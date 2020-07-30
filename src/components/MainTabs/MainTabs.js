@@ -4,8 +4,11 @@ import { useForm } from "react-hook-form";
 import { TabPanel, Tabs, TabList, Tab } from 'react-tabs';
 import SettingsTab from './Tabs/SettingsTab';
 import FieldsTab from './Tabs/FieldsTab/FieldsTab';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { settingIcon, fieldIcon } from '../../constants/icons';
 import { actions, Context } from '../../context/GeneratorContext';
+
 
 export const MainTabs = () => {
   const { handleSubmit, register } = useForm();
@@ -29,7 +32,9 @@ export const MainTabs = () => {
             <Tab>{settingIcon} Settings</Tab>
           </TabList>
           <TabPanel>
-            <FieldsTab register={register} />
+            <DndProvider backend={HTML5Backend}>
+              <FieldsTab register={register} />
+            </DndProvider>
           </TabPanel>
           <TabPanel>
             <SettingsTab register={register} />

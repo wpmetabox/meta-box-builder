@@ -1,0 +1,16 @@
+ul {
+  padding-left: 10px;
+  list-style-type: none;
+}
+
+.dndi {
+  height: 16px;
+}
+
+li.d {
+  cursor: move;
+}
+
+li {
+  border: 1px dashed #e0e0e0;
+}

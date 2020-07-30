@@ -4,6 +4,7 @@ import FieldSelected from './FieldSelected';
 import { fields } from '../../../../constants/constants';
 import { getDataCopiedItem } from '../../../../utility/functions';
 import SearchResultList from './SearchResultList';
+import Node from './Node';
 
 const FieldsTab = (props) => {
   const [selectedList, setListSelected] = useState([]);
@@ -71,24 +72,37 @@ const FieldsTab = (props) => {
         />
         {
           searchParam
-          ? <SearchResultList onSelectField={addItem} searchParam={searchParam} />
-          : <FieldMenu onSelectField={addItem} />
+            ? <SearchResultList onSelectField={addItem} searchParam={searchParam} />
+            : <FieldMenu onSelectField={addItem} />
         }
       </div>
 
       <div className="og-main">
         {selectedList.length === 0 && <p>No fields. Select fields on the left to add them to this field group.</p>}
-        {selectedList.map((item) => (
-          <FieldSelected
-            register={props.register}
-            data={item.data}
-            key={item.data.general.id}
-            index={item.data.general.id}
-            removeItem={removeItem}
-            copyItem={copyItem}
-            changePosition={changePosition}
-          />
-        ))}
+        {
+          selectedList.map((item, i) => {
+            return (
+              <Node
+                key={i}
+                id={item.id}
+                label={item.label}
+                items={item.items}
+                index={i}
+              />
+            );
+          })
+          // map((item) => (
+          //   <FieldSelected
+          //     register={props.register}
+          //     data={item.data}
+          //     key={item.data.general.id}
+          //     index={item.data.general.id}
+          //     removeItem={removeItem}
+          //     copyItem={copyItem}
+          //     changePosition={changePosition}
+          //   />
+          // ))
+        }
       </div>
     </div>
   );
