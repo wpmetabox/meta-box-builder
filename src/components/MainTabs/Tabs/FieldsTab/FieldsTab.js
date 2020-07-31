@@ -1,28 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FieldMenu from './FieldMenu';
 import FieldSelected from './FieldSelected';
 import { fields } from '../../../../constants/constants';
-import { getDataCopiedItem } from '../../../../utility/functions';
+import { getDataCopiedItem, updateSelectedList, getSelectedList } from '../../../../utility/functions';
 import SearchResultList from './SearchResultList';
 import Node from './Node';
+import List from './List';
 
 const FieldsTab = (props) => {
-  const [selectedList, setListSelected] = useState([]);
+  const [selectedList, setSelectedList] = useState({ id: "root", items: [] });
   const [searchParam, setSearchParam] = useState('');
 
+  useEffect(() => {
+    updateSelectedList(selectedList)
+    return
+  }, [selectedList])
+
   const addItem = (type) => {
+    const id = `${type}_${uniqid()}`
     const data = {
       ...fields[type],
-      general: { ...fields[type].general, id: `${type}_${uniqid()}` },
+      general: { ...fields[type].general, id },
     };
-    setListSelected([...selectedList, { type, data }]);
+    setSelectedList({ ...selectedList, items: [...selectedList.items, { id, type, data, items: [] }] });
   };
 
   const removeItem = (id) => {
     let newList = [...selectedList];
     const index = newList.map((item) => item.data.general.id).indexOf(id);
     newList.splice(index, 1);
-    setListSelected(newList);
+    setSelectedList(newList);
   };
 
   const copyItem = (type, id) => {
@@ -37,7 +44,7 @@ const FieldsTab = (props) => {
     let newList = [...selectedList];
     const index = newList.map((item) => item.data.general.id).indexOf(id);
     newList.splice(index + 1, 0, item);
-    setListSelected(newList);
+    setSelectedList(newList);
   };
 
   const changePosition = (id, direction) => {
@@ -58,8 +65,15 @@ const FieldsTab = (props) => {
       newList[index + 1] = itemChange;
     }
 
-    setListSelected(newList);
+    setSelectedList(newList);
   };
+
+  const changeSelectedList = () => {
+    const newSelectedList = getSelectedList();
+    setSelectedList(newSelectedList);
+  }
+
+  console.log('zzz', selectedList)
 
   return (
     <div className="og-fields-wrapper">
@@ -78,20 +92,18 @@ const FieldsTab = (props) => {
       </div>
 
       <div className="og-main">
-        {selectedList.length === 0 && <p>No fields. Select fields on the left to add them to this field group.</p>}
-        {
-          selectedList.map((item, i) => {
-            return (
-              <Node
-                key={i}
-                id={item.id}
-                label={item.label}
-                items={item.items}
-                index={i}
-              />
-            );
-          })
-          // map((item) => (
+        {selectedList.items.length === 0 && <p>No fields. Select fields on the left to add them to this field group.</p>}
+        <List id={selectedList.id} items={selectedList.items} changeSelectedList={changeSelectedList} />
+      </div>
+    </div>
+  );
+};
+
+const uniqid = () => Math.random().toString(36).substr(2);
+
+export default FieldsTab;
+
+   // map((item) => (
           //   <FieldSelected
           //     register={props.register}
           //     data={item.data}
@@ -102,12 +114,3 @@ const FieldsTab = (props) => {
           //     changePosition={changePosition}
           //   />
           // ))
-        }
-      </div>
-    </div>
-  );
-};
-
-const uniqid = () => Math.random().toString(36).substr(2);
-
-export default FieldsTab;

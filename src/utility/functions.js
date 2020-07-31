@@ -1,82 +1,82 @@
 import { TEXT_INPUT, NUMBER_INPUT, CHECKBOX, fields, DROPDOWN_MENU, RADIO_CHECKBOX, LIST_OPTION_TYPE, DATA_LIST_TYPE } from '../constants/constants';
 
 export const getLabel = (name, type) => {
-  const labels = {
-    class: "Custom CSS class",
-    std: "Default value",
-    size: "Size of the input box",
-    placeholder: "Placeholder",
-    min: "Minimum value",
-    max: "Maximum value",
-    rows: "Rows",
-    cols: "Columns",
-    prefix: "Prefix",
-    suffix: "Suffix",
-    timestamp: "Timestamp",
-    max_file_uploads: "Maximum number of files",
-    options: "Options",
-    parent: "Parent",
-    taxonomy: "Taxonomy",
-  };
+    const labels = {
+        class: "Custom CSS class",
+        std: "Default value",
+        size: "Size of the input box",
+        placeholder: "Placeholder",
+        min: "Minimum value",
+        max: "Maximum value",
+        rows: "Rows",
+        cols: "Columns",
+        prefix: "Prefix",
+        suffix: "Suffix",
+        timestamp: "Timestamp",
+        max_file_uploads: "Maximum number of files",
+        options: "Options",
+        parent: "Parent",
+        taxonomy: "Taxonomy",
+    };
 
-  return (name === 'std' && type === 'checkbox') ? "Checked?" : labels[name];
+    return (name === 'std' && type === 'checkbox') ? "Checked?" : labels[name];
 };
 
 export const getElementControlName = (name, type) => {
-  let types;
-  switch (name) {
-    case 'std':
-        types = {
-            button: 'StdButton',
-            checkbox: 'StdCheckbox',
-            checkbox_list: 'StdChoice',
-            map: 'StdMap',
-            select: 'StdChoice',
-            textarea: 'StdChoice',
-            wysiwyg: 'StdChoice',
-        };
-        return types[type] || 'TextInput';
-    case 'placeholder':
-    case 'class':
-    case 'min':
-    case 'max':
-      return 'TextInput';
-    case 'size':
-    case 'rows':
-    case 'cols':
-    case 'max_file_uploads':
-      return 'NumberInput';
-    case 'inline':
-        types = {
-            date: 'InlineDate',
-            datetime: 'InlineDate',
-        };
-        return types[type] || 'Inline';
-    case 'options':
-        types = {
-            fieldset_text: 'OptionsFieldsetText',
-            text_list: 'OptionsTextList',
-            wysiwyg: 'OptionsWysiwyg',
-        };
-        return types[type] || 'Options';
-    case 'query_args':
-        types = {
-            taxonomy: 'QueryArgsTaxonomy',
-            taxonomy_advanced: 'QueryArgsTaxonomy',
-            user: 'QueryArgsUser',
-        };
-        return types[type] || 'QueryArgs';
-    case 'js_options':
-        types = {
-            date: 'JsOptionsDate',
-            datetime: 'JsOptionsDate',
-            slider: 'JsOptionsSlider',
-            time: 'JsOptionsTime',
-        };
-        return types[type] || 'JsOptions';
-    default:
-      return toTitleCase(name);
-  }
+    let types;
+    switch (name) {
+        case 'std':
+            types = {
+                button: 'StdButton',
+                checkbox: 'StdCheckbox',
+                checkbox_list: 'StdChoice',
+                map: 'StdMap',
+                select: 'StdChoice',
+                textarea: 'StdChoice',
+                wysiwyg: 'StdChoice',
+            };
+            return types[type] || 'TextInput';
+        case 'placeholder':
+        case 'class':
+        case 'min':
+        case 'max':
+            return 'TextInput';
+        case 'size':
+        case 'rows':
+        case 'cols':
+        case 'max_file_uploads':
+            return 'NumberInput';
+        case 'inline':
+            types = {
+                date: 'InlineDate',
+                datetime: 'InlineDate',
+            };
+            return types[type] || 'Inline';
+        case 'options':
+            types = {
+                fieldset_text: 'OptionsFieldsetText',
+                text_list: 'OptionsTextList',
+                wysiwyg: 'OptionsWysiwyg',
+            };
+            return types[type] || 'Options';
+        case 'query_args':
+            types = {
+                taxonomy: 'QueryArgsTaxonomy',
+                taxonomy_advanced: 'QueryArgsTaxonomy',
+                user: 'QueryArgsUser',
+            };
+            return types[type] || 'QueryArgs';
+        case 'js_options':
+            types = {
+                date: 'JsOptionsDate',
+                datetime: 'JsOptionsDate',
+                slider: 'JsOptionsSlider',
+                time: 'JsOptionsTime',
+            };
+            return types[type] || 'JsOptions';
+        default:
+            return toTitleCase(name);
+    }
 }
 
 export const getElementType = (name) => {
@@ -173,7 +173,7 @@ const getAdvancedData = (advancedItems, index) => {
 
 const getElementValue = name => {
     const element = document.querySelector(`[name="${name}"]`);
-    if (! element) {
+    if (!element) {
         return null;
     }
     if (['select', 'textarea'].includes(element.tagName) || ['text', 'number', 'email'].includes(element.type)) {
@@ -186,6 +186,11 @@ const getElementValue = name => {
         return document.querySelector(`[name="${name}"]:checked`).value;
     }
 }
+
+export const updateSelectedList = data => localStorage.setItem('selectedList', JSON.stringify(data))
+
+export const getSelectedList = () => JSON.parse(localStorage.getItem('selectedList'))
+
 
 export const ucfirst = string => string.charAt(0).toUpperCase() + string.slice(1);
 const toTitleCase = string => string.split('_').map(ucfirst).join('');
