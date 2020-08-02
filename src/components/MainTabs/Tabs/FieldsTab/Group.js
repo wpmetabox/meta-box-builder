@@ -4,45 +4,33 @@ import { TabPanel, Tabs, TabList, Tab } from 'react-tabs';
 import GeneralContent from './FieldContent/GeneralContent';
 import AdvancedContent from './FieldContent/AdvancedContent';
 import { ucfirst } from '../../../../utility/functions';
+import Node from './Node';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
+import Insert from './Insert';
 import { cardSource, collect } from '../../../../utility/dragDrop';
 
-const FieldSelected = (props) => {
-  const { connectDragSource } = props;
+const Group = (props) => {
+  const {
+    id,
+    items,
+    parent,
+    indexDrop,
+    connectDragSource,
+    changeSelectedList,
+    register
+  } = props;
+
   const type = props.data.general.type;
-  const index = props.id;
+  const index = props.index;
 
   const [expanded, setExpanded] = useState(false);
   const toggleSettings = () => setExpanded(!expanded);
 
-  if ('divider' === type) {
-    return (
-      <div className={`og-item og-item--${type} og-collapsible${expanded ? ' og-collapsible--expanded' : ''}`}>
-        <input ref={props.register} type="hidden" name={`fields-${index}-type`} defaultValue={type} />
-        <Header
-          type={type}
-          index={index}
-          name={props.data.general.name}
-          expanded={expanded}
-          copyItem={props.copyItem}
-          removeItem={props.removeItem}
-          toggleSettings={toggleSettings}
-        />
-        <div className="og-item__body og-collapsible__body">
-          <GeneralContent register={props.register} type={type} index={index} fieldData={props.data.general} />
-        </div>
-        <div className="og-item__sort">
-          <button type="button" className="og-item__up" title="Move up" onClick={() => props.changePosition(props.index, 'up')}>{arrowUpIcon}</button>
-          <button type="button" className="og-item__down" title="Move down" onClick={() => props.changePosition(props.index, 'down')}>{arrowDownIcon}</button>
-        </div>
-      </div>
-    );
-  }
-
   return connectDragSource(
     <div className={`og-item og-item--${type} og-collapsible${expanded ? ' og-collapsible--expanded' : ''}`}>
-      <li className="d" id="leaf">
+      <li className="d" id="list">
+
         <input ref={props.register} type="hidden" name={`fields-${index}-type`} defaultValue={type} />
         <Header
           type={type}
@@ -71,6 +59,29 @@ const FieldSelected = (props) => {
           <button type="button" className="og-item__up" title="Move up" onClick={() => props.changePosition(props.index, 'up')}>{arrowUpIcon}</button>
           <button type="button" className="og-item__down" title="Move down" onClick={() => props.changePosition(props.index, 'down')}>{arrowDownIcon}</button>
         </div>
+        {items && items.length ? (
+          <ul>
+            {items.map((item, i) => {
+              return (
+                <div key={i}>
+                  <Insert index={i} parent={id} />
+                  <Node
+                    key={item.id}
+                    parent={item.id}
+                    id={item.id}
+                    item={item}
+                    label={item.id}
+                    items={item.items}
+                    changeSelectedList={changeSelectedList}
+                    index={i}
+                    register={register}
+                  />
+                </div>
+              );
+            })}
+            <Insert index={items.length} parent={id} />
+          </ul>
+        ) : null}
       </li>
     </div>
   );
@@ -98,4 +109,4 @@ const Header = (props) => {
   );
 };
 
-export default DragSource(Types.CARD, cardSource, collect)(memo(FieldSelected));;
+export default DragSource(Types.CARD, cardSource, collect)(memo(Group));

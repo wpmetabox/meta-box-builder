@@ -1,12 +1,26 @@
-import React from "react";
-import Leaf from "./Leaf";
-import List from "./List";
+import React, { memo } from "react";
+import Group from "./Group";
+import FieldSelected from "./FieldSelected";
+import { actions } from '../../../../context/UpdateSelected/UpdateSelectedContext'
 
 const Node = (props) => {
-  const { id, label, items, parent, index, changeSelectedList } = props;
-  return items && items.length
-    ? <List id={id} items={items} label={label} parent={parent} index={index} changeSelectedList={changeSelectedList} />
-    : <Leaf parent={parent} label={label} id={id} index={index} changeSelectedList={changeSelectedList} />
+  const { id, label, items, parent, item, register } = props;
+  return item.data.general.type === 'group'
+    ? <Group
+      register={register}
+      id={id}
+      data={item.data}
+      items={items}
+      label={label}
+      parent={parent}
+      changeSelectedList={actions.updateSelectedList} />
+    : <FieldSelected
+      register={register}
+      data={item.data}
+      parent={parent}
+      label={label}
+      id={id}
+      changeSelectedList={actions.updateSelectedList} />
 }
 
-export default Node;
+export default memo(Node);
