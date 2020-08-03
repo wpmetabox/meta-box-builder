@@ -110,7 +110,6 @@ const FieldsTab = (props) => {
           <SelectedList
             id={selectedList.id}
             items={selectedList.items}
-            // changeSelectedList={changeSelectedList}
             register={props.register}
           />
         </ul>

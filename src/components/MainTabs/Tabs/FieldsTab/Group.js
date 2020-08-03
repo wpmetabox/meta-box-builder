@@ -9,20 +9,18 @@ import { DragSource } from 'react-dnd';
 import Types from './Types';
 import Insert from './Insert';
 import { cardSource, collect } from '../../../../utility/dragDrop';
+import './style.css'
 
 const Group = (props) => {
   const {
     id,
     items,
-    parent,
-    indexDrop,
     connectDragSource,
-    changeSelectedList,
     register
   } = props;
 
   const type = props.data.general.type;
-  const index = props.index;
+  const index = props.id;
 
   const [expanded, setExpanded] = useState(false);
   const toggleSettings = () => setExpanded(!expanded);
@@ -59,29 +57,24 @@ const Group = (props) => {
           <button type="button" className="og-item__up" title="Move up" onClick={() => props.changePosition(props.index, 'up')}>{arrowUpIcon}</button>
           <button type="button" className="og-item__down" title="Move down" onClick={() => props.changePosition(props.index, 'down')}>{arrowDownIcon}</button>
         </div>
-        {items && items.length ? (
-          <ul>
-            {items.map((item, i) => {
-              return (
-                <div key={i}>
-                  <Insert index={i} parent={id} />
-                  <Node
-                    key={item.id}
-                    parent={item.id}
-                    id={item.id}
-                    item={item}
-                    label={item.id}
-                    items={item.items}
-                    changeSelectedList={changeSelectedList}
-                    index={i}
-                    register={register}
-                  />
-                </div>
-              );
-            })}
-            <Insert index={items.length} parent={id} />
-          </ul>
-        ) : null}
+        <ul>
+          {items.map((item, i) => (<div key={item.id}>
+            <Insert index={i} parent={id} />
+            <Node
+              key={item.id}
+              parent={item.id}
+              id={item.id}
+              item={item}
+              items={item.items}
+              register={register}
+            />
+          </div>
+          ))}
+          <Insert index={items.length} parent={id} isParent={true} />
+        </ul>
+        {
+          items.length === 0 && <div className="drop_area">Drag and drop child fields here.</div>
+        }
       </li>
     </div>
   );
@@ -109,4 +102,4 @@ const Header = (props) => {
   );
 };
 
-export default DragSource(Types.CARD, cardSource, collect)(memo(Group));
+export default memo(DragSource(Types.CARD, cardSource, collect)(Group));

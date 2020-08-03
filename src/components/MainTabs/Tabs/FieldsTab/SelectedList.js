@@ -6,7 +6,6 @@ const SelectedList = (props) => {
   const {
     id,
     items,
-    changeSelectedList,
     register
   } = props;
 
@@ -18,7 +17,6 @@ const SelectedList = (props) => {
             <div key={item.id}>
               <Insert index={index} parent={id} />
               <Node
-                key={item.id}
                 parent={item.id}
                 id={item.id}
                 item={item}
@@ -33,4 +31,4 @@ const SelectedList = (props) => {
   </>
 };
 
-export default SelectedList;
+export default memo(SelectedList);

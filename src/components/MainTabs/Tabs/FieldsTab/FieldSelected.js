@@ -7,17 +7,18 @@ import { ucfirst } from '../../../../utility/functions';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
 import { cardSource, collect } from '../../../../utility/dragDrop';
+import './style.css'
 
 const FieldSelected = (props) => {
   const { connectDragSource } = props;
   const type = props.data.general.type;
   const index = props.id;
-
+  console.log('iiii', index)
   const [expanded, setExpanded] = useState(false);
   const toggleSettings = () => setExpanded(!expanded);
 
   if ('divider' === type) {
-    return (
+    return connectDragSource(
       <div className={`og-item og-item--${type} og-collapsible${expanded ? ' og-collapsible--expanded' : ''}`}>
         <input ref={props.register} type="hidden" name={`fields-${index}-type`} defaultValue={type} />
         <Header
@@ -98,4 +99,4 @@ const Header = (props) => {
   );
 };
 
-export default DragSource(Types.CARD, cardSource, collect)(memo(FieldSelected));;
+export default memo(DragSource(Types.CARD, cardSource, collect)(FieldSelected));;

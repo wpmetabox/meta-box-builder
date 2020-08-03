@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import { DropTarget } from "react-dnd";
 import Types from "./Types";
 
@@ -24,23 +24,18 @@ function collect(connect, monitor) {
     connectDropTarget: connect.dropTarget(),
     isOver: monitor.isOver(),
     isOverCurrent: monitor.isOver({ shallow: true }),
-    canDrop: monitor.canDrop(),
-    itemType: monitor.getItemType()
   };
 }
 
-class Insert extends React.Component {
-  render() {
-    const { isOverCurrent, connectDropTarget, parent, index } = this.props;
-    return connectDropTarget(
-      <div
-        dataparent={parent}
-        dataindex={index}
-        className="dndi"
-        style={isOverCurrent ? { border: "2px dashed gray" } : {}}
-      />
-    );
-  }
+const Insert = (props) => {
+  const { isOverCurrent, connectDropTarget, parent, index } = props;
+  return connectDropTarget(
+    <div
+      dataparent={parent}
+      className="dndi"
+      style={isOverCurrent ? { border: "2px dashed gray" } : {}}
+    />
+  );
 }
 
-export default DropTarget(Types.CARD, spec, collect)(Insert);
+export default memo(DropTarget(Types.CARD, spec, collect)(Insert));
