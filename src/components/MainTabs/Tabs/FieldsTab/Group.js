@@ -59,7 +59,7 @@ const Group = (props) => {
         </div>
         <ul>
           {items.map((item, i) => (<div key={item.id}>
-            <Insert index={i} parent={id} />
+            <Insert parent={id} items={items} id={item.id} />
             <Node
               key={item.id}
               parent={item.id}

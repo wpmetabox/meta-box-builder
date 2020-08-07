@@ -1,24 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import FieldMenu from './FieldMenu';
 import { fields } from '../../../../constants/constants';
 import {
   getDataCopiedItem,
   updateSelectedList,
-  getSelectedList,
 } from '../../../../utility/functions';
 import SearchResultList from './SearchResultList';
 import SelectedList from './SelectedList';
-import { Context } from '../../../../context/UpdateSelected/UpdateSelectedContext'
 
 const FieldsTab = (props) => {
   const [selectedList, setSelectedList] = useState({ id: 'root', items: [] });
   const [searchParam, setSearchParam] = useState('');
-  const { state } = useContext(Context);
-
-  // initial selected list
-  useEffect(() => {
-    updateSelectedList({ id: 'root', items: [] });
-  }, []);
 
   const addItem = (type) => {
     const id = `${type}_${uniqid()}`;
@@ -34,10 +26,11 @@ const FieldsTab = (props) => {
     updateSelectedList(newList);
   };
 
-  useEffect(() => {
-    const newSelectedList = getSelectedList();
-    setSelectedList(newSelectedList);
-  }, [state.updatedTime])
+  // useEffect(() => {
+  //  setSelectedList(state.tree);
+  // }, [state.updatedTime])
+
+  const changeSelectedList = useCallback(params => setSelectedList(params), []);
 
   const removeItem = (id) => {
     let newList = [...selectedList];
@@ -82,6 +75,8 @@ const FieldsTab = (props) => {
     setSelectedList(newList);
   };
 
+  console.log('zzzz', selectedList)
+
 
   return (
     <div className="og-fields-wrapper">
@@ -107,11 +102,18 @@ const FieldsTab = (props) => {
           </p>
         )}
         <ul>
-          <SelectedList
-            id={selectedList.id}
-            items={selectedList.items}
-            register={props.register}
-          />
+          {
+            selectedList.items.map((item,index) => (
+              <SelectedList
+                key={item.id}
+                id={"root"}
+                item={item}
+                index={index}
+                register={props.register}
+                changeSelectedList={changeSelectedList}
+              />
+            ))
+          }
         </ul>
       </div>
     </div>

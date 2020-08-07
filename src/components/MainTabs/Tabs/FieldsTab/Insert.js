@@ -10,9 +10,6 @@ const spec = {
     const item = monitor.getItem();
     const result = monitor.isOver({ shallow: true });
     return result && [props.id, props.parent].indexOf(item.id) === -1;
-  },
-  hover: (props, monitor, component) => {
-    const item = monitor.getItem();
   }
 };
 
@@ -28,10 +25,9 @@ function collect(connect, monitor) {
 }
 
 const Insert = (props) => {
-  const { isOverCurrent, connectDropTarget, parent, index } = props;
+  const { isOverCurrent, connectDropTarget } = props;
   return connectDropTarget(
     <div
-      dataparent={parent}
       className="dndi"
       style={isOverCurrent ? { border: "2px dashed gray" } : {}}
     />

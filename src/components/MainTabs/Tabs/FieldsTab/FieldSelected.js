@@ -13,7 +13,6 @@ const FieldSelected = (props) => {
   const { connectDragSource } = props;
   const type = props.data.general.type;
   const index = props.id;
-  console.log('iiii', index)
   const [expanded, setExpanded] = useState(false);
   const toggleSettings = () => setExpanded(!expanded);
 

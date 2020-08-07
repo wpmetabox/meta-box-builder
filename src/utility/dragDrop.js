@@ -1,3 +1,4 @@
+import memoizeOne from 'memoize-one';
 import { updateSelectedList, getSelectedList } from '../utility/functions';
 
 
@@ -12,8 +13,9 @@ export const cardSource = {
 
     const item = monitor.getItem();
     const dropResult = monitor.getDropResult();
-    moveNode(item.id, dropResult.parent, dropResult.index);
-    props.changeSelectedList();
+    const selectedList = getSelectedList();
+    const tree = moveNode(item.id, dropResult.parent, dropResult.index);
+    selectedList !== tree && props.changeSelectedList(tree);
   },
 };
 
@@ -27,6 +29,8 @@ export const collect = (connect, monitor) => {
   };
 };
 
+
+
 const traverse = (current, id, i, cb, parent) => {
   if (current.id === id) cb(current, parent, i);
   if (!current.items) return;
@@ -35,13 +39,15 @@ const traverse = (current, id, i, cb, parent) => {
   });
 };
 
+const memTraverse = memoizeOne(traverse);
+
 export const moveNode = (from, to, index) => {
   var nodeTo = null,
     nodeFrom = null;
   let tree = getSelectedList();
 
   // Find node to receive
-  traverse(tree, to, 0, (item) => {
+  memTraverse(tree, to, 0, (item) => {
     nodeTo = item;
   });
 
@@ -49,7 +55,7 @@ export const moveNode = (from, to, index) => {
   if (!nodeTo) return;
 
   // Extract node to move
-  traverse(tree, from, 0, (item, parent, i) => {
+  memTraverse(tree, from, 0, (item, parent, i) => {
     parent = parent || tree;
     nodeFrom = item;
     parent.items.splice(i, 1);
@@ -59,5 +65,6 @@ export const moveNode = (from, to, index) => {
   if (!nodeFrom) return;
   // Insert node
   nodeTo.items.splice(index, 0, nodeFrom);
-  updateSelectedList(tree);
+  updateSelectedList(tree)
+  return tree
 };

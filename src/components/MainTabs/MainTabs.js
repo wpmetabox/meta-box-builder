@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import 'react-tabs/style/react-tabs.css';
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import { TabPanel, Tabs, TabList, Tab } from 'react-tabs';
 import SettingsTab from './Tabs/SettingsTab';
 import FieldsTab from './Tabs/FieldsTab/FieldsTab';
@@ -9,9 +9,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { settingIcon, fieldIcon } from '../../constants/icons';
 import { actions, Context } from '../../context/GeneratorContext';
 
-
 export const MainTabs = () => {
-  const { handleSubmit, register } = useForm();
+  const { handleSubmit, register, setValue, getValues } = useForm();
+  const methods = useForm();
 
   const state = useContext(Context);
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ export const MainTabs = () => {
           </TabList>
           <TabPanel>
             <DndProvider backend={HTML5Backend}>
-              <FieldsTab register={register} />
+              <FieldsTab register={register} setValue={setValue} getValues={getValues} />
             </DndProvider>
           </TabPanel>
           <TabPanel>

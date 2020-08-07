@@ -4,22 +4,22 @@ import FieldSelected from "./FieldSelected";
 import { actions } from '../../../../context/UpdateSelected/UpdateSelectedContext'
 
 const Node = (props) => {
-  const { id, items, parent, item, register } = props;
-  console.log(props)
-  return  item.data.general.type === 'group'
+  console.log('ppppp', props)
+  const { id, parent, item, register, changeSelectedList } = props;
+  return item.data.general.type === 'group'
     ? <Group
       register={register}
       id={id}
       data={item.data}
-      items={items}
+      items={item.items}
       parent={parent}
-      changeSelectedList={actions.updateSelectedList} />
+      changeSelectedList={changeSelectedList} />
     : <FieldSelected
       register={register}
       data={item.data}
       parent={parent}
       id={id}
-      changeSelectedList={actions.updateSelectedList} />
+      changeSelectedList={changeSelectedList} />
 }
 
 export default memo(Node);
