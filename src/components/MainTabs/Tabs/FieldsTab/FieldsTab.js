@@ -6,7 +6,7 @@ import {
   updateSelectedList,
 } from '../../../../utility/functions';
 import SearchResultList from './SearchResultList';
-import SelectedList from './SelectedList';
+import SelectedItem from './SelectedItem';
 
 const FieldsTab = (props) => {
   const [selectedList, setSelectedList] = useState({ id: 'root', items: [] });
@@ -25,10 +25,6 @@ const FieldsTab = (props) => {
     setSelectedList(newList);
     updateSelectedList(newList);
   };
-
-  // useEffect(() => {
-  //  setSelectedList(state.tree);
-  // }, [state.updatedTime])
 
   const changeSelectedList = useCallback(params => setSelectedList(params), []);
 
@@ -75,9 +71,6 @@ const FieldsTab = (props) => {
     setSelectedList(newList);
   };
 
-  console.log('zzzz', selectedList)
-
-
   return (
     <div className="og-fields-wrapper">
       <div className="og-sidebar">
@@ -104,7 +97,7 @@ const FieldsTab = (props) => {
         <ul>
           {
             selectedList.items.map((item,index) => (
-              <SelectedList
+              <SelectedItem
                 key={item.id}
                 id={"root"}
                 item={item}

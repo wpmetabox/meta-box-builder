@@ -1,4 +1,4 @@
-import React, { useMemo, memo } from 'react';
+import React, { memo } from 'react';
 import Node from './Node';
 import Insert from './Insert';
 
@@ -7,14 +7,14 @@ const SelectedList = (props) => {
     id,
     item,
     register,
-    changeSelectedList, 
+    changeSelectedList,
     index
   } = props;
 
   return <div key={item.id}>
     <Insert index={index} parent={id} />
     <Node
-      parent={item.id}
+      parent={id}
       id={item.id}
       item={item}
       register={register}

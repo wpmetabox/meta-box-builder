@@ -16,7 +16,8 @@ const Group = (props) => {
     id,
     items,
     connectDragSource,
-    register
+    register,
+    changeSelectedList
   } = props;
 
   const type = props.data.general.type;
@@ -53,28 +54,6 @@ const Group = (props) => {
             </TabPanel>
           </Tabs>
         </div>
-        <div className="og-item__sort">
-          <button type="button" className="og-item__up" title="Move up" onClick={() => props.changePosition(props.index, 'up')}>{arrowUpIcon}</button>
-          <button type="button" className="og-item__down" title="Move down" onClick={() => props.changePosition(props.index, 'down')}>{arrowDownIcon}</button>
-        </div>
-        <ul>
-          {items.map((item, i) => (<div key={item.id}>
-            <Insert parent={id} items={items} id={item.id} />
-            <Node
-              key={item.id}
-              parent={item.id}
-              id={item.id}
-              item={item}
-              items={item.items}
-              register={register}
-            />
-          </div>
-          ))}
-          <Insert index={items.length} parent={id} isParent={true} />
-        </ul>
-        {
-          items.length === 0 && <div className="drop_area">Drag and drop child fields here.</div>
-        }
       </li>
     </div>
   );
@@ -102,4 +81,4 @@ const Header = (props) => {
   );
 };
 
-export default memo(DragSource(Types.CARD, cardSource, collect)(Group));
+export default memo(DragSource(Types.CARD, cardSource, collect)(Group), (prevProps, nextProps) => prevProps.items === nextProps.items);

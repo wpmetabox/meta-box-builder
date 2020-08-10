@@ -2,6 +2,7 @@ import React, { lazy, Suspense, memo } from 'react';
 import { getElementControlName } from '../../../../../utility/functions';
 
 const GeneralContent = (props) => {
+  console.log('aaa', props.type)
   const getElement = (name) => {
     let componentName = getElementControlName(name, props.type);
     let Element = lazy(() => import(`../../../../Common/Elements/${componentName}`));
@@ -30,4 +31,4 @@ const GeneralContent = (props) => {
   );
 }
 
-export default memo(GeneralContent);
+export default memo(GeneralContent, (prevProps, nextProps) => prevProps.index === nextProps.index);
