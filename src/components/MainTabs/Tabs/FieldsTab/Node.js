@@ -1,12 +1,14 @@
 import React, { memo } from "react";
 import Group from "./Group";
 import FieldSelected from "./FieldSelected";
-import { actions } from '../../../../context/UpdateSelected/UpdateSelectedContext'
 
 const Node = (props) => {
   console.log('ppppp', props)
   const { id, parent, item, register, changeSelectedList } = props;
-  return item.data.general.type === 'group'
+
+  const isGroupField = () => item.data.general.type === 'group';
+
+  return isGroupField()
     ? <Group
       register={register}
       id={id}
@@ -22,4 +24,4 @@ const Node = (props) => {
       changeSelectedList={changeSelectedList} />
 }
 
-export default memo(Node);
+export default memo(Node, (prevProps, nextProps) => prevProps.id === nextProps.id);
