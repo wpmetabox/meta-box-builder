@@ -1,7 +1,10 @@
 import React from 'react';
 import {xIcon} from '../../../constants/icons';
+import { useFormContext } from "react-hook-form";
 
-const AdvancedAdditionalItem = ({register, name, type, index, data, removeItem}) => {
+const AdvancedAdditionalItem = ({ name, type, index, data, removeItem}) => {
+    const { register } = useFormContext();
+
     return (
         <div className="og-attribute">
             <input type="text" placeholder="Enter key" ref={register} name={`${name}-${type}-${index}-key`} defaultValue={data.key} />

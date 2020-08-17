@@ -15,7 +15,7 @@ const OptionsFieldsetText = props => {
       <h4>Inputs</h4>
       {
         list.map((item, index) => (
-          <Item data={item} key={index} index={index} removeItem={removeItem} register={props.register} name={`fields-${props.index}`} type='options' />
+          <Item data={item} key={index} index={index} removeItem={removeItem}  name={`fields-${props.index}`} type='options' />
         ))
       }
       <button type="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Input</button>

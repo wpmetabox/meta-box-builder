@@ -14,7 +14,7 @@ const JsOptionsTime= props => {
         <h4><a href="http://trentrichardson.com/examples/timepicker" target="_blank" rel="noreferrer noopener">Time picker options</a></h4>
         {
           list.map((item, index) => (
-            <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem} register={props.register} name={`fields-${props.index}`} type='js_options' />
+            <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem} name={`fields-${props.index}`} type='js_options' />
           ))
         }
         <button type="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Option</button>

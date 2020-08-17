@@ -4,20 +4,14 @@ import { TabPanel, Tabs, TabList, Tab } from 'react-tabs';
 import GeneralContent from './FieldContent/GeneralContent';
 import AdvancedContent from './FieldContent/AdvancedContent';
 import { ucfirst } from '../../../../utility/functions';
-import Node from './Node';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
-import Insert from './Insert';
 import { cardSource, collect } from '../../../../utility/dragDrop';
 import './style.css'
 
 const Group = (props) => {
   const {
-    id,
-    items,
     connectDragSource,
-    register,
-    changeSelectedList
   } = props;
 
   const type = props.data.general.type;
@@ -47,10 +41,10 @@ const Group = (props) => {
               <Tab>Advanced</Tab>
             </TabList>
             <TabPanel>
-              <GeneralContent register={props.register} type={type} index={index} fieldData={props.data.general} />
+              <GeneralContent type={type} index={index} fieldData={props.data.general} />
             </TabPanel>
             <TabPanel>
-              <AdvancedContent register={props.register} type={type} index={index} data={props.data.advanced} />
+              <AdvancedContent type={type} index={index} data={props.data.advanced} />
             </TabPanel>
           </Tabs>
         </div>
@@ -58,6 +52,7 @@ const Group = (props) => {
     </div>
   );
 };
+
 const Header = (props) => {
   const duplicate = (e) => {
     e.stopPropagation();
