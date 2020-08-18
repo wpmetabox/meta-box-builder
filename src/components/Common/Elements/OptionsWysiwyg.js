@@ -14,7 +14,7 @@ const OptionsWysiwyg= props => {
       <h4><a href="https://developer.wordpress.org/reference/functions/wp_editor/" target="_blank" rel="noopener noreferrer">Editor options</a></h4>
       {
         list.map((item, index) => (
-          <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem} register={props.register} name={`fields-${props.index}`} type='options' />
+          <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem}  name={`fields-${props.index}`} type='options' />
         ))
       }
       <button type="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Input</button>

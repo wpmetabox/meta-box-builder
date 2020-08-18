@@ -9,7 +9,7 @@ const AdvancedContent = (props) => {
     return <Element
       name={`fields-${props.index}-${name}`}
       label={name}
-      register={props.register}
+      
       defaultValue={props.data[name]}
       data={props.data}
       type={props.type}

@@ -13,6 +13,7 @@ const FieldSelected = (props) => {
   const { connectDragSource } = props;
   const type = props.data.general.type;
   const index = props.id;
+  console.log('zzzz', index)
   const [expanded, setExpanded] = useState(false);
   const toggleSettings = () => setExpanded(!expanded);
   if ('divider' === type) {
@@ -29,7 +30,7 @@ const FieldSelected = (props) => {
           toggleSettings={toggleSettings}
         />
         <div className="og-item__body og-collapsible__body">
-          <GeneralContent register={props.register} type={type} index={index} fieldData={props.data.general} />
+          <GeneralContent  type={type} index={index} fieldData={props.data.general} />
         </div>
         <div className="og-item__sort">
           <button type="button" className="og-item__up" title="Move up" onClick={() => props.changePosition(props.index, 'up')}>{arrowUpIcon}</button>
@@ -59,10 +60,10 @@ const FieldSelected = (props) => {
               <Tab>Advanced</Tab>
             </TabList>
             <TabPanel>
-              <GeneralContent register={props.register} type={type} index={index} fieldData={props.data.general} />
+              <GeneralContent  type={type} index={index} fieldData={props.data.general} />
             </TabPanel>
             <TabPanel>
-              <AdvancedContent register={props.register} type={type} index={index} data={props.data.advanced} />
+              <AdvancedContent  type={type} index={index} data={props.data.advanced} />
             </TabPanel>
           </Tabs>
         </div>
@@ -97,4 +98,14 @@ const Header = (props) => {
   );
 };
 
-export default memo(DragSource(Types.CARD, cardSource, collect)(FieldSelected), (prevProps, nextProps) => prevProps.id === nextProps.id);;
+const areEqual = (prevProps, nextProps) => {
+  console.log('111',prevProps.id)
+  console.log('222',nextProps.id)
+  /*
+  return true if passing nextProps to render would return
+  the same result as passing prevProps to render,
+  otherwise return false
+  */
+}
+
+export default memo(DragSource(Types.CARD, cardSource, collect)(FieldSelected), areEqual);;

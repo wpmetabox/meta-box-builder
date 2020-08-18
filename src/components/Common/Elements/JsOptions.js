@@ -14,7 +14,7 @@ const JsOptions = props => {
         <h4><a href="https://select2.org/configuration" target="_blank" rel="noreferrer noopener">Select2 options</a></h4>
         {
           list.map((item, index) => (
-            <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem} register={props.register} name={`fields-${props.index}`} type='js_options' />
+            <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem} name={`fields-${props.index}`} type='js_options' />
           ))
         }
         <button type="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Option</button>

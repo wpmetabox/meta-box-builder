@@ -102,7 +102,7 @@ const FieldsTab = (props) => {
                 id={"root"}
                 item={item}
                 index={index}
-                register={props.register}
+                
                 changeSelectedList={changeSelectedList}
               />
             ))
@@ -119,7 +119,7 @@ export default FieldsTab;
 
 // map((item) => (
 //   <FieldSelected
-//     register={props.register}
+//     
 //     data={item.data}
 //     key={item.data.general.id}
 //     index={item.data.general.id}

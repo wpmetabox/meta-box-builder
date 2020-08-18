@@ -18,7 +18,7 @@ const QueryArgs = props => {
       </h4>
       {
         list.map((item, index) => (
-          <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem} register={props.register} name={`fields-${props.index}`} type='query_args' />
+          <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem}  name={`fields-${props.index}`} type='query_args' />
         ))
       }
       <button type="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Argument</button>

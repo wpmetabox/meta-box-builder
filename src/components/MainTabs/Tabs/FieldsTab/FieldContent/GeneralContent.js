@@ -10,7 +10,7 @@ const GeneralContent = (props) => {
       name={`fields-${props.index}-${name}`}
       label={name}
       setLabel={props.setLabel}
-      register={props.register}
+      
       defaultValue={props.fieldData[name]}
       data={props.fieldData}
       index={props.index}
