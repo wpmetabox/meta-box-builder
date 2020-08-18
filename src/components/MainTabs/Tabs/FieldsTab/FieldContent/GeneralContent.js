@@ -2,7 +2,6 @@ import React, { lazy, Suspense, memo } from 'react';
 import { getElementControlName } from '../../../../../utility/functions';
 
 const GeneralContent = (props) => {
-  console.log('aaa', props.type)
   const getElement = (name) => {
     let componentName = getElementControlName(name, props.type);
     let Element = lazy(() => import(`../../../../Common/Elements/${componentName}`));

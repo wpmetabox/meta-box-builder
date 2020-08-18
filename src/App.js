@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Provider as GeneratorProvider } from './context/GeneratorContext';
 import { Provider as UpdateSelectedProvider } from './context/UpdateSelected/UpdateSelectedContext';
+import { Provider as FieldTypesProvider } from './context/FieldTypes/FieldTypesContext';
 
 function App() {
   const Result = lazy(() => import('./components/Result'))
@@ -9,10 +10,12 @@ function App() {
     <div className="og">
       <GeneratorProvider>
         <UpdateSelectedProvider>
-          <Suspense fallback={null}>
-            <MainTabs />
-            <Result />
-          </Suspense>
+          <FieldTypesProvider>
+            <Suspense fallback={null}>
+              <MainTabs />
+              <Result />
+            </Suspense>
+          </FieldTypesProvider>
         </UpdateSelectedProvider>
       </GeneratorProvider>
     </div>

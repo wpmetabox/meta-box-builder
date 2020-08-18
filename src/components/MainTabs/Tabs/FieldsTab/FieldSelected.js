@@ -15,7 +15,6 @@ const FieldSelected = (props) => {
   const index = props.id;
   const [expanded, setExpanded] = useState(false);
   const toggleSettings = () => setExpanded(!expanded);
-  console.log('pppp',props)
   if ('divider' === type) {
     return connectDragSource(
       <div className={`og-item og-item--${type} og-collapsible${expanded ? ' og-collapsible--expanded' : ''}`}>
