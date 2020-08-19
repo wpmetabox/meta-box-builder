@@ -5,8 +5,6 @@ import GroupChildrenList from './GroupChildrenList'
 
 const Node = (props) => {
   const { id, item, changeSelectedList } = props;
-  console.log('ppppp', props)
-
   const isGroupField = () => item.data.general.type === 'group';
 
   return isGroupField()

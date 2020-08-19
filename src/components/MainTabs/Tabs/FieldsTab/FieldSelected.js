@@ -13,7 +13,6 @@ const FieldSelected = (props) => {
   const { connectDragSource } = props;
   const type = props.data.general.type;
   const index = props.id;
-  console.log('zzzz', index)
   const [expanded, setExpanded] = useState(false);
   const toggleSettings = () => setExpanded(!expanded);
   if ('divider' === type) {
@@ -98,14 +97,4 @@ const Header = (props) => {
   );
 };
 
-const areEqual = (prevProps, nextProps) => {
-  console.log('111',prevProps.id)
-  console.log('222',nextProps.id)
-  /*
-  return true if passing nextProps to render would return
-  the same result as passing prevProps to render,
-  otherwise return false
-  */
-}
-
-export default memo(DragSource(Types.CARD, cardSource, collect)(FieldSelected), areEqual);;
+export default memo(DragSource(Types.CARD, cardSource, collect)(FieldSelected), (prevProps, nextProps) => prevProps.id === nextProps.id);

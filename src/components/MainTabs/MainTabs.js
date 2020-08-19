@@ -17,7 +17,6 @@ export const MainTabs = () => {
   const [loading, setLoading] = useState(false);
 
   const onSubmit = data => {
-    console.log('ddd', data)
     setLoading(true);
     actions.generatePHPCode(data);
   }

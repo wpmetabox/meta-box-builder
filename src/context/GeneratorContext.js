@@ -2,6 +2,7 @@ import createDataContext from './createDataContext';
 import generatorReducer from './GeneratorReducer';
 import { GENERATE_PHP_CODE } from './GeneratorActions';
 import { getSelectedList } from '../utility/functions';
+import { fields } from '../constants/constants';
 
 const generatePHPCode = dispatch => params => {
     const isTest = window.location.href.includes('localhost');
@@ -24,79 +25,69 @@ const formatParams = (params) => {
     console.log('ppp', params)
 
     // format params setting tab
-    const settingParams = Object.keys(params).filter(key => !key.includes('fields'));
-    settingParams.map((item, index) => result[item] = settingParams[index]);
+    for (const key in params) {
+        if (isSettingValue(key)) {
+            result[key] = params[key]
+        }
+    }
 
-    result = loopChildren(listSelected.items, Object.keys(params), result);
-
-    console.log('rrrr', result)
-    // Object.keys(params).forEach((keyName, keyIndex) => {
-    //     if (!keyName.includes('fields')) {
-    //         result[keyName] = Object.values(params)[keyIndex]
-    //         return;
-    //     }
-    //     // create params for selected fields
-    //     console.log('@@@', Object.values(params)[keyIndex])
-
-    //     listSelected.items.reduce((list, val, idx) => {
-    //         const keys = keyName.split('-');
-    //         keys.reduce((result, value, index) => {
-    //             if (!result[value]) {
-    //                 result[value] = {}
-    //             }
-    //             if (index === keys.length - 1) {
-    //                 result[value] = Object.values(params)[keyIndex]
-    //             }
-    //             return result[value]
-    //         }, result);
-    //     })
-
-    // })
-
-
-    // const list = new Map()
-    // listSelected.items.reduce((list, val, idx) => {
-    //     console.log('@@@',list)
-    //     console.log('vvv',val)
-    //     console.log('iiii',idx)
-    // },list)
-    console.log('rrrr', result)
-
-    return result
-}
-
-const formatField = (item, allParams, result) => {
-    const fieldParams = allParams.filter(key => key.includes(item.id));
-    console.log('@@@',fieldParams)
-    console.log('hahah',result)
-    fieldParams.map((keyName, keyIndex) => {
-        const keys = keyName.split('-');
-        keys.reduce((result, value, index) => {
-            if (!result[value]) {
-                result[value] = {}
-            }
-            if (index === keys.length - 1) {
-                result[value] = allParams[keyIndex]
-            }
-        }, {});
-    });
-
-    return result;
-}
-
-const loopChildren = (items, allParams, result) => {
-    if (items.length === 0) return
-    items.map(item => {
-        result = formatField(item, allParams, result)
-        if (isGroupField()) {
-            result = loopChildren(item.items, result[item.id])
+    result.fields = []
+    listSelected.items.map(item => {
+        if (isNotGroupField(item.type)) {
+            result.fields.push(formatField(item.id, params))
+        } else {
+            result.fields.push(formatGroupField(item, params))
         }
     })
 
     return result
 }
 
-const isGroupField = type => type === 'group'
+const isSettingValue = key => !key.includes('fields')
+
+const isNotGroupField = type => type !== 'group'
+
+const isOwnField = (key, id) => key.includes(id)
+
+const getKeyValue = key => key.split('-').slice(-1).pop()
+
+
+const formatField = (id, params) => {
+    let result = {}
+    for (const key in params) {
+        if (isOwnField(key, id)) {
+            const keyValue = getKeyValue(key);
+            result[keyValue] = params[key]
+        }
+    }
+
+    return result;
+}
+
+const formatGroupField = (item, params, result = {}) => {
+    const childrens = item.items;
+    if(childrens.length === 0) return
+    // fill group params
+    for (const key in params) {
+        if (isOwnField(key, item.id)) {
+            const keyValue = getKeyValue(key);
+            result[keyValue] = params[key]
+        }
+    }
+    // handle children fields
+    if (childrens) {
+        result.fields = []
+        childrens.map(children => {
+            if (isNotGroupField(children.type)) {
+                result.fields.push(formatField(children.id, params))
+            } else {
+                result.fields.push(formatGroupField(children, params))
+            }
+        })
+    }
+
+    return result;
+}
 
 export const { Provider, Context, actions } = createDataContext(
     generatorReducer,
