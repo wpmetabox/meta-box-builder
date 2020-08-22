@@ -27,8 +27,17 @@
   font-size: 12px;
   margin-top: 2px;
 }
+
+.dndi {
+  height: 12px;
+}
+.og-drop-area {
+  border: 2px dashed var(--color-light);
+  border-radius: 4px;
+  height: 42px;
+}
+
 &-item {
-  margin-bottom: 12px;
   padding-right: 32px;
   position: relative;
 
