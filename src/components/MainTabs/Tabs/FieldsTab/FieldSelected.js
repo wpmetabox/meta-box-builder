@@ -7,7 +7,6 @@ import { ucfirst } from '../../../../utility/functions';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
 import { cardSource, collect } from '../../../../utility/dragDrop';
-import './style.css'
 
 const FieldSelected = (props) => {
   const { connectDragSource } = props;
