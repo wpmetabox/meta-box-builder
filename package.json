@@ -25,7 +25,7 @@
   "scripts": {
     "css": "node-sass --output-style compressed -x sass/style.scss -o public",
     "postcss": "postcss public/style.css -u autoprefixer --no-map -o public/style.css --autoprefixer.browsers=\"last 2 versions\"",
-    "watch": "node-sass -w sass -o public",
+    "watch": "node-sass --output-style compressed -x -w sass -o public",
     "deploy": "scp -r build/* metabox:/home/bitnami/apps/wordpress/htdocs/online-generator2",
     "start": "react-scripts start",
     "build": "react-scripts build",

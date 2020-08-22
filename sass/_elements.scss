@@ -1,3 +1,12 @@
+ul {
+  list-style: none;
+  margin-bottom: 0;
+  margin-left: 36px;
+}
+&-main > ul {
+  margin-left: 0;
+}
+
 input[type="text"],
 input[type="number"],
 textarea,
@@ -124,6 +133,7 @@ svg {
   &__tab-list{
     border-bottom-color: var(--color-light);
     margin-bottom: 24px;
+    margin-left: 0;
   }
   &__tab {
     font-weight: bold;

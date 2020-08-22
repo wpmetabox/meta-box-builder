@@ -27,8 +27,8 @@
   font-size: 12px;
   margin-top: 2px;
 }
+
 &-item {
-  margin-bottom: 12px;
   padding-right: 32px;
   position: relative;
 
@@ -181,4 +181,23 @@
       fill: var(--color-red);
     }
   }
+}
+
+// Group
+&-group-drop-area {
+  border: 2px dashed var(--color-light);
+  border-radius: 4px;
+  text-align: center;
+  padding: 8px 12px;
+  margin-left: 36px;
+}
+
+// Drop area
+&-drop-area {
+  height: 12px;
+}
+&-drop-area--active {
+  border: 2px dashed var(--color-light);
+  border-radius: 4px;
+  height: 42px;
 }
