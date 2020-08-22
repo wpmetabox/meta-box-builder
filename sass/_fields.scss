@@ -28,15 +28,6 @@
   margin-top: 2px;
 }
 
-.dndi {
-  height: 12px;
-}
-.og-drop-area {
-  border: 2px dashed var(--color-light);
-  border-radius: 4px;
-  height: 42px;
-}
-
 &-item {
   padding-right: 32px;
   position: relative;
@@ -199,4 +190,14 @@
   text-align: center;
   padding: 8px 12px;
   margin-left: 36px;
+}
+
+// Drop area
+&-drop-area {
+  height: 12px;
+}
+&-drop-area--active {
+  border: 2px dashed var(--color-light);
+  border-radius: 4px;
+  height: 42px;
 }

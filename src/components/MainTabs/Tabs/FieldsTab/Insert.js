@@ -27,7 +27,7 @@ function collect(connect, monitor) {
 const Insert = (props) => {
   const { isOverCurrent, connectDropTarget } = props;
   return connectDropTarget(
-    <div className={`dndi${isOverCurrent ? ' og-drop-area' : ''}`} />
+    <div className={`og-drop-area${isOverCurrent ? ' og-drop-area--active' : ''}`} />
   );
 }
 
