@@ -1,5 +1,5 @@
 import memoizeOne from 'memoize-one';
-import { updateSelectedList, getSelectedList, getDataCopiedItem } from '../utility/functions';
+import { updateSelectedList, getSelectedList, getDataCopiedItem } from './functions';
 
 
 export const cardSource = {
@@ -41,7 +41,7 @@ const traverse = (current, id, i, cb, parent) => {
 
 const memTraverse = memoizeOne(traverse);
 
-export const moveNode = (from, to, index) => {
+export const moveNode = (from, to, index, typeChange) => {
   var nodeTo = null,
     nodeFrom = null;
   let tree = getSelectedList();
@@ -58,13 +58,21 @@ export const moveNode = (from, to, index) => {
     parent = parent || tree;
     nodeFrom = item;
     nodeFrom = keepValueNodeFrom(nodeFrom);
+
+    if (typeChange === 'copy') {
+      const itemCopy = createCopyItem({ ...nodeFrom })
+      parent.items.splice(i + 1, 0, itemCopy);
+    }
     parent.items.splice(i, 1);
   });
-
   // Validate node from
   if (!nodeFrom) return;
   // Insert node
-  nodeTo.items.splice(index, 0, nodeFrom);
+  if (typeChange !== 'delete') {
+    nodeTo.items.splice(index, 0, nodeFrom);
+  }
+
+
   updateSelectedList(tree)
   return tree
 };
@@ -88,4 +96,24 @@ const keepValueNodeFrom = (nodeItem) => {
   return result;
 }
 
-const isNotGroupField = type => type !== 'group'
+export const copyItem = (id, parent, index) => {
+  return moveNode(id, parent, index, 'copy')
+}
+
+export const deleteItem = (id, parent, index) => {
+  return moveNode(id, parent, index, 'delete')
+}
+
+const isNotGroupField = type => type !== 'group';
+
+const uniqid = () => Math.random().toString(36).substr(2);
+
+const createCopyItem = (item) => {
+  let result = { ...item };
+  const newId = `${item.type}_${uniqid()}`
+  result.id = newId
+  result.data.general.id = newId;
+  result.data.general.name += ' Copy';
+  
+  return result;
+};

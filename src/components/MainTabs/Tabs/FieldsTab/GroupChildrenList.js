@@ -6,7 +6,7 @@ const GroupChildrenList = (props) => {
     const {
         id,
         items,
-        changeSelectedList
+        changeSelectedList,
     } = props;
 
     return <>
@@ -18,6 +18,8 @@ const GroupChildrenList = (props) => {
                         key={item.id}
                         id={item.id}
                         item={item}
+                        parent={id}
+                        index={i}
                         changeSelectedList={changeSelectedList}
                     />
                 </div>)

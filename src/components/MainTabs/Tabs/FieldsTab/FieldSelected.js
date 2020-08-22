@@ -6,7 +6,7 @@ import AdvancedContent from './FieldContent/AdvancedContent';
 import { ucfirst } from '../../../../utility/functions';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
-import { cardSource, collect } from '../../../../utility/dragDrop';
+import { cardSource, collect, copyItem, deleteItem } from '../../../../utility/updateSelectedList';
 import './style.css'
 
 const FieldSelected = (props) => {
@@ -29,7 +29,7 @@ const FieldSelected = (props) => {
           toggleSettings={toggleSettings}
         />
         <div className="og-item__body og-collapsible__body">
-          <GeneralContent  type={type} index={index} fieldData={props.data.general} />
+          <GeneralContent type={type} index={index} fieldData={props.data.general} />
         </div>
         <div className="og-item__sort">
           <button type="button" className="og-item__up" title="Move up" onClick={() => props.changePosition(props.index, 'up')}>{arrowUpIcon}</button>
@@ -51,6 +51,9 @@ const FieldSelected = (props) => {
           copyItem={props.copyItem}
           removeItem={props.removeItem}
           toggleSettings={toggleSettings}
+          changeSelectedList={props.changeSelectedList}
+          parent={props.parent}
+          indexVal={props.indexVal}
         />
         <div className="og-item__body og-collapsible__body">
           <Tabs forceRenderTabPanel={true}>
@@ -59,10 +62,10 @@ const FieldSelected = (props) => {
               <Tab>Advanced</Tab>
             </TabList>
             <TabPanel>
-              <GeneralContent  type={type} index={index} fieldData={props.data.general} />
+              <GeneralContent type={type} index={index} fieldData={props.data.general} />
             </TabPanel>
             <TabPanel>
-              <AdvancedContent  type={type} index={index} data={props.data.advanced} />
+              <AdvancedContent type={type} index={index} data={props.data.advanced} />
             </TabPanel>
           </Tabs>
         </div>
@@ -77,11 +80,13 @@ const FieldSelected = (props) => {
 const Header = (props) => {
   const duplicate = (e) => {
     e.stopPropagation();
-    props.copyItem(props.type, props.index);
+    const newSelectedList = copyItem(props.index, props.parent, props.indexVal)
+    props.changeSelectedList(newSelectedList)
   };
   const remove = (e) => {
     e.stopPropagation();
-    props.removeItem(props.index);
+    const newSelectedList = deleteItem(props.index, props.parent, props.indexVal)
+    props.changeSelectedList(newSelectedList)
   };
 
   return (

@@ -21,8 +21,6 @@ const generatePHPCode = dispatch => params => {
 const formatParams = (params) => {
     let result = new Map();
     const listSelected = getSelectedList();
-    console.log('lll', listSelected)
-    console.log('ppp', params)
 
     // format params setting tab
     for (const key in params) {

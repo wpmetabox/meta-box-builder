@@ -15,6 +15,8 @@ const SelectedItem = (props) => {
     <Node
       id={item.id}
       item={item}
+      parent={id}
+      index={index}
       changeSelectedList={changeSelectedList}
     />
   </div>

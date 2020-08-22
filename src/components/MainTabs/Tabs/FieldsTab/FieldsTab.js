@@ -98,11 +98,10 @@ const FieldsTab = (props) => {
           {
             selectedList.items.map((item,index) => (
               <SelectedItem
-                key={item.id}
+                key={item.id + index}
                 id={"root"}
                 item={item}
                 index={index}
-                
                 changeSelectedList={changeSelectedList}
               />
             ))

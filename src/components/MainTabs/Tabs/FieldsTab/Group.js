@@ -6,7 +6,7 @@ import AdvancedContent from './FieldContent/AdvancedContent';
 import { ucfirst } from '../../../../utility/functions';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
-import { cardSource, collect } from '../../../../utility/dragDrop';
+import { cardSource, collect, copyItem, deleteItem } from '../../../../utility/updateSelectedList';
 import './style.css'
 
 const Group = (props) => {
@@ -33,6 +33,9 @@ const Group = (props) => {
           copyItem={props.copyItem}
           removeItem={props.removeItem}
           toggleSettings={toggleSettings}
+          changeSelectedList={props.changeSelectedList}
+          parent={props.parent}
+          indexVal={props.indexVal}
         />
         <div className="og-item__body og-collapsible__body">
           <Tabs forceRenderTabPanel={true}>
@@ -56,11 +59,13 @@ const Group = (props) => {
 const Header = (props) => {
   const duplicate = (e) => {
     e.stopPropagation();
-    props.copyItem(props.type, props.index);
+    const newSelectedList = copyItem(props.index, props.parent, props.indexVal)
+    props.changeSelectedList(newSelectedList)
   };
   const remove = (e) => {
     e.stopPropagation();
-    props.removeItem(props.index);
+    const newSelectedList = deleteItem(props.index, props.parent, props.indexVal)
+    props.changeSelectedList(newSelectedList)
   };
 
   return (
@@ -76,4 +81,4 @@ const Header = (props) => {
   );
 };
 
-export default memo(DragSource(Types.CARD, cardSource, collect)(Group), (prevProps, nextProps) => prevProps.items === nextProps.items);
+export default memo(DragSource(Types.CARD, cardSource, collect)(Group), (prevProps, nextProps) => prevProps.id === nextProps.id);
