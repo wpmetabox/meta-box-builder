@@ -1,5 +1,5 @@
 import memoizeOne from 'memoize-one';
-import { updateSelectedList, getSelectedList } from '../utility/functions';
+import { updateSelectedList, getSelectedList, getDataCopiedItem } from '../utility/functions';
 
 
 export const cardSource = {
@@ -45,7 +45,6 @@ export const moveNode = (from, to, index) => {
   var nodeTo = null,
     nodeFrom = null;
   let tree = getSelectedList();
-
   // Find node to receive
   memTraverse(tree, to, 0, (item) => {
     nodeTo = item;
@@ -58,6 +57,7 @@ export const moveNode = (from, to, index) => {
   memTraverse(tree, from, 0, (item, parent, i) => {
     parent = parent || tree;
     nodeFrom = item;
+    nodeFrom = keepValueNodeFrom(nodeFrom);
     parent.items.splice(i, 1);
   });
 
@@ -68,3 +68,24 @@ export const moveNode = (from, to, index) => {
   updateSelectedList(tree)
   return tree
 };
+
+const keepValueNodeFrom = (nodeItem) => {
+  let result = { ...nodeItem }
+  const childrens = nodeItem.items;
+
+  result.data = getDataCopiedItem(nodeItem.type, nodeItem.id);
+  if (childrens) {
+    result.items = []
+    childrens.map(children => {
+      if (isNotGroupField) {
+        result.items.push({ ...children, data: getDataCopiedItem(children.type, children.id) })
+      } else {
+        result.items.push(keepValueNodeFrom(children))
+      }
+    })
+  }
+
+  return result;
+}
+
+const isNotGroupField = type => type !== 'group'

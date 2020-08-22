@@ -25,4 +25,4 @@ const Node = (props) => {
       changeSelectedList={changeSelectedList} />
 }
 
-export default memo(Node);
+export default memo(Node, (prevProps, nextProps) => nextProps.item.type !== 'group' && prevProps.id === nextProps.id);
