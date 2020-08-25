@@ -50,27 +50,6 @@ const FieldsTab = (props) => {
     setSelectedList(newList);
   };
 
-  const changePosition = (id, direction) => {
-    let newList = [...selectedList];
-    const index = newList.map((item) => item.data.general.id).indexOf(id);
-    const itemChange = newList[index];
-    if (direction === 'up') {
-      if (0 === index) {
-        return;
-      }
-      newList[index] = newList[index - 1];
-      newList[index - 1] = itemChange;
-    } else {
-      if (index === selectedList.length - 1) {
-        return;
-      }
-      newList[index] = newList[index + 1];
-      newList[index + 1] = itemChange;
-    }
-
-    setSelectedList(newList);
-  };
-
   return (
     <div className="og-fields-wrapper">
       <div className="og-sidebar">
@@ -115,15 +94,3 @@ const FieldsTab = (props) => {
 const uniqid = () => Math.random().toString(36).substr(2);
 
 export default FieldsTab;
-
-// map((item) => (
-//   <FieldSelected
-//     
-//     data={item.data}
-//     key={item.data.general.id}
-//     index={item.data.general.id}
-//     removeItem={removeItem}
-//     copyItem={copyItem}
-//     changePosition={changePosition}
-//   />
-// ))

@@ -7,7 +7,6 @@ import { ucfirst } from '../../../../utility/functions';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
 import { cardSource, collect, copyItem, deleteItem } from '../../../../utility/updateSelectedList';
-import './style.css'
 
 const FieldSelected = (props) => {
   const { connectDragSource } = props;
@@ -30,10 +29,6 @@ const FieldSelected = (props) => {
         />
         <div className="og-item__body og-collapsible__body">
           <GeneralContent type={type} index={index} fieldData={props.data.general} />
-        </div>
-        <div className="og-item__sort">
-          <button type="button" className="og-item__up" title="Move up" onClick={() => props.changePosition(props.index, 'up')}>{arrowUpIcon}</button>
-          <button type="button" className="og-item__down" title="Move down" onClick={() => props.changePosition(props.index, 'down')}>{arrowDownIcon}</button>
         </div>
       </div>
     );
@@ -68,10 +63,6 @@ const FieldSelected = (props) => {
               <AdvancedContent type={type} index={index} data={props.data.advanced} />
             </TabPanel>
           </Tabs>
-        </div>
-        <div className="og-item__sort">
-          <button type="button" className="og-item__up" title="Move up" onClick={() => props.changePosition(props.index, 'up')}>{arrowUpIcon}</button>
-          <button type="button" className="og-item__down" title="Move down" onClick={() => props.changePosition(props.index, 'down')}>{arrowDownIcon}</button>
         </div>
       </li>
     </div>

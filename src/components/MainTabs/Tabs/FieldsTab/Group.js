@@ -7,7 +7,6 @@ import { ucfirst } from '../../../../utility/functions';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
 import { cardSource, collect, copyItem, deleteItem } from '../../../../utility/updateSelectedList';
-import './style.css'
 
 const Group = (props) => {
   const {
