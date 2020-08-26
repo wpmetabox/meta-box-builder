@@ -59,19 +59,25 @@ export const moveNode = (from, to, index, typeChange) => {
     nodeFrom = item;
     nodeFrom = keepValueNodeFrom(nodeFrom);
 
-    if (typeChange === 'copy') {
+    if (isCopying(typeChange)) {
       const itemCopy = createCopyItem({ ...nodeFrom })
       parent.items.splice(i + 1, 0, itemCopy);
     }
-    parent.items.splice(i, 1);
+    if (isNotDeleting(typeChange)) {
+      parent.items.splice(i, 1);
+    } else {
+      if (isExactlyParent(parent.id, to)) {
+        parent.items.splice(i, 1);
+      }
+    }
+
   });
   // Validate node from
   if (!nodeFrom) return;
   // Insert node
-  if (typeChange !== 'delete') {
+  if (isNotDeleting(typeChange)) {
     nodeTo.items.splice(index, 0, nodeFrom);
   }
-
 
   updateSelectedList(tree)
   return tree
@@ -104,16 +110,22 @@ export const deleteItem = (id, parent, index) => {
   return moveNode(id, parent, index, 'delete')
 }
 
-const isNotGroupField = type => type !== 'group';
-
-const uniqid = () => Math.random().toString(36).substr(2);
-
 const createCopyItem = (item) => {
   let result = { ...item };
   const newId = `${item.type}_${uniqid()}`
   result.id = newId
   result.data.general.id = newId;
   result.data.general.name += ' Copy';
-  
+
   return result;
 };
+
+const isNotGroupField = type => type !== 'group';
+
+const isCopying = typeChange => typeChange === 'copy';
+
+const isExactlyParent = (parentId, toId) => parentId === toId;
+
+const isNotDeleting = typeChange => typeChange !== 'delete';
+
+const uniqid = () => Math.random().toString(36).substr(2);
