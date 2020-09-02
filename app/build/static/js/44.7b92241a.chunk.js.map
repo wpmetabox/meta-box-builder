@@ -1,1 +1,0 @@
-{"version":3,"sources":["components/Common/Elements/Type.js"],"names":["Type"],"mappings":"8HAAA,OACeA,UADF,kBAAM","file":"static/js/44.7b92241a.chunk.js","sourcesContent":["const Type = () => null;\nexport default Type;"],"sourceRoot":""}

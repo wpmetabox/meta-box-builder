@@ -1,2 +1,1 @@
 (this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[14],{49:function(e,t,a){"use strict";a.r(t);var r=a(21),l=a(0),n=a.n(l),s=a(24);t.default=function(e){e.label,e.type;var t=Object(r.a)(e,["label","type"]);return n.a.createElement(s.a,Object.assign({},t,{label:"Address field",required:"true",tooltip:"The ID of address field. For multiple fields, separate them by comma."}))}}}]);
-//# sourceMappingURL=14.c090403b.chunk.js.map

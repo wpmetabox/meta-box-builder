@@ -1,2 +1,1 @@
 (this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[20],{58:function(e,t,n){"use strict";n.r(t);var s=n(0),a=n.n(s),r=n(24);t.default=function(e){return a.a.createElement(r.a,Object.assign({},e,{className:"og-field--id",label:"ID",type:"text",required:"true",tooltip:"Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores."}))}}}]);
-//# sourceMappingURL=20.acec15d3.chunk.js.map
