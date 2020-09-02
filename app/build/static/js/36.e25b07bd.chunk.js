@@ -1,0 +1,2 @@
+(this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[36],{83:function(e,t,n){"use strict";n.r(t);var a=n(0),r=n.n(a),o=n(24);t.default=function(e){return r.a.createElement(o.a,Object.assign({},e,{type:"text",label:"Button text"}))}}}]);
+//# sourceMappingURL=36.e25b07bd.chunk.js.map

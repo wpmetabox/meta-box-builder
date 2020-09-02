@@ -1,0 +1,2 @@
+(this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[30],{74:function(e,t,n){"use strict";n.r(t);var r=n(0),a=n.n(r),o=n(27);t.default=function(e){return a.a.createElement(o.a,Object.assign({},e,{label:"Parent",tooltip:"Set the selected post as the parent for the current being edited post."}))}}}]);
+//# sourceMappingURL=30.048cbfa5.chunk.js.map

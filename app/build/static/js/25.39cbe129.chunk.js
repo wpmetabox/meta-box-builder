@@ -1,0 +1,2 @@
+(this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[25],{67:function(e,t,n){"use strict";n.r(t);var l=n(0),o=n.n(l),i=n(27);t.default=function(e){return o.a.createElement(i.a,Object.assign({},e,{label:"Multiple",tooltip:"Allow to select multiple choices"}))}}}]);
+//# sourceMappingURL=25.39cbe129.chunk.js.map

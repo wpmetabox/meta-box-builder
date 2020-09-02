@@ -1,0 +1,2 @@
+(this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[43],{91:function(e,t,n){"use strict";n.r(t);var a=n(0),i=n.n(a),o=n(27);t.default=function(e){return i.a.createElement(o.a,Object.assign({},e,{label:"Timestamp",tooltip:"Save the date in the Unix timestamp format"}))}}}]);
+//# sourceMappingURL=43.d9d2c5ad.chunk.js.map
