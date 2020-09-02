@@ -17,7 +17,7 @@ const Attributes = props => {
           <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem} name={`fields-${props.index}`} type='attributes' />
         ))
       }
-      <button type="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Attribute</button>
+      <button type="button" className="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Attribute</button>
     </div>
   )
 }

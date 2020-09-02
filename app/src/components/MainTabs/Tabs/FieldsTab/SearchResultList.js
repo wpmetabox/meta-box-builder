@@ -19,7 +19,7 @@ const SearchResultList = (props) => {
 
   return (
     <div className="og-search-results">
-      {listItems.map((item, index) => <button type="button" onClick={() => props.onSelectField(item.type)} key={index}>{item.title}</button>)}
+      {listItems.map((item, index) => <button type="button" className="button" onClick={() => props.onSelectField(item.type)} key={index}>{item.title}</button>)}
     </div>
   )
 }

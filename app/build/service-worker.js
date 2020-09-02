@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/precache-manifest.46cc8a38c3e6f69e47ef82f084aa885c.js"
+  "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/precache-manifest.68841aa919b6df0d858cd61c2efb3c6b.js"
 );
 
 self.addEventListener('message', (event) => {

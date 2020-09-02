@@ -63,6 +63,7 @@ class Edit {
 		$css_files = array_filter( $assets_files, [ $this, 'is_css' ] );
 
 		// Load css files.
+		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css' );
 		foreach ( $css_files as $index => $css_file ) {
 			wp_enqueue_style( "mbb-app-$index", MBB_URL . "app/build/$css_file" );
 		}

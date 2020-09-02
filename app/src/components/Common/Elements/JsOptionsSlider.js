@@ -17,7 +17,7 @@ const JsOptionsSlider = props => {
             <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem} name={`fields-${props.index}`} type='js_options' />
           ))
         }
-        <button type="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Option</button>
+        <button type="button" className="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Option</button>
       </div>
     )
 }

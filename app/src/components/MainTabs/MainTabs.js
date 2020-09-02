@@ -40,7 +40,7 @@ export const MainTabs = () => {
             <SettingsTab register={register} />
           </TabPanel>
         </Tabs>
-        <button type="submit" disabled={loading}>Generate Code</button> {loading && <span className="og-loading">Generating code. Please wait...</span>}
+        <button type="submit" className="button button-primary" disabled={loading}>Generate Code</button> {loading && <span className="og-loading">Generating code. Please wait...</span>}
       </form>
     </FormContext>
   );

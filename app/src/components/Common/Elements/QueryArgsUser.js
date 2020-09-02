@@ -21,7 +21,7 @@ const QueryArgs = props => {
           <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem}  name={`fields-${props.index}`} type='query_args' />
         ))
       }
-      <button type="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Argument</button>
+      <button type="button" className="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Argument</button>
     </div>
   )
 }
