@@ -1,0 +1,16 @@
+name: Deploy to demo1.elightup.com site.
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: SamKirkland/FTP-Deploy-Action@3.0.0
+      with:
+        ftp-server: ${{ secrets.DEMO_URL }}
+        ftp-username: ${{ secrets.DEMO_USER }}
+        ftp-password: ${{ secrets.DEMO_PASSWORD }}
+        git-ftp-args: --insecure
