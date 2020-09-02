@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
     "autoprefixer": "^9.8.2",
     "memoize-one": "^5.1.1",
     "node-sass": "^4.14.1",
@@ -26,10 +23,8 @@
     "css": "node-sass --output-style compressed -x sass/style.scss -o public",
     "postcss": "postcss public/style.css -u autoprefixer --no-map -o public/style.css --autoprefixer.browsers=\"last 2 versions\"",
     "watch": "node-sass --output-style compressed -x -w sass -o public",
-    "deploy": "scp -r build/* metabox:/home/bitnami/apps/wordpress/htdocs/online-generator2",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
