@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "41e0b6ebdd0e4166c75aef9bb655f5e6",
+    "revision": "9aaac0f0528aba22f1ec819124428049",
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/index.html"
   },
   {
@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/css/48.3c091339.chunk.css"
   },
   {
-    "revision": "629e66e918314b6f08da",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/0.cd0ee7fb.chunk.js"
+    "revision": "4be304af9ec302c18dab",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/0.c06b3301.chunk.js"
   },
   {
-    "revision": "a5d65dadd791f608eb99",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/1.9760b3a6.chunk.js"
+    "revision": "24ddc7cdff3c2ada6fb9",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/1.3aa9db8f.chunk.js"
   },
   {
     "revision": "bb8e9386fbdcc4693b34",
@@ -36,8 +36,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/14.c090403b.chunk.js"
   },
   {
-    "revision": "2d4ac4f119d5f6d2a0f3",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/15.b11fe4e8.chunk.js"
+    "revision": "671822cf14fe0ce06056",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/15.ce2706d2.chunk.js"
   },
   {
     "revision": "2ea1dce249a0a12cadd5",
@@ -56,8 +56,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/19.f795ddd6.chunk.js"
   },
   {
-    "revision": "cb6da092c86012ecee2e",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/2.5a004b06.chunk.js"
+    "revision": "9451e13777fe8b0778be",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/2.5900c6b0.chunk.js"
   },
   {
     "revision": "438e1b7e1f795fd1a8da",
@@ -92,16 +92,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/27.9dc8b15b.chunk.js"
   },
   {
-    "revision": "236f6988fc697264d500",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/28.9a323759.chunk.js"
+    "revision": "5b46313df2048c400d93",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/28.f0643ebb.chunk.js"
   },
   {
-    "revision": "6a32645dca05e4ab568e",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/29.24cf5c9e.chunk.js"
+    "revision": "9822859591ed4c6ad980",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/29.a1c5ca49.chunk.js"
   },
   {
-    "revision": "456faf600f309d95afb9",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/3.949c0e40.chunk.js"
+    "revision": "528b5e1bb16647010283",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/3.8015c58d.chunk.js"
   },
   {
     "revision": "245e6023483d31275380",
@@ -144,8 +144,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/39.f0a6f3a8.chunk.js"
   },
   {
-    "revision": "aa78ac7bd905870647f0",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/4.38063314.chunk.js"
+    "revision": "611f1c23b658227b4b92",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/4.766d1631.chunk.js"
   },
   {
     "revision": "43377139e97de113a3cf",
@@ -192,8 +192,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/49.f976607f.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "ee65efb882cbc87816ba",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/5.0fb76b4b.chunk.js"
+    "revision": "a64c1d773d1989c74dc6",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/5.b2d1fc1c.chunk.js"
   },
   {
     "revision": "b962d3d3c8221ec31c34",
@@ -204,16 +204,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/51.8d65073b.chunk.js"
   },
   {
-    "revision": "d8b5fc860a6404453616",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/6.b2650388.chunk.js"
+    "revision": "71e8240fcc8f4b627d64",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/6.6ce056c7.chunk.js"
   },
   {
-    "revision": "505d920b19b05b0d44fb",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/7.d19492d2.chunk.js"
+    "revision": "02549b0932afab80a0c0",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/7.613be7ca.chunk.js"
   },
   {
-    "revision": "c598b3d657fd80333c7a",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/8.75224997.chunk.js"
+    "revision": "feab02c6d4aaeed4be82",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/8.5dc2ed41.chunk.js"
   },
   {
     "revision": "ca6a77fdef1385324d26",
@@ -224,7 +224,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/main.e3f558e9.chunk.js"
   },
   {
-    "revision": "0fe1179cd12c41221e66",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/runtime-main.275f040e.js"
+    "revision": "5e7fe35d14d8566e3281",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/runtime-main.c1b12fdc.js"
   }
 ]);

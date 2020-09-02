@@ -27,7 +27,7 @@ const Item = ({register, name, type, index, data, removeItem}) => (
   <div className="og-attribute">
     <input type="text" placeholder="Enter key" ref={register} name={`${name}-${type}-${index}-key`} defaultValue={data.key} />
     <input type="text" placeholder="Enter label" ref={register} name={`${name}-${type}-${index}-value`} defaultValue={data.label} />
-    <button type="button" className="button" onClick={() => removeItem(index)}>{xIcon}</button>
+    <button type="button" onClick={() => removeItem(index)}>{xIcon}</button>
   </div>
 )
 

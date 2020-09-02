@@ -6,10 +6,6 @@
   --color-red: #e53e3e;
   --shadow-md: 0 1px 1px rgba(0, 0, 0, .05);
 
-  label {
-    cursor: pointer;
-  }
-
   @import "elements";
   @import "sidebar";
   @import "fields";
