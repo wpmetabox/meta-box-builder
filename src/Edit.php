@@ -22,6 +22,8 @@ class Edit {
 		if ( ! $this->is_screen() ) {
 			return;
 		}
+		echo '<div id="root"></div>';
+		return;
 
 		$tab = mbb_get_current_tab();
 		require MBB_DIR . "views/tabs/$tab.php";
@@ -31,12 +33,52 @@ class Edit {
 		if ( ! $this->is_screen() ) {
 			return;
 		}
+		$this->load_react_app();
+		return;
+
 		$tab = isset( $_GET['tab'] ) ? $_GET['tab'] : null;
 		if ( 'code' === $tab ) {
 			$this->enqueue_for_code_tab();
 		} else {
 			$this->enqueue_for_builder();
 		}
+	}
+
+	function load_react_app() {
+		$manifest = MBB_DIR . 'app/build/asset-manifest.json';
+		$request = file_get_contents( $manifest );
+		if( ! $request ) {
+			return false;
+		}
+
+		$files_data = json_decode( $request );
+		if ( $files_data === null || ! property_exists( $files_data, 'entrypoints' ) ) {
+			return;
+		}
+
+		// Get assets links.
+		$assets_files = $files_data->entrypoints;
+
+		$js_files = array_filter( $assets_files, [ $this, 'is_js' ] );
+		$css_files = array_filter( $assets_files, [ $this, 'is_css' ] );
+
+		// Load css files.
+		foreach ( $css_files as $index => $css_file ) {
+			wp_enqueue_style( "mbb-app-$index", MBB_URL . "app/build/$css_file" );
+		}
+
+		// Load js files.
+		foreach ( $js_files as $index => $js_file ) {
+			wp_enqueue_script( "mbb-app-$index", MBB_URL . "app/build/$js_file", [], MBB_VER, true );
+		}
+	}
+
+	private function is_js( $file ) {
+		return pathinfo( $file, PATHINFO_EXTENSION ) === 'js';
+	}
+
+	private function is_css( $is_css ) {
+		return pathinfo( $is_css, PATHINFO_EXTENSION ) === 'css';
 	}
 
 	private function enqueue_for_code_tab() {

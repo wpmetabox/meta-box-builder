@@ -1,5 +1,6 @@
 {
   "name": "oneline-generator",
+  "homepage": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
