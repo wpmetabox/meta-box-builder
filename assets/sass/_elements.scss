@@ -32,6 +32,10 @@ svg {
   &__header {
     border: 1px solid var(--color-light);
     background-color: var(--color-lighter);
+    color: #23282d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     &:hover {
       border-color: var(--color-gray);
@@ -111,7 +115,7 @@ svg {
     background-color: #e5e5e5;
     border-color: var(--color-light);
     border-bottom: 1px solid var(--color-light);
-    margin-left: .5em;
+    margin-left: 6px;
     margin-bottom: 0;
   }
   &__tab--selected {

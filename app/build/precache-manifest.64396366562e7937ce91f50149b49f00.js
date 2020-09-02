@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ee0a93aed2d7e423d4b619b58a816a9a",
+    "revision": "41e0b6ebdd0e4166c75aef9bb655f5e6",
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/index.html"
   },
   {
@@ -8,12 +8,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/css/48.3c091339.chunk.css"
   },
   {
-    "revision": "f121afe55785514c65c8",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/0.3ed9d383.chunk.js"
+    "revision": "629e66e918314b6f08da",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/0.cd0ee7fb.chunk.js"
   },
   {
-    "revision": "3a585cd2fa0ea9720c0b",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/1.355234ea.chunk.js"
+    "revision": "a5d65dadd791f608eb99",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/1.9760b3a6.chunk.js"
   },
   {
     "revision": "bb8e9386fbdcc4693b34",
@@ -36,8 +36,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/14.c090403b.chunk.js"
   },
   {
-    "revision": "b85c7dd57b95dadf81ae",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/15.2abfe45f.chunk.js"
+    "revision": "2d4ac4f119d5f6d2a0f3",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/15.b11fe4e8.chunk.js"
   },
   {
     "revision": "2ea1dce249a0a12cadd5",
@@ -56,8 +56,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/19.f795ddd6.chunk.js"
   },
   {
-    "revision": "7387b910df3a2c1dd1d7",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/2.433f546d.chunk.js"
+    "revision": "cb6da092c86012ecee2e",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/2.5a004b06.chunk.js"
   },
   {
     "revision": "438e1b7e1f795fd1a8da",
@@ -92,16 +92,16 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/27.9dc8b15b.chunk.js"
   },
   {
-    "revision": "282ebb495828b573d27f",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/28.9e8f203a.chunk.js"
+    "revision": "236f6988fc697264d500",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/28.9a323759.chunk.js"
   },
   {
-    "revision": "298d22d2664511cd342c",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/29.e4370a48.chunk.js"
+    "revision": "6a32645dca05e4ab568e",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/29.24cf5c9e.chunk.js"
   },
   {
-    "revision": "870ffeb88834cd64a0f8",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/3.2578ab19.chunk.js"
+    "revision": "456faf600f309d95afb9",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/3.949c0e40.chunk.js"
   },
   {
     "revision": "245e6023483d31275380",
@@ -144,8 +144,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/39.f0a6f3a8.chunk.js"
   },
   {
-    "revision": "eadaae55346b77679458",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/4.7e517383.chunk.js"
+    "revision": "aa78ac7bd905870647f0",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/4.38063314.chunk.js"
   },
   {
     "revision": "43377139e97de113a3cf",
@@ -192,28 +192,28 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/49.f976607f.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "fbf543990813a477d396",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/5.e12de28d.chunk.js"
+    "revision": "ee65efb882cbc87816ba",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/5.0fb76b4b.chunk.js"
   },
   {
-    "revision": "f9d2ef7082da6f6c25c6",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/50.544fc144.chunk.js"
+    "revision": "b962d3d3c8221ec31c34",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/50.d4c6e26b.chunk.js"
   },
   {
     "revision": "defd3fbf09a1766b010b",
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/51.8d65073b.chunk.js"
   },
   {
-    "revision": "f3885906849bc512aec3",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/6.94a3b4e8.chunk.js"
+    "revision": "d8b5fc860a6404453616",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/6.b2650388.chunk.js"
   },
   {
-    "revision": "ec947199b06b4344f0b2",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/7.56a20a9d.chunk.js"
+    "revision": "505d920b19b05b0d44fb",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/7.d19492d2.chunk.js"
   },
   {
-    "revision": "6b916c295156559f84df",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/8.04a20db3.chunk.js"
+    "revision": "c598b3d657fd80333c7a",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/8.75224997.chunk.js"
   },
   {
     "revision": "ca6a77fdef1385324d26",
@@ -224,7 +224,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/main.e3f558e9.chunk.js"
   },
   {
-    "revision": "f0116900066ae9136c02",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/runtime-main.a04ab3c4.js"
+    "revision": "0fe1179cd12c41221e66",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/runtime-main.275f040e.js"
   }
 ]);

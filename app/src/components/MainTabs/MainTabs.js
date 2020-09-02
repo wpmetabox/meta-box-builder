@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import 'react-tabs/style/react-tabs.css';
-import { useForm, FormContext, useFormContext } from "react-hook-form";
+import { useForm, FormContext } from "react-hook-form";
 import { TabPanel, Tabs, TabList, Tab } from 'react-tabs';
 import SettingsTab from './Tabs/SettingsTab';
 import FieldsTab from './Tabs/FieldsTab/FieldsTab';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { settingIcon, fieldIcon } from '../../constants/icons';
 import { actions, Context } from '../../context/GeneratorContext';
 
 export const MainTabs = () => {
@@ -28,8 +27,8 @@ export const MainTabs = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Tabs forceRenderTabPanel={true}>
           <TabList>
-            <Tab>{fieldIcon} Fields</Tab>
-            <Tab>{settingIcon} Settings</Tab>
+            <Tab>Fields</Tab>
+            <Tab>Settings</Tab>
           </TabList>
           <TabPanel>
             <DndProvider backend={HTML5Backend}>

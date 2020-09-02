@@ -6,7 +6,17 @@
   margin-left: 36px;
 }
 &-sidebar {
-  width: 360px;
+  width: 300px;
+
+  .og-collapsible__header {
+    background: #fff;
+  }
+
+  .og-collapsible--expanded .og-collapsible__header,
+  .og-collapsible__header:hover {
+    border-color: var(--color-light);
+    background: var(--color-lighter);
+  }
 }
 &-search {
   width: 100%;
@@ -14,7 +24,7 @@
 }
 
 &-panel {
-  margin-bottom: 12px;
+  margin-bottom: -1px;
 
   h4 {
     cursor: pointer;
