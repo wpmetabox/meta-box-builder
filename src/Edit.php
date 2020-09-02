@@ -72,6 +72,11 @@ class Edit {
 		foreach ( $js_files as $index => $js_file ) {
 			wp_enqueue_script( "mbb-app-$index", MBB_URL . "app/build/$js_file", [], MBB_VER, true );
 		}
+
+  		wp_enqueue_style( 'highlightjs', 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/atom-one-dark.min.css', [], '9.12.0' );
+		wp_localize_script( 'mbb-app-0', 'mbbApp', [
+			'restUrl' => rest_url( 'mbb-parser/meta-box' ),
+		] );
 	}
 
 	private function is_js( $file ) {

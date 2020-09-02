@@ -2,11 +2,15 @@ import createDataContext from './createDataContext';
 import generatorReducer from './GeneratorReducer';
 import { GENERATE_PHP_CODE } from './GeneratorActions';
 import { getSelectedList } from '../utility/functions';
-import { fields } from '../constants/constants';
 
 const generatePHPCode = dispatch => params => {
-    const isTest = window.location.href.includes('localhost');
-    let url = isTest ? 'http://localhost/metaboxio/wp-json/mbb-parser/meta-box' : 'https://metabox.io/wp-json/mbb-parser/meta-box';
+    let url = null;
+    if ( window.mbbApp !== undefined ) {
+        url = window.mbbApp.restUrl;
+    } else {
+        const isTest = window.location.href.includes('localhost');
+        url = isTest ? 'http://localhost/metaboxio/wp-json/mbb-parser/meta-box' : 'https://metabox.io/wp-json/mbb-parser/meta-box';
+    }
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

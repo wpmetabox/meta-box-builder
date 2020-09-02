@@ -45,24 +45,24 @@
     "static/js/42.40b0d993.chunk.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/42.40b0d993.chunk.js",
     "static/js/43.d9d2c5ad.chunk.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/43.d9d2c5ad.chunk.js",
     "static/js/44.7b92241a.chunk.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/44.7b92241a.chunk.js",
-    "main.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/main.e3f558e9.chunk.js",
-    "runtime-main.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/runtime-main.c1b12fdc.js",
+    "main.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/main.6ff08539.chunk.js",
+    "runtime-main.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/runtime-main.f8aa3432.js",
     "static/js/47.b0676143.chunk.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/47.b0676143.chunk.js",
     "static/css/48.3c091339.chunk.css": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/css/48.3c091339.chunk.css",
     "static/js/48.805ba124.chunk.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/48.805ba124.chunk.js",
     "static/js/49.f976607f.chunk.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/49.f976607f.chunk.js",
     "static/js/50.d4c6e26b.chunk.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/50.d4c6e26b.chunk.js",
-    "static/js/51.8d65073b.chunk.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/51.8d65073b.chunk.js",
+    "static/js/51.bf56c1a0.chunk.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/51.bf56c1a0.chunk.js",
     "index.html": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/index.html",
-    "precache-manifest.11c0b6fac2f9faf229075124923338a6.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/precache-manifest.11c0b6fac2f9faf229075124923338a6.js",
+    "precache-manifest.2ed5965a4ee44c9e129701ae116edef9.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/precache-manifest.2ed5965a4ee44c9e129701ae116edef9.js",
     "service-worker.js": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/service-worker.js",
     "static/js/47.b0676143.chunk.js.LICENSE.txt": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/47.b0676143.chunk.js.LICENSE.txt",
     "static/js/48.805ba124.chunk.js.LICENSE.txt": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/48.805ba124.chunk.js.LICENSE.txt",
     "static/js/49.f976607f.chunk.js.LICENSE.txt": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/49.f976607f.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.c1b12fdc.js",
+    "static/js/runtime-main.f8aa3432.js",
     "static/js/49.f976607f.chunk.js",
-    "static/js/main.e3f558e9.chunk.js"
+    "static/js/main.6ff08539.chunk.js"
   ]
 }

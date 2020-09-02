@@ -14,10 +14,9 @@ const ResultCode = () => {
 
 	return data && (
 		<div className="og-result">
-			<div className="alert alert-info">Copy the code and paste into your theme's <code>functions.php</code> file. Wanna more features or use inside the WordPress admin? <a href="https://metabox.io/pricing/" target="_blank" rel="noopener noreferrer">Become a premium user</a>.</div>
 			<div className="og-result__body">
 				<Highlight language='php'>{data}</Highlight>
-				<Clipboard title="Click to copy the code" data-clipboard-text={data} onSuccess={copy}>{copied ? 'Copied' : 'Copy'}</Clipboard>
+				<Clipboard title="Click to copy the code" button-class="button" data-clipboard-text={data} onSuccess={copy}>{copied ? 'Copied' : 'Copy'}</Clipboard>
 			</div>
 		</div>
 	);

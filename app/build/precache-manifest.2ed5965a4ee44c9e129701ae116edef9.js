@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "9aaac0f0528aba22f1ec819124428049",
+    "revision": "2e9d9614f468e4a57763ebc56235f94e",
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/index.html"
   },
   {
@@ -200,8 +200,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/50.d4c6e26b.chunk.js"
   },
   {
-    "revision": "defd3fbf09a1766b010b",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/51.8d65073b.chunk.js"
+    "revision": "c2d005ab20f6d2aea614",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/51.bf56c1a0.chunk.js"
   },
   {
     "revision": "71e8240fcc8f4b627d64",
@@ -220,11 +220,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/9.872d608a.chunk.js"
   },
   {
-    "revision": "3181a02432fced7f0ded",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/main.e3f558e9.chunk.js"
+    "revision": "d4904857a1b7324476c7",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/main.6ff08539.chunk.js"
   },
   {
-    "revision": "5e7fe35d14d8566e3281",
-    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/runtime-main.c1b12fdc.js"
+    "revision": "882fdf1ecb5d6c04259b",
+    "url": "/metaboxplugins/wp-content/plugins/meta-box-builder-2/app/build/static/js/runtime-main.f8aa3432.js"
   }
 ]);

@@ -69,20 +69,13 @@ svg {
   &__body {
     position: relative;
   }
-  pre {
-    padding: 0;
-  }
-  .hljs {
-    font-size: 13px;
-  }
-
-  button {
+  & &__body button {
     position: absolute;
     top: 0;
     right: 0;
-    padding: 8px 12px;
     text-transform: none;
     border-radius: 0 0 0 4px;
+    border: none;
   }
 }
 

@@ -20,6 +20,7 @@ new PostType;
 new Upgrade\Manager;
 new Register;
 new RestApi;
+new \MBBParser\RestApi;
 
 if ( is_admin() ) {
 	new Import;
