@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "css": "node-sass --sourcemap none --output-style compressed -w assets/css -r -o assets/css"
+  }
+}

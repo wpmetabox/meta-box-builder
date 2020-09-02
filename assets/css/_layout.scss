@@ -1,0 +1,12 @@
+// Hide right meta box area. Make content full width.
+#poststuff .postbox-container {
+    display: none;
+}
+#poststuff #post-body.columns-2 {
+	margin-right: 0
+}
+
+// Fix padding for tab-nav-wrapper
+#poststuff .nav-tab-wrapper {
+	padding: 0;
+}

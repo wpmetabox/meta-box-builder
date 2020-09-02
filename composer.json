@@ -1,0 +1,47 @@
+{
+  "name": "meta-box/meta-box-builder",
+  "type": "wordpress-plugin",
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@github.com:wpmetabox/mbb-parser.git"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"MBB\\" : "src/"},
+    "files": ["src/helpers.php"]
+  },
+  "require": {
+    "twig/twig": "~1.33.2",
+    "meta-box/mbb-parser": "dev-master"
+  },
+  "extra": {
+    "light-ignore-plugin": {
+      "twig/twig": [
+        "doc",
+        "ext",
+        "test",
+        ".editorconfig",
+        ".gitignore",
+        "*.dist",
+        ".php_cs.dist",
+        ".travis.yml",
+        "*.json",
+        "*.rst",
+        "CHANGELOG",
+        "LICENSE"
+      ],
+      "meta-box/mbb-parser": [
+        ".git",
+        ".gitignore",
+        "*.json"
+      ],
+      "riimu/kit-phpencoder": [
+        "examples",
+        "*.md",
+        "*.json",
+        "LICENSE"
+      ]
+    }
+  }
+}
