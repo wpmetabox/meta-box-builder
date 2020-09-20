@@ -1,1 +1,0 @@
-(this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[24],{66:function(e,t,i){"use strict";i.r(t);var n=i(0),r=i.n(n),s=i(24);t.default=function(e){return r.a.createElement(s.a,Object.assign({},e,{label:"MIME types",type:"text",tooltip:"This is a filter for items in Media Library popup, it does not restrict file types when upload."}))}}}]);

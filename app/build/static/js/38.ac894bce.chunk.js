@@ -1,1 +1,0 @@
-(this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[38],{86:function(e,t,a){"use strict";a.r(t);var n=a(21),l=a(0),o=a.n(l),i=a(24);t.default=function(e){e.label,e.type;var t=Object(n.a)(e,["label","type"]);return o.a.createElement(i.a,Object.assign({},t,{label:"Default location",tooltip:"Format: latitude,longitude"}))}}}]);

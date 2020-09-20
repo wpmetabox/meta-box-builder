@@ -1,1 +1,0 @@
-(this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[32],{76:function(e,t,n){"use strict";n.r(t);var a=n(0),i=n.n(a),r=n(24);t.default=function(e){return i.a.createElement(r.a,Object.assign({},e,{type:"text",label:"Prefix",tooltip:"Text displayed before the field value"}))}}}]);

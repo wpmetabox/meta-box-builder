@@ -1,1 +1,0 @@
-(this["webpackJsonponeline-generator"]=this["webpackJsonponeline-generator"]||[]).push([[42],{90:function(e,t,n){"use strict";n.r(t);var a=n(21),r=n(0),c=n.n(r),l=n(24),s=n(7);t.default=function(e){var t=e.label,n=e.type,r=Object(a.a)(e,["label","type"]);return c.a.createElement(l.a,Object.assign({},r,{label:Object(s.c)(t,n)}))}}}]);
