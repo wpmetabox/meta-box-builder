@@ -45,33 +45,11 @@ class Edit {
 	}
 
 	function load_react_app() {
-		$manifest = MBB_DIR . 'app/build/asset-manifest.json';
-		$request = file_get_contents( $manifest );
-		if( ! $request ) {
-			return false;
-		}
-
-		$files_data = json_decode( $request );
-		if ( $files_data === null || ! property_exists( $files_data, 'entrypoints' ) ) {
-			return;
-		}
-
-		// Get assets links.
-		$assets_files = $files_data->entrypoints;
-
-		$js_files = array_filter( $assets_files, [ $this, 'is_js' ] );
-		$css_files = array_filter( $assets_files, [ $this, 'is_css' ] );
-
-		// Load css files.
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css' );
-		foreach ( $css_files as $index => $css_file ) {
-			wp_enqueue_style( "mbb-app-$index", MBB_URL . "app/build/$css_file" );
-		}
+		wp_enqueue_style( 'mbb-app-bundle', MBB_URL . 'app/build/static/css/bundle.min.css' );
 
-		// Load js files.
-		foreach ( $js_files as $index => $js_file ) {
-			wp_enqueue_script( "mbb-app-$index", MBB_URL . "app/build/$js_file", [], MBB_VER, true );
-		}
+		wp_enqueue_code_editor( ['type' => 'php'] );
+		wp_enqueue_script( 'mbb-app', MBB_URL . 'app/build/static/js/bundle.min.js', ['wp-element', 'wp-components', 'clipboard'], MBB_VER, true );
 
   		wp_enqueue_style( 'highlightjs', 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/atom-one-dark.min.css', [], '9.12.0' );
 		wp_localize_script( 'mbb-app-0', 'mbbApp', [
