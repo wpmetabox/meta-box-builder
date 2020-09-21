@@ -23,28 +23,12 @@ class Edit {
 			return;
 		}
 		echo '<div id="root"></div>';
-		return;
-
-		$tab = mbb_get_current_tab();
-		require MBB_DIR . "views/tabs/$tab.php";
 	}
 
 	public function enqueue() {
 		if ( ! $this->is_screen() ) {
 			return;
 		}
-		$this->load_react_app();
-		return;
-
-		$tab = isset( $_GET['tab'] ) ? $_GET['tab'] : null;
-		if ( 'code' === $tab ) {
-			$this->enqueue_for_code_tab();
-		} else {
-			$this->enqueue_for_builder();
-		}
-	}
-
-	function load_react_app() {
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css' );
 		wp_enqueue_style( 'mbb-app-bundle', MBB_URL . 'app/build/static/css/bundle.min.css' );
 
@@ -52,106 +36,22 @@ class Edit {
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'app/build/static/js/bundle.min.js', ['wp-element', 'wp-components', 'clipboard'], MBB_VER, true );
 
   		wp_enqueue_style( 'highlightjs', 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/atom-one-dark.min.css', [], '9.12.0' );
-		wp_localize_script( 'mbb-app-0', 'mbbApp', [
+		wp_localize_script( 'mbb-app', 'mbbApp', [
 			'restUrl' => rest_url( 'mbb-parser/meta-box' ),
 		] );
-	}
 
-	private function is_js( $file ) {
-		return pathinfo( $file, PATHINFO_EXTENSION ) === 'js';
-	}
-
-	private function is_css( $is_css ) {
-		return pathinfo( $is_css, PATHINFO_EXTENSION ) === 'css';
-	}
-
-	private function enqueue_for_code_tab() {
-		wp_enqueue_code_editor( [
-			'type' => 'application/x-httpd-php',
-		] );
-		wp_enqueue_style( 'mbb-code', MBB_URL . 'assets/css/code.css', ['code-editor'], MBB_VER  );
-
-		wp_enqueue_script( 'clipboard', '//cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js', [], '2.0.6', true );
-		wp_enqueue_script( 'mbb-code', MBB_URL . 'assets/js/code.js', ['code-editor', 'clipboard' ], MBB_VER, true );
-	}
-
-	private function enqueue_for_builder() {
-		wp_enqueue_style( 'rwmb-select2', RWMB_CSS_URL . 'select2/select2.css', [], RWMB_VER );
-		wp_enqueue_style( 'rwmb-select-advanced', RWMB_CSS_URL . 'select-advanced.css', [], RWMB_VER );
-		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_style( 'mbb-builder', MBB_URL . 'assets/css/builder.css', [], MBB_VER );
-
-		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
-			wp_enqueue_code_editor( [ 'type' => 'text/html' ] );
-		}
-		wp_add_inline_script(
-			'wp-codemirror',
-			'window.CodeMirror = wp.CodeMirror;'
-		);
-
-		wp_register_script( 'angularjs', MBB_URL . 'assets/js/angular.min.js', [], '1.6.9', true );
-		wp_register_script( 'angularjs-animate', MBB_URL . 'assets/js/angular-animate.min.js', [ 'angularjs' ], '1.6.9', true );
-		wp_register_script( 'angular-ui-sortable', MBB_URL . 'assets/js/angular-ui-sortable.min.js', [ 'angularjs' ], '0.19.0', true );
-		wp_register_script( 'angular-ui-bootstrap-collapse', MBB_URL . 'assets/js/angular-ui-bootstrap-collapse.min.js', [ 'angularjs' ], '2.5.0', true );
-		wp_register_script( 'angular-checklist-model', MBB_URL . 'assets/js/angular-checklist-model.js', [ 'angularjs' ], '1.0.0', true );
-		wp_register_script( 'angular-ui-codemirror', MBB_URL . 'assets/js/ui-codemirror.js', [ 'angularjs' ], '1.0.0', true );
-		wp_register_script( 'codemirror-autorefresh', MBB_URL . 'assets/js/codemirror-autorefresh.js', [ 'wp-codemirror' ], '1.0.0', true );
-		wp_register_script( 'tg-dynamic-directive', MBB_URL . 'assets/js/tg.dynamic.directive.js', [ 'angularjs' ], '0.3.0', true );
-		wp_register_script( 'meta-box-builder-directives', MBB_URL . 'assets/js/directives.js', [ 'angularjs' ], '2.12.0', true );
-		wp_register_script( 'rwmb-select2', RWMB_JS_URL . 'select2/select2.min.js', [ 'jquery' ], '4.0.2', true );
-		wp_register_script( 'popper', MBB_URL . 'assets/js/popper.min.js', [], '1.15.0', true );
-		wp_register_script( 'tippy', MBB_URL . 'assets/js/tippy.min.js', ['popper'], '4.3.1', true );
-
-		wp_enqueue_script(
-			'meta-box-builder',
-			MBB_URL . 'assets/js/builder.js',
-			array(
-				'angularjs-animate',
-				'angular-ui-sortable',
-				'angular-ui-bootstrap-collapse',
-				'angular-checklist-model',
-				'tg-dynamic-directive',
-				'meta-box-builder-directives',
-				'rwmb-select2',
-				'accordion',
-				'tippy',
-				'wp-color-picker',
-				'angular-ui-codemirror'
-			),
-			MBB_VER,
-			true
-		);
-
-		// If we're updating metabox, load old data.
-		if ( isset( $_GET['post'] ) ) {
-			$post = get_post( $_GET['post'] );
-
-			// Should convert to array to enqueue properly.
-			$meta = json_decode( $post->post_excerpt, true );
-			wp_localize_script( 'meta-box-builder', 'meta', $meta );
-		}
-
-		$attrs = require __DIR__ . '/define.php';
-		wp_localize_script( 'meta-box-builder', 'attrs', $attrs );
-		wp_localize_script( 'meta-box-builder', 'post_types', mbb_get_post_types() );
-		wp_localize_script( 'meta-box-builder', 'taxonomies', mbb_get_taxonomies() );
-		wp_localize_script( 'meta-box-builder', 'settings_pages', mbb_get_setting_pages() );
-		wp_localize_script( 'meta-box-builder', 'templates', mbb_get_templates() );
-		wp_localize_script( 'meta-box-builder', 'icons', mbb_get_dashicons() );
-		wp_localize_script( 'meta-box-builder', 'menu', mbb_get_builder_menu() );
-		wp_localize_script( 'meta-box-builder', 'align', [
+		wp_localize_script( 'mbb-app', 'post_types', mbb_get_post_types() );
+		wp_localize_script( 'mbb-app', 'taxonomies', mbb_get_taxonomies() );
+		wp_localize_script( 'mbb-app', 'settings_pages', mbb_get_setting_pages() );
+		wp_localize_script( 'mbb-app', 'templates', mbb_get_templates() );
+		wp_localize_script( 'mbb-app', 'icons', mbb_get_dashicons() );
+		wp_localize_script( 'mbb-app', 'menu', mbb_get_builder_menu() );
+		wp_localize_script( 'mbb-app', 'align', [
 			'left'   => __( 'Left', 'meta-box-builder' ),
 			'right'  => __( 'Right', 'meta-box-builder' ),
 			'center' => __( 'Center', 'meta-box-builder' ),
 			'wide'   => __( 'Wide', 'meta-box-builder' ),
 			'full'   => __( 'Full', 'meta-box-builder' ),
-		] );
-
-		wp_localize_script( 'meta-box-builder', 'i18n', [
-			'defaultTitle' => __( 'Untitled Field Group', 'meta-box-builder' ),
-			'copy' => __( '(Copy)', 'meta-box-builder' ),
-			'rest_url' => esc_url_raw( rest_url() ),
-    		'rest_nonce' => wp_create_nonce( 'wp_rest' )
 		] );
 	}
 
