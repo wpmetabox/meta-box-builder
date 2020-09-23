@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+const { useReducer } = wp.element;
 
 export default (reducer, actions, defaultValue) => {
     const Context = React.createContext();

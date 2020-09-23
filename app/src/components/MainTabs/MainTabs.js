@@ -3,25 +3,16 @@ import SettingsTab from './Tabs/SettingsTab';
 import FieldsTab from './Tabs/FieldsTab/FieldsTab';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { actions, Context } from '../../context/GeneratorContext';
+import { actions } from '../../context/GeneratorContext';
+import Result from '../Result';
 
-const { useState, useEffect, useContext } = wp.element;
 const { TabPanel } = wp.components;
 const { __ } = wp.i18n;
 
 const MainTabs = () => {
   const { handleSubmit, register, control } = useForm();
   const methods = useForm();
-
-  const state = useContext(Context);
-  const [loading, setLoading] = useState(false);
-
-  const onSubmit = data => {
-    setLoading(true);
-    actions.generatePHPCode(data);
-  }
-
-  useEffect(() => setLoading(false), [state.state.responseTime])
+  const onSubmit = data => actions.generatePHPCode(data);
 
   const tabs = [
     {
@@ -45,18 +36,21 @@ const MainTabs = () => {
       </DndProvider>
     ),
     settings: <SettingsTab register={register} />,
-    code: (
-      <>
-        This is code tab
-      </>
-    )
+    code: <Result />
+  }
+
+  const onSelect = tab => {
+    if ( tab !== 'code' ) {
+      return;
+    }
+    // TODO: get data in JSON format.
+    handleSubmit( onSubmit );
   }
 
   return (
     <FormContext {...methods} register={register} control={control}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TabPanel className="mbb-tabs" tabs={ tabs }>{ tab => panels[tab.name] }</TabPanel>
-        <button type="submit" className="button button-primary" disabled={loading}>Generate Code</button> {loading && <span className="og-loading">Generating code. Please wait...</span>}
+        <TabPanel className="mbb-tabs" tabs={ tabs } onSelect={ onSelect }>{ tab => panels[tab.name] }</TabPanel>
       </form>
     </FormContext>
   );
