@@ -34,8 +34,7 @@ class Edit {
 		wp_enqueue_code_editor( ['type' => 'php'] );
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'app/build/bundle.min.js', ['wp-element', 'wp-components', 'clipboard'], MBB_VER, true );
 
-  		wp_enqueue_style( 'highlightjs', 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.12.0/build/styles/atom-one-dark.min.css', [], '9.12.0' );
-		wp_localize_script( 'mbb-app', 'mbbApp', [
+		wp_localize_script( 'mbb-app', 'MbbApp', [
 			'restUrl' => rest_url( 'mbb-parser/meta-box' ),
 		] );
 
