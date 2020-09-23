@@ -13,8 +13,8 @@ const externals = {
 module.exports = {
     entry: "./src/index.js",
     output: {
-        path: path.join(__dirname, "/build"),
-        filename: "bundle.min.js"
+        path: path.join(__dirname, "../assets/js"),
+        filename: "app.js"
     },
     externals,
     module: {
