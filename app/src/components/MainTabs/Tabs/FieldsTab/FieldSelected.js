@@ -1,12 +1,14 @@
-import React, { useState, memo } from 'react';
 import { trashIcon, copyIcon, arrowDownIcon, arrowUpIcon } from '../../../../constants/icons';
-import { TabPanel, Tabs, TabList, Tab } from 'react-tabs';
 import GeneralContent from './FieldContent/GeneralContent';
 import AdvancedContent from './FieldContent/AdvancedContent';
 import { ucfirst } from '../../../../utility/functions';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
 import { cardSource, collect, copyItem, deleteItem } from '../../../../utility/updateSelectedList';
+
+const { useState, memo } = wp.element;
+const { TabPanel } = wp.components;
+const { __ } = wp.i18n;
 
 const FieldSelected = (props) => {
   const { connectDragSource } = props;
@@ -33,6 +35,20 @@ const FieldSelected = (props) => {
       </div>
     );
   }
+  const tabs = [
+    {
+      name: 'general',
+      title: __( 'General', 'meta-box-builder' ),
+    },
+    {
+      name: 'advanced',
+      title: __( 'Advanced', 'meta-box-builder' ),
+    },
+  ];
+  const panels = {
+    general: <GeneralContent type={type} index={index} fieldData={props.data.general} />,
+    advanced: <AdvancedContent type={type} index={index} data={props.data.advanced} />
+  };
 
   return connectDragSource(
     <div className={`og-item og-item--${type} og-collapsible${expanded ? ' og-collapsible--expanded' : ''}`}>
@@ -50,20 +66,7 @@ const FieldSelected = (props) => {
           parent={props.parent}
           indexVal={props.indexVal}
         />
-        <div className="og-item__body og-collapsible__body">
-          <Tabs forceRenderTabPanel={true}>
-            <TabList>
-              <Tab>General</Tab>
-              <Tab>Advanced</Tab>
-            </TabList>
-            <TabPanel>
-              <GeneralContent type={type} index={index} fieldData={props.data.general} />
-            </TabPanel>
-            <TabPanel>
-              <AdvancedContent type={type} index={index} data={props.data.advanced} />
-            </TabPanel>
-          </Tabs>
-        </div>
+        <TabPanel className="og-item__body og-collapsible__body" tabs={ tabs }>{ tab => panels[tab.name] }</TabPanel>
       </li>
     </div>
   );
