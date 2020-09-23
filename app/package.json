@@ -8,7 +8,7 @@
     "postcss": "postcss public/style.css -u autoprefixer --no-map -o public/style.css --autoprefixer.browsers=\"last 2 versions\"",
     "watch": "node-sass --output-style compressed -x -w sass -o public",
     "start": "node_modules/.bin/webpack-dev-server --mode development --open --hot",
-    "build": "node_modules/.bin/webpack --mode production"
+    "build": "webpack --mode production"
   },
   "dependencies": {
     "@babel/core": "^7.11.6",

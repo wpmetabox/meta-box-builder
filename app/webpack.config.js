@@ -4,14 +4,21 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require('webpack')
 
+// https://www.cssigniter.com/how-to-use-external-react-components-in-your-gutenberg-blocks/
+const externals = {
+	'react': 'React',
+	'react-dom': 'ReactDOM',
+	'codemirror': 'wp.CodeMirror',
+	'clipboard': 'ClipboardJS',
+};
 
 module.exports = {
-    devtool: 'source-map',
     entry: "./src/index.js",
     output: {
         path: path.join(__dirname, "/build"),
         filename: "bundle.min.js"
     },
+    externals,
     module: {
         rules: [{
             test: /\.js$/,
