@@ -29,7 +29,7 @@ class Edit {
 		if ( ! $this->is_screen() ) {
 			return;
 		}
-		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css' );
+		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', ['wp-components'] );
 
 		wp_enqueue_code_editor( ['type' => 'php'] );
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'app/build/bundle.min.js', ['wp-element', 'wp-components', 'clipboard'], MBB_VER, true );

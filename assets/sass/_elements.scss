@@ -93,28 +93,3 @@ svg {
   font-weight: 400;
   max-width: 400px;
 }
-
-// Tabs
-.react-tabs {
-  margin-bottom: 24px;
-
-  &__tab-list{
-    border-bottom-color: var(--color-light);
-    margin-bottom: 24px;
-    margin-left: 0;
-  }
-  &__tab {
-    font-weight: bold;
-    background-color: #e5e5e5;
-    border-color: var(--color-light);
-    border-bottom: 1px solid var(--color-light);
-    margin-left: 6px;
-    margin-bottom: 0;
-  }
-  &__tab--selected {
-    color: inherit;
-    background-color: inherit;
-    border-radius: 0;
-    border-bottom-color: #f1f1f1;
-  }
-}
