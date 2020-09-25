@@ -48,11 +48,7 @@ const MainTabs = () => {
   }
 
   return (
-    <FormContext {...methods} register={register} control={control}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TabPanel className="mbb-tabs" tabs={ tabs } onSelect={ onSelect }>{ tab => panels[tab.name] }</TabPanel>
-      </form>
-    </FormContext>
+      <TabPanel className="mbb-tabs" tabs={ tabs } onSelect={ onSelect }>{ tab => panels[tab.name] }</TabPanel>
   );
 }
 

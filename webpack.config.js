@@ -10,7 +10,7 @@ const externals = {
 };
 
 module.exports = {
-    entry: "./app/src/index.js",
+    entry: "./app/App.js",
     output: {
         path: path.join( __dirname, "assets/js" ),
         filename: "app.js"
