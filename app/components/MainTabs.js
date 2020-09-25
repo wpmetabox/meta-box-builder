@@ -3,8 +3,8 @@ import SettingsTab from './Tabs/SettingsTab';
 import FieldsTab from './Tabs/FieldsTab/FieldsTab';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { actions } from '../../context/GeneratorContext';
-import Result from '../Result';
+import { actions } from '../context/GeneratorContext';
+import Result from './Result';
 
 const { TabPanel } = wp.components;
 const { __ } = wp.i18n;
@@ -48,7 +48,11 @@ const MainTabs = () => {
   }
 
   return (
-      <TabPanel className="mbb-tabs" tabs={ tabs } onSelect={ onSelect }>{ tab => panels[tab.name] }</TabPanel>
+    <FormContext {...methods} register={register} control={control}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <TabPanel className="mbb-tabs" tabs={ tabs } onSelect={ onSelect }>{ tab => panels[tab.name] }</TabPanel>
+      </form>
+    </FormContext>
   );
 }
 

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import FieldMenu from './FieldMenu';
-import { fields } from '../../../../constants/constants';
+import { fields } from '../../../constants/constants';
 import {
   getDataCopiedItem,
   updateSelectedList,
-} from '../../../../utility/functions';
+} from '../../../utility/functions';
 import SearchResultList from './SearchResultList';
 import SelectedItem from './SelectedItem';
 

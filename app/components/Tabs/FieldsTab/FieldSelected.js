@@ -1,10 +1,10 @@
-import { trashIcon, copyIcon, arrowDownIcon, arrowUpIcon } from '../../../../constants/icons';
+import { trashIcon, copyIcon, arrowDownIcon, arrowUpIcon } from '../../../constants/icons';
 import GeneralContent from './FieldContent/GeneralContent';
 import AdvancedContent from './FieldContent/AdvancedContent';
-import { ucfirst } from '../../../../utility/functions';
+import { ucfirst } from '../../../utility/functions';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
-import { cardSource, collect, copyItem, deleteItem } from '../../../../utility/updateSelectedList';
+import { cardSource, collect, copyItem, deleteItem } from '../../../utility/updateSelectedList';
 
 const { useState, memo } = wp.element;
 const { TabPanel } = wp.components;

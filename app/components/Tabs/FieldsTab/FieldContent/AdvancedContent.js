@@ -1,15 +1,15 @@
 import React, { memo, Suspense, lazy } from 'react';
-import { getElementControlName } from '../../../../../utility/functions';
+import { getElementControlName } from '../../../../utility/functions';
 
 const AdvancedContent = (props) => {
   const getElement = (name) => {
     let componentName = getElementControlName(name, props.type);
-    let Element = lazy(() => import(`../../../../Common/Elements/${componentName}`))
+    let Element = lazy(() => import(`../../../Common/Elements/${componentName}`))
 
     return <Element
       name={`fields-${props.index}-${name}`}
       label={name}
-      
+
       defaultValue={props.data[name]}
       data={props.data}
       type={props.type}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { fieldTypes } from '../../../../constants/constants';
+import { fieldTypes } from '../../../constants/constants';
 
 const SearchResultList = (props) => {
   const getSearchResult = (param) => {
