@@ -11,7 +11,6 @@ const SelectedItem = (props) => {
   } = props;
 
   return <div key={item.id}>
-    <Insert index={index} parent={id} />
     <Node
       id={item.id}
       item={item}
@@ -19,6 +18,7 @@ const SelectedItem = (props) => {
       index={index}
       changeSelectedList={changeSelectedList}
     />
+    <Insert index={index} parent={id} />
   </div>
 };
 
