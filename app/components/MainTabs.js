@@ -1,6 +1,6 @@
 import { useForm, FormContext } from "react-hook-form";
 import SettingsTab from './Tabs/SettingsTab';
-import FieldsTab from './Tabs/FieldsTab/FieldsTab';
+import FieldsTab from './Tabs/FieldsTab';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { actions } from '../context/GeneratorContext';

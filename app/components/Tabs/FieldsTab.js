@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import FieldMenu from './FieldMenu';
-import { fields } from '../../../constants/constants';
+import FieldMenu from './FieldsTab/FieldMenu';
+import { fields } from '../../constants/constants';
 import {
   getDataCopiedItem,
   updateSelectedList,
-} from '../../../utility/functions';
-import SearchResultList from './SearchResultList';
-import SelectedItem from './SelectedItem';
+} from '../../utility/functions';
+import SearchResultList from './FieldsTab/SearchResultList';
+import SelectedItem from './FieldsTab/SelectedItem';
 
 const FieldsTab = (props) => {
   const [selectedList, setSelectedList] = useState({ id: 'root', items: [] });
