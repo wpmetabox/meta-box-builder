@@ -1,4 +1,4 @@
-import { useForm, FormContext } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import SettingsTab from './Tabs/SettingsTab';
 import FieldsTab from './Tabs/FieldsTab';
 import { DndProvider } from 'react-dnd';
@@ -48,11 +48,11 @@ const MainTabs = () => {
   }
 
   return (
-    <FormContext {...methods} register={register} control={control}>
+    <FormProvider {...methods} register={register} control={control}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <TabPanel className="mbb-tabs" tabs={ tabs } onSelect={ onSelect }>{ tab => panels[tab.name] }</TabPanel>
       </form>
-    </FormContext>
+    </FormProvider>
   );
 }
 
