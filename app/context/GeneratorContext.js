@@ -17,7 +17,7 @@ const generatePHPCode = dispatch => params => {
 		.catch(error => console.log(error));
 };
 
-const formatParams = (params) => {
+export const formatParams = (params) => {
 	let result = new Map();
 	const listSelected = getSelectedList();
 

@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import FieldMenu from './FieldsTab/FieldMenu';
 import { fields } from '../../constants/constants';
 import {
-  getDataCopiedItem,
   updateSelectedList,
 } from '../../utility/functions';
 import SearchResultList from './FieldsTab/SearchResultList';
@@ -27,28 +26,6 @@ const FieldsTab = (props) => {
   };
 
   const changeSelectedList = useCallback(params => setSelectedList(params), []);
-
-  const removeItem = (id) => {
-    let newList = [...selectedList];
-    const index = newList.map((item) => item.data.general.id).indexOf(id);
-    newList.splice(index, 1);
-    setSelectedList(newList);
-  };
-
-  const copyItem = (type, id) => {
-    let item = { type };
-    item.data = getDataCopiedItem(type, id);
-    if (item.data.general.id !== undefined) {
-      item.data.general.id += `_${uniqid()}`;
-    }
-    if (item.data.general.name !== undefined) {
-      item.data.general.name += ' Copy';
-    }
-    let newList = [...selectedList];
-    const index = newList.map((item) => item.data.general.id).indexOf(id);
-    newList.splice(index + 1, 0, item);
-    setSelectedList(newList);
-  };
 
   return (
     <div className="og-fields-wrapper">
@@ -75,7 +52,7 @@ const FieldsTab = (props) => {
         )}
         <ul>
           {
-            selectedList.items.map((item,index) => (
+            selectedList.items.map((item, index) => (
               <SelectedItem
                 key={item.id + index}
                 id={"root"}
@@ -93,4 +70,4 @@ const FieldsTab = (props) => {
 
 const uniqid = () => Math.random().toString(36).substr(2);
 
-export default FieldsTab;
+export default memo(FieldsTab);

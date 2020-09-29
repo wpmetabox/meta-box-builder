@@ -3,21 +3,28 @@ import SettingsTab from './Tabs/SettingsTab';
 import FieldsTab from './Tabs/FieldsTab';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { actions } from '../context/GeneratorContext';
+import { actions, formatParams } from '../context/GeneratorContext';
 import Result from './Result';
 
 const { TabPanel } = wp.components;
 const { __ } = wp.i18n;
+const INPUT_FORM_DATA = 'input-form-data'
 
 const MainTabs = () => {
-  const { handleSubmit, register, control } = useForm();
+  const { handleSubmit, register, control, watch } = useForm();
   const methods = useForm();
   const onSubmit = data => actions.generatePHPCode(data);
+
+  const onPublish = data => {
+    const inputData = document.getElementById(INPUT_FORM_DATA)
+    inputData.value = JSON.stringify(formatParams(data))
+  }
 
   const tabs = [
     {
       name: 'fields',
       title: __( 'Fields', 'meta-box-builder' ),
+      forceLayout:true 
     },
     {
       name: 'settings',
@@ -26,13 +33,13 @@ const MainTabs = () => {
     {
       name: 'code',
       title: __( 'Get PHP Code', 'meta-box-builder' ),
-      className: 'mbb-code button button-small'
+      className: 'mbb-code button button-small',
     }
   ];
   const panels = {
     fields: (
       <DndProvider backend={HTML5Backend}>
-        <FieldsTab />
+        <FieldsTab watch={watch} />
       </DndProvider>
     ),
     settings: <SettingsTab register={register} />,
@@ -43,15 +50,20 @@ const MainTabs = () => {
     if ( tab !== 'code' ) {
       return;
     }
+    const submitButton = document.getElementById('submit-form')
+    submitButton.click()
     // TODO: get data in JSON format.
-    handleSubmit( onSubmit );
+    // handleSubmit( onSubmit );
   }
 
   return (
     <FormProvider {...methods} register={register} control={control}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <TabPanel className="mbb-tabs" tabs={ tabs } onSelect={ onSelect }>{ tab => panels[tab.name] }</TabPanel>
+        <TabPanel initialTabName='fields' className="mbb-tabs" tabs={ tabs } onSelect={ onSelect }>{ tab => panels[tab.name] }</TabPanel>
+        <button type="submit" style={{display: 'none'}} id="submit-form" />
       </form>
+      <input type="hidden" id={INPUT_FORM_DATA} />
+      <button onClick={handleSubmit(onPublish)}>Publish</button>
     </FormProvider>
   );
 }
