@@ -5,17 +5,12 @@ class Edit {
 	public $meta = [];
 
 	public function __construct() {
-		add_action( 'add_meta_boxes_meta-box', [ $this, 'remove_meta_box' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'edit_form_after_title', [ $this, 'render' ] );
 
 		// Removed hooks that modify post content, excerpt. Priority 20 to run after default WP hooks.
 		add_action( 'init', [ $this, 'remove_content_hooks' ], 20 );
 		add_filter( 'wp_insert_post_data', [ $this, 'update_meta_box' ], 10, 2 );
-	}
-
-	public function remove_meta_box() {
-		remove_meta_box( 'submitdiv', 'meta-box', 'side' );
 	}
 
 	public function render() {

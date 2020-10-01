@@ -8,7 +8,7 @@ import Result from './Result';
 
 const { TabPanel } = wp.components;
 const { __ } = wp.i18n;
-const INPUT_FORM_DATA = 'input-form-data'
+const INPUT_FORM_DATA = 'post_content';
 
 const MainTabs = () => {
   const { handleSubmit, register, control, watch } = useForm();
@@ -24,7 +24,7 @@ const MainTabs = () => {
     {
       name: 'fields',
       title: __( 'Fields', 'meta-box-builder' ),
-      forceLayout:true 
+      forceLayout:true
     },
     {
       name: 'settings',
