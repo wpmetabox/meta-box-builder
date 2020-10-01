@@ -5,7 +5,7 @@ if ( file_exists( __DIR__ . '/vendor' ) ) {
 	require __DIR__ . '/vendor/autoload.php';
 }
 
-define( 'MBB_VER', '3.3.6' );
+define( 'MBB_VER', '4.0.0' );
 define( 'MBB_DIR', trailingslashit( __DIR__ ) );
 
 list( , $url ) = \RWMB_Loader::get_path( MBB_DIR );

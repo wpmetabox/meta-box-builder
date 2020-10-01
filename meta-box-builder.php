@@ -3,7 +3,7 @@
  * Plugin Name: Meta Box Builder
  * Plugin URI:  https://metabox.io/plugins/meta-box-builder/
  * Description: Drag and drop UI for creating custom meta boxes and custom fields.
- * Version:     3.3.6
+ * Version:     4.0.0
  * Author:      MetaBox.io
  * Author URI:  https://metabox.io
  * License:     GPL2+
