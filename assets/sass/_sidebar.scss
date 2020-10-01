@@ -5,8 +5,54 @@
   flex: 1;
   margin-left: 20px;
 }
+
 &-sidebar {
   width: 300px;
+  position: fixed;
+  top: 32px;
+  bottom: 0;
+  right: 0;
+  z-index: 99;
+
+  background: #fff;
+  border-left: var(--border);
+
+  transition: all .25s;
+  transform: translateX(300px);
+
+  &--open {
+    transform: translateX(0);
+  }
+
+  &__search {
+    padding: 16px 12px;
+
+    input {
+      width: 100%;
+    }
+  }
+  &__header {
+    border-bottom: var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  &__close {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: none;
+    padding: 0;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    font-weight: 300;
+  }
+  &__title {
+    font-weight: 600;
+    font-size: 14px;
+    padding-left: 12px;
+  }
 
   .og-collapsible__header {
     background: #fff;
@@ -18,13 +64,10 @@
     background: var(--color-lighter);
   }
 }
-&-search {
-  width: 100%;
-  margin-bottom: 12px;
-}
 
 &-panel {
   margin-bottom: -1px;
+  margin-left: -1px;
 
   h4 {
     cursor: pointer;
@@ -37,4 +80,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 12px;
+}
+&-search-results {
+  padding: 12px;
 }

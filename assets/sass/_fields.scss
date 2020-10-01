@@ -104,7 +104,7 @@
   &__down {
     display: flex;
     background: none;
-    border: 1px solid var(--color-light);
+    border: var(--border);
     padding: 2px 4px;
 
     &:focus {
