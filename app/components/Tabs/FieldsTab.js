@@ -31,7 +31,7 @@ const FieldsTab = ( props ) => {
   const changeSelectedList = useCallback( params => setSelectedList( params ), [] );
 
   return (
-    <div className="og-fields-wrapper">
+    <>
       <div className={ `og-sidebar${ isInserterOpen ? ' og-sidebar--open' : '' }` }>
         <header class="og-sidebar__header">
           <div class="og-sidebar__title">{ __( 'Add a field', 'meta-box-builder' ) }</div>
@@ -47,29 +47,22 @@ const FieldsTab = ( props ) => {
           ) }
       </div>
 
-      <div className="og-main">
-        <button className="button" onClick={ toggleInserter }>{ __( 'Add Field', 'meta-box-builder' ) }</button>
-        { selectedList.items.length === 0 && (
-          <p>
-            No fields. Select fields on the left to add them to this field
-            group.
-          </p>
-        ) }
-        <ul>
-          {
-            selectedList.items.map( ( item, index ) => (
-              <SelectedItem
-                key={ item.id + index }
-                id={ "root" }
-                item={ item }
-                index={ index }
-                changeSelectedList={ changeSelectedList }
-              />
-            ) )
-          }
-        </ul>
-      </div>
-    </div>
+      <button className="button og-add" onClick={ toggleInserter }>{ __( 'Add Field', 'meta-box-builder' ) }</button>
+      { selectedList.items.length === 0 && <p>{ __( 'Click the Add Button above to add a new field.', 'meta-box-builder' ) }.</p> }
+      <ul className="og-fields">
+        {
+          selectedList.items.map( ( item, index ) => (
+            <SelectedItem
+              key={ item.id + index }
+              id={ "root" }
+              item={ item }
+              index={ index }
+              changeSelectedList={ changeSelectedList }
+            />
+          ) )
+        }
+      </ul>
+    </>
   );
 };
 
