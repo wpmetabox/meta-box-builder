@@ -31,7 +31,7 @@ class Edit {
 		}
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', ['wp-components'] );
 
-		wp_enqueue_code_editor( ['type' => 'php'] );
+		wp_enqueue_code_editor( ['type' => 'application/x-httpd-php'] );
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['wp-element', 'wp-components', 'clipboard'], MBB_VER, true );
 
 		wp_localize_script( 'mbb-app', 'MbbApp', [
