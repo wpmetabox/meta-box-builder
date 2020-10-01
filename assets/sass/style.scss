@@ -14,14 +14,16 @@
 }
 
 // Tabs
-.components-tab-panel__tabs {
+.components-tab-panel__tabs,
+.components-tab-panel__tab-content {
 	background: #fff;
 	border: 1px solid var(--color-light);
 	align-items: center;
 }
 .components-tab-panel__tab-content {
-	margin-top: 24px;
 	margin-bottom: 24px;
+	padding: 24px 16px 0;
+	border-top: none;
 }
 .mbb-tabs {
 	.mbb-code {
