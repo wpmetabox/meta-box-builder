@@ -37,7 +37,7 @@ class PostType {
 			'capability_type' => 'post',
 			'hierarchical'    => false,
 			'menu_position'   => null,
-			'supports'        => false,
+			'supports'        => ['title'],
 
 			'map_meta_cap'    => true,
 			'capabilities'    => array(

@@ -32,8 +32,7 @@ const MainTabs = () => {
     },
     {
       name: 'code',
-      title: __( 'Get PHP Code', 'meta-box-builder' ),
-      className: 'mbb-code button button-small',
+      title: __( 'Code', 'meta-box-builder' ),
     }
   ];
   const panels = {
