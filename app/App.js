@@ -6,15 +6,13 @@ import MainTabs from './components/MainTabs';
 const { render } = wp.element;
 
 const App = () => (
-  <div className="og">
-    <GeneratorProvider>
-      <UpdateSelectedProvider>
-        <FieldTypesProvider>
-            <MainTabs />
-        </FieldTypesProvider>
-      </UpdateSelectedProvider>
-    </GeneratorProvider>
-  </div>
+  <GeneratorProvider>
+    <UpdateSelectedProvider>
+      <FieldTypesProvider>
+        <MainTabs />
+      </FieldTypesProvider>
+    </UpdateSelectedProvider>
+  </GeneratorProvider>
 );
 
 render( <App />, document.getElementById( 'root' ) );

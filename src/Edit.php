@@ -22,7 +22,7 @@ class Edit {
 		if ( ! $this->is_screen() ) {
 			return;
 		}
-		echo '<div id="root"></div>';
+		echo '<div id="root" class="og"></div>';
 	}
 
 	public function enqueue() {
