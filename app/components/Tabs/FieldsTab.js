@@ -48,7 +48,7 @@ const FieldsTab = ( props ) => {
       </div>
 
       <button className="button og-add" onClick={ toggleInserter }>{ __( 'Add Field', 'meta-box-builder' ) }</button>
-      { selectedList.items.length === 0 && <p>{ __( 'Click the Add Button above to add a new field.', 'meta-box-builder' ) }.</p> }
+      { selectedList.items.length === 0 && <p>{ __( 'There are no fields here. Click the Add Button above to add a new field.', 'meta-box-builder' ) }</p> }
       <ul className="og-fields">
         {
           selectedList.items.map( ( item, index ) => (
