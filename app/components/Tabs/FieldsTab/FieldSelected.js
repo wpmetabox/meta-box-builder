@@ -52,7 +52,7 @@ const FieldSelected = ( props ) => {
           parent={ props.parent }
           indexVal={ props.indexVal }
         />
-        <Tabs className="og-item__body og-collapsible__body">
+        <Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
           <TabList>
             <Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
             <Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
