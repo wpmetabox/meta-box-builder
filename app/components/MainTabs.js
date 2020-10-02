@@ -15,50 +15,56 @@ const MainTabs = () => {
   const { handleSubmit, register, control } = useForm();
   const methods = useForm();
   const onSubmit = data => {
-    actions.generatePHPCode( data );
+    actions.generatePHPCode(data);
   };
 
   const onPublish = data => {
-    const inputData = document.getElementById( 'post_content' );
-    inputData.value = JSON.stringify( formatParams( data ) );
+    localStorage.setItem('formValue',JSON.stringify( formatParams( data )))
   };
 
-  const onSelect = ( index ) => {
+  const onSelect = (index) => {
     const isGetCodeTab = index === 2;
-    if ( isGetCodeTab ) {
-      document.getElementById( SUBMIT_FORM_BUTTON ).click();
+    if (isGetCodeTab) {
+      document.getElementById(SUBMIT_FORM_BUTTON).click();
     }
   };
 
-  useEffect( () => {
-    document.querySelector( '#publish' ).addEventListener( 'click', handleSubmit( onPublish ) );
-  }, [] );
+  useEffect(() => {
+    const formValue = localStorage.getItem('formValue')
+    if(formValue){
+      const inputData = document.getElementById( 'post_content' );
+      inputData.value = formValue
+    }
+    document.querySelector('#publish').addEventListener('click', () => {
+      document.getElementById('testing').click()
+    });
+  }, []);
 
   return (
-    <FormProvider { ...methods } register={ register } control={ control }>
-      <form onSubmit={ handleSubmit( onSubmit ) } id='myForm'>
-        <Tabs forceRenderTabPanel={ true } onSelect={ onSelect }>
+    <FormProvider {...methods} register={register} control={control}>
+      <form onSubmit={handleSubmit(onSubmit)} id='myForm'>
+        <Tabs forceRenderTabPanel={true} onSelect={onSelect}>
           <TabList>
-            <Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
-            <Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
-            <Tab>{ __( 'Code', 'meta-box-builder' ) }</Tab>
+            <Tab>{__('Fields', 'meta-box-builder')}</Tab>
+            <Tab>{__('Settings', 'meta-box-builder')}</Tab>
+            <Tab>{__('Code', 'meta-box-builder')}</Tab>
           </TabList>
           <TabPanel>
-            <DndProvider backend={ HTML5Backend }>
+            <DndProvider backend={HTML5Backend}>
               <FieldsTab />
             </DndProvider>
           </TabPanel>
           <TabPanel>
-            <SettingsTab register={ register } />
+            <SettingsTab register={register} />
           </TabPanel>
           <TabPanel>
             <Result />
           </TabPanel>
         </Tabs>
-        <button type="submit" style={ { display: 'none' } } id={ SUBMIT_FORM_BUTTON } />
+        <button type="submit" style={{ display: 'none' }} id={SUBMIT_FORM_BUTTON} />
       </form>
       <input type="hidden" id="post_content" />
-      <button onClick={ handleSubmit( onPublish ) }>Publish</button>
+      <button id="testing" onClick={handleSubmit(onPublish)}>Publish</button>
     </FormProvider>
   );
 };
