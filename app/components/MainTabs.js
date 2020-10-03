@@ -37,6 +37,8 @@ const MainTabs = () => {
     } );
   }, [] );
 
+  const fields = MbbApp.settings ? MbbApp.settings.fields : [];
+
   return (
     <FormProvider { ...methods } register={ register } control={ control }>
       <form onSubmit={ handleSubmit( onSubmit ) } id='myForm'>
@@ -48,7 +50,7 @@ const MainTabs = () => {
           </TabList>
           <TabPanel>
             <DndProvider backend={ HTML5Backend }>
-              <FieldsTab fields={ parseFields( MbbApp.settings.fields ) } />
+              <FieldsTab fields={ parseFields( fields ) } />
             </DndProvider>
           </TabPanel>
           <TabPanel>
