@@ -8,7 +8,8 @@ const { useState, useCallback, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = ( props ) => {
-  const [ selectedList, setSelectedList ] = useState( { id: 'root', items: [] } );
+  const initialFields = props.fields || [];
+  const [ selectedList, setSelectedList ] = useState( { id: 'root', items: initialFields } );
   const [ searchParam, setSearchParam ] = useState( '' );
   const [ isInserterOpen, setInserterOpen ] = useState( false );
 
