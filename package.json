@@ -1,9 +1,11 @@
 {
   "scripts": {
     "css": "node-sass --sourcemap none --output-style compressed assets/sass/style.scss -o assets/css",
-    "watch": "node-sass --sourcemap none --output-style compressed -w assets/sass -r -o assets/css",
+    "watch:css": "node-sass --sourcemap none --output-style compressed -w assets/sass -r -o assets/css",
     "build": "webpack --mode production",
-    "start": "webpack --mode development"
+    "start": "webpack --mode development",
+    "watch:js": "webpack --mode development --watch",
+    "sync": "browser-sync start --proxy \"localhost/metaboxplugins/wp-admin/post.php?post=565&action=edit\" --files \"assets/css/style.css, assets/js/app.js\""
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
