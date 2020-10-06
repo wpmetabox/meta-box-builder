@@ -14,10 +14,9 @@ class Edit {
 	}
 
 	public function render() {
-		if ( ! $this->is_screen() ) {
-			return;
+		if ( $this->is_screen() ) {
+			echo '<div id="root" class="og"></div>';
 		}
-		echo '<div id="root" class="og"></div>';
 	}
 
 	public function enqueue() {
@@ -120,7 +119,6 @@ class Edit {
 	}
 
 	private function is_screen() {
-		$screen = get_current_screen();
-		return 'post' === $screen->base && 'meta-box' === $screen->post_type;
+		return 'meta-box' === get_current_screen()->id;
 	}
 }
