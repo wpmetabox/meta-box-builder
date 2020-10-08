@@ -29,7 +29,7 @@ class Edit {
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['wp-element', 'wp-components', 'clipboard'], MBB_VER, true );
 
 		wp_localize_script( 'mbb-app', 'MbbApp', [
-			'restUrl'  => rest_url( 'mbb-parser/meta-box' ),
+			'rest'     => untrailingslashit( rest_url() ),
 			'settings' => json_decode( get_post()->post_content, ARRAY_A ),
 		] );
 

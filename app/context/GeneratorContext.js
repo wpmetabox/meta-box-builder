@@ -3,15 +3,13 @@ import generatorReducer from './GeneratorReducer';
 import { GENERATE_PHP_CODE } from './GeneratorActions';
 import { getSelectedList } from '../utility/functions';
 
-const i18n = MbbApp;
-
 const generatePHPCode = dispatch => params => {
 	const requestOptions = {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify( formatParams( params ) )
 	};
-	fetch( i18n.restUrl, requestOptions )
+	fetch( `${ MbbApp.rest }/mbb-parser/meta-box`, requestOptions )
 		.then( response => response.json() )
 		.then( data => dispatch( { type: GENERATE_PHP_CODE, payload: data, responseTime: ( new Date() ).getTime() } ) )
 		.catch( error => console.log( error ) );
