@@ -29,14 +29,14 @@ class Edit {
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['wp-element', 'wp-components', 'clipboard'], MBB_VER, true );
 
 		wp_localize_script( 'mbb-app', 'MbbApp', [
-			'rest'     => untrailingslashit( rest_url() ),
-			'settings' => json_decode( get_post()->post_content, ARRAY_A ),
+			'rest'          => untrailingslashit( rest_url() ),
+			'settings'      => json_decode( get_post()->post_content, ARRAY_A ),
+			'postTypes'     => mbb_get_post_types(),
+			'taxonomies'    => mbb_get_taxonomies(),
+			'settingsPages' => mbb_get_setting_pages(),
+			'templates'     => mbb_get_templates(),
 		] );
 
-		wp_localize_script( 'mbb-app', 'post_types', mbb_get_post_types() );
-		wp_localize_script( 'mbb-app', 'taxonomies', mbb_get_taxonomies() );
-		wp_localize_script( 'mbb-app', 'settings_pages', mbb_get_setting_pages() );
-		wp_localize_script( 'mbb-app', 'templates', mbb_get_templates() );
 		wp_localize_script( 'mbb-app', 'icons', mbb_get_dashicons() );
 		wp_localize_script( 'mbb-app', 'menu', mbb_get_builder_menu() );
 		wp_localize_script( 'mbb-app', 'align', [
