@@ -5,9 +5,9 @@ import { ucfirst } from '../../../utility/functions';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
 import { cardSource, collect, copyItem, deleteItem } from '../../../utility/updateSelectedList';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 const { useState, memo } = wp.element;
-const { TabPanel } = wp.components;
 const { __ } = wp.i18n;
 
 const Group = (props) => {
@@ -20,21 +20,6 @@ const Group = (props) => {
 
   const [expanded, setExpanded] = useState(false);
   const toggleSettings = () => setExpanded(!expanded);
-
-  const tabs = [
-    {
-      name: 'general',
-      title: __( 'General', 'meta-box-builder' ),
-    },
-    {
-      name: 'advanced',
-      title: __( 'Advanced', 'meta-box-builder' ),
-    },
-  ];
-  const panels = {
-    general: <GeneralContent type={type} index={index} fieldData={props.data.general} />,
-    advanced: <AdvancedContent type={type} index={index} data={props.data.advanced} />
-  };
 
   return connectDragSource(
     <div className={`og-item og-item--${type} og-collapsible${expanded ? ' og-collapsible--expanded' : ''}`}>
@@ -53,7 +38,18 @@ const Group = (props) => {
           parent={props.parent}
           indexVal={props.indexVal}
         />
-        <TabPanel className="og-item__body og-collapsible__body" tabs={ tabs }>{ tab => panels[tab.name] }</TabPanel>
+        <Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
+          <TabList>
+            <Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
+            <Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
+          </TabList>
+          <TabPanel>
+            <GeneralContent type={ type } index={ index } fieldData={ props.data.general } />
+          </TabPanel>
+          <TabPanel>
+            <AdvancedContent type={ type } index={ index } data={ props.data.advanced } />
+          </TabPanel>
+        </Tabs>
       </div>
     </div>
   );
