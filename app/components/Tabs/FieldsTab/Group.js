@@ -38,7 +38,7 @@ const Group = (props) => {
 
   return connectDragSource(
     <div className={`og-item og-item--${type} og-collapsible${expanded ? ' og-collapsible--expanded' : ''}`}>
-      <li className="d" id="list">
+      <div className="d" id="list">
 
         <input ref={props.register} type="hidden" name={`fields-${index}-type`} defaultValue={type} />
         <Header
@@ -54,7 +54,7 @@ const Group = (props) => {
           indexVal={props.indexVal}
         />
         <TabPanel className="og-item__body og-collapsible__body" tabs={ tabs }>{ tab => panels[tab.name] }</TabPanel>
-      </li>
+      </div>
     </div>
   );
 };
