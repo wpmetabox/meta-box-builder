@@ -3,10 +3,8 @@ import AdvancedAdditionalItem from './AdvancedAdditionalItem.js';
 
 const Attributes = props => {
   const [list, setList] = useState([]);
-  const removeItem = index => {
-    let newList = [...list];
-    newList.splice(index, 1);
-    setList(newList);
+  const removeItem = id => {
+    setList(prevList => prevList.filter(item => item.unixId !== id));
   }
 
   return (
@@ -14,10 +12,10 @@ const Attributes = props => {
       <h4><a href="https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes" target="_blank" rel="noreferrer noopener">Custom attributes</a></h4>
       {
         list.map((item, index) => (
-          <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem} name={`fields-${props.index}`} type='attributes' />
+          <AdvancedAdditionalItem data={item} key={item.unixId} index={index} removeItem={removeItem} name={`fields-${props.index}`} type='attributes' />
         ))
       }
-      <button type="button" className="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Attribute</button>
+      <button type="button" className="button" onClick={() => setList(prevList => prevList.concat({ key: '', label: '', unixId: Math.random().toString(36).slice(-5) }))}>+ Add Attribute</button>
     </div>
   )
 }
