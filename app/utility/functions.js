@@ -34,6 +34,10 @@ export const getElementControlName = ( name, type ) => {
                 select: 'StdChoice',
                 textarea: 'StdChoice',
                 wysiwyg: 'StdChoice',
+                post: 'StdSelect',
+                user: 'StdSelect',
+                taxonomy: 'StdSelect',
+                taxonomy_advanced: 'StdSelect'
             };
             return types[ type ] || 'TextInput';
         case 'placeholder':
