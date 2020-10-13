@@ -10,7 +10,7 @@ const GroupChildrenList = (props) => {
     } = props;
 
     return <>
-        <ul>
+        <div className="og-group-fields">
             {
                 items.map((item, i) => <div key={item.id}>
                     <Insert parent={id} index={i} />
@@ -25,7 +25,7 @@ const GroupChildrenList = (props) => {
                 </div>)
             }
             <Insert index={items.length} parent={id} />
-        </ul>
+        </div>
         {
             items.length === 0 && <div className="og-group-drop-area">Drag and drop child fields here.</div>
         }

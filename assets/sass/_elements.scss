@@ -78,15 +78,11 @@ svg {
 
 
 // Tooltip
-& &-tooltip-icon {
+& &-tooltip-icon svg {
 	width: 14px;
 	height: 14px;
 	fill: var(--color-light);
 	margin-left: 6px;
 	top: 2px;
 	position: relative;
-}
-.__react_component_tooltip {
-  font-weight: 400;
-  max-width: 400px;
 }

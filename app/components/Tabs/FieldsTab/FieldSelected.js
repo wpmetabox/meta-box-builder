@@ -38,7 +38,7 @@ const FieldSelected = ( props ) => {
 
   return connectDragSource(
     <div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-      <li className="d" id="leaf">
+      <div className="d" id="leaf">
         <input ref={ props.register } type="hidden" name={ `fields-${ index }-type` } defaultValue={ type } />
         <Header
           type={ type }
@@ -64,7 +64,7 @@ const FieldSelected = ( props ) => {
             <AdvancedContent type={ type } index={ index } data={ props.data.advanced } />
           </TabPanel>
         </Tabs>
-      </li>
+      </div>
     </div>
   );
 };
