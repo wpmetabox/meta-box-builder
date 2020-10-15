@@ -1,4 +1,4 @@
-import { TEXT_INPUT, NUMBER_INPUT, CHECKBOX, fields, DROPDOWN_MENU, RADIO_CHECKBOX, LIST_OPTION_TYPE, DATA_LIST_TYPE } from '../constants/constants';
+import { CHECKBOX, DATA_LIST_TYPE, DROPDOWN_MENU, fields, LIST_OPTION_TYPE, NUMBER_INPUT, RADIO_CHECKBOX, TEXT_INPUT } from '../constants/constants';
 
 export const getLabel = ( name, type ) => {
     const labels = {
@@ -86,7 +86,7 @@ export const getElementControlName = ( name, type ) => {
 export const getElementType = ( name ) => {
     const inputsText = [ 'id', 'name', 'desc', 'std', 'placeholder', 'min', 'max', 'rows', 'cols', 'prefix', 'suffix', 'address_field', 'api_key', 'region', 'mime_type' ];
     const inputsNumber = [ 'size', 'step', 'max_file_uploads' ];
-    const checkboxes = [ 'clone', 'inline', 'multiple', 'timestamp', 'force_delete', 'max_status', 'parent', 'raw' ];
+    const checkboxes = [ 'clone', 'sort_clone', 'clone_default','clone_as_multiple', 'inline', 'multiple', 'timestamp', 'force_delete', 'max_status', 'parent', 'raw' ];
     const ratioCheckbox = [ 'field_type' ];
     const dropdownMenu = [ 'post_type', 'taxonomy' ];
     let type = '';

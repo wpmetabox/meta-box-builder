@@ -9,6 +9,11 @@ svg {
   height: 16px;
   fill: var(--color-gray);
 }
+
+.clone_optional {
+  display: none;
+}
+
 &-required {
   color: var(--color-red);
 }
@@ -76,13 +81,12 @@ svg {
   }
 }
 
-
 // Tooltip
 & &-tooltip-icon svg {
-	width: 14px;
-	height: 14px;
-	fill: var(--color-light);
-	margin-left: 6px;
-	top: 2px;
-	position: relative;
+  width: 14px;
+  height: 14px;
+  fill: var(--color-light);
+  margin-left: 6px;
+  top: 2px;
+  position: relative;
 }

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, memo } from 'react';
+import React, { lazy, memo, Suspense } from 'react';
 import { getElementControlName } from '../../../../utility/functions';
 
 const GeneralContent = (props) => {

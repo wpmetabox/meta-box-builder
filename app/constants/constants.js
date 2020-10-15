@@ -71,6 +71,11 @@ export const fields = {
       placeholder: '',
       size: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
