@@ -219,3 +219,5 @@ export const getSelectedList = () => JSON.parse( localStorage.getItem( 'selected
 
 export const ucfirst = string => string.charAt( 0 ).toUpperCase() + string.slice( 1 );
 const toTitleCase = string => string.split( '_' ).map( ucfirst ).join( '' );
+
+export const uniqid = () => Math.random().toString( 36 ).substr( 2 );

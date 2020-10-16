@@ -1,24 +1,12 @@
-import React, { useState } from 'react';
-import AdvancedAdditionalItem from './AdvancedAdditionalItem.js';
+import KeyValue from '../KeyValue';
+const { __ } = wp.i18n;
 
-const OptionsWysiwyg= props => {
-  const [list, setList] = useState([]);
-  const removeItem = index => {
-    let newList = [...list];
-    newList.splice(index, 1);
-    setList(newList);
-  }
-
-  return (
-    <div className="og-attributes">
-      <h4><a href="https://developer.wordpress.org/reference/functions/wp_editor/" target="_blank" rel="noopener noreferrer">Editor options</a></h4>
-      {
-        list.map((item, index) => (
-          <AdvancedAdditionalItem data={item} key={index} index={index} removeItem={removeItem}  name={`fields-${props.index}`} type='options' />
-        ))
-      }
-      <button type="button" className="button" onClick={() => setList(list.concat({ key: '', label: '' }))}>+ Add Input</button>
-    </div>
-  )
-}
+const OptionsWysiwyg = ( { index } ) => (
+	<KeyValue
+		index={ index }
+		type="options"
+		link="https://developer.wordpress.org/reference/functions/wp_editor/"
+		label={ __( 'Editor options', 'meta-box-builder' ) }
+	/>
+);
 export default OptionsWysiwyg;
