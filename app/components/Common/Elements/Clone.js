@@ -1,5 +1,6 @@
-import React from 'react';
 import Checkbox from '../Checkbox';
 
-const Clone = props => <Checkbox {...props} label="Cloneable" tooltip="Make field cloneable (repeatable)" />
+const { __ } = wp.i18n;
+
+const Clone = props => <Checkbox {...props} label="Cloneable" tooltip={ __( 'Make field cloneable (repeatable)', 'meta-box-builder' ) } />
 export default Clone;

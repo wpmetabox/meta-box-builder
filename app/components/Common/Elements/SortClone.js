@@ -1,5 +1,6 @@
-import React from 'react';
 import Checkbox from '../Checkbox';
 
-const SortClone = props => <Checkbox {...props} className='clone_optional' label="Sortable" tooltip="Allows to drag-and-drop reorder clones" />
+const { __ } = wp.i18n;
+
+const SortClone = props => <Checkbox {...props} className='clone_optional' label={ __( 'Sortable', 'meta-box-builder' ) } tooltip={ __( 'Allows to drag-and-drop reorder clones', 'meta-box-builder' ) } />
 export default SortClone;

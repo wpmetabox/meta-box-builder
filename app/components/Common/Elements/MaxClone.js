@@ -1,5 +1,6 @@
-import React from 'react';
-import Textarea from '../Textarea';
+import Input from '../Input';
 
-const MaxClone = props => <Textarea {...props} className='clone_optional' label="Maximum number of clones" tooltip='Leave empty for unlimited clones' />
+const { __ } = wp.i18n;
+
+const MaxClone = props => <Input {...props} className='clone_optional' label={ __( 'Maximum number of clones', 'meta-box-builder' ) } tooltip={ __( 'Leave empty for unlimited clones', 'meta-box-builder' ) } />
 export default MaxClone;

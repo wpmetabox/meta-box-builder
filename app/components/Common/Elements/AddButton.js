@@ -1,5 +1,6 @@
-import React from 'react';
-import Textarea from '../Textarea';
+import Input from '../Input';
 
-const AddButton = props => <Textarea {...props} className='clone_optional' label="Add more text" tooltip='Leave empty for unlimited clones' />
+const { __ } = wp.i18n;
+
+const AddButton = props => <Input {...props} className='clone_optional' label={ __( 'Add more text', 'meta-box-builder' ) } tooltip={ __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ) } />
 export default AddButton;
