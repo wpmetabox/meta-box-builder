@@ -6,30 +6,48 @@ import { uniqid } from '../../utility/functions';
 const { useState } = wp.element;
 const { __ } = wp.i18n;
 
-const KeyValue = ( { type, label, index, link = '', tooltip = '', button = __( '+ Add New', 'meta-box-builder' ) } ) => {
+const KeyValue = ( {
+	index,
+	type,
+	label,
+	link = '',
+	tooltip = '',
+	keyPlaceholder = __( 'Enter key', 'meta-box-builder' ),
+	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
+} ) => {
 	const [ list, setList ] = useState( [] );
 	const removeItem = id => setList( prevList => prevList.filter( item => item.uniqId !== id ) );
 
-	let outputLabel = label;
 	if ( link ) {
-		outputLabel = `<a href="${ link }" target="_blank" rel="noreferrer noopener">${ label }</a>`;
+		label = `<a href="${ link }" target="_blank" rel="noreferrer noopener">${ label }</a>`;
 	}
 
 	return (
-		<DivRow label={ outputLabel } tooltip={ tooltip }>
-			{ list.map( ( item, i ) => <Item key={ item.uniqId } item={ item } removeItem={ removeItem } name={ `fields-${ index }-${ type }-${ i }` } /> ) }
-			<button type="button" className="button" onClick={ () => setList( prevList => prevList.concat( { key: '', value: '', uniqId: uniqid() } ) ) }>{ button }</button>
+		<DivRow label={ label } tooltip={ tooltip }>
+			{
+				list.map( ( item, i ) => (
+					<Item
+						key={ item.uniqId }
+						item={ item }
+						removeItem={ removeItem }
+						name={ `fields-${ index }-${ type }-${ i }` }
+						keyPlaceholder={ keyPlaceholder }
+						valuePlaceholder={ valuePlaceholder }
+					/>
+				) )
+			}
+			<button type="button" className="button" onClick={ () => setList( prevList => prevList.concat( { key: '', value: '', uniqId: uniqid() } ) ) }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
 		</DivRow>
 	);
 };
 
-const Item = ( { name, item, removeItem } ) => {
+const Item = ( { name, item, removeItem, keyPlaceholder, valuePlaceholder } ) => {
 	const { register } = useFormContext();
 
 	return (
 		<div className="og-attribute">
-			<input type="text" placeholder={ __( 'Enter key', 'meta-box-builder' ) } ref={ register } name={ `${ name }-key` } defaultValue={ item.key } />
-			<input type="text" placeholder={ __( 'Enter value', 'meta-box-builder' ) } ref={ register } name={ `${ name }-value` } defaultValue={ item.value } />
+			<input type="text" placeholder={ keyPlaceholder } ref={ register } name={ `${ name }-key` } defaultValue={ item.key } />
+			<input type="text" placeholder={ valuePlaceholder } ref={ register } name={ `${ name }-value` } defaultValue={ item.value } />
 			<button type="button" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.uniqId ) }>{ xIcon }</button>
 		</div>
 	);
