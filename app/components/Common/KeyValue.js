@@ -1,5 +1,6 @@
 import DivRow from './DivRow';
-import AdvancedAdditionalItem from './Elements/AdvancedAdditionalItem.js';
+import { xIcon } from '../../constants/icons';
+import { useFormContext } from 'react-hook-form';
 import { uniqid } from '../../utility/functions';
 
 const { useState } = wp.element;
@@ -16,13 +17,21 @@ const KeyValue = ( { type, label, index, link = '', tooltip = '', button = __( '
 
 	return (
 		<DivRow label={ outputLabel } tooltip={ tooltip }>
-			{
-				list.map( ( item, i ) => (
-					<AdvancedAdditionalItem data={ item } key={ item.uniqId } index={ i } removeItem={ removeItem } name={ `fields-${ index }` } type={ type } />
-				) )
-			}
-			<button type="button" className="button" onClick={ () => setList( prevList => prevList.concat( { key: '', label: '', uniqId: uniqid() } ) ) }>{ button }</button>
+			{ list.map( ( item, i ) => <Item key={ item.uniqId } item={ item } removeItem={ removeItem } name={ `fields-${ index }-${ type }-${ i }` } /> ) }
+			<button type="button" className="button" onClick={ () => setList( prevList => prevList.concat( { key: '', value: '', uniqId: uniqid() } ) ) }>{ button }</button>
 		</DivRow>
+	);
+};
+
+const Item = ( { name, item, removeItem } ) => {
+	const { register } = useFormContext();
+
+	return (
+		<div className="og-attribute">
+			<input type="text" placeholder={ __( 'Enter key', 'meta-box-builder' ) } ref={ register } name={ `${ name }-key` } defaultValue={ item.key } />
+			<input type="text" placeholder={ __( 'Enter value', 'meta-box-builder' ) } ref={ register } name={ `${ name }-value` } defaultValue={ item.value } />
+			<button type="button" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.uniqId ) }>{ xIcon }</button>
+		</div>
 	);
 };
 
