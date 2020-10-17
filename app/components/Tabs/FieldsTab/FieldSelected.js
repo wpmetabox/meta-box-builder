@@ -1,4 +1,3 @@
-import { trashIcon, copyIcon, arrowDownIcon } from '../../../constants/icons';
 import GeneralContent from './FieldContent/GeneralContent';
 import AdvancedContent from './FieldContent/AdvancedContent';
 import { ucfirst } from '../../../utility/functions';
@@ -8,6 +7,7 @@ import { cardSource, collect, copyItem, deleteItem } from '../../../utility/upda
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 const { useState, memo } = wp.element;
+const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
 const FieldSelected = ( props ) => {
@@ -85,9 +85,9 @@ const Header = ( props ) => {
       <div className="og-item__title" id={ `og-item__title__${ props.index }` }>{ props.name || ucfirst( props.type ) }</div>
       <div className="og-item__actions">
         <span className="og-item__type">{ props.type }</span>
-        <span className="og-item__action og-item__action--remove" title="Remove" onClick={ remove }>{ trashIcon }</span>
-        <span className="og-item__action og-item__action--duplicate" title="Duplicate" onClick={ duplicate }>{ copyIcon }</span>
-        <span className="og-item__action og-item__action--toggle" title="Toggle Settings">{ arrowDownIcon }</span>
+        <span className="og-item__action og-item__action--remove" title="Remove" onClick={ remove }><Dashicon icon="trash" /></span>
+        <span className="og-item__action og-item__action--duplicate" title="Duplicate" onClick={ duplicate }><Dashicon icon="admin-page" /></span>
+        <span className="og-item__action og-item__action--toggle" title="Toggle Settings"><Dashicon icon="arrow-down-alt2" /></span>
       </div>
     </div>
   );
