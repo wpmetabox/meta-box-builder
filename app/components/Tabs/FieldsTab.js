@@ -1,6 +1,6 @@
-import FieldMenu from './FieldsTab/FieldMenu';
 import { fields } from '../../constants/constants';
 import { updateSelectedList } from '../../utility/functions';
+import FieldMenu from './FieldsTab/FieldMenu';
 import SearchResultList from './FieldsTab/SearchResultList';
 import SelectedItem from './FieldsTab/SelectedItem';
 

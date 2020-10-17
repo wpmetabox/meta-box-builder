@@ -1,4 +1,4 @@
-import { CHECKBOX, DATA_LIST_TYPE, DROPDOWN_MENU, fields, LIST_OPTION_TYPE, NUMBER_INPUT, RADIO_CHECKBOX, TEXT_INPUT } from '../constants/constants';
+import { DATA_LIST_TYPE, fields, LIST_OPTION_TYPE } from '../constants/constants';
 
 export const getLabel = ( name, type ) => {
     const labels = {
@@ -83,40 +83,40 @@ export const getElementControlName = ( name, type ) => {
     }
 };
 
-export const getElementType = ( name ) => {
-    const inputsText = [ 'id', 'name', 'desc', 'std', 'placeholder', 'min', 'max', 'rows', 'cols', 'prefix', 'suffix', 'address_field', 'api_key', 'region', 'mime_type' ];
-    const inputsNumber = [ 'size', 'step', 'max_file_uploads' ];
-    const checkboxes = [ 'clone', 'sort_clone', 'clone_default','clone_as_multiple', 'inline', 'multiple', 'timestamp', 'force_delete', 'max_status', 'parent', 'raw' ];
-    const ratioCheckbox = [ 'field_type' ];
-    const dropdownMenu = [ 'post_type', 'taxonomy' ];
-    let type = '';
-    if ( inputsText.includes( name ) ) {
-        type = TEXT_INPUT;
-    }
-    if ( inputsNumber.includes( name ) ) {
-        type = NUMBER_INPUT;
-    }
-    if ( checkboxes.includes( name ) ) {
-        type = CHECKBOX;
-    }
-    if ( ratioCheckbox.includes( name ) ) {
-        type = RADIO_CHECKBOX;
-    }
-    if ( dropdownMenu.includes( name ) ) {
-        type = DROPDOWN_MENU;
-    }
+// export const getElementType = ( name ) => {
+//     const inputsText = [ 'id', 'name', 'desc', 'std', 'placeholder', 'min', 'max', 'rows', 'cols', 'prefix', 'suffix', 'address_field', 'api_key', 'region', 'mime_type' ];
+//     const inputsNumber = [ 'size', 'step', 'max_file_uploads' ];
+//     const checkboxes = [ 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'inline', 'multiple', 'timestamp', 'force_delete', 'max_status', 'parent', 'raw' ];
+//     const ratioCheckbox = [ 'field_type' ];
+//     const dropdownMenu = [ 'post_type', 'taxonomy' ];
+//     let type = '';
+//     if ( inputsText.includes( name ) ) {
+//         type = TEXT_INPUT;
+//     }
+//     if ( inputsNumber.includes( name ) ) {
+//         type = NUMBER_INPUT;
+//     }
+//     if ( checkboxes.includes( name ) ) {
+//         type = CHECKBOX;
+//     }
+//     if ( ratioCheckbox.includes( name ) ) {
+//         type = RADIO_CHECKBOX;
+//     }
+//     if ( dropdownMenu.includes( name ) ) {
+//         type = DROPDOWN_MENU;
+//     }
 
-    return type;
-};
+//     return type;
+// };
 
-export const getDataCopiedItem = ( type, index ) => {
-    let data = fields[ type ];
-    let result = {};
-    result.general = getGeneralData( data.general, index );
-    result.advanced = getAdvancedData( data.advanced, index );
+// export const getDataCopiedItem = ( type, index ) => {
+//     let data = fields[ type ];
+//     let result = {};
+//     result.general = getGeneralData( data.general, index );
+//     result.advanced = getAdvancedData( data.advanced, index );
 
-    return result;
-};
+//     return result;
+// };
 
 const getGeneralData = ( generalItems, index ) => {
     let result = {};

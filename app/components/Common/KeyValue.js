@@ -1,14 +1,14 @@
-import DivRow from './DivRow';
-import { xIcon } from '../../constants/icons';
 import { useFormContext } from 'react-hook-form';
+import { xIcon } from '../../constants/icons';
 import { uniqid } from '../../utility/functions';
+import DivRow from './DivRow';
 
 const { useState } = wp.element;
 const { __ } = wp.i18n;
 
 const KeyValue = ( {
 	index,
-	type,
+	listType,
 	label,
 	link = '',
 	tooltip = '',
@@ -30,7 +30,7 @@ const KeyValue = ( {
 						key={ item.uniqId }
 						item={ item }
 						removeItem={ removeItem }
-						name={ `fields-${ index }-${ type }-${ i }` }
+						name={ `fields-${ index }-${ listType }-${ i }` }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
 					/>

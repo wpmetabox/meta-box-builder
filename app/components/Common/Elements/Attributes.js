@@ -4,7 +4,7 @@ const { __ } = wp.i18n;
 const Attributes = ( { index } ) => (
 	<KeyValue
 		index={ index }
-		type="attributes"
+		listType="attributes"
 		link="https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes"
 		label={ __( 'Custom settings', 'meta-box-builder' ) }
 	/>

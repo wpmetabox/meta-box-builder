@@ -1,7 +1,7 @@
-import createDataContext from './createDataContext';
-import generatorReducer from './GeneratorReducer';
-import { GENERATE_PHP_CODE } from './GeneratorActions';
 import { getSelectedList } from '../utility/functions';
+import createDataContext from './createDataContext';
+import { GENERATE_PHP_CODE } from './GeneratorActions';
+import generatorReducer from './GeneratorReducer';
 
 const generatePHPCode = dispatch => params => {
 	const requestOptions = {
@@ -51,8 +51,16 @@ const formatField = ( id, params ) => {
 	let result = {};
 	for ( const key in params ) {
 		if ( isOwnField( key, id ) ) {
-			const keyValue = getKeyValue( key );
-			result[ keyValue ] = params[ key ];
+			const keys = key.split( '-' );
+			keys.reduce( ( result, value, index ) => {
+				if ( !result[ value ] ) {
+					result[ value ] = {};
+				}
+				if ( index === keys.length - 1 ) {
+					result[ value ] = params[ key ];
+				}
+				return result[ value ];
+			}, result );
 		}
 	}
 

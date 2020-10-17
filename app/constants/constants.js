@@ -96,6 +96,11 @@ export const fields = {
       step: '',
       placeholder: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -114,6 +119,11 @@ export const fields = {
       placeholder: '',
       size: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -151,6 +161,11 @@ export const fields = {
       max: 9,
       step: 1,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -167,6 +182,11 @@ export const fields = {
       desc: '',
       options: [],
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -183,6 +203,11 @@ export const fields = {
       desc: '',
       std: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -200,6 +225,11 @@ export const fields = {
       options: '',
       std: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -233,6 +263,11 @@ export const fields = {
       placeholder: '',
       size: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -250,6 +285,11 @@ export const fields = {
       options: [],
       inline: true,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -269,6 +309,11 @@ export const fields = {
       placeholder: '',
       multiple: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -288,6 +333,11 @@ export const fields = {
       placeholder: '',
       multiple: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -308,6 +358,11 @@ export const fields = {
       rows: '',
       cols: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -339,6 +394,11 @@ export const fields = {
       options: '',
       multiple: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -355,6 +415,11 @@ export const fields = {
       desc: '',
       std: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -373,6 +438,11 @@ export const fields = {
       placeholder: '',
       size: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -391,6 +461,11 @@ export const fields = {
       prefix: '',
       suffix: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -409,6 +484,11 @@ export const fields = {
       std: '',
       raw: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -427,6 +507,11 @@ export const fields = {
       options: '',
       size: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -443,6 +528,11 @@ export const fields = {
       desc: '',
       options: [],
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -462,6 +552,11 @@ export const fields = {
       address_field: '',
       region: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -512,6 +607,11 @@ export const fields = {
       inline: false,
       timestamp: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -532,6 +632,11 @@ export const fields = {
       inline: false,
       timestamp: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -550,6 +655,11 @@ export const fields = {
       std: '',
       size: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -571,6 +681,11 @@ export const fields = {
       parent: false,
       placeholder: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -591,6 +706,11 @@ export const fields = {
       std: '',
       placeholder: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -611,6 +731,11 @@ export const fields = {
       std: '',
       placeholder: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -630,6 +755,11 @@ export const fields = {
       std: '',
       placeholder: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -648,6 +778,11 @@ export const fields = {
       max_file_uploads: '',
       force_delete: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -666,6 +801,11 @@ export const fields = {
       placeholder: '',
       size: '',
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -685,6 +825,11 @@ export const fields = {
       max_status: true,
       force_delete: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -703,6 +848,11 @@ export const fields = {
       max_status: false,
       force_delete: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -720,6 +870,11 @@ export const fields = {
       max_file_uploads: '',
       force_delete: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -738,6 +893,11 @@ export const fields = {
       max_status: false,
       force_delete: false,
       clone: false,
+      sort_clone: false,
+      clone_default: false,
+      clone_as_multiple: false,
+      max_clone: '',
+      add_button: ''
     },
     advanced: {
       before: '',
@@ -804,8 +964,8 @@ export const LIST_OPTION = [
   { type: 'time_picker', option: 'time' },
 ];
 
-export const DATA_LIST = ['text', 'oembed', 'file_input'];
-export const DATA_LIST_TYPE = ['datalist'];
+export const DATA_LIST = [ 'text', 'oembed', 'file_input' ];
+export const DATA_LIST_TYPE = [ 'datalist' ];
 
 export const LIST_OPTION_TYPE = [
   'attributes',
@@ -822,7 +982,7 @@ export const LIST_ADD_SELECT = [
   'image_select',
   'autocomplete',
 ];
-export const LIST_NO_HEADING = ['text_list', 'fieldset_text'];
+export const LIST_NO_HEADING = [ 'text_list', 'fieldset_text' ];
 
 export const LIST_FIELD_TYPE = {
   post: [
