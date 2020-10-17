@@ -6,7 +6,9 @@ const FieldMenu = ( { onSelectField } ) => {
 	const [ active, setActive ] = useState( 0 );
 	const [ fieldTypes, setFieldTypes ] = useState( {} );
 
-	useEffect( () => request( 'field-types' ).then( data => setFieldTypes( data ) ), [] );
+	useEffect( () => {
+		request( 'field-types' ).then( data => setFieldTypes( data ) );
+	}, [] );
 
 	return (
 		<>

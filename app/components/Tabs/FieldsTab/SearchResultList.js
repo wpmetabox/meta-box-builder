@@ -2,11 +2,9 @@ import { request } from '../../../utility/functions';
 const { useState, useEffect } = wp.element;
 
 const SearchResultList = ( { searchParam, onSelectField } ) => {
-	const [ items, setItems ] = useState( [] );
+	const [ fieldTypes, setFieldTypes ] = useState( {} );
 
-	const getSearchResults = fieldTypes => {
-		console.log( fieldTypes );
-
+	const getSearchResults = () => {
 		let result = [];
 		Object.values( fieldTypes ).forEach( list => {
 			Object.keys( list ).forEach( type => {
@@ -15,11 +13,14 @@ const SearchResultList = ( { searchParam, onSelectField } ) => {
 				}
 			} );
 		} );
-
-		setItems( result );
+		return result;
 	};
 
-	useEffect( () => request( 'field-types' ).then( getSearchResults ), [] );
+	useEffect( () => {
+		request( 'field-types' ).then( data => setFieldTypes( data ) );
+	}, [] );
+
+	const items = getSearchResults();
 
 	return (
 		<div className="og-search-results">
