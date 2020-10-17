@@ -222,13 +222,23 @@ const toTitleCase = string => string.split( '_' ).map( ucfirst ).join( '' );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
+let apiCache = {};
 export const request = async ( apiName, params = {}, method = 'GET' ) => {
 	let options = {
 		method,
 		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
 	};
+	let cacheKey = apiName;
 	if ( 'POST' === method ) {
 		options.body = JSON.stringify( params );
+		cacheKey += options.body;
 	}
-	return await fetch( `${ MbbApp.rest }/mbb/${ apiName }`, options ).then( response => response.json() );
+
+	if ( apiCache[ cacheKey ] ) {
+		return apiCache[ cacheKey ];
+	}
+
+	const result = await fetch( `${ MbbApp.rest }/mbb/${ apiName }`, options ).then( response => response.json() );
+	apiCache[ cacheKey ] = result;
+	return result;
 };
