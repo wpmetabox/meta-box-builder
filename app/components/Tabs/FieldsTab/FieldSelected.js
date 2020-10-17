@@ -1,4 +1,4 @@
-import { trashIcon, copyIcon, arrowDownIcon, arrowUpIcon } from '../../../constants/icons';
+import { trashIcon, copyIcon, arrowDownIcon } from '../../../constants/icons';
 import GeneralContent from './FieldContent/GeneralContent';
 import AdvancedContent from './FieldContent/AdvancedContent';
 import { ucfirst } from '../../../utility/functions';
@@ -87,7 +87,7 @@ const Header = ( props ) => {
         <span className="og-item__type">{ props.type }</span>
         <span className="og-item__action og-item__action--remove" title="Remove" onClick={ remove }>{ trashIcon }</span>
         <span className="og-item__action og-item__action--duplicate" title="Duplicate" onClick={ duplicate }>{ copyIcon }</span>
-        <span className="og-item__action og-item__action--toggle" title="Toggle Settings">{ props.expanded ? arrowUpIcon : arrowDownIcon }</span>
+        <span className="og-item__action og-item__action--toggle" title="Toggle Settings">{ arrowDownIcon }</span>
       </div>
     </div>
   );
