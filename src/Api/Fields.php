@@ -5,19 +5,21 @@ use WP_REST_Server;
 
 class Fields {
 	public function __construct() {
-		add_action( 'rest_api_init', [$this, 'register_routes'] );
+		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
 
 	public function register_routes() {
-		register_rest_route( 'mbb', 'field-types', [
+		$methods = get_class_methods( $this );
+		$methods = array_diff( $methods, [ '__construct', 'register_routes', 'register_route' ] );
+		array_walk( $methods, [ $this, 'register_route' ] );
+	}
+
+	private function register_route( $method ) {
+		$route = str_replace( ['get_', '_'], ['', '-'], $method );
+		register_rest_route( 'mbb', $route, [
 			'method'              => WP_REST_Server::READABLE,
-			'callback'            => [$this, 'get_field_types'],
-			'permission_callback' => [$this, 'has_permission'],
-		] );
-		register_rest_route( 'mbb', 'fields', [
-			'method'              => WP_REST_Server::READABLE,
-			'callback'            => [$this, 'get_fields'],
-			'permission_callback' => [$this, 'has_permission'],
+			'callback'            => [ $this, $method ],
+			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 	}
 
