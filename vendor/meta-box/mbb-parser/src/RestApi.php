@@ -8,8 +8,9 @@ class RestApi {
 
 	public function register_routes() {
 		register_rest_route( 'mbb-parser', 'meta-box', [
-			'methods'  => \WP_REST_Server::CREATABLE,
-			'callback' => [ $this, 'generate_code' ],
+			'methods'             => \WP_REST_Server::CREATABLE,
+			'callback'            => [ $this, 'generate_code' ],
+			'permission_callback' => '__return_true',
 		] );
 	}
 

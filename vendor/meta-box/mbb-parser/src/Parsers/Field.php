@@ -20,8 +20,10 @@ class Field extends Base {
 			->parse_array_attributes( 'query_args' )
 			->parse_custom_attributes()
 			->parse_conditional_logic()
-			->remove_empty_values()
 			->remove_id();
+		if ( 'button_group' !== $this->type ) {
+			$this->remove_empty_values();
+		}
 	}
 
 	private function remove_tabs() {
