@@ -48,7 +48,6 @@ const FieldsTab = ( props ) => {
           ) }
       </div>
 
-      <button className="button og-add" onClick={ toggleInserter }>{ __( 'Add Field', 'meta-box-builder' ) }</button>
       { selectedList.items.length === 0 && <p className="og-none">{ __( 'There are no fields here. Click the Add Button above to add a new field.', 'meta-box-builder' ) }</p> }
       <div className="og-fields">
         {
@@ -63,6 +62,7 @@ const FieldsTab = ( props ) => {
           ) )
         }
       </div>
+      <button className="button og-add" onClick={ toggleInserter }>{ __( 'Add Field', 'meta-box-builder' ) }</button>
     </>
   );
 };

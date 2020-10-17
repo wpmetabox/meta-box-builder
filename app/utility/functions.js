@@ -109,14 +109,14 @@ export const getElementControlName = ( name, type ) => {
 //     return type;
 // };
 
-// export const getDataCopiedItem = ( type, index ) => {
-//     let data = fields[ type ];
-//     let result = {};
-//     result.general = getGeneralData( data.general, index );
-//     result.advanced = getAdvancedData( data.advanced, index );
+export const getDataCopiedItem = ( type, index ) => {
+    let data = fields[ type ];
+    let result = {};
+    result.general = getGeneralData( data.general, index );
+    result.advanced = getAdvancedData( data.advanced, index );
 
-//     return result;
-// };
+    return result;
+};
 
 const getGeneralData = ( generalItems, index ) => {
     let result = {};
