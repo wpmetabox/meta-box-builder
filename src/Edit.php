@@ -30,6 +30,7 @@ class Edit {
 
 		wp_localize_script( 'mbb-app', 'MbbApp', [
 			'rest'          => untrailingslashit( rest_url() ),
+			'nonce'         => wp_create_nonce( 'wp_rest' ),
 			'settings'      => json_decode( get_post()->post_content, ARRAY_A ),
 			'postTypes'     => mbb_get_post_types(),
 			'taxonomies'    => mbb_get_taxonomies(),

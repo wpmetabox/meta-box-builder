@@ -21,6 +21,7 @@ new Upgrade\Manager;
 new Register;
 new RestApi;
 new \MBBParser\RestApi;
+new Api\Fields;
 
 if ( is_admin() ) {
 	new Import;
