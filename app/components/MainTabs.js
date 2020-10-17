@@ -1,4 +1,4 @@
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormContext } from "react-hook-form";
 import SettingsTab from './Tabs/SettingsTab';
 import FieldsTab from './Tabs/FieldsTab';
 import { DndProvider } from 'react-dnd';
@@ -40,7 +40,7 @@ const MainTabs = () => {
   const fields = MbbApp.settings ? MbbApp.settings.fields : [];
 
   return (
-    <FormProvider { ...methods } register={ register } control={ control }>
+    <FormContext { ...methods } register={ register } control={ control }>
       <form onSubmit={ handleSubmit( onSubmit ) } id='myForm'>
         <Tabs forceRenderTabPanel={ true } onSelect={ onSelect }>
           <TabList>
@@ -64,7 +64,7 @@ const MainTabs = () => {
       </form>
       <input type="hidden" id="post_content" name="post_content" />
       <button style={ { display: 'none' } } id="btn-on-publish" onClick={ handleSubmit( onPublish ) }>Publish</button>
-    </FormProvider>
+    </FormContext>
   );
 };
 
