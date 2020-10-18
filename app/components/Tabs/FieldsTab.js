@@ -1,5 +1,5 @@
 import FieldMenu from './FieldsTab/FieldMenu';
-import { updateSelectedList, request } from '../../utility/functions';
+import { updateSelectedList, request, uniqid } from '../../utility/functions';
 import SearchResultList from './FieldsTab/SearchResultList';
 import SelectedItem from './FieldsTab/SelectedItem';
 
@@ -70,7 +70,5 @@ const FieldsTab = ( props ) => {
 		</>
 	);
 };
-
-const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
 export default memo( FieldsTab );

@@ -88,6 +88,15 @@ class Fields {
 	}
 
 	public function get_fields() {
+		$attributes = [
+			'component' => 'KeyValue',
+			'props' => [
+				'type'  => 'attributes',
+				'link'  => 'https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes',
+				'label' => __( 'Custom settings', 'meta-box-builder' ),
+			],
+		];
+
 		return [
 			'text' => [
 				'general' => [
@@ -109,7 +118,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'number' => [
@@ -129,7 +138,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'url' => [
@@ -147,7 +156,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'email' => [
@@ -165,7 +174,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'range' => [
@@ -184,7 +193,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'text_list' => [
@@ -200,7 +209,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'checkbox' => [
@@ -216,7 +225,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'checkbox_list' => [
@@ -233,7 +242,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'button' => [
@@ -248,7 +257,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'password' => [
@@ -266,7 +275,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'radio' => [
@@ -283,7 +292,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'select' => [
@@ -302,7 +311,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'select_advanced' => [
@@ -322,7 +331,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'js_options' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'textarea' => [
@@ -341,7 +350,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'hidden' => [
@@ -354,7 +363,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'image_select' => [
@@ -372,7 +381,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'color' => [
@@ -388,7 +397,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'oembed' => [
@@ -406,7 +415,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'slider' => [
@@ -425,7 +434,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'js_options' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'wysiwyg' => [
@@ -443,7 +452,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'options' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'autocomplete' => [
@@ -460,7 +469,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'fieldset_text' => [
@@ -476,7 +485,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'map' => [
@@ -495,7 +504,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'group' => [
@@ -506,7 +515,7 @@ class Fields {
 					'desc' => ''
 				],
 				'advanced' => [
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'heading' => [
@@ -519,7 +528,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'divider' => [
@@ -546,7 +555,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'js_options' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'datetime' => [
@@ -566,7 +575,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'js_options' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'time' => [
@@ -584,7 +593,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'js_options' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'post' => [
@@ -605,7 +614,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'query_args' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'taxonomy' => [
@@ -625,7 +634,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'query_args' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'taxonomy_advanced' => [
@@ -645,7 +654,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'query_args' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'user' => [
@@ -664,7 +673,7 @@ class Fields {
 					'after' => '',
 					'class' => '',
 					'query_args' => [],
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'file' => [
@@ -681,7 +690,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'file_input' => [
@@ -699,7 +708,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'file_advanced' => [
@@ -718,7 +727,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'image_advanced' => [
@@ -736,7 +745,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'image' => [
@@ -753,7 +762,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			],
 			'video' => [
@@ -771,7 +780,7 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'attributes' => []
+					'attributes' => $attributes
 				]
 			]
 		];
