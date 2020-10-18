@@ -2,10 +2,6 @@ import { CHECKBOX, DATA_LIST_TYPE, DROPDOWN_MENU, fields, LIST_OPTION_TYPE, NUMB
 
 export const getLabel = ( name, type ) => {
 	const labels = {
-		prefix: "Prefix",
-		suffix: "Suffix",
-		timestamp: "Timestamp",
-		options: "Options",
 		parent: "Parent",
 		taxonomy: "Taxonomy",
 	};

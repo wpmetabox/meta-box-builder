@@ -157,6 +157,19 @@ class Fields {
 				'label' => __( 'Maximum value', 'meta-box-builder' ),
 			],
 		];
+		$timestamp = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label' => __( 'Save value as timestamp', 'meta-box-builder' ),
+			],
+		];
+		$options = [
+			'component' => 'Textarea',
+			'props'     => [
+				'label'   => __( 'Choices', 'meta-box-builder' ),
+				'tooltip' => __( "Enter each choice on a line. For more control, you may specify both a value and label like 'red: Red' (without quotes)", 'meta-box-builder' ),
+			],
+		];
 
 		// Advanced tab.
 		$before = [
@@ -336,7 +349,7 @@ class Fields {
 					'name' => 'Checkbox List',
 					'type' => 'checkbox_list',
 					'desc' => $desc,
-					'options' => '',
+					'options' => $options,
 					'std' => $std_textarea,
 					'clone' => false
 				],
@@ -391,7 +404,7 @@ class Fields {
 					'name' => 'Radio',
 					'type' => 'radio',
 					'desc' => $desc,
-					'options' => [],
+					'options' => $options,
 					'inline' => true,
 					'clone' => false
 				],
@@ -408,7 +421,7 @@ class Fields {
 					'name' => 'Select',
 					'type' => 'select',
 					'desc' => $desc,
-					'options' => '',
+					'options' => $options,
 					'std' => $std,
 					'placeholder' => $placeholder,
 					'multiple' => false,
@@ -427,7 +440,7 @@ class Fields {
 					'name' => 'Select Advanced',
 					'type' => 'select_advanced',
 					'desc' => $desc,
-					'options' => '',
+					'options' => $options,
 					'std' => $std,
 					'placeholder' => $placeholder,
 					'multiple' => false,
@@ -498,7 +511,7 @@ class Fields {
 					'name' => 'Image Select',
 					'desc' => $desc,
 					'std' => $std,
-					'options' => '',
+					'options' => $options,
 					'multiple' => false,
 					'clone' => false
 				],
@@ -550,8 +563,20 @@ class Fields {
 					'name' => 'Slider',
 					'desc' => $desc,
 					'std' => $std,
-					'prefix' => '',
-					'suffix' => '',
+					'prefix' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'Prefix', 'meta-box-builder' ),
+							'tooltip' => __( 'Text displayed before the field value', 'meta-box-builder' ),
+						],
+					],
+					'suffix' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'Suffix', 'meta-box-builder' ),
+							'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
+						],
+					],
 					'clone' => false
 				],
 				'advanced' => [
@@ -598,7 +623,7 @@ class Fields {
 					'type' => 'autocomplete',
 					'name' => 'Autocomplete',
 					'desc' => $desc,
-					'options' => '',
+					'options' => $options,
 					'size' => $size,
 					'clone' => false
 				],
@@ -696,7 +721,7 @@ class Fields {
 					'std' => $std,
 					'size' => $size,
 					'inline' => $inline_date,
-					'timestamp' => false,
+					'timestamp' => $timestamp,
 					'clone' => false
 				],
 				'advanced' => [
@@ -722,7 +747,7 @@ class Fields {
 					'std' => $std,
 					'size' => $size,
 					'inline' => $inline_date,
-					'timestamp' => false,
+					'timestamp' => $timestamp,
 					'clone' => false
 				],
 				'advanced' => [
