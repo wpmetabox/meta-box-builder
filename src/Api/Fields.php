@@ -796,7 +796,13 @@ class Fields {
 					'desc' => $desc,
 					'post_type' => 'post',
 					'field_type' => 'select_advanced',
-					'parent' => false,
+					'parent' => [
+						'component' => 'Checkbox',
+						'props'     => [
+							'label'   => __( 'Set as parent', 'meta-box-builder' ),
+							'tooltip' => __( 'Set the selected post as the parent for the current being edited post.', 'meta-box-builder' ),
+						],
+					],
 					'placeholder' => $placeholder,
 					'clone' => false
 				],

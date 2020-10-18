@@ -2,7 +2,6 @@ import { CHECKBOX, DATA_LIST_TYPE, DROPDOWN_MENU, fields, LIST_OPTION_TYPE, NUMB
 
 export const getLabel = ( name, type ) => {
 	const labels = {
-		parent: "Parent",
 		taxonomy: "Taxonomy",
 	};
 
