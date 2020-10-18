@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import DivRow from '../DivRow';
 
 const Name = ( { name, defaultValue, ...rest } ) => {
-  const changeFieldLabel = e => document.getElementById( `og-item__title__${ rest.data.id }` ).textContent = e.target.value;
+  const changeFieldLabel = e => document.getElementById( `og-item__title__${ rest.index }` ).textContent = e.target.value;
   const { register } = useFormContext();
 
   return (

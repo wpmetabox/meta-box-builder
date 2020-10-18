@@ -88,6 +88,71 @@ class Fields {
 	}
 
 	public function get_fields() {
+		// General tab.
+		$id = [
+			'component' => 'Input',
+			'props'     => [
+				'label'   => __( 'ID', 'meta-box-builder' ),
+				'require' => true,
+				'tooltip' => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
+			],
+		];
+		$std = [
+			'component' => 'Input',
+			'props'     => [
+				'label' => __( 'Default value', 'meta-box-builder' ),
+			],
+		];
+		$desc = [
+			'component' => 'Input',
+			'props'     => [
+				'label' => __( 'Description', 'meta-box-builder' ),
+			],
+		];
+		$size = [
+			'component' => 'Input',
+			'props'     => [
+				'type'  => 'number',
+				'label' => __( 'Size of the input box', 'meta-box-builder' ),
+			],
+		];
+		$placeholder = [
+			'component' => 'Input',
+			'props'     => [
+				'label' => __( 'Placeholder', 'meta-box-builder' ),
+			],
+		];
+		$max_file_uploads = [
+			'component' => 'Input',
+			'props'     => [
+				'type'    => 'number',
+				'label'   => __( 'Maximum number of files', 'meta-box-builder' ),
+				'tooltip' => __( 'Leave empty for unlimited uploads', 'meta-box-builder' ),
+			],
+		];
+		$inline_date = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'   => __( 'Inline', 'meta-box-builder' ),
+				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
+			],
+		];
+		$min = [
+			'component' => 'Input',
+			'props'     => [
+				'type'  => 'number',
+				'label' => __( 'Minumum value', 'meta-box-builder' ),
+			],
+		];
+		$max = [
+			'component' => 'Input',
+			'props'     => [
+				'type'  => 'number',
+				'label' => __( 'Maximum value', 'meta-box-builder' ),
+			],
+		];
+
+		// Advanced tab.
 		$before = [
 			'component' => 'Textarea',
 			'props'     => [
@@ -119,13 +184,13 @@ class Fields {
 		return [
 			'text' => [
 				'general' => [
-					'id'                => '',
+					'id' => $id,
 					'type'              => 'text',
 					'name'              => 'Text',
-					'desc'              => '',
-					'std'               => '',
-					'placeholder'       => '',
-					'size'              => '',
+					'desc' => $desc,
+					'std'               => $std,
+					'placeholder' => $placeholder,
+					'size' => $size,
 					'clone'             => false,
 					'sort_clone'        => false,
 					'clone_default'     => false,
@@ -142,15 +207,15 @@ class Fields {
 			],
 			'number' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'number',
 					'name' => 'Number',
-					'desc' => '',
-					'std' => '',
-					'min' => '',
-					'max' => '',
+					'desc' => $desc,
+					'std' => $std,
+					'min' => $min,
+					'max' => $max,
 					'step' => '',
-					'placeholder' => '',
+					'placeholder' => $placeholder,
 					'clone' => false
 				],
 				'advanced' => [
@@ -162,13 +227,13 @@ class Fields {
 			],
 			'url' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'url',
 					'name' => 'URL',
-					'desc' => '',
-					'std' => '',
-					'placeholder' => '',
-					'size' => '',
+					'desc' => $desc,
+					'std' => $std,
+					'placeholder' => $placeholder,
+					'size' => $size,
 					'clone' => false
 				],
 				'advanced' => [
@@ -180,13 +245,13 @@ class Fields {
 			],
 			'email' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'Email',
 					'type' => 'email',
-					'desc' => '',
-					'std' => '',
-					'placeholder' => '',
-					'size' => '',
+					'desc' => $desc,
+					'std' => $std,
+					'placeholder' => $placeholder,
+					'size' => $size,
 					'clone' => false
 				],
 				'advanced' => [
@@ -198,13 +263,13 @@ class Fields {
 			],
 			'range' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'Range',
 					'type' => 'range',
-					'desc' => '',
-					'std' => 0,
-					'min' => 0,
-					'max' => 9,
+					'desc' => $desc,
+					'std' => $std,
+					'min' => $min,
+					'max' => $max,
 					'step' => 1,
 					'clone' => false
 				],
@@ -217,10 +282,10 @@ class Fields {
 			],
 			'text_list' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'text_list',
 					'name' => 'Text List',
-					'desc' => '',
+					'desc' => $desc,
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -240,10 +305,10 @@ class Fields {
 			],
 			'checkbox' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'Checkbox',
 					'type' => 'checkbox',
-					'desc' => '',
+					'desc' => $desc,
 					'std' => false,
 					'clone' => false
 				],
@@ -256,10 +321,10 @@ class Fields {
 			],
 			'checkbox_list' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'Checkbox List',
 					'type' => 'checkbox_list',
-					'desc' => '',
+					'desc' => $desc,
 					'options' => '',
 					'std' => '',
 					'clone' => false
@@ -273,11 +338,11 @@ class Fields {
 			],
 			'button' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'button',
 					'name' => 'Button',
-					'desc' => '',
-					'std' => ''
+					'desc' => $desc,
+					'std' => '',
 				],
 				'advanced' => [
 					'before' => $before,
@@ -288,13 +353,13 @@ class Fields {
 			],
 			'password' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'password',
 					'name' => 'Password',
-					'desc' => '',
-					'std' => '',
-					'placeholder' => '',
-					'size' => '',
+					'desc' => $desc,
+					'std' => $std,
+					'placeholder' => $placeholder,
+					'size' => $size,
 					'clone' => false
 				],
 				'advanced' => [
@@ -306,10 +371,10 @@ class Fields {
 			],
 			'radio' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'Radio',
 					'type' => 'radio',
-					'desc' => '',
+					'desc' => $desc,
 					'options' => [],
 					'inline' => true,
 					'clone' => false
@@ -323,13 +388,13 @@ class Fields {
 			],
 			'select' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'Select',
 					'type' => 'select',
-					'desc' => '',
+					'desc' => $desc,
 					'options' => '',
-					'std' => '',
-					'placeholder' => '',
+					'std' => $std,
+					'placeholder' => $placeholder,
 					'multiple' => false,
 					'clone' => false
 				],
@@ -342,13 +407,13 @@ class Fields {
 			],
 			'select_advanced' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'Select Advanced',
 					'type' => 'select_advanced',
-					'desc' => '',
+					'desc' => $desc,
 					'options' => '',
-					'std' => '',
-					'placeholder' => '',
+					'std' => $std,
+					'placeholder' => $placeholder,
 					'multiple' => false,
 					'clone' => false
 				],
@@ -368,14 +433,26 @@ class Fields {
 			],
 			'textarea' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'textarea',
 					'name' => 'Textarea',
-					'desc' => '',
-					'std' => '',
-					'placeholder' => '',
-					'rows' => '',
-					'cols' => '',
+					'desc' => $desc,
+					'std' => $std,
+					'placeholder' => $placeholder,
+					'rows' => [
+						'component' => 'Input',
+						'props'     => [
+							'type'  => 'number',
+							'label' => __( 'Rows', 'meta-box-builder' ),
+						],
+					],
+					'cols' => [
+						'component' => 'Input',
+						'props'     => [
+							'type'  => 'number',
+							'label' => __( 'Columns', 'meta-box-builder' ),
+						],
+					],
 					'clone' => false
 				],
 				'advanced' => [
@@ -387,9 +464,9 @@ class Fields {
 			],
 			'hidden' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'hidden',
-					'std' => ''
+					'std' => $std,
 				],
 				'advanced' => [
 					'before' => $before,
@@ -400,11 +477,11 @@ class Fields {
 			],
 			'image_select' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'image_select',
 					'name' => 'Image Select',
-					'desc' => '',
-					'std' => '',
+					'desc' => $desc,
+					'std' => $std,
 					'options' => '',
 					'multiple' => false,
 					'clone' => false
@@ -418,11 +495,11 @@ class Fields {
 			],
 			'color' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'Color Picker',
 					'type' => 'color',
-					'desc' => '',
-					'std' => '',
+					'desc' => $desc,
+					'std' => $std,
 					'clone' => false
 				],
 				'advanced' => [
@@ -434,13 +511,13 @@ class Fields {
 			],
 			'oembed' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'oembed',
 					'name' => 'oEmbed',
-					'desc' => '',
-					'std' => '',
-					'placeholder' => '',
-					'size' => '',
+					'desc' => $desc,
+					'std' => $std,
+					'placeholder' => $placeholder,
+					'size' => $size,
 					'clone' => false
 				],
 				'advanced' => [
@@ -452,11 +529,11 @@ class Fields {
 			],
 			'slider' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'slider',
 					'name' => 'Slider',
-					'desc' => '',
-					'std' => '',
+					'desc' => $desc,
+					'std' => $std,
 					'prefix' => '',
 					'suffix' => '',
 					'clone' => false
@@ -477,11 +554,11 @@ class Fields {
 			],
 			'wysiwyg' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'WYSIWYG',
 					'type' => 'wysiwyg',
-					'desc' => '',
-					'std' => '',
+					'desc' => $desc,
+					'std' => $std,
 					'raw' => false,
 					'clone' => false
 				],
@@ -501,12 +578,12 @@ class Fields {
 			],
 			'autocomplete' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'autocomplete',
 					'name' => 'Autocomplete',
-					'desc' => '',
+					'desc' => $desc,
 					'options' => '',
-					'size' => '',
+					'size' => $size,
 					'clone' => false
 				],
 				'advanced' => [
@@ -518,10 +595,10 @@ class Fields {
 			],
 			'fieldset_text' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'fieldset_text',
 					'name' => 'Fieldset Text',
-					'desc' => '',
+					'desc' => $desc,
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -540,10 +617,10 @@ class Fields {
 			],
 			'map' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'map',
 					'name' => 'Map',
-					'desc' => '',
+					'desc' => $desc,
 					'std' => '',
 					'api_key' => '',
 					'address_field' => '',
@@ -562,7 +639,7 @@ class Fields {
 					'id' => 'group',
 					'type' => 'group',
 					'name' => 'Group',
-					'desc' => ''
+					'desc' => $desc,
 				],
 				'advanced' => [
 					'attributes' => $attributes
@@ -572,7 +649,7 @@ class Fields {
 				'general' => [
 					'type' => 'heading',
 					'name' => 'Heading',
-					'desc' => ''
+					'desc' => $desc,
 				],
 				'advanced' => [
 					'before' => $before,
@@ -585,18 +662,18 @@ class Fields {
 				'general' => [
 					'type' => 'divider',
 					'before' => $before,
-					'after' => ''
+					'after' => $after,
 				]
 			],
 			'date' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'date',
 					'name' => 'Date Picker',
-					'desc' => '',
-					'std' => '',
-					'size' => '',
-					'inline' => false,
+					'desc' => $desc,
+					'std' => $std,
+					'size' => $size,
+					'inline' => $inline_date,
 					'timestamp' => false,
 					'clone' => false
 				],
@@ -616,13 +693,13 @@ class Fields {
 			],
 			'datetime' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'datetime',
 					'name' => 'Date Time Picker',
-					'desc' => '',
-					'std' => '',
-					'size' => '',
-					'inline' => false,
+					'desc' => $desc,
+					'std' => $std,
+					'size' => $size,
+					'inline' => $inline_date,
 					'timestamp' => false,
 					'clone' => false
 				],
@@ -642,12 +719,12 @@ class Fields {
 			],
 			'time' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'name' => 'Time Picker',
 					'type' => 'time',
-					'desc' => '',
-					'std' => '',
-					'size' => '',
+					'desc' => $desc,
+					'std' => $std,
+					'size' => $size,
 					'clone' => false
 				],
 				'advanced' => [
@@ -666,15 +743,15 @@ class Fields {
 			],
 			'post' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'post',
 					'name' => 'Post',
-					'desc' => '',
+					'desc' => $desc,
 					'std' => '',
 					'post_type' => 'post',
 					'field_type' => 'select_advanced',
 					'parent' => false,
-					'placeholder' => '',
+					'placeholder' => $placeholder,
 					'clone' => false
 				],
 				'advanced' => [
@@ -694,14 +771,14 @@ class Fields {
 			],
 			'taxonomy' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'taxonomy',
 					'name' => 'Taxonomy',
-					'desc' => '',
+					'desc' => $desc,
 					'taxonomy' => 'category',
 					'field_type' => 'select_advanced',
 					'std' => '',
-					'placeholder' => '',
+					'placeholder' => $placeholder,
 					'clone' => false
 				],
 				'advanced' => [
@@ -721,14 +798,14 @@ class Fields {
 			],
 			'taxonomy_advanced' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'taxonomy_advanced',
 					'name' => 'Taxonomy Advanced',
-					'desc' => '',
+					'desc' => $desc,
 					'taxonomy' => 'category',
 					'field_type' => 'select_advanced',
 					'std' => '',
-					'placeholder' => '',
+					'placeholder' => $placeholder,
 					'clone' => false
 				],
 				'advanced' => [
@@ -748,13 +825,13 @@ class Fields {
 			],
 			'user' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'user',
 					'name' => 'User',
-					'desc' => '',
+					'desc' => $desc,
 					'field_type' => 'select_advanced',
 					'std' => '',
-					'placeholder' => '',
+					'placeholder' => $placeholder,
 					'clone' => false
 				],
 				'advanced' => [
@@ -774,11 +851,11 @@ class Fields {
 			],
 			'file' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'file',
 					'name' => 'File',
-					'desc' => '',
-					'max_file_uploads' => '',
+					'desc' => $desc,
+					'max_file_uploads' => $max_file_uploads,
 					'force_delete' => false,
 					'clone' => false
 				],
@@ -791,13 +868,13 @@ class Fields {
 			],
 			'file_input' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'file_input',
 					'name' => 'File Input',
-					'desc' => '',
-					'std' => '',
-					'placeholder' => '',
-					'size' => '',
+					'desc' => $desc,
+					'std' => $std,
+					'placeholder' => $placeholder,
+					'size' => $size,
 					'clone' => false
 				],
 				'advanced' => [
@@ -809,11 +886,11 @@ class Fields {
 			],
 			'file_advanced' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'file_advanced',
 					'name' => 'File Advanced',
-					'desc' => '',
-					'max_file_uploads' => '',
+					'desc' => $desc,
+					'max_file_uploads' => $max_file_uploads,
 					'mime_type' => '',
 					'max_status' => true,
 					'force_delete' => false,
@@ -828,11 +905,11 @@ class Fields {
 			],
 			'image_advanced' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'image_advanced',
 					'name' => 'Image Advanced',
-					'desc' => '',
-					'max_file_uploads' => '',
+					'desc' => $desc,
+					'max_file_uploads' => $max_file_uploads,
 					'max_status' => false,
 					'force_delete' => false,
 					'clone' => false
@@ -846,11 +923,11 @@ class Fields {
 			],
 			'image' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'image',
 					'name' => 'Image Upload',
-					'desc' => '',
-					'max_file_uploads' => '',
+					'desc' => $desc,
+					'max_file_uploads' => $max_file_uploads,
 					'force_delete' => false,
 					'clone' => false
 				],
@@ -863,10 +940,10 @@ class Fields {
 			],
 			'video' => [
 				'general' => [
-					'id' => '',
+					'id' => $id,
 					'type' => 'video',
 					'name' => 'Video',
-					'desc' => '',
+					'desc' => $desc,
 					'max_file_uploads' => 4,
 					'max_status' => false,
 					'force_delete' => false,

@@ -2,17 +2,9 @@ import { CHECKBOX, DATA_LIST_TYPE, DROPDOWN_MENU, fields, LIST_OPTION_TYPE, NUMB
 
 export const getLabel = ( name, type ) => {
 	const labels = {
-		std: "Default value",
-		size: "Size of the input box",
-		placeholder: "Placeholder",
-		min: "Minimum value",
-		max: "Maximum value",
-		rows: "Rows",
-		cols: "Columns",
 		prefix: "Prefix",
 		suffix: "Suffix",
 		timestamp: "Timestamp",
-		max_file_uploads: "Maximum number of files",
 		options: "Options",
 		parent: "Parent",
 		taxonomy: "Taxonomy",
@@ -39,21 +31,6 @@ export const getElementControlName = ( name, type ) => {
 				taxonomy_advanced: 'StdSelect'
 			};
 			return types[ type ] || 'TextInput';
-		case 'placeholder':
-		case 'min':
-		case 'max':
-			return 'TextInput';
-		case 'size':
-		case 'rows':
-		case 'cols':
-		case 'max_file_uploads':
-			return 'NumberInput';
-		case 'inline':
-			types = {
-				date: 'InlineDate',
-				datetime: 'InlineDate',
-			};
-			return types[ type ] || 'Inline';
 		default:
 			return toTitleCase( name );
 	}

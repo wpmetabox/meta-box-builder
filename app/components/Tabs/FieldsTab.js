@@ -23,7 +23,13 @@ const FieldsTab = ( props ) => {
 		const id = `${ type }_${ uniqid() }`;
 		const data = {
 			...fields[ type ],
-			general: { ...fields[ type ].general, id },
+			general: {
+				...fields[ type ].general,
+				id: {
+					...fields[ type ].general.id,
+					default: id
+				}
+			},
 		};
 		const newList = {
 			...selectedList,
