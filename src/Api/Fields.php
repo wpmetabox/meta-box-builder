@@ -88,9 +88,29 @@ class Fields {
 	}
 
 	public function get_fields() {
+		$before = [
+			'component' => 'Textarea',
+			'props'     => [
+				'label'   => __( 'Before', 'meta-box-builder' ),
+				'tooltip' => __( 'Custom HTML displayed before the field output', 'meta-box-builder' ),
+			],
+		];
+		$after = [
+			'component' => 'Textarea',
+			'props'     => [
+				'label'   => __( 'After', 'meta-box-builder' ),
+				'tooltip' => __( 'Custom HTML displayed after the field output', 'meta-box-builder' ),
+			],
+		];
+		$class = [
+			'component' => 'Input',
+			'props'     => [
+				'label' => __( 'Custom CSS class', 'meta-box-builder' ),
+			],
+		];
 		$attributes = [
 			'component' => 'KeyValue',
-			'props' => [
+			'props'     => [
 				'link'  => 'https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes',
 				'label' => __( 'Custom settings', 'meta-box-builder' ),
 			],
@@ -114,9 +134,9 @@ class Fields {
 					'add_button'        => ''
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -134,9 +154,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -152,9 +172,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -170,9 +190,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -189,9 +209,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -212,9 +232,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -228,9 +248,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -245,9 +265,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -260,9 +280,9 @@ class Fields {
 					'std' => ''
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -278,9 +298,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -295,9 +315,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -314,9 +334,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -333,9 +353,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -359,9 +379,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -372,9 +392,9 @@ class Fields {
 					'std' => ''
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -390,9 +410,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -406,9 +426,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -424,9 +444,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -442,9 +462,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -466,9 +486,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -490,9 +510,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -512,9 +532,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -531,9 +551,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -555,16 +575,16 @@ class Fields {
 					'desc' => ''
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
 			'divider' => [
 				'general' => [
 					'type' => 'divider',
-					'before' => '',
+					'before' => $before,
 					'after' => ''
 				]
 			],
@@ -581,9 +601,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -607,9 +627,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -631,9 +651,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -658,9 +678,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'query_args' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -685,9 +705,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'query_args' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -712,9 +732,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'query_args' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -738,9 +758,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'query_args' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -763,9 +783,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -781,9 +801,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -800,9 +820,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -818,9 +838,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -835,9 +855,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			],
@@ -853,9 +873,9 @@ class Fields {
 					'clone' => false
 				],
 				'advanced' => [
-					'before' => '',
-					'after' => '',
-					'class' => '',
+					'before' => $before,
+					'after' => $after,
+					'class' => $class,
 					'attributes' => $attributes
 				]
 			]

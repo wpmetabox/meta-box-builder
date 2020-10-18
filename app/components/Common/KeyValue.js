@@ -7,8 +7,7 @@ const { __ } = wp.i18n;
 const { Dashicon } = wp.components;
 
 const KeyValue = ( {
-	index,
-	type,
+	name,
 	label,
 	link = '',
 	tooltip = '',
@@ -30,7 +29,7 @@ const KeyValue = ( {
 						key={ item.uniqId }
 						item={ item }
 						removeItem={ removeItem }
-						name={ `fields-${ index }-${ type }-${ i }` }
+						name={ `${ name }-${ i }` }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
 					/>

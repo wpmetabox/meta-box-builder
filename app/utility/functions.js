@@ -2,7 +2,6 @@ import { CHECKBOX, DATA_LIST_TYPE, DROPDOWN_MENU, fields, LIST_OPTION_TYPE, NUMB
 
 export const getLabel = ( name, type ) => {
 	const labels = {
-		class: "Custom CSS class",
 		std: "Default value",
 		size: "Size of the input box",
 		placeholder: "Placeholder",
@@ -41,7 +40,6 @@ export const getElementControlName = ( name, type ) => {
 			};
 			return types[ type ] || 'TextInput';
 		case 'placeholder':
-		case 'class':
 		case 'min':
 		case 'max':
 			return 'TextInput';
