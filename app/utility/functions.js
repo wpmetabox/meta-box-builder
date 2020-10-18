@@ -56,28 +56,6 @@ export const getElementControlName = ( name, type ) => {
 				datetime: 'InlineDate',
 			};
 			return types[ type ] || 'Inline';
-		case 'options':
-			types = {
-				fieldset_text: 'OptionsFieldsetText',
-				text_list: 'OptionsTextList',
-				wysiwyg: 'OptionsWysiwyg',
-			};
-			return types[ type ] || 'Options';
-		case 'query_args':
-			types = {
-				taxonomy: 'QueryArgsTaxonomy',
-				taxonomy_advanced: 'QueryArgsTaxonomy',
-				user: 'QueryArgsUser',
-			};
-			return types[ type ] || 'QueryArgs';
-		case 'js_options':
-			types = {
-				date: 'JsOptionsDate',
-				datetime: 'JsOptionsDate',
-				slider: 'JsOptionsSlider',
-				time: 'JsOptionsTime',
-			};
-			return types[ type ] || 'JsOptions';
 		default:
 			return toTitleCase( name );
 	}

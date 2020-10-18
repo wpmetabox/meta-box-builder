@@ -30,7 +30,7 @@ const FieldSelected = ( props ) => {
           toggleSettings={ toggleSettings }
         />
         <div className="og-item__body og-collapsible__body">
-          <GeneralContent type={ type } index={ index } fieldData={ props.data.general } />
+          <GeneralContent type={ type } index={ index } data={ props.data.general } />
         </div>
       </div>
     );
@@ -58,7 +58,7 @@ const FieldSelected = ( props ) => {
             <Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
           </TabList>
           <TabPanel>
-            <GeneralContent type={ type } index={ index } fieldData={ props.data.general } />
+            <GeneralContent type={ type } index={ index } data={ props.data.general } />
           </TabPanel>
           <TabPanel>
             <AdvancedContent type={ type } index={ index } data={ props.data.advanced } />

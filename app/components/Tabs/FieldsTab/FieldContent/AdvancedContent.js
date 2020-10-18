@@ -6,7 +6,7 @@ const AdvancedContent = ( props ) => {
 		// Load shared component with dynamic config from the back-end API.
 		if ( props.data[ name ].component ) {
 			let Component = lazy( () => import( `../../../Common/${ props.data[ name ].component }` ) );
-			return <Component index={ props.index } { ...props.data[ name ].props } />;
+			return <Component index={ props.index } type={ name } { ...props.data[ name ].props } />;
 		}
 
 		// Load custom component.

@@ -1,32 +1,39 @@
 import React, { lazy, memo, Suspense } from 'react';
 import { getElementControlName } from '../../../../utility/functions';
 
-const GeneralContent = (props) => {
-  const getElement = (name) => {
-    let componentName = getElementControlName(name, props.type);
-    let Element = lazy(() => import(`../../../Common/Elements/${componentName}`));
+const GeneralContent = ( props ) => {
+	const getElement = ( name ) => {
+		// Load shared component with dynamic config from the back-end API.
+		if ( props.data[ name ].component ) {
+			let Component = lazy( () => import( `../../../Common/${ props.data[ name ].component }` ) );
+			return <Component index={ props.index } type={ name } { ...props.data[ name ].props } />;
+		}
 
-    return <Element
-      name={`fields-${props.index}-${name}`}
-      label={name}
-      setLabel={props.setLabel}
-      defaultValue={props.fieldData[name]}
-      data={props.fieldData}
-      index={props.index}
-      type={props.type} />
-  }
+		// Load custom component.
+		let componentName = getElementControlName( name, props.type );
+		let Element = lazy( () => import( `../../../Common/Elements/${ componentName }` ) );
 
-  return (
-    <div className="og-item__content">
-      {
-        Object.keys(props.fieldData).map((keyName, keyIndex) =>
-          <Suspense fallback={null} key={keyName + keyIndex}>
-            {getElement(keyName, keyIndex)}
-          </Suspense>
-        )
-      }
-    </div>
-  );
-}
+		return <Element
+			name={ `fields-${ props.index }-${ name }` }
+			label={ name }
+			setLabel={ props.setLabel }
+			defaultValue={ props.data[ name ] }
+			data={ props.data }
+			index={ props.index }
+			type={ props.type } />;
+	};
 
-export default memo(GeneralContent, (prevProps, nextProps) => prevProps.index === nextProps.index);
+	return (
+		<div className="og-item__content">
+			{
+				Object.keys( props.data ).map( ( keyName, keyIndex ) =>
+					<Suspense fallback={ null } key={ keyName + keyIndex }>
+						{ getElement( keyName, keyIndex ) }
+					</Suspense>
+				)
+			}
+		</div>
+	);
+};
+
+export default memo( GeneralContent, ( prevProps, nextProps ) => prevProps.index === nextProps.index );

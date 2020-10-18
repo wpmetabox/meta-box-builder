@@ -91,7 +91,6 @@ class Fields {
 		$attributes = [
 			'component' => 'KeyValue',
 			'props' => [
-				'type'  => 'attributes',
 				'link'  => 'https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes',
 				'label' => __( 'Custom settings', 'meta-box-builder' ),
 			],
@@ -202,7 +201,14 @@ class Fields {
 					'type' => 'text_list',
 					'name' => 'Text List',
 					'desc' => '',
-					'options' => [],
+					'options' => [
+						'component' => 'KeyValue',
+						'props'     => [
+							'label'            => __( 'Inputs', 'meta-box-builder' ),
+							'keyPlaceholder'   => __( 'Placeholder', 'meta-box-builder' ),
+							'valuePlaceholder' => __( 'Label', 'meta-box-builder' ),
+						],
+					],
 					'clone' => false
 				],
 				'advanced' => [
@@ -330,7 +336,13 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'js_options' => [],
+					'js_options' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'  => 'https://select2.org/configuration',
+							'label' => __( 'Select2 options', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
@@ -433,7 +445,13 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'js_options' => [],
+					'js_options' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'  => 'https://api.jqueryui.com/slider',
+							'label' => __( 'jQueryUI slider options', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
@@ -451,7 +469,13 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'options' => [],
+					'options' => [
+						'component' => 'KeyValue',
+						'props'     => [
+							'link'  => 'https://developer.wordpress.org/reference/functions/wp_editor/',
+							'label' => __( 'Editor options', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
@@ -478,7 +502,13 @@ class Fields {
 					'type' => 'fieldset_text',
 					'name' => 'Fieldset Text',
 					'desc' => '',
-					'options' => [],
+					'options' => [
+						'component' => 'KeyValue',
+						'props'     => [
+							'label'            => __( 'Inputs', 'meta-box-builder' ),
+							'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
+						],
+					],
 					'clone' => false
 				],
 				'advanced' => [
@@ -554,7 +584,13 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'js_options' => [],
+					'js_options' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'  => 'https://api.jqueryui.com/datepicker/',
+							'label' => __( 'Date picker options', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
@@ -574,7 +610,13 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'js_options' => [],
+					'js_options' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'  => 'https://api.jqueryui.com/datepicker/',
+							'label' => __( 'Date picker options', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
@@ -592,7 +634,13 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'js_options' => [],
+					'js_options' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'  => 'http://trentrichardson.com/examples/timepicker',
+							'label' => __( 'Time picker options', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
@@ -613,7 +661,14 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'query_args' => [],
+					'query_args' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'    => 'https://developer.wordpress.org/reference/classes/wp_query/',
+							'label'   => __( 'Query args', 'meta-box-builder' ),
+							'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
@@ -633,7 +688,14 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'query_args' => [],
+					'query_args' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
+							'label'   => __( 'Query args', 'meta-box-builder' ),
+							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
@@ -653,7 +715,14 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'query_args' => [],
+					'query_args' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
+							'label'   => __( 'Query args', 'meta-box-builder' ),
+							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
@@ -672,7 +741,14 @@ class Fields {
 					'before' => '',
 					'after' => '',
 					'class' => '',
-					'query_args' => [],
+					'query_args' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'    => 'https://codex.wordpress.org/Function_Reference/get_users',
+							'label'   => __( 'Query args', 'meta-box-builder' ),
+							'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
+						],
+					],
 					'attributes' => $attributes
 				]
 			],
