@@ -14,26 +14,7 @@ export const getLabel = ( name, type ) => {
 };
 
 export const getElementControlName = ( name, type ) => {
-	let types;
-	switch ( name ) {
-		case 'std':
-			types = {
-				button: 'StdButton',
-				checkbox: 'StdCheckbox',
-				checkbox_list: 'StdChoice',
-				map: 'StdMap',
-				select: 'StdChoice',
-				textarea: 'StdChoice',
-				wysiwyg: 'StdChoice',
-				post: 'StdSelect',
-				user: 'StdSelect',
-				taxonomy: 'StdSelect',
-				taxonomy_advanced: 'StdSelect'
-			};
-			return types[ type ] || 'TextInput';
-		default:
-			return toTitleCase( name );
-	}
+	return toTitleCase( name );
 };
 
 export const getElementType = ( name ) => {

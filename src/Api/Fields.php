@@ -103,6 +103,12 @@ class Fields {
 				'label' => __( 'Default value', 'meta-box-builder' ),
 			],
 		];
+		$std_textarea = [
+			'component' => 'Textarea',
+			'props'     => [
+				'label' => __( 'Default value' ),
+			],
+		];
 		$desc = [
 			'component' => 'Input',
 			'props'     => [
@@ -309,7 +315,12 @@ class Fields {
 					'name' => 'Checkbox',
 					'type' => 'checkbox',
 					'desc' => $desc,
-					'std' => false,
+					'std' => [
+						'component' => 'Checkbox',
+						'props'     => [
+							'label' => __( 'Checked by default', 'meta-box-builder' ),
+						],
+					],
 					'clone' => false
 				],
 				'advanced' => [
@@ -326,7 +337,7 @@ class Fields {
 					'type' => 'checkbox_list',
 					'desc' => $desc,
 					'options' => '',
-					'std' => '',
+					'std' => $std_textarea,
 					'clone' => false
 				],
 				'advanced' => [
@@ -342,7 +353,12 @@ class Fields {
 					'type' => 'button',
 					'name' => 'Button',
 					'desc' => $desc,
-					'std' => '',
+					'std' => [
+						'component' => 'Input',
+						'props'     => [
+							'label' => __( 'Button text', 'meta-box-builder' ),
+						],
+					],
 				],
 				'advanced' => [
 					'before' => $before,
@@ -437,7 +453,7 @@ class Fields {
 					'type' => 'textarea',
 					'name' => 'Textarea',
 					'desc' => $desc,
-					'std' => $std,
+					'std' => $std_textarea,
 					'placeholder' => $placeholder,
 					'rows' => [
 						'component' => 'Input',
@@ -558,7 +574,7 @@ class Fields {
 					'name' => 'WYSIWYG',
 					'type' => 'wysiwyg',
 					'desc' => $desc,
-					'std' => $std,
+					'std' => $std_textarea,
 					'raw' => false,
 					'clone' => false
 				],
@@ -621,7 +637,13 @@ class Fields {
 					'type' => 'map',
 					'name' => 'Map',
 					'desc' => $desc,
-					'std' => '',
+					'std' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'Default location', 'meta-box-builder' ),
+							'tooltip' => __( 'Format: latitude,longitude[, zoom]. Zoom is optional.', 'meta-box-builder' ),
+						],
+					],
 					'api_key' => '',
 					'address_field' => '',
 					'region' => '',
@@ -747,7 +769,6 @@ class Fields {
 					'type' => 'post',
 					'name' => 'Post',
 					'desc' => $desc,
-					'std' => '',
 					'post_type' => 'post',
 					'field_type' => 'select_advanced',
 					'parent' => false,
@@ -777,7 +798,6 @@ class Fields {
 					'desc' => $desc,
 					'taxonomy' => 'category',
 					'field_type' => 'select_advanced',
-					'std' => '',
 					'placeholder' => $placeholder,
 					'clone' => false
 				],
@@ -804,7 +824,6 @@ class Fields {
 					'desc' => $desc,
 					'taxonomy' => 'category',
 					'field_type' => 'select_advanced',
-					'std' => '',
 					'placeholder' => $placeholder,
 					'clone' => false
 				],
@@ -830,7 +849,6 @@ class Fields {
 					'name' => 'User',
 					'desc' => $desc,
 					'field_type' => 'select_advanced',
-					'std' => '',
 					'placeholder' => $placeholder,
 					'clone' => false
 				],
