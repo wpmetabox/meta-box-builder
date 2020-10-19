@@ -164,6 +164,27 @@ class Fields {
 				'label' => __( 'Maximum value', 'meta-box-builder' ),
 			],
 		];
+		$step = [
+			'component' => 'Input',
+			'props'     => [
+				'label'   => __( 'Step', 'meta-box-builder' ),
+				'tooltip' => __( "Set the increments at which a numeric value can be set. It can be the string 'any' (for floating numbers) or a positive number.", 'meta-box-builder' ),
+			],
+		];
+		$inline = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'   => __( 'Inline', 'meta-box-builder' ),
+				'tooltip' => __( 'Display choices on a single line', 'meta-box-builder' ),
+			],
+		];
+		$multiple = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'   => __( 'Multiple', 'meta-box-builder' ),
+				'tooltip' => __( 'Allow to select multiple choices', 'meta-box-builder' ),
+			],
+		];
 		$timestamp = [
 			'component' => 'Checkbox',
 			'props'     => [
@@ -279,7 +300,7 @@ class Fields {
 					'std'         => $std,
 					'min'         => $min,
 					'max'         => $max,
-					'step'        => '',
+					'step'        => $step,
 					'placeholder' => $placeholder,
 				], $clone_settings ),
 				'advanced' => $advanced,
@@ -317,7 +338,7 @@ class Fields {
 					'std'   => $std,
 					'min'   => $min,
 					'max'   => $max,
-					'step'  => 1,
+					'step'  => $step,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -361,6 +382,7 @@ class Fields {
 					'desc'    => $desc,
 					'options' => $options,
 					'std'     => $std_textarea,
+					'inline'  => $inline,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -398,7 +420,7 @@ class Fields {
 					'type'    => 'radio',
 					'desc'    => $desc,
 					'options' => $options,
-					'inline'  => true,
+					'inline'  => $inline,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -411,7 +433,7 @@ class Fields {
 					'options'     => $options,
 					'std'         => $std,
 					'placeholder' => $placeholder,
-					'multiple'    => false,
+					'multiple'    => $multiple,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -424,7 +446,7 @@ class Fields {
 					'options'     => $options,
 					'std'         => $std,
 					'placeholder' => $placeholder,
-					'multiple'    => false,
+					'multiple'    => $multiple,
 					'js_options'  => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -476,7 +498,7 @@ class Fields {
 					'desc'     => $desc,
 					'std'      => $std,
 					'options'  => $options,
-					'multiple' => false,
+					'multiple' => $multiple,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -540,7 +562,12 @@ class Fields {
 					'type'    => 'wysiwyg',
 					'desc'    => $desc,
 					'std'     => $std_textarea,
-					'raw'     => false,
+					'raw'     => [
+						'component' => 'Checkbox',
+						'props'     => [
+							'label' => __( 'Save data in the raw format', 'meta-box-builder' ),
+						],
+					],
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
