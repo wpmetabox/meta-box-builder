@@ -1,5 +1,4 @@
-import GeneralContent from './FieldContent/GeneralContent';
-import AdvancedContent from './FieldContent/AdvancedContent';
+import Content from './Content';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
 import Header from './Header';
@@ -40,10 +39,10 @@ const Group = (props) => {
 						<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 					</TabList>
 					<TabPanel>
-						<GeneralContent type={ type } index={ index } data={ props.data.general } />
+						<Content type={ type } index={ index } data={ props.data.general } />
 					</TabPanel>
 					<TabPanel>
-						<AdvancedContent type={ type } index={ index } data={ props.data.advanced } />
+						<Content type={ type } index={ index } data={ props.data.advanced } />
 					</TabPanel>
 				</Tabs>
 			</div>

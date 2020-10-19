@@ -1,9 +1,8 @@
-import GeneralContent from './FieldContent/GeneralContent';
-import AdvancedContent from './FieldContent/AdvancedContent';
+import Content from './Content';
 import { DragSource } from 'react-dnd';
 import Types from './Types';
 import Header from './Header';
-import { cardSource, collect, copyItem, deleteItem } from '../../../utility/updateSelectedList';
+import { cardSource, collect } from '../../../utility/updateSelectedList';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 const { useState, memo } = wp.element;
@@ -28,7 +27,7 @@ const FieldSelected = ( props ) => {
 					toggleSettings={ toggleSettings }
 				/>
 				<div className="og-item__body og-collapsible__body">
-					<GeneralContent type={ type } index={ index } data={ props.data.general } />
+					<Content type={ type } index={ index } data={ props.data.general } />
 				</div>
 			</div>
 		);
@@ -55,10 +54,10 @@ const FieldSelected = ( props ) => {
 						<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 					</TabList>
 					<TabPanel>
-						<GeneralContent type={ type } index={ index } data={ props.data.general } />
+						<Content type={ type } index={ index } data={ props.data.general } />
 					</TabPanel>
 					<TabPanel>
-						<AdvancedContent type={ type } index={ index } data={ props.data.advanced } />
+						<Content type={ type } index={ index } data={ props.data.advanced } />
 					</TabPanel>
 				</Tabs>
 			</div>
