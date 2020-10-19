@@ -1,4 +1,4 @@
 node_modules
-yarn.lock
+*.lock
 assets/js/app.js
 assets/css/style.css

@@ -1,27 +1,32 @@
-import React from 'react';
-import { fieldTypes } from '../../../constants/constants';
+import { request } from '../../../utility/functions';
+const { useState, useEffect } = wp.element;
 
-const SearchResultList = (props) => {
-  const getSearchResult = (param) => {
-    let searchResult = [];
-    Object.values(fieldTypes).forEach(list => {
-      Object.keys(list).forEach(item => {
-        if (list[item].toLowerCase().includes(param.toLowerCase())) {
-          searchResult.push({ type: item, title: list[item] });
-        }
-      })
-    })
+const SearchResultList = ( { searchParam, onSelectField } ) => {
+	const [ fieldTypes, setFieldTypes ] = useState( {} );
 
-    return searchResult;
-  }
+	const getSearchResults = () => {
+		let result = [];
+		Object.values( fieldTypes ).forEach( list => {
+			Object.keys( list ).forEach( type => {
+				if ( list[ type ].toLowerCase().includes( searchParam.toLowerCase() ) ) {
+					result.push( { type: type, title: list[ type ] } );
+				}
+			} );
+		} );
+		return result;
+	};
 
-  const listItems = getSearchResult(props.searchParam);
+	useEffect( () => {
+		request( 'field-types' ).then( data => setFieldTypes( data ) );
+	}, [] );
 
-  return (
-    <div className="og-search-results">
-      {listItems.map((item, index) => <button type="button" className="button" onClick={() => props.onSelectField(item.type)} key={index}>{item.title}</button>)}
-    </div>
-  )
-}
+	const items = getSearchResults();
+
+	return (
+		<div className="og-search-results">
+			{ items.map( ( item, index ) => <button type="button" className="button" key={ index } onClick={ () => onSelectField( item.type ) }>{ item.title }</button> ) }
+		</div>
+	);
+};
 
 export default SearchResultList;

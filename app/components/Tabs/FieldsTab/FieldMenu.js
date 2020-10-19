@@ -1,25 +1,36 @@
-import React, { useState } from 'react';
-import { fieldTypes } from '../../../constants/constants';
-import { arrowDownIcon, arrowUpIcon } from '../../../constants/icons';
+import { request } from '../../../utility/functions';
+const { Dashicon } = wp.components;
+const { useState, useEffect } = wp.element;
 
-const FieldMenu = ({onSelectField}) => {
-  const [active, setActive] = useState('Basic');
+const FieldMenu = ( { onSelectField } ) => {
+	const [ active, setActive ] = useState( 0 );
+	const [ fieldTypes, setFieldTypes ] = useState( {} );
 
-  return (
-    <>
-      {
-        Object.keys(fieldTypes).map((keyName, keyIndex) =>
-          <div className={`og-panel og-collapsible${keyName === active ? ' og-collapsible--expanded' : ''}`} key={keyIndex}>
-            <h4 className="og-collapsible__header" onClick={() => setActive(keyName)}>
-              { keyName }
-              { keyName === active ? arrowUpIcon : arrowDownIcon }
-            </h4>
-            <div className="og-panel__body og-collapsible__body">{Object.keys(fieldTypes[keyName]).map((key, index) => <button type="button" className="button" key={index} onClick={() => onSelectField(key)}>{fieldTypes[keyName][key]}</button>)}</div>
-          </div>
-        )
-      }
-    </>
-  )
-}
+	useEffect( () => {
+		request( 'field-types' ).then( data => setFieldTypes( data ) );
+	}, [] );
+
+	return (
+		<>
+			{
+				Object.keys( fieldTypes ).map( ( panelTitle, panelIndex ) =>
+					<div className={ `og-panel og-collapsible${ panelIndex === active ? ' og-collapsible--expanded' : '' }` } key={ panelIndex }>
+						<h4 className="og-collapsible__header" onClick={ () => setActive( panelIndex ) }>
+							{ panelTitle }
+							<Dashicon icon="arrow-down-alt2" />
+						</h4>
+						<div className="og-panel__body og-collapsible__body">
+							{
+								Object.keys( fieldTypes[ panelTitle ] ).map( ( key, index ) =>
+									<button type="button" className="button" key={ index } onClick={ () => onSelectField( key ) }>{ fieldTypes[ panelTitle ][ key ] }</button>
+								)
+							}
+						</div>
+					</div>
+				)
+			}
+		</>
+	);
+};
 
 export default FieldMenu;

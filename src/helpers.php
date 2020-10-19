@@ -52,6 +52,7 @@ if ( ! function_exists( 'mbb_get_post_types' ) ) {
 			'meta-box',
 			'mb-post-type',
 			'mb-taxonomy',
+			'mb-views',
 		];
 		$post_types  = get_post_types( [], 'objects' );
 		$post_types  = array_diff_key( $post_types, array_flip( $unsupported ) );
