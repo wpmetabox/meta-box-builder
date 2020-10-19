@@ -143,6 +143,20 @@ class Fields {
 				'tooltip' => __( 'Leave empty for unlimited uploads', 'meta-box-builder' ),
 			],
 		];
+		$force_delete = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'   => __( 'Force delete', 'meta-box-builder' ),
+				'tooltip' => __( 'Delete files from the Media Library when deleting them from post meta', 'meta-box-builder' ),
+			],
+		];
+		$max_status = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'   => __( 'Show status', 'meta-box-builder' ),
+				'tooltip' => __( 'Display how many files uploaded/remaining', 'meta-box-builder' ),
+			],
+		];
 		$inline_date = [
 			'component' => 'Checkbox',
 			'props'     => [
@@ -197,6 +211,30 @@ class Fields {
 				'label'   => __( 'Choices', 'meta-box-builder' ),
 				'tooltip' => __( "Enter each choice on a line. For more control, you may specify both a value and label like 'red: Red' (without quotes)", 'meta-box-builder' ),
 			],
+		];
+		$field_type = [
+			'component' => 'Select',
+			'props'     => [
+				'label' => __( 'Field type', 'meta-box-builder' ),
+				'options' => [
+					'select'          => __( 'Select', 'meta-box-builder' ),
+					'select_advanced' => __( 'Select advanced', 'meta-box-builder' ),
+					'select_tree'     => __( 'Select tree', 'meta-box-builder' ),
+					'checkbox_list'   => __( 'Checkbox list', 'meta-box-builder' ),
+					'checkbox_tree'   => __( 'Checkbox tree', 'meta-box-builder' ),
+					'radio_list'      => __( 'Radio list', 'meta-box-builder' ),
+				],
+			],
+			'default' => 'select_advanced',
+		];
+		$taxonomy = [
+			'component' => 'Select',
+			'props'     => [
+				'label'    => __( 'Taxonomy', 'meta-box-builder' ),
+				'options'  => $this->get_taxonomies(),
+				'multiple' => true,
+			],
+			'default' => []
 		];
 		$clone = [
 			'component' => 'Checkbox',
@@ -618,9 +656,29 @@ class Fields {
 							'tooltip' => __( 'Format: latitude,longitude[, zoom]. Zoom is optional.', 'meta-box-builder' ),
 						],
 					],
-					'api_key'       => '',
-					'address_field' => '',
-					'region'        => '',
+					'api_key'       => [
+						'component' => 'Input',
+						'props'     => [
+							'label'    => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopenner noreferrer">' . __( 'Google Maps API key', 'meta-box-builder' ) . '</a>',
+							'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
+							'required' => true,
+						],
+					],
+					'address_field' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'    => __( 'Address field', 'meta-box-builder' ),
+							'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
+							'required' => true,
+						],
+					],
+					'region'        => [
+						'component' => 'Input',
+						'props'     => [
+							'label'    => '<a href="https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains#Country_code_top-level_domains" target="_blank" rel="noopenner noreferrer">' . __( 'Region code', 'meta-box-builder' ) . '</a>',
+							'tooltip'  => __( 'The region code, specified as a country code top-level domain. Use for autocompleting addresses.' ),
+						],
+					],
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -712,8 +770,16 @@ class Fields {
 					'type'       => 'post',
 					'name'       => $name,
 					'desc'       => $desc,
-					'post_type'  => 'post',
-					'field_type' => 'select_advanced',
+					'post_type'  => [
+						'component' => 'Select',
+						'props'     => [
+							'label'    => __( 'Post types', 'meta-box-builder' ),
+							'options'  => $this->get_post_types(),
+							'multiple' => true,
+						],
+						'default' => [],
+					],
+					'field_type' => $field_type,
 					'parent'     => [
 						'component' => 'Checkbox',
 						'props'     => [
@@ -739,8 +805,8 @@ class Fields {
 					'type'        => 'taxonomy',
 					'name'        => $name,
 					'desc'        => $desc,
-					'taxonomy'    => 'category',
-					'field_type'  => 'select_advanced',
+					'taxonomy'    => $taxonomy,
+					'field_type'  => $field_type,
 					'placeholder' => $placeholder,
 					'query_args'  => [
 						'component' => 'KeyValue',
@@ -759,8 +825,8 @@ class Fields {
 					'type'        => 'taxonomy_advanced',
 					'name'        => $name,
 					'desc'        => $desc,
-					'taxonomy'    => 'category',
-					'field_type'  => 'select_advanced',
+					'taxonomy'    => $taxonomy,
+					'field_type'  => $field_type,
 					'placeholder' => $placeholder,
 					'query_args'  => [
 						'component' => 'KeyValue',
@@ -779,7 +845,7 @@ class Fields {
 					'type'        => 'user',
 					'name'        => $name,
 					'desc'        => $desc,
-					'field_type'  => 'select_advanced',
+					'field_type'  => $field_type,
 					'placeholder' => $placeholder,
 					'query_args'  => [
 						'component' => 'KeyValue',
@@ -799,7 +865,7 @@ class Fields {
 					'name'             => $name,
 					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
-					'force_delete'     => false,
+					'force_delete'     => $force_delete,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -822,9 +888,15 @@ class Fields {
 					'name'             => $name,
 					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
-					'mime_type'        => '',
-					'max_status'       => true,
-					'force_delete'     => false,
+					'mime_type'        => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'MIME types', 'meta-box-builder' ),
+							'tooltip' => __( 'Filters items in the Media Library popup, does not restrict file types when upload.', 'meta-box-builder' ),
+						],
+					],
+					'max_status'   => $max_status,
+					'force_delete' => $force_delete,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -835,8 +907,8 @@ class Fields {
 					'name'             => $name,
 					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
-					'max_status'       => false,
-					'force_delete'     => false,
+					'max_status'       => $max_status,
+					'force_delete'     => $force_delete,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -847,7 +919,7 @@ class Fields {
 					'name'             => $name,
 					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
-					'force_delete'     => false,
+					'force_delete'     => $force_delete,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -858,8 +930,8 @@ class Fields {
 					'name'             => $name,
 					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
-					'max_status'       => false,
-					'force_delete'     => false,
+					'max_status'       => $max_status,
+					'force_delete'     => $force_delete,
 				], $clone_settings ),
 				'advanced' => $advanced,
 			]
@@ -868,5 +940,23 @@ class Fields {
 
 	public function has_permission() {
 		return current_user_can( 'manage_options' );
+	}
+
+	private function get_post_types() {
+		$post_types = mbb_get_post_types();
+		$options = [];
+		foreach ( $post_types as $post_type ) {
+			$options[ $post_type['slug'] ] = sprintf( '%s (%s)', $post_type['name'], $post_type['slug'] );
+		}
+		return $options;
+	}
+
+	private function get_taxonomies() {
+		$taxonomies = mbb_get_taxonomies();
+		$options = [];
+		foreach ( $taxonomies as $taxonomy ) {
+			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
+		}
+		return $options;
 	}
 }

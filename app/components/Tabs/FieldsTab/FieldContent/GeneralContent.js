@@ -2,7 +2,11 @@ import React, { lazy, memo, Suspense } from 'react';
 import { getElementControlName } from '../../../../utility/functions';
 
 const GeneralContent = ( { index, data, type, setLabel } ) => {
-	const getElement = ( name ) => {
+	const getElement = name => {
+		if ( name === 'type' ) {
+			return null;
+		}
+
 		// Load shared component with dynamic config from the back-end API.
 		if ( data[ name ].component ) {
 			let Component = lazy( () => import( `../../../Common/${ data[ name ].component }` ) );
