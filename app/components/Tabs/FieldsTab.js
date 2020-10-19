@@ -23,13 +23,6 @@ const FieldsTab = ( props ) => {
 		const id = `${ type }_${ uniqid() }`;
 		const data = {
 			...fields[ type ],
-			general: {
-				...fields[ type ].general,
-				id: {
-					...fields[ type ].general.id,
-					default: id
-				}
-			},
 		};
 		const newList = {
 			...selectedList,
@@ -63,7 +56,7 @@ const FieldsTab = ( props ) => {
 					selectedList.items.map( ( item, index ) => (
 						<SelectedItem
 							key={ item.id + index }
-							id={ "root" }
+							parent={ 'root' }
 							item={ item }
 							index={ index }
 							changeSelectedList={ changeSelectedList }

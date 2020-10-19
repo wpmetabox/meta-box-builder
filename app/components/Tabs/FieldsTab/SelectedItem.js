@@ -4,7 +4,7 @@ import Insert from './Insert';
 
 const SelectedItem = (props) => {
   const {
-    id,
+    parent,
     item,
     changeSelectedList,
     index
@@ -14,11 +14,11 @@ const SelectedItem = (props) => {
     <Node
       id={item.id}
       item={item}
-      parent={id}
+      parent={parent}
       index={index}
       changeSelectedList={changeSelectedList}
     />
-    <Insert index={index} parent={id} />
+    <Insert index={index} parent={parent} />
   </div>
 };
 
