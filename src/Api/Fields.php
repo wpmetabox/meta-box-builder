@@ -177,6 +177,54 @@ class Fields {
 				'tooltip' => __( "Enter each choice on a line. For more control, you may specify both a value and label like 'red: Red' (without quotes)", 'meta-box-builder' ),
 			],
 		];
+		$clone = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'   => __( 'Cloneable', 'meta-box-builder' ),
+				'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
+				'setting' => 'clone',
+			],
+		];
+		$sort_clone = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'     => __( 'Sortable', 'meta-box-builder' ),
+				'tooltip'   => __( 'Allows to drag-and-drop reorder clones', 'meta-box-builder' ),
+				'className' => 'clone-setting',
+			],
+		];
+		$clone_default = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'     => __( 'Clone default value', 'meta-box-builder' ),
+				'className' => 'clone-setting',
+			],
+		];
+		$clone_as_multiple = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'     => __( 'Clone as multiple', 'meta-box-builder' ),
+				'tooltip'   =>  __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
+				'className' => 'clone-setting',
+			],
+		];
+		$max_clone = [
+			'component' => 'Input',
+			'props'     => [
+				'type'      => 'number',
+				'label'     => __( 'Maximum number of clones', 'meta-box-builder' ),
+				'tooltip'   => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
+				'className' => 'clone-setting',
+			],
+		];
+		$add_button = [
+			'component' => 'Input',
+			'props'     => [
+				'label'     => __( 'Add more text', 'meta-box-builder' ),
+				'tooltip'   => __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ),
+				'className' => 'clone-setting',
+			],
+		];
 
 		// Advanced tab.
 		$before = [
@@ -211,88 +259,83 @@ class Fields {
 		return [
 			'text' => [
 				'general' => [
-					'id' => $id,
+					'id'                => $id,
 					'type'              => 'text',
-					'name' => $name,
-					'desc' => $desc,
+					'name'              => $name,
+					'desc'              => $desc,
 					'std'               => $std,
-					'placeholder' => $placeholder,
-					'size' => $size,
-					'clone'             => false,
-					'sort_clone'        => false,
-					'clone_default'     => false,
-					'clone_as_multiple' => false,
-					'max_clone'         => '',
-					'add_button'        => ''
+					'placeholder'       => $placeholder,
+					'size'              => $size,
+					'clone'             => $clone,
+					'sort_clone'        => $sort_clone,
+					'clone_default'     => $clone_default,
+					'clone_as_multiple' => $clone_as_multiple,
+					'max_clone'         => $max_clone,
+					'add_button'        => $add_button,
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'number' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'number',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std,
-					'min' => $min,
-					'max' => $max,
-					'step' => '',
+					'id'          => $id,
+					'type'        => 'number',
+					'name'        => $name,
+					'desc'        => $desc,
+					'std'         => $std,
+					'min'         => $min,
+					'max'         => $max,
+					'step'        => '',
 					'placeholder' => $placeholder,
-					'clone' => false
+					'clone'       => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'url' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'url',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std,
+					'id'          => $id,
+					'type'        => 'url',
+					'name'        => $name,
+					'desc'        => $desc,
+					'std'         => $std,
 					'placeholder' => $placeholder,
-					'size' => $size,
-					'clone' => false
+					'size'        => $size,
+					'clone'       => $clone
 				],
 				'advanced' => $advanced,
 			],
 			'email' => [
 				'general' => [
-					'id' => $id,
-					'name' => $name,
-					'type' => 'email',
-					'desc' => $desc,
-					'std' => $std,
+					'id'          => $id,
+					'name'        => $name,
+					'type'        => 'email',
+					'desc'        => $desc,
+					'std'         => $std,
 					'placeholder' => $placeholder,
-					'size' => $size,
-					'clone' => false
+					'size'        => $size,
+					'clone'       => $clone
 				],
 				'advanced' => $advanced,
 			],
 			'range' => [
 				'general' => [
-					'id' => $id,
-					'name' => $name,
-					'type' => 'range',
-					'desc' => $desc,
-					'std' => $std,
-					'min' => $min,
-					'max' => $max,
-					'step' => 1,
-					'clone' => false
+					'id'    => $id,
+					'name'  => $name,
+					'type'  => 'range',
+					'desc'  => $desc,
+					'std'   => $std,
+					'min'   => $min,
+					'max'   => $max,
+					'step'  => 1,
+					'clone' => $clone
 				],
 				'advanced' => $advanced,
 			],
 			'text_list' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'text_list',
-					'name' => $name,
-					'desc' => $desc,
+					'id'      => $id,
+					'type'    => 'text_list',
+					'name'    => $name,
+					'desc'    => $desc,
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -301,45 +344,45 @@ class Fields {
 							'valuePlaceholder' => __( 'Label', 'meta-box-builder' ),
 						],
 					],
-					'clone' => false
+					'clone' => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'checkbox' => [
 				'general' => [
-					'id' => $id,
+					'id'   => $id,
 					'name' => $name,
 					'type' => 'checkbox',
 					'desc' => $desc,
-					'std' => [
+					'std'  => [
 						'component' => 'Checkbox',
 						'props'     => [
 							'label' => __( 'Checked by default', 'meta-box-builder' ),
 						],
 					],
-					'clone' => false
+					'clone' => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'checkbox_list' => [
 				'general' => [
-					'id' => $id,
-					'name' => $name,
-					'type' => 'checkbox_list',
-					'desc' => $desc,
+					'id'      => $id,
+					'name'    => $name,
+					'type'    => 'checkbox_list',
+					'desc'    => $desc,
 					'options' => $options,
-					'std' => $std_textarea,
-					'clone' => false
+					'std'     => $std_textarea,
+					'clone'   => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'button' => [
 				'general' => [
-					'id' => $id,
+					'id'   => $id,
 					'type' => 'button',
 					'name' => $name,
 					'desc' => $desc,
-					'std' => [
+					'std'  => [
 						'component' => 'Input',
 						'props'     => [
 							'label' => __( 'Button text', 'meta-box-builder' ),
@@ -350,55 +393,55 @@ class Fields {
 			],
 			'password' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'password',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std,
+					'id'          => $id,
+					'type'        => 'password',
+					'name'        => $name,
+					'desc'        => $desc,
+					'std'         => $std,
 					'placeholder' => $placeholder,
-					'size' => $size,
-					'clone' => false
+					'size'        => $size,
+					'clone'       => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'radio' => [
 				'general' => [
-					'id' => $id,
-					'name' => $name,
-					'type' => 'radio',
-					'desc' => $desc,
+					'id'      => $id,
+					'name'    => $name,
+					'type'    => 'radio',
+					'desc'    => $desc,
 					'options' => $options,
-					'inline' => true,
-					'clone' => false
+					'inline'  => true,
+					'clone'   => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'select' => [
 				'general' => [
-					'id' => $id,
-					'name' => $name,
-					'type' => 'select',
-					'desc' => $desc,
-					'options' => $options,
-					'std' => $std,
+					'id'          => $id,
+					'name'        => $name,
+					'type'        => 'select',
+					'desc'        => $desc,
+					'options'     => $options,
+					'std'         => $std,
 					'placeholder' => $placeholder,
-					'multiple' => false,
-					'clone' => false
+					'multiple'    => false,
+					'clone'       => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'select_advanced' => [
 				'general' => [
-					'id' => $id,
-					'name' => $name,
-					'type' => 'select_advanced',
-					'desc' => $desc,
-					'options' => $options,
-					'std' => $std,
+					'id'          => $id,
+					'name'        => $name,
+					'type'        => 'select_advanced',
+					'desc'        => $desc,
+					'options'     => $options,
+					'std'         => $std,
 					'placeholder' => $placeholder,
-					'multiple' => false,
-					'clone' => false,
-					'js_options' => [
+					'multiple'    => false,
+					'clone'       => $clone,
+					'js_options'  => [
 						'component' => 'KeyValue',
 						'props' => [
 							'link'  => 'https://select2.org/configuration',
@@ -410,13 +453,13 @@ class Fields {
 			],
 			'textarea' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'textarea',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std_textarea,
+					'id'          => $id,
+					'type'        => 'textarea',
+					'name'        => $name,
+					'desc'        => $desc,
+					'std'         => $std_textarea,
 					'placeholder' => $placeholder,
-					'rows' => [
+					'rows'        => [
 						'component' => 'Input',
 						'props'     => [
 							'type'  => 'number',
@@ -430,62 +473,62 @@ class Fields {
 							'label' => __( 'Columns', 'meta-box-builder' ),
 						],
 					],
-					'clone' => false
+					'clone' => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'hidden' => [
 				'general' => [
-					'id' => $id,
+					'id'   => $id,
 					'type' => 'hidden',
-					'std' => $std,
+					'std'  => $std,
 				],
 				'advanced' => $advanced,
 			],
 			'image_select' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'image_select',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std,
-					'options' => $options,
+					'id'       => $id,
+					'type'     => 'image_select',
+					'name'     => $name,
+					'desc'     => $desc,
+					'std'      => $std,
+					'options'  => $options,
 					'multiple' => false,
-					'clone' => false
+					'clone'    => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'color' => [
 				'general' => [
-					'id' => $id,
-					'name' => $name,
-					'type' => 'color',
-					'desc' => $desc,
-					'std' => $std,
-					'clone' => false
+					'id'    => $id,
+					'name'  => $name,
+					'type'  => 'color',
+					'desc'  => $desc,
+					'std'   => $std,
+					'clone' => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'oembed' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'oembed',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std,
+					'id'          => $id,
+					'type'        => 'oembed',
+					'name'        => $name,
+					'desc'        => $desc,
+					'std'         => $std,
 					'placeholder' => $placeholder,
-					'size' => $size,
-					'clone' => false
+					'size'        => $size,
+					'clone'       => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'slider' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'slider',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std,
+					'id'     => $id,
+					'type'   => 'slider',
+					'name'   => $name,
+					'desc'   => $desc,
+					'std'    => $std,
 					'prefix' => [
 						'component' => 'Input',
 						'props'     => [
@@ -500,7 +543,7 @@ class Fields {
 							'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
 						],
 					],
-					'clone' => false,
+					'clone'      => $clone,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -513,13 +556,13 @@ class Fields {
 			],
 			'wysiwyg' => [
 				'general' => [
-					'id' => $id,
-					'name' => $name,
-					'type' => 'wysiwyg',
-					'desc' => $desc,
-					'std' => $std_textarea,
-					'raw' => false,
-					'clone' => false,
+					'id'      => $id,
+					'name'    => $name,
+					'type'    => 'wysiwyg',
+					'desc'    => $desc,
+					'std'     => $std_textarea,
+					'raw'     => false,
+					'clone'   => $clone,
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -532,22 +575,22 @@ class Fields {
 			],
 			'autocomplete' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'autocomplete',
-					'name' => $name,
-					'desc' => $desc,
+					'id'      => $id,
+					'type'    => 'autocomplete',
+					'name'    => $name,
+					'desc'    => $desc,
 					'options' => $options,
-					'size' => $size,
-					'clone' => false
+					'size'    => $size,
+					'clone'   => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'fieldset_text' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'fieldset_text',
-					'name' => $name,
-					'desc' => $desc,
+					'id'      => $id,
+					'type'    => 'fieldset_text',
+					'name'    => $name,
+					'desc'    => $desc,
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -555,36 +598,37 @@ class Fields {
 							'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
 						],
 					],
-					'clone' => false
+					'clone' => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'map' => [
 				'general' => [
-					'id' => $id,
+					'id'   => $id,
 					'type' => 'map',
 					'name' => $name,
 					'desc' => $desc,
-					'std' => [
+					'std'  => [
 						'component' => 'Input',
 						'props'     => [
 							'label'   => __( 'Default location', 'meta-box-builder' ),
 							'tooltip' => __( 'Format: latitude,longitude[, zoom]. Zoom is optional.', 'meta-box-builder' ),
 						],
 					],
-					'api_key' => '',
+					'api_key'       => '',
 					'address_field' => '',
-					'region' => '',
-					'clone' => false
+					'region'        => '',
+					'clone'         => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'group' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'group',
-					'name' => $name,
-					'desc' => $desc,
+					'id'    => $id,
+					'type'  => 'group',
+					'name'  => $name,
+					'desc'  => $desc,
+					'clone' => $clone,
 				],
 				'advanced' => $advanced,
 			],
@@ -598,22 +642,22 @@ class Fields {
 			],
 			'divider' => [
 				'general' => [
-					'type' => 'divider',
+					'type'   => 'divider',
 					'before' => $before,
-					'after' => $after,
+					'after'  => $after,
 				]
 			],
 			'date' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'date',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std,
-					'size' => $size,
-					'inline' => $inline_date,
-					'timestamp' => $timestamp,
-					'clone' => false,
+					'id'         => $id,
+					'type'       => 'date',
+					'name'       => $name,
+					'desc'       => $desc,
+					'std'        => $std,
+					'size'       => $size,
+					'inline'     => $inline_date,
+					'timestamp'  => $timestamp,
+					'clone'      => $clone,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -626,15 +670,15 @@ class Fields {
 			],
 			'datetime' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'datetime',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std,
-					'size' => $size,
-					'inline' => $inline_date,
-					'timestamp' => $timestamp,
-					'clone' => false,
+					'id'         => $id,
+					'type'       => 'datetime',
+					'name'       => $name,
+					'desc'       => $desc,
+					'std'        => $std,
+					'size'       => $size,
+					'inline'     => $inline_date,
+					'timestamp'  => $timestamp,
+					'clone'      => $clone,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -647,13 +691,13 @@ class Fields {
 			],
 			'time' => [
 				'general' => [
-					'id' => $id,
-					'name' => $name,
-					'type' => 'time',
-					'desc' => $desc,
-					'std' => $std,
-					'size' => $size,
-					'clone' => false,
+					'id'         => $id,
+					'name'       => $name,
+					'type'       => 'time',
+					'desc'       => $desc,
+					'std'        => $std,
+					'size'       => $size,
+					'clone'      => $clone,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -666,13 +710,13 @@ class Fields {
 			],
 			'post' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'post',
-					'name' => $name,
-					'desc' => $desc,
-					'post_type' => 'post',
+					'id'         => $id,
+					'type'       => 'post',
+					'name'       => $name,
+					'desc'       => $desc,
+					'post_type'  => 'post',
 					'field_type' => 'select_advanced',
-					'parent' => [
+					'parent'     => [
 						'component' => 'Checkbox',
 						'props'     => [
 							'label'   => __( 'Set as parent', 'meta-box-builder' ),
@@ -680,36 +724,31 @@ class Fields {
 						],
 					],
 					'placeholder' => $placeholder,
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'query_args' => [
+					'clone'       => $clone,
+					'query_args'  => [
 						'component' => 'KeyValue',
-						'props' => [
+						'props'     => [
 							'link'    => 'https://developer.wordpress.org/reference/classes/wp_query/',
 							'label'   => __( 'Query args', 'meta-box-builder' ),
 							'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'taxonomy' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'taxonomy',
-					'name' => $name,
-					'desc' => $desc,
-					'taxonomy' => 'category',
-					'field_type' => 'select_advanced',
+					'id'          => $id,
+					'type'        => 'taxonomy',
+					'name'        => $name,
+					'desc'        => $desc,
+					'taxonomy'    => 'category',
+					'field_type'  => 'select_advanced',
 					'placeholder' => $placeholder,
-					'clone' => false,
-					'query_args' => [
+					'clone'       => $clone,
+					'query_args'  => [
 						'component' => 'KeyValue',
-						'props' => [
+						'props'     => [
 							'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
 							'label'   => __( 'Query args', 'meta-box-builder' ),
 							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
@@ -720,17 +759,17 @@ class Fields {
 			],
 			'taxonomy_advanced' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'taxonomy_advanced',
-					'name' => $name,
-					'desc' => $desc,
-					'taxonomy' => 'category',
-					'field_type' => 'select_advanced',
+					'id'          => $id,
+					'type'        => 'taxonomy_advanced',
+					'name'        => $name,
+					'desc'        => $desc,
+					'taxonomy'    => 'category',
+					'field_type'  => 'select_advanced',
 					'placeholder' => $placeholder,
-					'clone' => false,
-					'query_args' => [
+					'clone'       => $clone,
+					'query_args'  => [
 						'component' => 'KeyValue',
-						'props' => [
+						'props'     => [
 							'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
 							'label'   => __( 'Query args', 'meta-box-builder' ),
 							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
@@ -741,16 +780,16 @@ class Fields {
 			],
 			'user' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'user',
-					'name' => $name,
-					'desc' => $desc,
-					'field_type' => 'select_advanced',
+					'id'          => $id,
+					'type'        => 'user',
+					'name'        => $name,
+					'desc'        => $desc,
+					'field_type'  => 'select_advanced',
 					'placeholder' => $placeholder,
-					'clone' => false,
-					'query_args' => [
+					'clone'       => $clone,
+					'query_args'  => [
 						'component' => 'KeyValue',
-						'props' => [
+						'props'     => [
 							'link'    => 'https://codex.wordpress.org/Function_Reference/get_users',
 							'label'   => __( 'Query args', 'meta-box-builder' ),
 							'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
@@ -761,78 +800,78 @@ class Fields {
 			],
 			'file' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'file',
-					'name' => $name,
-					'desc' => $desc,
+					'id'               => $id,
+					'type'             => 'file',
+					'name'             => $name,
+					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
-					'force_delete' => false,
-					'clone' => false
+					'force_delete'     => false,
+					'clone'            => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'file_input' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'file_input',
-					'name' => $name,
-					'desc' => $desc,
-					'std' => $std,
+					'id'          => $id,
+					'type'        => 'file_input',
+					'name'        => $name,
+					'desc'        => $desc,
+					'std'         => $std,
 					'placeholder' => $placeholder,
-					'size' => $size,
-					'clone' => false
+					'size'        => $size,
+					'clone'       => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'file_advanced' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'file_advanced',
-					'name' => $name,
-					'desc' => $desc,
+					'id'               => $id,
+					'type'             => 'file_advanced',
+					'name'             => $name,
+					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
-					'mime_type' => '',
-					'max_status' => true,
-					'force_delete' => false,
-					'clone' => false
+					'mime_type'        => '',
+					'max_status'       => true,
+					'force_delete'     => false,
+					'clone'            => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'image_advanced' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'image_advanced',
-					'name' => $name,
-					'desc' => $desc,
+					'id'               => $id,
+					'type'             => 'image_advanced',
+					'name'             => $name,
+					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
-					'max_status' => false,
-					'force_delete' => false,
-					'clone' => false
+					'max_status'       => false,
+					'force_delete'     => false,
+					'clone'            => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'image' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'image',
-					'name' => $name,
-					'desc' => $desc,
+					'id'               => $id,
+					'type'             => 'image',
+					'name'             => $name,
+					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
-					'force_delete' => false,
-					'clone' => false
+					'force_delete'     => false,
+					'clone'            => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'video' => [
 				'general' => [
-					'id' => $id,
-					'type' => 'video',
-					'name' => $name,
-					'desc' => $desc,
+					'id'               => $id,
+					'type'             => 'video',
+					'name'             => $name,
+					'desc'             => $desc,
 					'max_file_uploads' => 4,
-					'max_status' => false,
-					'force_delete' => false,
-					'clone' => false
+					'max_status'       => false,
+					'force_delete'     => false,
+					'clone'            => $clone,
 				],
 				'advanced' => $advanced,
 			]
