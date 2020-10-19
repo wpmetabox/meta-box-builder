@@ -225,6 +225,7 @@ class Fields {
 				'className' => 'clone-setting',
 			],
 		];
+		$clone_settings = compact( 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button' );
 
 		// Advanced tab.
 		$before = [
@@ -258,7 +259,7 @@ class Fields {
 
 		return [
 			'text' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'                => $id,
 					'type'              => 'text',
 					'name'              => $name,
@@ -266,17 +267,11 @@ class Fields {
 					'std'               => $std,
 					'placeholder'       => $placeholder,
 					'size'              => $size,
-					'clone'             => $clone,
-					'sort_clone'        => $sort_clone,
-					'clone_default'     => $clone_default,
-					'clone_as_multiple' => $clone_as_multiple,
-					'max_clone'         => $max_clone,
-					'add_button'        => $add_button,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'number' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'type'        => 'number',
 					'name'        => $name,
@@ -286,12 +281,11 @@ class Fields {
 					'max'         => $max,
 					'step'        => '',
 					'placeholder' => $placeholder,
-					'clone'       => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'url' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'type'        => 'url',
 					'name'        => $name,
@@ -299,12 +293,11 @@ class Fields {
 					'std'         => $std,
 					'placeholder' => $placeholder,
 					'size'        => $size,
-					'clone'       => $clone
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'email' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'name'        => $name,
 					'type'        => 'email',
@@ -312,12 +305,11 @@ class Fields {
 					'std'         => $std,
 					'placeholder' => $placeholder,
 					'size'        => $size,
-					'clone'       => $clone
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'range' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'    => $id,
 					'name'  => $name,
 					'type'  => 'range',
@@ -326,12 +318,11 @@ class Fields {
 					'min'   => $min,
 					'max'   => $max,
 					'step'  => 1,
-					'clone' => $clone
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'text_list' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'      => $id,
 					'type'    => 'text_list',
 					'name'    => $name,
@@ -344,12 +335,11 @@ class Fields {
 							'valuePlaceholder' => __( 'Label', 'meta-box-builder' ),
 						],
 					],
-					'clone' => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'checkbox' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'   => $id,
 					'name' => $name,
 					'type' => 'checkbox',
@@ -360,20 +350,18 @@ class Fields {
 							'label' => __( 'Checked by default', 'meta-box-builder' ),
 						],
 					],
-					'clone' => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'checkbox_list' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'      => $id,
 					'name'    => $name,
 					'type'    => 'checkbox_list',
 					'desc'    => $desc,
 					'options' => $options,
 					'std'     => $std_textarea,
-					'clone'   => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'button' => [
@@ -400,24 +388,22 @@ class Fields {
 					'std'         => $std,
 					'placeholder' => $placeholder,
 					'size'        => $size,
-					'clone'       => $clone,
 				],
 				'advanced' => $advanced,
 			],
 			'radio' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'      => $id,
 					'name'    => $name,
 					'type'    => 'radio',
 					'desc'    => $desc,
 					'options' => $options,
 					'inline'  => true,
-					'clone'   => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'select' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'name'        => $name,
 					'type'        => 'select',
@@ -426,12 +412,11 @@ class Fields {
 					'std'         => $std,
 					'placeholder' => $placeholder,
 					'multiple'    => false,
-					'clone'       => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'select_advanced' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'name'        => $name,
 					'type'        => 'select_advanced',
@@ -440,7 +425,6 @@ class Fields {
 					'std'         => $std,
 					'placeholder' => $placeholder,
 					'multiple'    => false,
-					'clone'       => $clone,
 					'js_options'  => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -448,11 +432,11 @@ class Fields {
 							'label' => __( 'Select2 options', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'textarea' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'type'        => 'textarea',
 					'name'        => $name,
@@ -473,8 +457,7 @@ class Fields {
 							'label' => __( 'Columns', 'meta-box-builder' ),
 						],
 					],
-					'clone' => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'hidden' => [
@@ -486,7 +469,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'image_select' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'       => $id,
 					'type'     => 'image_select',
 					'name'     => $name,
@@ -494,23 +477,21 @@ class Fields {
 					'std'      => $std,
 					'options'  => $options,
 					'multiple' => false,
-					'clone'    => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'color' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'    => $id,
 					'name'  => $name,
 					'type'  => 'color',
 					'desc'  => $desc,
 					'std'   => $std,
-					'clone' => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'oembed' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'type'        => 'oembed',
 					'name'        => $name,
@@ -518,12 +499,11 @@ class Fields {
 					'std'         => $std,
 					'placeholder' => $placeholder,
 					'size'        => $size,
-					'clone'       => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'slider' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'     => $id,
 					'type'   => 'slider',
 					'name'   => $name,
@@ -543,7 +523,6 @@ class Fields {
 							'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
 						],
 					],
-					'clone'      => $clone,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -551,18 +530,17 @@ class Fields {
 							'label' => __( 'jQueryUI slider options', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'wysiwyg' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'      => $id,
 					'name'    => $name,
 					'type'    => 'wysiwyg',
 					'desc'    => $desc,
 					'std'     => $std_textarea,
 					'raw'     => false,
-					'clone'   => $clone,
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -570,23 +548,22 @@ class Fields {
 							'label' => __( 'Editor options', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'autocomplete' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'      => $id,
 					'type'    => 'autocomplete',
 					'name'    => $name,
 					'desc'    => $desc,
 					'options' => $options,
 					'size'    => $size,
-					'clone'   => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'fieldset_text' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'      => $id,
 					'type'    => 'fieldset_text',
 					'name'    => $name,
@@ -598,12 +575,11 @@ class Fields {
 							'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
 						],
 					],
-					'clone' => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'map' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'   => $id,
 					'type' => 'map',
 					'name' => $name,
@@ -618,18 +594,16 @@ class Fields {
 					'api_key'       => '',
 					'address_field' => '',
 					'region'        => '',
-					'clone'         => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'group' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'    => $id,
 					'type'  => 'group',
 					'name'  => $name,
 					'desc'  => $desc,
-					'clone' => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'heading' => [
@@ -648,7 +622,7 @@ class Fields {
 				]
 			],
 			'date' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'         => $id,
 					'type'       => 'date',
 					'name'       => $name,
@@ -657,7 +631,6 @@ class Fields {
 					'size'       => $size,
 					'inline'     => $inline_date,
 					'timestamp'  => $timestamp,
-					'clone'      => $clone,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -665,11 +638,11 @@ class Fields {
 							'label' => __( 'Date picker options', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'datetime' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'         => $id,
 					'type'       => 'datetime',
 					'name'       => $name,
@@ -678,7 +651,6 @@ class Fields {
 					'size'       => $size,
 					'inline'     => $inline_date,
 					'timestamp'  => $timestamp,
-					'clone'      => $clone,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -686,18 +658,17 @@ class Fields {
 							'label' => __( 'Date picker options', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'time' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'         => $id,
 					'name'       => $name,
 					'type'       => 'time',
 					'desc'       => $desc,
 					'std'        => $std,
 					'size'       => $size,
-					'clone'      => $clone,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -705,11 +676,11 @@ class Fields {
 							'label' => __( 'Time picker options', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'post' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'         => $id,
 					'type'       => 'post',
 					'name'       => $name,
@@ -724,7 +695,6 @@ class Fields {
 						],
 					],
 					'placeholder' => $placeholder,
-					'clone'       => $clone,
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -733,11 +703,11 @@ class Fields {
 							'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'taxonomy' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'type'        => 'taxonomy',
 					'name'        => $name,
@@ -745,7 +715,6 @@ class Fields {
 					'taxonomy'    => 'category',
 					'field_type'  => 'select_advanced',
 					'placeholder' => $placeholder,
-					'clone'       => $clone,
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -754,11 +723,11 @@ class Fields {
 							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'taxonomy_advanced' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'type'        => 'taxonomy_advanced',
 					'name'        => $name,
@@ -766,7 +735,6 @@ class Fields {
 					'taxonomy'    => 'category',
 					'field_type'  => 'select_advanced',
 					'placeholder' => $placeholder,
-					'clone'       => $clone,
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -775,18 +743,17 @@ class Fields {
 							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'user' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'type'        => 'user',
 					'name'        => $name,
 					'desc'        => $desc,
 					'field_type'  => 'select_advanced',
 					'placeholder' => $placeholder,
-					'clone'       => $clone,
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -795,23 +762,22 @@ class Fields {
 							'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
 						],
 					],
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'file' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'               => $id,
 					'type'             => 'file',
 					'name'             => $name,
 					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
 					'force_delete'     => false,
-					'clone'            => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'file_input' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'          => $id,
 					'type'        => 'file_input',
 					'name'        => $name,
@@ -819,12 +785,11 @@ class Fields {
 					'std'         => $std,
 					'placeholder' => $placeholder,
 					'size'        => $size,
-					'clone'       => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'file_advanced' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'               => $id,
 					'type'             => 'file_advanced',
 					'name'             => $name,
@@ -833,12 +798,11 @@ class Fields {
 					'mime_type'        => '',
 					'max_status'       => true,
 					'force_delete'     => false,
-					'clone'            => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'image_advanced' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'               => $id,
 					'type'             => 'image_advanced',
 					'name'             => $name,
@@ -846,33 +810,30 @@ class Fields {
 					'max_file_uploads' => $max_file_uploads,
 					'max_status'       => false,
 					'force_delete'     => false,
-					'clone'            => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'image' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'               => $id,
 					'type'             => 'image',
 					'name'             => $name,
 					'desc'             => $desc,
 					'max_file_uploads' => $max_file_uploads,
 					'force_delete'     => false,
-					'clone'            => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'video' => [
-				'general' => [
+				'general' => array_merge( [
 					'id'               => $id,
 					'type'             => 'video',
 					'name'             => $name,
 					'desc'             => $desc,
-					'max_file_uploads' => 4,
+					'max_file_uploads' => $max_file_uploads,
 					'max_status'       => false,
 					'force_delete'     => false,
-					'clone'            => $clone,
-				],
+				], $clone_settings ),
 				'advanced' => $advanced,
 			]
 		];
