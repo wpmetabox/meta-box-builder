@@ -284,6 +284,7 @@ class Fields {
 				'className' => 'clone-setting',
 			],
 		];
+		$upload_settings = compact( 'max_file_uploads', 'max_status', 'force_delete' );
 		$clone_settings = compact( 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button' );
 
 		// Advanced tab.
@@ -883,33 +884,27 @@ class Fields {
 			],
 			'file_advanced' => [
 				'general' => array_merge( [
-					'id'               => $id,
-					'type'             => 'file_advanced',
-					'name'             => $name,
-					'desc'             => $desc,
-					'max_file_uploads' => $max_file_uploads,
-					'mime_type'        => [
+					'id'        => $id,
+					'type'      => 'file_advanced',
+					'name'      => $name,
+					'desc'      => $desc,
+					'mime_type' => [
 						'component' => 'Input',
 						'props'     => [
 							'label'   => __( 'MIME types', 'meta-box-builder' ),
 							'tooltip' => __( 'Filters items in the Media Library popup, does not restrict file types when upload.', 'meta-box-builder' ),
 						],
 					],
-					'max_status'   => $max_status,
-					'force_delete' => $force_delete,
-				], $clone_settings ),
+				], $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'image_advanced' => [
 				'general' => array_merge( [
-					'id'               => $id,
-					'type'             => 'image_advanced',
-					'name'             => $name,
-					'desc'             => $desc,
-					'max_file_uploads' => $max_file_uploads,
-					'max_status'       => $max_status,
-					'force_delete'     => $force_delete,
-				], $clone_settings ),
+					'id'   => $id,
+					'type' => 'image_advanced',
+					'name' => $name,
+					'desc' => $desc,
+				], $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'image' => [
@@ -925,14 +920,11 @@ class Fields {
 			],
 			'video' => [
 				'general' => array_merge( [
-					'id'               => $id,
-					'type'             => 'video',
-					'name'             => $name,
-					'desc'             => $desc,
-					'max_file_uploads' => $max_file_uploads,
-					'max_status'       => $max_status,
-					'force_delete'     => $force_delete,
-				], $clone_settings ),
+					'id'   => $id,
+					'type' => 'video',
+					'name' => $name,
+					'desc' => $desc,
+				], $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			]
 		];
