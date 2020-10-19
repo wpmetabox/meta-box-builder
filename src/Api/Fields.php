@@ -206,6 +206,7 @@ class Fields {
 				'label' => __( 'Custom settings', 'meta-box-builder' ),
 			],
 		];
+		$advanced = compact( 'before', 'after', 'class', 'attributes' );
 
 		return [
 			'text' => [
@@ -244,12 +245,7 @@ class Fields {
 					'placeholder' => $placeholder,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'url' => [
 				'general' => [
@@ -262,12 +258,7 @@ class Fields {
 					'size' => $size,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'email' => [
 				'general' => [
@@ -280,12 +271,7 @@ class Fields {
 					'size' => $size,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'range' => [
 				'general' => [
@@ -299,12 +285,7 @@ class Fields {
 					'step' => 1,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'text_list' => [
 				'general' => [
@@ -322,12 +303,7 @@ class Fields {
 					],
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'checkbox' => [
 				'general' => [
@@ -343,12 +319,7 @@ class Fields {
 					],
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'checkbox_list' => [
 				'general' => [
@@ -360,12 +331,7 @@ class Fields {
 					'std' => $std_textarea,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'button' => [
 				'general' => [
@@ -380,12 +346,7 @@ class Fields {
 						],
 					],
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'password' => [
 				'general' => [
@@ -398,12 +359,7 @@ class Fields {
 					'size' => $size,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'radio' => [
 				'general' => [
@@ -415,12 +371,7 @@ class Fields {
 					'inline' => true,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'select' => [
 				'general' => [
@@ -434,12 +385,7 @@ class Fields {
 					'multiple' => false,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'select_advanced' => [
 				'general' => [
@@ -451,12 +397,7 @@ class Fields {
 					'std' => $std,
 					'placeholder' => $placeholder,
 					'multiple' => false,
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
+					'clone' => false,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -464,8 +405,8 @@ class Fields {
 							'label' => __( 'Select2 options', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'textarea' => [
 				'general' => [
@@ -491,12 +432,7 @@ class Fields {
 					],
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'hidden' => [
 				'general' => [
@@ -504,12 +440,7 @@ class Fields {
 					'type' => 'hidden',
 					'std' => $std,
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'image_select' => [
 				'general' => [
@@ -522,12 +453,7 @@ class Fields {
 					'multiple' => false,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'color' => [
 				'general' => [
@@ -538,12 +464,7 @@ class Fields {
 					'std' => $std,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'oembed' => [
 				'general' => [
@@ -556,12 +477,7 @@ class Fields {
 					'size' => $size,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'slider' => [
 				'general' => [
@@ -584,12 +500,7 @@ class Fields {
 							'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
 						],
 					],
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
+					'clone' => false,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -597,8 +508,8 @@ class Fields {
 							'label' => __( 'jQueryUI slider options', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'wysiwyg' => [
 				'general' => [
@@ -608,12 +519,7 @@ class Fields {
 					'desc' => $desc,
 					'std' => $std_textarea,
 					'raw' => false,
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
+					'clone' => false,
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -621,8 +527,8 @@ class Fields {
 							'label' => __( 'Editor options', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'autocomplete' => [
 				'general' => [
@@ -634,12 +540,7 @@ class Fields {
 					'size' => $size,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'fieldset_text' => [
 				'general' => [
@@ -656,12 +557,7 @@ class Fields {
 					],
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'map' => [
 				'general' => [
@@ -681,12 +577,7 @@ class Fields {
 					'region' => '',
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'group' => [
 				'general' => [
@@ -695,9 +586,7 @@ class Fields {
 					'name' => $name,
 					'desc' => $desc,
 				],
-				'advanced' => [
-					'attributes' => $attributes
-				],
+				'advanced' => $advanced,
 			],
 			'heading' => [
 				'general' => [
@@ -705,12 +594,7 @@ class Fields {
 					'name' => $name,
 					'desc' => $desc,
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'divider' => [
 				'general' => [
@@ -729,12 +613,7 @@ class Fields {
 					'size' => $size,
 					'inline' => $inline_date,
 					'timestamp' => $timestamp,
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
+					'clone' => false,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -742,8 +621,8 @@ class Fields {
 							'label' => __( 'Date picker options', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'datetime' => [
 				'general' => [
@@ -755,12 +634,7 @@ class Fields {
 					'size' => $size,
 					'inline' => $inline_date,
 					'timestamp' => $timestamp,
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
+					'clone' => false,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -768,8 +642,8 @@ class Fields {
 							'label' => __( 'Date picker options', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'time' => [
 				'general' => [
@@ -779,12 +653,7 @@ class Fields {
 					'desc' => $desc,
 					'std' => $std,
 					'size' => $size,
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
+					'clone' => false,
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -792,8 +661,8 @@ class Fields {
 							'label' => __( 'Time picker options', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'post' => [
 				'general' => [
@@ -837,12 +706,7 @@ class Fields {
 					'taxonomy' => 'category',
 					'field_type' => 'select_advanced',
 					'placeholder' => $placeholder,
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
+					'clone' => false,
 					'query_args' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -851,8 +715,8 @@ class Fields {
 							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'taxonomy_advanced' => [
 				'general' => [
@@ -863,12 +727,7 @@ class Fields {
 					'taxonomy' => 'category',
 					'field_type' => 'select_advanced',
 					'placeholder' => $placeholder,
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
+					'clone' => false,
 					'query_args' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -877,8 +736,8 @@ class Fields {
 							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'user' => [
 				'general' => [
@@ -888,12 +747,7 @@ class Fields {
 					'desc' => $desc,
 					'field_type' => 'select_advanced',
 					'placeholder' => $placeholder,
-					'clone' => false
-				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
+					'clone' => false,
 					'query_args' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -902,8 +756,8 @@ class Fields {
 							'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
 						],
 					],
-					'attributes' => $attributes
-				]
+				],
+				'advanced' => $advanced,
 			],
 			'file' => [
 				'general' => [
@@ -915,12 +769,7 @@ class Fields {
 					'force_delete' => false,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'file_input' => [
 				'general' => [
@@ -933,12 +782,7 @@ class Fields {
 					'size' => $size,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'file_advanced' => [
 				'general' => [
@@ -952,12 +796,7 @@ class Fields {
 					'force_delete' => false,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'image_advanced' => [
 				'general' => [
@@ -970,12 +809,7 @@ class Fields {
 					'force_delete' => false,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'image' => [
 				'general' => [
@@ -987,12 +821,7 @@ class Fields {
 					'force_delete' => false,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			],
 			'video' => [
 				'general' => [
@@ -1005,12 +834,7 @@ class Fields {
 					'force_delete' => false,
 					'clone' => false
 				],
-				'advanced' => [
-					'before' => $before,
-					'after' => $after,
-					'class' => $class,
-					'attributes' => $attributes
-				]
+				'advanced' => $advanced,
 			]
 		];
 	}
