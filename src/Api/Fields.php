@@ -97,6 +97,13 @@ class Fields {
 				'tooltip'  => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
 			],
 		];
+		$name = [
+			'component' => 'Name',
+			'props'     => [
+				'label'   => __( 'Label', 'meta-box-builder' ),
+				'tooltip' => __( 'Optional. Leave empty to make the input 100% width.', 'meta-box-builder' ),
+			],
+		];
 		$std = [
 			'component' => 'Input',
 			'props'     => [
@@ -205,7 +212,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type'              => 'text',
-					'name'              => 'Text',
+					'name' => $name,
 					'desc' => $desc,
 					'std'               => $std,
 					'placeholder' => $placeholder,
@@ -228,7 +235,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'number',
-					'name' => 'Number',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std,
 					'min' => $min,
@@ -248,7 +255,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'url',
-					'name' => 'URL',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std,
 					'placeholder' => $placeholder,
@@ -265,7 +272,7 @@ class Fields {
 			'email' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'Email',
+					'name' => $name,
 					'type' => 'email',
 					'desc' => $desc,
 					'std' => $std,
@@ -283,7 +290,7 @@ class Fields {
 			'range' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'Range',
+					'name' => $name,
 					'type' => 'range',
 					'desc' => $desc,
 					'std' => $std,
@@ -303,7 +310,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'text_list',
-					'name' => 'Text List',
+					'name' => $name,
 					'desc' => $desc,
 					'options' => [
 						'component' => 'KeyValue',
@@ -325,7 +332,7 @@ class Fields {
 			'checkbox' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'Checkbox',
+					'name' => $name,
 					'type' => 'checkbox',
 					'desc' => $desc,
 					'std' => [
@@ -346,7 +353,7 @@ class Fields {
 			'checkbox_list' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'Checkbox List',
+					'name' => $name,
 					'type' => 'checkbox_list',
 					'desc' => $desc,
 					'options' => $options,
@@ -364,7 +371,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'button',
-					'name' => 'Button',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => [
 						'component' => 'Input',
@@ -384,7 +391,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'password',
-					'name' => 'Password',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std,
 					'placeholder' => $placeholder,
@@ -401,7 +408,7 @@ class Fields {
 			'radio' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'Radio',
+					'name' => $name,
 					'type' => 'radio',
 					'desc' => $desc,
 					'options' => $options,
@@ -418,7 +425,7 @@ class Fields {
 			'select' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'Select',
+					'name' => $name,
 					'type' => 'select',
 					'desc' => $desc,
 					'options' => $options,
@@ -437,7 +444,7 @@ class Fields {
 			'select_advanced' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'Select Advanced',
+					'name' => $name,
 					'type' => 'select_advanced',
 					'desc' => $desc,
 					'options' => $options,
@@ -464,7 +471,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'textarea',
-					'name' => 'Textarea',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std_textarea,
 					'placeholder' => $placeholder,
@@ -508,7 +515,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'image_select',
-					'name' => 'Image Select',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std,
 					'options' => $options,
@@ -525,7 +532,7 @@ class Fields {
 			'color' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'Color Picker',
+					'name' => $name,
 					'type' => 'color',
 					'desc' => $desc,
 					'std' => $std,
@@ -542,7 +549,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'oembed',
-					'name' => 'oEmbed',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std,
 					'placeholder' => $placeholder,
@@ -560,7 +567,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'slider',
-					'name' => 'Slider',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std,
 					'prefix' => [
@@ -596,7 +603,7 @@ class Fields {
 			'wysiwyg' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'WYSIWYG',
+					'name' => $name,
 					'type' => 'wysiwyg',
 					'desc' => $desc,
 					'std' => $std_textarea,
@@ -621,7 +628,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'autocomplete',
-					'name' => 'Autocomplete',
+					'name' => $name,
 					'desc' => $desc,
 					'options' => $options,
 					'size' => $size,
@@ -638,7 +645,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'fieldset_text',
-					'name' => 'Fieldset Text',
+					'name' => $name,
 					'desc' => $desc,
 					'options' => [
 						'component' => 'KeyValue',
@@ -660,7 +667,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'map',
-					'name' => 'Map',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => [
 						'component' => 'Input',
@@ -683,19 +690,19 @@ class Fields {
 			],
 			'group' => [
 				'general' => [
-					'id' => 'group',
+					'id' => $id,
 					'type' => 'group',
-					'name' => 'Group',
+					'name' => $name,
 					'desc' => $desc,
 				],
 				'advanced' => [
 					'attributes' => $attributes
-				]
+				],
 			],
 			'heading' => [
 				'general' => [
 					'type' => 'heading',
-					'name' => 'Heading',
+					'name' => $name,
 					'desc' => $desc,
 				],
 				'advanced' => [
@@ -716,7 +723,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'date',
-					'name' => 'Date Picker',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std,
 					'size' => $size,
@@ -742,7 +749,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'datetime',
-					'name' => 'Date Time Picker',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std,
 					'size' => $size,
@@ -767,7 +774,7 @@ class Fields {
 			'time' => [
 				'general' => [
 					'id' => $id,
-					'name' => 'Time Picker',
+					'name' => $name,
 					'type' => 'time',
 					'desc' => $desc,
 					'std' => $std,
@@ -792,7 +799,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'post',
-					'name' => 'Post',
+					'name' => $name,
 					'desc' => $desc,
 					'post_type' => 'post',
 					'field_type' => 'select_advanced',
@@ -825,7 +832,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'taxonomy',
-					'name' => 'Taxonomy',
+					'name' => $name,
 					'desc' => $desc,
 					'taxonomy' => 'category',
 					'field_type' => 'select_advanced',
@@ -851,7 +858,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'taxonomy_advanced',
-					'name' => 'Taxonomy Advanced',
+					'name' => $name,
 					'desc' => $desc,
 					'taxonomy' => 'category',
 					'field_type' => 'select_advanced',
@@ -877,7 +884,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'user',
-					'name' => 'User',
+					'name' => $name,
 					'desc' => $desc,
 					'field_type' => 'select_advanced',
 					'placeholder' => $placeholder,
@@ -902,7 +909,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'file',
-					'name' => 'File',
+					'name' => $name,
 					'desc' => $desc,
 					'max_file_uploads' => $max_file_uploads,
 					'force_delete' => false,
@@ -919,7 +926,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'file_input',
-					'name' => 'File Input',
+					'name' => $name,
 					'desc' => $desc,
 					'std' => $std,
 					'placeholder' => $placeholder,
@@ -937,7 +944,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'file_advanced',
-					'name' => 'File Advanced',
+					'name' => $name,
 					'desc' => $desc,
 					'max_file_uploads' => $max_file_uploads,
 					'mime_type' => '',
@@ -956,7 +963,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'image_advanced',
-					'name' => 'Image Advanced',
+					'name' => $name,
 					'desc' => $desc,
 					'max_file_uploads' => $max_file_uploads,
 					'max_status' => false,
@@ -974,7 +981,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'image',
-					'name' => 'Image Upload',
+					'name' => $name,
 					'desc' => $desc,
 					'max_file_uploads' => $max_file_uploads,
 					'force_delete' => false,
@@ -991,7 +998,7 @@ class Fields {
 				'general' => [
 					'id' => $id,
 					'type' => 'video',
-					'name' => 'Video',
+					'name' => $name,
 					'desc' => $desc,
 					'max_file_uploads' => 4,
 					'max_status' => false,
