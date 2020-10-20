@@ -445,8 +445,8 @@ class Fields {
 							'label' => __( 'Allow to select opacity', 'meta-box-builder' ),
 						],
 					],
-					'readonly' => $readonly,
 					'disabled' => $disabled,
+					'readonly' => $readonly,
 					'js_options'  => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -474,6 +474,57 @@ class Fields {
 					],
 				] ),
 				'advanced' => $advanced,
+			],
+			'date' => [
+				'general'  => array_merge( $general, compact( 'std', 'size' ), [
+					'save_format' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'Save format', 'meta-box-builder' ),
+							'tooltip' => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
+						],
+					],
+					'timestamp'  => $timestamp,
+					'inline'     => $inline_date,
+					'required'   => $required,
+					'disabled'   => $disabled,
+					'readonly'   => $readonly,
+					'js_options' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'  => 'https://api.jqueryui.com/datepicker/',
+							'label' => __( 'Date picker options', 'meta-box-builder' ),
+						],
+					],
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'datetime' => [
+				'general'  => array_merge( $general, compact( 'std', 'size' ), [
+					'save_format' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'Save format', 'meta-box-builder' ),
+							'tooltip' => __( 'Custom PHP format for the saved value. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
+						],
+					],
+					'timestamp'  => $timestamp,
+					'inline'     => $inline_date,
+					'required'   => $required,
+					'disabled'   => $disabled,
+					'readonly'   => $readonly,
+					'js_options' => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'  => 'https://api.jqueryui.com/datepicker/',
+							'label' => __( 'Date picker options', 'meta-box-builder' ),
+						],
+					],
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'divider' => [
+				'general'  => compact( 'before', 'after' ),
 			],
 			'text' => [
 				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
@@ -660,33 +711,6 @@ class Fields {
 			],
 			'heading' => [
 				'general'  => compact( 'name', 'desc' ),
-				'advanced' => $advanced,
-			],
-			'divider' => [
-				'general'  => compact( 'before', 'after' ),
-			],
-			'date' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
-					'js_options' => [
-						'component' => 'KeyValue',
-						'props' => [
-							'link'  => 'https://api.jqueryui.com/datepicker/',
-							'label' => __( 'Date picker options', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'datetime' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
-					'js_options' => [
-						'component' => 'KeyValue',
-						'props' => [
-							'link'  => 'https://api.jqueryui.com/datepicker/',
-							'label' => __( 'Date picker options', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'time' => [
