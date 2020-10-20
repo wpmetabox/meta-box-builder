@@ -69,9 +69,9 @@ class Fields {
 				'user'              => 'User',
 			],
 			'Upload' => [
-				'file' => 'File',
-				'file_advanced' => 'File Advanced',
-				// file_upload
+				'file'           => 'File',
+				'file_advanced'  => 'File Advanced',
+				'file_upload'    => 'File Upload',
 				'file_input'     => 'File Input',
 				'image'          => 'Image',
 				'image_advanced' => 'Image Advanced',
@@ -157,6 +157,13 @@ class Fields {
 			'props'     => [
 				'label'   => __( 'Force delete', 'meta-box-builder' ),
 				'tooltip' => __( 'Delete files from the Media Library when deleting them from post meta', 'meta-box-builder' ),
+			],
+		];
+		$upload_dir = [
+			'component' => 'Input',
+			'props'     => [
+				'label'   => __( 'Custom upload folder', 'meta-box-builder' ),
+				'tooltip' => __( 'Relatively from the WordPress root path', 'meta-box-builder' ),
 			],
 		];
 		$max_status = [
@@ -476,7 +483,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'date' => [
-				'general'  => array_merge( $general, compact( 'std', 'size' ), [
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), [
 					'save_format' => [
 						'component' => 'Input',
 						'props'     => [
@@ -500,7 +507,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'datetime' => [
-				'general'  => array_merge( $general, compact( 'std', 'size' ), [
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), [
 					'save_format' => [
 						'component' => 'Input',
 						'props'     => [
@@ -525,6 +532,57 @@ class Fields {
 			],
 			'divider' => [
 				'general'  => compact( 'before', 'after' ),
+			],
+			'fieldset_text' => [
+				'general'  => array_merge( $general, [
+					'options' => [
+						'component' => 'KeyValue',
+						'props'     => [
+							'label'            => __( 'Inputs', 'meta-box-builder' ),
+							'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
+						],
+					],
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'file' => [
+				'general'  => array_merge( $general, compact( 'max_file_uploads', 'force_delete', 'upload_dir', 'required' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'file_advanced' => [
+				'general'  => array_merge( $general, [
+					'mime_type' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'MIME types', 'meta-box-builder' ),
+							'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload.', 'meta-box-builder' ),
+						],
+					],
+				], $upload_settings, $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'file_input' => [
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'file_upload' => [
+				'general'  => array_merge( $general, [
+					'mime_type' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'MIME types', 'meta-box-builder' ),
+							'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload.', 'meta-box-builder' ),
+						],
+					],
+					'max_file_size' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'Maximum file size', 'meta-box-builder' ),
+							'tooltip' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
+						],
+					],
+				], $upload_settings, $clone_settings ),
+				'advanced' => $advanced,
 			],
 			'text' => [
 				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
@@ -658,18 +716,6 @@ class Fields {
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
-			'fieldset_text' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc' ), [
-					'options' => [
-						'component' => 'KeyValue',
-						'props'     => [
-							'label'            => __( 'Inputs', 'meta-box-builder' ),
-							'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
 			'map' => [
 				'general'  => array_merge( compact( 'name', 'id', 'desc' ), [
 					'std'  => [
@@ -793,26 +839,6 @@ class Fields {
 						],
 					],
 				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'file' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'file_input' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'file_advanced' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc' ), [
-					'mime_type' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'MIME types', 'meta-box-builder' ),
-							'tooltip' => __( 'Filters items in the Media Library popup, does not restrict file types when upload.', 'meta-box-builder' ),
-						],
-					],
-				], $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'image_advanced' => [
