@@ -116,10 +116,16 @@ class Fields {
 				'label' => __( 'Default value' ),
 			],
 		];
+		$label_description = [
+			'component' => 'Input',
+			'props'     => [
+				'label' => __( 'Label description', 'meta-box-builder' ),
+			],
+		];
 		$desc = [
 			'component' => 'Input',
 			'props'     => [
-				'label' => __( 'Description', 'meta-box-builder' ),
+				'label' => __( 'Input description', 'meta-box-builder' ),
 			],
 		];
 		$size = [
@@ -308,34 +314,62 @@ class Fields {
 				'label' => __( 'Custom CSS class', 'meta-box-builder' ),
 			],
 		];
+		$save_field = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label'   => __( 'Save field value' ),
+				'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' )
+			],
+			'default' => true,
+		];
+		$sanitize_callback = [
+			'component' => 'Input',
+			'props'     => [
+				'label'   => '<a href="https://docs.metabox.io/sanitization/" target="_blank" rel="noreferrer noopener">' . __( 'Custom sanitize callback', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'Enter PHP function name for custom sanitization. Enter "none" to disable sanitization.', 'meta-box-builder' ),
+			],
+		];
 		$attributes = [
 			'component' => 'KeyValue',
 			'props'     => [
-				'link'  => 'https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes',
-				'label' => __( 'Custom settings', 'meta-box-builder' ),
+				'link'    => 'https://docs.metabox.io/custom-attributes/',
+				'label'   => __( 'Custom HTML5 attributes', 'meta-box-builder' ),
+				'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
 			],
 		];
-		$advanced = compact( 'before', 'after', 'class', 'attributes' );
+		$custom_settings = [
+			'component' => 'KeyValue',
+			'props'     => [
+				'link'    => 'https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes',
+				'label'   => __( 'Custom settings', 'meta-box-builder' ),
+				'tooltip' => __( 'Use this to add custom settings for the field. The custom settings will overwrite existing settings if they have the same key.', 'meta-box-builder' ),
+			],
+		];
+		$advanced = compact( 'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' );
 
 		return [
+			'autocomplete' => [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'size' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
 			'text' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'number' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'min', 'max', 'step', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'min', 'max', 'step', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'url' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'email' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'range' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'min', 'max', 'step' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'min', 'max', 'step' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'text_list' => [
@@ -363,7 +397,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'checkbox_list' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'button' => [
@@ -378,19 +412,19 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'password' => [
-				'general'  => compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ),
+				'general'  => compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ),
 				'advanced' => $advanced,
 			],
 			'radio' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'select' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'placeholder', 'multiple' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'placeholder', 'multiple' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'select_advanced' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'placeholder', 'multiple' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'placeholder', 'multiple' ), [
 					'js_options'  => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -402,7 +436,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'textarea' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder' ), [
 					'rows'        => [
 						'component' => 'Input',
 						'props'     => [
@@ -425,19 +459,19 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'image_select' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'multiple' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'multiple' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'color' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'oembed' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'slider' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std' ), [
 					'prefix' => [
 						'component' => 'Input',
 						'props'     => [
@@ -463,7 +497,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'wysiwyg' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std' ), [
 					'raw'     => [
 						'component' => 'Checkbox',
 						'props'     => [
@@ -478,10 +512,6 @@ class Fields {
 						],
 					],
 				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'autocomplete' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'fieldset_text' => [
@@ -543,7 +573,7 @@ class Fields {
 				'general'  => compact( 'before', 'after' ),
 			],
 			'date' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -555,7 +585,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'datetime' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -567,7 +597,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'time' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'size' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'size' ), [
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -610,7 +640,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'taxonomy' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -623,7 +653,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'taxonomy_advanced' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -636,7 +666,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'user' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'field_type', 'placeholder' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'field_type', 'placeholder' ), [
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -649,11 +679,11 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'file' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'file_input' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'file_advanced' => [
@@ -673,7 +703,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'image' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'video' => [
