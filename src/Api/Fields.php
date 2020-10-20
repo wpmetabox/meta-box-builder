@@ -43,10 +43,10 @@ class Fields {
 				'url'             => 'URL',
 			],
 			'Advanced' => [
-				'autocomplete' => 'Autocomplete',
-				'background'   => 'Background',
-				'color' => 'Color Picker',
-				// custom_html
+				'autocomplete'  => 'Autocomplete',
+				'background'    => 'Background',
+				'color'         => 'Color Picker',
+				'custom_html'   => 'Custom HTML',
 				'date'          => 'Date',
 				'datetime'      => 'Date Time',
 				'fieldset_text' => 'Fieldset Text',
@@ -114,6 +114,7 @@ class Fields {
 			'component' => 'Textarea',
 			'props'     => [
 				'label' => __( 'Default value' ),
+				'tooltip' => __( 'Enter each value on a line', 'meta-box-builder')
 			],
 		];
 		$label_description = [
@@ -310,6 +311,12 @@ class Fields {
 				'label' => __( 'Read-only', 'meta-box-builder' ),
 			],
 		];
+		$select_all_none = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label' => __( 'Display "Toggle All" button', 'meta-box-builder' ),
+			],
+		];
 		$upload_settings = compact( 'max_file_uploads', 'max_status', 'force_delete' );
 		$clone_settings = compact( 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button' );
 
@@ -409,6 +416,65 @@ class Fields {
 				], compact( 'multiple', 'required' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
+			'checkbox' => [
+				'general' => array_merge( $general, [
+					'std'  => [
+						'component' => 'Checkbox',
+						'props'     => [
+							'label' => __( 'Checked by default', 'meta-box-builder' ),
+						],
+					],
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'checkbox_list' => [
+				'general'  => array_merge( $general, [
+					'options'         => $options,
+					'std'             => $std_textarea,
+					'inline'          => $inline,
+					'select_all_none' => $select_all_none,
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'color' => [
+				'general'  => array_merge( $general, [
+					'std'           => $std,
+					'alpha_channel' => [
+						'component' => 'Checkbox',
+						'props'     => [
+							'label' => __( 'Allow to select opacity', 'meta-box-builder' ),
+						],
+					],
+					'readonly' => $readonly,
+					'disabled' => $disabled,
+					'js_options'  => [
+						'component' => 'KeyValue',
+						'props' => [
+							'link'  => 'https://automattic.github.io/Iris/',
+							'label' => __( 'Custom color picker options', 'meta-box-builder' ),
+						],
+					],
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'custom_html' => [
+				'general'  => array_merge( $general, [
+					'std' => [
+						'component' => 'Textarea',
+						'props'     => [
+							'label' => __( 'Content (HTML allowed)' ),
+						],
+					],
+					'callback' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'PHP Callback', 'meta-box-builder' ),
+							'tooltip' => __( 'PHP function that is called to show custom HTML content. Will overwrite the content setting above.', 'meta-box-builder' ),
+						],
+					],
+				] ),
+				'advanced' => $advanced,
+			],
 			'text' => [
 				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
@@ -440,21 +506,6 @@ class Fields {
 						],
 					],
 				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'checkbox' => [
-				'general' => array_merge( compact( 'name', 'id', 'desc' ), [
-					'std'  => [
-						'component' => 'Checkbox',
-						'props'     => [
-							'label' => __( 'Checked by default', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'checkbox_list' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'password' => [
@@ -506,10 +557,6 @@ class Fields {
 			],
 			'image_select' => [
 				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'multiple' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'color' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'oembed' => [
