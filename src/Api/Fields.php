@@ -324,6 +324,12 @@ class Fields {
 				'label' => __( 'Display "Toggle All" button', 'meta-box-builder' ),
 			],
 		];
+		$language_codes = 'ar,bg,bn,ca,cs,da,de,el,en,en-AU,en-GB,es,eu,eu,fa,fi,fil,fr,gl,gu,hi,hr,hu,id,it,iw,ja,kn,ko,lt,lv,ml,mr,nl,no,pl,pt,pt-BR,pt-PT,ro,ru,sk,sl,sr,sv,ta,te,th,tl,tr,uk,vi,zh-CN,zh-TW';
+		$language_names = 'Arabic,Bulgarian,Bengali,Catalan,Czech,Danish,German,Greek,English,English (Australian),English (Great Britain),Spanish,Basque,Basque,Farsi,Finnish,Filipino,French,Galician,Gujarati,Hindi,Croatian,Hungarian,Indonesian,Italian,Hebrew,Japanese,Kannada,Korean,Lithuanian,Latvian,Malayalam,Marathi,Dutch,Norwegian,Polish,Portuguese,Portuguese (Brazil),Portuguese (Portugal),Romanian,Russian,Slovak,Slovenian,Serbian,Swedish,Tamil,Telugu,Thai,Tagalog,Turkish,Ukrainian,Vietnamese,Chinese (Simplified),Chinese (Traditional)';
+		$language_codes = explode( ',', $language_codes );
+		$language_names = explode( ',', $language_names );
+		$languages      = array_combine( $language_codes, $language_names );
+
 		$upload_settings = compact( 'max_file_uploads', 'max_status', 'force_delete' );
 		$clone_settings = compact( 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button' );
 
@@ -584,6 +590,56 @@ class Fields {
 				], $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
+			'map' => [
+				'general'  => array_merge( $general, [
+					'std'  => [
+						'component' => 'Input',
+						'props'     => [
+							'label'   => __( 'Default location', 'meta-box-builder' ),
+							'tooltip' => __( 'Format: latitude,longitude[, zoom]. Zoom is optional.', 'meta-box-builder' ),
+						],
+					],
+					'api_key'       => [
+						'component' => 'Input',
+						'props'     => [
+							'label'    => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopenner noreferrer">' . __( 'Google Maps API key', 'meta-box-builder' ) . '</a>',
+							'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
+							'required' => true,
+						],
+					],
+					'address_field' => [
+						'component' => 'Input',
+						'props'     => [
+							'label'    => __( 'Address field', 'meta-box-builder' ),
+							'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
+							'required' => true,
+						],
+					],
+					'language' => [
+						'component' => 'Select',
+						'props'     => [
+							'label'   => __( 'Language', 'meta-box-builder' ),
+							'options' => $languages,
+						],
+					],
+					'region'        => [
+						'component' => 'Input',
+						'props'     => [
+							'label'    => '<a href="https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains#Country_code_top-level_domains" target="_blank" rel="noopenner noreferrer">' . __( 'Region code', 'meta-box-builder' ) . '</a>',
+							'tooltip'  => __( 'The region code, specified as a country code top-level domain. Use for autocompleting addresses.' ),
+						],
+					],
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'heading' => [
+				'general'  => compact( 'name', 'desc' ),
+				'advanced' => $advanced,
+			],
+			'hidden' => [
+				'general'  => compact( 'id', 'std' ),
+				'advanced' => $advanced,
+			],
 			'text' => [
 				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
@@ -605,7 +661,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'text_list' => [
-				'general' => array_merge( compact( 'name', 'id', 'desc' ), [
+				'general' => array_merge( $general, [
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -660,10 +716,6 @@ class Fields {
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
-			'hidden' => [
-				'general'  => compact( 'id', 'std' ),
-				'advanced' => $advanced,
-			],
 			'image_select' => [
 				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'multiple' ), $clone_settings ),
 				'advanced' => $advanced,
@@ -716,47 +768,8 @@ class Fields {
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
-			'map' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc' ), [
-					'std'  => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'Default location', 'meta-box-builder' ),
-							'tooltip' => __( 'Format: latitude,longitude[, zoom]. Zoom is optional.', 'meta-box-builder' ),
-						],
-					],
-					'api_key'       => [
-						'component' => 'Input',
-						'props'     => [
-							'label'    => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopenner noreferrer">' . __( 'Google Maps API key', 'meta-box-builder' ) . '</a>',
-							'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
-							'required' => true,
-						],
-					],
-					'address_field' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'    => __( 'Address field', 'meta-box-builder' ),
-							'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
-							'required' => true,
-						],
-					],
-					'region'        => [
-						'component' => 'Input',
-						'props'     => [
-							'label'    => '<a href="https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains#Country_code_top-level_domains" target="_blank" rel="noopenner noreferrer">' . __( 'Region code', 'meta-box-builder' ) . '</a>',
-							'tooltip'  => __( 'The region code, specified as a country code top-level domain. Use for autocompleting addresses.' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
 			'group' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'heading' => [
-				'general'  => compact( 'name', 'desc' ),
+				'general'  => array_merge( $general, $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'time' => [
@@ -772,7 +785,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'post' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc' ), [
+				'general'  => array_merge( $general, [
 					'post_type'  => [
 						'component' => 'Select',
 						'props'     => [
@@ -842,7 +855,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'image_advanced' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc' ), $upload_settings, $clone_settings ),
+				'general'  => array_merge( $general, $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'image' => [
@@ -850,7 +863,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'video' => [
-				'general'  => array_merge( compact( 'name', 'id', 'desc' ), $upload_settings, $clone_settings ),
+				'general'  => array_merge( $general, $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			]
 		];
