@@ -1,9 +1,10 @@
 import FieldMenu from './FieldsTab/FieldMenu';
 import { updateSelectedList, request, uniqid } from '../../utility/functions';
 import SearchResultList from './FieldsTab/SearchResultList';
-import SelectedItem from './FieldsTab/SelectedItem';
+import Node from './FieldsTab/Node';
+import Insert from './FieldsTab/Insert';
 
-const { useState, useEffect, useCallback, memo } = wp.element;
+const { useState, useEffect, useCallback, memo, Fragment } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = ( props ) => {
@@ -54,13 +55,16 @@ const FieldsTab = ( props ) => {
 			<div className="og-fields">
 				{
 					selectedList.items.map( ( item, index ) => (
-						<SelectedItem
-							key={ item.id + index }
-							parent={ 'root' }
-							item={ item }
-							index={ index }
-							changeSelectedList={ changeSelectedList }
-						/>
+						<Fragment key={ item.id + index }>
+							<Node
+								id={ item.id }
+								item={ item }
+								parent="root"
+								index={ index }
+								changeSelectedList={ changeSelectedList }
+							/>
+							<Insert index={ index } parent="root" />
+						</Fragment>
 					) )
 				}
 			</div>
