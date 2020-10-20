@@ -319,27 +319,27 @@ class Fields {
 
 		return [
 			'text' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'number' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'min', 'max', 'step', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'min', 'max', 'step', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'url' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'email' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'range' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'min', 'max', 'step' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'min', 'max', 'step' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'text_list' => [
-				'general' => array_merge( compact( 'id', 'name', 'desc' ), [
+				'general' => array_merge( compact( 'name', 'id', 'desc' ), [
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -352,7 +352,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'checkbox' => [
-				'general' => array_merge( compact( 'id', 'name', 'desc' ), [
+				'general' => array_merge( compact( 'name', 'id', 'desc' ), [
 					'std'  => [
 						'component' => 'Checkbox',
 						'props'     => [
@@ -363,11 +363,11 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'checkbox_list' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'button' => [
-				'general' => array_merge( compact( 'id', 'name', 'desc' ), [
+				'general' => array_merge( compact( 'name', 'id', 'desc' ), [
 					'std'  => [
 						'component' => 'Input',
 						'props'     => [
@@ -378,19 +378,19 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'password' => [
-				'general'  => compact( 'id', 'name', 'desc', 'std', 'placeholder', 'size' ),
+				'general'  => compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ),
 				'advanced' => $advanced,
 			],
 			'radio' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'select' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'options', 'std', 'placeholder', 'multiple' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'placeholder', 'multiple' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'select_advanced' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'options', 'std', 'placeholder', 'multiple' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'placeholder', 'multiple' ), [
 					'js_options'  => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -402,7 +402,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'textarea' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'placeholder' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder' ), [
 					'rows'        => [
 						'component' => 'Input',
 						'props'     => [
@@ -425,19 +425,19 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'image_select' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'options', 'std', 'multiple' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'std', 'multiple' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'color' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'oembed' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'slider' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std' ), [
 					'prefix' => [
 						'component' => 'Input',
 						'props'     => [
@@ -463,7 +463,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'wysiwyg' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std' ), [
 					'raw'     => [
 						'component' => 'Checkbox',
 						'props'     => [
@@ -481,11 +481,11 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'autocomplete' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'options', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'options', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'fieldset_text' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc' ), [
 					'options' => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -497,7 +497,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'map' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc' ), [
 					'std'  => [
 						'component' => 'Input',
 						'props'     => [
@@ -532,7 +532,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'group' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'heading' => [
@@ -543,7 +543,7 @@ class Fields {
 				'general'  => compact( 'before', 'after' ),
 			],
 			'date' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -555,7 +555,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'datetime' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'size', 'inline', 'timestamp' ), [
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -567,7 +567,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'time' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'size' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'size' ), [
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -579,7 +579,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'post' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc' ), [
 					'post_type'  => [
 						'component' => 'Select',
 						'props'     => [
@@ -610,7 +610,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'taxonomy' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -623,7 +623,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'taxonomy_advanced' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -636,7 +636,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'user' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'field_type', 'placeholder' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'field_type', 'placeholder' ), [
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -649,15 +649,15 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'file' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'file_input' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'file_advanced' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc' ), [
+				'general'  => array_merge( compact( 'name', 'id', 'desc' ), [
 					'mime_type' => [
 						'component' => 'Input',
 						'props'     => [
@@ -669,15 +669,15 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'image_advanced' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc' ), $upload_settings, $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc' ), $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'image' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'video' => [
-				'general'  => array_merge( compact( 'id', 'name', 'desc' ), $upload_settings, $clone_settings ),
+				'general'  => array_merge( compact( 'name', 'id', 'desc' ), $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			]
 		];
