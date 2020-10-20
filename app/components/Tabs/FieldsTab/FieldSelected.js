@@ -25,6 +25,7 @@ const FieldSelected = ( props ) => {
 					copyItem={ props.copyItem }
 					removeItem={ props.removeItem }
 					toggleSettings={ toggleSettings }
+					indexVal={ props.indexVal }
 				/>
 				<div className="og-item__body og-collapsible__body">
 					<Content type={ type } index={ index } data={ props.data.general } />

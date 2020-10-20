@@ -11,7 +11,7 @@ const { __ } = wp.i18n;
 const Group = (props) => {
 	const { connectDragSource } = props;
 
-	const type = props.data.general.type;
+	const type = props.type;
 	const index = props.id;
 
 	const [expanded, setExpanded] = useState(false);
