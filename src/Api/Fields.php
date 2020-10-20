@@ -26,8 +26,8 @@ class Fields {
 	public function get_field_types() {
 		return [
 			'Basic' => [
-				'button' => 'Button',
-				// button_group
+				'button'          => 'Button',
+				'button_group'    => 'Button Group',
 				'checkbox'        => 'Checkbox',
 				'checkbox_list'   => 'Checkbox List',
 				'email'           => 'Email',
@@ -44,7 +44,7 @@ class Fields {
 			],
 			'Advanced' => [
 				'autocomplete' => 'Autocomplete',
-				// background
+				'background'   => 'Background',
 				'color' => 'Color Picker',
 				// custom_html
 				'date'          => 'Date',
@@ -119,13 +119,15 @@ class Fields {
 		$label_description = [
 			'component' => 'Input',
 			'props'     => [
-				'label' => __( 'Label description', 'meta-box-builder' ),
+				'label'   => __( 'Label description', 'meta-box-builder' ),
+				'tooltip' => __( 'Display below the field label', 'meta-box-builder' ),
 			],
 		];
 		$desc = [
 			'component' => 'Input',
 			'props'     => [
-				'label' => __( 'Input description', 'meta-box-builder' ),
+				'label'   => __( 'Input description', 'meta-box-builder' ),
+				'tooltip' => __( 'Display below the field input', 'meta-box-builder' ),
 			],
 		];
 		$size = [
@@ -215,7 +217,7 @@ class Fields {
 			'component' => 'Textarea',
 			'props'     => [
 				'label'   => __( 'Choices', 'meta-box-builder' ),
-				'tooltip' => __( "Enter each choice on a line. For more control, you may specify both a value and label like 'red: Red' (without quotes)", 'meta-box-builder' ),
+				'tooltip' => __( "Enter each choice on a line. For more control, you may specify both value and label like 'red: Red' (without quotes)", 'meta-box-builder' ),
 			],
 		];
 		$field_type = [
@@ -290,6 +292,24 @@ class Fields {
 				'className' => 'clone-setting',
 			],
 		];
+		$disabled = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label' => __( 'Disabled', 'meta-box-builder' ),
+			],
+		];
+		$required = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label' => __( 'Required', 'meta-box-builder' ),
+			],
+		];
+		$readonly = [
+			'component' => 'Checkbox',
+			'props'     => [
+				'label' => __( 'Read-only', 'meta-box-builder' ),
+			],
+		];
 		$upload_settings = compact( 'max_file_uploads', 'max_status', 'force_delete' );
 		$clone_settings = compact( 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button' );
 
@@ -345,11 +365,48 @@ class Fields {
 				'tooltip' => __( 'Use this to add custom settings for the field. The custom settings will overwrite existing settings if they have the same key.', 'meta-box-builder' ),
 			],
 		];
+		$general = compact( 'name', 'id', 'label_description', 'desc' );
 		$advanced = compact( 'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' );
 
 		return [
 			'autocomplete' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'size' ), $clone_settings ),
+				'general'  => array_merge( $general, compact( 'options', 'size' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'background' => [
+				'general'  => array_merge( $general, $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'button' => [
+				'general' => array_merge( $general, [
+					'std'  => [
+						'component' => 'Input',
+						'props'     => [
+							'label' => __( 'Button text', 'meta-box-builder' ),
+						],
+					],
+					'disabled' => $disabled,
+				] ),
+				'advanced' => $advanced,
+			],
+			'button_group' => [
+				'general'  => array_merge( $general, [
+					'options' => [
+						'component' => 'Textarea',
+						'props'     => [
+							'label'   => __( 'Buttons', 'meta-box-builder' ),
+							'tooltip' => __( "Enter each button text on a line. For more control, you may specify both value and label like 'bold: B' (without quotes)", 'meta-box-builder' ),
+						],
+					],
+					'std'    => $std,
+					'inline' => [
+						'component' => 'Checkbox',
+						'props'     => [
+							'label' => __( 'Display buttons horizontally', 'meta-box-builder' ),
+						],
+						'default' => true,
+					],
+				], compact( 'multiple', 'required' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'text' => [
@@ -398,17 +455,6 @@ class Fields {
 			],
 			'checkbox_list' => [
 				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'button' => [
-				'general' => array_merge( compact( 'name', 'id', 'desc' ), [
-					'std'  => [
-						'component' => 'Input',
-						'props'     => [
-							'label' => __( 'Button text', 'meta-box-builder' ),
-						],
-					],
-				] ),
 				'advanced' => $advanced,
 			],
 			'password' => [
