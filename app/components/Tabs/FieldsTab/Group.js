@@ -39,10 +39,10 @@ const Group = (props) => {
 						<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 					</TabList>
 					<TabPanel>
-						<Content type={ type } index={ index } data={ props.data.general } />
+						<Content index={ index } data={ props.data.general } />
 					</TabPanel>
 					<TabPanel>
-						<Content type={ type } index={ index } data={ props.data.advanced } />
+						<Content index={ index } data={ props.data.advanced } />
 					</TabPanel>
 				</Tabs>
 			</div>

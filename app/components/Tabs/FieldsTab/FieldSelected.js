@@ -28,7 +28,7 @@ const FieldSelected = ( props ) => {
 					indexVal={ props.indexVal }
 				/>
 				<div className="og-item__body og-collapsible__body">
-					<Content type={ type } index={ index } data={ props.data.general } />
+					<Content index={ index } data={ props.data.general } />
 				</div>
 			</div>
 		);
@@ -55,10 +55,10 @@ const FieldSelected = ( props ) => {
 						<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 					</TabList>
 					<TabPanel>
-						<Content type={ type } index={ index } data={ props.data.general } />
+						<Content index={ index } data={ props.data.general } />
 					</TabPanel>
 					<TabPanel>
-						<Content type={ type } index={ index } data={ props.data.advanced } />
+						<Content index={ index } data={ props.data.advanced } />
 					</TabPanel>
 				</Tabs>
 			</div>
