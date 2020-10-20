@@ -75,7 +75,7 @@ class Fields {
 				'file_input'     => 'File Input',
 				'image'          => 'Image',
 				'image_advanced' => 'Image Advanced',
-				// image_upload
+				'image_upload'   => 'Image Upload',
 				// single_image
 				'video' => 'Video',
 			],
@@ -330,6 +330,39 @@ class Fields {
 		$language_names = explode( ',', $language_names );
 		$languages      = array_combine( $language_codes, $language_names );
 
+		$max_file_size = [
+			'component' => 'Input',
+			'props'     => [
+				'label'   => __( 'Maximum file size', 'meta-box-builder' ),
+				'tooltip' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
+			],
+		];
+
+		$image_sizes = [];
+		$wp_image_sizes = get_intermediate_image_sizes();
+		foreach ( $wp_image_sizes as $size_name ) {
+			$image_sizes[ $size_name ] = ucwords( str_replace( ['_', '-'], ' ', $size_name ) );
+		}
+		$image_size = [
+			'component' => 'Select',
+			'props'     => [
+				'label'   => __( 'Image size', 'meta-box-builder' ),
+				'tooltip' => __( 'Image size that displays in the edit page, used to make sure images are not blurry. It\'s not meant to display images with the exact width and height.', 'meta-box-builder' ),
+				'options' => $image_sizes,
+			],
+		];
+
+		$add_to = [
+			'component' => 'Select',
+			'props'     => [
+				'label' => __( 'New image placement', 'meta-box-builder' ),
+				'options' => [
+					'beginning' => __( 'Beginning of the list', 'meta-box-builder' ),
+					'end'       => __( 'End of the list', 'meta-box-builder' ),
+				],
+			],
+		];
+
 		$upload_settings = compact( 'max_file_uploads', 'max_status', 'force_delete' );
 		$clone_settings = compact( 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button' );
 
@@ -580,13 +613,7 @@ class Fields {
 							'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload.', 'meta-box-builder' ),
 						],
 					],
-					'max_file_size' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'Maximum file size', 'meta-box-builder' ),
-							'tooltip' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
-						],
-					],
+					'max_file_size' => $max_file_size,
 				], $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -638,6 +665,22 @@ class Fields {
 			],
 			'hidden' => [
 				'general'  => compact( 'id', 'std' ),
+				'advanced' => $advanced,
+			],
+			'image' => [
+				'general'  => array_merge( $general, compact( 'max_file_uploads', 'force_delete', 'upload_dir', 'required' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'image_advanced' => [
+				'general'  => array_merge( $general, $upload_settings, compact( 'image_size', 'add_to' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'image_select' => [
+				'general'  => array_merge( $general, compact( 'options', 'std', 'multiple', 'required' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'image_upload' => [
+				'general'  => array_merge( $general, compact( 'max_file_size', 'image_size', 'add_to' ), $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'text' => [
@@ -714,10 +757,6 @@ class Fields {
 						],
 					],
 				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'image_select' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'multiple' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'oembed' => [
@@ -852,14 +891,6 @@ class Fields {
 						],
 					],
 				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'image_advanced' => [
-				'general'  => array_merge( $general, $upload_settings, $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'image' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'max_file_uploads', 'force_delete' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'video' => [
