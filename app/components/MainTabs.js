@@ -1,12 +1,13 @@
-import { useForm, FormProvider } from 'react-hook-form';
-import SettingsTab from './Tabs/SettingsTab';
-import FieldsTab from './Tabs/FieldsTab';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { actions, formatParams } from '../context/GeneratorContext';
-import Result from './Result';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { FormProvider, useForm } from 'react-hook-form';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { actions as commonDataActions } from '../context/CommonData/CommonDataContext';
+import { actions, formatParams } from '../context/Generator/GeneratorContext';
 import { parseFields } from '../utility/functions';
+import Result from './Result';
+import FieldsTab from './Tabs/FieldsTab';
+import SettingsTab from './Tabs/SettingsTab';
 
 const { useEffect } = wp.element;
 const { __ } = wp.i18n;
@@ -32,6 +33,7 @@ const MainTabs = () => {
 	};
 
 	useEffect( () => {
+		commonDataActions.getMBFields();
 		document.querySelector( '#publish' ).addEventListener( 'click', () => {
 			document.getElementById( 'btn-on-publish' ).click();
 		} );

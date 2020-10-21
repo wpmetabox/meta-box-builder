@@ -1,6 +1,6 @@
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Clipboard from 'react-clipboard.js';
-import { Context } from '../context/GeneratorContext';
+import { Context } from '../context/Generator/GeneratorContext';
 const { useState, useContext } = wp.element;
 const { __ } = wp.i18n;
 

@@ -1,0 +1,1 @@
+export const GET_MB_FIELDS = 'GET_MB_FIELDS'

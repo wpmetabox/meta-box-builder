@@ -1,0 +1,26 @@
+{
+    "javascript.preferences.importModuleSpecifier": "relative",
+	"[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features",
+        "editor.showUnused": true
+    },
+    "[javascriptreact]": {
+        "editor.showUnused": true
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true,
+    },
+    "javascript.suggest.autoImports": true,
+    "javascript.suggestionActions.enabled": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+	"javascript.format.semicolons": "insert",
+	"javascript.format.insertSpaceAfterCommaDelimiter": true,
+	"javascript.format.insertSpaceBeforeAndAfterBinaryOperators": true,
+	"javascript.format.insertSpaceAfterKeywordsInControlFlowStatements": true,
+	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": true,
+	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
+	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": true,
+	"javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
+}
