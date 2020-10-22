@@ -51,7 +51,7 @@ class Fields {
 				'datetime'      => 'Date Time',
 				'fieldset_text' => 'Fieldset Text',
 				'map'           => 'Google Maps',
-				// key_value
+				'key_value'     => 'Key Value',
 				'image_select' => 'Image Select',
 				'oembed' => 'oEmbed',
 				// osm
@@ -89,335 +89,191 @@ class Fields {
 
 	public function get_fields() {
 		// General tab.
-		$id = [
-			'component' => 'Input',
-			'props'     => [
-				'label'    => __( 'ID', 'meta-box-builder' ),
-				'required' => true,
-				'tooltip'  => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
+		$id = Component::Input( [
+			'label'    => __( 'ID', 'meta-box-builder' ),
+			'required' => true,
+			'tooltip'  => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
+		] );
+		$name = Component::Name( [
+			'label'   => __( 'Label', 'meta-box-builder' ),
+			'tooltip' => __( 'Optional. Leave empty to make the input 100% width.', 'meta-box-builder' ),
+		] );
+		$std = Component::Input( __( 'Default value', 'meta-box-builder' ) );
+		$std_textarea = Component::Textarea( [
+			'label'   => __( 'Default value' ),
+			'tooltip' => __( 'Enter each value on a line', 'meta-box-builder')
+		] );
+		$label_description = Component::Input( [
+			'label'   => __( 'Label description', 'meta-box-builder' ),
+			'tooltip' => __( 'Display below the field label', 'meta-box-builder' ),
+		] );
+		$desc = Component::Input( [
+			'label'   => __( 'Input description', 'meta-box-builder' ),
+			'tooltip' => __( 'Display below the field input', 'meta-box-builder' ),
+		] );
+		$size = Component::Input( [
+			'type'  => 'number',
+			'label' => __( 'Size of the input box', 'meta-box-builder' ),
+		] );
+		$placeholder = Component::Input( __( 'Placeholder', 'meta-box-builder' ) );
+		$max_file_uploads = Component::Input( [
+			'type'    => 'number',
+			'label'   => __( 'Maximum number of files', 'meta-box-builder' ),
+			'tooltip' => __( 'Leave empty for unlimited uploads', 'meta-box-builder' ),
+		] );
+		$force_delete = Component::Checkbox( [
+			'label'   => __( 'Force delete', 'meta-box-builder' ),
+			'tooltip' => __( 'Delete files from the Media Library when deleting them from post meta', 'meta-box-builder' ),
+		] );
+		$upload_dir = Component::Input( [
+			'label'   => __( 'Custom upload folder', 'meta-box-builder' ),
+			'tooltip' => __( 'Relatively from the WordPress root path', 'meta-box-builder' ),
+		] );
+		$max_status = Component::Checkbox( [
+			'label'   => __( 'Show status', 'meta-box-builder' ),
+			'tooltip' => __( 'Display how many files uploaded/remaining', 'meta-box-builder' ),
+		] );
+		$inline_date = Component::Checkbox( [
+			'label'   => __( 'Inline', 'meta-box-builder' ),
+			'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
+		] );
+		$min = Component::Input( [
+			'type'  => 'number',
+			'label' => __( 'Minumum value', 'meta-box-builder' ),
+		] );
+		$max = Component::Input( [
+			'type'  => 'number',
+			'label' => __( 'Maximum value', 'meta-box-builder' ),
+		] );
+		$step = Component::Input( [
+			'label'   => __( 'Step', 'meta-box-builder' ),
+			'tooltip' => __( "Set the increments at which a numeric value can be set. It can be the string 'any' (for floating numbers) or a positive number.", 'meta-box-builder' ),
+		] );
+		$inline = Component::Checkbox( [
+			'label'   => __( 'Inline', 'meta-box-builder' ),
+			'tooltip' => __( 'Display choices on a single line', 'meta-box-builder' ),
+		] );
+		$multiple = Component::Checkbox( [
+			'label'   => __( 'Multiple', 'meta-box-builder' ),
+			'tooltip' => __( 'Allow to select multiple choices', 'meta-box-builder' ),
+		] );
+		$timestamp = Component::Checkbox( __( 'Save value as timestamp', 'meta-box-builder' ) );
+		$options = Component::Textarea( [
+			'label'   => __( 'Choices', 'meta-box-builder' ),
+			'tooltip' => __( "Enter each choice on a line. For more control, you may specify both value and label like 'red: Red' (without quotes)", 'meta-box-builder' ),
+		] );
+		$field_type = Component::Select( [
+			'label'   => __( 'Field type', 'meta-box-builder' ),
+			'options' => [
+				'select'          => __( 'Select', 'meta-box-builder' ),
+				'select_advanced' => __( 'Select advanced', 'meta-box-builder' ),
+				'select_tree'     => __( 'Select tree', 'meta-box-builder' ),
+				'checkbox_list'   => __( 'Checkbox list', 'meta-box-builder' ),
+				'checkbox_tree'   => __( 'Checkbox tree', 'meta-box-builder' ),
+				'radio_list'      => __( 'Radio list', 'meta-box-builder' ),
 			],
-		];
-		$name = [
-			'component' => 'Name',
-			'props'     => [
-				'label'   => __( 'Label', 'meta-box-builder' ),
-				'tooltip' => __( 'Optional. Leave empty to make the input 100% width.', 'meta-box-builder' ),
-			],
-		];
-		$std = [
-			'component' => 'Input',
-			'props'     => [
-				'label' => __( 'Default value', 'meta-box-builder' ),
-			],
-		];
-		$std_textarea = [
-			'component' => 'Textarea',
-			'props'     => [
-				'label' => __( 'Default value' ),
-				'tooltip' => __( 'Enter each value on a line', 'meta-box-builder')
-			],
-		];
-		$label_description = [
-			'component' => 'Input',
-			'props'     => [
-				'label'   => __( 'Label description', 'meta-box-builder' ),
-				'tooltip' => __( 'Display below the field label', 'meta-box-builder' ),
-			],
-		];
-		$desc = [
-			'component' => 'Input',
-			'props'     => [
-				'label'   => __( 'Input description', 'meta-box-builder' ),
-				'tooltip' => __( 'Display below the field input', 'meta-box-builder' ),
-			],
-		];
-		$size = [
-			'component' => 'Input',
-			'props'     => [
-				'type'  => 'number',
-				'label' => __( 'Size of the input box', 'meta-box-builder' ),
-			],
-		];
-		$placeholder = [
-			'component' => 'Input',
-			'props'     => [
-				'label' => __( 'Placeholder', 'meta-box-builder' ),
-			],
-		];
-		$max_file_uploads = [
-			'component' => 'Input',
-			'props'     => [
-				'type'    => 'number',
-				'label'   => __( 'Maximum number of files', 'meta-box-builder' ),
-				'tooltip' => __( 'Leave empty for unlimited uploads', 'meta-box-builder' ),
-			],
-		];
-		$force_delete = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'   => __( 'Force delete', 'meta-box-builder' ),
-				'tooltip' => __( 'Delete files from the Media Library when deleting them from post meta', 'meta-box-builder' ),
-			],
-		];
-		$upload_dir = [
-			'component' => 'Input',
-			'props'     => [
-				'label'   => __( 'Custom upload folder', 'meta-box-builder' ),
-				'tooltip' => __( 'Relatively from the WordPress root path', 'meta-box-builder' ),
-			],
-		];
-		$max_status = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'   => __( 'Show status', 'meta-box-builder' ),
-				'tooltip' => __( 'Display how many files uploaded/remaining', 'meta-box-builder' ),
-			],
-		];
-		$inline_date = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'   => __( 'Inline', 'meta-box-builder' ),
-				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
-			],
-		];
-		$min = [
-			'component' => 'Input',
-			'props'     => [
-				'type'  => 'number',
-				'label' => __( 'Minumum value', 'meta-box-builder' ),
-			],
-		];
-		$max = [
-			'component' => 'Input',
-			'props'     => [
-				'type'  => 'number',
-				'label' => __( 'Maximum value', 'meta-box-builder' ),
-			],
-		];
-		$step = [
-			'component' => 'Input',
-			'props'     => [
-				'label'   => __( 'Step', 'meta-box-builder' ),
-				'tooltip' => __( "Set the increments at which a numeric value can be set. It can be the string 'any' (for floating numbers) or a positive number.", 'meta-box-builder' ),
-			],
-		];
-		$inline = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'   => __( 'Inline', 'meta-box-builder' ),
-				'tooltip' => __( 'Display choices on a single line', 'meta-box-builder' ),
-			],
-		];
-		$multiple = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'   => __( 'Multiple', 'meta-box-builder' ),
-				'tooltip' => __( 'Allow to select multiple choices', 'meta-box-builder' ),
-			],
-		];
-		$timestamp = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label' => __( 'Save value as timestamp', 'meta-box-builder' ),
-			],
-		];
-		$options = [
-			'component' => 'Textarea',
-			'props'     => [
-				'label'   => __( 'Choices', 'meta-box-builder' ),
-				'tooltip' => __( "Enter each choice on a line. For more control, you may specify both value and label like 'red: Red' (without quotes)", 'meta-box-builder' ),
-			],
-		];
-		$field_type = [
-			'component' => 'Select',
-			'props'     => [
-				'label' => __( 'Field type', 'meta-box-builder' ),
-				'options' => [
-					'select'          => __( 'Select', 'meta-box-builder' ),
-					'select_advanced' => __( 'Select advanced', 'meta-box-builder' ),
-					'select_tree'     => __( 'Select tree', 'meta-box-builder' ),
-					'checkbox_list'   => __( 'Checkbox list', 'meta-box-builder' ),
-					'checkbox_tree'   => __( 'Checkbox tree', 'meta-box-builder' ),
-					'radio_list'      => __( 'Radio list', 'meta-box-builder' ),
-				],
-			],
-			'default' => 'select_advanced',
-		];
-		$taxonomy = [
-			'component' => 'Select',
-			'props'     => [
-				'label'    => __( 'Taxonomy', 'meta-box-builder' ),
-				'options'  => $this->get_taxonomies(),
-				'multiple' => true,
-			],
-			'default' => []
-		];
-		$clone = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'   => __( 'Cloneable', 'meta-box-builder' ),
-				'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
-				'setting' => 'clone',
-			],
-		];
-		$sort_clone = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'     => __( 'Sortable', 'meta-box-builder' ),
-				'tooltip'   => __( 'Allows to drag-and-drop reorder clones', 'meta-box-builder' ),
-				'className' => 'clone-setting',
-			],
-		];
-		$clone_default = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'     => __( 'Clone default value', 'meta-box-builder' ),
-				'className' => 'clone-setting',
-			],
-		];
-		$clone_as_multiple = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'     => __( 'Clone as multiple', 'meta-box-builder' ),
-				'tooltip'   =>  __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
-				'className' => 'clone-setting',
-			],
-		];
-		$max_clone = [
-			'component' => 'Input',
-			'props'     => [
-				'type'      => 'number',
-				'label'     => __( 'Maximum number of clones', 'meta-box-builder' ),
-				'tooltip'   => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
-				'className' => 'clone-setting',
-			],
-		];
-		$add_button = [
-			'component' => 'Input',
-			'props'     => [
-				'label'     => __( 'Add more text', 'meta-box-builder' ),
-				'tooltip'   => __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ),
-				'className' => 'clone-setting',
-			],
-		];
-		$disabled = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label' => __( 'Disabled', 'meta-box-builder' ),
-			],
-		];
-		$required = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label' => __( 'Required', 'meta-box-builder' ),
-			],
-		];
-		$readonly = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label' => __( 'Read-only', 'meta-box-builder' ),
-			],
-		];
-		$select_all_none = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label' => __( 'Display "Toggle All" button', 'meta-box-builder' ),
-			],
-		];
+		], 'select_advanced' );
+		$taxonomy = Component::Select( [
+			'label'    => __( 'Taxonomy', 'meta-box-builder' ),
+			'options'  => $this->get_taxonomies(),
+			'multiple' => true,
+		], [] );
+		$clone = Component::Checkbox( [
+			'label'   => __( 'Cloneable', 'meta-box-builder' ),
+			'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
+			'setting' => 'clone',
+		] );
+		$sort_clone = Component::Checkbox( [
+			'label'     => __( 'Sortable', 'meta-box-builder' ),
+			'tooltip'   => __( 'Allows to drag-and-drop reorder clones', 'meta-box-builder' ),
+			'className' => 'clone-setting',
+		] );
+		$clone_default = Component::Checkbox( [
+			'label'     => __( 'Clone default value', 'meta-box-builder' ),
+			'className' => 'clone-setting',
+		] );
+		$clone_as_multiple = Component::Checkbox( [
+			'label'     => __( 'Clone as multiple', 'meta-box-builder' ),
+			'tooltip'   =>  __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
+			'className' => 'clone-setting',
+		] );
+		$max_clone = Component::Input( [
+			'type'      => 'number',
+			'label'     => __( 'Maximum number of clones', 'meta-box-builder' ),
+			'tooltip'   => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
+			'className' => 'clone-setting',
+		] );
+		$add_button = Component::Input( [
+			'label'     => __( 'Add more text', 'meta-box-builder' ),
+			'tooltip'   => __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ),
+			'className' => 'clone-setting',
+		] );
+		$disabled = Component::Checkbox( __( 'Disabled', 'meta-box-builder' ) );
+		$required = Component::Checkbox( __( 'Required', 'meta-box-builder' ) );
+		$readonly = Component::Checkbox( __( 'Read-only', 'meta-box-builder' ) );
+		$select_all_none = Component::Checkbox( __( 'Display "Toggle All" button', 'meta-box-builder' ) );
+
 		$language_codes = 'ar,bg,bn,ca,cs,da,de,el,en,en-AU,en-GB,es,eu,eu,fa,fi,fil,fr,gl,gu,hi,hr,hu,id,it,iw,ja,kn,ko,lt,lv,ml,mr,nl,no,pl,pt,pt-BR,pt-PT,ro,ru,sk,sl,sr,sv,ta,te,th,tl,tr,uk,vi,zh-CN,zh-TW';
 		$language_names = 'Arabic,Bulgarian,Bengali,Catalan,Czech,Danish,German,Greek,English,English (Australian),English (Great Britain),Spanish,Basque,Basque,Farsi,Finnish,Filipino,French,Galician,Gujarati,Hindi,Croatian,Hungarian,Indonesian,Italian,Hebrew,Japanese,Kannada,Korean,Lithuanian,Latvian,Malayalam,Marathi,Dutch,Norwegian,Polish,Portuguese,Portuguese (Brazil),Portuguese (Portugal),Romanian,Russian,Slovak,Slovenian,Serbian,Swedish,Tamil,Telugu,Thai,Tagalog,Turkish,Ukrainian,Vietnamese,Chinese (Simplified),Chinese (Traditional)';
 		$language_codes = explode( ',', $language_codes );
 		$language_names = explode( ',', $language_names );
 		$languages      = array_combine( $language_codes, $language_names );
 
-		$max_file_size = [
-			'component' => 'Input',
-			'props'     => [
-				'label'   => __( 'Maximum file size', 'meta-box-builder' ),
-				'tooltip' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
-			],
-		];
+		$max_file_size = Component::Input( [
+			'label'   => __( 'Maximum file size', 'meta-box-builder' ),
+			'tooltip' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
+		] );
 
 		$image_sizes = [];
 		$wp_image_sizes = get_intermediate_image_sizes();
 		foreach ( $wp_image_sizes as $size_name ) {
 			$image_sizes[ $size_name ] = ucwords( str_replace( ['_', '-'], ' ', $size_name ) );
 		}
-		$image_size = [
-			'component' => 'Select',
-			'props'     => [
-				'label'   => __( 'Image size', 'meta-box-builder' ),
-				'tooltip' => __( 'Image size that displays in the edit page, used to make sure images are not blurry. It\'s not meant to display images with the exact width and height.', 'meta-box-builder' ),
-				'options' => $image_sizes,
-			],
-		];
+		$image_size = Component::Select( [
+			'label'   => __( 'Image size', 'meta-box-builder' ),
+			'tooltip' => __( 'Image size that displays in the edit page, used to make sure images are not blurry. It\'s not meant to display images with the exact width and height.', 'meta-box-builder' ),
+			'options' => $image_sizes,
+		] );
 
-		$add_to = [
-			'component' => 'Select',
-			'props'     => [
-				'label' => __( 'New image placement', 'meta-box-builder' ),
-				'options' => [
-					'beginning' => __( 'Beginning of the list', 'meta-box-builder' ),
-					'end'       => __( 'End of the list', 'meta-box-builder' ),
-				],
+		$add_to = Component::Select( [
+			'label'   => __( 'New image placement', 'meta-box-builder' ),
+			'options' => [
+				'beginning' => __( 'Beginning of the list', 'meta-box-builder' ),
+				'end'       => __( 'End of the list', 'meta-box-builder' ),
 			],
-		];
+		] );
 
 		$upload_settings = compact( 'max_file_uploads', 'max_status', 'force_delete' );
 		$clone_settings = compact( 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button' );
 
 		// Advanced tab.
-		$before = [
-			'component' => 'Textarea',
-			'props'     => [
-				'label'   => __( 'Before', 'meta-box-builder' ),
-				'tooltip' => __( 'Custom HTML displayed before the field output', 'meta-box-builder' ),
-			],
-		];
-		$after = [
-			'component' => 'Textarea',
-			'props'     => [
-				'label'   => __( 'After', 'meta-box-builder' ),
-				'tooltip' => __( 'Custom HTML displayed after the field output', 'meta-box-builder' ),
-			],
-		];
-		$class = [
-			'component' => 'Input',
-			'props'     => [
-				'label' => __( 'Custom CSS class', 'meta-box-builder' ),
-			],
-		];
-		$save_field = [
-			'component' => 'Checkbox',
-			'props'     => [
-				'label'   => __( 'Save field value' ),
-				'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' )
-			],
-			'default' => true,
-		];
-		$sanitize_callback = [
-			'component' => 'Input',
-			'props'     => [
-				'label'   => '<a href="https://docs.metabox.io/sanitization/" target="_blank" rel="noreferrer noopener">' . __( 'Custom sanitize callback', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Enter PHP function name for custom sanitization. Enter "none" to disable sanitization.', 'meta-box-builder' ),
-			],
-		];
-		$attributes = [
-			'component' => 'KeyValue',
-			'props'     => [
-				'link'    => 'https://docs.metabox.io/custom-attributes/',
-				'label'   => __( 'Custom HTML5 attributes', 'meta-box-builder' ),
-				'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
-			],
-		];
-		$custom_settings = [
-			'component' => 'KeyValue',
-			'props'     => [
-				'link'    => 'https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes',
-				'label'   => __( 'Custom settings', 'meta-box-builder' ),
-				'tooltip' => __( 'Use this to add custom settings for the field. The custom settings will overwrite existing settings if they have the same key.', 'meta-box-builder' ),
-			],
-		];
+		$before = Component::Textarea( [
+			'label'   => __( 'Before', 'meta-box-builder' ),
+			'tooltip' => __( 'Custom HTML displayed before the field output', 'meta-box-builder' ),
+		] );
+		$after = Component::Textarea( [
+			'label'   => __( 'After', 'meta-box-builder' ),
+			'tooltip' => __( 'Custom HTML displayed after the field output', 'meta-box-builder' ),
+		] );
+		$class = Component::Input( __( 'Custom CSS class', 'meta-box-builder' ) );
+		$save_field = Component::Checkbox( [
+			'label'   => __( 'Save field value' ),
+			'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' )
+		], true );
+		$sanitize_callback = Component::Input( [
+			'label'   => '<a href="https://docs.metabox.io/sanitization/" target="_blank" rel="noreferrer noopener">' . __( 'Custom sanitize callback', 'meta-box-builder' ) . '</a>',
+			'tooltip' => __( 'Enter PHP function name for custom sanitization. Enter "none" to disable sanitization.', 'meta-box-builder' ),
+		] );
+		$attributes = Component::KeyValue( [
+			'link'    => 'https://docs.metabox.io/custom-attributes/',
+			'label'   => __( 'Custom HTML5 attributes', 'meta-box-builder' ),
+			'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
+		] );
+		$custom_settings = Component::KeyValue( [
+			'link'    => 'https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes',
+			'label'   => __( 'Custom settings', 'meta-box-builder' ),
+			'tooltip' => __( 'Use this to add custom settings for the field. The custom settings will overwrite existing settings if they have the same key.', 'meta-box-builder' ),
+		] );
 		$general = compact( 'name', 'id', 'label_description', 'desc' );
 		$advanced = compact( 'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' );
 
@@ -432,44 +288,25 @@ class Fields {
 			],
 			'button' => [
 				'general' => array_merge( $general, [
-					'std'  => [
-						'component' => 'Input',
-						'props'     => [
-							'label' => __( 'Button text', 'meta-box-builder' ),
-						],
-					],
+					'std'      => Component::Input( __( 'Button text', 'meta-box-builder' ) ),
 					'disabled' => $disabled,
 				] ),
 				'advanced' => $advanced,
 			],
 			'button_group' => [
 				'general'  => array_merge( $general, [
-					'options' => [
-						'component' => 'Textarea',
-						'props'     => [
-							'label'   => __( 'Buttons', 'meta-box-builder' ),
-							'tooltip' => __( "Enter each button text on a line. For more control, you may specify both value and label like 'bold: B' (without quotes)", 'meta-box-builder' ),
-						],
-					],
+					'options' => Component::Textarea( [
+						'label'   => __( 'Buttons', 'meta-box-builder' ),
+						'tooltip' => __( "Enter each button text on a line. For more control, you may specify both value and label like 'bold: B' (without quotes)", 'meta-box-builder' ),
+					] ),
 					'std'    => $std,
-					'inline' => [
-						'component' => 'Checkbox',
-						'props'     => [
-							'label' => __( 'Display buttons horizontally', 'meta-box-builder' ),
-						],
-						'default' => true,
-					],
+					'inline' => Component::Checkbox( __( 'Display buttons horizontally', 'meta-box-builder' ), true ),
 				], compact( 'multiple', 'required' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'checkbox' => [
 				'general' => array_merge( $general, [
-					'std'  => [
-						'component' => 'Checkbox',
-						'props'     => [
-							'label' => __( 'Checked by default', 'meta-box-builder' ),
-						],
-					],
+					'std'  => Component::Checkbox( __( 'Checked by default', 'meta-box-builder' ) ),
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -485,87 +322,59 @@ class Fields {
 			'color' => [
 				'general'  => array_merge( $general, [
 					'std'           => $std,
-					'alpha_channel' => [
-						'component' => 'Checkbox',
-						'props'     => [
-							'label' => __( 'Allow to select opacity', 'meta-box-builder' ),
-						],
-					],
-					'disabled' => $disabled,
-					'readonly' => $readonly,
-					'js_options'  => [
-						'component' => 'KeyValue',
-						'props' => [
-							'link'  => 'https://automattic.github.io/Iris/',
-							'label' => __( 'Custom color picker options', 'meta-box-builder' ),
-						],
-					],
+					'alpha_channel' => Component::Checkbox( __( 'Allow to select opacity', 'meta-box-builder' ) ),
+					'disabled'      => $disabled,
+					'readonly'      => $readonly,
+					'js_options'    => Component::KeyValue( [
+						'link'  => 'https://automattic.github.io/Iris/',
+						'label' => __( 'Custom color picker options', 'meta-box-builder' ),
+					] ),
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'custom_html' => [
 				'general'  => array_merge( $general, [
-					'std' => [
-						'component' => 'Textarea',
-						'props'     => [
-							'label' => __( 'Content (HTML allowed)' ),
-						],
-					],
-					'callback' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'PHP Callback', 'meta-box-builder' ),
-							'tooltip' => __( 'PHP function that is called to show custom HTML content. Will overwrite the content setting above.', 'meta-box-builder' ),
-						],
-					],
+					'std'      => Component::Textarea( __( 'Content (HTML allowed)' ) ),
+					'callback' => Component::Input( [
+						'label'   => __( 'PHP Callback', 'meta-box-builder' ),
+						'tooltip' => __( 'PHP function that is called to show custom HTML content. Will overwrite the content setting above.', 'meta-box-builder' ),
+					] ),
 				] ),
 				'advanced' => $advanced,
 			],
 			'date' => [
 				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), [
-					'save_format' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'Save format', 'meta-box-builder' ),
-							'tooltip' => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
-						],
-					],
+					'save_format' => Component::Input( [
+						'label'   => __( 'Save format', 'meta-box-builder' ),
+						'tooltip' => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
+					] ),
 					'timestamp'  => $timestamp,
 					'inline'     => $inline_date,
 					'required'   => $required,
 					'disabled'   => $disabled,
 					'readonly'   => $readonly,
-					'js_options' => [
-						'component' => 'KeyValue',
-						'props' => [
-							'link'  => 'https://api.jqueryui.com/datepicker/',
-							'label' => __( 'Date picker options', 'meta-box-builder' ),
-						],
-					],
+					'js_options' => Component::KeyValue( [
+						'link'  => 'https://api.jqueryui.com/datepicker/',
+						'label' => __( 'Date picker options', 'meta-box-builder' ),
+					] ),
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'datetime' => [
 				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), [
-					'save_format' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'Save format', 'meta-box-builder' ),
-							'tooltip' => __( 'Custom PHP format for the saved value. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
-						],
-					],
+					'save_format' => Component::Input( [
+						'label'   => __( 'Save format', 'meta-box-builder' ),
+						'tooltip' => __( 'Custom PHP format for the saved value. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
+					] ),
 					'timestamp'  => $timestamp,
 					'inline'     => $inline_date,
 					'required'   => $required,
 					'disabled'   => $disabled,
 					'readonly'   => $readonly,
-					'js_options' => [
-						'component' => 'KeyValue',
-						'props' => [
-							'link'  => 'https://api.jqueryui.com/datepicker/',
-							'label' => __( 'Date picker options', 'meta-box-builder' ),
-						],
-					],
+					'js_options' => Component::KeyValue( [
+						'link'  => 'https://api.jqueryui.com/datepicker/',
+						'label' => __( 'Date picker options', 'meta-box-builder' ),
+					] ),
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -574,13 +383,10 @@ class Fields {
 			],
 			'fieldset_text' => [
 				'general'  => array_merge( $general, [
-					'options' => [
-						'component' => 'KeyValue',
-						'props'     => [
-							'label'            => __( 'Inputs', 'meta-box-builder' ),
-							'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
-						],
-					],
+					'options' => Component::KeyValue( [
+						'label'            => __( 'Inputs', 'meta-box-builder' ),
+						'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
+					] ),
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -590,13 +396,10 @@ class Fields {
 			],
 			'file_advanced' => [
 				'general'  => array_merge( $general, [
-					'mime_type' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'MIME types', 'meta-box-builder' ),
-							'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload.', 'meta-box-builder' ),
-						],
-					],
+					'mime_type' => Component::Input( [
+						'label'   => __( 'MIME types', 'meta-box-builder' ),
+						'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload.', 'meta-box-builder' ),
+					] ),
 				], $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -606,56 +409,38 @@ class Fields {
 			],
 			'file_upload' => [
 				'general'  => array_merge( $general, [
-					'mime_type' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'MIME types', 'meta-box-builder' ),
-							'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload.', 'meta-box-builder' ),
-						],
-					],
+					'mime_type' => Component::Input( [
+						'label'   => __( 'MIME types', 'meta-box-builder' ),
+						'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload.', 'meta-box-builder' ),
+					] ),
 					'max_file_size' => $max_file_size,
 				], $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'map' => [
 				'general'  => array_merge( $general, [
-					'std'  => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'Default location', 'meta-box-builder' ),
-							'tooltip' => __( 'Format: latitude,longitude[, zoom]. Zoom is optional.', 'meta-box-builder' ),
-						],
-					],
-					'api_key'       => [
-						'component' => 'Input',
-						'props'     => [
-							'label'    => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopenner noreferrer">' . __( 'Google Maps API key', 'meta-box-builder' ) . '</a>',
-							'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
-							'required' => true,
-						],
-					],
-					'address_field' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'    => __( 'Address field', 'meta-box-builder' ),
-							'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
-							'required' => true,
-						],
-					],
-					'language' => [
-						'component' => 'Select',
-						'props'     => [
-							'label'   => __( 'Language', 'meta-box-builder' ),
-							'options' => $languages,
-						],
-					],
-					'region'        => [
-						'component' => 'Input',
-						'props'     => [
-							'label'    => '<a href="https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains#Country_code_top-level_domains" target="_blank" rel="noopenner noreferrer">' . __( 'Region code', 'meta-box-builder' ) . '</a>',
-							'tooltip'  => __( 'The region code, specified as a country code top-level domain. Use for autocompleting addresses.' ),
-						],
-					],
+					'std'  => Component::Input( [
+						'label'   => __( 'Default location', 'meta-box-builder' ),
+						'tooltip' => __( 'Format: latitude,longitude[, zoom]. Zoom is optional.', 'meta-box-builder' ),
+					] ),
+					'api_key'       => Component::Input( [
+						'label'    => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopenner noreferrer">' . __( 'Google Maps API key', 'meta-box-builder' ) . '</a>',
+						'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
+						'required' => true,
+					] ),
+					'address_field' => Component::Input( [
+						'label'    => __( 'Address field', 'meta-box-builder' ),
+						'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
+						'required' => true,
+					] ),
+					'language' => Component::Select( [
+						'label'   => __( 'Language', 'meta-box-builder' ),
+						'options' => $languages,
+					] ),
+					'region'        => Component::Input( [
+						'label'    => '<a href="https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains#Country_code_top-level_domains" target="_blank" rel="noopenner noreferrer">' . __( 'Region code', 'meta-box-builder' ) . '</a>',
+						'tooltip'  => __( 'The region code, specified as a country code top-level domain. Use for autocompleting addresses.' ),
+					] ),
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
@@ -681,6 +466,13 @@ class Fields {
 			],
 			'image_upload' => [
 				'general'  => array_merge( $general, compact( 'max_file_size', 'image_size', 'add_to' ), $upload_settings, $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'key_value' => [
+				'general'  => array_merge( $general, compact( 'size' ), [
+					'placeholder_key'   => Component::Input( __( 'Placeholder for key', 'meta-box-builder' ) ),
+					'placeholder_value' => Component::Input( __( 'Placeholder for value', 'meta-box-builder' ) ),
+				] ),
 				'advanced' => $advanced,
 			],
 			'text' => [
