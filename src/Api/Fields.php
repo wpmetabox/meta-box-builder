@@ -62,8 +62,8 @@ class Fields {
 				'wysiwyg' => 'WYSIWYG',
 			],
 			'WordPress' => [
-				'post' => 'Post',
-				// sidebar
+				'post'              => 'Post',
+				'sidebar'           => 'Sidebar',
 				'taxonomy'          => 'Taxonomy',
 				'taxonomy_advanced' => 'Taxonomy Advanced',
 				'user'              => 'User',
@@ -537,6 +537,31 @@ class Fields {
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
+			'radio' => [
+				'general'  => array_merge( $general, compact( 'options', 'std', 'inline', 'required' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'range' => [
+				'general'  => array_merge( $general, compact( 'std', 'min', 'max', 'step', 'required', 'disabled', 'readonly' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'select' => [
+				'general'  => array_merge( $general, compact( 'options', 'std', 'placeholder', 'multiple', 'select_all_none', 'required', 'disabled', 'readonly' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'select_advanced' => [
+				'general'  => array_merge( $general, compact( 'options', 'std', 'placeholder', 'multiple', 'select_all_none', 'required', 'disabled', 'readonly' ), [
+					'js_options'  => Component::KeyValue( [
+						'link'  => 'https://select2.org/configuration',
+						'label' => __( 'Select2 options', 'meta-box-builder' ),
+					] ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'sidebar' => [
+				'general' => array_merge( $general, compact( 'std', 'placeholder', 'field_type', 'required', 'disabled', 'readonly' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
 			'text' => [
 				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ), $clone_settings ),
 				'advanced' => $advanced,
@@ -549,10 +574,6 @@ class Fields {
 				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
-			'range' => [
-				'general'  => array_merge( $general, compact( 'std', 'min', 'max', 'step' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
 			'text_list' => [
 				'general' => array_merge( $general, [
 					'options' => [
@@ -561,26 +582,6 @@ class Fields {
 							'label'            => __( 'Inputs', 'meta-box-builder' ),
 							'keyPlaceholder'   => __( 'Placeholder', 'meta-box-builder' ),
 							'valuePlaceholder' => __( 'Label', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'radio' => [
-				'general'  => array_merge( $general, compact( 'options', 'std', 'inline' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'select' => [
-				'general'  => array_merge( $general, compact( 'options', 'std', 'placeholder', 'multiple' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'select_advanced' => [
-				'general'  => array_merge( $general, compact( 'options', 'std', 'placeholder', 'multiple' ), [
-					'js_options'  => [
-						'component' => 'KeyValue',
-						'props' => [
-							'link'  => 'https://select2.org/configuration',
-							'label' => __( 'Select2 options', 'meta-box-builder' ),
 						],
 					],
 				], $clone_settings ),
