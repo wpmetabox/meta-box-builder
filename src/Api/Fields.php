@@ -47,19 +47,19 @@ class Fields {
 				'background'    => 'Background',
 				'color'         => 'Color Picker',
 				'custom_html'   => 'Custom HTML',
-				'date'          => 'Date',
-				'datetime'      => 'Date Time',
+				'date'          => 'Date Picker',
+				'datetime'      => 'Date Time Picker',
 				'fieldset_text' => 'Fieldset Text',
 				'map'           => 'Google Maps',
+				'slider'        => 'jQuery UI Slider',
 				'key_value'     => 'Key Value',
 				'image_select'  => 'Image Select',
 				'oembed'        => 'oEmbed',
 				'osm'           => 'Open Street Maps',
-				'slider'        => 'Slider',
-				// switch
-				'text_list' => 'Text List',
-				'time' => 'Time',
-				'wysiwyg' => 'WYSIWYG',
+				'switch'        => 'Switch',
+				'text_list'     => 'Text List',
+				'time'          => 'Time Picker',
+				'wysiwyg'       => 'WYSIWYG Editor',
 			],
 			'WordPress' => [
 				'post'              => 'Post',
@@ -76,8 +76,8 @@ class Fields {
 				'image'          => 'Image',
 				'image_advanced' => 'Image Advanced',
 				'image_upload'   => 'Image Upload',
-				// single_image
-				'video' => 'Video',
+				'single_image'   => 'Single Image',
+				'video'          => 'Video',
 			],
 			'Layout' => [
 				'divider' => 'Divider',
@@ -173,8 +173,8 @@ class Fields {
 				'radio_list'      => __( 'Radio list', 'meta-box-builder' ),
 			],
 		], 'select_advanced' );
-		$taxonomy = Component::Select( [
-			'label'    => __( 'Taxonomy', 'meta-box-builder' ),
+		$taxonomy = Component::CheckboxList( [
+			'label'    => __( 'Taxonomies', 'meta-box-builder' ),
 			'options'  => $this->get_taxonomies(),
 			'multiple' => true,
 		], [] );
@@ -562,8 +562,98 @@ class Fields {
 				'general' => array_merge( $general, compact( 'std', 'placeholder', 'field_type', 'required', 'disabled', 'readonly' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
+			'single_image' => [
+				'general' => array_merge( $general, compact( 'force_delete', 'image_size' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'slider' => [
+				'general'  => array_merge( $general, compact( 'std' ), [
+					'prefix' => Component::Input( [
+						'label'   => __( 'Prefix', 'meta-box-builder' ),
+						'tooltip' => __( 'Text displayed before the field value', 'meta-box-builder' ),
+					] ),
+					'suffix' => Component::Input( [
+						'label'   => __( 'Suffix', 'meta-box-builder' ),
+						'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
+					] ),
+					'required' => $required,
+					'js_options' => Component::KeyValue( [
+						'link'  => 'https://api.jqueryui.com/slider',
+						'label' => __( 'jQueryUI slider options', 'meta-box-builder' ),
+					] ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'switch' => [
+				'general' => array_merge( $general, [
+					'style' => Component::Select( [
+						'label'   => __( 'Style', 'meta-box-builder' ),
+						'options' => [
+							'rounded' => __( 'Rounded', 'meta-box-builder' ),
+							'square'  => __( 'Square', 'meta-box-builder' ),
+						],
+					], 'rounded' ),
+					'on_label'  => Component::Input( __( 'Custom ON status label', 'meta-box-builder' ) ),
+					'off_label' => Component::Input( __( 'Custom OFF status label', 'meta-box-builder' ) ),
+					'std'       => Component::Checkbox( __( 'ON by default', 'meta-box-builder' ) ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'taxonomy' => [
+				'general'  => array_merge( $general, compact( 'taxonomy', 'field_type', 'placeholder' ), [
+					'add_new'        => Component::Checkbox( [
+						'label'   => __( 'Add new', 'meta-box-builder' ),
+						'tooltip' => __( 'Allow users to create a new term when submitting the post', 'meta-box-builder' ),
+					] ),
+					'remove_default'  => Component::Checkbox( __( 'Remove default meta box', 'meta-box-builder' ) ),
+					'multiple'        => $multiple,
+					'select_all_none' => $select_all_none,
+					'required'        => $required,
+					'query_args'      => Component::KeyValue( [
+						'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
+						'label'   => __( 'Query args', 'meta-box-builder' ),
+						'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
+					] ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'taxonomy_advanced' => [
+				'general'  => array_merge( $general, compact( 'taxonomy', 'field_type', 'placeholder' ), [
+					'add_new'        => Component::Checkbox( [
+						'label'   => __( 'Add new', 'meta-box-builder' ),
+						'tooltip' => __( 'Allow users to create a new term when submitting the post', 'meta-box-builder' ),
+					] ),
+					'remove_default'  => Component::Checkbox( __( 'Remove default meta box', 'meta-box-builder' ) ),
+					'multiple'        => $multiple,
+					'select_all_none' => $select_all_none,
+					'required'        => $required,
+					'query_args'      => Component::KeyValue( [
+						'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
+						'label'   => __( 'Query args', 'meta-box-builder' ),
+						'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
+					] ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
 			'text' => [
-				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ), $clone_settings ),
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), [
+					'prepend' => Component::Input( __( 'Prepend text', 'meta-box-builder' ) ),
+					'append'  => Component::Input( __( 'Append text', 'meta-box-builder' ) ),
+					'datalist_options' => Component::Textarea( [
+						'label'   => __( 'Predefined values', 'meta-box-builder' ),
+						'tooltip' => __( 'Known as "datalist", these are values that users can select from (they still can enter text if they want). Enter each value on a line.', 'meta-box-builder' ),
+					] ),
+				], compact( 'required', 'disabled', 'readonly' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'text_list' => [
+				'general' => array_merge( $general, [
+					'options' => Component::KeyValue( [
+						'label'            => __( 'Inputs', 'meta-box-builder' ),
+						'keyPlaceholder'   => __( 'Placeholder', 'meta-box-builder' ),
+						'valuePlaceholder' => __( 'Label', 'meta-box-builder' ),
+					] ),
+				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'url' => [
@@ -572,19 +662,6 @@ class Fields {
 			],
 			'email' => [
 				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'text_list' => [
-				'general' => array_merge( $general, [
-					'options' => [
-						'component' => 'KeyValue',
-						'props'     => [
-							'label'            => __( 'Inputs', 'meta-box-builder' ),
-							'keyPlaceholder'   => __( 'Placeholder', 'meta-box-builder' ),
-							'valuePlaceholder' => __( 'Label', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'textarea' => [
@@ -601,32 +678,6 @@ class Fields {
 						'props'     => [
 							'type'  => 'number',
 							'label' => __( 'Columns', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'slider' => [
-				'general'  => array_merge( $general, compact( 'std' ), [
-					'prefix' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'Prefix', 'meta-box-builder' ),
-							'tooltip' => __( 'Text displayed before the field value', 'meta-box-builder' ),
-						],
-					],
-					'suffix' => [
-						'component' => 'Input',
-						'props'     => [
-							'label'   => __( 'Suffix', 'meta-box-builder' ),
-							'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
-						],
-					],
-					'js_options' => [
-						'component' => 'KeyValue',
-						'props' => [
-							'link'  => 'https://api.jqueryui.com/slider',
-							'label' => __( 'jQueryUI slider options', 'meta-box-builder' ),
 						],
 					],
 				], $clone_settings ),
@@ -661,32 +712,6 @@ class Fields {
 						'props' => [
 							'link'  => 'http://trentrichardson.com/examples/timepicker',
 							'label' => __( 'Time picker options', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'taxonomy' => [
-				'general'  => array_merge( $general, compact( 'taxonomy', 'field_type', 'placeholder' ), [
-					'query_args'  => [
-						'component' => 'KeyValue',
-						'props'     => [
-							'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
-							'label'   => __( 'Query args', 'meta-box-builder' ),
-							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'taxonomy_advanced' => [
-				'general'  => array_merge( $general, compact( 'taxonomy', 'field_type', 'placeholder' ), [
-					'query_args'  => [
-						'component' => 'KeyValue',
-						'props'     => [
-							'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
-							'label'   => __( 'Query args', 'meta-box-builder' ),
-							'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 						],
 					],
 				], $clone_settings ),
