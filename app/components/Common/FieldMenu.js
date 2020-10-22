@@ -1,4 +1,4 @@
-import { request } from '../../../utility/functions';
+import { request } from '../../utility/functions';
 const { Dashicon } = wp.components;
 const { useState, useEffect } = wp.element;
 

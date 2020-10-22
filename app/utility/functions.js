@@ -1,4 +1,4 @@
-import { DATA_LIST_TYPE, fields, LIST_OPTION_TYPE } from '../constants/constants';
+import { DATA_LIST_TYPE, LIST_OPTION_TYPE } from '../constants/constants';
 
 export const getLabel = ( name, type ) => {
 	const labels = {

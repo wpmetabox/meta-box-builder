@@ -13,7 +13,6 @@
     },
     "javascript.suggest.autoImports": true,
     "javascript.suggestionActions.enabled": true,
-    "javascript.updateImportsOnFileMove.enabled": "always",
 	"javascript.format.semicolons": "insert",
 	"javascript.format.insertSpaceAfterCommaDelimiter": true,
 	"javascript.format.insertSpaceBeforeAndAfterBinaryOperators": true,

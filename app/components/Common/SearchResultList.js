@@ -1,4 +1,4 @@
-import { request } from '../../../utility/functions';
+import { request } from '../../utility/functions';
 const { useState, useEffect } = wp.element;
 
 const SearchResultList = ( { searchParam, onSelectField } ) => {
