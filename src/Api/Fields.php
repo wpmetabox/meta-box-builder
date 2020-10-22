@@ -52,10 +52,10 @@ class Fields {
 				'fieldset_text' => 'Fieldset Text',
 				'map'           => 'Google Maps',
 				'key_value'     => 'Key Value',
-				'image_select' => 'Image Select',
-				'oembed' => 'oEmbed',
-				// osm
-				'slider' => 'Slider',
+				'image_select'  => 'Image Select',
+				'oembed'        => 'oEmbed',
+				'osm'           => 'Open Street Maps',
+				'slider'        => 'Slider',
 				// switch
 				'text_list' => 'Text List',
 				'time' => 'Time',
@@ -147,7 +147,7 @@ class Fields {
 		] );
 		$step = Component::Input( [
 			'label'   => __( 'Step', 'meta-box-builder' ),
-			'tooltip' => __( "Set the increments at which a numeric value can be set. It can be the string 'any' (for floating numbers) or a positive number.", 'meta-box-builder' ),
+			'tooltip' => __( "Set the increments at which a numeric value can be set. Enter 'any' to accept any number.", 'meta-box-builder' ),
 		] );
 		$inline = Component::Checkbox( [
 			'label'   => __( 'Inline', 'meta-box-builder' ),
@@ -475,24 +475,82 @@ class Fields {
 				] ),
 				'advanced' => $advanced,
 			],
-			'text' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+			'number' => [
+				'general'  => array_merge( $general, compact( 'std', 'min', 'max', 'step', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
-			'number' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'min', 'max', 'step', 'placeholder', 'size' ), $clone_settings ),
+			'oembed' => [
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), [
+					'not_available_string' => Component::Input( [
+						'label'   => __( 'Not available text', 'meta-box-builder' ),
+						'tooltip' => __( 'The text message displayed to users when the embed media is not available. Accepts HTML.', 'meta-box-builder' ),
+					 ] ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'osm' => [
+				'general' => array_merge( $general, [
+					'std' => Component::Input( [
+						'label'   => __( 'Default location', 'meta-box-builder' ),
+						'tooltip' => __( 'Format: latitude,longitude.', 'meta-box-builder' ),
+					] ),
+					'address_field' => Component::Input( [
+						'label'    => __( 'Address field', 'meta-box-builder' ),
+						'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
+						'required' => true,
+					] ),
+					'language' => Component::Select( [
+						'label'   => __( 'Language', 'meta-box-builder' ),
+						'options' => $languages,
+					] ),
+					'region' => Component::Input( [
+						'label'    => '<a href="https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains#Country_code_top-level_domains" target="_blank" rel="noopenner noreferrer">' . __( 'Region code', 'meta-box-builder' ) . '</a>',
+						'tooltip'  => __( 'The region code, specified as a country code top-level domain. Use for autocompleting addresses.' ),
+					] ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'password' => [
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'post' => [
+				'general' => array_merge( $general, [
+					'post_type' => Component::CheckboxList( [
+						'label'   => __( 'Post types', 'meta-box-builder' ),
+						'options' => $this->get_post_types(),
+					], ['post'] ),
+					'field_type'      => $field_type,
+					'multiple'        => $multiple,
+					'select_all_none' => $select_all_none,
+					'parent'          => Component::Checkbox( [
+						'label'   => __( 'Set as parent', 'meta-box-builder' ),
+						'tooltip' => __( 'Set the selected post as the parent for the current being edited post.', 'meta-box-builder' ),
+					] ),
+					'required'    => $required,
+					'placeholder' => $placeholder,
+					'query_args'  => Component::KeyValue( [
+						'link'    => 'https://developer.wordpress.org/reference/classes/wp_query/',
+						'label'   => __( 'Query args', 'meta-box-builder' ),
+						'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
+					] ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'text' => [
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'url' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'email' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'range' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'min', 'max', 'step' ), $clone_settings ),
+				'general'  => array_merge( $general, compact( 'std', 'min', 'max', 'step' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'text_list' => [
@@ -508,20 +566,16 @@ class Fields {
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
-			'password' => [
-				'general'  => compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ),
-				'advanced' => $advanced,
-			],
 			'radio' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'inline' ), $clone_settings ),
+				'general'  => array_merge( $general, compact( 'options', 'std', 'inline' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'select' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'placeholder', 'multiple' ), $clone_settings ),
+				'general'  => array_merge( $general, compact( 'options', 'std', 'placeholder', 'multiple' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'select_advanced' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'options', 'std', 'placeholder', 'multiple' ), [
+				'general'  => array_merge( $general, compact( 'options', 'std', 'placeholder', 'multiple' ), [
 					'js_options'  => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -533,7 +587,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'textarea' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder' ), [
+				'general'  => array_merge( $general, compact( 'std', 'placeholder' ), [
 					'rows'        => [
 						'component' => 'Input',
 						'props'     => [
@@ -551,12 +605,8 @@ class Fields {
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
-			'oembed' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'placeholder', 'size' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
 			'slider' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std' ), [
+				'general'  => array_merge( $general, compact( 'std' ), [
 					'prefix' => [
 						'component' => 'Input',
 						'props'     => [
@@ -582,7 +632,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'wysiwyg' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std' ), [
+				'general'  => array_merge( $general, compact( 'std' ), [
 					'raw'     => [
 						'component' => 'Checkbox',
 						'props'     => [
@@ -604,7 +654,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'time' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'std', 'size' ), [
+				'general'  => array_merge( $general, compact( 'std', 'size' ), [
 					'js_options' => [
 						'component' => 'KeyValue',
 						'props' => [
@@ -615,39 +665,8 @@ class Fields {
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
-			'post' => [
-				'general'  => array_merge( $general, [
-					'post_type'  => [
-						'component' => 'Select',
-						'props'     => [
-							'label'    => __( 'Post types', 'meta-box-builder' ),
-							'options'  => $this->get_post_types(),
-							'multiple' => true,
-						],
-						'default' => [],
-					],
-					'field_type' => $field_type,
-					'parent'     => [
-						'component' => 'Checkbox',
-						'props'     => [
-							'label'   => __( 'Set as parent', 'meta-box-builder' ),
-							'tooltip' => __( 'Set the selected post as the parent for the current being edited post.', 'meta-box-builder' ),
-						],
-					],
-					'placeholder' => $placeholder,
-					'query_args'  => [
-						'component' => 'KeyValue',
-						'props'     => [
-							'link'    => 'https://developer.wordpress.org/reference/classes/wp_query/',
-							'label'   => __( 'Query args', 'meta-box-builder' ),
-							'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
 			'taxonomy' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
+				'general'  => array_merge( $general, compact( 'taxonomy', 'field_type', 'placeholder' ), [
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -660,7 +679,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'taxonomy_advanced' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'taxonomy', 'field_type', 'placeholder' ), [
+				'general'  => array_merge( $general, compact( 'taxonomy', 'field_type', 'placeholder' ), [
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -673,7 +692,7 @@ class Fields {
 				'advanced' => $advanced,
 			],
 			'user' => [
-				'general'  => array_merge( compact( 'name', 'id', 'label_description', 'desc', 'field_type', 'placeholder' ), [
+				'general'  => array_merge( $general, compact( 'field_type', 'placeholder' ), [
 					'query_args'  => [
 						'component' => 'KeyValue',
 						'props'     => [
@@ -700,7 +719,7 @@ class Fields {
 		$post_types = mbb_get_post_types();
 		$options = [];
 		foreach ( $post_types as $post_type ) {
-			$options[ $post_type['slug'] ] = sprintf( '%s (%s)', $post_type['name'], $post_type['slug'] );
+			$options[ $post_type['slug'] ] = sprintf( '%s (<code>%s</code>)', $post_type['name'], $post_type['slug'] );
 		}
 		return $options;
 	}
@@ -709,7 +728,7 @@ class Fields {
 		$taxonomies = mbb_get_taxonomies();
 		$options = [];
 		foreach ( $taxonomies as $taxonomy ) {
-			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
+			$options[ $taxonomy['slug'] ] = sprintf( '%s (<code>%s</code>)', $taxonomy['name'], $taxonomy['slug'] );
 		}
 		return $options;
 	}
