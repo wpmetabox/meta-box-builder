@@ -381,6 +381,10 @@ class Fields {
 			'divider' => [
 				'general'  => compact( 'before', 'after' ),
 			],
+			'email' => [
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ), $clone_settings ),
+				'advanced' => $advanced,
+			],
 			'fieldset_text' => [
 				'general'  => array_merge( $general, [
 					'options' => Component::KeyValue( [
@@ -656,84 +660,92 @@ class Fields {
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
-			'url' => [
-				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'email' => [
-				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size' ), $clone_settings ),
-				'advanced' => $advanced,
-			],
 			'textarea' => [
 				'general'  => array_merge( $general, compact( 'std', 'placeholder' ), [
-					'rows'        => [
-						'component' => 'Input',
-						'props'     => [
-							'type'  => 'number',
-							'label' => __( 'Rows', 'meta-box-builder' ),
-						],
-					],
-					'cols' => [
-						'component' => 'Input',
-						'props'     => [
-							'type'  => 'number',
-							'label' => __( 'Columns', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'wysiwyg' => [
-				'general'  => array_merge( $general, compact( 'std' ), [
-					'raw'     => [
-						'component' => 'Checkbox',
-						'props'     => [
-							'label' => __( 'Save data in the raw format', 'meta-box-builder' ),
-						],
-					],
-					'options' => [
-						'component' => 'KeyValue',
-						'props'     => [
-							'link'  => 'https://developer.wordpress.org/reference/functions/wp_editor/',
-							'label' => __( 'Editor options', 'meta-box-builder' ),
-						],
-					],
-				], $clone_settings ),
-				'advanced' => $advanced,
-			],
-			'group' => [
-				'general'  => array_merge( $general, $clone_settings ),
+					'rows' => Component::Input( [
+						'type'  => 'number',
+						'label' => __( 'Rows', 'meta-box-builder' ),
+					] ),
+					'cols' => Component::Input( [
+						'type'  => 'number',
+						'label' => __( 'Columns', 'meta-box-builder' ),
+					] ),
+				], compact( 'required', 'disabled', 'readonly' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'time' => [
-				'general'  => array_merge( $general, compact( 'std', 'size' ), [
-					'js_options' => [
-						'component' => 'KeyValue',
-						'props' => [
-							'link'  => 'http://trentrichardson.com/examples/timepicker',
-							'label' => __( 'Time picker options', 'meta-box-builder' ),
-						],
-					],
+				'general'  => array_merge( $general, compact( 'std', 'size', 'placeholder' ), [
+					'inline'     => Component::Checkbox( [
+						'label'   => __( 'Inline', 'meta-box-builder' ),
+						'tooltip' => __( 'Display the time picker inline with the input. Do not require to click the input field to trigger the time picker.', 'meta-box-builder' ),
+					] ),
+					'required'   => $required,
+					'disabled'   => $disabled,
+					'readonly'   => $readonly,
+					'js_options' => Component::KeyValue( [
+						'link'  => 'http://trentrichardson.com/examples/timepicker',
+						'label' => __( 'Time picker options', 'meta-box-builder' ),
+					] ),
 				], $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'user' => [
 				'general'  => array_merge( $general, compact( 'field_type', 'placeholder' ), [
-					'query_args'  => [
-						'component' => 'KeyValue',
-						'props'     => [
-							'link'    => 'https://codex.wordpress.org/Function_Reference/get_users',
-							'label'   => __( 'Query args', 'meta-box-builder' ),
-							'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
-						],
-					],
+					'multiple'        => $multiple,
+					'select_all_none' => $select_all_none,
+					'required'        => $required,
+					'query_args'      => Component::KeyValue( [
+						'link'    => 'https://codex.wordpress.org/Function_Reference/get_users',
+						'label'   => __( 'Query args', 'meta-box-builder' ),
+						'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
+					] ),
 				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'url' => [
+				'general'  => array_merge( $general, compact( 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ), $clone_settings ),
 				'advanced' => $advanced,
 			],
 			'video' => [
 				'general'  => array_merge( $general, $upload_settings, $clone_settings ),
 				'advanced' => $advanced,
-			]
+			],
+			'wysiwyg' => [
+				'general'  => array_merge( $general, compact( 'std' ), [
+					'raw'     => Component::Checkbox( __( 'Save data in the raw format', 'meta-box-builder' ) ),
+					'options' => Component::KeyValue( [
+						'link'  => 'https://developer.wordpress.org/reference/functions/wp_editor/',
+						'label' => __( 'Editor options', 'meta-box-builder' ),
+					] ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
+			'group' => [
+				'general'  => array_merge( $general, [
+					'collapsible' => Component::Checkbox( [
+						'label'   => __( 'Collapsible', 'meta-box-builder' ),
+						'setting' => 'collapsible',
+					] ),
+					'default_state' => Component::Select( [
+						'label'   => __( 'Default state', 'meta-box-builder' ),
+						'options' => [
+							'expanded'  => __( 'Expanded', 'meta-box-builder' ),
+							'collapsed' => __( 'Collapsed', 'meta-box-builder' ),
+						],
+						'className' => 'collapsible-setting',
+					], 'expanded' ),
+					'save_state' => Component::Checkbox( [
+						'label'     => __( 'Save state', 'meta-box-builder' ),
+						'className' => 'collapsible-setting',
+					] ),
+					'group_title' => Component::Input( [
+						'label'     => __( 'Group title', 'meta-box-builder' ),
+						'tooltip'   => __( 'Use {field_id} for a sub-field value and {#} for the clone index (if the group is cloneable)', 'meta-box-builder' ),
+						'className' => 'collapsible-setting',
+					] ),
+				], $clone_settings ),
+				'advanced' => $advanced,
+			],
 		];
 	}
 
