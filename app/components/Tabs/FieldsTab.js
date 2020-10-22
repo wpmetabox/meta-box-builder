@@ -41,7 +41,7 @@ const FieldsTab = ( props ) => {
           <div className="og-sidebar__title">{ __( 'Add a field', 'meta-box-builder' ) }</div>
           <button className="og-sidebar__close" onClick={ toggleInserter }>×</button>
         </header>
-        <div className="og-sidebar__search">
+        <div className="og-sidebar__item og-sidebar__search">
           <input type="search" placeholder={ __( 'Enter field type here', 'meta-box-builder' ) } onChange={ e => setSearchParam( e.target.value ) } />
         </div>
         {
