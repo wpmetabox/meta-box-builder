@@ -199,6 +199,7 @@
 		max-height: 0;
 		transition: all 0.2s ease;
 		padding: 0 12px;
+		margin-bottom: 0;
 
 		> .og-input {
 			border: var(--border-lighter);
@@ -221,6 +222,7 @@
 	}
 	&.og-collapsible--expanded .og-group-fields {
 		max-height: 999999px;
+		padding-bottom: 12px;
 	}
 }
 
