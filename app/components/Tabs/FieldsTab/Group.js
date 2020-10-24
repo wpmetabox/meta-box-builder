@@ -3,7 +3,7 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { Context } from '../../../context/CommonData/CommonDataContext';
 import { addGroupChild, uniqid } from '../../../utility/functions';
 import { cardSource, collect } from '../../../utility/updateSelectedList';
-import { SideMenu } from '../../Common/SideMenu';
+import { Inserter } from '../../Common/Inserter';
 import Content from './Content';
 import Header from './Header';
 import Insert from './Insert';
@@ -79,7 +79,7 @@ const Group = ( props ) => {
 						</div> )
 					}
 					<Insert index={ props.items.length } parent={ id } />
-					<SideMenu addItem={ addItem } />
+					<Inserter addItem={ addItem } />
 				</div>
 			</div>
 		</div>
