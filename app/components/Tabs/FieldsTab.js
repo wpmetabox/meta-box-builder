@@ -27,6 +27,7 @@ const FieldsTab = ( props ) => {
   };
 
   const changeSelectedList = useCallback( params => setSelectedList( params ), [] );
+  console.log( '@@@@', selectedList );
 
   return (
     <>

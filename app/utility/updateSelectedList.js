@@ -114,8 +114,7 @@ const createCopyItem = ( item ) => {
   let result = { ...item };
   const newId = `${ item.type }_${ uniqid() }`;
   result.id = newId;
-  result.data.general.id = newId;
-  result.data.general.name += ' Copy';
+  result.data.general.name.default += ' Copy';
 
   return result;
 };

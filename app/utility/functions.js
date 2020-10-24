@@ -12,32 +12,32 @@ export const getElementControlName = ( name, type ) => {
 	return toTitleCase( name );
 };
 
-export const getDataCopiedItem = ( type, index ) => {
+export const getDataCopiedItem = ( type, id ) => {
 	const fields = JSON.parse( localStorage.getItem( 'MbFields' ) );
 	let data = fields[ type ];
 	let result = {};
-	result.general = getGeneralData( data.general, index );
-	result.advanced = getAdvancedData( data.advanced, index );
+	result.general = getGeneralData( data.general, id );
+	result.advanced = getAdvancedData( data.advanced, id );
 
 	return result;
 };
 
-const getGeneralData = ( generalItems, index ) => {
+const getGeneralData = ( generalItems, id ) => {
 	let result = {};
 	const multipleInputTypes = [ 'fieldset_text', 'text_list' ];
 
 	Object.keys( generalItems ).forEach( item => {
-		const elementName = `fields-${ index }-${ item }`;
+		const elementName = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementName );
-		value = value ? value : generalItems[ item ];
-		result[ item ] = value;
+		value = value || generalItems[ item ].default;
+		result[ item ] = { ...generalItems[ item ], default: value };
 
 		if ( item === 'options' && multipleInputTypes.includes( item ) ) {
 			let options = [];
 			for ( let i = 0; i < value; i++ ) {
 				options[ i ] = {};
-				options[ i ][ 'key' ] = getElementValue( `fields-${ index }-${ item }-${ i }-key` );
-				options[ i ][ 'label' ] = getElementValue( `fields-${ index }-${ item }-${ i }-label` );
+				options[ i ][ 'key' ] = getElementValue( `fields-${ id }-${ item }-${ i }-key` );
+				options[ i ][ 'label' ] = getElementValue( `fields-${ id }-${ item }-${ i }-label` );
 			}
 			result[ item ] = options;
 		}
@@ -46,33 +46,33 @@ const getGeneralData = ( generalItems, index ) => {
 	return result;
 };
 
-const getAdvancedData = ( advancedItems, index ) => {
+const getAdvancedData = ( advancedItems, id ) => {
 	let result = {};
 	Object.keys( advancedItems ).forEach( item => {
-		const elementName = `fields-${ index }-${ item }`;
+		const elementName = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementName );
-		value = value ? value : advancedItems[ item ];
+		value = value || advancedItems[ item ];
 		if ( LIST_OPTION_TYPE.includes( item ) ) {
 			let optionalList = [];
 			for ( let i = 0; i < value; i++ ) {
 				optionalList[ i ] = {};
-				optionalList[ i ][ 'key' ] = getElementValue( `fields-${ index }-${ item }-${ i }-key` );
-				optionalList[ i ][ 'label' ] = getElementValue( `fields-${ index }-${ item }-${ i }-label` );
+				optionalList[ i ][ 'key' ] = getElementValue( `fields-${ id }-${ item }-${ i }-key` );
+				optionalList[ i ][ 'label' ] = getElementValue( `fields-${ id }-${ item }-${ i }-label` );
 			}
 
-			result[ item ] = optionalList;
+			result[ item ] = { ...advancedItems[ item ], optionalList };
 		} else if ( DATA_LIST_TYPE.includes( item ) ) {
 			let dataList = [];
-			let idDataList = document.getElementsByName( `fields-${ index }-datalist-id` )[ 0 ]?.value;
-			const listValue = document.getElementsByName( `fields-${ index }-datalist-options-0` );
+			let idDataList = document.getElementsByName( `fields-${ id }-datalist-id` )[ 0 ]?.value;
+			const listValue = document.getElementsByName( `fields-${ id }-datalist-options-0` );
 
 			listValue.forEach( input => {
 				dataList.push( input.value );
 			} );
 
-			result[ item ] = { id: idDataList, items: dataList };
+			result[ item ] = { ...advancedItems[ item ], id: idDataList, items: dataList };
 		} else {
-			result[ item ] = value;
+			result[ item ] = { ...advancedItems[ item ], default: value };
 		}
 	} );
 

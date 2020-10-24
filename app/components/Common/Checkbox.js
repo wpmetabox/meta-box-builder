@@ -1,12 +1,12 @@
 import { useFormContext } from "react-hook-form";
-import DivRow from './DivRow';
+import DivRow from "./DivRow";
 
 const { useState } = wp.element;
 
 const Checkbox = ( { name, label, type, className, defaultValue, ...rest } ) => {
 	const [ value, setValue ] = useState( defaultValue );
 	const toggleSettings = e => {
-		if ( ! rest.setting ) {
+		if ( !rest.setting ) {
 			return;
 		}
 

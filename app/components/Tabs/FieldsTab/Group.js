@@ -76,7 +76,6 @@ const Group = ( props ) => {
 							/>
 						</div> )
 					}
-					<Insert index={ props.items.length } parent={ id } />
 					<Inserter addItem={ addItem } />
 				</div>
 			</div>
