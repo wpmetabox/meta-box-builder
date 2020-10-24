@@ -34,7 +34,7 @@ export const formatParams = ( params ) => {
 			result.fields.push( formatGroupField( item, params ) );
 		}
 	} );
-
+	console.log( 'sssaaa', result );
 	return result;
 };
 
@@ -51,7 +51,8 @@ const formatField = ( id, params ) => {
 	let result = {};
 	for ( const key in params ) {
 		if ( isOwnField( key, id ) ) {
-			const keys = key.split( '-' );
+			let keys = key.split( '-' );
+			keys.splice( 0, 2 );
 			keys.reduce( ( result, value, index ) => {
 				if ( !result[ value ] ) {
 					result[ value ] = {};
