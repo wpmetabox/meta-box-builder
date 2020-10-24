@@ -124,12 +124,12 @@ export const addGroupChild = ( groupId, childList ) => {
 };
 
 const findNode = ( id, node, childList ) => {
-	if ( node.items ) {
-		const isExactedFiled = node.items.filter( item => item.id === id );
-		if ( isExactedFiled ) {
-			isExactedFiled[ 0 ].items = childList;
+	if ( node.items.length > 0 ) {
+		const exactedFiled = node.items.filter( item => item.id === id );
+		if ( exactedFiled ) {
+			exactedFiled[ 0 ].items = childList;
 		} else {
-			node.items.map( ( item ) => findNode( item ) );
+			node.items.map( ( item ) => findNode( id, item, childList ) );
 		}
 	}
 

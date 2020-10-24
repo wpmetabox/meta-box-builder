@@ -8,8 +8,7 @@ const { useContext, useState, useEffect, useCallback, memo, Fragment } = wp.elem
 const { __ } = wp.i18n;
 
 const FieldsTab = ( props ) => {
-  const { state } = useContext( Context );
-  const { MbFields } = state;
+  const { MbFields } = useContext( Context );
 
   const initialFields = props.fields || [];
   const [ selectedList, setSelectedList ] = useState( { id: 'root', items: initialFields } );
@@ -38,7 +37,7 @@ const FieldsTab = ( props ) => {
             <Fragment key={ item.id + index }>
               <Node
                 id={ item.id }
-                item={ item }
+                data={ item }
                 parent="root"
                 index={ index }
                 changeSelectedList={ changeSelectedList }

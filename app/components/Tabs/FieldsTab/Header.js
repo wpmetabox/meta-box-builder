@@ -5,18 +5,18 @@ import { copyItem, deleteItem } from '../../../utility/updateSelectedList';
 const Header = props => {
 	const duplicate = e => {
 		e.stopPropagation();
-		const newSelectedList = copyItem( props.index, props.parent, props.indexVal );
+		const newSelectedList = copyItem( props.id, props.parent, props.index );
 		props.changeSelectedList( newSelectedList );
 	};
 	const remove = e => {
 		e.stopPropagation();
-		const newSelectedList = deleteItem( props.index, props.parent, props.indexVal );
+		const newSelectedList = deleteItem( props.id, props.parent, props.index );
 		props.changeSelectedList( newSelectedList );
 	};
 
 	return (
 		<div className="og-item__header og-collapsible__header" onClick={ props.toggleSettings }>
-			<div className="og-item__title" id={ `og-item__title__${ props.index }` }>{ __( '(No label)', 'meta-box-builder' ) }</div>
+			<div className="og-item__title" id={ `og-item__title__${ props.id }` }>{ __( '(No label)', 'meta-box-builder' ) }</div>
 			<div className="og-item__actions">
 				<span className="og-item__type">{ props.type }</span>
 				<span className="og-item__action og-item__action--remove" title="Remove" onClick={ remove }><Dashicon icon="trash" /></span>

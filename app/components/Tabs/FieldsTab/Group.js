@@ -16,11 +16,9 @@ const { __ } = wp.i18n;
 
 const Group = ( props ) => {
 	const { connectDragSource } = props;
-	const { state } = useContext( Context );
-	const { MbFields } = state;
+	const { MbFields } = useContext( Context );
 
 	const type = props.type;
-	const index = props.id;
 
 	const [ expanded, setExpanded ] = useState( false );
 	const [ childs, setChilds ] = useState( props.items );
@@ -34,23 +32,23 @@ const Group = ( props ) => {
 		};
 		const newChildList = [ ...childs, { id, type, data, items: [] } ];
 		setChilds( newChildList );
-		addGroupChild( index, newChildList );
+		addGroupChild( props.id, newChildList );
 	};
 
 	return connectDragSource(
 		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 			<div className="d" id="list">
 
-				<input ref={ props.register } type="hidden" name={ `fields-${ index }-type` } defaultValue={ type } />
+				<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
 				<Header
 					type={ type }
-					index={ index }
+					id={ props.id }
 					copyItem={ props.copyItem }
 					removeItem={ props.removeItem }
 					toggleSettings={ toggleSettings }
 					changeSelectedList={ props.changeSelectedList }
 					parent={ props.parent }
-					indexVal={ props.indexVal }
+					index={ props.index }
 				/>
 				<Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
 					<TabList>
@@ -58,21 +56,21 @@ const Group = ( props ) => {
 						<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 					</TabList>
 					<TabPanel>
-						<Content index={ index } data={ props.data.general } />
+						<Content fieldId={ props.id } data={ props.data.general } />
 					</TabPanel>
 					<TabPanel>
-						<Content index={ index } data={ props.data.advanced } />
+						<Content fieldId={ props.id } data={ props.data.advanced } />
 					</TabPanel>
 				</Tabs>
 				<div className="og-group-fields">
 					{
 						childs.map( ( item, i ) => <div key={ item.id }>
-							<Insert parent={ id } index={ i } />
+							<Insert parent={ props.id } index={ i } />
 							<Node
 								key={ item.id }
 								id={ item.id }
-								item={ item }
-								parent={ id }
+								data={ item }
+								parent={ props.id }
 								index={ i }
 								changeSelectedList={ props.changeSelectedList }
 							/>

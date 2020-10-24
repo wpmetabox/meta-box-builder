@@ -11,24 +11,25 @@ const { __ } = wp.i18n;
 const FieldSelected = ( props ) => {
 	const { connectDragSource } = props;
 	const type = props.type;
-	const index = props.id;
-	const [ expanded, setExpanded ] = useState( true );
+	const data = props.data;
+
+	const [ expanded, setExpanded ] = useState( false );
 	const toggleSettings = () => setExpanded( !expanded );
 
 	if ( 'divider' === type ) {
 		return connectDragSource(
 			<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-				<input ref={ props.register } type="hidden" name={ `fields-${ index }-type` } defaultValue={ type } />
+				<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
 				<Header
 					type={ type }
-					index={ index }
+					id={ props.id }
 					copyItem={ props.copyItem }
 					removeItem={ props.removeItem }
 					toggleSettings={ toggleSettings }
-					indexVal={ props.indexVal }
+					index={ props.index }
 				/>
 				<div className="og-item__body og-collapsible__body">
-					<Content index={ index } data={ props.data.general } />
+					<Content index={ props.id } data={ data.general } />
 				</div>
 			</div>
 		);
@@ -37,16 +38,16 @@ const FieldSelected = ( props ) => {
 	return connectDragSource(
 		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 			<div className="d" id="leaf">
-				<input ref={ props.register } type="hidden" name={ `fields-${ index }-type` } defaultValue={ type } />
+				<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
 				<Header
 					type={ type }
-					index={ index }
+					id={ props.id }
 					copyItem={ props.copyItem }
 					removeItem={ props.removeItem }
 					toggleSettings={ toggleSettings }
 					changeSelectedList={ props.changeSelectedList }
 					parent={ props.parent }
-					indexVal={ props.indexVal }
+					index={ props.index }
 				/>
 				<Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
 					<TabList>
@@ -54,10 +55,10 @@ const FieldSelected = ( props ) => {
 						<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 					</TabList>
 					<TabPanel>
-						<Content index={ index } data={ props.data.general } />
+						<Content fieldId={ props.id } data={ data.general } />
 					</TabPanel>
 					<TabPanel>
-						<Content index={ index } data={ props.data.advanced } />
+						<Content fieldId={ props.id } data={ data.advanced } />
 					</TabPanel>
 				</Tabs>
 			</div>
@@ -65,4 +66,4 @@ const FieldSelected = ( props ) => {
 	);
 };
 
-export default memo( DragSource( Types.CARD, cardSource, collect )( FieldSelected ), ( prevProps, nextProps ) => prevProps.id === nextProps.id );
+export default memo( DragSource( Types.CARD, cardSource, collect )( FieldSelected ), ( prevProps, nextProps ) => prevProps.props.id === nextProps.props.id );

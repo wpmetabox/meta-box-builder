@@ -1,14 +1,14 @@
 const { lazy, memo, Suspense } = wp.element;
 
-const Content = ( { index, data } ) => {
+const Content = ( { fieldId, data } ) => {
 	const getElement = name => {
 		if ( 'type' === name ) {
 			return null;
 		}
 		let Component = lazy( () => import( `../../Common/${ data[ name ].component }` ) );
 		return <Component
-			index={ index }
-			name={ `fields-${ index }-${ name }` }
+			fieldId={ fieldId }
+			name={ `fields-${ fieldId }-${ name }` }
 			defaultValue={ data[ name ].default }
 			{ ...data[ name ].props }
 		/>;
@@ -27,4 +27,4 @@ const Content = ( { index, data } ) => {
 	);
 };
 
-export default memo( Content, ( prevProps, nextProps ) => prevProps.index === nextProps.index );
+export default memo( Content, ( prevProps, nextProps ) => prevProps.fieldId === nextProps.fieldId );

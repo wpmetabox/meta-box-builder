@@ -3,22 +3,24 @@ import Group from './Group';
 const { memo } = wp.element;
 
 const Node = ( props ) => {
-	const { item, changeSelectedList, parent, index } = props;
+	const { id, data, changeSelectedList, parent, index } = props;
 
-	return item.type === 'group'
+	return data.type === 'group'
 		?
 		<Group
-			{ ...item }
+			{ ...data }
+			id={ id }
 			parent={ parent }
-			indexVal={ index }
+			index={ index }
 			changeSelectedList={ changeSelectedList }
 		/>
 		: <FieldSelected
-			{ ...item }
+			{ ...data }
+			id={ id }
 			parent={ parent }
-			indexVal={ index }
+			index={ index }
 			changeSelectedList={ changeSelectedList }
 		/>;
 };
 
-export default memo( Node, ( prevProps, nextProps ) => nextProps.item.type !== 'group' && prevProps.id === nextProps.id );
+export default memo( Node, ( prevProps, nextProps ) => nextProps.data.type !== 'group' && prevProps.id === nextProps.id );

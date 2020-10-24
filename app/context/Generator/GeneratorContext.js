@@ -34,7 +34,7 @@ export const formatParams = ( params ) => {
 			result.fields.push( formatGroupField( item, params ) );
 		}
 	} );
-	console.log( 'sssaaa', result );
+
 	return result;
 };
 
@@ -81,7 +81,6 @@ const formatGroupField = ( item, params, result = {} ) => {
 	// handle children fields
 	if ( childrens ) {
 		result.fields = [];
-		console.log( childrens );
 		childrens.map( children => {
 			if ( isNotGroupField( children.type ) ) {
 				result.fields.push( formatField( children.id, params ) );
