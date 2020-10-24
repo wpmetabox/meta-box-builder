@@ -3,9 +3,6 @@
 	padding: 16px 12px;
 	border-bottom: var(--border-lighter);
 }
-&-group-fields {
-	margin-left: 36px;
-}
 
 &-field {
 	margin-bottom: 16px;
@@ -16,6 +13,7 @@
 		label {
 			display: block;
 		}
+
 		code {
 			background: none;
 			padding: 0;
@@ -99,6 +97,7 @@
 		border: none;
 		margin: 0 0 24px;
 	}
+
 	.react-tabs__tab {
 		height: auto;
 		line-height: 1;
@@ -193,7 +192,38 @@
 	}
 }
 
-// Group
+// Group.
+&-item--group {
+	.og-group-fields {
+		overflow-y: hidden;
+		max-height: 0;
+		transition: all 0.2s ease;
+		padding: 0 12px;
+
+		> .og-input {
+			border: var(--border-lighter);
+		}
+		.og-item__header {
+			padding: 8px 12px;
+		}
+	}
+	.og-group-fields--empty {
+		> .og-input {
+			border: none;
+
+			> .og-inserter {
+				margin: 0;
+			}
+		}
+	}
+	.og-collapsible__body {
+		padding-bottom: 0;
+	}
+	&.og-collapsible--expanded .og-group-fields {
+		max-height: 999999px;
+	}
+}
+
 &-group-drop-area {
 	border: 2px dashed var(--color-light);
 	border-radius: 4px;

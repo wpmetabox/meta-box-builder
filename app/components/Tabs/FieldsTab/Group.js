@@ -21,7 +21,7 @@ const Group = ( props ) => {
 	const type = props.type;
 
 	const [ expanded, setExpanded ] = useState( true );
-	const [ childs, setChilds ] = useState( props.items );
+	const [ children, setChildren ] = useState( props.items );
 
 	const toggleSettings = () => setExpanded( !expanded );
 
@@ -30,8 +30,8 @@ const Group = ( props ) => {
 		const data = {
 			...MbFields[ type ],
 		};
-		const newChildList = [ ...childs, { id, type, data, items: [] } ];
-		setChilds( newChildList );
+		const newChildList = [ ...children, { id, type, data, items: [] } ];
+		setChildren( newChildList );
 		addGroupChild( props.id, newChildList );
 	};
 
@@ -62,21 +62,24 @@ const Group = ( props ) => {
 						<Content fieldId={ props.id } data={ props.data.advanced } />
 					</TabPanel>
 				</Tabs>
-				<div className="og-group-fields">
-					{
-						childs.map( ( item, i ) => <div key={ item.id }>
-							<Insert parent={ props.id } index={ i } />
-							<Node
-								key={ item.id }
-								id={ item.id }
-								data={ item }
-								parent={ props.id }
-								index={ i }
-								changeSelectedList={ props.changeSelectedList }
-							/>
-						</div> )
-					}
-					<Inserter addItem={ addItem } />
+				<div className={ `og-group-fields og-field${ ! children.length ? ' og-group-fields--empty' : ''}` }>
+					<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
+					<div className="og-input">
+						{
+							children.map( ( item, i ) => <div key={ item.id }>
+								<Insert parent={ props.id } index={ i } />
+								<Node
+									key={ item.id }
+									id={ item.id }
+									data={ item }
+									parent={ props.id }
+									index={ i }
+									changeSelectedList={ props.changeSelectedList }
+								/>
+							</div> )
+						}
+						<Inserter addItem={ addItem } />
+					</div>
 				</div>
 			</div>
 		</div>
