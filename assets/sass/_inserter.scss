@@ -1,6 +1,7 @@
-// Inserter.
 &-inserter {
-	color: var(--color-gray);
+	.components-popover__content {
+		width: 400px;
+	}
 
 	input {
 		width: 100%;
@@ -12,12 +13,23 @@
 		text-transform: uppercase;
 		font-size: 11px;
 		font-weight: 500;
+		color: var(--color-gray);
 	}
 
 	&__content {
 		margin-top: 12px;
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		grid-gap: 8px;
+		grid-gap: 2px;
+	}
+
+	&__item {
+		padding: 4px;
+		cursor: pointer;
+		border-radius: 4px;
+
+		&:hover {
+			background: var(--color-light);
+		}
 	}
 }

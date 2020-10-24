@@ -16,45 +16,21 @@ export const Inserter = ( { addItem } ) => {
 	const search = e => setSearchParam( e.target.value );
 	const open = ( toggle, close ) => {
 		toggle();
-		setCloseCallback( () => close );
+		setCloseCallback( prevCallback => close );
 	};
 	const insert = e => {
 		addItem( e.target.dataset.type );
 		closeCallback();
-		setSearchParam( '' );
-	};
-
-	const Category = ( { title, items } ) => {
-		let result = [];
-		Object.entries( items ).forEach( ( [ type, label ] ) => {
-			if ( label.toLowerCase().includes( searchParam.toLowerCase() ) ) {
-				result.push( { type, label } );
-			}
-		} );
-
-		if ( !result.length ) {
-			return null;
-		}
-
-		return (
-			<>
-				{ title && <div className="og-inserter__title">{ title }</div> }
-				<div className="og-inserter__content">
-					{
-						result.map( ( { type, label } ) =>
-							<button type="button" className="button" key={ type } data-type={ type } onClick={ insert }>{ label }</button>
-						)
-					}
-				</div>
-			</>
-		);
 	};
 
 	return (
 		<Dropdown
 			className="og-inserter"
+			onClose={ () => setSearchParam( '' ) }
 			renderToggle={ ( { onToggle, onClose } ) => (
-				<button type="button" className="button button-primary" onClick={ () => open( onToggle, onClose ) }>{ __( '+ Add Field', 'meta-box-builder' ) }</button>
+				<button type="button" className="button button-primary" onClick={ () => open( onToggle, onClose ) }>
+					{ __( '+ Add Field', 'meta-box-builder' ) }
+				</button>
 			) }
 			renderContent={ () => (
 				<>
@@ -64,14 +40,38 @@ export const Inserter = ( { addItem } ) => {
 					{
 						Object.keys( fieldTypes ).length
 							? Object.entries( fieldTypes ).map( ( [ title, items ] ) =>
-								<Fragment key={ title }>
-									<Category title={ title } items={ items } />
-								</Fragment>
+								<Category key={ title } title={ title } items={ items } insert={ insert } searchParam={ searchParam } />
 							)
 							: <p>{ __( 'Fetching field types, please wait...', 'meta-box-builder' ) }</p>
 					}
 				</>
 			) }
 		/>
+	);
+};
+
+const Category = ( { title, items, insert, searchParam } ) => {
+	let result = [];
+	Object.entries( items ).forEach( ( [ type, label ] ) => {
+		if ( label.toLowerCase().includes( searchParam.toLowerCase() ) ) {
+			result.push( { type, label } );
+		}
+	} );
+
+	if ( !result.length ) {
+		return null;
+	}
+
+	return (
+		<>
+			<div className="og-inserter__title">{ title }</div>
+			<div className="og-inserter__content">
+				{
+					result.map( ( { type, label } ) =>
+						<div className="og-inserter__item" key={ type } data-type={ type } onClick={ insert }>{ label }</div>
+					)
+				}
+			</div>
+		</>
 	);
 };
