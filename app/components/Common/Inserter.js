@@ -1,6 +1,6 @@
 import { request } from '../../utility/functions';
 
-const { useState, useEffect, Fragment } = wp.element;
+const { useState, useEffect } = wp.element;
 const { Dropdown } = wp.components;
 const { __ } = wp.i18n;
 
