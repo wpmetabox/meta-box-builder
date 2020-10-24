@@ -1,6 +1,7 @@
 import { request } from '../../utility/functions';
 const { Dashicon } = wp.components;
 const { useState, useEffect } = wp.element;
+const { __ } = wp.i18n;
 
 const FieldMenu = ( { onSelectField } ) => {
 	const [ active, setActive ] = useState( 0 );
@@ -13,7 +14,8 @@ const FieldMenu = ( { onSelectField } ) => {
 	return (
 		<>
 			{
-				Object.keys( fieldTypes ).map( ( panelTitle, panelIndex ) =>
+				Object.keys( fieldTypes ).length
+				? Object.keys( fieldTypes ).map( ( panelTitle, panelIndex ) =>
 					<div className={ `og-panel og-collapsible${ panelIndex === active ? ' og-collapsible--expanded' : '' }` } key={ panelIndex }>
 						<h4 className="og-collapsible__header" onClick={ () => setActive( panelIndex ) }>
 							{ panelTitle }
@@ -28,6 +30,7 @@ const FieldMenu = ( { onSelectField } ) => {
 						</div>
 					</div>
 				)
+				: <p className="og-sidebar__item">{ __( 'Fetching field types, please wait...', 'meta-box-builder' ) }</p>
 			}
 		</>
 	);

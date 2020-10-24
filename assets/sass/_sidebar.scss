@@ -1,78 +1,79 @@
 &-sidebar {
-  width: 300px;
-  position: fixed;
-  top: 32px;
-  bottom: 0;
-  right: 0;
-  z-index: 99;
+	width: 300px;
+	position: fixed;
+	top: 32px;
+	bottom: 0;
+	right: 0;
+	z-index: 99;
 
-  background: #fff;
-  border-left: var(--border);
+	background: #fff;
+	border-left: var(--border);
 
-  transition: all .25s;
-  transform: translateX(300px);
+	transition: all .25s;
+	transform: translateX(300px);
 
-  &--open {
-    transform: translateX(0);
-  }
+	&--open {
+		transform: translateX(0);
+	}
 
-  &__search {
-    padding: 16px 12px;
+	&__item {
+		padding: 16px 12px;
+	}
 
-    input {
-      width: 100%;
-    }
-  }
-  &__header {
-    border-bottom: var(--border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  &__close {
-    width: 44px;
-    height: 44px;
-    border: 0;
-    background: none;
-    padding: 0;
-    font-size: 24px;
-    cursor: pointer;
-    color: #999;
-    font-weight: 300;
-  }
-  &__title {
-    font-weight: 600;
-    font-size: 14px;
-    padding-left: 12px;
-  }
+	&__search input {
+		width: 100%;
+	}
 
-  .og-collapsible__header {
-    background: #fff;
-  }
+	&__header {
+		border-bottom: var(--border);
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 
-  .og-collapsible--expanded .og-collapsible__header,
-  .og-collapsible__header:hover {
-    border-color: var(--color-light);
-    background: var(--color-lighter);
-  }
+	&__close {
+		width: 44px;
+		height: 44px;
+		border: 0;
+		background: none;
+		padding: 0;
+		font-size: 24px;
+		cursor: pointer;
+		color: #999;
+		font-weight: 300;
+	}
+
+	&__title {
+		font-weight: 600;
+		font-size: 14px;
+		padding-left: 12px;
+	}
+
+	.og-collapsible__header {
+		background: #fff;
+	}
+
+	.og-collapsible--expanded .og-collapsible__header,
+	.og-collapsible__header:hover {
+		border-color: var(--color-light);
+		background: var(--color-lighter);
+	}
 }
 
 &-panel {
-  margin-bottom: -1px;
-  margin-left: -1px;
+	margin-bottom: -1px;
+	margin-left: -1px;
 
-  h4 {
-    cursor: pointer;
-    padding: 12px 16px;
-    margin: 0;
-  }
+	h4 {
+		cursor: pointer;
+		padding: 12px 16px;
+		margin: 0;
+	}
 }
+
 &-panel__body,
 &-search-results {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 12px;
-}
-&-search-results {
-  padding: 12px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 12px;
 }

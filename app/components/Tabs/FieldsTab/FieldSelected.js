@@ -12,7 +12,7 @@ const FieldSelected = ( props ) => {
 	const { connectDragSource } = props;
 	const type = props.type;
 	const index = props.id;
-	const [ expanded, setExpanded ] = useState( false );
+	const [ expanded, setExpanded ] = useState( true );
 	const toggleSettings = () => setExpanded( !expanded );
 
 	if ( 'divider' === type ) {

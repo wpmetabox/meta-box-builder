@@ -31,7 +31,6 @@ const FieldsTab = ( props ) => {
 
   return (
     <>
-
       { selectedList.items.length === 0 && <p className="og-none">{ __( 'There are no fields here. Click the Add Button above to add a new field.', 'meta-box-builder' ) }</p> }
       <div className="og-fields">
         {

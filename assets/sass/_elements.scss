@@ -10,7 +10,8 @@ svg {
   fill: var(--color-gray);
 }
 
-.clone-setting {
+.clone-setting,
+.collapsible-setting {
   display: none;
 }
 
@@ -74,13 +75,14 @@ svg {
   &__body {
     position: relative;
   }
-  .button {
+  .components-button {
     position: absolute;
     top: 0;
     right: 0;
     border-color: var(--color-light);
     border-radius: 0 0 0 4px;
     z-index: 9;
+    height: 30px;
   }
 }
 

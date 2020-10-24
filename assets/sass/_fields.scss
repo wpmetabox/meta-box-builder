@@ -6,6 +6,17 @@
 	margin-bottom: 16px;
 	display: flex;
 	justify-content: space-between;
+
+	&--checkbox-list .og-input {
+		label {
+			display: block;
+		}
+		code {
+			background: none;
+			padding: 0;
+			font-size: inherit;
+		}
+	}
 }
 
 &-field--check &-input {

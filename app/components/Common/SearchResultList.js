@@ -23,7 +23,7 @@ const SearchResultList = ( { searchParam, onSelectField } ) => {
 	const items = getSearchResults();
 
 	return (
-		<div className="og-search-results">
+		<div className="og-sidebar__item og-search-results">
 			{ items.map( ( item, index ) => <button type="button" className="button" key={ index } onClick={ () => onSelectField( item.type ) }>{ item.title }</button> ) }
 		</div>
 	);
