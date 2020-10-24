@@ -1,9 +1,9 @@
-import Content from './Content';
 import { DragSource } from 'react-dnd';
-import Types from './Types';
-import Header from './Header';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { cardSource, collect } from '../../../utility/updateSelectedList';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Content from './Content';
+import Header from './Header';
+import Types from './Types';
 
 const { useState, memo } = wp.element;
 const { __ } = wp.i18n;
@@ -14,6 +14,7 @@ const FieldSelected = ( props ) => {
 	const index = props.id;
 	const [ expanded, setExpanded ] = useState( false );
 	const toggleSettings = () => setExpanded( !expanded );
+
 	if ( 'divider' === type ) {
 		return connectDragSource(
 			<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
@@ -21,7 +22,6 @@ const FieldSelected = ( props ) => {
 				<Header
 					type={ type }
 					index={ index }
-					expanded={ expanded }
 					copyItem={ props.copyItem }
 					removeItem={ props.removeItem }
 					toggleSettings={ toggleSettings }
@@ -41,7 +41,6 @@ const FieldSelected = ( props ) => {
 				<Header
 					type={ type }
 					index={ index }
-					expanded={ expanded }
 					copyItem={ props.copyItem }
 					removeItem={ props.removeItem }
 					toggleSettings={ toggleSettings }

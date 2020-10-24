@@ -1,26 +1,18 @@
-import Group from './Group';
 import FieldSelected from './FieldSelected';
-import GroupChildrenList from './GroupChildrenList';
+import Group from './Group';
 const { memo } = wp.element;
 
 const Node = ( props ) => {
 	const { item, changeSelectedList, parent, index } = props;
 
 	return item.type === 'group'
-		? <>
-			<Group
-				{ ...item }
-				parent={ parent }
-				indexVal={ index }
-				changeSelectedList={ changeSelectedList }
-			/>
-			<GroupChildrenList
-				{ ...item }
-				items={ item.items }
-				parent={ parent }
-				changeSelectedList={ changeSelectedList }
-			/>
-		</>
+		?
+		<Group
+			{ ...item }
+			parent={ parent }
+			indexVal={ index }
+			changeSelectedList={ changeSelectedList }
+		/>
 		: <FieldSelected
 			{ ...item }
 			parent={ parent }

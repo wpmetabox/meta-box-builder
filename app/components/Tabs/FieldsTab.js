@@ -1,6 +1,6 @@
 import { Context } from '../../context/CommonData/CommonDataContext';
 import { uniqid, updateSelectedList } from '../../utility/functions';
-import { SideMenu, toggleSideMenu } from '../Common/SideMenu';
+import { SideMenu } from '../Common/SideMenu';
 import Insert from './FieldsTab/Insert';
 import Node from './FieldsTab/Node';
 
@@ -31,7 +31,7 @@ const FieldsTab = ( props ) => {
 
   return (
     <>
-      <SideMenu addItem={ addItem } />
+
       { selectedList.items.length === 0 && <p className="og-none">{ __( 'There are no fields here. Click the Add Button above to add a new field.', 'meta-box-builder' ) }</p> }
       <div className="og-fields">
         {
@@ -49,7 +49,7 @@ const FieldsTab = ( props ) => {
           ) )
         }
       </div>
-      <button className="button og-add" onClick={ toggleSideMenu }>{ __( 'Add Field', 'meta-box-builder' ) }</button>
+      <SideMenu addItem={ addItem } />
     </>
   );
 };

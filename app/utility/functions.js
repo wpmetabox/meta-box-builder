@@ -12,33 +12,8 @@ export const getElementControlName = ( name, type ) => {
 	return toTitleCase( name );
 };
 
-// export const getElementType = ( name ) => {
-//     const inputsText = [ 'id', 'name', 'desc', 'std', 'placeholder', 'min', 'max', 'rows', 'cols', 'prefix', 'suffix', 'address_field', 'api_key', 'region', 'mime_type' ];
-//     const inputsNumber = [ 'size', 'step', 'max_file_uploads' ];
-//     const checkboxes = [ 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'inline', 'multiple', 'timestamp', 'force_delete', 'max_status', 'parent', 'raw' ];
-//     const ratioCheckbox = [ 'field_type' ];
-//     const dropdownMenu = [ 'post_type', 'taxonomy' ];
-//     let type = '';
-//     if ( inputsText.includes( name ) ) {
-//         type = TEXT_INPUT;
-//     }
-//     if ( inputsNumber.includes( name ) ) {
-//         type = NUMBER_INPUT;
-//     }
-//     if ( checkboxes.includes( name ) ) {
-//         type = CHECKBOX;
-//     }
-//     if ( ratioCheckbox.includes( name ) ) {
-//         type = RADIO_CHECKBOX;
-//     }
-//     if ( dropdownMenu.includes( name ) ) {
-//         type = DROPDOWN_MENU;
-//     }
-
-//     return type;
-// };
-
 export const getDataCopiedItem = ( type, index ) => {
+	const fields = JSON.parse( localStorage.getItem( 'MbFields' ) );
 	let data = fields[ type ];
 	let result = {};
 	result.general = getGeneralData( data.general, index );
@@ -109,6 +84,7 @@ export const parseFields = ( listFields ) => {
 };
 
 const formatField = ( field ) => {
+	JSON.parse( localStorage.getItem( 'MbFields' ) );
 	let result = { data: { ...fields[ field.type ] }, id: field.id, type: field.type };
 
 
@@ -140,6 +116,26 @@ const getElementValue = name => {
 		return document.querySelector( `[name="${ name }"]:checked` ).value;
 	}
 };
+
+export const addGroupChild = ( groupId, childList ) => {
+	const selectedList = getSelectedList();
+	const updatedList = findNode( groupId, selectedList, childList );
+	updateSelectedList( updatedList );
+};
+
+const findNode = ( id, node, childList ) => {
+	if ( node.items ) {
+		const isExactedFiled = node.items.filter( item => item.id === id );
+		if ( isExactedFiled ) {
+			isExactedFiled[ 0 ].items = childList;
+		} else {
+			node.items.map( ( item ) => findNode( item ) );
+		}
+	}
+
+	return node;
+};
+
 
 export const updateSelectedList = data => localStorage.setItem( 'selectedList', JSON.stringify( data ) );
 

@@ -80,6 +80,7 @@ const formatGroupField = ( item, params, result = {} ) => {
 	// handle children fields
 	if ( childrens ) {
 		result.fields = [];
+		console.log( childrens );
 		childrens.map( children => {
 			if ( isNotGroupField( children.type ) ) {
 				result.fields.push( formatField( children.id, params ) );

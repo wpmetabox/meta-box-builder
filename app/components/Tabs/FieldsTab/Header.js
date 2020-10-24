@@ -1,5 +1,6 @@
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
+import { copyItem, deleteItem } from '../../../utility/updateSelectedList';
 
 const Header = props => {
 	const duplicate = e => {
