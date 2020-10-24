@@ -1,6 +1,6 @@
 import { Context } from '../../context/CommonData/CommonDataContext';
 import { uniqid, updateSelectedList } from '../../utility/functions';
-import { SideMenu } from '../Common/SideMenu';
+import { Inserter } from '../Common/Inserter';
 import Insert from './FieldsTab/Insert';
 import Node from './FieldsTab/Node';
 
@@ -47,7 +47,7 @@ const FieldsTab = ( props ) => {
           ) )
         }
       </div>
-      <SideMenu addItem={ addItem } />
+      <Inserter addItem={ addItem } />
     </>
   );
 };
