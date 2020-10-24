@@ -1,3 +1,8 @@
+&-none {
+	margin: 0;
+	padding: 16px 12px;
+	border-bottom: var(--border-lighter);
+}
 &-group-fields {
 	margin-left: 36px;
 }
@@ -34,7 +39,6 @@
 
 &-label {
 	width: 25%;
-	font-weight: 700;
 
 	a {
 		text-decoration: none;
@@ -52,12 +56,15 @@
 }
 
 &-item {
+	border-bottom: var(--border-lighter);
+
 	&__header {
-		padding: 8px 12px;
+		padding: 12px;
 		cursor: move;
 	}
 
 	&__title {
+		color: var(--wp-admin-theme-color);
 		font-weight: bold;
 		line-height: 24px;
 	}
@@ -111,10 +118,6 @@
 		}
 	}
 
-	.react-tabs__tab-panel {
-		padding: 0;
-	}
-
 	// Sorting.
 	&__sort {
 		position: absolute;
@@ -153,14 +156,6 @@
 		border-radius: 0 0 4px 4px;
 		border-top-width: 0;
 	}
-}
-
-&-item &-field {
-	margin-top: 12px;
-}
-
-&-item &-label {
-	font-weight: normal;
 }
 
 &-item--heading &-field--id,
@@ -209,7 +204,7 @@
 
 // Drop area
 &-drop-area {
-	height: 12px;
+	// height: 12px;
 }
 
 &-drop-area--active {
