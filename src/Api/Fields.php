@@ -172,7 +172,7 @@ class Fields {
 			'label'    => __( 'Taxonomies', 'meta-box-builder' ),
 			'options'  => $this->get_taxonomies(),
 			'multiple' => true,
-		], [] );
+		] );
 		$clone = Component::Checkbox( [
 			'label'   => __( 'Cloneable', 'meta-box-builder' ),
 			'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),

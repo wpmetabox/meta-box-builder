@@ -25,38 +25,27 @@ svg {
 
 // Collapsible panel
 &-collapsible {
-  background-color: #fff;
-
   &__header {
-    border: var(--border);
-    background-color: var(--color-lighter);
-    color: #23282d;
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    &:hover {
-      border-color: var(--color-gray);
-    }
   }
 
   &__body {
     overflow-y: hidden;
     max-height: 0;
     transition: all 0.2s ease;
-
-    border-width: 0 1px;
-    border-style: solid;
-    border-color: var(--color-light);
     padding: 0 12px;
   }
   &--expanded {
     .og-collapsible__header .dashicons-arrow-down-alt2 {
       transform: rotate(180deg);
     }
+    .og-collapsible__header {
+      background: var(--color-lighter);
+    }
     .og-collapsible__body {
       max-height: 1000px;
-      border-bottom-width: 1px;
       padding-top: 12px;
       padding-bottom: 12px;
     }

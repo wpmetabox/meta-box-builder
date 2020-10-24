@@ -20,7 +20,7 @@ const Group = ( props ) => {
 
 	const type = props.type;
 
-	const [ expanded, setExpanded ] = useState( false );
+	const [ expanded, setExpanded ] = useState( true );
 	const [ childs, setChilds ] = useState( props.items );
 
 	const toggleSettings = () => setExpanded( !expanded );

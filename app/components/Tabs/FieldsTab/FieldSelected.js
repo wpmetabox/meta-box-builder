@@ -13,7 +13,7 @@ const FieldSelected = ( props ) => {
 	const type = props.type;
 	const data = props.data;
 
-	const [ expanded, setExpanded ] = useState( false );
+	const [ expanded, setExpanded ] = useState( true );
 	const toggleSettings = () => setExpanded( !expanded );
 
 	if ( 'divider' === type ) {

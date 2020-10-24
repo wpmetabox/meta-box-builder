@@ -31,7 +31,7 @@ const FieldsTab = ( props ) => {
 
   return (
     <>
-      { selectedList.items.length === 0 && <p className="og-none">{ __( 'There are no fields here. Click the Add Button above to add a new field.', 'meta-box-builder' ) }</p> }
+      { selectedList.items.length === 0 && <p className="og-none" dangerouslySetInnerHTML={ { __html: __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) } } /> }
       <div className="og-fields">
         {
           selectedList.items.map( ( item, index ) => (
