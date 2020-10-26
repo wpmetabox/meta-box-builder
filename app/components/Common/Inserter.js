@@ -4,7 +4,7 @@ const { useState, useEffect } = wp.element;
 const { Dropdown } = wp.components;
 const { __ } = wp.i18n;
 
-export const Inserter = ( { addItem } ) => {
+export const Inserter = ( { addItem, type } ) => {
 	const [ fieldTypes, setFieldTypes ] = useState( {} );
 	const [ searchParam, setSearchParam ] = useState( '' );
 	const [ closeCallback, setCloseCallback ] = useState( () => { } );
@@ -28,7 +28,7 @@ export const Inserter = ( { addItem } ) => {
 			className="og-inserter"
 			onClose={ () => setSearchParam( '' ) }
 			renderToggle={ ( { onToggle, onClose } ) => (
-				<button type="button" className="button button-primary" onClick={ () => open( onToggle, onClose ) }>
+				<button type="button" id={ `og-inserter${ type }` } className="button button-primary" onClick={ () => open( onToggle, onClose ) }>
 					{ __( '+ Add Field', 'meta-box-builder' ) }
 				</button>
 			) }

@@ -2,7 +2,6 @@ const { lazy, memo, Suspense } = wp.element;
 
 const Content = ( { fieldId, data } ) => {
 	const getElement = name => {
-		console.log( data[ name ].component );
 		if ( 'type' === name ) {
 			return null;
 		}

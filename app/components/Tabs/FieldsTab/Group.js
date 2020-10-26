@@ -11,7 +11,7 @@ import Node from './Node';
 import Types from './Types';
 
 
-const { useState, memo, useContext } = wp.element;
+const { useState, memo, useContext, useEffect } = wp.element;
 const { __ } = wp.i18n;
 
 const Group = ( props ) => {
@@ -23,9 +23,16 @@ const Group = ( props ) => {
 	const [ expanded, setExpanded ] = useState( true );
 	const [ children, setChildren ] = useState( props.items );
 
-	const toggleSettings = () => setExpanded( !expanded );
+	useEffect( () => {
+		setChildren( props.items );
+		return;
+	}, [ props.items ] );
+	console.log( 'cccc', props.items );
+
+	const toggleSettings = () => setExpanded( prev => !prev );
 
 	const addItem = ( type ) => {
+
 		const id = `${ type }_${ uniqid() }`;
 		const data = {
 			...MbFields[ type ],
@@ -62,7 +69,7 @@ const Group = ( props ) => {
 						<Content fieldId={ props.id } data={ props.data.advanced } />
 					</TabPanel>
 				</Tabs>
-				<div className={ `og-group-fields og-field${ ! children.length ? ' og-group-fields--empty' : ''}` }>
+				<div className={ `og-group-fields og-field${ !children.length ? ' og-group-fields--empty' : '' }` }>
 					<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 					<div className="og-input">
 						{
@@ -78,7 +85,7 @@ const Group = ( props ) => {
 								/>
 							</div> )
 						}
-						<Inserter addItem={ addItem } />
+						<Inserter addItem={ addItem } type="group" />
 					</div>
 				</div>
 			</div>
@@ -86,4 +93,4 @@ const Group = ( props ) => {
 	);
 };
 
-export default memo( DragSource( Types.CARD, cardSource, collect )( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id );
+export default memo( DragSource( Types.CARD, cardSource, collect )( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.items === nextProps.items );

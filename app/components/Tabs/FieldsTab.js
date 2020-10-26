@@ -4,7 +4,7 @@ import { Inserter } from '../Common/Inserter';
 import Insert from './FieldsTab/Insert';
 import Node from './FieldsTab/Node';
 
-const { useContext, useState, useEffect, useCallback, memo, Fragment } = wp.element;
+const { useContext, useState, useCallback, memo, Fragment } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = ( props ) => {
@@ -15,6 +15,7 @@ const FieldsTab = ( props ) => {
 
   const addItem = ( type ) => {
     const id = `${ type }_${ uniqid() }`;
+    // actions.updateCurrentFieldId(id)
     const data = {
       ...MbFields[ type ],
     };
@@ -26,8 +27,8 @@ const FieldsTab = ( props ) => {
     updateSelectedList( newList );
   };
 
+  console.log( 'ggg', selectedList );
   const changeSelectedList = useCallback( params => setSelectedList( params ), [] );
-  console.log( '@@@@', selectedList );
 
   return (
     <>
@@ -36,6 +37,7 @@ const FieldsTab = ( props ) => {
         {
           selectedList.items.map( ( item, index ) => (
             <Fragment key={ item.id + index }>
+              <Insert index={ index } parent="root" />
               <Node
                 id={ item.id }
                 data={ item }
@@ -43,7 +45,6 @@ const FieldsTab = ( props ) => {
                 index={ index }
                 changeSelectedList={ changeSelectedList }
               />
-              <Insert index={ index } parent="root" />
             </Fragment>
           ) )
         }
