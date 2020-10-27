@@ -84,7 +84,9 @@ const Group = ( props ) => {
 								/>
 							</div> )
 						}
-						<Inserter addItem={ addItem } type="group" />
+						{
+							expanded && <Inserter addItem={ addItem } type="group" />
+						}
 					</div>
 				</div>
 			</div>
