@@ -4,9 +4,15 @@ import { getDataCopiedItem, getSelectedList, updateSelectedList } from './functi
 
 export const cardSource = {
   beginDrag( props ) {
+    const dropAreas = document.getElementsByClassName( `og-drop-area-${ props.parent }` );
+
+    Object.values( dropAreas ).map( item => item.style.height = '50px' );
     return { id: props.id, parent: props.parent };
   },
   endDrag( props, monitor ) {
+    const dropAreas = document.getElementsByClassName( `og-drop-area-${ props.parent }` );
+
+    Object.values( dropAreas ).map( item => item.style.height = '0px' );
     if ( !monitor.didDrop() ) {
       return;
     }
