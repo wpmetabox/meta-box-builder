@@ -27,7 +27,6 @@ const Group = ( props ) => {
 		setChildren( props.items );
 		return;
 	}, [ props.items ] );
-	console.log( 'cccc', props.items );
 
 	const toggleSettings = () => setExpanded( prev => !prev );
 

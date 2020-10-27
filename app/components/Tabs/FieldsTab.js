@@ -27,7 +27,6 @@ const FieldsTab = ( props ) => {
     updateSelectedList( newList );
   };
 
-  console.log( 'ggg', selectedList );
   const changeSelectedList = useCallback( params => setSelectedList( params ), [] );
 
   return (
