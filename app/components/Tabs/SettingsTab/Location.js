@@ -35,12 +35,12 @@ export const Location = () => {
 	return <>
 		<h3>{ __( 'Location', 'meta-box-builder' ) }</h3>
 		<DivRow label={ __( 'Object type', 'meta-box-builder' ) }>
-			<ReactSelect options={ objectTypes } defaultValue={ objectTypes[0] } isClearable={ true } onChange={ onSelectObjectType } />
+			<ReactSelect className="react-select" classNamePrefix="react-select" options={ objectTypes } defaultValue={ objectTypes[0] } onChange={ onSelectObjectType } />
 		</DivRow>
 		{
 			'post' === objectType &&
 			<DivRow label={ __( 'Post types', 'meta-box-builder' ) }>
-				<ReactSelect isMulti={ true } options={ MbbApp.postTypes.map( item => ( { value: item.slug, label: item.name } ) ) } />
+				<ReactSelect className="react-select" classNamePrefix="react-select" isMulti={ true } options={ MbbApp.postTypes.map( item => ( { value: item.slug, label: item.name } ) ) } />
 			</DivRow>
 		}
 	</>;

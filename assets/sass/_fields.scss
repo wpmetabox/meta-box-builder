@@ -243,3 +243,35 @@
   border-radius: 4px;
   height: 42px;
 }
+
+// React select.
+.react-select {
+	&__control.react-select__control {
+		border-color: #7e8993;
+		min-height: 30px;
+		height: 30px;
+  }
+  &__value-container {
+    padding-top: 0;
+    padding-bottom: 0;
+
+    div:last-child {
+      height: 22px;
+    }
+  }
+  &__multi-value__label {
+    line-height: 16px;
+    font-style: 12px;
+  }
+	&__input input {
+		min-height: 18px;
+		line-height: 1;
+
+		&:focus {
+			box-shadow: none;
+		}
+	}
+	&__indicator.react-select__indicator {
+		padding: 4px;
+	}
+}
