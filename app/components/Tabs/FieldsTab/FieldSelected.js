@@ -17,6 +17,7 @@ const FieldSelected = ( props ) => {
 	const toggleSettings = () => {
 		setExpanded( prev => !prev );
 	};
+	console.log( 'render', props.id );
 
 	if ( 'divider' === type ) {
 		return connectDragSource(
@@ -66,4 +67,4 @@ const FieldSelected = ( props ) => {
 	);
 };
 
-export default memo( DragSource( Types.CARD, cardSource, collect )( FieldSelected ), ( prevProps, nextProps ) => prevProps.props.id === nextProps.props.id );
+export default memo( DragSource( Types.CARD, cardSource, collect )( FieldSelected ), ( prevProps, nextProps ) => prevProps.id === nextProps.id );

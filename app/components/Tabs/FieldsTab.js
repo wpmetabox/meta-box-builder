@@ -35,7 +35,7 @@ const FieldsTab = ( props ) => {
       <div className="og-fields">
         {
           selectedList.items.map( ( item, index ) => (
-            <Fragment key={ item.id + index }>
+            <Fragment key={ item.id }>
               <Insert index={ index } parent="root" />
               <Node
                 id={ item.id }
