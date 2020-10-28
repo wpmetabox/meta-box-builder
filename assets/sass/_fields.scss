@@ -195,6 +195,25 @@
 // Group.
 &-item--group {
   .og-group-fields {
+    display: none;
+  }
+  .og-group-fields--empty {
+    > .og-input {
+      border: none;
+
+      > .og-inserter {
+        margin: 0;
+      }
+    }
+  }
+
+  .og-collapsible__body {
+    padding-bottom: 0;
+  }
+  &.og-collapsible--expanded .og-group-fields {
+    max-height: 999999px;
+    padding-bottom: 12px;
+    display: flex;
     overflow-y: hidden;
     transition: all 0.2s ease;
     padding: 0 12px;
@@ -206,22 +225,6 @@
     .og-item__header {
       padding: 8px 12px;
     }
-  }
-  .og-group-fields--empty {
-    > .og-input {
-      border: none;
-
-      > .og-inserter {
-        margin: 0;
-      }
-    }
-  }
-  .og-collapsible__body {
-    padding-bottom: 0;
-  }
-  &.og-collapsible--expanded .og-group-fields {
-    max-height: 999999px;
-    padding-bottom: 12px;
   }
 }
 

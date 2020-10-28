@@ -1,15 +1,11 @@
-import { DragSource } from 'react-dnd';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { cardSource, collect } from '../../../utility/updateSelectedList';
 import Content from './Content';
 import Header from './Header';
-import Types from './Types';
 
 const { useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldSelected = ( props ) => {
-	const { connectDragSource } = props;
 	const type = props.type;
 	const data = props.data;
 
@@ -20,7 +16,7 @@ const FieldSelected = ( props ) => {
 	console.log( 'render', props.id );
 
 	if ( 'divider' === type ) {
-		return connectDragSource(
+		return (
 			<div className={ `og-item og-item--${ type } og-children-collapsible${ expanded ? ' og-children-collapsible--expanded' : '' }` }>
 				<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
 				<Header
@@ -38,7 +34,7 @@ const FieldSelected = ( props ) => {
 		);
 	}
 
-	return connectDragSource(
+	return (
 		<div className={ `og-item og-item--${ type } og-children-collapsible${ expanded ? ' og-children-collapsible--expanded' : '' }` }>
 			<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
 			<Header
@@ -67,4 +63,4 @@ const FieldSelected = ( props ) => {
 	);
 };
 
-export default memo( DragSource( Types.CARD, cardSource, collect )( FieldSelected ), ( prevProps, nextProps ) => prevProps.id === nextProps.id );
+export default memo( ( FieldSelected ), ( prevProps, nextProps ) => prevProps.id === nextProps.id );

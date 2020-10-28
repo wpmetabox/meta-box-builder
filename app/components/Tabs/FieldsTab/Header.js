@@ -1,8 +1,11 @@
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
-import { copyItem, deleteItem } from '../../../utility/updateSelectedList';
+import { DragSource } from 'react-dnd';
+import { cardSource, collect, copyItem, deleteItem } from '../../../utility/updateSelectedList';
+import Types from './Types';
 
 const Header = props => {
+	const { connectDragSource } = props;
 	const duplicate = e => {
 		e.stopPropagation();
 		const newSelectedList = copyItem( props.id, props.parent, props.index );
@@ -14,7 +17,7 @@ const Header = props => {
 		props.changeSelectedList( newSelectedList );
 	};
 
-	return (
+	return connectDragSource(
 		<div className="og-item__header og-collapsible__header" onClick={ props.toggleSettings }>
 			<div className="og-item__title" id={ `og-item__title__${ props.id }` }>{ __( '(No label)', 'meta-box-builder' ) }</div>
 			<div className="og-item__actions">
@@ -26,4 +29,4 @@ const Header = props => {
 		</div>
 	);
 };
-export default Header;
+export default DragSource( Types.CARD, cardSource, collect )( Header );

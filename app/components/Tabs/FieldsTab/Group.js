@@ -1,21 +1,18 @@
-import { DragSource } from 'react-dnd';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { Context } from '../../../context/CommonData/CommonDataContext';
 import { addGroupChild, uniqid } from '../../../utility/functions';
-import { cardSource, collect } from '../../../utility/updateSelectedList';
 import { Inserter } from '../../Common/Inserter';
 import Content from './Content';
 import Header from './Header';
 import Insert from './Insert';
 import Node from './Node';
-import Types from './Types';
 
 
 const { useState, memo, useContext, useEffect } = wp.element;
 const { __ } = wp.i18n;
 
 const Group = ( props ) => {
-	const { connectDragSource } = props;
+
 	const { MbFields } = useContext( Context );
 
 	const type = props.type;
@@ -41,7 +38,7 @@ const Group = ( props ) => {
 		addGroupChild( props.id, newChildList );
 	};
 
-	return connectDragSource(
+	return (
 		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 			<div className="d" id="list">
 
@@ -68,30 +65,28 @@ const Group = ( props ) => {
 						<Content fieldId={ props.id } data={ props.data.advanced } />
 					</TabPanel>
 				</Tabs>
-				{
-					expanded && <div className={ `og-group-fields og-field${ !children.length ? ' og-group-fields--empty' : '' }` }>
-						<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
-						<div className="og-input">
-							{
-								children.map( ( item, i ) => <div key={ item.id }>
-									<Insert parent={ props.id } index={ i } />
-									<Node
-										key={ item.id }
-										id={ item.id }
-										data={ item }
-										parent={ props.id }
-										index={ i }
-										changeSelectedList={ props.changeSelectedList }
-									/>
-								</div> )
-							}
-							<Inserter addItem={ addItem } type="group" />
-						</div>
+				<div className={ `og-group-fields og-field${ !children.length ? ' og-group-fields--empty' : '' }` }>
+					<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
+					<div className="og-input">
+						{
+							children.map( ( item, i ) => <div key={ item.id }>
+								<Insert parent={ props.id } index={ i } />
+								<Node
+									key={ item.id }
+									id={ item.id }
+									data={ item }
+									parent={ props.id }
+									index={ i }
+									changeSelectedList={ props.changeSelectedList }
+								/>
+							</div> )
+						}
+						<Inserter addItem={ addItem } type="group" />
 					</div>
-				}
+				</div>
 			</div>
 		</div>
 	);
 };
 
-export default memo( DragSource( Types.CARD, cardSource, collect )( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.items === nextProps.items );
+export default memo( ( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.items === nextProps.items );
