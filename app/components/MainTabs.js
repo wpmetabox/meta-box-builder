@@ -55,7 +55,7 @@ const MainTabs = () => {
 							<FieldsTab fields={ parseFields( fields ) } />
 						</DndProvider>
 					</TabPanel>
-					<TabPanel>
+					<TabPanel className="react-tabs__tab-panel og-tab-settings">
 						<SettingsTab register={ register } />
 					</TabPanel>
 					<TabPanel>
