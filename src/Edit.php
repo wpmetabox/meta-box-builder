@@ -36,6 +36,23 @@ class Edit {
 			'taxonomies'    => mbb_get_taxonomies(),
 			'settingsPages' => mbb_get_setting_pages(),
 			'templates'     => mbb_get_templates(),
+
+			// Extensions check.
+			'extensions' => [
+				'blocks'             => mbb_is_extension_active( 'mb-blocks' ),
+				'columns'            => mbb_is_extension_active( 'meta-box-columns' ),
+				'commentMeta'        => mbb_is_extension_active( 'mb-comment-meta' ),
+				'conditionalLogic'   => mbb_is_extension_active( 'meta-box-conditional-logic' ),
+				'customTable'        => mbb_is_extension_active( 'mb-custom-table' ),
+				'frontendSubmission' => mbb_is_extension_active( 'mb-frontend-submission' ),
+				'group'              => mbb_is_extension_active( 'meta-box-group' ),
+				'includeExclude'     => mbb_is_extension_active( 'meta-box-include-exclude' ),
+				'settingsPage'       => mbb_is_extension_active( 'mb-settings-page' ),
+				'showHide'           => mbb_is_extension_active( 'meta-box-show-hide' ),
+				'tabs'               => mbb_is_extension_active( 'meta-box-tabs' ),
+				'termMeta'           => mbb_is_extension_active( 'mb-term-meta' ),
+				'userMeta'           => mbb_is_extension_active( 'mb-user-meta' ),
+			]
 		] );
 
 		wp_localize_script( 'mbb-app', 'icons', mbb_get_dashicons() );
