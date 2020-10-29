@@ -23,4 +23,4 @@ const Node = ( props ) => {
 		/>;
 };
 
-export default memo( Node, ( prevProps, nextProps ) => prevProps.id === nextProps.id );
+export default memo( Node, ( prevProps, nextProps ) => nextProps.data.type !== 'group' && prevProps.id === nextProps.id );

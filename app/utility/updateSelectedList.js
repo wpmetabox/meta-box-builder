@@ -16,10 +16,10 @@ export const cardSource = {
     if ( !monitor.didDrop() ) {
       return;
     }
-
     const item = monitor.getItem();
     const dropResult = monitor.getDropResult();
     const selectedList = getSelectedList();
+    console.log( item.id, dropResult.parent, dropResult.index );
     const tree = moveNode( item.id, dropResult.parent, dropResult.index );
     selectedList !== tree && props.changeSelectedList( tree );
   },
