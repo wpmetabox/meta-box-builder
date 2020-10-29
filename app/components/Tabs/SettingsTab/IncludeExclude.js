@@ -56,7 +56,7 @@ const Rule = ( { rule, index, removeRule } ) => {
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 
-	const loadOptions = inputValue => request( 'include-exclude', { name, s: inputValue } );
+	const loadOptions = s => request( 'include-exclude', { name, s } );
 
 	return (
 		<div className="og-include-exclude__rule og-attribute">
@@ -78,8 +78,9 @@ const Rule = ( { rule, index, removeRule } ) => {
 				<option value="custom">{ __( 'Custom', 'meta-box-builder' ) }</option>
 			</select>
 			{
+				// Using an unused "key" prop for AsyncSelect forces rerendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
-				<AsyncSelect className="react-select og-include-exclude__value" classNamePrefix="react-select" defaultOptions loadOptions={ loadOptions } />
+				<AsyncSelect key={ name } className="react-select og-include-exclude__value" classNamePrefix="react-select" defaultOptions loadOptions={ loadOptions } />
 			}
 			{
 				name === 'is_child' &&

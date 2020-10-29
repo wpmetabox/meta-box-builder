@@ -6,7 +6,7 @@ use WP_REST_Request;
 class IncludeExclude extends Base {
 	public function include_exclude( WP_REST_Request $request ) {
 		$name = $request->get_param( 'name' );
-		$s    = $request->get_param( 's' );
+		$s    = strtolower( $request->get_param( 's' ) );
 
 		return $this->cache( $name, $s );
 	}
@@ -48,12 +48,16 @@ class IncludeExclude extends Base {
 
 		$where = '';
 		if ( $s ) {
-			$where = ' AND post_title LIKE %s';
+			$where = ' AND LOWER( post_title ) LIKE %s';
 		}
 		$sql = $wpdb->prepare( "
 			SELECT ID AS value, post_title AS label
 			FROM $wpdb->posts
-			WHERE post_status NOT IN ('trash', 'auto-draft' ) $where
+			WHERE
+				post_status NOT IN ('trash', 'auto-draft', 'inherit')
+				AND post_type NOT IN ('customize_changeset', 'custom_css', 'mb-post-type', 'mb-taxonomy', 'mb-views', 'meta-box', 'nav_menu_item', 'revision')
+				AND post_title != ''
+				$where
 			ORDER BY post_title ASC
 			LIMIT 10
 		", '%' . $wpdb->esc_like( $s ) . '%' );
@@ -105,7 +109,7 @@ class IncludeExclude extends Base {
 		// Group templates by file, which eliminates duplicates templates for multiple post types.
 		$items = [];
 		foreach ( $templates as $template ) {
-			if ( empty( $s ) || false !== strpos( $template['name'], $s ) ) {
+			if ( empty( $s ) || false !== strpos( strtolower( $template['name'] ), $s ) ) {
 				$items[ $template['file'] ] = $template['name'];
 			}
 		}
@@ -126,10 +130,12 @@ class IncludeExclude extends Base {
 		$roles = $wp_roles->roles;
 		$data  = [];
 		foreach ( $roles as $key => $role ) {
-			$data[] = [
-				'value' => $key,
-				'label' => $role['name'],
-			];
+			if ( empty( $s ) || false !== strpos( $role['name'], $s ) ) {
+				$data[] = [
+					'value' => $key,
+					'label' => $role['name'],
+				];
+			}
 		}
 		return $data;
 	}
