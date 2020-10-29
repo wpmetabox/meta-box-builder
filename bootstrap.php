@@ -23,6 +23,10 @@ new RestApi;
 new \MBBParser\RestApi;
 new Api\Fields;
 
+if ( mbb_is_extension_active( 'meta-box-include-exclude' ) ) {
+	new Api\IncludeExclude;
+}
+
 if ( is_admin() ) {
 	new Import;
 	new Edit;

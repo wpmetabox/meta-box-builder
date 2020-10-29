@@ -1,5 +1,6 @@
 import { useFormContext } from 'react-hook-form';
-import { uniqid } from '../../../utility/functions';
+import AsyncSelect from 'react-select/async';
+import { request, uniqid } from '../../../utility/functions';
 import DivRow from '../../Common/DivRow';
 const { useState } = wp.element;
 const { Dashicon } = wp.components;
@@ -8,7 +9,7 @@ const { __ } = wp.i18n;
 export const IncludeExclude = () => {
 	const [ rules, setRules ] = useState( [] );
 
-	const addRule = () => setRules( prevRules => prevRules.concat( { name: '', value: '', id: uniqid() } ) );
+	const addRule = () => setRules( prevRules => prevRules.concat( { name: 'ID', value: '', id: uniqid() } ) );
 	const removeRule = id => setRules( prevRules => prevRules.filter( rule => rule.id !== id ) );
 
 	return (
@@ -55,6 +56,8 @@ const Rule = ( { rule, index, removeRule } ) => {
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 
+	const loadOptions = inputValue => request( 'include-exclude', { name, s: inputValue } );
+
 	return (
 		<div className="og-include-exclude__rule og-attribute">
 			<select name={ `include_exclude[rules][${ index }][name]` } ref={ register } defaultValue={ name } onChange={ onChangeName }>
@@ -71,9 +74,24 @@ const Rule = ( { rule, index, removeRule } ) => {
 				<option value="user_id">{ __( 'User', 'meta-box-builder' ) }</option>
 				<option value="edited_user_role">{ __( 'Edited user role', 'meta-box-builder' ) }</option>
 				<option value="edited_user_id">{ __( 'Edited user', 'meta-box-builder' ) }</option>
-				<option value="is_child">{ __( 'Child post', 'meta-box-builder' ) }</option>
-				<option value="custom">{ __( 'Custom PHP callback', 'meta-box-builder' ) }</option>
+				<option value="is_child">{ __( 'Is child post', 'meta-box-builder' ) }</option>
+				<option value="custom">{ __( 'Custom', 'meta-box-builder' ) }</option>
 			</select>
+			{
+				![ 'is_child', 'custom' ].includes( name ) &&
+				<AsyncSelect className="react-select og-include-exclude__value" classNamePrefix="react-select" defaultOptions loadOptions={ loadOptions } />
+			}
+			{
+				name === 'is_child' &&
+				<select className="og-include-exclude__value" name={ `include_exclude[rules][${ index }][value]` } ref={ register }>
+					<option value="true">{ __( 'Yes', 'meta-box-builder' ) }</option>
+					<option value="false">{ __( 'No', 'meta-box-builder' ) }</option>
+				</select>
+			}
+			{
+				name === 'custom' &&
+				<input className="og-include-exclude__value" type="text" name={ `include_exclude[rules][${ index }][value]` } ref={ register } placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) } />
+			}
 			<button type="button" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
 		</div>
 	);

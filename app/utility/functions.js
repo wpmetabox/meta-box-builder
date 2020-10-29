@@ -159,6 +159,9 @@ export const request = async ( apiName, params = {}, method = 'GET' ) => {
 	if ( 'POST' === method ) {
 		options.body = JSON.stringify( params );
 		cacheKey += options.body;
+	} else {
+		apiName += '?' + ( new URLSearchParams( params ) ).toString();
+		cacheKey = apiName;
 	}
 
 	if ( apiCache[ cacheKey ] ) {

@@ -9,7 +9,7 @@ const SettingsTab = ( { register } ) => {
 		<>
 			<h3>Options</h3>
 			<Location />
-			<IncludeExclude />
+			{ MbbApp.extensions.includeExclude && <IncludeExclude /> }
 			<DivRow label="Position" htmlFor="context">
 				<select ref={ register } id="context" name="context" defaultValue="advanced">
 					<option value="normal">After content</option>
