@@ -40,49 +40,47 @@ const Group = ( props ) => {
 
 	return (
 		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-			<div className="d" id="list">
 
-				<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
-				<Header
-					type={ type }
-					id={ props.id }
-					copyItem={ props.copyItem }
-					removeItem={ props.removeItem }
-					toggleSettings={ toggleSettings }
-					changeSelectedList={ props.changeSelectedList }
-					parent={ props.parent }
-					index={ props.index }
-				/>
-				<Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
-					<TabList>
-						<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
-						<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
-					</TabList>
-					<TabPanel>
-						<Content fieldId={ props.id } data={ props.data.general } />
-					</TabPanel>
-					<TabPanel>
-						<Content fieldId={ props.id } data={ props.data.advanced } />
-					</TabPanel>
-				</Tabs>
-				<div className={ `og-group-fields og-field${ !children.length ? ' og-group-fields--empty' : '' }` }>
-					<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
-					<div className="og-input">
-						{
-							children.map( ( item, i ) => <div key={ item.id }>
-								<Insert parent={ props.id } index={ i } />
-								<Node
-									key={ item.id }
-									id={ item.id }
-									data={ item }
-									parent={ props.id }
-									index={ i }
-									changeSelectedList={ props.changeSelectedList }
-								/>
-							</div> )
-						}
-						<Inserter addItem={ addItem } type="group" />
-					</div>
+			<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
+			<Header
+				type={ type }
+				id={ props.id }
+				copyItem={ props.copyItem }
+				removeItem={ props.removeItem }
+				toggleSettings={ toggleSettings }
+				changeSelectedList={ props.changeSelectedList }
+				parent={ props.parent }
+				index={ props.index }
+			/>
+			<Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
+				<TabList>
+					<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
+					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
+				</TabList>
+				<TabPanel>
+					<Content fieldId={ props.id } data={ props.data.general } />
+				</TabPanel>
+				<TabPanel>
+					<Content fieldId={ props.id } data={ props.data.advanced } />
+				</TabPanel>
+			</Tabs>
+			<div className={ `og-group-fields og-field${ !children.length ? ' og-group-fields--empty' : '' }` }>
+				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
+				<div className="og-input">
+					{
+						children.map( ( item, i ) => <div key={ item.id }>
+							<Insert parent={ props.id } index={ i } />
+							<Node
+								key={ item.id }
+								id={ item.id }
+								data={ item }
+								parent={ props.id }
+								index={ i }
+								changeSelectedList={ props.changeSelectedList }
+							/>
+						</div> )
+					}
+					<Inserter addItem={ addItem } type="group" />
 				</div>
 			</div>
 		</div>
