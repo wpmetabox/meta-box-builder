@@ -1,6 +1,7 @@
 import Checkbox from '../Common/Checkbox';
 import DivRow from '../Common/DivRow';
 import Input from '../Common/Input';
+import { IncludeExclude } from './SettingsTab/IncludeExclude';
 import { Location } from './SettingsTab/Location';
 
 const SettingsTab = ( { register } ) => {
@@ -8,6 +9,7 @@ const SettingsTab = ( { register } ) => {
 		<>
 			<h3>Options</h3>
 			<Location />
+			<IncludeExclude />
 			<DivRow label="Position" htmlFor="context">
 				<select ref={ register } id="context" name="context" defaultValue="advanced">
 					<option value="normal">After content</option>
