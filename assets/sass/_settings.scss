@@ -1,3 +1,21 @@
 &-tab-settings {
 	padding: 12px;
 }
+
+&-include-exclude {
+	select {
+		width: auto;
+	}
+
+	&__intro {
+		margin-bottom: 12px;
+
+		select {
+			margin-right: 8px;
+
+			&:not(:first-child) {
+				margin-left: 8px;
+			}
+		}
+	}
+}
