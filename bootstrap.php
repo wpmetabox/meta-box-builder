@@ -26,6 +26,9 @@ new Api\Fields;
 if ( mbb_is_extension_active( 'meta-box-include-exclude' ) ) {
 	new Api\IncludeExclude;
 }
+if ( mbb_is_extension_active( 'meta-box-show-hide' ) ) {
+	new Api\ShowHide;
+}
 
 if ( is_admin() ) {
 	new Import;

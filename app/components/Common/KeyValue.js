@@ -48,7 +48,7 @@ const Item = ( { name, item, removeItem, keyPlaceholder, valuePlaceholder } ) =>
 		<div className="og-attribute">
 			<input type="text" placeholder={ keyPlaceholder } ref={ register } name={ `${ name }-key` } defaultValue={ item.key } />
 			<input type="text" placeholder={ valuePlaceholder } ref={ register } name={ `${ name }-value` } defaultValue={ item.value } />
-			<button type="button" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.uniqId ) }><Dashicon icon="dismiss" /></button>
+			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.uniqId ) }><Dashicon icon="dismiss" /></button>
 		</div>
 	);
 };

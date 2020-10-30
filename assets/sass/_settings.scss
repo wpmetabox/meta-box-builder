@@ -22,3 +22,11 @@
 		flex: 1;
 	}
 }
+&-show-hide__inputs {
+	align-items: flex-start;
+
+	.og-field {
+		flex: 1;
+		margin-bottom: 0;
+	}
+}

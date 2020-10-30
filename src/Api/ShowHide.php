@@ -3,8 +3,8 @@ namespace MBB\Api;
 
 use WP_REST_Request;
 
-class IncludeExclude extends Base {
-	public function include_exclude( WP_REST_Request $request ) {
+class ShowHide extends Base {
+	public function show_hide( WP_REST_Request $request ) {
 		$name = $request->get_param( 'name' );
 		$s    = strtolower( $request->get_param( 's' ) );
 
@@ -20,10 +20,10 @@ class IncludeExclude extends Base {
 			$s,
 			wp_cache_get_last_changed( 'posts' )
 		);
-		$data = wp_cache_get( $cache_key, 'mbb-include-exclude' );
+		$data = wp_cache_get( $cache_key, 'mbb-show-hide' );
 		if ( false === $data ) {
 			$data = $this->$method( $s, $name );
-			wp_cache_set( $cache_key, $data, 'mbb-include-exclude' );
+			wp_cache_set( $cache_key, $data, 'mbb-show-hide' );
 		}
 
 		return $data;
@@ -31,13 +31,8 @@ class IncludeExclude extends Base {
 
 	private function get_method( $name ) {
 		$methods = [
-			'ID'               => 'get_posts',
-			'parent'           => 'get_posts',
-			'template'         => 'get_templates',
-			'user_role'        => 'get_user_roles',
-			'user_id'          => 'get_users',
-			'edited_user_role' => 'get_user_roles',
-			'edited_user_id'   => 'get_users',
+			'template' => 'get_templates',
+			'format'   => 'get_formats',
 		];
 		$method = isset( $methods[ $name ] ) ? $methods[ $name ] : 'get_terms';
 		return $method;

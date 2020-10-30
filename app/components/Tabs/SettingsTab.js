@@ -3,6 +3,7 @@ import DivRow from '../Common/DivRow';
 import Input from '../Common/Input';
 import { IncludeExclude } from './SettingsTab/IncludeExclude';
 import { Location } from './SettingsTab/Location';
+import { ShowHide } from './SettingsTab/ShowHide';
 
 const SettingsTab = ( { register } ) => {
 	return (
@@ -10,6 +11,7 @@ const SettingsTab = ( { register } ) => {
 			<h3>Options</h3>
 			<Location />
 			{ MbbApp.extensions.includeExclude && <IncludeExclude /> }
+			{ MbbApp.extensions.showHide && <ShowHide /> }
 			<DivRow label="Position" htmlFor="context">
 				<select ref={ register } id="context" name="context" defaultValue="advanced">
 					<option value="normal">After content</option>

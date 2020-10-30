@@ -166,13 +166,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  grid-gap: 6px;
   margin-bottom: 12px;
 
-  input {
-    margin-right: 6px;
-  }
-
-  button {
+  .og-remove {
     padding: 0;
     border: none;
     background: none;
@@ -180,15 +177,13 @@
     transition: unset;
   }
 
-  &:hover button {
+  &:hover > .og-remove {
     visibility: visible;
     cursor: pointer;
   }
 
-  svg {
-    &:hover {
-      fill: var(--color-red);
-    }
+  svg:hover {
+    fill: var(--color-red);
   }
 }
 
