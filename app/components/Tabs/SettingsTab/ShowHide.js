@@ -17,7 +17,7 @@ export const ShowHide = () => {
 		<DivRow
 			className="og-include-exclude"
 			label={ `<a href="https://metabox.io/plugins/meta-box-show-hide/" target="_blank" rel="noopener norefferer">${ __( 'Toggle rules', 'meta-box-builder' ) }</a>` }
-			tooltip={ __( 'Conditions to toggle the whole field group', 'meta-box-builder' ) }
+			tooltip={ __( 'Conditions to toggle visibility of the field group', 'meta-box-builder' ) }
 		>
 			{ rules.length > 0 && <Intro /> }
 			{

@@ -3,6 +3,9 @@ namespace MBB\Api;
 
 use WP_REST_Server;
 use ReflectionMethod;
+use RWMB_Post_Field;
+use RWMB_Taxonomy_Field;
+use RWMB_User_Field;
 
 class Base {
 	public function __construct() {
@@ -37,63 +40,54 @@ class Base {
 	}
 
 	protected function get_posts( $s ) {
-		global $wpdb;
+		$post_types = mbb_get_post_types();
+		$post_types = array_map( function( $post_type ) {
+			return $post_type['slug'];
+		}, $post_types );
+		$post_types = array_diff( $post_types, ['attachment'] );
 
-		$where = '';
-		if ( $s ) {
-			$where = ' AND LOWER( post_title ) LIKE %s';
-		}
-		$sql = $wpdb->prepare( "
-			SELECT ID AS value, post_title AS label
-			FROM $wpdb->posts
-			WHERE
-				post_status NOT IN ('trash', 'auto-draft', 'inherit')
-				AND post_type NOT IN ('customize_changeset', 'custom_css', 'mb-post-type', 'mb-taxonomy', 'mb-views', 'meta-box', 'nav_menu_item', 'revision')
-				AND post_title != ''
-				$where
-			ORDER BY post_title ASC
-			LIMIT 10
-		", '%' . $wpdb->esc_like( $s ) . '%' );
-		$data = $wpdb->get_results( $sql );
+		$field = [
+			'query_args' => [
+				's'              => $s,
+				'post_type'      => $post_types,
+				'post_status'    => 'any',
+				'posts_per_page' => 10,
+				'orderby'        => 'post_title',
+				'order'          => 'ASC',
+			],
+		];
 
-		return $data;
+		$data = RWMB_Post_Field::query( null, $field );
+		return array_values( $data );
 	}
 
 	protected function get_terms( $s, $taxonomy ) {
-		$items = get_terms( [
-			'taxonomy'               => $taxonomy,
-			'name__like'             => $s,
-			'orderby'                => 'name',
-			'number'                 => 10,
-			'fields'                 => 'id=>name',
-			'hide_empty'             => false,
-			'count'                  => false,
-			'update_term_meta_cache' => false,
-		] );
-		$data = [];
-		foreach ( $items as $id => $name ) {
-			$data[] = [
-				'value' => $id,
-				'label' => $name,
-			];
-		}
-		return $data;
+		$field = [
+			'query_args' => [
+				'taxonomy'   => $taxonomy,
+				'name__like' => $s,
+				'orderby'    => 'name',
+				'number'     => 10,
+			],
+		];
+
+		$data = RWMB_Taxonomy_Field::query( null, $field );
+		return array_values( $data );
 	}
 
 	protected function get_users( $s ) {
-		$items = get_users( [
-			'search'  => "*{$s}*",
-			'number'  => 10,
-			'orderby' => 'display_name',
-			'order'   => 'ASC',
-			'fields'  => ['ID', 'display_name'],
-		] );
-		return array_map( function( $item ) {
-			return [
-				'value' => $item->ID,
-				'label' => $item->display_name,
-			];
-		}, $items );
+		$field = [
+			'display_field' => 'display_name',
+			'query_args'    => [
+				'search'  => "*{$s}*",
+				'number'  => 10,
+				'orderby' => 'display_name',
+				'order'   => 'ASC',
+			],
+		];
+
+		$data = RWMB_User_Field::query( null, $field );
+		return array_values( $data );
 	}
 
 	protected function get_user_roles( $s ) {
