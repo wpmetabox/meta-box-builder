@@ -28,14 +28,16 @@ class Edit {
 		wp_enqueue_code_editor( ['type' => 'application/x-httpd-php'] );
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['wp-element', 'wp-components', 'clipboard'], MBB_VER, true );
 
-		wp_localize_script( 'mbb-app', 'MbbApp', [
+		$data = [
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
 			'settings'      => json_decode( get_post()->post_content, ARRAY_A ),
+
 			'postTypes'     => mbb_get_post_types(),
 			'taxonomies'    => mbb_get_taxonomies(),
 			'settingsPages' => mbb_get_setting_pages(),
 			'templates'     => mbb_get_templates(),
+			'icons'         => mbb_get_dashicons(),
 
 			// Extensions check.
 			'extensions' => [
@@ -53,17 +55,9 @@ class Edit {
 				'termMeta'           => mbb_is_extension_active( 'mb-term-meta' ),
 				'userMeta'           => mbb_is_extension_active( 'mb-user-meta' ),
 			]
-		] );
+		];
 
-		wp_localize_script( 'mbb-app', 'icons', mbb_get_dashicons() );
-		wp_localize_script( 'mbb-app', 'menu', mbb_get_builder_menu() );
-		wp_localize_script( 'mbb-app', 'align', [
-			'left'   => __( 'Left', 'meta-box-builder' ),
-			'right'  => __( 'Right', 'meta-box-builder' ),
-			'center' => __( 'Center', 'meta-box-builder' ),
-			'wide'   => __( 'Wide', 'meta-box-builder' ),
-			'full'   => __( 'Full', 'meta-box-builder' ),
-		] );
+		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}
 
 	/**

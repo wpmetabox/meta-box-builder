@@ -7,30 +7,6 @@ if ( ! mbb_is_extension_active( 'mb-blocks' ) ) {
 	<h3><?php esc_html_e( 'Options', 'meta-box-builder' ); ?></h3>
 
 	<table class="form-table mbb-settings-block">
-		<tr>
-			<th><?php esc_html_e( 'Description', 'meta-box-builder' ); ?></th>
-			<td>
-				<input type="text" class="regular-text" ng-model="meta.description">
-			</td>
-		</tr>
-		<tr ng-init="meta.icon_type = 'dashicons'">
-			<th><?php esc_html_e( 'Icon type', 'meta-box-builder' ); ?></th>
-			<td>
-				<label><input type="radio" name="icon_type" ng-model="meta.icon_type" value="dashicons"> <?php esc_html_e( 'Dashicons', 'meta-box-builder' ) ?></label>
-				<label><input type="radio" name="icon_type" ng-model="meta.icon_type" value="svg"> <?php esc_html_e( 'Custom SVG', 'meta-box-builder' ) ?></label>
-			</td>
-		</tr>
-		<tr ng-show="meta.icon_type === 'dashicons'">
-			<th><?php esc_html_e( 'Icon', 'meta-box-builder' ); ?></th>
-			<td>
-				<div class="icon-panel">
-					<label ng-repeat="icon in icons" class="icon-single {{meta.icon == icon ? 'active' : ''}}">
-						<i class="wp-menu-image dashicons-before dashicons-{{icon}}"></i>
-						<input type="radio" ng-model="meta.icon" value="{{icon}}" class="hidden" name="block_icon">
-					</label>
-				</div>
-			</td>
-		</tr>
 		<tr ng-show="meta.icon_type === 'dashicons'">
 			<th><?php esc_html_e( 'Custom icon background color', 'meta-box-builder' ); ?></th>
 			<td>
