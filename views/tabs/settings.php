@@ -1,9 +1,5 @@
-<?php include MBB_DIR . 'views/settings/location.php'; ?>
-<?php include MBB_DIR . 'views/settings/include-exclude.php'; ?>
-<?php include MBB_DIR . 'views/settings/show-hide.php'; ?>
 <?php include MBB_DIR . 'views/settings/conditional-logic.php'; ?>
 
-<?php include MBB_DIR . 'views/settings/post.php'; ?>
 <?php include MBB_DIR . 'views/settings/block.php'; ?>
 
 <h3><?php esc_html_e( 'Advanced', 'meta-box-builder' ); ?></h3>
