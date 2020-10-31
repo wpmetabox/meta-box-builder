@@ -19,7 +19,6 @@ export const cardSource = {
     const item = monitor.getItem();
     const dropResult = monitor.getDropResult();
     const selectedList = getSelectedList();
-    console.log( item.id, dropResult.parent, dropResult.index );
     const tree = moveNode( item.id, dropResult.parent, dropResult.index );
     selectedList !== tree && props.changeSelectedList( tree );
   },
@@ -89,7 +88,7 @@ export const moveNode = ( from, to, index, typeChange ) => {
   return tree;
 };
 
-const keepValueNodeFrom = ( nodeItem ) => {
+export const keepValueNodeFrom = ( nodeItem ) => {
   let result = { ...nodeItem };
   const childrens = nodeItem.items;
 

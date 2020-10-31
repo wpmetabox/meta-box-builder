@@ -1,4 +1,5 @@
 import { DATA_LIST_TYPE, LIST_OPTION_TYPE } from '../constants/constants';
+import { keepValueNodeFrom } from './updateSelectedList';
 
 export const getLabel = ( name, type ) => {
 	const labels = {
@@ -10,6 +11,19 @@ export const getLabel = ( name, type ) => {
 
 export const getElementControlName = ( name, type ) => {
 	return toTitleCase( name );
+};
+
+export const fillFieldsValues = () => {
+	const listSelected = { ...getSelectedList() };
+	listSelected.items.map( ( item, index ) => {
+		listSelected.items[ index ] = getFieldValue( item );
+	} );
+
+	return listSelected;
+};
+
+const getFieldValue = ( item ) => {
+	return keepValueNodeFrom( item );
 };
 
 export const getDataCopiedItem = ( type, id ) => {
@@ -37,7 +51,7 @@ const getGeneralData = ( generalItems, id ) => {
 			for ( let i = 0; i < value; i++ ) {
 				options[ i ] = {};
 				options[ i ][ 'key' ] = getElementValue( `fields-${ id }-${ item }-${ i }-key` );
-				options[ i ][ 'label' ] = getElementValue( `fields-${ id }-${ item }-${ i }-label` );
+				options[ i ][ 'label' ] = getElementValue( `fields-${ id }-${ item }-${ i }-value` );
 			}
 			result[ item ] = options;
 		}
@@ -51,16 +65,17 @@ const getAdvancedData = ( advancedItems, id ) => {
 	Object.keys( advancedItems ).forEach( item => {
 		const elementName = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementName );
-		value = value || advancedItems[ item ];
+		value = value || advancedItems[ item ].default;
+
 		if ( LIST_OPTION_TYPE.includes( item ) ) {
 			let optionalList = [];
 			for ( let i = 0; i < value; i++ ) {
 				optionalList[ i ] = {};
 				optionalList[ i ][ 'key' ] = getElementValue( `fields-${ id }-${ item }-${ i }-key` );
-				optionalList[ i ][ 'label' ] = getElementValue( `fields-${ id }-${ item }-${ i }-label` );
+				optionalList[ i ][ 'value' ] = getElementValue( `fields-${ id }-${ item }-${ i }-value` );
 			}
 
-			result[ item ] = { ...advancedItems[ item ], optionalList };
+			result[ item ] = { ...advancedItems[ item ], default: optionalList };
 		} else if ( DATA_LIST_TYPE.includes( item ) ) {
 			let dataList = [];
 			let idDataList = document.getElementsByName( `fields-${ id }-datalist-id` )[ 0 ]?.value;
@@ -106,7 +121,7 @@ const getElementValue = name => {
 	if ( !element ) {
 		return null;
 	}
-	if ( [ 'select', 'textarea' ].includes( element.tagName ) || [ 'text', 'number', 'email' ].includes( element.type ) ) {
+	if ( [ 'SELECT', 'TEXTAREA' ].includes( element.tagName ) || [ 'text', 'number', 'email', 'hidden' ].includes( element.type ) ) {
 		return element.value;
 	}
 	if ( 'checkbox' === element.type ) {

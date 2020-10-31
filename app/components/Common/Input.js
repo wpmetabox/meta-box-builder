@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import DivRow from './DivRow';
 
-const Input = ( { name, test, defaultValue, type = 'text', ...rest } ) => {
+const Input = ( { name, defaultValue, type = 'text', ...rest } ) => {
 	const { register } = useFormContext();
 
 	return <DivRow htmlFor={ name } { ...rest }>

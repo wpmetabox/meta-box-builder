@@ -7,17 +7,20 @@ const { __ } = wp.i18n;
 const { Dashicon } = wp.components;
 
 const KeyValue = ( {
-	index,
+	fieldId,
+	defaultValue,
 	listType,
 	label,
+	name,
 	link = '',
 	tooltip = '',
 	keyPlaceholder = __( 'Enter key', 'meta-box-builder' ),
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
 } ) => {
-	const [ list, setList ] = useState( [] );
-	const removeItem = id => setList( prevList => prevList.filter( item => item.uniqId !== id ) );
 
+	const { register } = useFormContext();
+	const [ list, setList ] = useState( defaultValue || [] );
+	const removeItem = id => setList( prevList => prevList.filter( item => item.uniqId !== id ) );
 	if ( link ) {
 		label = `<a href="${ link }" target="_blank" rel="noreferrer noopener">${ label }</a>`;
 	}
@@ -30,12 +33,13 @@ const KeyValue = ( {
 						key={ item.uniqId }
 						item={ item }
 						removeItem={ removeItem }
-						name={ `fields-${ index }-${ listType }-${ i }` }
+						name={ `${ name }-${ i }` }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
 					/>
 				) )
 			}
+			<input type='hidden' id={ name } name={ name } ref={ register } value={ list.length } />
 			<button type="button" className="button" onClick={ () => setList( prevList => prevList.concat( { key: '', value: '', uniqId: uniqid() } ) ) }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
 		</DivRow>
 	);

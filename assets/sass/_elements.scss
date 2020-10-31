@@ -59,6 +59,10 @@ svg {
     align-items: center;
   }
 
+  .og-collapsible__header {
+    background-color: #ffffff;
+  }
+
   &__body {
     overflow-y: hidden;
     max-height: 0;

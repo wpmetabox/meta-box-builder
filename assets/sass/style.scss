@@ -52,6 +52,7 @@
     &--selected {
       box-shadow: inset 0 0 0 1.5px transparent,
         inset 0 -4px 0 0 var(--wp-admin-theme-color);
+      color: var(--wp-admin-theme-color);
     }
 
     &:hover {
