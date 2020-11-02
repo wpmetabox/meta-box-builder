@@ -175,6 +175,8 @@
     background: none;
     visibility: hidden;
     transition: unset;
+    width: 16px;
+    height: 16px;
   }
 
   &:hover > .og-remove {

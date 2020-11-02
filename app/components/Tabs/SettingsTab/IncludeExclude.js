@@ -43,8 +43,8 @@ const Intro = () => {
 			</select>
 			{ __( 'when', 'meta-box-builder' ) }
 			<select name="include_exclude[relation]" ref={ register }>
-				<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 				<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
+				<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 			</select>
 			{ __( 'conditions match', 'meta-box-builder' ) }
 		</div>
@@ -60,7 +60,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 
 	return (
 		<div className="og-include-exclude__rule og-attribute">
-			<select name={ `${ baseName }[name]` } ref={ register } defaultValue={ name } onChange={ onChangeName }>
+			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" ref={ register } defaultValue={ name } onChange={ onChangeName }>
 				<option value="ID">{ __( 'Post', 'meta-box-builder' ) }</option>
 				<option value="parent">{ __( 'Parent post', 'meta-box-builder' ) }</option>
 				<option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option>
