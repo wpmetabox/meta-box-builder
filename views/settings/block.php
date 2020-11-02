@@ -21,66 +21,9 @@ if ( ! mbb_is_extension_active( 'mb-blocks' ) ) {
 				<p class="description"><?php esc_html_e( 'Leave empty to use default color', 'meta-box-builder' ) ?></p>
 			</td>
 		</tr>
-		<tr ng-show="meta.icon_type === 'svg'">
-			<th><?php esc_html_e( 'SVG icon', 'meta-box-builder' ); ?></th>
-			<td>
-				<textarea class="large-text" placeholder="<?php esc_attr_e( 'Paste the SVG content here', 'meta-box-builder' ) ?>">{{meta.icon_svg}}</textarea>
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Category', 'meta-box-builder' ); ?></th>
-			<td>
-				<select ng-model="meta.category" ng-init="meta.category = 'layout'">
-					<option value="layout"><?php esc_html_e( 'Layout', 'meta-box-builder' ) ?></option>
-					<option value="common"><?php esc_html_e( 'Common', 'meta-box-builder' ) ?></option>
-					<option value="formatting"><?php esc_html_e( 'Formatting', 'meta-box-builder' ) ?></option>
-					<option value="widgets"><?php esc_html_e( 'Widgets', 'meta-box-builder' ) ?></option>
-					<option value="embed"><?php esc_html_e( 'Embed', 'meta-box-builder' ) ?></option>
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Keywords', 'meta-box-builder' ); ?></th>
-			<td>
-				<input type="text" class="regular-text" ng-model="meta.keywords">
-				<p class="description"><?php esc_html_e( 'Separate by commas', 'meta-box-builder' ) ?></p>
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Block Settings Position', 'meta-box-builder' ); ?></th>
-			<td>
-				<select ng-model="meta.block_context">
-					<option value=""><?php esc_html_e( 'In the content area', 'meta-box-builder' ); ?></option>
-					<option value="side"><?php esc_html_e( 'On the right sidebar', 'meta-box-builder' ); ?></option>
-				</select>
-			</td>
-		</tr>
 	</table>
 
 	<h3><?php esc_html_e( 'Block Supports', 'meta-box-builder' ); ?></h3>
-
-	<table class="form-table mbb-settings-block">
-		<tr>
-			<th><?php esc_html_e( 'Alignment', 'meta-box-builder' ); ?></th>
-			<td>
-				<label ng-repeat="(value, label) in align">
-					<input type="checkbox" checklist-model="meta.supports.align" checklist-value="value"> {{label}}
-				</label>
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Anchor', 'meta-box-builder' ); ?></th>
-			<td>
-				<input type="checkbox" ng-model="meta.supports.anchor" ng-true-value="true" ng-false-value="false">
-			</td>
-		</tr>
-		<tr>
-			<th><?php esc_html_e( 'Custom CSS class name', 'meta-box-builder' ); ?></th>
-			<td>
-				<input type="checkbox" ng-model="meta.supports.customClassName" ng-true-value="true" ng-false-value="false">
-			</td>
-		</tr>
-	</table>
 
 	<h3 ng-show="meta.for == 'block'"><?php esc_html_e( 'Render Options', 'meta-box-builder' ); ?></h3>
 
