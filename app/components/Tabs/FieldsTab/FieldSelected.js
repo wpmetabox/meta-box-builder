@@ -17,7 +17,7 @@ const FieldSelected = ( props ) => {
 
 	if ( 'divider' === type ) {
 		return (
-			<div className={ `og-item og-item--${ type } og-children-collapsible${ expanded ? ' og-children-collapsible--expanded' : '' }` }>
+			<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 				<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
 				<Header
 					type={ type }
@@ -27,7 +27,7 @@ const FieldSelected = ( props ) => {
 					toggleSettings={ toggleSettings }
 					index={ props.index }
 				/>
-				<div className="og-item__body og-children-collapsible__body">
+				<div className="og-item__body og-collapsible__body">
 					<Content index={ props.id } data={ data.general } />
 				</div>
 			</div>
@@ -35,7 +35,7 @@ const FieldSelected = ( props ) => {
 	}
 
 	return (
-		<div className={ `og-item og-item--${ type } ${ expanded ? ' og-children-collapsible--expanded' : 'og-children-collapsible' }` }>
+		<div className={ `og-item og-item--${ type } ${ expanded ? ' og-collapsible--expanded' : 'og-collapsible' }` }>
 			<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
 			<Header
 				type={ type }
@@ -47,7 +47,7 @@ const FieldSelected = ( props ) => {
 				parent={ props.parent }
 				index={ props.index }
 			/>
-			<Tabs selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) } forceRenderTabPanel={ true } className="og-item__body og-children-collapsible__body">
+			<Tabs selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) } forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
 				<TabList>
 					<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
 					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>

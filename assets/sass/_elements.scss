@@ -38,45 +38,14 @@ svg {
     padding: 0 12px;
   }
   &--expanded {
-    .og-collapsible__header .dashicons-arrow-down-alt2 {
-      transform: rotate(180deg);
-    }
-    .og-collapsible__header {
+    > .og-collapsible__header {
       background: var(--color-lighter);
-    }
-    .og-collapsible__body {
-      max-height: 999999px;
-      padding-top: 12px;
-      padding-bottom: 12px;
-    }
-  }
-}
 
-&-children-collapsible {
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .og-collapsible__header {
-    background-color: #ffffff;
-  }
-
-  &__body {
-    overflow-y: hidden;
-    max-height: 0;
-    transition: all 0.2s ease;
-    padding: 0 12px;
-  }
-  &--expanded {
-    .og-collapsible__header .dashicons-arrow-down-alt2 {
-      transform: rotate(180deg);
+      .dashicons-arrow-down-alt2 {
+        transform: rotate(180deg);
+      }
     }
-    .og-collapsible__header {
-      background: var(--color-lighter);
-    }
-    .og-children-collapsible__body {
+    > .og-collapsible__body {
       max-height: 999999px;
       padding-top: 12px;
       padding-bottom: 12px;
