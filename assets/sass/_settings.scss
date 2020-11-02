@@ -2,6 +2,20 @@
 	padding: 12px;
 }
 
+&-location {
+	& > .og-input {
+		display: flex;
+		justify-content: space-between;
+		grid-gap: 6px;
+	}
+	select {
+		width: auto;
+	}
+	.react-select {
+		flex: 1;
+	}
+}
+
 &-include-exclude {
 	select {
 		width: auto;
