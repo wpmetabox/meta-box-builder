@@ -15,8 +15,8 @@ export const IncludeExclude = () => {
 	return (
 		<DivRow
 			className="og-include-exclude"
-			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced rules', 'meta-box-builder' ) }</a>` }
-			tooltip={ __( 'More controls on where to show this field group.', 'meta-box-builder' ) }
+			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced location rules', 'meta-box-builder' ) }</a>` }
+			tooltip={ __( 'More rules on where to display the field group.', 'meta-box-builder' ) }
 		>
 			{ rules.length > 0 && <Intro /> }
 			{
@@ -80,7 +80,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 			{
 				// Using an unused "key" prop for AsyncSelect forces rerendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
-				<AsyncSelect key={ name } className="react-select og-include-exclude__value" classNamePrefix="react-select" defaultOptions loadOptions={ loadOptions } />
+				<AsyncSelect key={ name } className="react-select og-include-exclude__value" classNamePrefix="react-select" isMulti defaultOptions loadOptions={ loadOptions } />
 			}
 			{
 				name === 'is_child' &&

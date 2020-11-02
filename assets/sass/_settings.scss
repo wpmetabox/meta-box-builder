@@ -35,12 +35,11 @@
 	&__value {
 		flex: 1;
 	}
-}
-&-show-hide__inputs {
-	align-items: flex-start;
-
-	.og-field {
-		flex: 1;
-		margin-bottom: 0;
+	&__rule {
+		align-items: flex-start;
 	}
+}
+&-show-hide__inputs .og-field {
+	flex: 1;
+	margin-bottom: 0;
 }
