@@ -1,6 +1,6 @@
 import Checkbox from '../../Common/Checkbox';
 import CheckboxList from '../../Common/CheckboxList';
-import Icons from '../../Common/Icons';
+import Icon from '../../Common/Icon';
 import Input from '../../Common/Input';
 import Select from '../../Common/Select';
 import Textarea from '../../Common/Textarea';
@@ -26,10 +26,10 @@ export const Block = () => {
 			<Textarea
 				name="icon_svg"
 				label={ __( 'SVG icon', 'meta-box-builder' ) }
-				tooltip={ __( 'Paste the SVG content here', 'meta-box-builder' ) }
+				placeholder={ __( 'Paste the SVG content here', 'meta-box-builder' ) }
 			/>
 		}
-		{ iconType === 'dashicons' && <Icons name="icon" /> }
+		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="icon" /> }
 		<Select
 			name="category"
 			label={ __( 'Category', 'meta-box-builder' ) }
