@@ -5,6 +5,7 @@ import { IncludeExclude } from './SettingsTab/IncludeExclude';
 import { Location } from './SettingsTab/Location';
 import { Post } from './SettingsTab/Post';
 import { ShowHide } from './SettingsTab/ShowHide';
+import { Tabs } from './SettingsTab/Tabs';
 const { useState } = wp.element;
 
 const SettingsTab = ( { register } ) => {
@@ -30,6 +31,7 @@ const SettingsTab = ( { register } ) => {
 			{ objectType === 'post' && postTypes.length > 0 && <Post postTypes={ postTypes } /> }
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block /> }
 			{ MbbApp.extensions.customTable && <CustomTable /> }
+			{ MbbApp.extensions.tabs && <Tabs /> }
 			<CustomSettings objectType={ objectType } />
 		</>
 	);
