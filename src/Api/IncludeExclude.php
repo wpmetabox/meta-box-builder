@@ -9,6 +9,7 @@ class IncludeExclude extends Base {
 		$s    = strtolower( $request->get_param( 's' ) );
 
 		$method = $this->get_method( $name );
+		$name = 'get_terms' === $method ? str_replace( 'parent_', '', $name ) : $name;
 		return $this->$method( $s, $name );
 	}
 

@@ -80,7 +80,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 			{
 				// Using an unused "key" prop for AsyncSelect forces rerendering, which makes the loadOptions callback work.
 				![ 'is_child', 'input_value' ].includes( name ) &&
-				<AsyncSelect key={ name } className="react-select og-include-exclude__value" classNamePrefix="react-select" defaultOptions loadOptions={ loadOptions } />
+				<AsyncSelect key={ name } className="react-select og-include-exclude__value" classNamePrefix="react-select" isMulti defaultOptions loadOptions={ loadOptions } />
 			}
 			{
 				name === 'is_child' &&
