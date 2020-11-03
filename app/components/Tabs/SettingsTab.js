@@ -1,4 +1,5 @@
 import { Block } from './SettingsTab/Block';
+import { CustomSettings } from './SettingsTab/CustomSettings';
 import { IncludeExclude } from './SettingsTab/IncludeExclude';
 import { Location } from './SettingsTab/Location';
 import { Post } from './SettingsTab/Post';
@@ -27,6 +28,7 @@ const SettingsTab = ( { register } ) => {
 			{ MbbApp.extensions.showHide && <ShowHide /> }
 			{ objectType === 'post' && postTypes.length > 0 && <Post postTypes={ postTypes } /> }
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block /> }
+			<CustomSettings />
 		</>
 	);
 };
