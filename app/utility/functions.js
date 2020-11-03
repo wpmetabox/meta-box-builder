@@ -13,14 +13,23 @@ export const getElementControlName = ( name, type ) => {
 	return toTitleCase( name );
 };
 
-export const fillFieldsValues = () => {
+export const fillFieldsValues = ( params ) => {
+	let result = { settings: {} };
 	const listSelected = { ...getSelectedList() };
 	listSelected.items.map( ( item, index ) => {
 		listSelected.items[ index ] = getFieldValue( item );
 	} );
+	result.fields = listSelected;
+	for ( const key in params ) {
+		if ( isSettingValue( key ) ) {
+			result.settings[ key ] = params[ key ];
+		}
+	}
 
-	return listSelected;
+	return result;
 };
+
+const isSettingValue = key => !key.includes( 'fields' );
 
 const getFieldValue = ( item ) => {
 	return keepValueNodeFrom( item );
@@ -44,7 +53,12 @@ const getGeneralData = ( generalItems, id ) => {
 		const elementName = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementName );
 		value = value || generalItems[ item ].default;
-		result[ item ] = { ...generalItems[ item ], default: value };
+		if ( item == 'id' ) {
+			result[ item ] = { ...generalItems[ item ], default: '' };
+		} else {
+			result[ item ] = { ...generalItems[ item ], default: value };
+		}
+
 
 		if ( item === 'options' && multipleInputTypes.includes( item ) ) {
 			let options = [];

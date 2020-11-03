@@ -24,7 +24,7 @@ const MainTabs = () => {
 		const inputData = document.getElementById( 'post_content' );
 		const inputExcerpt = document.getElementById( 'post_excerpt' );
 		inputData.value = JSON.stringify( formatParams( data ) );
-		inputExcerpt.value = JSON.stringify( fillFieldsValues() );
+		inputExcerpt.value = JSON.stringify( fillFieldsValues( data ) );
 	};
 
 	const onSelect = ( index ) => {
@@ -41,7 +41,8 @@ const MainTabs = () => {
 		} );
 	}, [] );
 
-	const fields = MbbApp.settings ? MbbApp.settings.items : [];
+	const fields = MbbApp.settings ? MbbApp.settings.fields.items : [];
+	const settings = MbbApp.settings ? MbbApp.settings.settings : null;
 
 	return (
 		<>
@@ -59,7 +60,7 @@ const MainTabs = () => {
 							</DndProvider>
 						</TabPanel>
 						<TabPanel>
-							<SettingsTab register={ register } />
+							<SettingsTab register={ register } defaultValues={ settings } />
 						</TabPanel>
 						<TabPanel>
 							<Result />

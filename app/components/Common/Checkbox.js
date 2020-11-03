@@ -1,10 +1,19 @@
 import { useFormContext } from "react-hook-form";
 import DivRow from "./DivRow";
 
-const { useState } = wp.element;
+const { useState, useEffect } = wp.element;
 
 const Checkbox = ( { name, label, type, className, defaultValue, ...rest } ) => {
+	console.log( 'test', name, defaultValue );
 	const [ value, setValue ] = useState( defaultValue );
+
+	useEffect( () => {
+		if ( defaultValue ) {
+			document.getElementById( name ).closest( '.og-item' ).querySelectorAll( `.${ rest.setting }-setting` ).forEach( item => item.style.display = 'flex' );
+		}
+
+	}, [ defaultValue ] );
+
 	const toggleSettings = e => {
 		if ( !rest.setting ) {
 			return;

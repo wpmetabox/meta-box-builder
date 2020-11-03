@@ -1,5 +1,5 @@
 import memoizeOne from 'memoize-one';
-import { getDataCopiedItem, getSelectedList, updateSelectedList } from './functions';
+import { getDataCopiedItem, getSelectedList, uniqid, updateSelectedList } from './functions';
 
 
 export const cardSource = {
@@ -117,8 +117,10 @@ export const deleteItem = ( id, parent, index ) => {
 
 const createCopyItem = ( item ) => {
   let result = { ...item };
-  const newId = `${ item.type }_${ uniqid() }`;
-  result.id = newId;
+  result.id = `${ item.type }_${ uniqid() }`;
+  if ( result.items ) {
+    result.items.map( item => item = createCopyItem( item ) );
+  }
   result.data.general.name.default += ' Copy';
 
   return result;
@@ -131,5 +133,3 @@ const isCopying = typeChange => typeChange === 'copy';
 const isExactlyParent = ( parentId, toId ) => parentId === toId;
 
 const isNotDeleting = typeChange => typeChange !== 'delete';
-
-const uniqid = () => Math.random().toString( 36 ).substr( 2 );
