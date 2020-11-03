@@ -1,7 +1,5 @@
 <?php include MBB_DIR . 'views/settings/conditional-logic.php'; ?>
 
-<?php include MBB_DIR . 'views/settings/custom-table.php'; ?>
-
 <h2 ng-show="tabExists"><?php esc_html_e( 'Tabs', 'meta-box-builder' ); ?></h3>
 <table class="form-table" ng-show="tabExists">
 	<tr>
