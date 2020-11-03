@@ -50,3 +50,15 @@
 	flex: 2;
 	margin-bottom: 0;
 }
+
+&-block-description {
+	td {
+		vertical-align: top;
+	}
+	code {
+		background: none;
+		font-size: 12px;
+		white-space: nowrap;
+		padding: 0;
+	}
+}

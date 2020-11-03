@@ -1,5 +1,7 @@
+import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Checkbox from '../../Common/Checkbox';
 import CheckboxList from '../../Common/CheckboxList';
+import DivRow from '../../Common/DivRow';
 import Icon from '../../Common/Icon';
 import Input from '../../Common/Input';
 import Select from '../../Common/Select';
@@ -9,11 +11,13 @@ const { useState, useEffect } = wp.element;
 
 export const Block = () => {
 	const [ iconType, setIconType ] = useState( 'dashicons' );
+	const [ renderWith, setRenderWith ] = useState( 'callback' );
 	const updateIconType = e => setIconType( e.target.value );
+	const updateRenderWith = e => setRenderWith( e.target.value );
 
 	useEffect( () => {
 		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
-	}, iconType );
+	}, [ iconType ] );
 
 	return <>
 		<h3>{ __( 'Block Settings', 'meta-box-builder' ) }</h3>
@@ -22,7 +26,7 @@ export const Block = () => {
 			name="icon_type"
 			label={ __( 'Icon type', 'meta-box-builder' ) }
 			options={ { dashicons: __( 'Dashicons', 'meta-box-builder' ), svg: __( 'Custom SVG', 'meta-box-builder' ) } }
-			defaultValue="dashicons"
+			defaultValue={ iconType }
 			onChange={ updateIconType }
 		/>
 		{
@@ -68,14 +72,90 @@ export const Block = () => {
 			name="supports[align]"
 			label={ __( 'Alignment', 'meta-box-builder' ) }
 			options={ {
-				left  : __( 'Left', 'meta-box-builder' ),
-				right : __( 'Right', 'meta-box-builder' ),
+				left: __( 'Left', 'meta-box-builder' ),
+				right: __( 'Right', 'meta-box-builder' ),
 				center: __( 'Center', 'meta-box-builder' ),
-				wide  : __( 'Wide', 'meta-box-builder' ),
-				full  : __( 'Full', 'meta-box-builder' ),
+				wide: __( 'Wide', 'meta-box-builder' ),
+				full: __( 'Full', 'meta-box-builder' ),
 			} }
 		/>
 		<Checkbox name="supports[anchor]" label={ __( 'Anchor', 'meta-box-builder' ) } />
 		<Checkbox name="supports[customClassName]" label={ __( 'Custom CSS class name', 'meta-box-builder' ) } />
+
+		<h3>{ __( 'Block Render Settings', 'meta-box-builder' ) }</h3>
+		<Select
+			name="render_width"
+			label={ __( 'Render with', 'meta-box-builder' ) }
+			options={ {
+				callback: __( 'PHP callback function', 'meta-box-builder' ),
+				template: __( 'Template file', 'meta-box-builder' ),
+				code: __( 'Code', 'meta-box-builder' ),
+			} }
+			defaultValue={ renderWith }
+			onChange={ updateRenderWith }
+		/>
+		{
+			renderWith === 'callback' &&
+			<Input name="render_callback" label={ __( 'Render callback', 'meta-box-builder' ) } placeholder={ __( 'Enter PHP function name', 'meta-box-builder' ) } />
+		}
+		{
+			renderWith === 'template' &&
+			<Input name="render_template" label={ __( 'Render template', 'meta-box-builder' ) } placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) } />
+		}
+		{
+			renderWith === 'code' &&
+			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
+				<CodeMirror name="render_code" options={ { mode: 'php', lineNumbers: true } } />
+				<table className="og-block-description">
+					<tbody>
+						<tr>
+							<td><code>{ "{{ attribute }}" }</code></td>
+							<td dangerouslySetInnerHTML={ { __html: __( 'Block attribute. Replace <code>attribute</code> with <code>anchor</code>, <code>align</code> or <code>className</code>).', 'meta-box-builder' ) } } />
+						</tr>
+						<tr>
+							<td><code>{ "{{ field_id }}" }</code></td>
+							<td dangerouslySetInnerHTML={ { __html: __( 'Field value. Replace <code>field_id</code> with a real field ID.', 'meta-box-builder' ) } } />
+						</tr>
+						<tr>
+							<td><code>{ "{{ is_preview }}" }</code></td>
+							<td dangerouslySetInnerHTML={ { __html: __( 'Whether in preview mode.', 'meta-box-builder' ) } } />
+						</tr>
+						<tr>
+							<td><code>{ "{{ post_id }}" }</code></td>
+							<td dangerouslySetInnerHTML={ { __html: __( 'Current post ID.', 'meta-box-builder' ) } } />
+						</tr>
+						<tr>
+							<td><code>mb.function()</code></td>
+							<td dangerouslySetInnerHTML={ { __html: __( 'Run a PHP/WordPress function via <code>mb</code> namespace. Replace <code>function</code> with a valid PHP/WordPress function name.', 'meta-box-builder' ) } } />
+						</tr>
+					</tbody>
+				</table>
+			</DivRow>
+		}
+		<Input name="enqueue_style" label={ __( 'Custom CSS', 'meta-box-builder' ) } placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) } />
+		<Input name="enqueue_script" label={ __( 'Custom CSS', 'meta-box-builder' ) } placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) } />
+		<Input name="enqueue_assets" label={ __( 'Custom assets callback', 'meta-box-builder' ) } placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) } />
+		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
+			<table className="og-block-description">
+				<tbody>
+					<tr>
+						<td><code>{ "{{ site.path }}" }</code></td>
+						<td>{ __( 'Site path', 'meta-box-builder' ) }</td>
+					</tr>
+					<tr>
+						<td><code>{ "{{ site.url }}" }</code></td>
+						<td>{ __( 'Site URL', 'meta-box-builder' ) }</td>
+					</tr>
+					<tr>
+						<td><code>{ "{{ theme.path }}" }</code></td>
+						<td>{ __( 'Path to the current [child] theme directory', 'meta-box-builder' ) }</td>
+					</tr>
+					<tr>
+						<td><code>{ "{{ theme.url }}" }</code></td>
+						<td>{ __( 'URL to the current [child] theme directory', 'meta-box-builder' ) }</td>
+					</tr>
+				</tbody>
+			</table>
+		</DivRow>
 	</>;
 };

@@ -1,3 +1,7 @@
+h3 {
+  margin-top: 32px;
+}
+
 input[type="text"],
 input[type="number"],
 textarea,
@@ -81,14 +85,15 @@ svg {
   }
 }
 
+.react-codemirror2 {
+  border: var(--border);
+    margin-bottom: 12px;
+}
+
 // Result
 &-result {
   code {
     font-size: 12px;
-  }
-  .react-codemirror2 {
-    border: var(--border);
-    margin-bottom: 24px;
   }
   &__body {
     position: relative;
