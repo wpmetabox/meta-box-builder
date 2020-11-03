@@ -1,31 +1,5 @@
 <?php include MBB_DIR . 'views/settings/conditional-logic.php'; ?>
 
-<?php include MBB_DIR . 'views/settings/block.php'; ?>
-
-<h3><?php esc_html_e( 'Advanced', 'meta-box-builder' ); ?></h3>
-
-<table class="form-table">
-	<tr>
-		<th>
-			<?php esc_html_e( 'Field ID prefix', 'meta-box-builder' ); ?>
-			<?= mbb_tooltip( __( 'Auto add a prefix to all field IDs to keep them separated from other field groups or other plugins.', 'meta-box-builder' ) ) ?>
-		</th>
-		<td>
-			<input type="text" class="regular-text" ng-model="meta.prefix">
-			<p class="description"><?= wp_kses_post( __( 'Leave empty to ignore this or use <code>_</code> to make the fields hidden.', 'meta-box-builder' ) ) ?></p>
-		</td>
-	</tr>
-	<tr>
-		<th>
-			<?php esc_html_e( 'Text domain', 'meta-box-builder' ); ?>
-			<?= mbb_tooltip( __( 'Required for multilingual website. Used in the exported code only.', 'meta-box-builder' ) ) ?>
-		</th>
-		<td>
-			<input type="text" class="regular-text" ng-model="meta.text_domain">
-		</td>
-	</tr>
-</table>
-
 <?php include MBB_DIR . 'views/settings/custom-attributes.php'; ?>
 <?php include MBB_DIR . 'views/settings/custom-table.php'; ?>
 

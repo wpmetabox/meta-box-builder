@@ -10,7 +10,7 @@ export const Location = ( { objectType, updateObjectType, postTypes, updatePostT
 	return <>
 		<DivRow label={ __( 'Location', 'meta-box-builder' ) } className="og-location" tooltip={ __( 'Select where to display the field group', 'meta-box-builder' ) }>
 			<select name="object_type" ref={ register } defaultValue={ objectType } onChange={ updateObjectType }>
-				<option value="post">{ __( 'Post', 'meta-box-builder' ) }</option>
+				<option value="post">{ __( 'Post type', 'meta-box-builder' ) }</option>
 				{ MbbApp.extensions.termMeta && <option value="term">{ __( 'Taxonomy', 'meta-box-builder' ) }</option> }
 				{ MbbApp.extensions.userMeta && <option value="user">{ __( 'User', 'meta-box-builder' ) }</option> }
 				{ MbbApp.extensions.commentMeta && <option value="comment">{ __( 'Comment', 'meta-box-builder' ) }</option> }

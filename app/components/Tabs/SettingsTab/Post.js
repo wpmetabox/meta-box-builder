@@ -15,7 +15,6 @@ export const Post = ( { postTypes } ) => {
 	}
 
 	return <>
-		<h3>{ __( 'Options', 'meta-box-builder' ) }</h3>
 		<Select
 			name="position"
 			label={ __( 'Position', 'meta-box-builder' ) }

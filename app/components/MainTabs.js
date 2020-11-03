@@ -58,7 +58,7 @@ const MainTabs = () => {
 					<TabPanel className="react-tabs__tab-panel og-tab-settings">
 						<SettingsTab register={ register } />
 					</TabPanel>
-					<TabPanel>
+					<TabPanel className="react-tabs__tab-panel og-tab-code">
 						<Result />
 					</TabPanel>
 				</Tabs>
