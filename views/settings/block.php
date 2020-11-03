@@ -6,25 +6,6 @@ if ( ! mbb_is_extension_active( 'mb-blocks' ) ) {
 <div ng-show="meta.for === 'block'">
 	<h3><?php esc_html_e( 'Options', 'meta-box-builder' ); ?></h3>
 
-	<table class="form-table mbb-settings-block">
-		<tr ng-show="meta.icon_type === 'dashicons'">
-			<th><?php esc_html_e( 'Custom icon background color', 'meta-box-builder' ); ?></th>
-			<td>
-				<input type="text" class="mbb-color" ng-model="meta.icon_background">
-				<p class="description"><?php esc_html_e( 'Leave empty to use default color', 'meta-box-builder' ) ?></p>
-			</td>
-		</tr>
-		<tr ng-show="meta.icon_type === 'dashicons'">
-			<th><?php esc_html_e( 'Custom icon color', 'meta-box-builder' ); ?></th>
-			<td>
-				<input type="text" class="mbb-color" ng-model="meta.icon_foreground">
-				<p class="description"><?php esc_html_e( 'Leave empty to use default color', 'meta-box-builder' ) ?></p>
-			</td>
-		</tr>
-	</table>
-
-	<h3><?php esc_html_e( 'Block Supports', 'meta-box-builder' ); ?></h3>
-
 	<h3 ng-show="meta.for == 'block'"><?php esc_html_e( 'Render Options', 'meta-box-builder' ); ?></h3>
 
 	<table class="form-table mbb-settings-block">

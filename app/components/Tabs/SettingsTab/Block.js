@@ -5,14 +5,18 @@ import Input from '../../Common/Input';
 import Select from '../../Common/Select';
 import Textarea from '../../Common/Textarea';
 const { __ } = wp.i18n;
-const { useState } = wp.element;
+const { useState, useEffect } = wp.element;
 
 export const Block = () => {
 	const [ iconType, setIconType ] = useState( 'dashicons' );
 	const updateIconType = e => setIconType( e.target.value );
 
+	useEffect( () => {
+		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
+	}, iconType );
+
 	return <>
-		<h3>{ __( 'Options', 'meta-box-builder' ) }</h3>
+		<h3>{ __( 'Block Settings', 'meta-box-builder' ) }</h3>
 		<Input name="description" label={ __( 'Description', 'meta-box-builder' ) } />
 		<Select
 			name="icon_type"
@@ -30,6 +34,14 @@ export const Block = () => {
 			/>
 		}
 		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="icon" /> }
+		{
+			iconType === 'dashicons' &&
+			<Input name="icon_foreground" className="og-color-picker" label={ __( 'Custom icon color', 'meta-box-builder' ) } tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) } />
+		}
+		{
+			iconType === 'dashicons' &&
+			<Input name="icon_background" className="og-color-picker" label={ __( 'Custom icon background color', 'meta-box-builder' ) } tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) } />
+		}
 		<Select
 			name="category"
 			label={ __( 'Category', 'meta-box-builder' ) }
