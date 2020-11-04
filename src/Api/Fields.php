@@ -303,13 +303,22 @@ class Fields extends Base {
 			'label'   => __( 'Custom settings', 'meta-box-builder' ),
 			'tooltip' => __( 'Use this to add custom settings for the field. The custom settings will overwrite existing settings if they have the same key.', 'meta-box-builder' ),
 		] );
-		$conditional_logic = Component::ConditionalLogic( [
-			'link' => 'https://docs.metabox.io/extensions/meta-box-conditional-logic/',
-			'label' => __( 'Conditional logic', 'meta-box-builder' ),
-			'tooltip' => __( 'Toogle the field visibility by other fields\' values', 'meta-box-builder' ),
-		] );
 		$general = compact( 'name', 'id', 'label_description', 'desc' );
-		$advanced = compact( 'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings', 'conditional_logic' );
+		$advanced = compact( 'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' );
+		if ( mbb_is_extension_active( 'meta-box-conditional-logic' ) ) {
+			$conditional_logic = Component::ConditionalLogic( [
+				'link' => 'https://docs.metabox.io/extensions/meta-box-conditional-logic/',
+				'label' => __( 'Conditional logic', 'meta-box-builder' ),
+				'tooltip' => __( 'Toogle the field visibility by other fields\' values', 'meta-box-builder' ),
+			] );
+			$advanced = array_merge( $advanced, [
+				'conditional_logic' => Component::ConditionalLogic( [
+					'link' => 'https://docs.metabox.io/extensions/meta-box-conditional-logic/',
+					'label' => __( 'Conditional logic', 'meta-box-builder' ),
+					'tooltip' => __( 'Toogle the field visibility by other fields\' values', 'meta-box-builder' ),
+				] ),
+			] );
+		}
 
 		// Define only general tab.
 		$fields = [
@@ -510,7 +519,9 @@ class Fields extends Base {
 					'label' => __( 'Editor options', 'meta-box-builder' ),
 				] ),
 			], $clone_settings ),
-			'group' => array_merge( $general, [
+		];
+		if ( mbb_is_extension_active( 'meta-box-group' ) ) {
+			$fields['group'] = array_merge( $general, [
 				'collapsible' => Component::Checkbox( [
 					'label'   => __( 'Collapsible', 'meta-box-builder' ),
 					'setting' => 'collapsible',
@@ -532,8 +543,8 @@ class Fields extends Base {
 					'tooltip'   => __( 'Use {field_id} for a sub-field value and {#} for the clone index (if the group is cloneable)', 'meta-box-builder' ),
 					'className' => 'collapsible-setting',
 				] ),
-			], $clone_settings ),
-		];
+			], $clone_settings );
+		}
 
 		foreach ( $fields as $key => $general ) {
 			$fields[ $key ] = compact( 'general', 'advanced' );
