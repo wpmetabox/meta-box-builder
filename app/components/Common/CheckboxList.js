@@ -1,7 +1,7 @@
-import DivRow from './DivRow';
 import { useFormContext } from 'react-hook-form';
+import DivRow from './DivRow';
 
-const CheckboxList = ( { name, options, className, defaultValue, ...rest } ) => {
+const CheckboxList = ( { name, options, className, defaultValue = [], ...rest } ) => {
 	const { register } = useFormContext();
 
 	className = `og-field--checkbox-list ${ className || '' }`;

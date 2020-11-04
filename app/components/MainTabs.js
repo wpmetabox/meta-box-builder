@@ -43,7 +43,7 @@ const MainTabs = () => {
 
 	const fields = MbbApp.settings ? MbbApp.settings.fields.items : [];
 	const settings = MbbApp.settings ? MbbApp.settings.settings : null;
-
+	console.log( 'mmm', MbbApp );
 	return (
 		<>
 			<FormProvider { ...methods } register={ register } control={ control }>
@@ -62,7 +62,7 @@ const MainTabs = () => {
 						<TabPanel>
 							<SettingsTab register={ register } defaultValues={ settings } />
 						</TabPanel>
-						<TabPanel>
+						<TabPanel className="react-tabs__tab-panel og-tab-code">
 							<Result />
 						</TabPanel>
 					</Tabs>

@@ -176,6 +176,8 @@ const toTitleCase = string => string.split( '_' ).map( ucfirst ).join( '' );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
+export const objectToArray = object => Object.entries( object ).map( ( [ value, label ] ) => ( { value, label } ) );
+
 let apiCache = {};
 export const request = async ( apiName, params = {}, method = 'GET' ) => {
 	let options = {
@@ -186,6 +188,9 @@ export const request = async ( apiName, params = {}, method = 'GET' ) => {
 	if ( 'POST' === method ) {
 		options.body = JSON.stringify( params );
 		cacheKey += options.body;
+	} else {
+		apiName += '?' + ( new URLSearchParams( params ) ).toString();
+		cacheKey = apiName;
 	}
 
 	if ( apiCache[ cacheKey ] ) {
