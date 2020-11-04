@@ -2,12 +2,12 @@ import Checkbox from '../../Common/Checkbox';
 import Select from '../../Common/Select';
 const { __ } = wp.i18n;
 
-export const Post = ( { postTypes } ) => {
-	const isClassic = ! MbbApp.postTypes.find( pt => postTypes.includes( pt.slug ) && pt.block_editor );
+export const Post = ( { postTypes, defaultValues } ) => {
+	const isClassic = !MbbApp.postTypes.find( pt => postTypes.includes( pt.slug ) && pt.block_editor );
 
 	let contextOptions = {
 		normal: __( 'After content', 'meta-box-builder' ),
-		side  : __( 'Side', 'meta-box-builder' ),
+		side: __( 'Side', 'meta-box-builder' ),
 	};
 	if ( isClassic ) {
 		contextOptions.form_top = __( 'Before post title', 'meta-box-builder' );
@@ -19,19 +19,19 @@ export const Post = ( { postTypes } ) => {
 			name="position"
 			label={ __( 'Position', 'meta-box-builder' ) }
 			options={ contextOptions }
-			defaultValue="normal"
+			defaultValue={ defaultValues.position || "normal" }
 		/>
 		<Select
 			name="priority"
 			label={ __( 'Priority', 'meta-box-builder' ) }
 			options={ { high: __( 'High', 'meta-box-builder' ), low: __( 'Low', 'meta-box-builder' ) } }
-			defaultValue="high"
+			defaultValue={ defaultValues.priority || "high" }
 		/>
 		<Select
 			name="style"
 			label={ __( 'Style', 'meta-box-builder' ) }
 			options={ { default: __( 'Standard (WordPress meta box)', 'meta-box-builder' ), seamless: __( 'Seamless (no meta box)', 'meta-box-builder' ) } }
-			defaultValue="high"
+			defaultValue={ defaultValues.style || "high" }
 		/>
 		{
 			isClassic &&
