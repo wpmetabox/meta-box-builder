@@ -3,7 +3,7 @@ namespace MBB\Api;
 
 class Fields extends Base {
 	public function get_field_types() {
-		return [
+		$field_types = [
 			'Basic' => [
 				'button'          => 'Button',
 				'button_group'    => 'Button Group',
@@ -61,9 +61,12 @@ class Fields extends Base {
 			'Layout' => [
 				'divider' => 'Divider',
 				'heading' => 'Heading',
-				'group'   => 'Group',
 			],
 		];
+		if ( mbb_is_extension_active( 'meta-box-group' ) ) {
+			$field_types['Layout']['group'] = 'Group';
+		}
+		return $field_types;
 	}
 
 	public function get_fields() {
