@@ -63,6 +63,9 @@ class Fields extends Base {
 				'heading' => 'Heading',
 			],
 		];
+		if ( mbb_is_extension_active( 'meta-box-tabs' ) ) {
+			$field_types['Layout']['tab'] = 'Tab';
+		}
 		if ( mbb_is_extension_active( 'meta-box-group' ) ) {
 			$field_types['Layout']['group'] = 'Group';
 		}
@@ -552,6 +555,27 @@ class Fields extends Base {
 		foreach ( $fields as $key => $general ) {
 			$fields[ $key ] = compact( 'general', 'advanced' );
 		}
+
+		if ( mbb_is_extension_active( 'meta-box-tabs' ) ) {
+			$fields['tab'] = array_merge( [
+				'general'  => array_merge( compact( 'name', 'id' ), [
+					'icon_type' => Component::Select( [
+						'label' => __( 'Icon type', 'meta-box-builder' ),
+						'options' => [
+							'dashicons'   => __( 'Dashicons', 'meta-box-builder' ),
+							'fontawesome' => __( 'Font Awesome', 'meta-box-builder' ),
+							'url'         => __( 'Custom URL', 'meta-box-builder' ),
+						],
+						'default' => 'dashicons',
+					] ),
+					'icon' => Component::Input( [
+						'label' => __( 'Icon', 'meta-box-builder' ),
+					] ),
+				] ),
+				'advanced' => [],
+			] );
+		}
+
 		return $fields;
 	}
 
