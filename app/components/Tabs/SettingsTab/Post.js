@@ -19,19 +19,19 @@ export const Post = ( { postTypes, defaultValues } ) => {
 			name="position"
 			label={ __( 'Position', 'meta-box-builder' ) }
 			options={ contextOptions }
-			defaultValue={ defaultValues.position || "normal" }
+			defaultValue={ defaultValues?.position || "normal" }
 		/>
 		<Select
 			name="priority"
 			label={ __( 'Priority', 'meta-box-builder' ) }
 			options={ { high: __( 'High', 'meta-box-builder' ), low: __( 'Low', 'meta-box-builder' ) } }
-			defaultValue={ defaultValues.priority || "high" }
+			defaultValue={ defaultValues?.priority || "high" }
 		/>
 		<Select
 			name="style"
 			label={ __( 'Style', 'meta-box-builder' ) }
 			options={ { default: __( 'Standard (WordPress meta box)', 'meta-box-builder' ), seamless: __( 'Seamless (no meta box)', 'meta-box-builder' ) } }
-			defaultValue={ defaultValues.style || "high" }
+			defaultValue={ defaultValues?.style || "high" }
 		/>
 		{
 			isClassic &&
