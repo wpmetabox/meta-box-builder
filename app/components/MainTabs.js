@@ -73,8 +73,12 @@ const MainTabs = () => {
 
 				<button style={ { display: 'none' } } id="btn-on-publish" onClick={ handleSubmit( onPublish ) }>Publish</button>
 			</FormProvider>
+			<div style={ { marginTop: 32 } } onClick={ handleSubmit( onPublish ) } >test</div>
 		</>
 	);
+
+
+
 };
 
 export default MainTabs;
