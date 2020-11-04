@@ -303,8 +303,13 @@ class Fields extends Base {
 			'label'   => __( 'Custom settings', 'meta-box-builder' ),
 			'tooltip' => __( 'Use this to add custom settings for the field. The custom settings will overwrite existing settings if they have the same key.', 'meta-box-builder' ),
 		] );
+		$conditional_logic = Component::ConditionalLogic( [
+			'link' => 'https://docs.metabox.io/extensions/meta-box-conditional-logic/',
+			'label' => __( 'Conditional logic', 'meta-box-builder' ),
+			'tooltip' => __( 'Toogle the field visibility by other fields\' values', 'meta-box-builder' ),
+		] );
 		$general = compact( 'name', 'id', 'label_description', 'desc' );
-		$advanced = compact( 'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' );
+		$advanced = compact( 'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings', 'conditional_logic' );
 
 		// Define only general tab.
 		$fields = [
