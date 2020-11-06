@@ -4,7 +4,6 @@ import DivRow from "./DivRow";
 const { useState, useEffect } = wp.element;
 
 const Checkbox = ( { name, label, type, className, defaultValue, ...rest } ) => {
-	console.log( 'test', name, defaultValue );
 	const [ value, setValue ] = useState( defaultValue );
 
 	useEffect( () => {

@@ -29,4 +29,4 @@ const Header = props => {
 		</div>
 	);
 };
-export default DragSource( Types.CARD, cardSource, collect )( Header );
+export default DragSource( Types.CARD, cardSource, collect, { captureDraggingState: true } )( Header );

@@ -51,7 +51,7 @@ const SettingsTab = ( { register, defaultValues } ) => {
     let newPostTypes = items ? items.map( item => item.value ) : [];
     setPostTypes( newPostTypes );
   };
-  console.log( 'ddd', defaultValues );
+
   return (
     <>
       <Location
@@ -66,7 +66,7 @@ const SettingsTab = ( { register, defaultValues } ) => {
       { MbbApp.extensions.blocks && objectType === 'block' && <Block /> }
       { MbbApp.extensions.customTable && <CustomTable /> }
       { MbbApp.extensions.tabs && <Tabs /> }
-      <CustomSettings objectType={ objectType } name='custom_setting' defaultValue={ defaultValues.custom_setting } />
+      <CustomSettings objectType={ objectType } name='custom_setting' defaultValue={ defaultValues?.custom_setting } />
     </>
   );
 };

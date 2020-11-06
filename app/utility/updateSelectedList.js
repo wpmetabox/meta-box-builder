@@ -2,20 +2,21 @@ import memoizeOne from 'memoize-one';
 import { getDataCopiedItem, getSelectedList, uniqid, updateSelectedList } from './functions';
 
 
-export const cardSource = {
+export const cardSource =
+{
   beginDrag( props ) {
     const dropAreas = document.getElementsByClassName( `og-drop-area-${ props.parent }` );
-
     Object.values( dropAreas ).map( item => item.style.height = '50px' );
+
     return { id: props.id, parent: props.parent };
   },
   endDrag( props, monitor ) {
     const dropAreas = document.getElementsByClassName( `og-drop-area-${ props.parent }` );
-
     Object.values( dropAreas ).map( item => item.style.height = '0px' );
     if ( !monitor.didDrop() ) {
       return;
     }
+
     const item = monitor.getItem();
     const dropResult = monitor.getDropResult();
     const selectedList = getSelectedList();
@@ -118,10 +119,11 @@ export const deleteItem = ( id, parent, index ) => {
 const createCopyItem = ( item ) => {
   let result = { ...item };
   result.id = `${ item.type }_${ uniqid() }`;
-  if ( result.items ) {
-    result.items.map( item => item = createCopyItem( item ) );
+  if ( result.items.length > 0 ) {
+    result.data.general.name.default += ' Copy';
+    result.items = result.items.map( item => item = createCopyItem( item ) );
   }
-  result.data.general.name.default += ' Copy';
+
 
   return result;
 };

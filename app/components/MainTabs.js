@@ -43,7 +43,7 @@ const MainTabs = () => {
 
 	const fields = MbbApp.settings ? MbbApp.settings.fields.items : [];
 	const settings = MbbApp.settings ? MbbApp.settings.settings : null;
-	console.log( 'mmm', MbbApp );
+
 	return (
 		<>
 			<FormProvider { ...methods } register={ register } control={ control }>
@@ -55,7 +55,7 @@ const MainTabs = () => {
 							<Tab>{ __( 'Code', 'meta-box-builder' ) }</Tab>
 						</TabList>
 						<TabPanel>
-							<DndProvider backend={ HTML5Backend }>
+							<DndProvider backend={ HTML5Backend } options={ { enableTouchEvents: false, enableMouseEvents: true } }>
 								<FieldsTab fields={ fields } />
 							</DndProvider>
 						</TabPanel>

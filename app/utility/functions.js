@@ -53,6 +53,7 @@ const getGeneralData = ( generalItems, id ) => {
 		const elementName = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementName );
 		value = value || generalItems[ item ].default;
+
 		if ( item == 'id' ) {
 			result[ item ] = { ...generalItems[ item ], default: '' };
 		} else {
@@ -60,14 +61,15 @@ const getGeneralData = ( generalItems, id ) => {
 		}
 
 
-		if ( item === 'options' && multipleInputTypes.includes( item ) ) {
-			let options = [];
+		if ( LIST_OPTION_TYPE.includes( item ) ) {
+			let optionalList = [];
 			for ( let i = 0; i < value; i++ ) {
-				options[ i ] = {};
-				options[ i ][ 'key' ] = getElementValue( `fields-${ id }-${ item }-${ i }-key` );
-				options[ i ][ 'label' ] = getElementValue( `fields-${ id }-${ item }-${ i }-value` );
+				optionalList[ i ] = {};
+				optionalList[ i ][ 'key' ] = getElementValue( `fields-${ id }-${ item }-${ i }-key` );
+				optionalList[ i ][ 'value' ] = getElementValue( `fields-${ id }-${ item }-${ i }-value` );
 			}
-			result[ item ] = options;
+
+			result[ item ] = { ...generalItems[ item ], default: optionalList };
 		}
 	} );
 
@@ -80,7 +82,6 @@ const getAdvancedData = ( advancedItems, id ) => {
 		const elementName = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementName );
 		value = value || advancedItems[ item ].default;
-
 		if ( LIST_OPTION_TYPE.includes( item ) ) {
 			let optionalList = [];
 			for ( let i = 0; i < value; i++ ) {

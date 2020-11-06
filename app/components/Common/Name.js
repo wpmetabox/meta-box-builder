@@ -6,6 +6,7 @@ const { useEffect } = wp.element;
 
 const Name = ( { name, ...rest } ) => {
 	const { register } = useFormContext();
+
 	useEffect( () => {
 		document.getElementById( `og-item__title__${ rest.fieldId }` ).textContent = rest.defaultValue || __( '(No label)', 'meta-box-builder' );
 	}, [] );

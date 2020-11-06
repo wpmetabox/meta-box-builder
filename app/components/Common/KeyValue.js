@@ -20,7 +20,6 @@ const KeyValue = ( {
 	if ( link ) {
 		label = `<a href="${ link }" target="_blank" rel="noreferrer noopener">${ label }</a>`;
 	}
-
 	return (
 		<DivRow label={ label } tooltip={ tooltip }>
 			{
@@ -29,7 +28,7 @@ const KeyValue = ( {
 						key={ item.uniqId }
 						item={ item }
 						removeItem={ removeItem }
-						name={ `${ name }[${ i }]` }
+						name={ name === 'custom_setting' ? `${ name }[${ i }]` : `${ name }-${ i }` }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
 					/>
@@ -46,8 +45,8 @@ const Item = ( { name, item, removeItem, keyPlaceholder, valuePlaceholder } ) =>
 
 	return (
 		<div className="og-attribute">
-			<input type="text" placeholder={ keyPlaceholder } ref={ register } name={ `${ name }[key]` } defaultValue={ item.key } />
-			<input type="text" placeholder={ valuePlaceholder } ref={ register } name={ `${ name }[value]` } defaultValue={ item.value } />
+			<input type="text" placeholder={ keyPlaceholder } ref={ register } name={ name.indexOf( 'custom_setting' ) !== -1 ? `${ name }[key]` : `${ name }-key` } defaultValue={ item.key } />
+			<input type="text" placeholder={ valuePlaceholder } ref={ register } name={ name.indexOf( 'custom_setting' ) !== -1 ? `${ name }[value]` : `${ name }-value` } defaultValue={ item.value } />
 			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.uniqId ) }><Dashicon icon="dismiss" /></button>
 		</div>
 	);

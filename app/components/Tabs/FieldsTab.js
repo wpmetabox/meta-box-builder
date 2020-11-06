@@ -12,7 +12,7 @@ const FieldsTab = ( props ) => {
 
   const initialFields = props.fields || [];
   const [ selectedList, setSelectedList ] = useState( { id: 'root', items: initialFields } );
-  console.log( 'ssss', selectedList );
+
   const addItem = ( type ) => {
     const id = `${ type }_${ uniqid() }`;
     const data = {
