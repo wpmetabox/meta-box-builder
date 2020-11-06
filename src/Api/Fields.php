@@ -159,34 +159,36 @@ class Fields extends Base {
 			'multiple' => true,
 		] );
 		$clone = Component::Checkbox( [
-			'label'   => __( 'Cloneable', 'meta-box-builder' ),
-			'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
-			'setting' => 'clone',
+			'label'        => __( 'Cloneable', 'meta-box-builder' ),
+			'tooltip'      => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
+			'isDependency' => true,
 		] );
 		$sort_clone = Component::Checkbox( [
-			'label'     => __( 'Sortable', 'meta-box-builder' ),
-			'tooltip'   => __( 'Allows to drag-and-drop reorder clones', 'meta-box-builder' ),
-			'className' => 'clone-setting',
+			'label'      => __( 'Sortable', 'meta-box-builder' ),
+			'tooltip'    => __( 'Allows to drag-and-drop reorder clones', 'meta-box-builder' ),
+			'dependency' => 'clone:true',
 		] );
 		$clone_default = Component::Checkbox( [
-			'label'     => __( 'Clone default value', 'meta-box-builder' ),
-			'className' => 'clone-setting',
+			'label'      => __( 'Clone default value', 'meta-box-builder' ),
+			'dependency' => 'clone:true',
 		] );
 		$clone_as_multiple = Component::Checkbox( [
-			'label'     => __( 'Clone as multiple', 'meta-box-builder' ),
-			'tooltip'   =>  __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
-			'className' => 'clone-setting',
+			'label'      => __( 'Clone as multiple', 'meta-box-builder' ),
+			'tooltip'    => __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
+			'className'  => 'clone-setting',
+			'dependency' => 'clone:true',
 		] );
 		$max_clone = Component::Input( [
-			'type'      => 'number',
-			'label'     => __( 'Maximum number of clones', 'meta-box-builder' ),
-			'tooltip'   => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
-			'className' => 'clone-setting',
+			'type'       => 'number',
+			'label'      => __( 'Maximum number of clones', 'meta-box-builder' ),
+			'tooltip'    => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
+			'className'  => 'clone-setting',
+			'dependency' => 'clone:true',
 		] );
 		$add_button = Component::Input( [
-			'label'     => __( 'Add more text', 'meta-box-builder' ),
-			'tooltip'   => __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ),
-			'className' => 'clone-setting',
+			'label'      => __( 'Add more text', 'meta-box-builder' ),
+			'tooltip'    => __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ),
+			'dependency' => 'clone:true',
 		] );
 		$disabled        = Component::Checkbox( __( 'Disabled', 'meta-box-builder' ) );
 		$required        = Component::Checkbox( __( 'Required', 'meta-box-builder' ) );
@@ -568,7 +570,7 @@ class Fields extends Base {
 						],
 						'default' => 'dashicons',
 					] ),
-					'icon' => Component::Input( [
+					'icon' => Component::Icon( [
 						'label' => __( 'Icon', 'meta-box-builder' ),
 					] ),
 				] ),
