@@ -1,8 +1,18 @@
 import Tooltip from './Tooltip';
 
-const DivRow = ( { label, children, className = '', htmlFor = '', description = '', tooltip = '', keyValue = '', required = false } ) => {
+const DivRow = ( {
+	children,
+	label,
+	description,
+	tooltip,
+	className = '',
+	htmlFor = '',
+	keyValue = '',
+	required = false,
+	dependency
+} ) => {
 	return (
-		<div className={ `og-field ${ className }` } key={ keyValue }>
+		<div className={ `og-field ${ className } ${ dependency ? `dep:${ dependency }` : '' }` } key={ keyValue }>
 			{
 				label &&
 				<label className="og-label" htmlFor={ htmlFor }>
