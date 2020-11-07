@@ -89,18 +89,18 @@ export const moveNode = ( from, to, index, typeChange ) => {
   return tree;
 };
 
-export const keepValueNodeFrom = ( nodeItem ) => {
+export const keepValueNodeFrom = ( nodeItem, publishing ) => {
   let result = { ...nodeItem };
   const childrens = nodeItem.items;
 
-  result.data = getDataCopiedItem( nodeItem.type, nodeItem.id );
+  result.data = getDataCopiedItem( nodeItem.type, nodeItem.id, publishing );
   if ( childrens ) {
     result.items = [];
     childrens.map( children => {
       if ( isNotGroupField ) {
-        result.items.push( { ...children, data: getDataCopiedItem( children.type, children.id ) } );
+        result.items.push( { ...children, data: getDataCopiedItem( children.type, children.id, publishing ) } );
       } else {
-        result.items.push( keepValueNodeFrom( children ) );
+        result.items.push( keepValueNodeFrom( children, publishing ) );
       }
     } );
   }
@@ -116,12 +116,14 @@ export const deleteItem = ( id, parent, index ) => {
   return moveNode( id, parent, index, 'delete' );
 };
 
-const createCopyItem = ( item ) => {
+const createCopyItem = ( item, isChildren ) => {
   let result = { ...item };
   result.id = `${ item.type }_${ uniqid() }`;
-  if ( result.items.length > 0 ) {
+  if ( !isChildren ) {
     result.data.general.name.default += ' Copy';
-    result.items = result.items.map( item => item = createCopyItem( item ) );
+  }
+  if ( result.items.length > 0 ) {
+    result.items = result.items.map( item => item = createCopyItem( item, isChildren ) );
   }
 
 

@@ -32,20 +32,21 @@ export const fillFieldsValues = ( params ) => {
 const isSettingValue = key => !key.includes( 'fields' );
 
 const getFieldValue = ( item ) => {
-	return keepValueNodeFrom( item );
+	const publishing = true;
+	return keepValueNodeFrom( item, publishing );
 };
 
-export const getDataCopiedItem = ( type, id ) => {
+export const getDataCopiedItem = ( type, id, publishing ) => {
 	const fields = JSON.parse( localStorage.getItem( 'MbFields' ) );
 	let data = fields[ type ];
 	let result = {};
-	result.general = getGeneralData( data.general, id );
-	result.advanced = getAdvancedData( data.advanced, id );
+	result.general = getGeneralData( data.general, id, publishing );
+	result.advanced = getAdvancedData( data.advanced, id, publishing );
 
 	return result;
 };
 
-const getGeneralData = ( generalItems, id ) => {
+const getGeneralData = ( generalItems, id, publishing ) => {
 	let result = {};
 	const multipleInputTypes = [ 'fieldset_text', 'text_list' ];
 
@@ -53,8 +54,8 @@ const getGeneralData = ( generalItems, id ) => {
 		const elementName = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementName );
 		value = value || generalItems[ item ].default;
-
-		if ( item == 'id' ) {
+		console.log( '123', publishing );
+		if ( item == 'id' && !publishing ) {
 			result[ item ] = { ...generalItems[ item ], default: '' };
 		} else {
 			result[ item ] = { ...generalItems[ item ], default: value };

@@ -41,6 +41,7 @@ const MainTabs = () => {
 		} );
 	}, [] );
 
+	console.log( 'mmmm', MbbApp );
 	const fields = MbbApp.settings ? MbbApp.settings.fields.items : [];
 	const settings = MbbApp.settings ? MbbApp.settings.settings : null;
 
@@ -76,9 +77,6 @@ const MainTabs = () => {
 			<div style={ { marginTop: 32 } } onClick={ handleSubmit( onPublish ) } >test</div>
 		</>
 	);
-
-
-
 };
 
 export default MainTabs;
