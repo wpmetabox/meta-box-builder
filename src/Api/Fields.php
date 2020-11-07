@@ -532,21 +532,21 @@ class Fields extends Base {
 					'setting' => 'collapsible',
 				] ),
 				'default_state' => Component::Select( [
-					'label'   => __( 'Default state', 'meta-box-builder' ),
-					'options' => [
+					'label'      => __( 'Default state', 'meta-box-builder' ),
+					'dependency' => 'collapsible:true',
+					'options'    => [
 						'expanded'  => __( 'Expanded', 'meta-box-builder' ),
 						'collapsed' => __( 'Collapsed', 'meta-box-builder' ),
 					],
-					'className' => 'collapsible-setting',
 				], 'expanded' ),
 				'save_state' => Component::Checkbox( [
-					'label'     => __( 'Save state', 'meta-box-builder' ),
-					'className' => 'collapsible-setting',
+					'label'      => __( 'Save state', 'meta-box-builder' ),
+					'dependency' => 'collapsible:true',
 				] ),
 				'group_title' => Component::Input( [
-					'label'     => __( 'Group title', 'meta-box-builder' ),
-					'tooltip'   => __( 'Use {field_id} for a sub-field value and {#} for the clone index (if the group is cloneable)', 'meta-box-builder' ),
-					'className' => 'collapsible-setting',
+					'label'      => __( 'Group title', 'meta-box-builder' ),
+					'tooltip'    => __( 'Use {field_id} for a sub-field value and {#} for the clone index (if the group is cloneable)', 'meta-box-builder' ),
+					'dependency' => 'collapsible:true',
 				] ),
 			], $clone_settings );
 		}
