@@ -11,7 +11,7 @@ const normalizeBool = value => {
 const normalizeNumber = value => isNaN( parseInt( value ) ) ? value : parseInt( value );
 
 export const useToggle = name => {
-	const [ handle, setHandle ] = useState( () => () => { } );
+	const [ handle, setHandle ] = useState( () => () => {} );
 
 	useEffect( () => {
 		const el = document.getElementById( name );
@@ -28,6 +28,9 @@ export const useToggle = name => {
 		const match = name.match( /-([^-]*)$/ );
 		const shortName = match ? match[ 1 ] : name;
 		const dependants = scope.querySelectorAll( `[class*="dep:${ shortName }:"]` );
+		if ( !dependants.length ) {
+			return;
+		}
 
 		const h = () => {
 			dependants.forEach( dependant => {
@@ -39,6 +42,9 @@ export const useToggle = name => {
 			} );
 		};
 		setHandle( () => h );
+
+		// Kick-off the first time.
+		h();
 	}, [ name ] );
 
 	return handle;
