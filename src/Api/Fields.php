@@ -159,9 +159,8 @@ class Fields extends Base {
 			'multiple' => true,
 		] );
 		$clone = Component::Checkbox( [
-			'label'        => __( 'Cloneable', 'meta-box-builder' ),
-			'tooltip'      => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
-			'isDependency' => true,
+			'label'   => __( 'Cloneable', 'meta-box-builder' ),
+			'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
 		] );
 		$sort_clone = Component::Checkbox( [
 			'label'      => __( 'Sortable', 'meta-box-builder' ),
@@ -175,14 +174,12 @@ class Fields extends Base {
 		$clone_as_multiple = Component::Checkbox( [
 			'label'      => __( 'Clone as multiple', 'meta-box-builder' ),
 			'tooltip'    => __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
-			'className'  => 'clone-setting',
 			'dependency' => 'clone:true',
 		] );
 		$max_clone = Component::Input( [
 			'type'       => 'number',
 			'label'      => __( 'Maximum number of clones', 'meta-box-builder' ),
 			'tooltip'    => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
-			'className'  => 'clone-setting',
 			'dependency' => 'clone:true',
 		] );
 		$add_button = Component::Input( [
