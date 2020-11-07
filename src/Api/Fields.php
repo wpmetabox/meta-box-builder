@@ -557,7 +557,8 @@ class Fields extends Base {
 
 		if ( mbb_is_extension_active( 'meta-box-tabs' ) ) {
 			$fields['tab'] = array_merge( [
-				'general'  => array_merge( compact( 'name', 'id' ), [
+				'general'  => [
+					'name' => $name,
 					'icon_type' => Component::Select( [
 						'label' => __( 'Icon type', 'meta-box-builder' ),
 						'options' => [
@@ -565,12 +566,20 @@ class Fields extends Base {
 							'fontawesome' => __( 'Font Awesome', 'meta-box-builder' ),
 							'url'         => __( 'Custom URL', 'meta-box-builder' ),
 						],
-						'default' => 'dashicons',
-					] ),
+					], 'dashicons' ),
 					'icon' => Component::Icon( [
-						'label' => __( 'Icon', 'meta-box-builder' ),
+						'label'      => __( 'Icon', 'meta-box-builder' ),
+						'dependency' => 'icon_type:dashicons',
 					] ),
-				] ),
+					'icon_fa' => Component::Input( [
+						'label'      => __( 'Icon CSS Class', 'meta-box-builder' ),
+						'dependency' => 'icon_type:fontawesome',
+					] ),
+					'icon_url' => Component::Input( [
+						'label'      => __( 'Icon URL', 'meta-box-builder' ),
+						'dependency' => 'icon_type:url',
+					] ),
+				],
 				'advanced' => [],
 			] );
 		}
