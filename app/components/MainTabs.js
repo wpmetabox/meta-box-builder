@@ -59,7 +59,7 @@ const MainTabs = () => {
 								<FieldsTab fields={ fields } />
 							</DndProvider>
 						</TabPanel>
-						<TabPanel>
+						<TabPanel className="react-tabs__tab-panel og-tab-settings">
 							<SettingsTab register={ register } defaultValues={ settings } />
 						</TabPanel>
 						<TabPanel className="react-tabs__tab-panel og-tab-code">
