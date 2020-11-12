@@ -6,11 +6,13 @@ import Types from './Types';
 
 const Header = props => {
 	const { connectDragSource } = props;
+
 	const duplicate = e => {
 		e.stopPropagation();
 		const newSelectedList = copyItem( props.id, props.parent, props.index );
 		props.changeSelectedList( newSelectedList );
 	};
+
 	const remove = e => {
 		e.stopPropagation();
 		const newSelectedList = deleteItem( props.id, props.parent, props.index );

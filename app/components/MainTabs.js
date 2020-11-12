@@ -3,7 +3,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { actions as commonDataActions } from '../context/CommonData/CommonDataContext';
-import { actions, formatParams } from '../context/Generator/GeneratorContext';
+import { actions } from '../context/Generator/GeneratorContext';
 import { fillFieldsValues } from '../utility/functions';
 import Result from './Result';
 import FieldsTab from './Tabs/FieldsTab';
@@ -16,6 +16,7 @@ const SUBMIT_FORM_BUTTON = 'submit-form';
 const MainTabs = () => {
 	const { handleSubmit, register, control } = useForm();
 	const methods = useForm();
+
 	const onSubmit = data => {
 		actions.generatePHPCode( data );
 	};
@@ -23,7 +24,7 @@ const MainTabs = () => {
 	const onPublish = data => {
 		const inputData = document.getElementById( 'post_content' );
 		const inputExcerpt = document.getElementById( 'post_excerpt' );
-		inputData.value = JSON.stringify( formatParams( data ) );
+		inputData.value = JSON.stringify( data );
 		inputExcerpt.value = JSON.stringify( fillFieldsValues( data ) );
 	};
 
@@ -40,9 +41,7 @@ const MainTabs = () => {
 			document.getElementById( 'btn-on-publish' ).click();
 		} );
 	}, [] );
-
-	console.log( 'mmmm', MbbApp );
-	const fields = MbbApp.settings ? MbbApp.settings.fields.items : [];
+	const fields = MbbApp.settings ? MbbApp.settings.fields : [];
 	const settings = MbbApp.settings ? MbbApp.settings.settings : null;
 
 	return (

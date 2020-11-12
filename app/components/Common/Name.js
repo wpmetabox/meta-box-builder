@@ -4,7 +4,7 @@ import DivRow from './DivRow';
 const { __ } = wp.i18n;
 const { useEffect } = wp.element;
 
-const Name = ( { name, ...rest } ) => {
+const Name = ( { name, componentId, ...rest } ) => {
 	const { register } = useFormContext();
 
 	useEffect( () => {
@@ -18,7 +18,7 @@ const Name = ( { name, ...rest } ) => {
 
 	return (
 		<DivRow htmlFor={ name } { ...rest }>
-			<input type="text" id={ name } defaultValue={ rest.defaultValue } name={ name } ref={ register } onChange={ onChange } />
+			<input type="text" id={ componentId } defaultValue={ rest.defaultValue } name={ name } ref={ register } onChange={ onChange } />
 		</DivRow>
 	);
 };

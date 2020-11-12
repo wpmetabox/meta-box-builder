@@ -18,7 +18,7 @@ const FieldSelected = ( props ) => {
 	if ( 'divider' === type ) {
 		return (
 			<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-				<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
+				<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
 				<Header
 					type={ type }
 					id={ props.id }
@@ -36,7 +36,7 @@ const FieldSelected = ( props ) => {
 
 	return (
 		<div className={ `og-item og-item--${ type } ${ expanded ? ' og-collapsible--expanded' : 'og-collapsible' }` }>
-			<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
+			<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
 			<Header
 				type={ type }
 				id={ props.id }

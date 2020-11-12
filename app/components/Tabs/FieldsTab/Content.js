@@ -6,9 +6,11 @@ const Content = ( { fieldId, data } ) => {
 			return null;
 		}
 		let Component = lazy( () => import( `../../Common/${ data[ name ].component }` ) );
+
 		return <Component
 			fieldId={ fieldId }
-			name={ `fields-${ fieldId }-${ name }` }
+			componentId={ `fields-${ fieldId }-${ name }` }
+			name={ `fields[${ fieldId }][${ name }]` }
 			defaultValue={ data[ name ].default }
 			{ ...data[ name ].props }
 		/>;

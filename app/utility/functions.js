@@ -1,5 +1,29 @@
 import { DATA_LIST_TYPE, LIST_OPTION_TYPE } from '../constants/constants';
-import { keepValueNodeFrom } from './updateSelectedList';
+
+export const getConditionFieldIds = ( fieldId ) => {
+	const selectedList = getSelectedList();
+	return getListIds( selectedList.items, fieldId );
+};
+
+export const getListIds = ( items, fieldId, result = [], end ) => {
+	const field = items.filter( item => item.id === fieldId );
+	const isStop = field[ 0 ] && field[ 0 ].items.length === 0;
+
+	items.map( item => {
+		result.push( getIdValue( item.id ) );
+		if ( item.items.length > 0 ) {
+			if ( !end && !isStop ) {
+				getListIds( item.items, fieldId, result, field.length > 0 );
+			}
+		}
+	} );
+
+	return result;
+};
+
+export const getIdValue = ( id ) => {
+	return document.getElementById( `fields-${ id }-id` ).value;
+};
 
 export const getLabel = ( name, type ) => {
 	const labels = {
@@ -15,47 +39,91 @@ export const getElementControlName = ( name, type ) => {
 
 export const fillFieldsValues = ( params ) => {
 	let result = { settings: {} };
-	const listSelected = { ...getSelectedList() };
-	listSelected.items.map( ( item, index ) => {
-		listSelected.items[ index ] = getFieldValue( item );
+	const selectedData = { ...getSelectedList() };
+	const listSelected = selectedData.items;
+	const fieldParams = params.fields;
+
+	listSelected.map( ( item, index ) => {
+		if ( isNotGroupField( item.type ) ) {
+			listSelected[ index ] = fillFieldData( item, fieldParams[ item.id ] );
+		} else {
+			listSelected[ index ] = fillGroupData( item, fieldParams );
+		}
 	} );
 	result.fields = listSelected;
+
 	for ( const key in params ) {
 		if ( isSettingValue( key ) ) {
 			result.settings[ key ] = params[ key ];
 		}
 	}
 
+
+	return result;
+};
+
+const fillGroupData = ( item, params ) => {
+	let result = { ...item };
+	result = fillFieldData( item, params[ item.id ] );
+	result.items.map( ( item, index ) => {
+		if ( isNotGroupField( item.type ) ) {
+			result.items[ index ] = fillFieldData( item, params[ item.id ] );
+		} else {
+			result.items[ index ] = fillGroupData( item, params );
+		}
+	} );
+
+	return result;
+};
+
+const fillFieldData = ( item, data ) => {
+	let result = { ...item };
+	result.data.general = fillDataByKey( item.data.general, data );
+	result.data.advanced = fillDataByKey( item.data.advanced, data );
+
+	return result;
+};
+
+const fillDataByKey = ( items, data ) => {
+	let result = {};
+	Object.keys( items ).forEach( key => {
+		if ( LIST_OPTION_TYPE.includes( key ) && data[ key ] ) {
+			let optionalList = [];
+			for ( let i = 0; i < data[ key ].length; i++ ) {
+				optionalList[ i ] = {};
+				optionalList[ i ][ 'key' ] = data[ key ][ i ][ 'key' ];
+				optionalList[ i ][ 'value' ] = data[ key ][ i ][ 'value' ];
+			}
+			result[ key ] = { ...items[ key ], default: optionalList };
+		} else {
+			result[ key ] = { ...items[ key ], default: data[ key ] };
+		}
+	} );
+
 	return result;
 };
 
 const isSettingValue = key => !key.includes( 'fields' );
 
-const getFieldValue = ( item ) => {
-	const publishing = true;
-	return keepValueNodeFrom( item, publishing );
-};
-
-export const getDataCopiedItem = ( type, id, publishing ) => {
+export const getDataCopiedItem = ( type, id ) => {
 	const fields = JSON.parse( localStorage.getItem( 'MbFields' ) );
 	let data = fields[ type ];
 	let result = {};
-	result.general = getGeneralData( data.general, id, publishing );
-	result.advanced = getAdvancedData( data.advanced, id, publishing );
+	result.general = getGeneralData( data.general, id );
+	result.advanced = getAdvancedData( data.advanced, id );
 
 	return result;
 };
 
-const getGeneralData = ( generalItems, id, publishing ) => {
+const getGeneralData = ( generalItems, id ) => {
 	let result = {};
-	const multipleInputTypes = [ 'fieldset_text', 'text_list' ];
 
 	Object.keys( generalItems ).forEach( item => {
-		const elementName = `fields-${ id }-${ item }`;
-		let value = getElementValue( elementName );
+		const elementId = `fields-${ id }-${ item }`;
+		let value = getElementValue( elementId );
 		value = value || generalItems[ item ].default;
-		console.log( '123', publishing );
-		if ( item == 'id' && !publishing ) {
+		// set id value is empty when copy field
+		if ( item == 'id' ) {
 			result[ item ] = { ...generalItems[ item ], default: '' };
 		} else {
 			result[ item ] = { ...generalItems[ item ], default: value };
@@ -80,8 +148,8 @@ const getGeneralData = ( generalItems, id, publishing ) => {
 const getAdvancedData = ( advancedItems, id ) => {
 	let result = {};
 	Object.keys( advancedItems ).forEach( item => {
-		const elementName = `fields-${ id }-${ item }`;
-		let value = getElementValue( elementName );
+		const elementId = `fields-${ id }-${ item }`;
+		let value = getElementValue( elementId );
 		value = value || advancedItems[ item ].default;
 		if ( LIST_OPTION_TYPE.includes( item ) ) {
 			let optionalList = [];
@@ -110,30 +178,8 @@ const getAdvancedData = ( advancedItems, id ) => {
 	return result;
 };
 
-export const parseFields = ( listFields ) => {
-	return listFields.map( ( item ) => formatField( item ) );
-};
-
-const formatField = ( field ) => {
-	JSON.parse( localStorage.getItem( 'MbFields' ) );
-	let result = { data: { ...fields[ field.type ] }, id: field.id, type: field.type };
-
-
-	Object.keys( field ).map( key => {
-		if ( result.data.general.hasOwnProperty( key ) ) {
-			result.data.general[ key ] = field[ key ];
-		}
-		if ( result.data.advanced.hasOwnProperty( key ) ) {
-			result.data.general[ key ] = field[ key ];
-		}
-	} );
-
-
-	return result;
-};
-
-const getElementValue = name => {
-	const element = document.querySelector( `[name="${ name }"]` );
+const getElementValue = id => {
+	const element = document.querySelector( `[id="${ id }"]` );
 	if ( !element ) {
 		return null;
 	}
@@ -152,13 +198,15 @@ export const addGroupChild = ( groupId, childList ) => {
 	const selectedList = getSelectedList();
 	const updatedList = findNode( groupId, selectedList, childList );
 	updateSelectedList( updatedList );
+
+	return updatedList;
 };
 
 const findNode = ( id, node, childList ) => {
 	if ( node.items.length > 0 ) {
-		const exactedFiled = node.items.filter( item => item.id === id );
-		if ( exactedFiled ) {
-			exactedFiled[ 0 ].items = childList;
+		const exactedField = node.items.filter( item => item.id === id );
+		if ( exactedField.length > 0 ) {
+			exactedField[ 0 ].items = childList;
 		} else {
 			node.items.map( ( item ) => findNode( id, item, childList ) );
 		}
@@ -167,13 +215,14 @@ const findNode = ( id, node, childList ) => {
 	return node;
 };
 
+export const isNotGroupField = type => type !== 'group';
 
 export const updateSelectedList = data => localStorage.setItem( 'selectedList', JSON.stringify( data ) );
 
 export const getSelectedList = () => JSON.parse( localStorage.getItem( 'selectedList' ) );
 
-
 export const ucfirst = string => string.charAt( 0 ).toUpperCase() + string.slice( 1 );
+
 const toTitleCase = string => string.split( '_' ).map( ucfirst ).join( '' );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );

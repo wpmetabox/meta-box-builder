@@ -8,6 +8,7 @@ const { Dashicon } = wp.components;
 
 const KeyValue = ( {
 	defaultValue,
+	componentId,
 	label,
 	name,
 	link = '',
@@ -28,25 +29,26 @@ const KeyValue = ( {
 						key={ item.uniqId }
 						item={ item }
 						removeItem={ removeItem }
-						name={ name === 'custom_setting' ? `${ name }[${ i }]` : `${ name }-${ i }` }
+						id={ `${ componentId }-${ i }` }
+						name={ `${ name }[${ i }]` }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
 					/>
 				) )
 			}
-			<input type='hidden' id={ name } name={ name } value={ list.length } />
+			<input type='hidden' id={ componentId } name={ name } value={ list.length } />
 			<button type="button" className="button" onClick={ () => setList( prevList => prevList.concat( { key: '', value: '', uniqId: uniqid() } ) ) }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
 		</DivRow>
 	);
 };
 
-const Item = ( { name, item, removeItem, keyPlaceholder, valuePlaceholder } ) => {
+const Item = ( { name, item, removeItem, keyPlaceholder, valuePlaceholder, id } ) => {
 	const { register } = useFormContext();
 
 	return (
 		<div className="og-attribute">
-			<input type="text" placeholder={ keyPlaceholder } ref={ register } name={ name.indexOf( 'custom_setting' ) !== -1 ? `${ name }[key]` : `${ name }-key` } defaultValue={ item.key } />
-			<input type="text" placeholder={ valuePlaceholder } ref={ register } name={ name.indexOf( 'custom_setting' ) !== -1 ? `${ name }[value]` : `${ name }-value` } defaultValue={ item.value } />
+			<input type="text" placeholder={ keyPlaceholder } ref={ register } id={ `${ id }-key` } name={ `${ name }[key]` } defaultValue={ item.key } />
+			<input type="text" placeholder={ valuePlaceholder } ref={ register } id={ `${ id }-value` } name={ `${ name }[value]` } defaultValue={ item.value } />
 			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.uniqId ) }><Dashicon icon="dismiss" /></button>
 		</div>
 	);

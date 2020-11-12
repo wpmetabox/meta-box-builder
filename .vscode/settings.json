@@ -2,7 +2,6 @@
     "javascript.preferences.importModuleSpecifier": "relative",
 	"[javascript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features",
-        "editor.showUnused": true
     },
     "[javascriptreact]": {
         "editor.showUnused": true

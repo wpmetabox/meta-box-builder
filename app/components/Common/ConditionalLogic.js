@@ -1,119 +1,100 @@
 import { useFormContext } from 'react-hook-form';
-import { uniqid } from '../../utility/functions';
-import DivRow from './DivRow';
-import Select from './Select';
-
+import { getConditionFieldIds, uniqid } from '../../utility/functions';
+import DivRow from '../Common/DivRow';
 const { useState } = wp.element;
-const { __ } = wp.i18n;
 const { Dashicon } = wp.components;
+const { __ } = wp.i18n;
 
 const ConditionalLogic = ( {
     defaultValue,
-    label,
     name,
-    link = '',
-    tooltip = '',
-    keyPlaceholder = __( 'Select or enter a field', 'meta-box-builder' ),
-    valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
+    fieldId
 } ) => {
-    const [ list, setList ] = useState( defaultValue || [] );
-    console.log( 'lll', list );
-    const removeItem = id => setList( prevList => prevList.filter( item => item.uniqId !== id ) );
-    if ( link ) {
-        label = `<a href="${ link }" target="_blank" rel="noreferrer noopener">${ label }</a>`;
-    }
+    const [ conditions, setConditions ] = useState( defaultValue || [] );
+    const [ list, setList ] = useState( [] );
 
-    if ( !MbbApp.extensions.conditionalLogic ) {
-        return null;
-    }
+
+    const addCondition = () => {
+        setConditions( prevConditions => prevConditions.concat( { name: 'ID', value: '', id: uniqid() } ) );
+        setList( getConditionFieldIds( fieldId ) );
+    };
+    const removeCondition = id => setConditions( prevConditions => prevConditions.filter( conditon => conditon.id !== id ) );
 
     return (
-        <DivRow label={ label } tooltip={ tooltip }>
+        <DivRow
+            className="og-include-exclude"
+            label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced location conditions', 'meta-box-builder' ) }</a>` }
+            tooltip={ __( 'More conditions on where to display the field group.', 'meta-box-builder' ) }
+        >
+            { conditions.length > 0 && <Intro /> }
             {
-                list.map( ( item, i ) => (
-                    <Item
-                        key={ item.uniqId }
-                        item={ item }
-                        removeItem={ removeItem }
-                        name={ name === 'custom_setting' ? `${ name }[${ i }]` : `${ name }-${ i }` }
-                        keyPlaceholder={ keyPlaceholder }
-                        valuePlaceholder={ valuePlaceholder }
-                    />
-                ) )
+                conditions.map( ( condition, index ) => <Condition
+                    fieldId={ fieldId }
+                    conditionIdList={ list }
+                    key={ condition.id }
+                    condition={ condition }
+                    baseName={ `${ name }[${ index }]` }
+                    removeCondition={ removeCondition }
+                /> )
             }
-            <input type='hidden' id={ name } name={ name } value={ list.length } />
-            <button type="button" className="button" onClick={ () => setList( prevList => prevList.concat( { key: '', value: '', uniqId: uniqid() } ) ) }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
+            <button type="button" className="button" onClick={ addCondition }>{ __( '+ Add Condition', 'meta-box-builder' ) }</button>
         </DivRow>
     );
 };
 
-const Item = ( { name, item, removeItem, keyPlaceholder, valuePlaceholder } ) => {
+const Intro = ( { name } ) => {
     const { register } = useFormContext();
 
+    return (
+        <div className="og-include-exclude__intro">
+            <select name={ `${ name }[type]` } ref={ register }>
+                <option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
+                <option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
+            </select>
+            { __( 'when', 'meta-box-builder' ) }
+            <select name={ `${ name }[relation]` } ref={ register }>
+                <option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
+                <option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
+            </select>
+            { __( 'conditions match', 'meta-box-builder' ) }
+        </div>
+    );
+};
+
+const Condition = ( { condition, baseName, removeCondition, conditionIdList } ) => {
+    const { register } = useFormContext();
 
     return (
-        <div className="og-conditional-logic">
-            <div style={ { display: 'flex' } }>
-                <Select
-                    style={ { width: 90 } }
-                    name={ `${ name }-visibility` }
-                    options={
-                        {
-                            visible: "Visible",
-                            hidden: "Hidden"
-                        }
-                    }
-                    defaultValue="visible"
-                />
-                <span>when</span>
-                <Select
-                    style={ { width: 60 } }
-                    name={ `${ name }-relation` }
-                    options={ {
-                        all: "All",
-                        any: "Any",
-                    } }
-                    defaultValue="all"
-                />
-                <span>of these conditions match</span>
-            </div>
-            <div style={ { display: 'flex' } }>
-                <Select
-                    style={ { width: 180 } }
-                    name={ `${ name }-fieldId` }
-                    options={ { id: "All" } }
-                    placeholder="Select or enter a field"
-                    defaultValue=""
-                />
-                <Select
-                    style={ { width: 90 } }
-                    name={ `${ name }-condition` }
-                    options={ {
-                        equal: "=",
-                        greater: ">",
-                        smaller: "<",
-                        eqGreater: ">=",
-                        eqSmaller: "<=",
-                        diff: "!=",
-                        contain: "contains",
-                        notContain: "not contains",
-                        startWith: "starts with",
-                        notStartWidth: "not starts with",
-                        endWidth: "ends with",
-                        notEndWidth: "ends with",
-                        between: "between",
-                        notBetween: "not between",
-                        in: "in",
-                        notIn: "not in",
-                        match: "match",
-                        notMatch: "not match",
-                    } }
-                    defaultValue="equal"
-                />
-                <input type="text" placeholder={ valuePlaceholder } style={ { width: 120, height: 30 } } ref={ register } name={ `${ name }-value` } defaultValue={ item.value } />
-                <button style={ { height: 30 } } type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.uniqId ) }><Dashicon icon="dismiss" /></button>
-            </div>
-
+        <div className="og-include-exclude__rule og-attribute">
+            <select className="og-include-exclude__value" name={ `${ baseName }[fieldId]` } ref={ register }>
+                {
+                    conditionIdList.map( item => (
+                        <option value={ item } key={ item }>{ item }</option>
+                    ) )
+                }
+            </select>
+            <select name={ `${ baseName }[condition]` } className="og-include-exclude__name" ref={ register } defaultValue={ name } >
+                <option value="=">{ __( '=', 'meta-box-builder' ) }</option>
+                <option value=">">{ __( '>', 'meta-box-builder' ) }</option>
+                <option value="<">{ __( '<', 'meta-box-builder' ) }</option>
+                <option value=">=">{ __( '>=', 'meta-box-builder' ) }</option>
+                <option value="<=">{ __( '<=', 'meta-box-builder' ) }</option>
+                <option value="!=">{ __( '!=', 'meta-box-builder' ) }</option>
+                <option value="contains">{ __( 'contains', 'meta-box-builder' ) }</option>
+                <option value="not contains">{ __( 'not contains', 'meta-box-builder' ) }</option>
+                <option value="starts with">{ __( 'starts with', 'meta-box-builder' ) }</option>
+                <option value="not starts with">{ __( 'not starts with', 'meta-box-builder' ) }</option>
+                <option value="ends with">{ __( 'ends with', 'meta-box-builder' ) }</option>
+                <option value="not ends with">{ __( 'not ends with', 'meta-box-builder' ) }</option>
+                <option value="between">{ __( 'between', 'meta-box-builder' ) }</option>
+                <option value="not between">{ __( 'not between', 'meta-box-builder' ) }</option>
+                <option value="in">{ __( 'in', 'meta-box-builder' ) }</option>
+                <option value="not in">{ __( 'not in', 'meta-box-builder' ) }</option>
+                <option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
+                <option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
+            </select>
+            <input type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } style={ { width: 120, height: 30 } } ref={ register } name={ `${ baseName }[value]` } defaultValue={ condition.value } />
+            <button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeCondition( condition.id ) }><Dashicon icon="dismiss" /></button>
         </div>
     );
 };

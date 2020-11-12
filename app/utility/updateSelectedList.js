@@ -1,5 +1,5 @@
 import memoizeOne from 'memoize-one';
-import { getDataCopiedItem, getSelectedList, uniqid, updateSelectedList } from './functions';
+import { getDataCopiedItem, getSelectedList, isNotGroupField, uniqid, updateSelectedList } from './functions';
 
 
 export const cardSource =
@@ -89,18 +89,18 @@ export const moveNode = ( from, to, index, typeChange ) => {
   return tree;
 };
 
-export const keepValueNodeFrom = ( nodeItem, publishing ) => {
+export const keepValueNodeFrom = ( nodeItem ) => {
   let result = { ...nodeItem };
   const childrens = nodeItem.items;
 
-  result.data = getDataCopiedItem( nodeItem.type, nodeItem.id, publishing );
+  result.data = getDataCopiedItem( nodeItem.type, nodeItem.id );
   if ( childrens ) {
     result.items = [];
     childrens.map( children => {
-      if ( isNotGroupField ) {
-        result.items.push( { ...children, data: getDataCopiedItem( children.type, children.id, publishing ) } );
+      if ( isNotGroupField( children.type ) ) {
+        result.items.push( { ...children, data: getDataCopiedItem( children.type, children.id ) } );
       } else {
-        result.items.push( keepValueNodeFrom( children, publishing ) );
+        result.items.push( keepValueNodeFrom( children ) );
       }
     } );
   }
@@ -123,14 +123,12 @@ const createCopyItem = ( item, isChildren ) => {
     result.data.general.name.default += ' Copy';
   }
   if ( result.items.length > 0 ) {
-    result.items = result.items.map( item => item = createCopyItem( item, isChildren ) );
+    result.items = result.items.map( item => item = createCopyItem( item, true ) );
   }
 
 
   return result;
 };
-
-const isNotGroupField = type => type !== 'group';
 
 const isCopying = typeChange => typeChange === 'copy';
 

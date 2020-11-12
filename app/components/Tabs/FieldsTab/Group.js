@@ -35,13 +35,13 @@ const Group = ( props ) => {
 		};
 		const newChildList = [ ...children, { id, type, data, items: [] } ];
 		setChildren( newChildList );
-		addGroupChild( props.id, newChildList );
+		props.changeSelectedList( addGroupChild( props.id, newChildList ) );
 	};
 
 	return (
 		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 
-			<input ref={ props.register } type="hidden" name={ `fields-${ props.id }-type` } defaultValue={ type } />
+			<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
 			<Header
 				type={ type }
 				id={ props.id }
