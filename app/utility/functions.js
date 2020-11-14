@@ -33,7 +33,6 @@ export const fillFieldsValues = ( params ) => {
 		}
 	}
 
-
 	return result;
 };
 
@@ -70,6 +69,19 @@ const fillDataByKey = ( items, data ) => {
 				optionalList[ i ][ 'value' ] = data[ key ][ i ][ 'value' ];
 			}
 			result[ key ] = { ...items[ key ], default: optionalList };
+		} else if ( key === 'conditional_logic' && data[ key ] ) {
+			const type = data[ key ][ 'type' ];
+			const relation = data[ key ][ 'relation' ];
+
+			let optionalList = [];
+			for ( let i = 0; i < data[ key ][ 'logic' ][ 'length' ]; i++ ) {
+				optionalList[ i ] = {};
+				optionalList[ i ][ 'name' ] = data[ key ][ 'logic' ][ i ][ 'name' ];
+				optionalList[ i ][ 'operator' ] = data[ key ][ 'logic' ][ i ][ 'operator' ];
+				optionalList[ i ][ 'value' ] = data[ key ][ 'logic' ][ i ][ 'value' ];
+			}
+
+			result[ key ] = { ...items[ key ], default: { relation, type, list: optionalList } };
 		} else {
 			result[ key ] = { ...items[ key ], default: data[ key ] };
 		}
@@ -80,13 +92,12 @@ const fillDataByKey = ( items, data ) => {
 
 const isSettingValue = key => !key.includes( 'fields' );
 
-export const getDataCopiedItem = ( type, id ) => {
+export const getCopiedItemData = ( type, id ) => {
 	const fields = JSON.parse( localStorage.getItem( 'MbFields' ) );
 	let data = fields[ type ];
 	let result = {};
 	result.general = getGeneralData( data.general, id );
 	result.advanced = getAdvancedData( data.advanced, id );
-
 	return result;
 };
 
@@ -96,14 +107,17 @@ const getGeneralData = ( generalItems, id ) => {
 	Object.keys( generalItems ).forEach( item => {
 		const elementId = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementId );
-		value = value || generalItems[ item ].default;
+		if ( typeof value === "boolean" ) {
+			value = value;
+		} else {
+			value = value || generalItems[ item ].default;
+		}
 		// set id value is empty when copy field
 		if ( item == 'id' ) {
 			result[ item ] = { ...generalItems[ item ], default: '' };
 		} else {
 			result[ item ] = { ...generalItems[ item ], default: value };
 		}
-
 
 		if ( LIST_OPTION_TYPE.includes( item ) ) {
 			let optionalList = [];
@@ -125,8 +139,26 @@ const getAdvancedData = ( advancedItems, id ) => {
 	Object.keys( advancedItems ).forEach( item => {
 		const elementId = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementId );
-		value = value || advancedItems[ item ].default;
-		if ( LIST_OPTION_TYPE.includes( item ) ) {
+		if ( typeof value === "boolean" ) {
+			value = value;
+		} else {
+			value = value || advancedItems[ item ].default;
+		}
+
+		if ( item === 'conditional_logic' ) {
+			const type = getElementValue( `fields-${ id }-${ item }-type` );
+			const relation = getElementValue( `fields-${ id }-${ item }-relation` );
+
+			let optionalList = [];
+			for ( let i = 0; i < value; i++ ) {
+				optionalList[ i ] = {};
+				optionalList[ i ][ 'name' ] = getElementValue( `fields-${ id }-${ item }-${ i }-name` );
+				optionalList[ i ][ 'operator' ] = getElementValue( `fields-${ id }-${ item }-${ i }-operator` );
+				optionalList[ i ][ 'value' ] = getElementValue( `fields-${ id }-${ item }-${ i }-value` );
+			}
+
+			result[ item ] = { ...advancedItems[ item ], default: { relation, type, list: optionalList } };
+		} else if ( LIST_OPTION_TYPE.includes( item ) ) {
 			let optionalList = [];
 			for ( let i = 0; i < value; i++ ) {
 				optionalList[ i ] = {};

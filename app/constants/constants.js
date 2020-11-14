@@ -62,7 +62,7 @@ export const LIST_OPTION_TYPE = [
   'query_args',
   'js_options',
   'options',
-  'custom_settings'
+  'custom_settings',
 ];
 
 export const LIST_ADD_SELECT = [

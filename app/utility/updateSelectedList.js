@@ -1,5 +1,5 @@
 import memoizeOne from 'memoize-one';
-import { getDataCopiedItem, getSelectedList, isNotGroupField, uniqid, updateSelectedList } from './functions';
+import { getCopiedItemData, getSelectedList, isNotGroupField, uniqid, updateSelectedList } from './functions';
 
 
 export const cardSource =
@@ -93,12 +93,12 @@ export const keepValueNodeFrom = ( nodeItem ) => {
   let result = { ...nodeItem };
   const childrens = nodeItem.items;
 
-  result.data = getDataCopiedItem( nodeItem.type, nodeItem.id );
+  result.data = getCopiedItemData( nodeItem.type, nodeItem.id );
   if ( childrens ) {
     result.items = [];
     childrens.map( children => {
       if ( isNotGroupField( children.type ) ) {
-        result.items.push( { ...children, data: getDataCopiedItem( children.type, children.id ) } );
+        result.items.push( { ...children, data: getCopiedItemData( children.type, children.id ) } );
       } else {
         result.items.push( keepValueNodeFrom( children ) );
       }
