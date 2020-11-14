@@ -11,7 +11,7 @@ const Select = ( { componentId, name, options, multiple, defaultValue, onChange,
 		onChange && onChange( e );
 	};
 
-	return <DivRow htmlFor={ name } { ...rest }>
+	return <DivRow htmlFor={ componentId } { ...rest }>
 		<select placeholder={ placeholder } style={ style } ref={ register } id={ componentId } name={ name } multiple={ multiple } defaultValue={ defaultValue } onChange={ onChange }>
 			{ !multiple && !defaultValue && <option value=""></option> }
 			{

@@ -9,6 +9,7 @@ const Content = ( { fieldId, data } ) => {
 
 		return <Component
 			fieldId={ fieldId }
+			componentName={ name }
 			componentId={ `fields-${ fieldId }-${ name }` }
 			name={ `fields[${ fieldId }][${ name }]` }
 			defaultValue={ data[ name ].default }

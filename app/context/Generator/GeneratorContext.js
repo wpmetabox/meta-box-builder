@@ -25,7 +25,6 @@ export const formatParams = ( params ) => {
 			result[ key ] = params[ key ];
 		}
 	}
-
 	result.fields = [];
 	listSelected.items.map( item => {
 		if ( isNotGroupField( item.type ) ) {

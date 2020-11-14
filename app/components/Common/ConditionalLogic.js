@@ -1,7 +1,9 @@
 import { useFormContext } from 'react-hook-form';
-import { getConditionFieldIds, uniqid } from '../../utility/functions';
+import { Context } from '../../context/ConditionalList/ConditionalContext';
+import { uniqid } from '../../utility/functions';
 import DivRow from '../Common/DivRow';
-const { useState } = wp.element;
+
+const { useState, useContext, useEffect } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
@@ -12,11 +14,15 @@ const ConditionalLogic = ( {
 } ) => {
     const [ conditions, setConditions ] = useState( defaultValue || [] );
     const [ list, setList ] = useState( [] );
+    const state = useContext( Context );
+
+    useEffect( () => {
+        setList( Object.values( state ).map( item => `${ item.label } ( ${ item.id } )` ) );
+    }, [ state ] );
 
 
     const addCondition = () => {
         setConditions( prevConditions => prevConditions.concat( { name: 'ID', value: '', id: uniqid() } ) );
-        setList( getConditionFieldIds( fieldId ) );
     };
     const removeCondition = id => setConditions( prevConditions => prevConditions.filter( conditon => conditon.id !== id ) );
 
@@ -26,14 +32,14 @@ const ConditionalLogic = ( {
             label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced location conditions', 'meta-box-builder' ) }</a>` }
             tooltip={ __( 'More conditions on where to display the field group.', 'meta-box-builder' ) }
         >
-            { conditions.length > 0 && <Intro /> }
+            { conditions.length > 0 && <Intro name={ name } /> }
             {
                 conditions.map( ( condition, index ) => <Condition
                     fieldId={ fieldId }
                     conditionIdList={ list }
                     key={ condition.id }
                     condition={ condition }
-                    baseName={ `${ name }[${ index }]` }
+                    baseName={ `${ name }[logic][${ index }]` }
                     removeCondition={ removeCondition }
                 /> )
             }
@@ -61,19 +67,20 @@ const Intro = ( { name } ) => {
     );
 };
 
+
 const Condition = ( { condition, baseName, removeCondition, conditionIdList } ) => {
     const { register } = useFormContext();
 
     return (
         <div className="og-include-exclude__rule og-attribute">
-            <select className="og-include-exclude__value" name={ `${ baseName }[fieldId]` } ref={ register }>
+            <select className="og-include-exclude__value" name={ `${ baseName }[name]` } ref={ register }>
                 {
                     conditionIdList.map( item => (
                         <option value={ item } key={ item }>{ item }</option>
                     ) )
                 }
             </select>
-            <select name={ `${ baseName }[condition]` } className="og-include-exclude__name" ref={ register } defaultValue={ name } >
+            <select name={ `${ baseName }[operator]` } className="og-include-exclude__name" ref={ register } defaultValue={ name } >
                 <option value="=">{ __( '=', 'meta-box-builder' ) }</option>
                 <option value=">">{ __( '>', 'meta-box-builder' ) }</option>
                 <option value="<">{ __( '<', 'meta-box-builder' ) }</option>

@@ -1,30 +1,5 @@
 import { DATA_LIST_TYPE, LIST_OPTION_TYPE } from '../constants/constants';
 
-export const getConditionFieldIds = ( fieldId ) => {
-	const selectedList = getSelectedList();
-	return getListIds( selectedList.items, fieldId );
-};
-
-export const getListIds = ( items, fieldId, result = [], end ) => {
-	const field = items.filter( item => item.id === fieldId );
-	const isStop = field[ 0 ] && field[ 0 ].items.length === 0;
-
-	items.map( item => {
-		result.push( getIdValue( item.id ) );
-		if ( item.items.length > 0 ) {
-			if ( !end && !isStop ) {
-				getListIds( item.items, fieldId, result, field.length > 0 );
-			}
-		}
-	} );
-
-	return result;
-};
-
-export const getIdValue = ( id ) => {
-	return document.getElementById( `fields-${ id }-id` ).value;
-};
-
 export const getLabel = ( name, type ) => {
 	const labels = {
 		taxonomy: "Taxonomy",
