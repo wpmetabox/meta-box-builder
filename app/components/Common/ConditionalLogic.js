@@ -12,12 +12,12 @@ const ConditionalLogic = ( {
     name,
     componentId
 } ) => {
-    const [ conditions, setConditions ] = useState( defaultValue?.list || [] );
-    const [ list, setList ] = useState( [] );
+    const [ conditions, setConditions ] = useState( defaultValue?.rules || [] );
+    const [ listId, setListId ] = useState( [] );
     const state = useContext( Context );
 
     useEffect( () => {
-        setList( Object.values( state ).map( item => `${ item.label } ( ${ item.id } )` ) );
+        setListId( Object.values( state ).map( item => `${ item.label } ( ${ item.id } )` ) );
     }, [ state ] );
 
 
@@ -35,12 +35,12 @@ const ConditionalLogic = ( {
             { conditions.length > 0 && <Intro id={ componentId } name={ name } defaultValue={ defaultValue } /> }
             {
                 conditions.map( ( condition, index ) => <Condition
-                    id={ `${ componentId }-${ index }` }
-                    conditionIdList={ list }
-                    defaultValue={ defaultValue?.list && defaultValue?.list[ index ] || {} }
+                    id={ `${ componentId }-rules-${ index }` }
+                    conditionIdList={ listId }
+                    defaultValue={ defaultValue?.rules && defaultValue?.rules[ index ] || {} }
                     key={ condition.id }
                     condition={ condition }
-                    baseName={ `${ name }[logic][${ index }]` }
+                    baseName={ `${ name }[rules][${ index }]` }
                     removeCondition={ removeCondition }
                 /> )
             }
@@ -60,7 +60,7 @@ const Intro = ( { name, id, defaultValue } ) => {
                 <option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
             </select>
             { __( 'when', 'meta-box-builder' ) }
-            <select defaultValue={ defaultValue?.type || 'OR' } id={ `${ id }-relation` } name={ `${ name }[relation]` } ref={ register }>
+            <select defaultValue={ defaultValue?.relation || 'OR' } id={ `${ id }-relation` } name={ `${ name }[relation]` } ref={ register }>
                 <option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
                 <option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
             </select>

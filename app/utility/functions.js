@@ -12,7 +12,7 @@ export const getElementControlName = ( name, type ) => {
 	return toTitleCase( name );
 };
 
-export const fillFieldsValues = ( params ) => {
+export const fillFieldsValues = ( params, conditionalList ) => {
 	let result = { settings: {} };
 	const selectedData = { ...getSelectedList() };
 	const listSelected = selectedData.items;
@@ -32,6 +32,7 @@ export const fillFieldsValues = ( params ) => {
 			result.settings[ key ] = params[ key ];
 		}
 	}
+	result.conditionalList = JSON.stringify( conditionalList );
 
 	return result;
 };
@@ -52,13 +53,13 @@ const fillGroupData = ( item, params ) => {
 
 const fillFieldData = ( item, data ) => {
 	let result = { ...item };
-	result.data.general = fillDataByKey( item.data.general, data );
-	result.data.advanced = fillDataByKey( item.data.advanced, data );
+	result.data.general = fillDataByKey( item.data.general, data, item.id );
+	result.data.advanced = fillDataByKey( item.data.advanced, data, item.id );
 
 	return result;
 };
 
-const fillDataByKey = ( items, data ) => {
+const fillDataByKey = ( items, data, uniqId ) => {
 	let result = {};
 	Object.keys( items ).forEach( key => {
 		if ( LIST_OPTION_TYPE.includes( key ) && data[ key ] ) {
@@ -74,14 +75,14 @@ const fillDataByKey = ( items, data ) => {
 			const relation = data[ key ][ 'relation' ];
 
 			let optionalList = [];
-			for ( let i = 0; i < data[ key ][ 'logic' ][ 'length' ]; i++ ) {
+			for ( let i = 0; i < data[ key ][ 'rules' ][ 'length' ]; i++ ) {
 				optionalList[ i ] = {};
-				optionalList[ i ][ 'name' ] = data[ key ][ 'logic' ][ i ][ 'name' ];
-				optionalList[ i ][ 'operator' ] = data[ key ][ 'logic' ][ i ][ 'operator' ];
-				optionalList[ i ][ 'value' ] = data[ key ][ 'logic' ][ i ][ 'value' ];
+				optionalList[ i ][ 'name' ] = data[ key ][ 'rules' ][ i ][ 'name' ];
+				optionalList[ i ][ 'operator' ] = data[ key ][ 'rules' ][ i ][ 'operator' ];
+				optionalList[ i ][ 'value' ] = data[ key ][ 'rules' ][ i ][ 'value' ];
 			}
 
-			result[ key ] = { ...items[ key ], default: { relation, type, list: optionalList } };
+			result[ key ] = { ...items[ key ], default: { relation, type, rules: optionalList } };
 		} else {
 			result[ key ] = { ...items[ key ], default: data[ key ] };
 		}
@@ -152,12 +153,12 @@ const getAdvancedData = ( advancedItems, id ) => {
 			let optionalList = [];
 			for ( let i = 0; i < value; i++ ) {
 				optionalList[ i ] = {};
-				optionalList[ i ][ 'name' ] = getElementValue( `fields-${ id }-${ item }-${ i }-name` );
-				optionalList[ i ][ 'operator' ] = getElementValue( `fields-${ id }-${ item }-${ i }-operator` );
-				optionalList[ i ][ 'value' ] = getElementValue( `fields-${ id }-${ item }-${ i }-value` );
+				optionalList[ i ][ 'name' ] = getElementValue( `fields-${ id }-${ item }-rules-${ i }-name` );
+				optionalList[ i ][ 'operator' ] = getElementValue( `fields-${ id }-${ item }-rules-${ i }-operator` );
+				optionalList[ i ][ 'value' ] = getElementValue( `fields-${ id }-${ item }-rules-${ i }-value` );
 			}
 
-			result[ item ] = { ...advancedItems[ item ], default: { relation, type, list: optionalList } };
+			result[ item ] = { ...advancedItems[ item ], default: { relation, type, rules: optionalList } };
 		} else if ( LIST_OPTION_TYPE.includes( item ) ) {
 			let optionalList = [];
 			for ( let i = 0; i < value; i++ ) {

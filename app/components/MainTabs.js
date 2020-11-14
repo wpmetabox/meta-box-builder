@@ -3,19 +3,22 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { actions as commonDataActions } from '../context/CommonData/CommonDataContext';
+import { actions as ConditionalActions, Context } from '../context/ConditionalList/ConditionalContext';
 import { actions } from '../context/Generator/GeneratorContext';
 import { fillFieldsValues } from '../utility/functions';
 import Result from './Result';
 import FieldsTab from './Tabs/FieldsTab';
 import SettingsTab from './Tabs/SettingsTab';
 
-const { useEffect } = wp.element;
+const { useEffect, useContext } = wp.element;
 const { __ } = wp.i18n;
 const SUBMIT_FORM_BUTTON = 'submit-form';
 
 const MainTabs = () => {
 	const { handleSubmit, register, control } = useForm();
 	const methods = useForm();
+
+	const state = useContext( Context );
 
 	const onSubmit = data => {
 		actions.generatePHPCode( data );
@@ -25,7 +28,7 @@ const MainTabs = () => {
 		const inputData = document.getElementById( 'post_content' );
 		const inputExcerpt = document.getElementById( 'post_excerpt' );
 		inputData.value = JSON.stringify( data );
-		inputExcerpt.value = JSON.stringify( fillFieldsValues( data ) );
+		inputExcerpt.value = JSON.stringify( fillFieldsValues( data, state ) );
 	};
 
 	const onSelect = ( index ) => {
@@ -40,6 +43,9 @@ const MainTabs = () => {
 		document.querySelector( '#publish' ).addEventListener( 'click', () => {
 			document.getElementById( 'btn-on-publish' ).click();
 		} );
+		if ( MbbApp.settings && MbbApp.settings.conditionalList ) {
+			ConditionalActions.updateConditionalList( JSON.parse( MbbApp.settings.conditionalList ), 'initial' );
+		}
 	}, [] );
 	const fields = MbbApp.settings ? MbbApp.settings.fields : [];
 	const settings = MbbApp.settings ? MbbApp.settings.settings : null;

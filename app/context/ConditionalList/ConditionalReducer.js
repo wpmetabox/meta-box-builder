@@ -1,18 +1,24 @@
 const conditionalReducer = ( state, action ) => {
-  const key = Object.keys( action )[ 0 ];
-  let updatingValue = { ...state[ key ] };
-  if ( action[ key ].label && action[ key ].id ) {
-    updatingValue = action[ key ];
+  if ( action.type === 'initial' ) {
+    return action.payload;
   } else {
-    if ( action[ key ].label ) {
-      updatingValue.label = action[ key ].label;
+    const payload = action.payload;
+    const key = Object.keys( payload )[ 0 ];
+    let updatingValue = { ...state[ key ] };
+    if ( payload[ key ].label && payload[ key ].id ) {
+      updatingValue = payload[ key ];
+    } else {
+      if ( payload[ key ].label ) {
+        updatingValue.label = payload[ key ].label;
+      }
+      if ( payload[ key ].id ) {
+        updatingValue.id = payload[ key ].id;
+      }
     }
-    if ( action[ key ].id ) {
-      updatingValue.id = action[ key ].id;
-    }
+
+    return { ...state, [ key ]: updatingValue };
   }
 
-  return { ...state, [ key ]: updatingValue };
 };
 
 export default conditionalReducer;
