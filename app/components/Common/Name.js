@@ -14,10 +14,16 @@ const Name = ( { name, componentId, ...rest } ) => {
 	}, [] );
 
 	const onChange = e => {
-		document.getElementById( `og-item__title__${ rest.fieldId }` ).textContent = e.target.value || __( '(No label)', 'meta-box-builder' );
-		document.getElementById( `fields-${ rest.fieldId }-id` ).value = slugify( e.target.value, { lower: true, replacement: '_' } );
-		ConditionalActions.updateConditionalList( { [ rest.fieldId ]: { label: e.target.value, id: e.target.value } } );
+		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
+		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
+		if ( titleElement ) {
+			document.getElementById( `og-item__title__${ rest.fieldId }` ).textContent = e.target.value || __( '(No label)', 'meta-box-builder' );
+		}
+		if ( idElement ) {
+			document.getElementById( `fields-${ rest.fieldId }-id` ).value = slugify( e.target.value, { lower: true, replacement: '_' } );
+			ConditionalActions.updateConditionalList( { [ rest.fieldId ]: { label: e.target.value, id: e.target.value } } );
 
+		}
 	};
 
 	return (

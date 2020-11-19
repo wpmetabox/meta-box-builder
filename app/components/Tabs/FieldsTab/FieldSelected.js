@@ -25,10 +25,12 @@ const FieldSelected = ( props ) => {
 					copyItem={ props.copyItem }
 					removeItem={ props.removeItem }
 					toggleSettings={ toggleSettings }
+					changeSelectedList={ props.changeSelectedList }
+					parent={ props.parent }
 					index={ props.index }
 				/>
 				<div className="og-item__body og-collapsible__body">
-					<Content index={ props.id } data={ data.general } />
+					<Content fieldId={ props.id } data={ data.general } />
 				</div>
 			</div>
 		);

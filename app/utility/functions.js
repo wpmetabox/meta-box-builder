@@ -104,8 +104,8 @@ export const getCopiedItemData = ( type, id ) => {
 
 const getGeneralData = ( generalItems, id ) => {
 	let result = {};
-
 	Object.keys( generalItems ).forEach( item => {
+
 		const elementId = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementId );
 		if ( typeof value === "boolean" ) {
@@ -120,7 +120,11 @@ const getGeneralData = ( generalItems, id ) => {
 			result[ item ] = { ...generalItems[ item ], default: value };
 		}
 
-		if ( LIST_OPTION_TYPE.includes( item ) ) {
+		if ( item === 'post_type' ) {
+
+		}
+
+		if ( LIST_OPTION_TYPE.includes( item ) || generalItems[ item ].component === 'KeyValue' ) {
 			let optionalList = [];
 			for ( let i = 0; i < value; i++ ) {
 				optionalList[ i ] = {};

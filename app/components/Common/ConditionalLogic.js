@@ -17,7 +17,7 @@ const ConditionalLogic = ( {
     const state = useContext( Context );
 
     useEffect( () => {
-        setListId( Object.values( state ).map( item => `${ item.label } ( ${ item.id } )` ) );
+        setListId( Object.values( state ).map( item => item.label ? `${ item.label } ( ${ item.id } )` : item.id ) );
     }, [ state ] );
 
 
@@ -28,9 +28,8 @@ const ConditionalLogic = ( {
 
     return (
         <DivRow
-            className="og-include-exclude"
-            label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced location conditions', 'meta-box-builder' ) }</a>` }
-            tooltip={ __( 'More conditions on where to display the field group.', 'meta-box-builder' ) }
+            label={ `<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noopener norefferer">${ __( 'Conditional Logic', 'meta-box-builder' ) }</a>` }
+            tooltip={ __( 'Show hide the field based on other field value.', 'meta-box-builder' ) }
         >
             { conditions.length > 0 && <Intro id={ componentId } name={ name } defaultValue={ defaultValue } /> }
             {

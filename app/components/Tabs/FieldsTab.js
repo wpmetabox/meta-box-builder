@@ -4,7 +4,7 @@ import { Inserter } from '../Common/Inserter';
 import Insert from './FieldsTab/Insert';
 import Node from './FieldsTab/Node';
 
-const { useContext, useState, useCallback, memo, Fragment } = wp.element;
+const { useContext, useEffect, useState, useCallback, memo, Fragment } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = ( props ) => {
@@ -12,6 +12,10 @@ const FieldsTab = ( props ) => {
 
   const initialFields = props.fields || [];
   const [ selectedList, setSelectedList ] = useState( { id: 'root', items: initialFields } );
+
+  useEffect( () => {
+    updateSelectedList( selectedList );
+  }, [ selectedList ] );
 
   const addItem = ( type ) => {
     const id = `${ type }_${ uniqid() }`;
@@ -26,7 +30,9 @@ const FieldsTab = ( props ) => {
     updateSelectedList( newList );
   };
 
-  const changeSelectedList = useCallback( params => setSelectedList( params ), [] );
+  const changeSelectedList = useCallback( params => {
+    setSelectedList( params );
+  }, [] );
 
   return (
     <>

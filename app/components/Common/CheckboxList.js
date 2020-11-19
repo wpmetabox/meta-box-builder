@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form';
 import DivRow from './DivRow';
 
-const CheckboxList = ( { name, options, className, defaultValue = [], ...rest } ) => {
+const CheckboxList = ( { name, componentId, options, className, defaultValue = [], ...rest } ) => {
 	const { register } = useFormContext();
 
 	className = `og-field--checkbox-list ${ className || '' }`;
@@ -11,7 +11,7 @@ const CheckboxList = ( { name, options, className, defaultValue = [], ...rest } 
 		{
 			Object.entries( options ).map( ( [ value, label ] ) =>
 				<label key={ value }>
-					<input type="checkbox" ref={ register } name={ `${ name }[]` } value={ value } defaultChecked={ defaultValue.includes( value ) } />
+					<input type="checkbox" componentId={ componentId } ref={ register } name={ name } value={ value } defaultChecked={ defaultValue.includes( value ) } />
 					<span dangerouslySetInnerHTML={ { __html: label } } />
 				</label>
 			)

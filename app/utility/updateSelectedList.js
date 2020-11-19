@@ -58,7 +58,6 @@ export const moveNode = ( from, to, index, typeChange ) => {
 
   // Validate node to
   if ( !nodeTo ) return;
-
   // Extract node to move
   memTraverse( tree, from, 0, ( item, parent, i ) => {
     parent = parent || tree;
@@ -84,7 +83,6 @@ export const moveNode = ( from, to, index, typeChange ) => {
   if ( isNotDeleting( typeChange ) ) {
     nodeTo.items.splice( index, 0, nodeFrom );
   }
-
   updateSelectedList( tree );
   return tree;
 };
@@ -119,7 +117,7 @@ export const deleteItem = ( id, parent, index ) => {
 const createCopyItem = ( item, isChildren ) => {
   let result = { ...item };
   result.id = `${ item.type }_${ uniqid() }`;
-  if ( !isChildren ) {
+  if ( !isChildren && result.data.general.name ) {
     result.data.general.name.default += ' Copy';
   }
   if ( result.items.length > 0 ) {
