@@ -1,4 +1,4 @@
-import { DATA_LIST_TYPE, LIST_OPTION_TYPE } from '../constants/constants';
+import { CHECKBOX_LIST_TYPE, LIST_OPTION_TYPE } from '../constants/constants';
 
 export const getLabel = ( name, type ) => {
 	const labels = {
@@ -62,27 +62,37 @@ const fillFieldData = ( item, data ) => {
 const fillDataByKey = ( items, data, uniqId ) => {
 	let result = {};
 	Object.keys( items ).forEach( key => {
-		if ( LIST_OPTION_TYPE.includes( key ) && data[ key ] ) {
-			let optionalList = [];
-			for ( let i = 0; i < data[ key ].length; i++ ) {
-				optionalList[ i ] = {};
-				optionalList[ i ][ 'key' ] = data[ key ][ i ][ 'key' ];
-				optionalList[ i ][ 'value' ] = data[ key ][ i ][ 'value' ];
-			}
+		// handle Key value
+		if ( LIST_OPTION_TYPE.includes( key ) && data[ key ] && typeof data[ key ] === 'object' ) {
+			const optionalList = Object.values( data[ key ] );
 			result[ key ] = { ...items[ key ], default: optionalList };
-		} else if ( key === 'conditional_logic' && data[ key ] ) {
+		} else if ( key === 'conditional_logic' && data[ key ] && typeof data[ key ] === 'object' ) {
+			// handle conditional logic
 			const type = data[ key ][ 'type' ];
 			const relation = data[ key ][ 'relation' ];
-
-			let optionalList = [];
-			for ( let i = 0; i < data[ key ][ 'rules' ][ 'length' ]; i++ ) {
-				optionalList[ i ] = {};
-				optionalList[ i ][ 'name' ] = data[ key ][ 'rules' ][ i ][ 'name' ];
-				optionalList[ i ][ 'operator' ] = data[ key ][ 'rules' ][ i ][ 'operator' ];
-				optionalList[ i ][ 'value' ] = data[ key ][ 'rules' ][ i ][ 'value' ];
-			}
+			const optionalList = Object.values( data[ key ][ 'rules' ] );
 
 			result[ key ] = { ...items[ key ], default: { relation, type, rules: optionalList } };
+		} else if ( key === 'icon' ) {
+			const icons = document.getElementsByClassName( `fields-${ uniqId }-icon` );
+			Object.values( icons ).map( icon => {
+				if ( icon.checked ) {
+					const value = icon.value;
+					result[ key ] = { ...items[ key ], default: value };
+				}
+			} );
+		} else if ( CHECKBOX_LIST_TYPE.includes( key ) ) {
+			// handle post type (checkbox list)
+			let postTypeList = [];
+			const checkedList = document.getElementsByClassName( `fields-${ uniqId }-checklist` );
+			Object.values( checkedList ).map( input => {
+				const value = input.value;
+				if ( input.checked ) {
+					postTypeList.push( value );
+				}
+			} );
+
+			result[ key ] = { ...items[ key ], default: postTypeList };
 		} else {
 			result[ key ] = { ...items[ key ], default: data[ key ] };
 		}
@@ -98,14 +108,13 @@ export const getCopiedItemData = ( type, id ) => {
 	let data = fields[ type ];
 	let result = {};
 	result.general = getGeneralData( data.general, id );
-	result.advanced = getAdvancedData( data.advanced, id );
+	result.advanced = data.advanced && type !== 'divider' ? getAdvancedData( data.advanced, id ) : {};
 	return result;
 };
 
 const getGeneralData = ( generalItems, id ) => {
 	let result = {};
 	Object.keys( generalItems ).forEach( item => {
-
 		const elementId = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementId );
 		if ( typeof value === "boolean" ) {
@@ -114,25 +123,38 @@ const getGeneralData = ( generalItems, id ) => {
 			value = value || generalItems[ item ].default;
 		}
 		// set id value is empty when copy field
-		if ( item == 'id' ) {
+		if ( item === 'id' ) {
 			result[ item ] = { ...generalItems[ item ], default: '' };
 		} else {
 			result[ item ] = { ...generalItems[ item ], default: value };
 		}
+		if ( item === 'icon' ) {
+			const icons = document.getElementsByClassName( `fields-${ id }-icon` );
+			Object.values( icons ).map( icon => {
+				if ( icon.checked ) {
+					const value = icon.value;
+					result[ item ] = { ...generalItems[ item ], default: value };
+				}
+			} );
+		} else if ( CHECKBOX_LIST_TYPE.includes( item ) ) {
+			let postTypeList = [];
+			const checkedList = document.getElementsByClassName( `fields-${ id }-checklist` );
+			Object.values( checkedList ).map( input => {
+				const value = input.value;
+				if ( input.checked ) {
+					postTypeList.push( value );
+				}
+			} );
 
-		if ( item === 'post_type' ) {
-
-		}
-
-		if ( LIST_OPTION_TYPE.includes( item ) || generalItems[ item ].component === 'KeyValue' ) {
-			let optionalList = [];
-			for ( let i = 0; i < value; i++ ) {
-				optionalList[ i ] = {};
-				optionalList[ i ][ 'key' ] = getElementValue( `fields-${ id }-${ item }-${ i }-key` );
-				optionalList[ i ][ 'value' ] = getElementValue( `fields-${ id }-${ item }-${ i }-value` );
-			}
-
-			result[ item ] = { ...generalItems[ item ], default: optionalList };
+			result[ item ] = { ...generalItems[ item ], default: postTypeList };
+		} else if ( LIST_OPTION_TYPE.includes( item ) && generalItems[ item ].component === 'KeyValue' ) {
+			let list = JSON.parse( value );
+			list = list.map( keyValue => ( {
+				...keyValue,
+				key: getElementValue( `fields-${ id }-${ item }-${ keyValue.uniqId }-key` ),
+				value: getElementValue( `fields-${ id }-${ item }-${ keyValue.uniqId }-value` )
+			} ) );
+			result[ item ] = { ...generalItems[ item ], default: list };
 		}
 	} );
 
@@ -144,44 +166,37 @@ const getAdvancedData = ( advancedItems, id ) => {
 	Object.keys( advancedItems ).forEach( item => {
 		const elementId = `fields-${ id }-${ item }`;
 		let value = getElementValue( elementId );
+
 		if ( typeof value === "boolean" ) {
+			// is checkbox value
 			value = value;
 		} else {
+			// assign value if exist
 			value = value || advancedItems[ item ].default;
 		}
 
 		if ( item === 'conditional_logic' ) {
+			// handle conditional logic
 			const type = getElementValue( `fields-${ id }-${ item }-type` );
 			const relation = getElementValue( `fields-${ id }-${ item }-relation` );
+			let rules = JSON.parse( value );
+			rules = rules.map( rule => ( {
+				...rule,
+				name: getElementValue( `fields-${ id }-${ item }-rules-${ rule.id }-name` ),
+				operator: getElementValue( `fields-${ id }-${ item }-rules-${ rule.id }-operator` ),
+				value: getElementValue( `fields-${ id }-${ item }-rules-${ rule.id }-value` ),
+			} ) );
 
-			let optionalList = [];
-			for ( let i = 0; i < value; i++ ) {
-				optionalList[ i ] = {};
-				optionalList[ i ][ 'name' ] = getElementValue( `fields-${ id }-${ item }-rules-${ i }-name` );
-				optionalList[ i ][ 'operator' ] = getElementValue( `fields-${ id }-${ item }-rules-${ i }-operator` );
-				optionalList[ i ][ 'value' ] = getElementValue( `fields-${ id }-${ item }-rules-${ i }-value` );
-			}
-
-			result[ item ] = { ...advancedItems[ item ], default: { relation, type, rules: optionalList } };
+			result[ item ] = { ...advancedItems[ item ], default: { relation, type, rules } };
 		} else if ( LIST_OPTION_TYPE.includes( item ) ) {
-			let optionalList = [];
-			for ( let i = 0; i < value; i++ ) {
-				optionalList[ i ] = {};
-				optionalList[ i ][ 'key' ] = getElementValue( `fields-${ id }-${ item }-${ i }-key` );
-				optionalList[ i ][ 'value' ] = getElementValue( `fields-${ id }-${ item }-${ i }-value` );
-			}
-
-			result[ item ] = { ...advancedItems[ item ], default: optionalList };
-		} else if ( DATA_LIST_TYPE.includes( item ) ) {
-			let dataList = [];
-			let idDataList = document.getElementsByName( `fields-${ id }-datalist-id` )[ 0 ]?.value;
-			const listValue = document.getElementsByName( `fields-${ id }-datalist-options-0` );
-
-			listValue.forEach( input => {
-				dataList.push( input.value );
-			} );
-
-			result[ item ] = { ...advancedItems[ item ], id: idDataList, items: dataList };
+			//handle key value
+			let list = JSON.parse( value );
+			list = list.map( keyValue => ( {
+				...keyValue,
+				key: getElementValue( `fields-${ id }-${ item }-${ keyValue.uniqId }-key` ),
+				value: getElementValue( `fields-${ id }-${ item }-${ keyValue.uniqId }-value` )
+			} ) );
+			result[ item ] = { ...advancedItems[ item ], default: list };
 		} else {
 			result[ item ] = { ...advancedItems[ item ], default: value };
 		}

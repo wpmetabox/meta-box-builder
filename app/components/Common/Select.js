@@ -12,7 +12,7 @@ const Select = ( { componentId, name, options, multiple, defaultValue, onChange,
 	};
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
-		<select placeholder={ placeholder } style={ style } ref={ register } id={ componentId } name={ name } multiple={ multiple } defaultValue={ defaultValue } onChange={ onChange }>
+		<select placeholder={ placeholder } style={ style } ref={ register } id={ componentId } name={ name } multiple={ multiple } defaultValue={ defaultValue } onChange={ update }>
 			{ !multiple && !defaultValue && <option value=""></option> }
 			{
 				Object.entries( options ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> )

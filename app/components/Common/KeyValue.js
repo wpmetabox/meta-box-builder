@@ -16,7 +16,11 @@ const KeyValue = ( {
 	keyPlaceholder = __( 'Enter key', 'meta-box-builder' ),
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
 } ) => {
-	const [ list, setList ] = useState( defaultValue || [] );
+	const handleDefaultValues = () => {
+		return defaultValue?.map( item => ( { ...item, uniqId: uniqid() } ) );
+	};
+
+	const [ list, setList ] = useState( handleDefaultValues() || [] );
 	const removeItem = id => setList( prevList => prevList.filter( item => item.uniqId !== id ) );
 	if ( link ) {
 		label = `<a href="${ link }" target="_blank" rel="noreferrer noopener">${ label }</a>`;
@@ -29,14 +33,14 @@ const KeyValue = ( {
 						key={ item.uniqId }
 						item={ item }
 						removeItem={ removeItem }
-						id={ `${ componentId }-${ i }` }
-						name={ `${ name }[${ i }]` }
+						id={ `${ componentId }-${ item.uniqId }` }
+						name={ `${ name }[${ item.uniqId }]` }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
 					/>
 				) )
 			}
-			<input type='hidden' id={ componentId } name={ name } value={ list.length } />
+			<input type='hidden' id={ componentId } name={ name } value={ JSON.stringify( list ) } />
 			<button type="button" className="button" onClick={ () => setList( prevList => prevList.concat( { key: '', value: '', uniqId: uniqid() } ) ) }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
 		</DivRow>
 	);

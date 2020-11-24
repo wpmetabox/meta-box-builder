@@ -65,6 +65,11 @@ export const LIST_OPTION_TYPE = [
   'custom_settings',
 ];
 
+export const CHECKBOX_LIST_TYPE = [
+  'post_type',
+  'taxonomy',
+];
+
 export const LIST_ADD_SELECT = [
   'checkbox_list',
   'radio',

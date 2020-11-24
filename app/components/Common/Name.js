@@ -1,29 +1,39 @@
 import { useFormContext } from 'react-hook-form';
 import slugify from 'slugify';
 import { actions as ConditionalActions } from '../../context/ConditionalList/ConditionalContext';
+import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
 
 const { __ } = wp.i18n;
-const { useEffect } = wp.element;
+const { useEffect, useState } = wp.element;
 
 const Name = ( { name, componentId, ...rest } ) => {
 	const { register } = useFormContext();
+	const [ value, setValue ] = useState( '' );
+	const debounceValue = useDebounce( value );
 
 	useEffect( () => {
 		document.getElementById( `og-item__title__${ rest.fieldId }` ).textContent = rest.defaultValue || __( '(No label)', 'meta-box-builder' );
 	}, [] );
 
-	const onChange = e => {
-		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
+	useEffect( () => {
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
+		if ( idElement ) {
+			ConditionalActions.updateConditionalList( { [ rest.fieldId ]: { label: debounceValue, id: debounceValue } } );
+		}
+	}, [ debounceValue ] );
+
+	const onChange = e => {
+		setValue( e.target.value );
+		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
+		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
 		if ( titleElement ) {
-			document.getElementById( `og-item__title__${ rest.fieldId }` ).textContent = e.target.value || __( '(No label)', 'meta-box-builder' );
+			titleElement.textContent = e.target.value || __( '(No label)', 'meta-box-builder' );
 		}
 		if ( idElement ) {
-			document.getElementById( `fields-${ rest.fieldId }-id` ).value = slugify( e.target.value, { lower: true, replacement: '_' } );
-			ConditionalActions.updateConditionalList( { [ rest.fieldId ]: { label: e.target.value, id: e.target.value } } );
-
+			idElement.value = slugify( e.target.value, { lower: true, replacement: '_' } );
 		}
+
 	};
 
 	return (

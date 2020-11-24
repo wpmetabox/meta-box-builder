@@ -11,7 +11,7 @@ const CheckboxList = ( { name, componentId, options, className, defaultValue = [
 		{
 			Object.entries( options ).map( ( [ value, label ] ) =>
 				<label key={ value }>
-					<input type="checkbox" componentId={ componentId } ref={ register } name={ name } value={ value } defaultChecked={ defaultValue.includes( value ) } />
+					<input type="checkbox" className={ `fields-${ rest.fieldId }-checklist` } ref={ register } name={ name } value={ value } defaultChecked={ defaultValue.includes( value ) } />
 					<span dangerouslySetInnerHTML={ { __html: label } } />
 				</label>
 			)
