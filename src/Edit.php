@@ -2,8 +2,6 @@
 namespace MBB;
 
 class Edit {
-	public $meta = [];
-
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'edit_form_after_title', [ $this, 'render' ] );
