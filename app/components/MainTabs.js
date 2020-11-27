@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { actions as commonDataActions } from '../context/CommonData/CommonDataContext';
 import { actions as ConditionalActions, Context } from '../context/ConditionalList/ConditionalContext';
-import { actions } from '../context/Generator/GeneratorContext';
+import { actions, formatParams } from '../context/Generator/GeneratorContext';
 import { fillFieldsValues } from '../utility/functions';
 import Result from './Result';
 import FieldsTab from './Tabs/FieldsTab';
@@ -26,7 +26,7 @@ const MainTabs = () => {
 
 	const onPublish = data => {
 		document.getElementById( 'data' ).value = JSON.stringify( fillFieldsValues( data, state ) );
-		document.getElementById( 'raw' ).value = JSON.stringify( data );
+		document.getElementById( 'raw' ).value = JSON.stringify( formatParams( data ) );
 	}
 
 	const onSelect = ( index ) => {
