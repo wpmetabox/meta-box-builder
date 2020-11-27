@@ -24,7 +24,10 @@ const MainTabs = () => {
 		actions.generatePHPCode( data );
 	};
 
-	const onPublish = data => document.getElementById( 'data' ).value = JSON.stringify( fillFieldsValues( data, state ) );
+	const onPublish = data => {
+		document.getElementById( 'data' ).value = JSON.stringify( fillFieldsValues( data, state ) );
+		document.getElementById( 'raw' ).value = JSON.stringify( data );
+	}
 
 	const onSelect = ( index ) => {
 		const isGetCodeTab = index === 2;
@@ -70,6 +73,7 @@ const MainTabs = () => {
 					<button type="submit" style={ { display: 'none' } } id={ SUBMIT_FORM_BUTTON } />
 				</form>
 				<input type="hidden" id="data" name="data" />
+				<input type="hidden" id="raw" name="raw" />
 
 				<button style={ { display: 'none' } } id="btn-on-publish" onClick={ handleSubmit( onPublish ) }>Publish</button>
 			</FormProvider>

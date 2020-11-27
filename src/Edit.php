@@ -64,8 +64,11 @@ class Edit {
 		}
 
 		// Save JSON data for JavaScript.
-		$data = rwmb_request()->post( 'data' );
+		$request = rwmb_request();
+		$data = $request->post( 'data' );
+		$raw = $request->post( 'raw' );
 		update_post_meta( $post_id, 'data', $data );
+		update_post_meta( $post_id, 'raw', $raw );
 	}
 
 	private function is_screen() {
