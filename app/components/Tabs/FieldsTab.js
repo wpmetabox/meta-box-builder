@@ -24,7 +24,7 @@ const FieldsTab = ( props ) => {
     };
     const newList = {
       ...selectedList,
-      items: [ ...selectedList.items, { id, type, data, items: [] } ],
+      items: [ ...selectedList.items, { id, type, expanded: true, data, items: [] } ],
     };
     setSelectedList( newList );
     updateSelectedList( newList );

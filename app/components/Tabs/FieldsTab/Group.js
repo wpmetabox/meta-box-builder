@@ -12,12 +12,11 @@ const { useState, memo, useContext, useEffect } = wp.element;
 const { __ } = wp.i18n;
 
 const Group = ( props ) => {
-
 	const { MbFields } = useContext( Context );
 
 	const type = props.type;
 
-	const [ expanded, setExpanded ] = useState( true );
+	const [ expanded, setExpanded ] = useState( !! props.expanded );
 	const [ children, setChildren ] = useState( props.items );
 
 	useEffect( () => {
@@ -28,20 +27,19 @@ const Group = ( props ) => {
 	const toggleSettings = () => setExpanded( prev => !prev );
 
 	const addItem = ( type ) => {
-
 		const id = `${ type }_${ uniqid() }`;
 		const data = {
 			...MbFields[ type ],
 		};
-		const newChildList = [ ...children, { id, type, data, items: [] } ];
+		const newChildList = [ ...children, { id, type, expanded: true, data, items: [] } ];
 		setChildren( newChildList );
 		props.changeSelectedList( addGroupChild( props.id, newChildList ) );
 	};
 
 	return (
 		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-
 			<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
+			<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][expanded]` } value={ expanded } />
 			<Header
 				type={ type }
 				id={ props.id }

@@ -9,16 +9,15 @@ const FieldSelected = ( props ) => {
 	const type = props.type;
 	const data = props.data;
 
-	const [ expanded, setExpanded ] = useState( true );
+	const [ expanded, setExpanded ] = useState( !! props.expanded );
 	const [ tabIndex, setTabIndex ] = useState( 0 );
-	const toggleSettings = () => {
-		setExpanded( prev => !prev );
-	};
+	const toggleSettings = () => setExpanded( prev => !prev );
 
 	if ( 'divider' === type ) {
 		return (
 			<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 				<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
+				<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][expanded]` } value={ expanded } />
 				<Header
 					type={ type }
 					id={ props.id }
