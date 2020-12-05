@@ -11,29 +11,16 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
     );
 
     public static $prefixLengthsPsr4 = array (
-        'R' => 
-        array (
-            'Riimu\\Kit\\PHPEncoder\\' => 21,
-        ),
         'M' => 
         array (
             'MBB\\' => 4,
-            'MBBParser\\' => 10,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Riimu\\Kit\\PHPEncoder\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/riimu/kit-phpencoder/src',
-        ),
         'MBB\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
-        ),
-        'MBBParser\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/meta-box/mbb-parser/src',
         ),
     );
 
