@@ -10,7 +10,7 @@ import Result from './Result';
 import FieldsTab from './Tabs/FieldsTab';
 import SettingsTab from './Tabs/SettingsTab';
 
-const { useEffect, useContext } = wp.element;
+const { useEffect, useContext, memo } = wp.element;
 const { __ } = wp.i18n;
 const SUBMIT_FORM_BUTTON = 'submit-form';
 
@@ -39,7 +39,7 @@ const MainTabs = () => {
 			document.getElementById( 'btn-on-publish' ).click();
 		} );
 		if ( MbbApp.settings && MbbApp.settings.conditionalList ) {
-			ConditionalActions.updateConditionalList( JSON.parse( MbbApp.settings.conditionalList ), 'initial' );
+			ConditionalActions.updateConditionalList( 'initial', JSON.parse( MbbApp.settings.conditionalList ) );
 		}
 	}, [] );
 	const fields = MbbApp.settings ? MbbApp.settings.fields : [];
@@ -78,4 +78,4 @@ const MainTabs = () => {
 	);
 };
 
-export default MainTabs;
+export default memo( MainTabs );

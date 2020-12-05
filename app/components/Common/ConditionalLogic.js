@@ -20,7 +20,7 @@ const ConditionalLogic = ( {
     const state = useContext( Context );
 
     useEffect( () => {
-        setListId( Object.values( state ).map( item => item.label ? `${ item.label } ( ${ item.id } )` : item.id ) );
+        setListId( Object.values( state ).map( item => item.label ? item.id ? `${ item.label } ( ${ item.id } )` : item.label : ( item.id || '' ) ) );
     }, [ state ] );
 
 
