@@ -21,7 +21,7 @@ class Base {
 	private function register_route( $method ) {
 		$route = str_replace( ['get_', '_'], ['', '-'], $method );
 		register_rest_route( 'mbb', $route, [
-			'method'              => WP_REST_Server::READABLE,
+			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, $method ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
