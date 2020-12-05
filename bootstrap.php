@@ -20,7 +20,7 @@ new PostType;
 new Upgrade\Manager;
 new Register;
 new RestApi;
-new \MBBParser\RestApi;
+new Api\Generator;
 new Api\Fields;
 
 if ( mbb_is_extension_active( 'meta-box-include-exclude' ) ) {

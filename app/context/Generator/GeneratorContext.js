@@ -1,18 +1,15 @@
-import { getSelectedList, isNotGroupField } from '../../utility/functions';
+import { getSelectedList, isNotGroupField, request } from '../../utility/functions';
 import createDataContext from '../createDataContext';
 import { GENERATE_PHP_CODE } from './GeneratorActions';
 import generatorReducer from './GeneratorReducer';
 
-const generatePHPCode = dispatch => params => {
-	const requestOptions = {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify( formatParams( params ) )
-	};
-	fetch( `${ MbbApp.rest }/mbb-parser/meta-box`, requestOptions )
-		.then( response => response.json() )
-		.then( data => dispatch( { type: GENERATE_PHP_CODE, payload: data, responseTime: ( new Date() ).getTime() } ) )
-		.catch( error => console.log( error ) );
+const generatePHPCode = dispatch => async ( params ) => {
+	const data = await request( 'generate', formatParams( params ), 'POST' );
+	dispatch( {
+		type: GENERATE_PHP_CODE,
+		payload: data,
+		responseTime: ( new Date() ).getTime()
+	} );
 };
 
 export const formatParams = ( params ) => {

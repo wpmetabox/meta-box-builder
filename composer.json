@@ -7,7 +7,8 @@
     "files": ["src/helpers.php"]
   },
   "require": {
-    "twig/twig": "~1.33.2"
+    "twig/twig": "~1.33.2",
+    "riimu/kit-phpencoder": "^2.4"
   },
   "extra": {
     "light-ignore-plugin": {

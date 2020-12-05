@@ -1,5 +1,58 @@
 [
     {
+        "name": "riimu/kit-phpencoder",
+        "version": "v2.4.1",
+        "version_normalized": "2.4.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Riimu/Kit-PHPEncoder.git",
+            "reference": "ca6f004e1290aec7ef4bebf6c0807b30fcf981d7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Riimu/Kit-PHPEncoder/zipball/ca6f004e1290aec7ef4bebf6c0807b30fcf981d7",
+            "reference": "ca6f004e1290aec7ef4bebf6c0807b30fcf981d7",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.6.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^9.4 || ^6.5 || ^5.7"
+        },
+        "suggest": {
+            "ext-gmp": "To convert GMP numbers into PHP code"
+        },
+        "time": "2020-11-29T16:53:17+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Riimu\\Kit\\PHPEncoder\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Riikka Kalliomäki",
+                "email": "riikka.kalliomaki@gmail.com",
+                "homepage": "http://riimu.net"
+            }
+        ],
+        "description": "Highly customizable alternative to var_export for PHP code generation",
+        "homepage": "http://kit.riimu.net",
+        "keywords": [
+            "code",
+            "encoder",
+            "export",
+            "generator",
+            "variable"
+        ]
+    },
+    {
         "name": "twig/twig",
         "version": "v1.33.2",
         "version_normalized": "1.33.2.0",
