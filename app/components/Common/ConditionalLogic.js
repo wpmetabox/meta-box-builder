@@ -20,7 +20,7 @@ const ConditionalLogic = ( {
     const state = useContext( Context );
 
     useEffect( () => {
-        setListId( Object.values( state ).map( item => item.label ? item.id ? `${ item.label } ( ${ item.id } )` : item.label : ( item.id || '' ) ) );
+        setListId( Object.values( state ).map( item => item.label ? ( item.id ? `${ item.label } (${ item.id })` : item.label ) : ( item.id || '' ) ) );
     }, [ state ] );
 
 
@@ -33,7 +33,7 @@ const ConditionalLogic = ( {
         <DivRow
             className="og-field"
             label={ `<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noopener norefferer">${ __( 'Conditional Logic', 'meta-box-builder' ) }</a>` }
-            tooltip={ __( 'Show hide the field based on other field value.', 'meta-box-builder' ) }
+            tooltip={ __( 'Toggle the field based on another field value.', 'meta-box-builder' ) }
         >
             { conditions.length > 0 && <Intro id={ componentId } name={ name } defaultValue={ defaultValue } /> }
             {
@@ -103,7 +103,7 @@ const Condition = ( { condition, baseName, removeCondition, conditionIdList, id 
                 <option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
                 <option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
             </select>
-            <input defaultValue={ condition.value || '' } id={ `${ id }-value` } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } style={ { width: 120, height: 30 } } ref={ register } name={ `${ baseName }[value]` } />
+            <input defaultValue={ condition.value || '' } id={ `${ id }-value` } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } ref={ register } name={ `${ baseName }[value]` } />
             <button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeCondition( condition.id ) }><Dashicon icon="dismiss" /></button>
         </div>
     );
