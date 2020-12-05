@@ -18,8 +18,8 @@ const Name = ( { name, componentId, ...rest } ) => {
 
 	useEffect( () => {
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
-		if ( idElement ) {
-			ConditionalActions.updateConditionalList( { [ rest.fieldId ]: { label: debounceValue, id: debounceValue } } );
+		if ( idElement && ( debounceValue || rest.defaultValue ) ) {
+			ConditionalActions.updateConditionalList( 'add', { [ rest.fieldId ]: { label: debounceValue || rest.defaultValue, id: debounceValue } } );
 		}
 	}, [ debounceValue ] );
 

@@ -64,6 +64,7 @@ export const moveNode = ( from, to, index, typeChange ) => {
     nodeFrom = item;
     nodeFrom = keepValueNodeFrom( nodeFrom );
 
+    if ( !nodeFrom ) return;
     if ( isCopying( typeChange ) ) {
       const itemCopy = createCopyItem( { ...nodeFrom } );
       parent.items.splice( i + 1, 0, itemCopy );
@@ -77,8 +78,7 @@ export const moveNode = ( from, to, index, typeChange ) => {
     }
 
   } );
-  // Validate node from
-  if ( !nodeFrom ) return;
+
   // Insert node
   if ( isNotDeleting( typeChange ) ) {
     nodeTo.items.splice( index, 0, nodeFrom );

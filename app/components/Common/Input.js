@@ -12,8 +12,8 @@ const Input = ( { name, componentName, componentId, placeholder, defaultValue, t
 
 	useEffect( () => {
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
-		if ( idElement ) {
-			ConditionalActions.updateConditionalList( { [ rest.fieldId ]: { id: debounceValue } } );
+		if ( idElement && debounceValue ) {
+			ConditionalActions.updateConditionalList( 'add', { [ rest.fieldId ]: { id: debounceValue } } );
 		}
 	}, [ debounceValue ] );
 

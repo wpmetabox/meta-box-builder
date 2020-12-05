@@ -1,6 +1,7 @@
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 import { DragSource } from 'react-dnd';
+import { actions as ConditionalActions } from '../../../context/ConditionalList/ConditionalContext';
 import { cardSource, collect, copyItem, deleteItem } from '../../../utility/updateSelectedList';
 import Types from './Types';
 
@@ -16,6 +17,7 @@ const Header = props => {
 	const remove = e => {
 		e.stopPropagation();
 		const newSelectedList = deleteItem( props.id, props.parent, props.index );
+		ConditionalActions.updateConditionalList( 'remove', { id: props.id } );
 		props.changeSelectedList( newSelectedList );
 	};
 

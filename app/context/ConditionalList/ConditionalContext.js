@@ -1,7 +1,7 @@
 import createDataContext from '../createDataContext';
 import conditionalReducer from './ConditionalReducer';
 
-const updateConditionalList = dispatch => ( payload, type ) => {
+const updateConditionalList = dispatch => ( type, payload ) => {
   dispatch( { type, payload } );
 };
 
