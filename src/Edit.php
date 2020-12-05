@@ -2,15 +2,10 @@
 namespace MBB;
 
 class Edit {
-	public $meta = [];
-
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'edit_form_after_title', [ $this, 'render' ] );
-
-		// Removed hooks that modify post content, excerpt. Priority 20 to run after default WP hooks.
-		add_action( 'init', [ $this, 'remove_content_hooks' ], 20 );
-		add_filter( 'wp_insert_post_data', [ $this, 'update_meta_box' ], 10, 2 );
+		add_action( 'save_post_meta-box', [ $this, 'save' ] );
 	}
 
 	public function render() {
@@ -28,10 +23,13 @@ class Edit {
 		wp_enqueue_code_editor( ['type' => 'application/x-httpd-php'] );
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['wp-element', 'wp-components', 'clipboard', 'wp-color-picker'], MBB_VER, true );
 
+		$saved_data = get_post_meta( get_the_ID(), 'data', true );
+		$saved_data = $saved_data ? json_decode( $saved_data, true ) : [];
+
 		$data = [
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
-			'settings'      => json_decode( get_post()->post_excerpt, ARRAY_A ),
+			'settings'      => $saved_data,
 			'postTypes'     => mbb_get_post_types(),
 			'taxonomies'    => mbb_get_taxonomies(),
 			'settingsPages' => mbb_get_setting_pages(),
@@ -59,74 +57,18 @@ class Edit {
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}
 
-	/**
-	 * Removed excerpt_save_pre filter for meta box, which adds rel="noopener"
-	 * to <a target="_blank"> links, thus braking JSON validity.
-	 *
-	 * @see https://elightup.freshdesk.com/a/tickets/27894
-	 */
-	public function remove_content_hooks() {
-		if ( ! is_admin() ) {
-			return;
+	public function save( $post_id ) {
+		$parent = wp_is_post_revision( $post_id );
+		if ( $parent ) {
+			$post_id = $parent;
 		}
 
-		// Update meta box via method POST.
-		$action    = filter_input( INPUT_POST, 'action' );
-		$post_type = filter_input( INPUT_POST, 'post_type' );
-		$is_post   = 'editpost' === $action && 'meta-box' === $post_type;
-
-		// Trash or restore meta box via method GET.
-		$is_get  = isset( $_GET['post_type'] ) && 'meta-box' === $_GET['post_type']; // Bulk removed.
-		$post_id = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_NUMBER_INT );
-		if ( $post_id ) {
-			$post = get_post( $post_id );
-			$is_get = 'meta-box' === $post->post_type;
-		}
-
-		if ( $is_post || $is_get ) {
-			remove_all_filters( 'excerpt_save_pre' );
-		}
-	}
-
-	/**
-	 * Manually set post_content field, which is parsed from post_excerpt and serialize.
-	 *
-	 * @param  array $data Raw post data.
-	 * @param  array $post Current post to save.
-	 *
-	 * @return array
-	 */
-	public function update_meta_box( $data, $post ) {
-		if ( ! isset( $post['post_type'] ) || 'meta-box' !== $post['post_type'] || empty( $data['post_excerpt'] ) ) {
-			return $data;
-		}
-
-		static $is_saved = false;
-		if ( $is_saved ) {
-			return $data;
-		}
-
-		$settings = json_decode( wp_unslash( $data['post_excerpt'] ), true );
-		$parser = new \MBBParser\Parsers\MetaBox( $settings );
-		$parser->parse();
-
-		$meta_box = $parser->get_settings();
-		$status   = empty( $meta_box['status'] ) ? 'publish' : $meta_box['status'];
-		unset( $meta_box['status'] );
-
-		// Only allow Trash or Publish status.
-		$data['post_status']  = 'trash' === $data['post_status'] ? $data['post_status'] : $status;
-
-		/*
-		 * Encode the meta box settings in JSON.
-		 * Use wp_json_encode() to handle non-UTF8 string.
-		 * Must add slashes. WordPress will unslash later.
-		 */
-		$data['post_content'] = wp_slash( wp_json_encode( $meta_box, JSON_UNESCAPED_UNICODE ) );
-
-		$is_saved = true;
-
-		return $data;
+		// Save JSON data for JavaScript.
+		$request = rwmb_request();
+		$data = $request->post( 'data' );
+		$raw = $request->post( 'raw' );
+		update_post_meta( $post_id, 'data', $data );
+		update_post_meta( $post_id, 'raw', $raw );
 	}
 
 	private function is_screen() {
