@@ -258,23 +258,20 @@ export const objectToArray = object => Object.entries( object ).map( ( [ value, 
 
 let apiCache = {};
 export const request = async ( apiName, params = {}, method = 'GET' ) => {
-	let options = {
-		method,
-		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
-	};
-	let cacheKey = apiName;
-	if ( 'POST' === method ) {
-		options.body = JSON.stringify( params );
-		cacheKey += options.body;
-	} else {
-		apiName += '?' + ( new URLSearchParams( params ) ).toString();
-		cacheKey = apiName;
-	}
-
+	let cacheKey = JSON.stringify( { apiName, params, method } );
 	if ( apiCache[ cacheKey ] ) {
 		return apiCache[ cacheKey ];
 	}
 
+	let options = {
+		method,
+		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
+	};
+	if ( 'POST' === method ) {
+		options.body = JSON.stringify( params );
+	} else {
+		apiName += '?' + ( new URLSearchParams( params ) ).toString();
+	}
 	const result = await fetch( `${ MbbApp.rest }/mbb/${ apiName }`, options ).then( response => response.json() );
 	apiCache[ cacheKey ] = result;
 	return result;
