@@ -7,7 +7,6 @@ class MetaBox extends Base {
 	public function parse() {
 		$this->parse_boolean_values()
 			->parse_numeric_values()
-			->remove_angular_keys()
 			->parse_location()
 			->parse_block()
 			->parse_custom_attributes()

@@ -35,11 +35,6 @@ class Base {
 		}
 	}
 
-	protected function remove_angular_keys() {
-		unset( $this->settings['$$hashKey'] );
-		return $this;
-	}
-
 	protected function remove_empty_values() {
 		foreach ( $this->settings as $key => $value ) {
 			if ( empty( $value ) && ! in_array( $key, $this->ignore_empty_keys, true ) ) {

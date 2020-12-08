@@ -9,7 +9,6 @@ class Field extends Base {
 		$this->remove_tabs()
 			->parse_boolean_values()
 			->parse_numeric_values()
-			->remove_angular_keys()
 			->parse_datalist()
 			->parse_group_title()
 			->parse_object_field()
