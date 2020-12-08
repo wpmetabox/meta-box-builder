@@ -43,8 +43,7 @@ const FieldsTab = ( props ) => {
             <Fragment key={ item.id }>
               <Insert index={ index } parent="root" />
               <Node
-                id={ item.id }
-                data={ item }
+                item={ item }
                 parent="root"
                 index={ index }
                 changeSelectedList={ changeSelectedList }
