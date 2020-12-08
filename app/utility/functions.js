@@ -47,11 +47,11 @@ const fillGroupData = ( item, params ) => {
 
 const fillItemData = ( item, data ) => {
 	let result = { ...item };
-	result.data.general  = fillDataByKey( item.data.general, data, item.id );
+	result.data.general = fillDataByKey( item.data.general, data, item.id );
 	result.data.advanced = fillDataByKey( item.data.advanced, data, item.id );
 
 	// Store the expanded state (independently from the item.data)
-	result.expanded      = !!data.expanded;
+	result.expanded = !!data.expanded;
 
 	return result;
 };
@@ -207,15 +207,13 @@ const getElementValue = id => {
 	if ( !element ) {
 		return null;
 	}
-	if ( [ 'SELECT', 'TEXTAREA' ].includes( element.tagName ) || [ 'text', 'number', 'email', 'hidden' ].includes( element.type ) ) {
-		return element.value;
-	}
 	if ( 'checkbox' === element.type ) {
 		return element?.checked;
 	}
 	if ( 'radio' === element.type ) {
-		return document.querySelector( `[name="${ name }"]:checked` ).value;
+		return document.querySelector( `[name="${ element.name }"]:checked` ).value;
 	}
+	return element.value;
 };
 
 export const addGroupChild = ( groupId, childList ) => {
