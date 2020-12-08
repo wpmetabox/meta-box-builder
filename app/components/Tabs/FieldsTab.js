@@ -24,7 +24,7 @@ const FieldsTab = ( props ) => {
     };
     const newList = {
       ...selectedList,
-      items: [ ...selectedList.items, { id, type, data, items: [] } ],
+      items: [ ...selectedList.items, { id, type, expanded: true, data, items: [] } ],
     };
     setSelectedList( newList );
     updateSelectedList( newList );
@@ -43,8 +43,7 @@ const FieldsTab = ( props ) => {
             <Fragment key={ item.id }>
               <Insert index={ index } parent="root" />
               <Node
-                id={ item.id }
-                data={ item }
+                item={ item }
                 parent="root"
                 index={ index }
                 changeSelectedList={ changeSelectedList }

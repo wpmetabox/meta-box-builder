@@ -1,3 +1,4 @@
+import { useFormContext } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { Context } from '../../../context/CommonData/CommonDataContext';
 import { addGroupChild, uniqid } from '../../../utility/functions';
@@ -7,17 +8,16 @@ import Header from './Header';
 import Insert from './Insert';
 import Node from './Node';
 
-
-const { useState, memo, useContext, useEffect } = wp.element;
+const { useState, memo, useContext, useEffect, Fragment } = wp.element;
 const { __ } = wp.i18n;
 
 const Group = ( props ) => {
-
 	const { MbFields } = useContext( Context );
 
 	const type = props.type;
 
-	const [ expanded, setExpanded ] = useState( true );
+	const { register } = useFormContext();
+	const [ expanded, setExpanded ] = useState( !!props.expanded );
 	const [ children, setChildren ] = useState( props.items );
 
 	useEffect( () => {
@@ -28,25 +28,21 @@ const Group = ( props ) => {
 	const toggleSettings = () => setExpanded( prev => !prev );
 
 	const addItem = ( type ) => {
-
 		const id = `${ type }_${ uniqid() }`;
 		const data = {
 			...MbFields[ type ],
 		};
-		const newChildList = [ ...children, { id, type, data, items: [] } ];
+		const newChildList = [ ...children, { id, type, expanded: true, data, items: [] } ];
 		setChildren( newChildList );
 		props.changeSelectedList( addGroupChild( props.id, newChildList ) );
 	};
 
 	return (
 		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-
-			<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
+			<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ props.id }][expanded]` } checked={ expanded } />
 			<Header
 				type={ type }
 				id={ props.id }
-				copyItem={ props.copyItem }
-				removeItem={ props.removeItem }
 				toggleSettings={ toggleSettings }
 				changeSelectedList={ props.changeSelectedList }
 				parent={ props.parent }
@@ -68,17 +64,17 @@ const Group = ( props ) => {
 				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 				<div className="og-input">
 					{
-						children.map( ( item, i ) => <div key={ item.id }>
-							<Insert parent={ props.id } index={ i } />
-							<Node
-								key={ item.id }
-								id={ item.id }
-								data={ item }
-								parent={ props.id }
-								index={ i }
-								changeSelectedList={ props.changeSelectedList }
-							/>
-						</div> )
+						children.map( ( item, i ) => (
+							<Fragment key={ item.id }>
+								<Insert parent={ props.id } index={ i } />
+								<Node
+									item={ item }
+									parent={ props.id }
+									index={ i }
+									changeSelectedList={ props.changeSelectedList }
+								/>
+							</Fragment>
+						) )
 					}
 					<Inserter addItem={ addItem } type="group" />
 				</div>

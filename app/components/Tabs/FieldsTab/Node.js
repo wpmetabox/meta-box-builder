@@ -2,25 +2,20 @@ import FieldSelected from './FieldSelected';
 import Group from './Group';
 const { memo } = wp.element;
 
-const Node = ( props ) => {
-	const { id, data, changeSelectedList, parent, index } = props;
-
-	return data.type === 'group'
-		?
-		<Group
-			{ ...data }
-			id={ id }
+const Node = ( { item, changeSelectedList, parent, index } ) => {
+	return item.type === 'group'
+		? <Group
+			{ ...item }
 			parent={ parent }
 			index={ index }
 			changeSelectedList={ changeSelectedList }
 		/>
 		: <FieldSelected
-			{ ...data }
-			id={ id }
+			{ ...item }
 			parent={ parent }
 			index={ index }
 			changeSelectedList={ changeSelectedList }
 		/>;
 };
 
-export default memo( Node, ( prevProps, nextProps ) => nextProps.data.type !== 'group' && prevProps.id === nextProps.id );
+export default memo( Node, ( prevProps, nextProps ) => nextProps.item.type !== 'group' && prevProps.id === nextProps.id );

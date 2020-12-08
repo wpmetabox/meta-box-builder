@@ -15,17 +15,11 @@ export const getElementControlName = ( name, type ) => {
 export const fillFieldsValues = ( params, conditionalList ) => {
 	let result = { settings: {} };
 	const selectedData = { ...getSelectedList() };
-	const listSelected = selectedData.items;
 	const fieldParams = params.fields;
 
-	listSelected.map( ( item, index ) => {
-		if ( isNotGroupField( item.type ) ) {
-			listSelected[ index ] = fillFieldData( item, fieldParams[ item.id ] );
-		} else {
-			listSelected[ index ] = fillGroupData( item, fieldParams );
-		}
+	result.fields = selectedData.items.map( item => {
+		return item.type === 'group' ? fillGroupData( item, fieldParams ) : fillItemData( item, fieldParams[ item.id ] );
 	} );
-	result.fields = listSelected;
 
 	for ( const key in params ) {
 		if ( isSettingValue( key ) ) {
@@ -39,10 +33,10 @@ export const fillFieldsValues = ( params, conditionalList ) => {
 
 const fillGroupData = ( item, params ) => {
 	let result = { ...item };
-	result = fillFieldData( item, params[ item.id ] );
+	result = fillItemData( item, params[ item.id ] );
 	result.items.map( ( item, index ) => {
 		if ( isNotGroupField( item.type ) ) {
-			result.items[ index ] = fillFieldData( item, params[ item.id ] );
+			result.items[ index ] = fillItemData( item, params[ item.id ] );
 		} else {
 			result.items[ index ] = fillGroupData( item, params );
 		}
@@ -51,10 +45,13 @@ const fillGroupData = ( item, params ) => {
 	return result;
 };
 
-const fillFieldData = ( item, data ) => {
+const fillItemData = ( item, data ) => {
 	let result = { ...item };
-	result.data.general = fillDataByKey( item.data.general, data, item.id );
+	result.data.general  = fillDataByKey( item.data.general, data, item.id );
 	result.data.advanced = fillDataByKey( item.data.advanced, data, item.id );
+
+	// Store the expanded state (independently from the item.data)
+	result.expanded      = !!data.expanded;
 
 	return result;
 };
