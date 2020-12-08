@@ -47,8 +47,11 @@ const fillGroupData = ( item, params ) => {
 
 const fillItemData = ( item, data ) => {
 	let result = { ...item };
-	result.data.general = fillDataByKey( item.data.general, data, item.id );
+	result.data.general  = fillDataByKey( item.data.general, data, item.id );
 	result.data.advanced = fillDataByKey( item.data.advanced, data, item.id );
+
+	// Store the expanded state (independently from the item.data)
+	result.expanded      = !!data.expanded;
 
 	return result;
 };

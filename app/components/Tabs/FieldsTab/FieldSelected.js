@@ -1,3 +1,4 @@
+import { useFormContext } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Content from './Content';
 import Header from './Header';
@@ -9,15 +10,15 @@ const FieldSelected = ( props ) => {
 	const type = props.type;
 	const data = props.data;
 
-	const [ expanded, setExpanded ] = useState( !! props.expanded );
+	const { register } = useFormContext();
+	const [ expanded, setExpanded ] = useState( !!props.expanded );
 	const [ tabIndex, setTabIndex ] = useState( 0 );
 	const toggleSettings = () => setExpanded( prev => !prev );
 
 	if ( 'divider' === type ) {
 		return (
 			<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-				<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
-				<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][expanded]` } value={ expanded } />
+				<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ props.id }][expanded]` } checked={ expanded } />
 				<Header
 					type={ type }
 					id={ props.id }
@@ -34,8 +35,8 @@ const FieldSelected = ( props ) => {
 	}
 
 	return (
-		<div className={ `og-item og-item--${ type } ${ expanded ? ' og-collapsible--expanded' : 'og-collapsible' }` }>
-			<input ref={ props.register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
+		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
+			<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ props.id }][expanded]` } checked={ expanded } />
 			<Header
 				type={ type }
 				id={ props.id }
