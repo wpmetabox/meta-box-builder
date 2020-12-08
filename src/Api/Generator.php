@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Api;
 
+use MBB\Parsers\MetaBox;
 use WP_REST_Server;
 use WP_REST_Request;
 use Riimu\Kit\PHPEncoder\PHPEncoder;
@@ -28,7 +29,13 @@ class Generator {
 	}
 
 	public function generate( WP_REST_Request $request ) {
-		$settings = $request->get_json_params();
+		$parser = new MetaBox( $request->get_json_params() );
+		$parser->parse();
+
+		$settings = $parser->get_settings();
+		// $encoder = new Encoders\MetaBox( $settings );
+		// $encoder->encode();
+
 		$encoder = new PHPEncoder();
 		$this->encoded_string = $encoder->encode( $settings, [
 			'array.base'  => 4,
