@@ -243,7 +243,8 @@ export const updateSelectedList = data => localStorage.setItem( 'selectedList', 
 
 export const getSelectedList = () => JSON.parse( localStorage.getItem( 'selectedList' ) );
 
-export const ucfirst = string => string.charAt( 0 ).toUpperCase() + string.slice( 1 );
+export const ucfirst = string => string[0].toUpperCase() + string.slice( 1 );
+export const ucwords = string => string.split( ' ' ).map( ucfirst ).join( ' ' );
 
 const toTitleCase = string => string.split( '_' ).map( ucfirst ).join( '' );
 
