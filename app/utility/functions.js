@@ -18,7 +18,7 @@ export const fillFieldsValues = ( params, conditionalList ) => {
 	const fieldParams = params.fields;
 
 	result.fields = selectedData.items.map( item => {
-		return item.type === 'group' ? fillGroupData( item, fieldParams ) : fillFieldData( item, fieldParams[ item.id ] );
+		return item.type === 'group' ? fillGroupData( item, fieldParams ) : fillItemData( item, fieldParams[ item.id ] );
 	} );
 
 	for ( const key in params ) {
@@ -33,10 +33,10 @@ export const fillFieldsValues = ( params, conditionalList ) => {
 
 const fillGroupData = ( item, params ) => {
 	let result = { ...item };
-	result = fillFieldData( item, params[ item.id ] );
+	result = fillItemData( item, params[ item.id ] );
 	result.items.map( ( item, index ) => {
 		if ( isNotGroupField( item.type ) ) {
-			result.items[ index ] = fillFieldData( item, params[ item.id ] );
+			result.items[ index ] = fillItemData( item, params[ item.id ] );
 		} else {
 			result.items[ index ] = fillGroupData( item, params );
 		}
@@ -45,7 +45,7 @@ const fillGroupData = ( item, params ) => {
 	return result;
 };
 
-const fillFieldData = ( item, data ) => {
+const fillItemData = ( item, data ) => {
 	let result = { ...item };
 	result.data.general = fillDataByKey( item.data.general, data, item.id );
 	result.data.advanced = fillDataByKey( item.data.advanced, data, item.id );
