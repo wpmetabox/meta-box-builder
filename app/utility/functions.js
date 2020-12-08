@@ -15,17 +15,11 @@ export const getElementControlName = ( name, type ) => {
 export const fillFieldsValues = ( params, conditionalList ) => {
 	let result = { settings: {} };
 	const selectedData = { ...getSelectedList() };
-	const listSelected = selectedData.items;
 	const fieldParams = params.fields;
 
-	listSelected.map( ( item, index ) => {
-		if ( isNotGroupField( item.type ) ) {
-			listSelected[ index ] = fillFieldData( item, fieldParams[ item.id ] );
-		} else {
-			listSelected[ index ] = fillGroupData( item, fieldParams );
-		}
+	result.fields = selectedData.items.map( item => {
+		return item.type === 'group' ? fillGroupData( item, fieldParams ) : fillFieldData( item, fieldParams[ item.id ] );
 	} );
-	result.fields = listSelected;
 
 	for ( const key in params ) {
 		if ( isSettingValue( key ) ) {
