@@ -7,8 +7,11 @@ const { useState } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
-export const ShowHide = () => {
-	const [ rules, setRules ] = useState( [] );
+export const ShowHide = ( { defaultValues } ) => {
+	const handleDefaultValues = () => {
+		return defaultValues.show_hide?.rules?.map( item => ( { ...item, id: uniqid() } ) );
+	};
+	const [ rules, setRules ] = useState( defaultValues.show_hide ? handleDefaultValues() : [] );
 
 	const addRule = () => setRules( prevRules => prevRules.concat( { name: 'template', value: '', id: uniqid() } ) );
 	const removeRule = id => setRules( prevRules => prevRules.filter( rule => rule.id !== id ) );
@@ -62,7 +65,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 		if ( e.target.value === 'input_value' ) {
 			rule.value = [];
 		}
-	}
+	};
 
 	const loadOptions = s => request( 'show-hide', { name, s } );
 

@@ -6,8 +6,11 @@ const { useState } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
-export const IncludeExclude = () => {
-	const [ rules, setRules ] = useState( [] );
+export const IncludeExclude = ( { defaultValues } ) => {
+	const handleDefaultValues = () => {
+		return defaultValues.include_exclude?.rules?.map( item => ( { ...item, id: uniqid() } ) );
+	};
+	const [ rules, setRules ] = useState( defaultValues.include_exclude ? handleDefaultValues() : [] );
 
 	const addRule = () => setRules( prevRules => prevRules.concat( { name: 'ID', value: '', id: uniqid() } ) );
 	const removeRule = id => setRules( prevRules => prevRules.filter( rule => rule.id !== id ) );
@@ -55,9 +58,9 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 	const { register } = useFormContext();
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
+	const [ values, setValues ] = useState( rule.value ? JSON.parse( rule.value ) : [] );
 
 	const loadOptions = s => request( 'include-exclude', { name, s } );
-
 	return (
 		<div className="og-include-exclude__rule og-attribute">
 			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" ref={ register } defaultValue={ name } onChange={ onChangeName }>
@@ -80,7 +83,10 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 			{
 				// Using an unused "key" prop for AsyncSelect forces rerendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
-				<AsyncSelect key={ name } className="react-select og-include-exclude__value" classNamePrefix="react-select" isMulti defaultOptions loadOptions={ loadOptions } />
+				<>
+					<input type="hidden" name={ `${ baseName }[value]` } ref={ register } value={ JSON.stringify( values ) } />
+					<AsyncSelect onChange={ values => setValues( values ) } className="react-select og-include-exclude__value" classNamePrefix="react-select" isMulti defaultOptions loadOptions={ loadOptions } defaultValue={ values } />
+				</>
 			}
 			{
 				name === 'is_child' &&

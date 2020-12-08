@@ -13,11 +13,10 @@ const ReactSelect = ( { name, componentId, options, multiple, defaultValue, ...r
 		const transformValueToOption = value => options.find( item => item.value === value );
 		defaultValue = multiple ? defaultValue.map( transformValueToOption ) : transformValueToOption( defaultValue );
 	}
-
 	return <Select
 		className="react-select"
 		classNamePrefix="react-select"
-		innerRef={ register }
+		ref={ register }
 		inputId={ componentId }
 		name={ name }
 		isMulti={ multiple }

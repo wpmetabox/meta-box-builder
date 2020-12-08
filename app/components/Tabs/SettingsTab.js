@@ -44,7 +44,7 @@ const { useState } = wp.element;
 
 const SettingsTab = ( { register, defaultValues } ) => {
   const [ objectType, setObjectType ] = useState( 'post' );
-  const [ postTypes, setPostTypes ] = useState( [ 'post' ] );
+  const [ postTypes, setPostTypes ] = useState( defaultValues ? JSON.parse( defaultValues[ 'post_types' ] ) : [ 'post' ] );
 
   const updateObjectType = e => setObjectType( e.target.value );
   const updatePostTypes = items => {
@@ -58,15 +58,16 @@ const SettingsTab = ( { register, defaultValues } ) => {
         objectType={ objectType }
         updateObjectType={ updateObjectType }
         postTypes={ postTypes }
+        defaultValues={ defaultValues }
         updatePostTypes={ updatePostTypes }
       />
-      { MbbApp.extensions.includeExclude && <IncludeExclude /> }
-      { MbbApp.extensions.showHide && <ShowHide /> }
+      { MbbApp.extensions.includeExclude && <IncludeExclude defaultValues={ defaultValues } /> }
+      { MbbApp.extensions.showHide && <ShowHide defaultValues={ defaultValues } /> }
       { objectType === 'post' && postTypes.length > 0 && <Post defaultValues={ defaultValues } postTypes={ postTypes } /> }
       { MbbApp.extensions.blocks && objectType === 'block' && <Block /> }
       { MbbApp.extensions.customTable && <CustomTable /> }
-      { MbbApp.extensions.tabs && <Tabs /> }
-      <CustomSettings objectType={ objectType } name='custom_setting' defaultValue={ defaultValues?.custom_setting } />
+      { MbbApp.extensions.tabs && <Tabs defaultValues={ defaultValues } /> }
+      <CustomSettings objectType={ objectType } name='custom_setting' defaultValue={ Object.values( defaultValues?.custom_setting ) } />
     </>
   );
 };

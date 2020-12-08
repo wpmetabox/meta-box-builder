@@ -27,7 +27,7 @@ const MainTabs = () => {
 	const onPublish = data => {
 		document.getElementById( 'data' ).value = JSON.stringify( fillFieldsValues( data, state ) );
 		document.getElementById( 'raw' ).value = JSON.stringify( formatParams( data ) );
-	}
+	};
 
 	const onSelect = ( index ) => {
 		const isGetCodeTab = index === 2;
