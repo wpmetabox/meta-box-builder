@@ -21,8 +21,6 @@ const FieldSelected = ( props ) => {
 				<Header
 					type={ type }
 					id={ props.id }
-					copyItem={ props.copyItem }
-					removeItem={ props.removeItem }
 					toggleSettings={ toggleSettings }
 					changeSelectedList={ props.changeSelectedList }
 					parent={ props.parent }
@@ -41,8 +39,6 @@ const FieldSelected = ( props ) => {
 			<Header
 				type={ type }
 				id={ props.id }
-				copyItem={ props.copyItem }
-				removeItem={ props.removeItem }
 				toggleSettings={ toggleSettings }
 				changeSelectedList={ props.changeSelectedList }
 				parent={ props.parent }
