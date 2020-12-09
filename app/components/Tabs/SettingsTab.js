@@ -34,7 +34,7 @@ const SettingsTab = ( { register, defaultValues } ) => {
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block /> }
 			{ MbbApp.extensions.customTable && <CustomTable /> }
 			{ MbbApp.extensions.tabs && <Tabs defaultValues={ defaultValues } /> }
-			<CustomSettings objectType={ objectType } name='custom_setting' defaultValue={ Object.values( defaultValues?.custom_setting ) } />
+			<CustomSettings objectType={ objectType } name='custom_setting' defaultValue={ defaultValues && defaultValues.custom_setting ? Object.values( defaultValues?.custom_setting ) : [] } />
 		</>
 	);
 };
