@@ -81,7 +81,9 @@
 
     svg {
       fill: currentColor;
-      width: 16px;
+    }
+    .dashicon {
+      color: currentColor;
     }
 
     &:hover {
@@ -184,8 +186,13 @@
     cursor: pointer;
   }
 
+  // WordPress < 5.6
   svg:hover {
     fill: var(--color-red);
+  }
+  // WordPress 5.6+
+  .dashicon:hover {
+    color: var(--color-red);
   }
 }
 

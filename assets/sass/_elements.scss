@@ -14,6 +14,12 @@ svg {
   height: 16px;
   fill: var(--color-gray);
 }
+.dashicon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: var(--color-gray);
+}
 
 &-required {
   color: var(--color-red);
