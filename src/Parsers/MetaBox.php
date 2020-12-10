@@ -13,8 +13,8 @@ class MetaBox extends Base {
 			->parse_conditional_logic()
 			->parse_tabs()
 			->set_fields_tab()
-			->parse_toggle_rules( 'showhide' )
-			->parse_toggle_rules( 'includeexclude' )
+			->parse_toggle_rules( 'show_hide' )
+			->parse_toggle_rules( 'include_exclude' )
 			->parse_custom_table();
 
 		if ( isset( $this->settings['fields'] ) && is_array( $this->settings['fields'] ) ) {
@@ -176,43 +176,28 @@ class MetaBox extends Base {
 	}
 
 	private function parse_toggle_rules( $key ) {
-		if ( 'showhide' === $key ) {
+		if ( 'show_hide' === $key ) {
 			unset( $this->settings['show'], $this->settings['hide'] );
 		} else {
 			unset( $this->settings['include'], $this->settings['exclude'] );
 		}
 
-		if ( ! isset( $this->{$key} ) ) {
+		if ( ! isset( $this->$key ) ) {
 			return $this;
 		}
 
-		// Skip if users use show hide or include exclude but set it to off.
-		if ( 'off' === $this->{$key}['type'] ) {
-			unset( $this->{$key} );
-			return $this;
+		$data = $this->$key;
+		unset( $this->$key );
+
+		$rules = [];
+		foreach ( $data['rules'] as $rule ) {
+			$rules[ $rule['name'] ] = is_array( $rule['value'] ) ? wp_list_pluck( $rule['value'], 'value' ) : $rule['value'];
 		}
+		$type = $data['type'];
 
-		$action = $this->{$key}['type'];
-
-		$this->{$action} = $this->{$key};
-		unset( $this->{$key} );
-
-		// Todo: Check this if it compatibility with PHP7.
-		unset( $this->settings[ $action ]['type'] );
-
-		// Now we have $meta_box[$action] with raw data.
-		foreach ( $this->settings[ $action ] as $key => $value ) {
-
-			if ( empty( $value ) ) {
-				continue;
-			}
-
-			if ( is_string( $value ) && strpos( $value, ',' ) !== false ) {
-				$value = array_map( 'trim', explode( ',', $value ) );
-			}
-
-			$this->settings[ $action ][ $key ] = $value;
-		}
+		$this->$type = array_merge( [
+			'relation' => $data['relation'],
+		], $rules );
 
 		return $this;
 	}
