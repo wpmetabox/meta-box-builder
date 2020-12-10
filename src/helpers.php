@@ -93,9 +93,7 @@ if ( ! function_exists( 'mbb_get_taxonomies' ) ) {
 
 if ( ! function_exists( 'mbb_get_page_templates' ) ) {
 	function mbb_get_page_templates() {
-		$templates = get_page_templates();
-
-		return $templates;
+		return array_flip( wp_get_theme()->get_page_templates() );
 	}
 }
 
@@ -105,7 +103,8 @@ if ( ! function_exists( 'mbb_get_templates' ) ) {
 
 		$templates = [];
 		foreach ( $post_types as $post_type ) {
-			$post_type_templates = get_page_templates( null, $post_type['slug'] );
+			$post_type_templates = array_flip( wp_get_theme()->get_page_templates( null, $post_type['slug'] ) );
+
 			foreach ( $post_type_templates as $name => $file ) {
 				$templates[] = [
 					'name'           => $name,
