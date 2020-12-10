@@ -1,10 +1,8 @@
-import { useFormContext } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { objectToArray } from '../../utility/functions';
 
-const ReactSelect = ( { name, componentId, options, multiple, defaultValue, ...rest } ) => {
-	const { register } = useFormContext();
-
+const ReactSelect = ( { name, options, multiple, defaultValue, ...rest } ) => {
 	if ( !Array.isArray( options ) ) {
 		options = objectToArray( options );
 	}
@@ -13,16 +11,25 @@ const ReactSelect = ( { name, componentId, options, multiple, defaultValue, ...r
 		const transformValueToOption = value => options.find( item => item.value === value );
 		defaultValue = multiple ? defaultValue.map( transformValueToOption ) : transformValueToOption( defaultValue );
 	}
-	return <Select
-		className="react-select"
-		classNamePrefix="react-select"
-		ref={ register }
-		inputId={ componentId }
+
+	return <Controller
 		name={ name }
-		isMulti={ multiple }
-		options={ options }
-		defaultValue={ defaultValue }
-		{ ...rest }
+		render={ ( { onChange } ) => (
+			<Select
+				className="react-select"
+				classNamePrefix="react-select"
+				isMulti={ multiple }
+				options={ options }
+				onChange={ items => {
+					const values = items ? items.map( item => item.value ) : [];
+					onChange( values );
+					if ( rest.onChange ) {
+						rest.onChange( values );
+					}
+				} }
+				defaultValue={ defaultValue }
+			/>
+		) }
 	/>;
 };
 
