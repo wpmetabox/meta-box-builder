@@ -191,7 +191,12 @@ class MetaBox extends Base {
 
 		$rules = [];
 		foreach ( $data['rules'] as $rule ) {
-			$rules[ $rule['name'] ] = is_array( $rule['value'] ) ? wp_list_pluck( $rule['value'], 'value' ) : $rule['value'];
+			if ( 'input_value' === $rule['name'] ) {
+				$value = wp_list_pluck( $rule['value'], 'value', 'key' );
+			} else {
+				$value = is_array( $rule['value'] ) ? wp_list_pluck( $rule['value'], 'value' ) : $rule['value'];
+			}
+			$rules[ $rule['name'] ] = $value;
 		}
 		$type = $data['type'];
 

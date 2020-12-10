@@ -1,4 +1,5 @@
-import { useFormContext } from 'react-hook-form';
+import dotProp from 'dot-prop';
+import { Controller, useFormContext } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
 import { request, uniqid } from '../../../utility/functions';
 import DivRow from '../../Common/DivRow';
@@ -8,10 +9,7 @@ const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
 export const ShowHide = ( { defaultValues } ) => {
-	const handleDefaultValues = () => {
-		return defaultValues.show_hide?.rules?.map( item => ( { ...item, id: uniqid() } ) );
-	};
-	const [ rules, setRules ] = useState( defaultValues.show_hide ? handleDefaultValues() : [] );
+	const [ rules, setRules ] = useState( dotProp.get( defaultValues, 'rules', [] ) );
 
 	const addRule = () => setRules( prevRules => prevRules.concat( { name: 'template', value: '', id: uniqid() } ) );
 	const removeRule = id => setRules( prevRules => prevRules.filter( rule => rule.id !== id ) );
@@ -22,7 +20,7 @@ export const ShowHide = ( { defaultValues } ) => {
 			label={ `<a href="https://metabox.io/plugins/meta-box-show-hide/" target="_blank" rel="noopener norefferer">${ __( 'Toggle rules', 'meta-box-builder' ) }</a>` }
 			tooltip={ __( 'Conditions to toggle visibility of the field group', 'meta-box-builder' ) }
 		>
-			{ rules.length > 0 && <Intro /> }
+			{ rules.length > 0 && <Intro defaultValues={ defaultValues } /> }
 			{
 				rules.map( ( rule, index ) => <Rule
 					key={ rule.id }
@@ -36,17 +34,17 @@ export const ShowHide = ( { defaultValues } ) => {
 	);
 };
 
-const Intro = () => {
+const Intro = ( { defaultValues } ) => {
 	const { register } = useFormContext();
 
 	return (
 		<div className="og-include-exclude__intro">
-			<select name="show_hide[type]" ref={ register }>
-				<option value="include">{ __( 'Show', 'meta-box-builder' ) }</option>
-				<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
+			<select name="show_hide[type]" ref={ register } defaultValue={ dotProp.get( defaultValues, 'type', 'show' ) }>
+				<option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
+				<option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
 			</select>
 			{ __( 'when', 'meta-box-builder' ) }
-			<select name="show_hide[relation]" ref={ register }>
+			<select name="show_hide[relation]" ref={ register } defaultValue={ dotProp.get( defaultValues, 'relation', 'OR' ) }>
 				<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 				<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 			</select>
@@ -71,6 +69,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 
 	return (
 		<div className={ `og-include-exclude__rule og-attribute${ name === 'input_value' ? ' og-show-hide__inputs' : '' }` }>
+			<input type="hidden" name={ `${ baseName }[id]` } ref={ register } defaultValue={ rule.id } />
 			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" ref={ register } defaultValue={ name } onChange={ onChangeName }>
 				<option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option>
 				<option value="format">{ __( 'Post format', 'meta-box-builder' ) }</option>
@@ -83,7 +82,23 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 			{
 				// Using an unused "key" prop for AsyncSelect forces rerendering, which makes the loadOptions callback work.
 				![ 'is_child', 'input_value' ].includes( name ) &&
-				<AsyncSelect key={ name } className="react-select og-include-exclude__value" classNamePrefix="react-select" isMulti defaultOptions loadOptions={ loadOptions } />
+				<Controller
+					key={ name }
+					name={ `${ baseName }[value]` }
+					defaultValue={ rule.value } // Required to save field values if no changes.
+					render={ ( { onChange } ) => (
+						<AsyncSelect
+							key={ name }
+							className="react-select og-include-exclude__value"
+							classNamePrefix="react-select"
+							isMulti
+							defaultOptions
+							loadOptions={ loadOptions }
+							onChange={ onChange }
+							defaultValue={ name === rule.name ? rule.value : [] } // Conditional because the component is used for different rules.
+						/>
+					) }
+				/>
 			}
 			{
 				name === 'is_child' &&
@@ -94,7 +109,10 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 			}
 			{
 				name === 'input_value' &&
-				<KeyValue keyPlaceholder={ __( 'CSS selector', 'meta-box-builder' ) } />
+				<KeyValue
+					name={ `${ baseName }[value]` }
+					keyPlaceholder={ __( 'CSS selector', 'meta-box-builder' ) }
+				/>
 			}
 			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
 		</div>

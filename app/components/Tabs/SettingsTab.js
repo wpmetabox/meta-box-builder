@@ -26,7 +26,7 @@ const SettingsTab = ( { register, defaultValues } ) => {
 				setPostTypes={ setPostTypes }
 			/>
 			{ MbbApp.extensions.includeExclude && <IncludeExclude defaultValues={ dotProp.get( defaultValues, 'include_exclude', {} ) } /> }
-			{ MbbApp.extensions.showHide && <ShowHide defaultValues={ defaultValues } /> }
+			{ MbbApp.extensions.showHide && <ShowHide defaultValues={ dotProp.get( defaultValues, 'show_hide', {} ) } /> }
 			{ objectType === 'post' && postTypes.length > 0 && <Post defaultValues={ defaultValues } postTypes={ postTypes } /> }
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block /> }
 			{ MbbApp.extensions.customTable && <CustomTable /> }
