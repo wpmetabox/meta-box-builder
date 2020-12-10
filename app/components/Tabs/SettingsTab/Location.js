@@ -1,10 +1,11 @@
+import dotProp from 'dot-prop';
 import { useFormContext } from 'react-hook-form';
 import Checkbox from '../../Common/Checkbox';
 import DivRow from '../../Common/DivRow';
 import ReactSelect from '../../Common/ReactSelect';
 const { __ } = wp.i18n;
 
-export const Location = ( { objectType, updateObjectType, postTypes, updatePostTypes, defaultValues } ) => {
+export const Location = ( { objectType, updateObjectType, postTypes, setPostTypes, defaultValues } ) => {
 	const { register } = useFormContext();
 	return <>
 		<DivRow label={ __( 'Location', 'meta-box-builder' ) } className="og-location" tooltip={ __( 'Select where to display the field group', 'meta-box-builder' ) }>
@@ -18,31 +19,30 @@ export const Location = ( { objectType, updateObjectType, postTypes, updatePostT
 			</select>
 			{
 				'post' === objectType &&
-				<>
-					<input type="hidden" name="post_types" ref={ register } value={ JSON.stringify( postTypes ) } />
-					<ReactSelect
-						label={ __( 'Post types', 'meta-box-builder' ) }
-						multiple={ true }
-						options={ MbbApp.postTypes.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
-						defaultValue={ postTypes }
-						onChange={ updatePostTypes }
-					/>
-				</>
+				<ReactSelect
+					name="post_types"
+					multiple={ true }
+					options={ MbbApp.postTypes.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
+					defaultValue={ postTypes }
+					onChange={ setPostTypes }
+				/>
 			}
 			{
 				'term' === objectType &&
 				<ReactSelect
-					label={ __( 'Taxonomies', 'meta-box-builder' ) }
+					name="taxonomies"
 					multiple={ true }
 					options={ MbbApp.taxonomies.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
+					defaultValue={ dotProp.get( defaultValues, 'taxonomies', [] ) }
 				/>
 			}
 			{
 				'setting' === objectType &&
 				<ReactSelect
-					label={ __( 'Settings pages', 'meta-box-builder' ) }
+					name="settings_pages"
 					multiple={ true }
 					options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.slug })` } ) ) }
+					defaultValue={ dotProp.get( defaultValues, 'settings_pages', [] ) }
 				/>
 			}
 		</DivRow>

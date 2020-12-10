@@ -1,3 +1,4 @@
+import dotProp from 'dot-prop';
 import { Block } from './SettingsTab/Block';
 import { CustomSettings } from './SettingsTab/CustomSettings';
 import { CustomTable } from './SettingsTab/CustomTable';
@@ -10,14 +11,10 @@ import { Tabs } from './SettingsTab/Tabs';
 const { useState } = wp.element;
 
 const SettingsTab = ( { register, defaultValues } ) => {
-	const [ objectType, setObjectType ] = useState( 'post' );
-	const [ postTypes, setPostTypes ] = useState( defaultValues ? JSON.parse( defaultValues[ 'post_types' ] ) : [ 'post' ] );
+	const [ objectType, setObjectType ] = useState( dotProp.get( defaultValues, 'object_type', 'post' ) );
+	const [ postTypes, setPostTypes ] = useState( dotProp.get( defaultValues, 'post_types', [ 'post' ] ) );
 
 	const updateObjectType = e => setObjectType( e.target.value );
-	const updatePostTypes = items => {
-		let newPostTypes = items ? items.map( item => item.value ) : [];
-		setPostTypes( newPostTypes );
-	};
 
 	return (
 		<>
@@ -26,7 +23,7 @@ const SettingsTab = ( { register, defaultValues } ) => {
 				updateObjectType={ updateObjectType }
 				postTypes={ postTypes }
 				defaultValues={ defaultValues }
-				updatePostTypes={ updatePostTypes }
+				setPostTypes={ setPostTypes }
 			/>
 			{ MbbApp.extensions.includeExclude && <IncludeExclude defaultValues={ defaultValues } /> }
 			{ MbbApp.extensions.showHide && <ShowHide defaultValues={ defaultValues } /> }
