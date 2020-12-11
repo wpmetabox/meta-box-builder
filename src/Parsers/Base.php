@@ -85,21 +85,17 @@ class Base {
 		return $this;
 	}
 
-	protected function parse_custom_attributes() {
-		if ( isset( $this->attributes ) ) {
-			$param = 'attributes';
-		} elseif ( isset( $this->attrs ) ) {
-			$param = 'attrs';
-		} else {
+	protected function parse_custom_settings() {
+		if ( ! isset( $this->settings ) ) {
 			return $this;
 		}
 
-		$this->parse_array_attributes( $param );
-		foreach ( $this->{$param} as $key => $value ) {
-			$this->{$key} = $value;
+		$this->parse_array_attributes( 'custom_settings' );
+		foreach ( $this->custom_settings as $key => $value ) {
+			$this->$key = $value;
 		}
 
-		unset( $this->{$param} );
+		unset( $this->custom_settings );
 		return $this;
 	}
 

@@ -9,7 +9,7 @@ class MetaBox extends Base {
 			->parse_numeric_values()
 			->parse_location()
 			->parse_block()
-			->parse_custom_attributes()
+			->parse_custom_settings()
 			->parse_conditional_logic()
 			->parse_tabs()
 			->set_fields_tab()

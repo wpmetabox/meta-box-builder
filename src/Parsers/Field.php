@@ -17,7 +17,7 @@ class Field extends Base {
 			->parse_array_attributes( 'options' )
 			->parse_array_attributes( 'js_options' )
 			->parse_array_attributes( 'query_args' )
-			->parse_custom_attributes()
+			->parse_custom_settings()
 			->parse_conditional_logic()
 			->remove_id();
 		if ( 'button_group' !== $this->type ) {
