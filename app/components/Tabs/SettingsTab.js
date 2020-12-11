@@ -29,7 +29,7 @@ const SettingsTab = ( { register, defaultValues } ) => {
 			{ MbbApp.extensions.showHide && objectType !== 'block' && <ShowHide defaultValues={ dotProp.get( defaultValues, 'show_hide', {} ) } /> }
 			{ objectType === 'post' && postTypes.length > 0 && <Post defaultValues={ defaultValues } postTypes={ postTypes } /> }
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block defaultValues={ defaultValues } /> }
-			{ MbbApp.extensions.customTable && <CustomTable defaultValues={ defaultValues } /> }
+			{ MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) && <CustomTable defaultValues={ defaultValues } /> }
 			{ MbbApp.extensions.tabs && <Tabs defaultValues={ defaultValues } /> }
 			<CustomSettings objectType={ objectType } name='custom_setting' defaultValue={ defaultValues && defaultValues.custom_setting ? Object.values( defaultValues?.custom_setting ) : [] } />
 		</>

@@ -127,8 +127,18 @@ class MetaBox extends Base {
 	}
 
 	private function parse_custom_table() {
-		if ( $this->table ) {
+		if ( $this->table_enable ) {
 			$this->storage_type = 'custom_table';
+
+			global $wpdb;
+			$this->table = ( $this->table_prefix ? $wpdb->prefix : '' ) . $this->table_name;
+		}
+
+		$params = [
+			'table_enable', 'table_name', 'table_prefix', 'table_create',
+		];
+		foreach ( $params as $param ) {
+			unset( $this->{$param} );
 		}
 		return $this;
 	}

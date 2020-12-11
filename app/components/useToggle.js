@@ -19,7 +19,10 @@ export const useToggle = name => {
 			return;
 		}
 
-		const scope = el.closest( '.og-item' );
+		let scope = el.closest( '.og-item' );
+		if ( !scope ) {
+			scope = el.closest( '.react-tabs__tab-panel' );
+		}
 		if ( !scope ) {
 			return;
 		}
