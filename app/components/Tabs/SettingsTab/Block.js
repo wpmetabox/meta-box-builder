@@ -22,7 +22,6 @@ export const Block = ( { defaultValues } ) => {
 	}, [ iconType ] );
 
 	return <>
-		<h3>{ __( 'Block Settings', 'meta-box-builder' ) }</h3>
 		<Input
 			name="description"
 			label={ __( 'Description', 'meta-box-builder' ) }
