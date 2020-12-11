@@ -1,3 +1,4 @@
+import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Checkbox from '../../Common/Checkbox';
 import CheckboxList from '../../Common/CheckboxList';
@@ -8,10 +9,11 @@ import Select from '../../Common/Select';
 import Textarea from '../../Common/Textarea';
 const { __ } = wp.i18n;
 const { useState, useEffect } = wp.element;
+const { ColorPicker } = wp.components;
 
-export const Block = () => {
-	const [ iconType, setIconType ] = useState( 'dashicons' );
-	const [ renderWith, setRenderWith ] = useState( 'callback' );
+export const Block = ( { defaultValues } ) => {
+	const [ iconType, setIconType ] = useState( dotProp.get( defaultValues, 'icon_type', 'dashicons' ) );
+	const [ renderWith, setRenderWith ] = useState( dotProp.get( defaultValues, 'render_with', 'callback' ) );
 	const updateIconType = e => setIconType( e.target.value );
 	const updateRenderWith = e => setRenderWith( e.target.value );
 
@@ -21,10 +23,16 @@ export const Block = () => {
 
 	return <>
 		<h3>{ __( 'Block Settings', 'meta-box-builder' ) }</h3>
-		<Input name="description" label={ __( 'Description', 'meta-box-builder' ) } />
+		<Input
+			name="description"
+			label={ __( 'Description', 'meta-box-builder' ) }
+			componentId="settings-block-description"
+			defaultValue={ dotProp.get( defaultValues, 'description' ) }
+		/>
 		<Select
 			name="icon_type"
 			label={ __( 'Icon type', 'meta-box-builder' ) }
+			componentId="settings-block-icon_type"
 			options={ { dashicons: __( 'Dashicons', 'meta-box-builder' ), svg: __( 'Custom SVG', 'meta-box-builder' ) } }
 			defaultValue={ iconType }
 			onChange={ updateIconType }
@@ -34,21 +42,38 @@ export const Block = () => {
 			<Textarea
 				name="icon_svg"
 				label={ __( 'SVG icon', 'meta-box-builder' ) }
+				componentId="settings-block-icon_svg"
 				placeholder={ __( 'Paste the SVG content here', 'meta-box-builder' ) }
+				defaultValue={ dotProp.get( defaultValues, 'icon_svg' ) }
 			/>
 		}
-		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="icon" /> }
+		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="icon" defaultValue={ dotProp.get( defaultValues, 'icon' ) } /> }
 		{
 			iconType === 'dashicons' &&
-			<Input name="icon_foreground" className="og-color-picker" label={ __( 'Custom icon color', 'meta-box-builder' ) } tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) } />
+			<Input
+				name="icon_foreground"
+				className="og-color-picker"
+				componentId="settings-block-icon_foreground"
+				label={ __( 'Custom icon color', 'meta-box-builder' ) }
+				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
+				defaultValue={ dotProp.get( defaultValues, 'icon_foreground' ) }
+			/>
 		}
 		{
 			iconType === 'dashicons' &&
-			<Input name="icon_background" className="og-color-picker" label={ __( 'Custom icon background color', 'meta-box-builder' ) } tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) } />
+			<Input
+				name="icon_background"
+				className="og-color-picker"
+				componentId="settings-block-icon_background"
+				label={ __( 'Custom icon background color', 'meta-box-builder' ) }
+				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
+				defaultValue={ dotProp.get( defaultValues, 'icon_background' ) }
+			/>
 		}
 		<Select
 			name="category"
 			label={ __( 'Category', 'meta-box-builder' ) }
+			componentId="settings-block-category"
 			options={ {
 				layout: __( 'Layout', 'meta-box-builder' ),
 				common: __( 'Common', 'meta-box-builder' ),
@@ -56,21 +81,29 @@ export const Block = () => {
 				widgets: __( 'Widgets', 'meta-box-builder' ),
 				embed: __( 'Embed', 'meta-box-builder' ),
 			} }
-			defaultValue="layout"
+			defaultValue={ dotProp.get( defaultValues, 'category', 'layout' ) }
 		/>
-		<Input name="keywords" label={ __( 'Keywords', 'meta-box-builder' ) } tooltip={ __( 'Separate by commas', 'meta-box-builder' ) } />
+		<Input
+			name="keywords"
+			label={ __( 'Keywords', 'meta-box-builder' ) }
+			componentId="settings-block-keywords"
+			tooltip={ __( 'Separate by commas', 'meta-box-builder' ) }
+			defaultValue={ dotProp.get( defaultValues, 'keywords' ) }
+		/>
 		<Select
 			name="block_context"
 			label={ __( 'Block Settings Position', 'meta-box-builder' ) }
+			componentId="settings-block-block_context"
 			options={ {
 				content: __( 'In the content area', 'meta-box-builder' ),
 				side: __( 'On the right sidebar', 'meta-box-builder' ),
 			} }
-			defaultValue="layout"
+			defaultValue={ dotProp.get( defaultValues, 'block_context', 'content' ) }
 		/>
 		<CheckboxList
 			name="supports[align]"
 			label={ __( 'Alignment', 'meta-box-builder' ) }
+			componentId="settings-block-supports-align"
 			options={ {
 				left: __( 'Left', 'meta-box-builder' ),
 				right: __( 'Right', 'meta-box-builder' ),
@@ -78,14 +111,26 @@ export const Block = () => {
 				wide: __( 'Wide', 'meta-box-builder' ),
 				full: __( 'Full', 'meta-box-builder' ),
 			} }
+			defaultValue={ dotProp.get( defaultValues, 'supports.align', [] ) }
 		/>
-		<Checkbox name="supports[anchor]" label={ __( 'Anchor', 'meta-box-builder' ) } />
-		<Checkbox name="supports[customClassName]" label={ __( 'Custom CSS class name', 'meta-box-builder' ) } />
+		<Checkbox
+			name="supports[anchor]"
+			label={ __( 'Anchor', 'meta-box-builder' ) }
+			componentId="settings-block-supports-anchor"
+			defaultValue={ dotProp.get( defaultValues, 'supports.anchor', false ) }
+		/>
+		<Checkbox
+			name="supports[customClassName]"
+			label={ __( 'Custom CSS class name', 'meta-box-builder' ) }
+			componentId="settings-block-supports-custom-class-name"
+			defaultValue={ dotProp.get( defaultValues, 'supports.customClassName', false ) }
+		/>
 
 		<h3>{ __( 'Block Render Settings', 'meta-box-builder' ) }</h3>
 		<Select
 			name="render_width"
 			label={ __( 'Render with', 'meta-box-builder' ) }
+			componentId="settings-block-render_width"
 			options={ {
 				callback: __( 'PHP callback function', 'meta-box-builder' ),
 				template: __( 'Template file', 'meta-box-builder' ),
@@ -96,16 +141,28 @@ export const Block = () => {
 		/>
 		{
 			renderWith === 'callback' &&
-			<Input name="render_callback" label={ __( 'Render callback', 'meta-box-builder' ) } placeholder={ __( 'Enter PHP function name', 'meta-box-builder' ) } />
+			<Input
+				name="render_callback"
+				label={ __( 'Render callback', 'meta-box-builder' ) }
+				componentId="settings-block-render_callback"
+				placeholder={ __( 'Enter PHP function name', 'meta-box-builder' ) }
+				defaultValue={ dotProp.get( defaultValues, 'render_callback' ) }
+			/>
 		}
 		{
 			renderWith === 'template' &&
-			<Input name="render_template" label={ __( 'Render template', 'meta-box-builder' ) } placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) } />
+			<Input
+				name="render_template"
+				label={ __( 'Render template', 'meta-box-builder' ) }
+				componentId="settings-block-render_template"
+				placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) }
+				defaultValue={ dotProp.get( defaultValues, 'render_template' ) }
+			/>
 		}
 		{
 			renderWith === 'code' &&
 			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
-				<CodeMirror name="render_code" options={ { mode: 'php', lineNumbers: true } } />
+				<CodeMirror name="render_code" options={ { mode: 'php', lineNumbers: true } } defaultValue={ dotProp.get( defaultValues, 'render_code' ) } />
 				<table className="og-block-description">
 					<tbody>
 						<tr>
@@ -132,9 +189,27 @@ export const Block = () => {
 				</table>
 			</DivRow>
 		}
-		<Input name="enqueue_style" label={ __( 'Custom CSS', 'meta-box-builder' ) } placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) } />
-		<Input name="enqueue_script" label={ __( 'Custom CSS', 'meta-box-builder' ) } placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) } />
-		<Input name="enqueue_assets" label={ __( 'Custom assets callback', 'meta-box-builder' ) } placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) } />
+		<Input
+			name="enqueue_style"
+			label={ __( 'Custom CSS', 'meta-box-builder' ) }
+			componentId="settings-block-enqueue_style"
+			placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
+			defaultValue={ dotProp.get( defaultValues, 'enqueue_style' ) }
+		/>
+		<Input
+			name="enqueue_script"
+			label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
+			componentId="settings-block-enqueue_script"
+			placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
+			defaultValue={ dotProp.get( defaultValues, 'enqueue_script' ) }
+		/>
+		<Input
+			name="enqueue_assets"
+			label={ __( 'Custom assets callback', 'meta-box-builder' ) }
+			componentId="settings-block-enqueue_assets"
+			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
+			defaultValue={ dotProp.get( defaultValues, 'enqueue_assets' ) }
+		/>
 		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
 			<table className="og-block-description">
 				<tbody>

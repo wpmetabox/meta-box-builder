@@ -21,6 +21,24 @@ svg {
   color: var(--color-gray);
 }
 
+// Color picker
+.wp-picker-container {
+  position: relative;
+
+  input {
+    width: auto;
+  }
+}
+.wp-picker-input-wrap:not(.hidden) {
+  display: inline-flex;
+  align-items: stretch;
+}
+.wp-picker-holder {
+  position: absolute;
+  z-index: 99;
+	min-width: 255px;
+}
+
 &-required {
   color: var(--color-red);
 }

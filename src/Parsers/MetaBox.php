@@ -69,7 +69,7 @@ class MetaBox extends Base {
 
 	private function parse_block() {
 		// Remove block settings.
-		if ( 'block' !== $this->type ) {
+		if ( 'block' !== $this->object_type ) {
 			$params = [
 				'description', 'category', 'keywords', 'supports', 'block_context',
 				'icon', 'icon_type', 'icon_svg', 'icon_background', 'icon_foreground',
