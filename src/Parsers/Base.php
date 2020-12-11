@@ -3,6 +3,7 @@ namespace MBB\Parsers;
 
 use MBB\Arr;
 use MBB\SettingsTrait;
+use RWMB_Helpers_Array;
 
 class Base {
 	use SettingsTrait;
@@ -100,37 +101,31 @@ class Base {
 	}
 
 	protected function parse_conditional_logic() {
-		if ( empty( $this->logic ) ) {
+		if ( empty( $this->conditional_logic ) ) {
 			return $this;
 		}
 
-		$logic = $this->logic;
-
-		$visibility = 'visible' === $logic['visibility'] ? 'visible' : 'hidden';
-		$relation   = 'and' === $logic['relation'] ? 'and' : 'or';
-
-		foreach ( $logic['when'] as $index => $condition ) {
-			if ( empty( $condition[0] ) ) {
-				unset( $logic['when'][ $index ] );
+		$data = $this->conditional_logic;
+		foreach ( $data['when'] as &$condition ) {
+			// Allow to set array as CSV.
+			if ( false !== strpos( $condition['value'], ',' ) ) {
+				$condition['value'] = RWMB_Helpers_Array::from_csv( $condition['value'] );
 			}
-
-			if ( ! isset( $condition[2] ) || is_null( $condition[2] ) ) {
-				$condition[2] = '';
-			}
-
-			if ( strpos( $condition[2], ',' ) !== false ) {
-				$logic['when'][ $index ][2] = array_map( 'trim', explode( ',', $condition[2] ) );
-			}
+			$condition = [
+				$condition['name'],
+				$condition['operator'],
+				$condition['value'],
+			];
 		}
 
-		if ( ! empty( $logic['when'] ) ) {
-			$this->{$visibility} = array(
-				'when'     => $logic['when'],
-				'relation' => $relation,
+		if ( ! empty( $data['when'] ) ) {
+			$this->{$data['type']} = array(
+				'when'     => $data['when'],
+				'relation' => $data['relation'],
 			);
 		}
 
-		unset( $this->logic );
+		unset( $this->conditional_logic );
 
 		return $this;
 	}

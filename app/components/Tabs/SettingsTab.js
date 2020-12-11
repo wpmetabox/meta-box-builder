@@ -1,5 +1,6 @@
 import dotProp from 'dot-prop';
 import { Block } from './SettingsTab/Block';
+import { ConditionalLogic } from './SettingsTab/ConditionalLogic';
 import { CustomSettings } from './SettingsTab/CustomSettings';
 import { CustomTable } from './SettingsTab/CustomTable';
 import { IncludeExclude } from './SettingsTab/IncludeExclude';
@@ -27,6 +28,7 @@ const SettingsTab = ( { register, defaultValues } ) => {
 			/>
 			{ MbbApp.extensions.includeExclude && objectType !== 'block' && <IncludeExclude defaultValues={ dotProp.get( defaultValues, 'include_exclude', {} ) } /> }
 			{ MbbApp.extensions.showHide && objectType !== 'block' && <ShowHide defaultValues={ dotProp.get( defaultValues, 'show_hide', {} ) } /> }
+			{ MbbApp.extensions.conditionalLogic && objectType !== 'block' && <ConditionalLogic defaultValues={ dotProp.get( defaultValues, 'conditional_logic', {} ) } /> }
 			{ objectType === 'post' && postTypes.length > 0 && <Post defaultValues={ defaultValues } postTypes={ postTypes } /> }
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block defaultValues={ defaultValues } /> }
 			{ MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) && <CustomTable defaultValues={ defaultValues } /> }
