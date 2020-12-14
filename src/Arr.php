@@ -24,6 +24,9 @@ class Arr {
 		return $output;
 	}
 
+	/**
+	 * Set array element value with dot notation.
+	 */
 	public static function set( &$array, $key, $value ) {
 		if ( is_null( $key ) ) {
 			return $array = $value;
@@ -51,5 +54,25 @@ class Arr {
 		}
 
 		$array[ array_shift( $keys ) ] = $value;
+	}
+
+	/**
+	 * Get array element value with dot notation.
+	 */
+	public static function get( $array, $key, $default = null ) {
+		if ( is_null( $key ) ) {
+			return $array;
+		}
+
+		$keys = explode( '.', $key );
+		foreach ( $keys as $key ) {
+			if ( isset( $array[ $key ] ) ) {
+				$array = $array[ $key ];
+			} else {
+				return $default;
+			}
+		}
+
+		return $array;
 	}
 }

@@ -131,24 +131,22 @@ if ( ! function_exists( 'mbb_get_post_formats' ) ) {
 	}
 }
 
-if ( ! function_exists( 'mbb_get_setting_pages' ) ) {
-	function mbb_get_setting_pages() {
-		$pages = array();
-		$settings_pages = apply_filters( 'mb_settings_pages', array() );
-		foreach ( $settings_pages as $settings_page ) {
-			$title = '';
-			if ( ! empty( $settings_page['menu_title'] ) ) {
-				$title = $settings_page['menu_title'];
-			} elseif ( ! empty( $settings_page['page_title'] ) ) {
-				$title = $settings_page['page_title'];
-			}
-			$pages[$settings_page['id']] = array(
-				'id'    => $settings_page['id'],
-				'title' => $title,
-			);
+function mbb_get_setting_pages() {
+	$pages = [];
+	$settings_pages = apply_filters( 'mb_settings_pages', [] );
+	foreach ( $settings_pages as $settings_page ) {
+		$title = '';
+		if ( ! empty( $settings_page['menu_title'] ) ) {
+			$title = $settings_page['menu_title'];
+		} elseif ( ! empty( $settings_page['page_title'] ) ) {
+			$title = $settings_page['page_title'];
 		}
-		return $pages;
+		$pages[] = [
+			'id'    => $settings_page['id'],
+			'title' => $title,
+		];
 	}
+	return $pages;
 }
 
 if ( ! function_exists( 'mbb_get_categories' ) ) {

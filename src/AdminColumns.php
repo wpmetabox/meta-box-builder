@@ -42,68 +42,67 @@ class AdminColumns {
 		if ( ! in_array( $name, array( 'for', 'location', 'shortcode' ) ) ) {
 			return;
 		}
-		$info = json_decode( $post->post_excerpt );
-		$this->{"show_$name"}( $info );
+		$data = json_decode( $post->post_excerpt );
+		$saved_data = get_post_meta( get_the_ID(), 'raw', true );
+		$data = $saved_data ? json_decode( $saved_data, true ) : [];
+		$this->{"show_$name"}( $data );
 	}
 
-	private function show_for( $info ) {
-		$for = $info->for;
-		switch ( $for ) {
+	private function show_for( $data ) {
+		$object_type = Arr::get( $data, 'object_type', 'post' );
+		switch ( $object_type ) {
 			case 'user':
 				esc_html_e( 'Users', 'meta-box-builder' );
 				break;
 			case 'comment':
 				esc_html_e( 'Comments', 'meta-box-builder' );
 				break;
-			case 'attachments':
-				esc_html_e( 'Attachments', 'meta-box-builder' );
-				break;
-			case 'settings_pages':
+			case 'setting':
 				esc_html_e( 'Settings Pages', 'meta-box-builder' );
 				break;
-			case 'post_types':
+			case 'post':
 				esc_html_e( 'Posts', 'meta-box-builder' );
 				break;
-			case 'taxonomies':
+			case 'term':
 				esc_html_e( 'Taxonomies', 'meta-box-builder' );
 			case 'block':
 				esc_html_e( 'Blocks', 'meta-box-builder' );
 		}
 	}
 
-	private function show_location( $info ) {
-		$for  = $info->for;
-		switch ( $for ) {
+	private function show_location( $data ) {
+		$object_type = Arr::get( $data, 'object_type', 'post' );
+		switch ( $object_type ) {
 			case 'user':
 				esc_html_e( 'All Users', 'meta-box-builder' );
 				break;
 			case 'comment':
 				esc_html_e( 'All Comments', 'meta-box-builder' );
 				break;
-			case 'attachments':
-				esc_html_e( 'All Attachments', 'meta-box-builder' );
+			case 'setting':
+				$settings_pages = mbb_get_setting_pages();
+				$settings_pages = wp_list_pluck( $settings_pages, 'title', 'id' );
+				$ids            = Arr::get( $data, 'settings_pages', [] );
+				$saved          = array_intersect_key( $settings_pages, array_flip( $ids ) );
+				echo implode( '<br>', $saved );
 				break;
-			case 'settings_pages':
-				echo implode( '<br>', array_filter( array_map( function( $setting_page ) {
-					return isset( $settings_pages[$setting_page] ) ? $settings_pages[$setting_page]['title'] : '';
-				}, $info->settings_pages ) ) );
-				break;
-			case 'post_types':
+			case 'post':
 				echo implode( '<br>', array_filter( array_map( function( $post_type ) {
 					$post_type_object = get_post_type_object( $post_type );
 					return $post_type_object ? $post_type_object->labels->singular_name : '';
-				}, $info->post_types ) ) );
+				}, Arr::get( $data, 'post_types', ['post'] ) ) ) );
 				break;
-			case 'taxonomies':
+			case 'term':
 				echo implode( '<br>', array_filter( array_map( function( $taxonomy ) {
 					$taxonomy_object = get_taxonomy( $taxonomy );
 					return $taxonomy_object ? $taxonomy_object->labels->singular_name : '';
-				}, $info->taxonomies ) ) );
+				}, Arr::get( $data, 'taxonomies', [] ) ) ) );
 		}
 	}
 
-	private function show_shortcode( $info ) {
-		$shortcode = "[mb_frontend_form id='{$info->id}' post_fields='title,content']";
+	private function show_shortcode() {
+		global $post;
+		$shortcode = "[mb_frontend_form id='{$post->post_name}' post_fields='title,content']";
 		echo '<input type="text" readonly value="' . esc_attr( $shortcode ) . '" onclick="this.select()">';
 	}
 }
