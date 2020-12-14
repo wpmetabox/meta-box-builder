@@ -120,7 +120,7 @@ class Base {
 
 		if ( ! empty( $data['when'] ) ) {
 			$this->{$data['type']} = array(
-				'when'     => $data['when'],
+				'when'     => array_values( $data['when'] ),
 				'relation' => $data['relation'],
 			);
 		}
