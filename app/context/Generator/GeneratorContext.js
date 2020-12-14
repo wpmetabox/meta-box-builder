@@ -4,7 +4,7 @@ import { GENERATE_PHP_CODE } from './GeneratorActions';
 import generatorReducer from './GeneratorReducer';
 
 const generatePHPCode = dispatch => async ( params ) => {
-	const data = await request( 'generate', formatParams( params ), 'POST' );
+	const data = await request( 'generate', formatParams( params ), 'POST', false );
 	dispatch( {
 		type: GENERATE_PHP_CODE,
 		payload: data,

@@ -8,13 +8,13 @@ class MetaBox extends Base {
 		$this->parse_boolean_values()
 			->parse_numeric_values()
 			->parse_location()
+			->parse_location_rules( 'show_hide' )
+			->parse_location_rules( 'include_exclude' )
 			->parse_block()
 			->parse_custom_settings()
 			->parse_conditional_logic()
 			->parse_tabs()
 			->set_fields_tab()
-			->parse_toggle_rules( 'show_hide' )
-			->parse_toggle_rules( 'include_exclude' )
 			->parse_custom_table();
 
 		if ( isset( $this->settings['fields'] ) && is_array( $this->settings['fields'] ) ) {
@@ -30,39 +30,13 @@ class MetaBox extends Base {
 	}
 
 	private function parse_location() {
-		$for = $this->for ? $this->for : 'post_types';
-		unset( $this->for );
+		$object_type = $this->object_type ? $this->object_type : 'post';
+		unset( $this->object_type );
 
-		$objects = array( 'post_types', 'taxonomies', 'settings_pages', 'user', 'comment', 'attachments' );
-		foreach ( $objects as $object ) {
-			if ( $for !== $object ) {
-				unset( $this->$object );
-			}
+		if ( in_array( $object_type, ['user', 'comment', 'block'], true ) ) {
+			unset( $this->$object_type );
+			$this->type = $object_type;
 		}
-
-		if ( 'post_types' !== $for ) {
-			unset( $this->context );
-			unset( $this->priority );
-			unset( $this->style );
-			unset( $this->default_hidden );
-		}
-
-		if ( in_array( $for, ['user', 'comment', 'block'], true ) ) {
-			unset( $this->{$for} );
-			$this->type = $for;
-		}
-		if ( 'attachments' === $for ) {
-			$this->post_types = 'attachment';
-			unset( $this->attachments );
-		} else {
-			unset( $this->media_modal );
-		}
-
-		if ( $this->showhide ) {
-			$this->showhide = array_filter( (array) $this->showhide );
-		}
-
-		unset( $this->pages );
 
 		return $this;
 	}
@@ -185,13 +159,7 @@ class MetaBox extends Base {
 		return $this;
 	}
 
-	private function parse_toggle_rules( $key ) {
-		if ( 'show_hide' === $key ) {
-			unset( $this->settings['show'], $this->settings['hide'] );
-		} else {
-			unset( $this->settings['include'], $this->settings['exclude'] );
-		}
-
+	private function parse_location_rules( $key ) {
 		if ( ! isset( $this->$key ) ) {
 			return $this;
 		}
@@ -201,10 +169,11 @@ class MetaBox extends Base {
 
 		$rules = [];
 		foreach ( $data['rules'] as $rule ) {
+			$value = $rule['value'];
 			if ( 'input_value' === $rule['name'] ) {
-				$value = wp_list_pluck( $rule['value'], 'value', 'key' );
-			} else {
-				$value = is_array( $rule['value'] ) ? wp_list_pluck( $rule['value'], 'value' ) : $rule['value'];
+				$value = wp_list_pluck( $value, 'value', 'key' );
+			} elseif ( is_array( $rule['value'] ) ) {
+				$value = wp_list_pluck( $value, 'value' );
 			}
 			$rules[ $rule['name'] ] = $value;
 		}
