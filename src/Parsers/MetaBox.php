@@ -5,28 +5,29 @@ use RWMB_Helpers_Array;
 
 class MetaBox extends Base {
 	public function parse() {
+		if ( ! isset( $this->fields ) || ! is_array( $this->fields ) ) {
+			$this->fields = [];
+		}
+		// Remove array keys.
+		$this->fields = array_values( $this->fields );
+
 		$this->parse_boolean_values()
 			->parse_numeric_values()
 			->parse_location()
 			->parse_location_rules( 'show_hide' )
 			->parse_location_rules( 'include_exclude' )
-			->parse_block()
-			->parse_custom_settings()
 			->parse_conditional_logic()
+			->parse_block()
+			->parse_custom_table()
 			->parse_tabs()
 			->set_fields_tab()
-			->parse_custom_table();
-
-		if ( isset( $this->settings['fields'] ) && is_array( $this->settings['fields'] ) ) {
-			$this->parse_fields( $this->settings['fields'] );
-
-			// Online Generator uses field IDs as array index. We don't need that in the output.
-			$this->fields = array_values( $this->fields );
-		}
-
-		unset( $this->is_id_modified );
+			->parse_custom_settings()
+			->parse_fields( $this->settings['fields'] );
 
 		$this->remove_empty_values();
+
+		// Remove array keys again. Some methods like parse tabs change fields.
+		$this->fields = array_values( $this->fields );
 	}
 
 	private function parse_location() {
@@ -119,17 +120,15 @@ class MetaBox extends Base {
 
 	private function parse_tabs() {
 		$this->tabs = [];
-		if ( ! empty( $this->fields ) ) {
-			foreach ( $this->fields as $field ) {
-				if ( empty( $field['type'] ) || 'tab' !== $field['type'] ) {
-					continue;
-				}
-
-				$label = isset( $field['label'] ) ? $field['label'] : '';
-				$icon  = isset( $field['icon'] ) ? $field['icon'] : '';
-
-				$this->settings['tabs'][ $field['id'] ] = compact( 'label', 'icon' );
+		foreach ( $this->fields as $field ) {
+			if ( empty( $field['type'] ) || 'tab' !== $field['type'] ) {
+				continue;
 			}
+
+			$label = isset( $field['name'] ) ? $field['name'] : '';
+			$icon  = isset( $field['icon'] ) ? $field['icon'] : '';
+
+			$this->settings['tabs'][ $field['id'] ] = compact( 'label', 'icon' );
 		}
 
 		if ( empty( $this->tabs ) ) {
@@ -141,18 +140,17 @@ class MetaBox extends Base {
 	}
 
 	private function set_fields_tab() {
-		$tab = ! empty( $this->settings['fields'][0]['type'] ) ? $this->settings['fields'][0]['type'] : '';
+		$tab = isset( $this->settings['fields'][0]['type'] ) ? $this->settings['fields'][0]['type'] : null;
 		if ( 'tab' !== $tab ) {
 			return $this;
 		}
 
-		$previous_tab = 0;
-
+		$previous_tab = null;
 		foreach ( $this->settings['fields'] as $index => $field ) {
 			if ( 'tab' === $field['type'] ) {
-				$previous_tab = $index;
+				$previous_tab = $field['id'];
 			} else {
-				$this->settings['fields'][ $index ]['tab'] = $this->settings['fields'][ $previous_tab ]['id'];
+				$this->settings['fields'][ $index ]['tab'] = $previous_tab;
 			}
 		}
 

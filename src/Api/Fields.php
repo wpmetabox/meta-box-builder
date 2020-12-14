@@ -556,9 +556,10 @@ class Fields extends Base {
 		}
 
 		if ( mbb_is_extension_active( 'meta-box-tabs' ) ) {
-			$fields['tab'] = array_merge( [
+			$fields['tab'] = [
 				'general'  => [
 					'name' => $name,
+					'id' => $id,
 					'icon_type' => Component::Select( [
 						'label' => __( 'Icon type', 'meta-box-builder' ),
 						'options' => [
@@ -580,8 +581,7 @@ class Fields extends Base {
 						'dependency' => 'icon_type:url',
 					] ),
 				],
-				'advanced' => [],
-			] );
+			];
 		}
 
 		return $fields;
