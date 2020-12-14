@@ -37,6 +37,14 @@
   &__tab-list {
     border-bottom: var(--border);
     margin: 0;
+    display: flex;
+    align-items: center;
+
+    .button {
+      margin-left: auto;
+      margin-right: 16px;
+      box-shadow: none;
+    }
   }
 
   &__tab {

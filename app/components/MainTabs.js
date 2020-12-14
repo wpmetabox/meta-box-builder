@@ -56,17 +56,17 @@ const MainTabs = () => {
 						<TabList>
 							<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
 							<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
-							<Tab>{ __( 'Code', 'meta-box-builder' ) }</Tab>
+							<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
 						</TabList>
 						<TabPanel>
 							<DndProvider backend={ HTML5Backend } options={ { enableTouchEvents: false, enableMouseEvents: true } }>
 								<FieldsTab fields={ fields } />
 							</DndProvider>
 						</TabPanel>
-						<TabPanel className="react-tabs__tab-panel og-tab-settings">
+						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
 							<SettingsTab register={ register } defaultValues={ settings } />
 						</TabPanel>
-						<TabPanel className="react-tabs__tab-panel og-tab-code">
+						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
 							<Result />
 						</TabPanel>
 					</Tabs>
