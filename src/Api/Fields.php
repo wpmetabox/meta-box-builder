@@ -81,7 +81,7 @@ class Fields extends Base {
 		] );
 		$name = Component::Name( [
 			'label'   => __( 'Label', 'meta-box-builder' ),
-			'tooltip' => __( 'Optional. Leave empty to make the input 100% width.', 'meta-box-builder' ),
+			'tooltip' => __( 'Leave empty to make the input 100% width.', 'meta-box-builder' ),
 		] );
 		$std = Component::Input( __( 'Default value', 'meta-box-builder' ) );
 		$std_textarea = Component::Textarea( [

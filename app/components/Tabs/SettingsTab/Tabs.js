@@ -12,7 +12,13 @@ export const Tabs = ( { defaultValues } ) => <>
 			box: __( 'Box', 'meta-box-builder' ),
 			left: __( 'Left', 'meta-box-builder' ),
 		} }
+		componentId="settings-tab-style"
 		defaultValue={ dotProp.get( defaultValues, 'tab_style', 'default' ) }
 	/>
-	<Checkbox name="tab_wrapper" label={ __( 'Show meta box wrapper', 'meta-box-builder' ) } defaultValue={ dotProp.get( defaultValues, 'tab_wrapper' ) } />
+	<Checkbox
+		name="tab_wrapper"
+		label={ __( 'Show meta box wrapper', 'meta-box-builder' ) }
+		componentId="settings-tab-wrapper"
+		defaultValue={ dotProp.get( defaultValues, 'tab_wrapper', true ) }
+	/>
 </>;
