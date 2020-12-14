@@ -15,10 +15,11 @@ const FieldSelected = ( props ) => {
 	const [ tabIndex, setTabIndex ] = useState( 0 );
 	const toggleSettings = () => setExpanded( prev => !prev );
 
-	if ( 'divider' === type ) {
+	if ( ['divider', 'tab'].includes( type ) ) {
 		return (
 			<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 				<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ props.id }][expanded]` } checked={ expanded } />
+				<input ref={ register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
 				<Header
 					type={ type }
 					id={ props.id }
@@ -37,6 +38,7 @@ const FieldSelected = ( props ) => {
 	return (
 		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 			<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ props.id }][expanded]` } checked={ expanded } />
+			<input ref={ register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
 			<Header
 				type={ type }
 				id={ props.id }
