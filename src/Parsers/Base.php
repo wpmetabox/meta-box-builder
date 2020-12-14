@@ -87,7 +87,7 @@ class Base {
 	}
 
 	protected function parse_custom_settings() {
-		if ( ! isset( $this->settings ) ) {
+		if ( ! isset( $this->custom_settings ) ) {
 			return $this;
 		}
 

@@ -6,6 +6,14 @@ class Field extends Base {
 	private $choice_types        = ['select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete'];
 
 	public function parse() {
+		// Remove collapse/expand state.
+		unset( $this->expanded );
+
+		// Remove save_field settings unless it's false.
+		if ( false !== $this->save_field ) {
+			unset( $this->save_field );
+		}
+
 		$this->remove_tabs()
 			->parse_boolean_values()
 			->parse_numeric_values()
@@ -17,6 +25,7 @@ class Field extends Base {
 			->parse_array_attributes( 'options' )
 			->parse_array_attributes( 'js_options' )
 			->parse_array_attributes( 'query_args' )
+			->parse_array_attributes( 'attributes' )
 			->parse_custom_settings()
 			->parse_conditional_logic()
 			->remove_id();
@@ -27,7 +36,7 @@ class Field extends Base {
 
 	private function remove_tabs() {
 		if ( 'tab' === $this->type ) {
-			$this->settings = array();
+			$this->settings = [];
 		}
 		return $this;
 	}
