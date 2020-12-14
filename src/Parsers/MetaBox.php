@@ -41,6 +41,13 @@ class MetaBox extends Base {
 			$this->type = $object_type;
 		}
 
+		if ( 'post' === $object_type ) {
+			$this->remove_default( 'post_types', ['post'] );
+			$this->remove_default( 'priority', 'high' );
+			$this->remove_default( 'style', 'default' );
+			$this->remove_default( 'position', 'normal' );
+		}
+
 		return $this;
 	}
 

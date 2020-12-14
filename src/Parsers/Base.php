@@ -142,4 +142,10 @@ class Base {
 		// Parse dot notation.
 		return Arr::unflatten( $array );
 	}
+
+	protected function remove_default( $key, $value ) {
+		if ( $this->$key === $value ) {
+			unset( $this->$key );
+		}
+	}
 }
