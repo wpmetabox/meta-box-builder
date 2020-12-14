@@ -41,7 +41,7 @@ export const Location = ( { objectType, updateObjectType, postTypes, setPostType
 				<ReactSelect
 					name="settings_pages"
 					multiple={ true }
-					options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.slug })` } ) ) }
+					options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.id })` } ) ) }
 					defaultValue={ dotProp.get( defaultValues, 'settings_pages', [] ) }
 				/>
 			}
