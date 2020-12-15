@@ -66,9 +66,9 @@ const fillDataByKey = ( items, data, uniqId ) => {
 			// handle conditional logic
 			const type = data[ key ][ 'type' ];
 			const relation = data[ key ][ 'relation' ];
-			const optionalList = Object.values( data[ key ][ 'rules' ] );
+			const optionalList = Object.values( data[ key ][ 'when' ] );
 
-			result[ key ] = { ...items[ key ], default: { relation, type, rules: optionalList } };
+			result[ key ] = { ...items[ key ], default: { relation, type, when: optionalList } };
 		} else if ( key === 'icon' ) {
 			const icons = document.getElementsByClassName( `fields-${ uniqId }-icon` );
 			Object.values( icons ).map( icon => {
@@ -175,7 +175,7 @@ const getAdvancedData = ( advancedItems, id ) => {
 			// handle conditional logic
 			const type = getElementValue( `fields-${ id }-${ item }-type` );
 			const relation = getElementValue( `fields-${ id }-${ item }-relation` );
-			let rules = JSON.parse( value );
+			let rules = JSON.parse( value ) || [];
 			rules = rules.map( rule => ( {
 				...rule,
 				name: getElementValue( `fields-${ id }-${ item }-rules-${ rule.id }-name` ),

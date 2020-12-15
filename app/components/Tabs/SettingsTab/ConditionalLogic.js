@@ -40,14 +40,14 @@ const Intro = ( { defaultValues } ) => {
 		<div className="og-include-exclude__intro">
 			<select name="conditional_logic[type]" ref={ register } defaultValue={ dotProp.get( defaultValues, 'type', 'visible' ) }>
 				<option value="visible">{ __( 'Visible', 'meta-box-builder' ) }</option>
-				<option value="hidden">{ __( 'Hidde ', 'meta-box-builder' ) }</option>
+				<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
 			</select>
 			{ __( 'when', 'meta-box-builder' ) }
 			<select name="conditional_logic[relation]" ref={ register } defaultValue={ dotProp.get( defaultValues, 'relation', 'or' ) }>
 				<option value="or">{ __( 'any', 'meta-box-builder' ) }</option>
 				<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
 			</select>
-			{ __( 'rules match', 'meta-box-builder' ) }
+			{ __( 'conditions match', 'meta-box-builder' ) }
 		</div>
 	);
 };

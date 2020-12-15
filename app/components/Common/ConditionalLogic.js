@@ -1,3 +1,4 @@
+import dotProp from 'dot-prop';
 import { useFormContext } from 'react-hook-form';
 import { Context } from '../../context/ConditionalList/ConditionalContext';
 import { uniqid } from '../../utility/functions';
@@ -7,106 +8,101 @@ const { useState, useContext, useEffect } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
-const ConditionalLogic = ( {
-    defaultValue,
-    name,
-    componentId
-} ) => {
-    const handleDefaultValues = () => {
-        return defaultValue?.rules?.map( item => ( { ...item, id: uniqid() } ) );
-    };
-    const [ conditions, setConditions ] = useState( handleDefaultValues() || [] );
-    const [ listId, setListId ] = useState( [] );
-    const state = useContext( Context );
+const ConditionalLogic = ( { defaultValue, name, componentId } ) => {
+	const [ rules, setRules ] = useState( dotProp.get( defaultValue, 'when', [] ) );
 
-    useEffect( () => {
-        setListId( Object.values( state ).map( item => item.label ? ( item.id ? `${ item.label } (${ item.id })` : item.label ) : ( item.id || '' ) ) );
-    }, [ state ] );
+	const addRule = () => setRules( prevRules => prevRules.concat( { name: '', operator: '=', value: '', id: uniqid() } ) );
+	const removeRule = id => setRules( prevRules => prevRules.filter( rule => rule.id !== id ) );
 
-
-    const addCondition = () => {
-        setConditions( prevConditions => prevConditions.concat( { name: 'ID', value: '', id: uniqid() } ) );
-    };
-    const removeCondition = id => setConditions( prevConditions => prevConditions.filter( conditon => conditon.id !== id ) );
-
-    return (
-        <DivRow
-            className="og-field"
-            label={ `<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noopener norefferer">${ __( 'Conditional Logic', 'meta-box-builder' ) }</a>` }
-            tooltip={ __( 'Toggle the field based on another field value.', 'meta-box-builder' ) }
-        >
-            { conditions.length > 0 && <Intro id={ componentId } name={ name } defaultValue={ defaultValue } /> }
-            {
-                conditions.map( ( condition ) => <Condition
-                    id={ `${ componentId }-rules-${ condition.id }` }
-                    conditionIdList={ listId }
-                    key={ condition.id }
-                    condition={ condition }
-                    baseName={ `${ name }[rules][${ condition.id }]` }
-                    removeCondition={ removeCondition }
-                /> )
-            }
-            <input type='hidden' id={ componentId } value={ JSON.stringify( conditions ) } />
-            <button type="button" className="button" onClick={ addCondition }>{ __( '+ Add Condition', 'meta-box-builder' ) }</button>
-        </DivRow>
-    );
+	return (
+		<DivRow
+			className="og-include-exclude"
+			label={ `<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noopener norefferer">${ __( 'Conditional Logic', 'meta-box-builder' ) }</a>` }
+			tooltip={ __( 'Toggle the field based on other field values', 'meta-box-builder' ) }
+		>
+			{ rules.length > 0 && <Intro id={ componentId } name={ name } defaultValue={ defaultValue } /> }
+			{
+				rules.map( ( rule ) => <Rule
+					key={ rule.id }
+					id={ `${ componentId }-rules-${ rule.id }` }
+					rule={ rule }
+					baseName={ `${ name }[when][${ rule.id }]` }
+					removeRule={ removeRule }
+				/> )
+			}
+			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
+		</DivRow>
+	);
 };
 
 const Intro = ( { name, id, defaultValue } ) => {
-    const { register } = useFormContext();
+	const { register } = useFormContext();
 
-    return (
-        <div className="og-include-exclude__intro">
-            <select defaultValue={ defaultValue?.type || 'show' } id={ `${ id }-type` } name={ `${ name }[type]` } ref={ register } style={ { width: 'auto' } }>
-                <option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
-                <option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
-            </select>
-            { __( 'when', 'meta-box-builder' ) }
-            <select defaultValue={ defaultValue?.relation || 'OR' } id={ `${ id }-relation` } name={ `${ name }[relation]` } ref={ register } style={ { width: 'auto' } } >
-                <option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
-                <option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
-            </select>
-            { __( 'conditions match', 'meta-box-builder' ) }
-        </div>
-    );
+	return (
+		<div className="og-include-exclude__intro">
+			<select name={ `${ name }[type]` } id={ `${ id }-type` } ref={ register } defaultValue={ dotProp.get( defaultValue, 'type', 'visible' ) }>
+				<option value="visible">{ __( 'Visible', 'meta-box-builder' ) }</option>
+				<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
+			</select>
+			{ __( 'when', 'meta-box-builder' ) }
+			<select name={ `${ name }[relation]` } id={ `${ id }-relation` } ref={ register } defaultValue={ dotProp.get( defaultValue, 'relation', 'or' ) }>
+				<option value="or">{ __( 'any', 'meta-box-builder' ) }</option>
+				<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
+			</select>
+			{ __( 'conditions match', 'meta-box-builder' ) }
+		</div>
+	);
 };
 
+const Rule = ( { rule, baseName, removeRule, id } ) => {
+	const { register } = useFormContext();
+	const state = useContext( Context );
+	const items = Object.values( state );
 
-const Condition = ( { condition, baseName, removeCondition, conditionIdList, id } ) => {
-    const { register } = useFormContext();
-    return (
-        <div className="og-include-exclude__rule og-attribute">
-            <select defaultValue={ condition.name || conditionIdList[ 0 ] } id={ `${ id }-name` } className="og-include-exclude__value" name={ `${ baseName }[name]` } ref={ register }>
-                {
-                    conditionIdList.map( item => (
-                        <option value={ item } key={ item }>{ item }</option>
-                    ) )
-                }
-            </select>
-            <select defaultValue={ condition.operator || '=' } id={ `${ id }-operator` } name={ `${ baseName }[operator]` } className="og-include-exclude__name" ref={ register }  >
-                <option value="=">{ __( '=', 'meta-box-builder' ) }</option>
-                <option value=">">{ __( '>', 'meta-box-builder' ) }</option>
-                <option value="<">{ __( '<', 'meta-box-builder' ) }</option>
-                <option value=">=">{ __( '>=', 'meta-box-builder' ) }</option>
-                <option value="<=">{ __( '<=', 'meta-box-builder' ) }</option>
-                <option value="!=">{ __( '!=', 'meta-box-builder' ) }</option>
-                <option value="contains">{ __( 'contains', 'meta-box-builder' ) }</option>
-                <option value="not contains">{ __( 'not contains', 'meta-box-builder' ) }</option>
-                <option value="starts with">{ __( 'starts with', 'meta-box-builder' ) }</option>
-                <option value="not starts with">{ __( 'not starts with', 'meta-box-builder' ) }</option>
-                <option value="ends with">{ __( 'ends with', 'meta-box-builder' ) }</option>
-                <option value="not ends with">{ __( 'not ends with', 'meta-box-builder' ) }</option>
-                <option value="between">{ __( 'between', 'meta-box-builder' ) }</option>
-                <option value="not between">{ __( 'not between', 'meta-box-builder' ) }</option>
-                <option value="in">{ __( 'in', 'meta-box-builder' ) }</option>
-                <option value="not in">{ __( 'not in', 'meta-box-builder' ) }</option>
-                <option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
-                <option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
-            </select>
-            <input defaultValue={ condition.value || '' } id={ `${ id }-value` } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } ref={ register } name={ `${ baseName }[value]` } />
-            <button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeCondition( condition.id ) }><Dashicon icon="dismiss" /></button>
-        </div>
-    );
+	return (
+		<div className="og-include-exclude__rule og-attribute">
+			<input type="hidden" name={ `${ baseName }[id]` } ref={ register } defaultValue={ rule.id } />
+			<select
+				name={ `${ baseName }[name]` }
+				id={ `${ id }-name` }
+				className="og-include-exclude__name"
+				ref={ register }
+				defaultValue={ rule.name || items[ 0 ].id }
+			>
+				{
+					items.map( item => <option value={ item.id } key={ item.id }>{ item.label ? `${ item.label } (${ item.id})` : item.id }</option> )
+				}
+			</select>
+			<select
+				name={ `${ baseName }[operator]` }
+				id={ `${ id }-operator` }
+				className="og-include-exclude__operator"
+				ref={ register }
+				defaultValue={ rule.operator }
+			>
+				<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
+				<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
+				<option value="<">{ __( '<', 'meta-box-builder' ) }</option>
+				<option value=">=">{ __( '>=', 'meta-box-builder' ) }</option>
+				<option value="<=">{ __( '<=', 'meta-box-builder' ) }</option>
+				<option value="!=">{ __( '!=', 'meta-box-builder' ) }</option>
+				<option value="contains">{ __( 'contains', 'meta-box-builder' ) }</option>
+				<option value="not contains">{ __( 'not contains', 'meta-box-builder' ) }</option>
+				<option value="starts with">{ __( 'starts with', 'meta-box-builder' ) }</option>
+				<option value="not starts with">{ __( 'not starts with', 'meta-box-builder' ) }</option>
+				<option value="ends with">{ __( 'ends with', 'meta-box-builder' ) }</option>
+				<option value="not ends with">{ __( 'not ends with', 'meta-box-builder' ) }</option>
+				<option value="between">{ __( 'between', 'meta-box-builder' ) }</option>
+				<option value="not between">{ __( 'not between', 'meta-box-builder' ) }</option>
+				<option value="in">{ __( 'in', 'meta-box-builder' ) }</option>
+				<option value="not in">{ __( 'not in', 'meta-box-builder' ) }</option>
+				<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
+				<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
+			</select>
+			<input defaultValue={ rule.value } id={ `${ id }-value` } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } ref={ register } name={ `${ baseName }[value]` } />
+			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
+		</div>
+	);
 };
 
 export default ConditionalLogic;
