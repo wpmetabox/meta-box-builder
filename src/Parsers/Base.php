@@ -41,7 +41,7 @@ class Base {
 		$non_empty = $this->type && isset( $this->non_empty_keys[ $this->type ] ) ? $this->non_empty_keys[ $this->type ] : [];
 
 		foreach ( $this->settings as $key => $value ) {
-			if ( empty( $value ) && ! in_array( $key, $this->ignore_empty_keys, true ) && ! in_array( $key, $non_empty ) ) {
+			if ( empty( $value ) && ! in_array( $key, $this->empty_keys ) && ! in_array( $key, $non_empty ) ) {
 				unset( $this->settings[ $key ] );
 			}
 		}

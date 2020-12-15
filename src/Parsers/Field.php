@@ -31,6 +31,7 @@ class Field extends Base {
 			->parse_array_attributes( 'attributes' )
 			->parse_custom_settings()
 			->parse_conditional_logic()
+			->parse_upload_dir()
 			->remove_id()
 			->remove_empty_values();
 
@@ -149,6 +150,13 @@ class Field extends Base {
 		$keys = ['sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button'];
 		foreach ( $keys as $key ) {
 			unset( $this->$key );
+		}
+		return $this;
+	}
+
+	private function parse_upload_dir() {
+		if ( $this->upload_dir ) {
+			$this->upload_dir = trailingslashit( ABSPATH ) . untrailingslashit( $this->upload_dir );
 		}
 		return $this;
 	}
