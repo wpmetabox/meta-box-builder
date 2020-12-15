@@ -47,8 +47,9 @@ class Base {
 
 	protected function parse_array_attributes( $key ) {
 		// Make sure we're processing 2-dimentional array [[key, value], [key, value]].
-		$value = $this->{$key};
+		$value = $this->$key;
 		if ( ! is_array( $value ) ) {
+			$this->$key = [];
 			return $this;
 		}
 		$first = reset( $value );

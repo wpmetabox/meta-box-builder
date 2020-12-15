@@ -20,6 +20,7 @@ class Field extends Base {
 			->parse_object_field()
 			->parse_choice_options()
 			->parse_choice_std()
+			->parse_clone()
 			->parse_array_attributes( 'options' )
 			->parse_array_attributes( 'js_options' )
 			->parse_array_attributes( 'query_args' )
@@ -133,6 +134,17 @@ class Field extends Base {
 			unset( $this->std );
 		}
 
+		return $this;
+	}
+
+	private function parse_clone() {
+		if ( $this->clone ) {
+			return;
+		}
+		$keys = ['sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button'];
+		foreach ( $keys as $key ) {
+			unset( $this->$key );
+		}
 		return $this;
 	}
 
