@@ -7,13 +7,15 @@ const ReactSelect = ( { name, options, multiple, defaultValue, ...rest } ) => {
 		options = objectToArray( options );
 	}
 
+	let transformedDefaultValue = defaultValue;
 	if ( defaultValue ) {
 		const transformValueToOption = value => options.find( item => item.value === value );
-		defaultValue = multiple ? defaultValue.map( transformValueToOption ) : transformValueToOption( defaultValue );
+		transformedDefaultValue = multiple ? defaultValue.map( transformValueToOption ) : transformValueToOption( defaultValue );
 	}
 
 	return <Controller
 		name={ name }
+		defaultValue={ defaultValue }
 		render={ ( { onChange } ) => (
 			<Select
 				className="react-select"
@@ -27,7 +29,7 @@ const ReactSelect = ( { name, options, multiple, defaultValue, ...rest } ) => {
 						rest.onChange( values );
 					}
 				} }
-				defaultValue={ defaultValue }
+				defaultValue={ transformedDefaultValue }
 			/>
 		) }
 	/>;
