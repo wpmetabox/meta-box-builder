@@ -189,4 +189,16 @@ class Field extends Base {
 		}
 		unset( $this->placeholder_key, $this->placeholder_value );
 	}
+
+	private function parse_field_group() {
+		$this->remove_default( 'default_state', 'expanded' );
+		if ( $this->collapsible ) {
+			return;
+		}
+		$keys = ['default_state', 'save_state', 'group_title'];
+		foreach ( $keys as $key ) {
+			unset( $this->$key );
+		}
+		return $this;
+	}
 }

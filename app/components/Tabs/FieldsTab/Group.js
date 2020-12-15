@@ -40,6 +40,7 @@ const Group = ( props ) => {
 	return (
 		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 			<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ props.id }][expanded]` } checked={ expanded } />
+			<input ref={ register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
 			<Header
 				type={ type }
 				id={ props.id }
