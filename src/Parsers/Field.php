@@ -10,9 +10,7 @@ class Field extends Base {
 		unset( $this->expanded );
 
 		// Remove save_field settings unless it's false.
-		if ( false !== $this->save_field ) {
-			unset( $this->save_field );
-		}
+		$this->remove_default( 'save_field', true );
 
 		$this->remove_tabs()
 			->parse_boolean_values()
@@ -29,7 +27,10 @@ class Field extends Base {
 			->parse_custom_settings()
 			->parse_conditional_logic()
 			->remove_id();
-		if ( 'button_group' !== $this->type ) {
+
+		if ( 'button_group' === $this->type ) {
+			$this->parse_field_button_group();
+		} else {
 			$this->remove_empty_values();
 		}
 	}
@@ -140,5 +141,16 @@ class Field extends Base {
 			unset( $this->id );
 		}
 		return $this;
+	}
+
+	private function parse_field_button_group() {
+		// Remove empty keys except 'inline'.
+		foreach ( $this->settings as $key => $value ) {
+			if ( empty( $value ) && ! in_array( $key, $this->ignore_empty_keys, true ) && $key !== 'inline' ) {
+				unset( $this->settings[ $key ] );
+			}
+		}
+
+		$this->remove_default( 'inline', true );
 	}
 }
