@@ -174,4 +174,19 @@ class Field extends Base {
 		}
 		return $this;
 	}
+
+	private function parse_field_key_value() {
+		$placeholder = [];
+		if ( $this->placeholder_key ) {
+			$placeholder['key'] = $this->placeholder_key;
+		}
+		if ( $this->placeholder_value ) {
+			$placeholder['value'] = $this->placeholder_value;
+		}
+		$placeholder = array_filter( $placeholder );
+		if ( $placeholder ) {
+			$this->placeholder = $placeholder;
+		}
+		unset( $this->placeholder_key, $this->placeholder_value );
+	}
 }
