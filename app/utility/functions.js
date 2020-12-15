@@ -173,24 +173,24 @@ const getAdvancedData = ( advancedItems, id ) => {
 
 		if ( item === 'conditional_logic' ) {
 			// handle conditional logic
-			const type = getElementValue( `fields-${ id }-${ item }-type` );
-			const relation = getElementValue( `fields-${ id }-${ item }-relation` );
-			let rules = JSON.parse( value ) || [];
-			rules = rules.map( rule => ( {
+			const type = getElementValue( `${ elementId }-type` );
+			const relation = getElementValue( `${ elementId }-relation` );
+			let when = JSON.parse( value ) || [];
+			when = when.map( rule => ( {
 				...rule,
-				name: getElementValue( `fields-${ id }-${ item }-rules-${ rule.id }-name` ),
-				operator: getElementValue( `fields-${ id }-${ item }-rules-${ rule.id }-operator` ),
-				value: getElementValue( `fields-${ id }-${ item }-rules-${ rule.id }-value` ),
+				name: getElementValue( `${ elementId }-rules-${ rule.id }-name` ),
+				operator: getElementValue( `${ elementId }-rules-${ rule.id }-operator` ),
+				value: getElementValue( `${ elementId }-rules-${ rule.id }-value` ),
 			} ) );
 
-			result[ item ] = { ...advancedItems[ item ], default: { relation, type, rules } };
+			result[ item ] = { ...advancedItems[ item ], default: { relation, type, when } };
 		} else if ( LIST_OPTION_TYPE.includes( item ) ) {
 			//handle key value
 			let list = JSON.parse( value );
 			list = list.map( keyValue => ( {
 				...keyValue,
-				key: getElementValue( `fields-${ id }-${ item }-${ keyValue.uniqId }-key` ),
-				value: getElementValue( `fields-${ id }-${ item }-${ keyValue.uniqId }-value` )
+				key: getElementValue( `${ elementId }-${ keyValue.uniqId }-key` ),
+				value: getElementValue( `${ elementId }-${ keyValue.uniqId }-value` )
 			} ) );
 			result[ item ] = { ...advancedItems[ item ], default: list };
 		} else {

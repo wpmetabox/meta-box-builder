@@ -30,6 +30,7 @@ const ConditionalLogic = ( { defaultValue, name, componentId } ) => {
 					removeRule={ removeRule }
 				/> )
 			}
+			<input type='hidden' id={ componentId } value={ JSON.stringify( rules ) } />
 			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
 		</DivRow>
 	);
