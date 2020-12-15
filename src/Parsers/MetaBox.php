@@ -4,7 +4,7 @@ namespace MBB\Parsers;
 use RWMB_Helpers_Array;
 
 class MetaBox extends Base {
-	protected $ignore_empty_keys = ['fields'];
+	protected $empty_keys = ['fields'];
 
 	public function parse() {
 		if ( ! isset( $this->fields ) || ! is_array( $this->fields ) ) {

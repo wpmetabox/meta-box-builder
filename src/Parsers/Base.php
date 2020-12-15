@@ -8,7 +8,8 @@ use RWMB_Helpers_Array;
 class Base {
 	use SettingsTrait;
 
-	protected $ignore_empty_keys = [];
+	protected $empty_keys = [];
+	protected $non_empty_keys = [];
 
 	public function __construct( $settings ) {
 		$this->settings = (array) $settings;
@@ -37,11 +38,17 @@ class Base {
 	}
 
 	protected function remove_empty_values() {
+		$non_empty = $this->type && isset( $this->non_empty_keys[ $this->type ] ) ? $this->non_empty_keys[ $this->type ] : [];
+
 		foreach ( $this->settings as $key => $value ) {
-			if ( empty( $value ) && ! in_array( $key, $this->ignore_empty_keys, true ) ) {
+			if ( empty( $value ) && ! in_array( $key, $this->ignore_empty_keys, true ) && ! in_array( $key, $non_empty ) ) {
 				unset( $this->settings[ $key ] );
 			}
 		}
+		foreach ( $non_empty as $key ) {
+			$this->remove_default( $key, true );
+		}
+
 		return $this;
 	}
 

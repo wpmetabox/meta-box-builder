@@ -2,7 +2,11 @@
 namespace MBB\Parsers;
 
 class Field extends Base {
-	protected $ignore_empty_keys = ['max_status', 'save_field'];
+	protected $empty_keys = ['max_status', 'save_field'];
+	protected $non_empty_keys = [
+		'button_group' => ['inline'],
+		'radio'        => ['inline'],
+	];
 	private $choice_types        = ['select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete'];
 
 	public function parse() {
@@ -27,12 +31,13 @@ class Field extends Base {
 			->parse_array_attributes( 'attributes' )
 			->parse_custom_settings()
 			->parse_conditional_logic()
-			->remove_id();
+			->remove_id()
+			->remove_empty_values();
 
-		if ( 'button_group' === $this->type ) {
-			$this->parse_field_button_group();
-		} else {
-			$this->remove_empty_values();
+		// Field-specific parser.
+		$func = "parse_field_{$this->type}";
+		if ( method_exists( $this, $func ) ) {
+			$this->$func();
 		}
 	}
 
@@ -153,16 +158,5 @@ class Field extends Base {
 			unset( $this->id );
 		}
 		return $this;
-	}
-
-	private function parse_field_button_group() {
-		// Remove empty keys except 'inline'.
-		foreach ( $this->settings as $key => $value ) {
-			if ( empty( $value ) && ! in_array( $key, $this->ignore_empty_keys, true ) && $key !== 'inline' ) {
-				unset( $this->settings[ $key ] );
-			}
-		}
-
-		$this->remove_default( 'inline', true );
 	}
 }
