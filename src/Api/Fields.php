@@ -470,7 +470,7 @@ class Fields extends Base {
 			'text'              => array_merge( $general, compact( 'std', 'placeholder', 'size' ), [
 				'prepend' => Component::Input( __( 'Prepend text', 'meta-box-builder' ) ),
 				'append'  => Component::Input( __( 'Append text', 'meta-box-builder' ) ),
-				'datalist_options' => Component::Textarea( [
+				'datalist_choices' => Component::Textarea( [
 					'label'   => __( 'Predefined values', 'meta-box-builder' ),
 					'tooltip' => __( 'Known as "datalist", these are values that users can select from (they still can enter text if they want). Enter each value on a line.', 'meta-box-builder' ),
 				] ),
