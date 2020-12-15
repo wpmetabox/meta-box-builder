@@ -388,7 +388,12 @@ class Fields extends Base {
 					'required' => true,
 				] ),
 			], $map_settings, $clone_settings ),
-			'heading'        => compact( 'name', 'desc' ),
+			'heading'        => [
+				'name' => $name,
+				'desc' => Component::Input( [
+					'label' => __( 'Description', 'meta-box-builder' ),
+				] ),
+			],
 			'hidden'         => compact( 'id', 'std' ),
 			'image'          => array_merge( $general, compact( 'max_file_uploads', 'force_delete', 'upload_dir', 'required' ), $clone_settings ),
 			'image_advanced' => array_merge( $general, $upload_settings, compact( 'image_size', 'add_to' ), $clone_settings ),
