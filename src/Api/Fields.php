@@ -578,7 +578,7 @@ class Fields extends Base {
 						'dependency' => 'icon_type:dashicons',
 					] ),
 					'icon_fa' => Component::Input( [
-						'label'      => __( 'Icon CSS Class', 'meta-box-builder' ),
+						'label' => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank" rel="noopenner noreferrer">' . __( 'Icon CSS class', 'meta-box-builder' ) . '</a>',
 						'dependency' => 'icon_type:fontawesome',
 					] ),
 					'icon_url' => Component::Input( [
