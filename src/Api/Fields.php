@@ -117,7 +117,7 @@ class Fields extends Base {
 		$max_status = Component::Checkbox( [
 			'label'   => __( 'Show status', 'meta-box-builder' ),
 			'tooltip' => __( 'Display how many files uploaded/remaining', 'meta-box-builder' ),
-		] );
+		], true );
 		$min = Component::Input( [
 			'type'  => 'number',
 			'label' => __( 'Minumum value', 'meta-box-builder' ),
@@ -206,10 +206,10 @@ class Fields extends Base {
 			'label'   => __( 'Image size', 'meta-box-builder' ),
 			'tooltip' => __( 'Image size that displays in the edit page, used to make sure images are not blurry. It\'s not meant to display images with the exact width and height.', 'meta-box-builder' ),
 			'options' => $image_sizes,
-		] );
+		], 'thumbnail' );
 		$mime_type = Component::Input( [
 			'label'   => __( 'MIME types', 'meta-box-builder' ),
-			'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload.', 'meta-box-builder' ),
+			'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload. Separate by commas.', 'meta-box-builder' ),
 		] );
 		$add_to = Component::Select( [
 			'label'   => __( 'New image placement', 'meta-box-builder' ),
@@ -217,7 +217,7 @@ class Fields extends Base {
 				'beginning' => __( 'Beginning of the list', 'meta-box-builder' ),
 				'end'       => __( 'End of the list', 'meta-box-builder' ),
 			],
-		] );
+		], 'end' );
 		$date_settings = [
 			'save_format' => Component::Input( [
 				'label'   => __( 'Save format', 'meta-box-builder' ),

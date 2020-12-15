@@ -2,19 +2,26 @@
 namespace MBB\Parsers;
 
 class Field extends Base {
-	protected $empty_keys = ['max_status', 'save_field'];
+	protected $empty_keys = ['save_field'];
 	protected $non_empty_keys = [
-		'button_group' => ['inline'],
-		'radio'        => ['inline'],
+		'button_group'   => ['inline'],
+		'radio'          => ['inline'],
+		'file_advanced'  => ['max_status'],
+		'file_upload'    => ['max_status'],
+		'image_advanced' => ['max_status'],
+		'image_upload'   => ['max_status'],
+		'video'          => ['max_status'],
 	];
-	private $choice_types        = ['select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete'];
+	private $choice_types = ['select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete'];
 
 	public function parse() {
 		// Remove collapse/expand state.
 		unset( $this->expanded );
 
-		// Remove save_field settings unless it's false.
+		// Remove default fields.
 		$this->remove_default( 'save_field', true );
+		$this->remove_default( 'add_to', 'end' ); // image_advanced.
+		$this->remove_default( 'image_size', 'thumbnail' ); // image_advanced.
 
 		$this->remove_tabs()
 			->parse_boolean_values()
