@@ -32,7 +32,7 @@ const SettingsTab = ( { defaultValues } ) => {
 			{ MbbApp.extensions.conditionalLogic && objectType !== 'block' && <ConditionalLogic defaultValues={ dotProp.get( defaultValues, 'conditional_logic', {} ) } /> }
 			{ objectType === 'post' && postTypes.length > 0 && <Post defaultValues={ defaultValues } postTypes={ postTypes } /> }
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block defaultValues={ defaultValues } /> }
-			{ MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) && <CustomTable defaultValues={ defaultValues } /> }
+			{ MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) && <CustomTable defaultValues={ dotProp.get( defaultValues, 'custom_table', {} ) } /> }
 			{ MbbApp.extensions.tabs && <Tabs defaultValues={ defaultValues } /> }
 			<KeyValue
 				name="custom_settings"

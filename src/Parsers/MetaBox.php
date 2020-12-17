@@ -2,6 +2,7 @@
 namespace MBB\Parsers;
 
 use RWMB_Helpers_Array;
+use MBB\Helpers\Arr;
 
 class MetaBox extends Base {
 	protected $empty_keys = ['fields'];
@@ -111,19 +112,17 @@ class MetaBox extends Base {
 	}
 
 	private function parse_custom_table() {
-		if ( $this->table_enable ) {
+		$enable = Arr::get( $this->settings, 'custom_table.enable', false );
+		$name = Arr::get( $this->settings, 'custom_table.name', '' );
+		if ( $enable && $name ) {
 			$this->storage_type = 'custom_table';
 
 			global $wpdb;
-			$this->table = ( $this->table_prefix ? $wpdb->prefix : '' ) . $this->table_name;
+			$prefix = Arr::get( $this->settings, 'custom_table.prefix', false );
+			$this->table = ( $prefix ? $wpdb->prefix : '' ) . $name;
 		}
 
-		$params = [
-			'table_enable', 'table_name', 'table_prefix', 'table_create',
-		];
-		foreach ( $params as $param ) {
-			unset( $this->{$param} );
-		}
+		unset( $this->custom_table );
 		return $this;
 	}
 
