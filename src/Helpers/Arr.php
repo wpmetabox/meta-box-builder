@@ -1,5 +1,5 @@
 <?php
-namespace MBB;
+namespace MBB\Helpers;
 
 class Arr {
 	/**

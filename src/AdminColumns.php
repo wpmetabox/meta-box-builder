@@ -2,6 +2,7 @@
 namespace MBB;
 
 use MBB\Helpers\Data;
+use MBB\Helpers\Arr;
 
 class AdminColumns {
 	public function __construct() {

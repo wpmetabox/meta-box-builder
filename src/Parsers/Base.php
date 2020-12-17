@@ -1,7 +1,7 @@
 <?php
 namespace MBB\Parsers;
 
-use MBB\Arr;
+use MBB\Helpers\Arr;
 use MBB\SettingsTrait;
 use RWMB_Helpers_Array;
 
