@@ -15,11 +15,9 @@ define( 'MBB_URL', $url );
 add_filter( 'rwmb_admin_menu', '__return_true' );
 load_plugin_textdomain( 'meta-box-builder', false, plugin_basename( MBB_DIR ) . '/languages/' );
 
-Attribute::set_labels();
 new PostType;
 new Upgrade\Manager;
 new Register;
-new RestApi;
 new Api\Generator;
 new Api\Fields;
 
