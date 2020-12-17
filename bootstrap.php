@@ -21,10 +21,10 @@ new Register;
 new Api\Generator;
 new Api\Fields;
 
-if ( mbb_is_extension_active( 'meta-box-include-exclude' ) ) {
+if ( Helpers\Data::is_extension_active( 'meta-box-include-exclude' ) ) {
 	new Api\IncludeExclude;
 }
-if ( mbb_is_extension_active( 'meta-box-show-hide' ) ) {
+if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 	new Api\ShowHide;
 }
 

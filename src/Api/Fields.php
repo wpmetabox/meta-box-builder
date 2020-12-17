@@ -1,6 +1,8 @@
 <?php
 namespace MBB\Api;
 
+use MBB\Helpers\Data;
+
 class Fields extends Base {
 	public function get_field_types() {
 		$field_types = [
@@ -63,10 +65,10 @@ class Fields extends Base {
 				'heading' => 'Heading',
 			],
 		];
-		if ( mbb_is_extension_active( 'meta-box-tabs' ) ) {
+		if ( Data::is_extension_active( 'meta-box-tabs' ) ) {
 			$field_types['Layout']['tab'] = 'Tab';
 		}
-		if ( mbb_is_extension_active( 'meta-box-group' ) ) {
+		if ( Data::is_extension_active( 'meta-box-group' ) ) {
 			$field_types['Layout']['group'] = 'Group';
 		}
 		return $field_types;
@@ -310,7 +312,7 @@ class Fields extends Base {
 		] );
 		$general = compact( 'name', 'id', 'label_description', 'desc' );
 		$advanced = compact( 'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' );
-		if ( mbb_is_extension_active( 'meta-box-conditional-logic' ) ) {
+		if ( Data::is_extension_active( 'meta-box-conditional-logic' ) ) {
 			$conditional_logic = Component::ConditionalLogic( [
 				'link' => 'https://docs.metabox.io/extensions/meta-box-conditional-logic/',
 				'label' => __( 'Conditional logic', 'meta-box-builder' ),
@@ -530,7 +532,7 @@ class Fields extends Base {
 				] ),
 			], $clone_settings ),
 		];
-		if ( mbb_is_extension_active( 'meta-box-group' ) ) {
+		if ( Data::is_extension_active( 'meta-box-group' ) ) {
 			$fields['group'] = array_merge( $general, [
 				'collapsible' => Component::Checkbox( [
 					'label'   => __( 'Collapsible', 'meta-box-builder' ),
@@ -560,7 +562,7 @@ class Fields extends Base {
 			$fields[ $key ] = compact( 'general', 'advanced' );
 		}
 
-		if ( mbb_is_extension_active( 'meta-box-tabs' ) ) {
+		if ( Data::is_extension_active( 'meta-box-tabs' ) ) {
 			$fields['tab'] = [
 				'general'  => [
 					'name' => $name,
@@ -593,7 +595,7 @@ class Fields extends Base {
 	}
 
 	private function get_post_types() {
-		$post_types = mbb_get_post_types();
+		$post_types = Data::get_post_types();
 		$options = [];
 		foreach ( $post_types as $post_type ) {
 			$options[ $post_type['slug'] ] = sprintf( '%s (<code>%s</code>)', $post_type['name'], $post_type['slug'] );
@@ -602,7 +604,7 @@ class Fields extends Base {
 	}
 
 	private function get_taxonomies() {
-		$taxonomies = mbb_get_taxonomies();
+		$taxonomies = Data::get_taxonomies();
 		$options = [];
 		foreach ( $taxonomies as $taxonomy ) {
 			$options[ $taxonomy['slug'] ] = sprintf( '%s (<code>%s</code>)', $taxonomy['name'], $taxonomy['slug'] );

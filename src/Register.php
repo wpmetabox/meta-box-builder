@@ -20,7 +20,7 @@ class Register {
 		] );
 
 		foreach ( $query->posts as $post ) {
-			$meta_box = mbb_parse_meta_box_settings( $post->post_content );
+			$meta_box = Helpers\Data::parse_meta_box_settings( $post->post_content );
 
 			$this->transform_for_block( $meta_box );
 

@@ -1,11 +1,8 @@
 <?php
-if ( ! function_exists( 'mbb_get_post_types' ) ) {
-	/**
-	 * Get post type for displaying on Meta Box Settings
-	 *
-	 * @return array Post types
-	 */
-	function mbb_get_post_types() {
+namespace MBB\Helpers;
+
+class Data {
+	public static function get_post_types() {
 		$unsupported = [
 			// WordPress built-in post types.
 			'revision',
@@ -35,15 +32,8 @@ if ( ! function_exists( 'mbb_get_post_types' ) ) {
 
 		return array_values( $post_types );
 	}
-}
 
-if ( ! function_exists( 'mbb_get_taxonomies' ) ) {
-	/**
-	 * Get taxonomies for displaying dropdown for taxonomy and taxonomy_advanced fields
-	 *
-	 * @return array
-	 */
-	function mbb_get_taxonomies() {
+	public static function get_taxonomies() {
 		$unsupported = ['link_category', 'nav_menu', 'post_format'];
 		$taxonomies  = get_taxonomies( '', 'objects' );
 		$taxonomies  = array_diff_key( $taxonomies, array_flip( $unsupported ) );
@@ -57,17 +47,13 @@ if ( ! function_exists( 'mbb_get_taxonomies' ) ) {
 
 		return array_values( $taxonomies );
 	}
-}
 
-if ( ! function_exists( 'mbb_get_page_templates' ) ) {
-	function mbb_get_page_templates() {
+	public static function get_page_templates() {
 		return array_flip( wp_get_theme()->get_page_templates() );
 	}
-}
 
-if ( ! function_exists( 'mbb_get_templates' ) ) {
-	function mbb_get_templates() {
-		$post_types = mbb_get_post_types();
+	public static function get_templates() {
+		$post_types = self::get_post_types();
 
 		$templates = [];
 		foreach ( $post_types as $post_type ) {
@@ -86,10 +72,8 @@ if ( ! function_exists( 'mbb_get_templates' ) ) {
 
 		return $templates;
 	}
-}
 
-if ( ! function_exists( 'mbb_get_post_formats' ) ) {
-	function mbb_get_post_formats() {
+	public static function get_post_formats() {
 		if ( ! current_theme_supports( 'post-formats' ) ) {
 			return [];
 		}
@@ -97,10 +81,8 @@ if ( ! function_exists( 'mbb_get_post_formats' ) ) {
 
 		return is_array( $post_formats[0] ) ? $post_formats[0] : [];
 	}
-}
 
-if ( ! function_exists( 'mbb_get_settings_pages' ) ) {
-	function mbb_get_setting_pages() {
+	public static function get_setting_pages() {
 		$pages = [];
 		$settings_pages = apply_filters( 'mb_settings_pages', [] );
 		foreach ( $settings_pages as $settings_page ) {
@@ -117,15 +99,8 @@ if ( ! function_exists( 'mbb_get_settings_pages' ) ) {
 		}
 		return $pages;
 	}
-}
 
-if ( ! function_exists( 'mbb_get_dashicons' ) ) {
-	/**
-	 * Get All WP Dashicon for displaying in Tab or Tooltip
-	 *
-	 * @return Array List of WP Dashicon
-	 */
-	function mbb_get_dashicons() {
+	public static function get_dashicons() {
 		return array(
 			'admin-appearance',
 			'admin-collapse',
@@ -352,10 +327,8 @@ if ( ! function_exists( 'mbb_get_dashicons' ) ) {
 			'wordpress',
 		);
 	}
-}
 
-if ( ! function_exists( 'mbb_is_extension_active' ) ) {
-	function mbb_is_extension_active( $extension ) {
+	public static function is_extension_active( $extension ) {
 		$functions = [
 			'mb-blocks'                  => 'mb_blocks_load',
 			'mb-comment-meta'            => 'mb_comment_meta_load',
@@ -382,15 +355,11 @@ if ( ! function_exists( 'mbb_is_extension_active' ) ) {
 		}
 		return false;
 	}
-}
 
-if ( ! function_exists( 'mbb_tooltip' ) ) {
-	function mbb_tooltip( $content ) {
+	public static function tooltip( $content ) {
 		return '<button type="button" class="mbb-tooltip" data-tippy-content="' . esc_attr( $content ) . '"><span class="dashicons dashicons-editor-help"></span></button>';
 	}
-}
 
-if ( ! function_exists( 'mbb_parse_meta_box_settings' ) ) {
 	/**
 	 * Parse post content to meta box settings array.
 	 * Try JSON decode first, then unserialize for backward-compatibility.
@@ -398,7 +367,7 @@ if ( ! function_exists( 'mbb_parse_meta_box_settings' ) ) {
 	 * @param  string $data Encoded post content.
 	 * @return array
 	 */
-	function mbb_parse_meta_box_settings( $data ) {
+	public static function parse_meta_box_settings( $data ) {
 		$settings = json_decode( $data, true );
 		return json_last_error() === JSON_ERROR_NONE ? $settings : @unserialize( $data );
 	}

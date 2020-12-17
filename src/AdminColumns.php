@@ -1,6 +1,8 @@
 <?php
 namespace MBB;
 
+use MBB\Helpers\Data;
+
 class AdminColumns {
 	public function __construct() {
 		add_action( 'admin_print_styles-edit.php', [ $this, 'enqueue' ] );
@@ -30,8 +32,8 @@ class AdminColumns {
 			'for'      => __( 'Show For', 'meta-box-builder' ),
 			'location' => __( 'Location', 'meta-box-builder' ),
 		);
-		if ( mbb_is_extension_active( 'mb-frontend-submission' ) ) {
-			$new_columns['shortcode'] = __( 'Shortcode', 'meta-box-builder' ) . mbb_tooltip( __( 'Embed the field group in the front end for users to submit posts.', 'meta-box-builder' ) );
+		if ( Data::is_extension_active( 'mb-frontend-submission' ) ) {
+			$new_columns['shortcode'] = __( 'Shortcode', 'meta-box-builder' ) . Data::tooltip( __( 'Embed the field group in the front end for users to submit posts.', 'meta-box-builder' ) );
 		}
 		$columns = array_slice( $columns, 0, 2, true ) + $new_columns + array_slice( $columns, 2, null, true );
 		return $columns;
@@ -80,7 +82,7 @@ class AdminColumns {
 				esc_html_e( 'All Comments', 'meta-box-builder' );
 				break;
 			case 'setting':
-				$settings_pages = mbb_get_setting_pages();
+				$settings_pages = Data::get_setting_pages();
 				$settings_pages = wp_list_pluck( $settings_pages, 'title', 'id' );
 				$ids            = Arr::get( $data, 'settings_pages', [] );
 				$saved          = array_intersect_key( $settings_pages, array_flip( $ids ) );

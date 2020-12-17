@@ -1,37 +1,36 @@
 {
-  "name": "meta-box/meta-box-builder",
-  "description": "Meta Box Builder extension for Meta Box",
-  "type": "wordpress-plugin",
-  "autoload": {
-    "psr-4": {"MBB\\" : "src/"},
-    "files": ["src/helpers.php"]
-  },
-  "require": {
-    "twig/twig": "~1.33.2",
-    "riimu/kit-phpencoder": "^2.4"
-  },
-  "extra": {
-    "light-ignore-plugin": {
-      "twig/twig": [
-        "doc",
-        "ext",
-        "test",
-        ".editorconfig",
-        ".gitignore",
-        "*.dist",
-        ".php_cs.dist",
-        ".travis.yml",
-        "*.json",
-        "*.rst",
-        "CHANGELOG",
-        "LICENSE"
-      ],
-      "riimu/kit-phpencoder": [
-        "examples",
-        "*.md",
-        "*.json",
-        "LICENSE"
-      ]
-    }
-  }
+	"name": "meta-box/meta-box-builder",
+	"description": "Meta Box Builder extension for Meta Box",
+	"type": "wordpress-plugin",
+	"autoload": {
+		"psr-4": {"MBB\\" : "src/"}
+	},
+	"require": {
+		"twig/twig": "~1.33.2",
+		"riimu/kit-phpencoder": "^2.4"
+	},
+	"extra": {
+		"light-ignore-plugin": {
+			"twig/twig": [
+				"doc",
+				"ext",
+				"test",
+				".editorconfig",
+				".gitignore",
+				"*.dist",
+				".php_cs.dist",
+				".travis.yml",
+				"*.json",
+				"*.rst",
+				"CHANGELOG",
+				"LICENSE"
+			],
+			"riimu/kit-phpencoder": [
+				"examples",
+				"*.md",
+				"*.json",
+				"LICENSE"
+			]
+		}
+	}
 }

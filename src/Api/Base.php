@@ -6,6 +6,7 @@ use ReflectionMethod;
 use RWMB_Post_Field;
 use RWMB_Taxonomy_Field;
 use RWMB_User_Field;
+use MBB\Helpers\Data;
 
 class Base {
 	public function __construct() {
@@ -40,7 +41,7 @@ class Base {
 	}
 
 	protected function get_posts( $s ) {
-		$post_types = mbb_get_post_types();
+		$post_types = Data::get_post_types();
 		$post_types = array_map( function( $post_type ) {
 			return $post_type['slug'];
 		}, $post_types );
@@ -107,7 +108,7 @@ class Base {
 	}
 
 	protected function get_templates( $s ) {
-		$templates = mbb_get_templates();
+		$templates = Data::get_templates();
 
 		// Group templates by file, which eliminates duplicates templates for multiple post types.
 		$items = [];
@@ -128,7 +129,7 @@ class Base {
 	}
 
 	protected function get_formats( $s ) {
-		$items = mbb_get_post_formats();
+		$items = Data::get_post_formats();
 		$data = [];
 		foreach ( $items as $name ) {
 			if ( empty( $s ) || false !== strpos( $name, $s ) ) {
