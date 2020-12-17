@@ -27,7 +27,6 @@ class Field extends Base {
 			->parse_boolean_values()
 			->parse_numeric_values()
 			->parse_datalist()
-			->parse_group_title()
 			->parse_object_field()
 			->parse_choice_options()
 			->parse_choice_std()
@@ -65,14 +64,6 @@ class Field extends Base {
 			'options' => explode( "\n", $this->settings['datalist_choices'] ),
 		];
 		unset( $this->settings['datalist_choices'] );
-		return $this;
-	}
-
-	private function parse_group_title() {
-		if ( 'group' !== $this->type ) {
-			return $this;
-		}
-		unset( $this->groupfield );
 		return $this;
 	}
 
