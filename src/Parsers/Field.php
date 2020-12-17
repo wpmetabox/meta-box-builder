@@ -38,7 +38,6 @@ class Field extends Base {
 			->parse_custom_settings()
 			->parse_conditional_logic()
 			->parse_upload_dir()
-			->remove_id()
 			->remove_empty_values();
 
 		// Field-specific parser.
@@ -155,13 +154,6 @@ class Field extends Base {
 	private function parse_upload_dir() {
 		if ( $this->upload_dir ) {
 			$this->upload_dir = trailingslashit( ABSPATH ) . untrailingslashit( $this->upload_dir );
-		}
-		return $this;
-	}
-
-	private function remove_id() {
-		if ( in_array( $this->type, ['divider', 'heading'] ) ) {
-			unset( $this->id );
 		}
 		return $this;
 	}
