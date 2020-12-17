@@ -26,10 +26,14 @@ class Edit {
 		$saved_data = get_post_meta( get_the_ID(), 'data', true );
 		$saved_data = $saved_data ? json_decode( $saved_data, true ) : [];
 
+		$data_raw = get_post_meta( get_the_ID(), 'data_raw', true );
+		$data_raw = $data_raw ? json_decode( $data_raw, true ) : [];
+
 		$data = [
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
 			'settings'      => $saved_data,
+			'data_raw'      => $data_raw,
 			'postTypes'     => Helpers\Data::get_post_types(),
 			'taxonomies'    => Helpers\Data::get_taxonomies(),
 			'settingsPages' => Helpers\Data::get_setting_pages(),
@@ -69,6 +73,7 @@ class Edit {
 		$raw = $request->post( 'raw' );
 		update_post_meta( $post_id, 'data', $data );
 		update_post_meta( $post_id, 'raw', $raw );
+		update_post_meta( $post_id, 'data_raw', $request->post( 'data_raw' ) );
 	}
 
 	private function is_screen() {
