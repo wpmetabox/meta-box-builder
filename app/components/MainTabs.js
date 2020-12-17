@@ -27,6 +27,7 @@ const MainTabs = () => {
 	const onPublish = data => {
 		document.getElementById( 'data' ).value = JSON.stringify( fillFieldsValues( data, state ) );
 		document.getElementById( 'raw' ).value = JSON.stringify( formatParams( data ) );
+		document.getElementById( 'data_raw' ).value = JSON.stringify( data );
 	};
 
 	const onSelect = ( index ) => {
@@ -46,7 +47,6 @@ const MainTabs = () => {
 		}
 	}, [] );
 	const fields = MbbApp.settings ? MbbApp.settings.fields : [];
-	const settings = MbbApp.settings ? MbbApp.settings.settings : null;
 
 	return (
 		<>
@@ -64,7 +64,7 @@ const MainTabs = () => {
 							</DndProvider>
 						</TabPanel>
 						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-							<SettingsTab register={ register } defaultValues={ settings } />
+							<SettingsTab defaultValues={ MbbApp.data_raw } />
 						</TabPanel>
 						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
 							<Result />
@@ -74,6 +74,7 @@ const MainTabs = () => {
 				</form>
 				<input type="hidden" id="data" name="data" />
 				<input type="hidden" id="raw" name="raw" />
+				<input type="hidden" id="data_raw" name="data_raw" />
 
 				<button style={ { display: 'none' } } id="btn-on-publish" onClick={ handleSubmit( onPublish ) }>Publish</button>
 			</FormProvider>
