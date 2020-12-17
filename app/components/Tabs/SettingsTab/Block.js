@@ -1,5 +1,6 @@
 import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { Controller } from 'react-hook-form';
 import Checkbox from '../../Common/Checkbox';
 import CheckboxList from '../../Common/CheckboxList';
 import DivRow from '../../Common/DivRow';
@@ -127,9 +128,9 @@ export const Block = ( { defaultValues } ) => {
 
 		<h3>{ __( 'Block Render Settings', 'meta-box-builder' ) }</h3>
 		<Select
-			name="render_width"
+			name="render_with"
 			label={ __( 'Render with', 'meta-box-builder' ) }
-			componentId="settings-block-render_width"
+			componentId="settings-block-render_with"
 			options={ {
 				callback: __( 'PHP callback function', 'meta-box-builder' ),
 				template: __( 'Template file', 'meta-box-builder' ),
@@ -161,7 +162,20 @@ export const Block = ( { defaultValues } ) => {
 		{
 			renderWith === 'code' &&
 			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
-				<CodeMirror name="render_code" options={ { mode: 'php', lineNumbers: true } } defaultValue={ dotProp.get( defaultValues, 'render_code' ) } />
+				<Controller
+					name="render_code"
+					defaultValue={ dotProp.get( defaultValues, 'render_code' ) }
+					render={ ( { onChange } ) => (
+						<CodeMirror
+							name="render_code"
+							options={ { mode: 'php' } }
+							value={ dotProp.get( defaultValues, 'render_code' ) }
+							onChange={ ( editor, data, value ) => {
+								onChange( value );
+							} }
+						/>
+					) }
+				/>
 				<table className="og-block-description">
 					<tbody>
 						<tr>
