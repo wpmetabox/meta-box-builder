@@ -38,7 +38,7 @@ const Name = ( { name, componentId, ...rest } ) => {
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<input type="text" id={ componentId } defaultValue={ rest.defaultValue } name={ name } ref={ register } onChange={ onChange } />
+			<input autoFocus type="text" id={ componentId } defaultValue={ rest.defaultValue } name={ name } ref={ register } onChange={ onChange } />
 		</DivRow>
 	);
 };
