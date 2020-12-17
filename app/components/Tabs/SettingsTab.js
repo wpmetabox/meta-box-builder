@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
+import KeyValue from '../Common/KeyValue';
 import { Block } from './SettingsTab/Block';
 import { ConditionalLogic } from './SettingsTab/ConditionalLogic';
-import { CustomSettings } from './SettingsTab/CustomSettings';
 import { CustomTable } from './SettingsTab/CustomTable';
 import { IncludeExclude } from './SettingsTab/IncludeExclude';
 import { Location } from './SettingsTab/Location';
@@ -10,8 +10,9 @@ import { ShowHide } from './SettingsTab/ShowHide';
 import { Tabs } from './SettingsTab/Tabs';
 
 const { useState } = wp.element;
+const { __ } = wp.i18n;
 
-const SettingsTab = ( { register, defaultValues } ) => {
+const SettingsTab = ( { defaultValues } ) => {
 	const [ objectType, setObjectType ] = useState( dotProp.get( defaultValues, 'object_type', 'post' ) );
 	const [ postTypes, setPostTypes ] = useState( dotProp.get( defaultValues, 'post_types', [ 'post' ] ) );
 
@@ -33,7 +34,12 @@ const SettingsTab = ( { register, defaultValues } ) => {
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block defaultValues={ defaultValues } /> }
 			{ MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) && <CustomTable defaultValues={ defaultValues } /> }
 			{ MbbApp.extensions.tabs && <Tabs defaultValues={ defaultValues } /> }
-			<CustomSettings defaultValues={ defaultValues } />
+			<KeyValue
+				name="custom_settings"
+				defaultValue={ dotProp.get( defaultValues, 'custom_settings', {} ) }
+				label={ __( 'Custom settings', 'meta-box-builder' ) }
+				tooltip={ __( 'Apply to the current field group. For individual fields, please go to each field > tab Advanced.', 'meta-box-builder' ) }
+			/>
 		</>
 	);
 };

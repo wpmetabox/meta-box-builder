@@ -16,32 +16,31 @@ const KeyValue = ( {
 	keyPlaceholder = __( 'Enter key', 'meta-box-builder' ),
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
 } ) => {
-	const handleDefaultValues = () => {
-		return defaultValue?.map( item => ( { ...item, uniqId: uniqid() } ) );
-	};
+	const [ items, setItems ] = useState( Object.values( defaultValue ) );
 
-	const [ list, setList ] = useState( handleDefaultValues() || [] );
-	const removeItem = id => setList( prevList => prevList.filter( item => item.uniqId !== id ) );
+	const addItem = () => setItems( prevItems => prevItems.concat( { key: '', value: '', id: uniqid() } ) );
+	const removeItem = id => setItems( prevItems => prevItems.filter( item => item.id !== id ) );
+
 	if ( link ) {
 		label = `<a href="${ link }" target="_blank" rel="noreferrer noopener">${ label }</a>`;
 	}
 	return (
 		<DivRow label={ label } tooltip={ tooltip }>
 			{
-				list.map( ( item, i ) => (
+				items.map( item => (
 					<Item
-						key={ item.uniqId }
+						key={ item.id }
 						item={ item }
 						removeItem={ removeItem }
-						id={ `${ componentId }-${ item.uniqId }` }
-						name={ `${ name }[${ item.uniqId }]` }
+						id={ `${ componentId }-${ item.id }` }
+						name={ `${ name }[${ item.id }]` }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
 					/>
 				) )
 			}
-			<input type='hidden' id={ componentId } name={ name } value={ JSON.stringify( list ) } />
-			<button type="button" className="button" onClick={ () => setList( prevList => prevList.concat( { key: '', value: '', uniqId: uniqid() } ) ) }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
+			<input type='hidden' id={ componentId } name={ name } value={ JSON.stringify( items ) } />
+			<button type="button" className="button" onClick={ addItem }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
 		</DivRow>
 	);
 };
@@ -51,9 +50,10 @@ const Item = ( { name, item, removeItem, keyPlaceholder, valuePlaceholder, id } 
 
 	return (
 		<div className="og-attribute">
+			<input type="hidden" ref={ register } name={ `${ name }[id]` } defaultValue={ item.id } />
 			<input type="text" placeholder={ keyPlaceholder } ref={ register } id={ `${ id }-key` } name={ `${ name }[key]` } defaultValue={ item.key } />
 			<input type="text" placeholder={ valuePlaceholder } ref={ register } id={ `${ id }-value` } name={ `${ name }[value]` } defaultValue={ item.value } />
-			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.uniqId ) }><Dashicon icon="dismiss" /></button>
+			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.id ) }><Dashicon icon="dismiss" /></button>
 		</div>
 	);
 };
