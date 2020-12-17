@@ -8,7 +8,7 @@ const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
 export const ConditionalLogic = ( { defaultValues } ) => {
-	const [ rules, setRules ] = useState( dotProp.get( defaultValues, 'when', [] ) );
+	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValues, 'when', {} ) ) );
 
 	const addRule = () => setRules( prevRules => prevRules.concat( { name: '', operator: '=', value: '', id: uniqid() } ) );
 	const removeRule = id => setRules( prevRules => prevRules.filter( rule => rule.id !== id ) );
