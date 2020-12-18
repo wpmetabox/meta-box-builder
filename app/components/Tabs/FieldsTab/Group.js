@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { Context } from '../../../context/CommonData/CommonDataContext';
-import { uniqid } from '../../../utility/functions';
+import { ucwords, uniqid } from '../../../utility/functions';
 import { Inserter } from '../../Common/Inserter';
 import Content from './Content';
 import Node from './Node';
@@ -11,7 +11,10 @@ const { __ } = wp.i18n;
 
 const Group = ( { id, field, parent = '' } ) => {
 	const [ subFields, setSubFields ] = useState( dotProp.get( field, 'fields', {} ) );
-	const addField = type => setSubFields( prevSubFields => ( { ...prevSubFields, [ uniqid() ]: { type } } ) );
+	const addSubField = type => setSubFields( prevSubFields => {
+		const id = uniqid();
+		return { ...prevSubFields, [ id ]: { type, name: ucwords( type ), id } }
+	 } );
 
 	const { MbFields } = useContext( Context );
 	const data = { ...MbFields[ field.type ] };
@@ -34,7 +37,7 @@ const Group = ( { id, field, parent = '' } ) => {
 				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 				<div className="og-input">
 					{ Object.entries( subFields ).map( ( [ subId, subField ] ) => <Node key={ subId } id={ subId } field={ subField } parent={ `${ parent }[${ id }][fields]` } /> ) }
-					<Inserter addField={ addField } />
+					<Inserter addField={ addSubField } />
 				</div>
 			</div>
 		</>
