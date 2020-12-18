@@ -1,20 +1,22 @@
 import { useFormContext } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { Context } from '../../../context/CommonData/CommonDataContext';
 import Content from './Content';
 
-const { useState, memo } = wp.element;
+const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
-const FieldSelected = ( props ) => {
-	const type = props.type;
-	const data = props.data;
+const FieldSelected = ( { id, field } ) => {
+	const { MbFields } = useContext( Context );
+
+	const data = { ...MbFields[ field.type ] };
 
 	const { register } = useFormContext();
 	const [ tabIndex, setTabIndex ] = useState( 0 );
 
-	if ( [ 'divider', 'tab' ].includes( type ) ) {
+	if ( [ 'divider', 'tab' ].includes( field.type ) ) {
 		return <div className="og-item__body og-collapsible__body">
-			<Content fieldId={ props.id } data={ data.general } />
+			<Content id={ id } data={ data.general } field={ field } />
 		</div>;
 	}
 
@@ -24,10 +26,10 @@ const FieldSelected = ( props ) => {
 			<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 		</TabList>
 		<TabPanel>
-			<Content fieldId={ props.id } data={ data.general } />
+			<Content id={ id } data={ data.general } field={ field } />
 		</TabPanel>
 		<TabPanel>
-			<Content fieldId={ props.id } data={ data.advanced } />
+			<Content id={ id } data={ data.advanced } field={ field } />
 		</TabPanel>
 	</Tabs>;
 };

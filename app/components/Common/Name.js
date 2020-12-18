@@ -13,7 +13,10 @@ const Name = ( { name, componentId, ...rest } ) => {
 	const debounceValue = useDebounce( value );
 
 	useEffect( () => {
-		document.getElementById( `og-item__title__${ rest.fieldId }` ).textContent = rest.defaultValue || __( '(No label)', 'meta-box-builder' );
+		let titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
+		if ( titleElement ) {
+			title.textContent = rest.defaultValue || __( '(No label)', 'meta-box-builder' );
+		}
 	}, [] );
 
 	useEffect( () => {

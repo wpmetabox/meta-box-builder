@@ -4,7 +4,7 @@ const { useState, useEffect } = wp.element;
 const { Dropdown } = wp.components;
 const { __ } = wp.i18n;
 
-export const Inserter = ( { addItem, type } ) => {
+export const Inserter = ( { addField, type } ) => {
 	const [ fieldTypes, setFieldTypes ] = useState( {} );
 	const [ searchParam, setSearchParam ] = useState( '' );
 	const [ closeCallback, setCloseCallback ] = useState( () => { } );
@@ -19,7 +19,7 @@ export const Inserter = ( { addItem, type } ) => {
 		setCloseCallback( prevCallback => close );
 	};
 	const insert = e => {
-		addItem( e.target.dataset.type );
+		addField( e.target.dataset.type );
 		closeCallback();
 	};
 

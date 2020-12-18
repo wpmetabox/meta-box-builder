@@ -1,60 +1,23 @@
-import { Context } from '../../context/CommonData/CommonDataContext';
-import { uniqid, updateSelectedList } from '../../utility/functions';
+import { uniqid } from '../../utility/functions';
 import { Inserter } from '../Common/Inserter';
-import Insert from './FieldsTab/Insert';
 import Node from './FieldsTab/Node';
 
-const { useContext, useEffect, useState, useCallback, memo, Fragment } = wp.element;
+const { useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = ( props ) => {
-  const { MbFields } = useContext( Context );
+	const [ fields, setFields ] = useState( props.fields );
+	const addField = type => setFields( prevFields => ( { ...prevFields, [ uniqid() ]: { type } } ) );
 
-  const initialFields = props.fields || [];
-  const [ selectedList, setSelectedList ] = useState( { id: 'root', items: initialFields } );
-
-  useEffect( () => {
-    updateSelectedList( selectedList );
-  }, [ selectedList ] );
-
-  const addItem = ( type ) => {
-    const id = `${ type }_${ uniqid() }`;
-    const data = {
-      ...MbFields[ type ],
-    };
-    const newList = {
-      ...selectedList,
-      items: [ ...selectedList.items, { id, type, expanded: true, data, items: [] } ],
-    };
-    setSelectedList( newList );
-    updateSelectedList( newList );
-  };
-
-  const changeSelectedList = useCallback( params => {
-    setSelectedList( params );
-  }, [] );
-
-  return (
-    <>
-      { selectedList.items.length === 0 && <p className="og-none" dangerouslySetInnerHTML={ { __html: __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) } } /> }
-      <div className="og-fields">
-        {
-          selectedList.items.map( ( item, index ) => (
-            <Fragment key={ item.id }>
-              <Insert index={ index } parent="root" />
-              <Node
-                item={ item }
-                parent="root"
-                index={ index }
-                changeSelectedList={ changeSelectedList }
-              />
-            </Fragment>
-          ) )
-        }
-      </div>
-      <Inserter addItem={ addItem } />
-    </>
-  );
+	return (
+		<>
+			{ Object.values( fields ).length === 0 && <p className="og-none" dangerouslySetInnerHTML={ { __html: __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) } } /> }
+			<div className="og-fields">
+				{ Object.entries( fields ).map( ( [ id, field ] ) => <Node key={ id } id={ id } field={ field } /> ) }
+			</div>
+			<Inserter addField={ addField } />
+		</>
+	);
 };
 
 export default memo( FieldsTab );
