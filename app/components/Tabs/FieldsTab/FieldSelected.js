@@ -1,7 +1,6 @@
 import { useFormContext } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Content from './Content';
-import Header from './Header';
 
 const { useState, memo } = wp.element;
 const { __ } = wp.i18n;
@@ -11,56 +10,26 @@ const FieldSelected = ( props ) => {
 	const data = props.data;
 
 	const { register } = useFormContext();
-	const [ expanded, setExpanded ] = useState( !!props.expanded );
 	const [ tabIndex, setTabIndex ] = useState( 0 );
-	const toggleSettings = () => setExpanded( prev => !prev );
 
-	if ( ['divider', 'tab'].includes( type ) ) {
-		return (
-			<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-				<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ props.id }][expanded]` } checked={ expanded } />
-				<input ref={ register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
-				<Header
-					type={ type }
-					id={ props.id }
-					toggleSettings={ toggleSettings }
-					changeSelectedList={ props.changeSelectedList }
-					parent={ props.parent }
-					index={ props.index }
-				/>
-				<div className="og-item__body og-collapsible__body">
-					<Content fieldId={ props.id } data={ data.general } />
-				</div>
-			</div>
-		);
+	if ( [ 'divider', 'tab' ].includes( type ) ) {
+		return <div className="og-item__body og-collapsible__body">
+			<Content fieldId={ props.id } data={ data.general } />
+		</div>;
 	}
 
-	return (
-		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-			<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ props.id }][expanded]` } checked={ expanded } />
-			<input ref={ register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
-			<Header
-				type={ type }
-				id={ props.id }
-				toggleSettings={ toggleSettings }
-				changeSelectedList={ props.changeSelectedList }
-				parent={ props.parent }
-				index={ props.index }
-			/>
-			<Tabs selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) } forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
-				<TabList>
-					<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
-					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
-				</TabList>
-				<TabPanel>
-					<Content fieldId={ props.id } data={ data.general } />
-				</TabPanel>
-				<TabPanel>
-					<Content fieldId={ props.id } data={ data.advanced } />
-				</TabPanel>
-			</Tabs>
-		</div>
-	);
+	return <Tabs selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) } forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
+		<TabList>
+			<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
+			<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
+		</TabList>
+		<TabPanel>
+			<Content fieldId={ props.id } data={ data.general } />
+		</TabPanel>
+		<TabPanel>
+			<Content fieldId={ props.id } data={ data.advanced } />
+		</TabPanel>
+	</Tabs>;
 };
 
 export default memo( ( FieldSelected ), ( prevProps, nextProps ) => prevProps.id === nextProps.id );
