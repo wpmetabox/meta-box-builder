@@ -11,10 +11,15 @@ const { __ } = wp.i18n;
 
 const Group = ( { id, field, parent = '' } ) => {
 	const [ subFields, setSubFields ] = useState( dotProp.get( field, 'fields', {} ) );
-	const addSubField = type => setSubFields( prevSubFields => {
+	const addSubField = type => setSubFields( prev => {
 		const id = uniqid();
-		return { ...prevSubFields, [ id ]: { type, name: ucwords( type ), id } }
-	 } );
+		return { ...prev, [ id ]: { type, name: ucwords( type ), id } };
+	} );
+	const removeSubField = id => setSubFields( prev => {
+		let newFields = { ...prev };
+		dotProp.delete( newFields, id );
+		return newFields;
+	} );
 
 	const { MbFields } = useContext( Context );
 	const data = { ...MbFields[ field.type ] };
@@ -36,7 +41,11 @@ const Group = ( { id, field, parent = '' } ) => {
 			<div className={ `og-group-fields og-field${ Object.keys( subFields ).length === 0 ? ' og-group-fields--empty' : '' }` }>
 				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 				<div className="og-input">
-					{ Object.entries( subFields ).map( ( [ subId, subField ] ) => <Node key={ subId } id={ subId } field={ subField } parent={ `${ parent }[${ id }][fields]` } /> ) }
+					{
+						Object.entries( subFields ).map( ( [ subId, subField ] ) =>
+							<Node key={ subId } id={ subId } field={ subField } parent={ `${ parent }[${ id }][fields]` } removeField={ removeSubField } />
+						)
+					}
 					<Inserter addField={ addSubField } />
 				</div>
 			</div>
