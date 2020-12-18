@@ -6,7 +6,7 @@ import Content from './Content';
 const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
-const FieldSelected = ( { id, field } ) => {
+const FieldSelected = ( { id, field, parent = '' } ) => {
 	const { MbFields } = useContext( Context );
 
 	const data = { ...MbFields[ field.type ] };
@@ -26,10 +26,10 @@ const FieldSelected = ( { id, field } ) => {
 			<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 		</TabList>
 		<TabPanel>
-			<Content id={ id } data={ data.general } field={ field } />
+			<Content id={ id } data={ data.general } field={ field } parent={ parent } />
 		</TabPanel>
 		<TabPanel>
-			<Content id={ id } data={ data.advanced } field={ field } />
+			<Content id={ id } data={ data.advanced } field={ field } parent={ parent } />
 		</TabPanel>
 	</Tabs>;
 };
