@@ -4,7 +4,6 @@ import { Context } from '../../../context/CommonData/CommonDataContext';
 import { addGroupChild, uniqid } from '../../../utility/functions';
 import { Inserter } from '../../Common/Inserter';
 import Content from './Content';
-import Header from './Header';
 import Insert from './Insert';
 import Node from './Node';
 
@@ -17,15 +16,12 @@ const Group = ( props ) => {
 	const type = props.type;
 
 	const { register } = useFormContext();
-	const [ expanded, setExpanded ] = useState( !!props.expanded );
 	const [ children, setChildren ] = useState( props.items );
 
 	useEffect( () => {
 		setChildren( props.items );
 		return;
 	}, [ props.items ] );
-
-	const toggleSettings = () => setExpanded( prev => !prev );
 
 	const addItem = ( type ) => {
 		const id = `${ type }_${ uniqid() }`;
@@ -38,17 +34,7 @@ const Group = ( props ) => {
 	};
 
 	return (
-		<div className={ `og-item og-item--${ type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-			<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ props.id }][expanded]` } checked={ expanded } />
-			<input ref={ register } type="hidden" name={ `fields[${ props.id }][type]` } defaultValue={ type } />
-			<Header
-				type={ type }
-				id={ props.id }
-				toggleSettings={ toggleSettings }
-				changeSelectedList={ props.changeSelectedList }
-				parent={ props.parent }
-				index={ props.index }
-			/>
+		<>
 			<Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
 				<TabList>
 					<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
@@ -80,7 +66,7 @@ const Group = ( props ) => {
 					<Inserter addItem={ addItem } type="group" />
 				</div>
 			</div>
-		</div>
+		</>
 	);
 };
 
