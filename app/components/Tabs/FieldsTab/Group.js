@@ -1,37 +1,16 @@
-import { useFormContext } from 'react-hook-form';
+import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { Context } from '../../../context/CommonData/CommonDataContext';
-import { addGroupChild, uniqid } from '../../../utility/functions';
+import { uniqid } from '../../../utility/functions';
 import { Inserter } from '../../Common/Inserter';
 import Content from './Content';
-import Insert from './Insert';
 import Node from './Node';
 
-const { useState, memo, useContext, useEffect, Fragment } = wp.element;
+const { useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
-const Group = ( props ) => {
-	const { MbFields } = useContext( Context );
-
-	const type = props.type;
-
-	const { register } = useFormContext();
-	const [ children, setChildren ] = useState( props.items );
-
-	useEffect( () => {
-		setChildren( props.items );
-		return;
-	}, [ props.items ] );
-
-	const addItem = ( type ) => {
-		const id = `${ type }_${ uniqid() }`;
-		const data = {
-			...MbFields[ type ],
-		};
-		const newChildList = [ ...children, { id, type, expanded: true, data, items: [] } ];
-		setChildren( newChildList );
-		props.changeSelectedList( addGroupChild( props.id, newChildList ) );
-	};
+const Group = ( { id, field } ) => {
+	const [ fields, setFields ] = useState( dotProp.get( field, fields, {} ) );
+	const addField = type => setFields( prevFields => ( { ...prevFields, [ uniqid() ]: { type } } ) );
 
 	return (
 		<>
@@ -41,33 +20,21 @@ const Group = ( props ) => {
 					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 				</TabList>
 				<TabPanel>
-					<Content fieldId={ props.id } data={ props.data.general } />
+					<Content id={ id } data={ data.general } field={ field } />
 				</TabPanel>
 				<TabPanel>
-					<Content fieldId={ props.id } data={ props.data.advanced } />
+					<Content id={ id } data={ data.advanced } field={ field } />
 				</TabPanel>
 			</Tabs>
-			<div className={ `og-group-fields og-field${ !children.length ? ' og-group-fields--empty' : '' }` }>
+			<div className={ `og-group-fields og-field${ Object.values( fields ).length === 0 ? ' og-group-fields--empty' : '' }` }>
 				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 				<div className="og-input">
-					{
-						children.map( ( item, i ) => (
-							<Fragment key={ item.id }>
-								<Insert parent={ props.id } index={ i } />
-								<Node
-									item={ item }
-									parent={ props.id }
-									index={ i }
-									changeSelectedList={ props.changeSelectedList }
-								/>
-							</Fragment>
-						) )
-					}
-					<Inserter addItem={ addItem } type="group" />
+					{ Object.values( fields ).map( ( [ id, field ] ) => <Node key={ id } id={ id } field={ field } /> ) }
+					<Inserter addField={ addField } />
 				</div>
 			</div>
 		</>
 	);
 };
 
-export default memo( ( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.items === nextProps.items );
+export default memo( ( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.fields === nextProps.fields );

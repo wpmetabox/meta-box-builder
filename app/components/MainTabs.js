@@ -1,3 +1,4 @@
+import dotProp from 'dot-prop';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -46,7 +47,6 @@ const MainTabs = () => {
 			ConditionalActions.updateConditionalList( 'initial', JSON.parse( MbbApp.settings.conditionalList ) );
 		}
 	}, [] );
-	const fields = MbbApp.settings ? MbbApp.settings.fields : [];
 
 	return (
 		<>
@@ -60,7 +60,7 @@ const MainTabs = () => {
 						</TabList>
 						<TabPanel>
 							<DndProvider backend={ HTML5Backend } options={ { enableTouchEvents: false, enableMouseEvents: true } }>
-								<FieldsTab fields={ fields } />
+								<FieldsTab fields={ dotProp.get( MbbApp.data_raw, 'fields', {} ) } />
 							</DndProvider>
 						</TabPanel>
 						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">

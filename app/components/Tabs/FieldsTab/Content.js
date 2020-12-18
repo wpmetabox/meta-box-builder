@@ -1,6 +1,7 @@
+import dotProp from 'dot-prop';
 const { lazy, memo, Suspense } = wp.element;
 
-const Content = ( { fieldId, data } ) => {
+const Content = ( { id, data, field } ) => {
 	const getElement = name => {
 		if ( 'type' === name ) {
 			return null;
@@ -8,11 +9,11 @@ const Content = ( { fieldId, data } ) => {
 		let Component = lazy( () => import( `../../Common/${ data[ name ].component }` ) );
 
 		return <Component
-			fieldId={ fieldId }
+			fieldId={ id }
 			componentName={ name }
-			componentId={ `fields-${ fieldId }-${ name }` }
-			name={ `fields[${ fieldId }][${ name }]` }
-			defaultValue={ data[ name ].default }
+			componentId={ `fields-${ id }-${ name }` }
+			name={ `fields[${ id }][${ name }]` }
+			defaultValue={ dotProp.get( field, name, data[ name ].default ) }
 			{ ...data[ name ].props }
 		/>;
 	};
@@ -22,7 +23,7 @@ const Content = ( { fieldId, data } ) => {
 			{
 				Object.keys( data ).map( ( keyName, keyIndex ) =>
 					<Suspense fallback={ null } key={ keyName + keyIndex }>
-						{ getElement( keyName, keyIndex ) }
+						{ getElement( keyName ) }
 					</Suspense>
 				)
 			}
@@ -30,4 +31,4 @@ const Content = ( { fieldId, data } ) => {
 	);
 };
 
-export default memo( Content, ( prevProps, nextProps ) => prevProps.fieldId === nextProps.fieldId );
+export default memo( Content, ( prevProps, nextProps ) => prevProps.id === nextProps.id );
