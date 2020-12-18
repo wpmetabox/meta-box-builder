@@ -10,8 +10,8 @@ const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const Group = ( { id, field, parent = '' } ) => {
-	const [ fields, setFields ] = useState( dotProp.get( field, fields, {} ) );
-	const addField = type => setFields( prevFields => ( { ...prevFields, [ uniqid() ]: { type } } ) );
+	const [ subFields, setSubFields ] = useState( dotProp.get( field, 'fields', {} ) );
+	const addField = type => setSubFields( prevSubFields => ( { ...prevSubFields, [ uniqid() ]: { type } } ) );
 
 	const { MbFields } = useContext( Context );
 	const data = { ...MbFields[ field.type ] };
@@ -30,10 +30,10 @@ const Group = ( { id, field, parent = '' } ) => {
 					<Content id={ id } data={ data.advanced } field={ field } parent={ parent } />
 				</TabPanel>
 			</Tabs>
-			<div className={ `og-group-fields og-field${ Object.values( fields ).length === 0 ? ' og-group-fields--empty' : '' }` }>
+			<div className={ `og-group-fields og-field${ Object.keys( subFields ).length === 0 ? ' og-group-fields--empty' : '' }` }>
 				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 				<div className="og-input">
-					{ Object.values( fields ).map( ( [ subId, subField ] ) => <Node key={ subId } id={ subId } field={ subField } parent={ `${ parent }[${ id }]` } /> ) }
+					{ Object.entries( subFields ).map( ( [ subId, subField ] ) => <Node key={ subId } id={ subId } field={ subField } parent={ `${ parent }[${ id }][fields]` } /> ) }
 					<Inserter addField={ addField } />
 				</div>
 			</div>
@@ -41,4 +41,4 @@ const Group = ( { id, field, parent = '' } ) => {
 	);
 };
 
-export default memo( ( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.fields === nextProps.fields );
+export default memo( ( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.field.subFields === nextProps.field.subFields );
