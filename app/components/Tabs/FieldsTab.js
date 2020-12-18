@@ -1,4 +1,4 @@
-import { uniqid } from '../../utility/functions';
+import { ucwords, uniqid } from '../../utility/functions';
 import { Inserter } from '../Common/Inserter';
 import Node from './FieldsTab/Node';
 
@@ -7,7 +7,10 @@ const { __ } = wp.i18n;
 
 const FieldsTab = ( props ) => {
 	const [ fields, setFields ] = useState( props.fields );
-	const addField = type => setFields( prevFields => ( { ...prevFields, [ uniqid() ]: { type } } ) );
+	const addField = type => setFields( prevFields => {
+		const id = uniqid();
+		return { ...prevFields, [ id ]: { type, name: ucwords( type ), id } }
+	 } );
 
 	return (
 		<>

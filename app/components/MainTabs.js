@@ -5,7 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { actions as commonDataActions } from '../context/CommonData/CommonDataContext';
 import { actions as ConditionalActions, Context } from '../context/ConditionalList/ConditionalContext';
-import { actions, formatParams } from '../context/Generator/GeneratorContext';
+import { actions } from '../context/Generator/GeneratorContext';
 import Result from './Result';
 import FieldsTab from './Tabs/FieldsTab';
 import SettingsTab from './Tabs/SettingsTab';
@@ -25,7 +25,6 @@ const MainTabs = () => {
 	};
 
 	const onPublish = data => {
-		document.getElementById( 'raw' ).value = JSON.stringify( formatParams( data ) );
 		document.getElementById( 'data_raw' ).value = JSON.stringify( data );
 	};
 
@@ -70,7 +69,6 @@ const MainTabs = () => {
 					</Tabs>
 					<button type="submit" style={ { display: 'none' } } id={ SUBMIT_FORM_BUTTON } />
 				</form>
-				<input type="hidden" id="raw" name="raw" />
 				<input type="hidden" id="data_raw" name="data_raw" />
 
 				<button style={ { display: 'none' } } id="btn-on-publish" onClick={ handleSubmit( onPublish ) }>Publish</button>

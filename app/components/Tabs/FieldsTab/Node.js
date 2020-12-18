@@ -11,8 +11,8 @@ const Node = ( { id, field, parent = '' } ) => {
 	const { register } = useFormContext();
 
 	return <div className={ `og-item og-item--${ field.type } og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-		<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields[${ id }][expanded]` } checked={ expanded } />
-		<input ref={ register } type="hidden" name={ `fields[${ id }][type]` } defaultValue={ field.type } />
+		<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields${ parent }[${ id }][expanded]` } checked={ expanded } />
+		<input ref={ register } type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
 		<Header type={ field.type } id={ id } toggleSettings={ toggleSettings } />
 		{ field.type === 'group' ? <Group id={ id } field={ field } parent={ parent } /> : <FieldSelected id={ id } field={ field } parent={ parent } /> }
 	</div>;

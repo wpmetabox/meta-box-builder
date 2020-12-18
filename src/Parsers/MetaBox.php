@@ -194,7 +194,7 @@ class MetaBox extends Base {
 
 	private function parse_fields( &$fields ) {
 		array_walk( $fields, array( $this, 'parse_field' ) );
-		$fields = array_filter( $fields ); // Make sure to remove empty (such as empty groups) or "tab" fields.
+		$fields = array_values( array_filter( $fields ) ); // Make sure to remove empty (such as empty groups) or "tab" fields.
 	}
 
 	private function parse_field( &$field ) {
