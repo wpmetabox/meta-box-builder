@@ -8,7 +8,6 @@ const { __ } = wp.i18n;
 
 const FieldSelected = ( { id, field, parent = '' } ) => {
 	const { MbFields } = useContext( Context );
-
 	const data = { ...MbFields[ field.type ] };
 
 	const { register } = useFormContext();

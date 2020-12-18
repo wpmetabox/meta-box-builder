@@ -1,16 +1,20 @@
 import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { Context } from '../../../context/CommonData/CommonDataContext';
 import { uniqid } from '../../../utility/functions';
 import { Inserter } from '../../Common/Inserter';
 import Content from './Content';
 import Node from './Node';
 
-const { useState, memo } = wp.element;
+const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const Group = ( { id, field, parent = '' } ) => {
 	const [ fields, setFields ] = useState( dotProp.get( field, fields, {} ) );
 	const addField = type => setFields( prevFields => ( { ...prevFields, [ uniqid() ]: { type } } ) );
+
+	const { MbFields } = useContext( Context );
+	const data = { ...MbFields[ field.type ] };
 
 	return (
 		<>
