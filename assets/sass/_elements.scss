@@ -53,6 +53,7 @@ svg {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #fff;
   }
 
   &__body {
@@ -60,6 +61,7 @@ svg {
     max-height: 0;
     transition: all 0.2s ease;
     padding: 0 12px;
+    background: #fff;
   }
   &--expanded {
     > .og-collapsible__header {

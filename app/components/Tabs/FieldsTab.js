@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { useFormContext } from 'react-hook-form';
 import { ucwords, uniqid } from '../../utility/functions';
 import { Inserter } from '../Common/Inserter';
@@ -31,22 +32,50 @@ const FieldsTab = props => {
 		return newFields;
 	} );
 
+	const onDragEnd = ( { source, destination } ) => {
+		if ( !destination ) {
+			return;
+		}
+		if ( destination.index === source.index ) {
+			return;
+		}
+
+		setFields( prev => {
+			let newFields = [ ...prev ];
+			const sourceField = prev[ source.index ];
+			newFields.splice( source.index, 1 );
+			newFields.splice( destination.index, 0, sourceField );
+
+			return newFields;
+		} );
+	};
+
 	return (
-		<>
+		<DragDropContext onDragEnd={ onDragEnd }>
 			{ fields.length === 0 && <p className="og-none" dangerouslySetInnerHTML={ { __html: __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) } } /> }
-			<div className="og-fields">
-				{
-					fields.map( field => <Node
-						key={ field._id }
-						id={ field._id }
-						field={ field }
-						removeField={ removeField }
-						duplicateField={ duplicateField }
-					/> )
-				}
-			</div>
+			<Droppable droppableId="fields">
+				{ provided => (
+					<div
+						className="og-fields"
+						ref={ provided.innerRef }
+						{ ...provided.droppableProps }
+					>
+						{
+							fields.map( ( field, index ) => <Node
+								key={ field._id }
+								id={ field._id }
+								field={ field }
+								index={ index }
+								removeField={ removeField }
+								duplicateField={ duplicateField }
+							/> )
+						}
+						{ provided.placeholder }
+					</div>
+				) }
+			</Droppable>
 			<Inserter addField={ addField } />
-		</>
+		</DragDropContext>
 	);
 };
 
