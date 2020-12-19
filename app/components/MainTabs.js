@@ -51,7 +51,7 @@ const MainTabs = () => {
 						<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
 					</TabList>
 					<TabPanel>
-						<FieldsTab fields={ dotProp.get( MbbApp.data_raw, 'fields', {} ) } />
+						<FieldsTab fields={ Object.values( dotProp.get( MbbApp.data_raw, 'fields', {} ) ) } />
 					</TabPanel>
 					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
 						<SettingsTab defaultValues={ MbbApp.data_raw } />
