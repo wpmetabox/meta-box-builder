@@ -1,6 +1,4 @@
 import dotProp from 'dot-prop';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { actions as commonDataActions } from '../context/CommonData/CommonDataContext';
@@ -12,10 +10,8 @@ import SettingsTab from './Tabs/SettingsTab';
 
 const { useEffect, useContext, memo } = wp.element;
 const { __ } = wp.i18n;
-const SUBMIT_FORM_BUTTON = 'submit-form';
 
 const MainTabs = () => {
-	const { handleSubmit, register, control } = useForm();
 	const methods = useForm();
 
 	const state = useContext( Context );
@@ -31,7 +27,7 @@ const MainTabs = () => {
 	const onSelect = ( index ) => {
 		const isGetCodeTab = index === 2;
 		if ( isGetCodeTab ) {
-			document.getElementById( SUBMIT_FORM_BUTTON ).click();
+			document.getElementById( 'submit-form' ).click();
 		}
 	};
 
@@ -46,35 +42,30 @@ const MainTabs = () => {
 	}, [] );
 
 	return (
-		<>
-			<FormProvider { ...methods } register={ register } control={ control }>
-				<form onSubmit={ handleSubmit( onSubmit ) } id='myForm'>
-					<Tabs forceRenderTabPanel={ true } onSelect={ onSelect }>
-						<TabList>
-							<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
-							<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
-							<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
-						</TabList>
-						<TabPanel>
-							<DndProvider backend={ HTML5Backend } options={ { enableTouchEvents: false, enableMouseEvents: true } }>
-								<FieldsTab fields={ dotProp.get( MbbApp.data_raw, 'fields', {} ) } />
-							</DndProvider>
-						</TabPanel>
-						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-							<SettingsTab defaultValues={ MbbApp.data_raw } />
-						</TabPanel>
-						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-							<Result />
-						</TabPanel>
-					</Tabs>
-					<button type="submit" style={ { display: 'none' } } id={ SUBMIT_FORM_BUTTON } />
-				</form>
-				<input type="hidden" id="data_raw" name="data_raw" />
+		<FormProvider { ...methods }>
+			<form onSubmit={ methods.handleSubmit( onSubmit ) } id='myForm'>
+				<Tabs forceRenderTabPanel={ true } onSelect={ onSelect }>
+					<TabList>
+						<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
+						<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
+						<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
+					</TabList>
+					<TabPanel>
+						<FieldsTab fields={ dotProp.get( MbbApp.data_raw, 'fields', {} ) } />
+					</TabPanel>
+					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
+						<SettingsTab defaultValues={ MbbApp.data_raw } />
+					</TabPanel>
+					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
+						<Result />
+					</TabPanel>
+				</Tabs>
+				<button type="submit" style={ { display: 'none' } } id="submit-form" />
+			</form>
+			<input type="hidden" id="data_raw" name="data_raw" />
 
-				<button style={ { display: 'none' } } id="btn-on-publish" onClick={ handleSubmit( onPublish ) }>Publish</button>
-			</FormProvider>
-			<div style={ { marginTop: 32 } } onClick={ handleSubmit( onPublish ) } >test</div>
-		</>
+			<button style={ { display: 'none' } } id="btn-on-publish" onClick={ methods.handleSubmit( onPublish ) }>Publish</button>
+		</FormProvider>
 	);
 };
 
