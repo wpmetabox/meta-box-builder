@@ -18,6 +18,9 @@ class Field extends Base {
 		// Remove collapse/expand state.
 		unset( $this->expanded );
 
+		// Remove unique ID used for tracking in JS.
+		unset( $this->_id );
+
 		// Remove default fields.
 		$this->remove_default( 'save_field', true );
 		$this->remove_default( 'add_to', 'end' ); // image_advanced.
