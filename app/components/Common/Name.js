@@ -7,22 +7,15 @@ import DivRow from './DivRow';
 const { __ } = wp.i18n;
 const { useEffect, useState } = wp.element;
 
-const Name = ( { name, componentId, ...rest } ) => {
+const Name = ( { name, componentId, defaultValue, ...rest } ) => {
 	const { register } = useFormContext();
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 
 	useEffect( () => {
-		let titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
-		if ( titleElement ) {
-			title.textContent = rest.defaultValue || __( '(No label)', 'meta-box-builder' );
-		}
-	}, [] );
-
-	useEffect( () => {
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
-		if ( idElement && ( debounceValue || rest.defaultValue ) ) {
-			ConditionalActions.updateConditionalList( 'add', { [ rest.fieldId ]: { label: debounceValue || rest.defaultValue, id: idElement.value } } );
+		if ( idElement && ( debounceValue || defaultValue ) ) {
+			ConditionalActions.updateConditionalList( 'add', { [ rest.fieldId ]: { label: debounceValue || defaultValue, id: idElement.value } } );
 		}
 	}, [ debounceValue ] );
 
@@ -36,12 +29,11 @@ const Name = ( { name, componentId, ...rest } ) => {
 		if ( idElement ) {
 			idElement.value = slugify( e.target.value, { lower: true, replacement: '_' } );
 		}
-
 	};
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<input autoFocus type="text" id={ componentId } defaultValue={ rest.defaultValue } name={ name } ref={ register } onChange={ onChange } />
+			<input autoFocus type="text" id={ componentId } defaultValue={ defaultValue } name={ name } ref={ register } onChange={ onChange } />
 		</DivRow>
 	);
 };
