@@ -12,40 +12,33 @@ const FieldsTab = props => {
 	const [ fields, setFields ] = useState( props.fields );
 	const addField = type => setFields( prev => {
 		const id = uniqid();
-		return { ...prev, [ id ]: { type, name: ucwords( type ), id } };
+		return [ ...prev, { type, name: ucwords( type ), id, _id: id } ];
 	} );
-	const removeField = id => setFields( prev => {
-		let newFields = { ...prev };
-		dotProp.delete( newFields, id );
-		return newFields;
-	} );
+	const removeField = id => setFields( prev => prev.filter( field => field._id !== id ) );
 	const duplicateField = id => setFields( prev => {
-		const keys = Object.keys( prev );
-		const index = keys.indexOf( id );
-
 		// Get existing values from the current field with react-hook-form and dotProp.
 		const newId = uniqid();
 		const values = getValues();
 		let newField = dotProp.get( values, `fields.${ id }` );
 		newField.id = newId;
+		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
-		let entries = Object.entries( prev );
-		let newFields = {};
-		entries.splice( index + 1, 0, [ newId, newField ] );
-		entries.forEach( ( [ key, value ] ) => newFields[ key ] = value );
+		const index = prev.findIndex( field => field._id === id );
+		let newFields = [ ...prev ];
+		newFields.splice( index + 1, 0, newField );
 
 		return newFields;
 	} );
 
 	return (
 		<>
-			{ Object.values( fields ).length === 0 && <p className="og-none" dangerouslySetInnerHTML={ { __html: __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) } } /> }
+			{ fields.length === 0 && <p className="og-none" dangerouslySetInnerHTML={ { __html: __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) } } /> }
 			<div className="og-fields">
 				{
-					Object.entries( fields ).map( ( [ id, field ] ) => <Node
-						key={ id }
-						id={ id }
+					fields.map( field => <Node
+						key={ field._id }
+						id={ field._id }
 						field={ field }
 						removeField={ removeField }
 						duplicateField={ duplicateField }
