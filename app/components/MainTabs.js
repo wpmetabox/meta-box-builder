@@ -1,8 +1,8 @@
 import dotProp from 'dot-prop';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { actions as commonDataActions } from '../context/CommonData/CommonDataContext';
 import { actions as ConditionalActions, Context } from '../context/ConditionalList/ConditionalContext';
+import { actions as fieldsDataActions } from '../context/FieldsData/FieldsDataContext';
 import { actions } from '../context/Generator/GeneratorContext';
 import Result from './Result';
 import FieldsTab from './Tabs/FieldsTab';
@@ -32,7 +32,7 @@ const MainTabs = () => {
 	};
 
 	useEffect( () => {
-		commonDataActions.getMBFields();
+		fieldsDataActions.getFieldsData();
 		document.querySelector( '#publish' ).addEventListener( 'click', () => {
 			document.getElementById( 'btn-on-publish' ).click();
 		} );

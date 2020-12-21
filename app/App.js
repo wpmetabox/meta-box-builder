@@ -1,18 +1,18 @@
 import MainTabs from './components/MainTabs';
-import { Provider as CommonDataProvider } from './context/CommonData/CommonDataContext';
 import { Provider as UpdateConditionalProvider } from './context/ConditionalList/ConditionalContext';
+import { Provider as FieldsDataProvider } from './context/FieldsData/FieldsDataContext';
 import { Provider as GeneratorProvider } from './context/Generator/GeneratorContext';
 
 const { render } = wp.element;
 
 const App = () => (
-  <CommonDataProvider>
+  <FieldsDataProvider>
     <GeneratorProvider>
       <UpdateConditionalProvider>
         <MainTabs />
       </UpdateConditionalProvider>
     </GeneratorProvider>
-  </CommonDataProvider>
+  </FieldsDataProvider>
 );
 
 render( <App />, document.getElementById( 'root' ) );

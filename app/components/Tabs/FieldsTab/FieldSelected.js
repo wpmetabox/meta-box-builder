@@ -1,13 +1,13 @@
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { Context } from '../../../context/CommonData/CommonDataContext';
+import { Context } from '../../../context/FieldsData/FieldsDataContext';
 import Content from './Content';
 
 const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldSelected = ( { id, field, parent = '' } ) => {
-	const { MbFields } = useContext( Context );
-	const data = { ...MbFields[ field.type ] };
+	const { fieldsData } = useContext( Context );
+	const data = { ...fieldsData[ field.type ] };
 
 	if ( [ 'divider', 'tab' ].includes( field.type ) ) {
 		return <div className="og-item__body og-collapsible__body">
