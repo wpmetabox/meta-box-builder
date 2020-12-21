@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { Context } from '../../../context/CommonData/CommonDataContext';
 import Content from './Content';
@@ -10,16 +9,13 @@ const FieldSelected = ( { id, field, parent = '' } ) => {
 	const { MbFields } = useContext( Context );
 	const data = { ...MbFields[ field.type ] };
 
-	const { register } = useFormContext();
-	const [ tabIndex, setTabIndex ] = useState( 0 );
-
 	if ( [ 'divider', 'tab' ].includes( field.type ) ) {
 		return <div className="og-item__body og-collapsible__body">
 			<Content id={ id } data={ data.general } field={ field } />
 		</div>;
 	}
 
-	return <Tabs selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) } forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
+	return <Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
 		<TabList>
 			<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
 			<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
