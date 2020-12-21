@@ -1,4 +1,4 @@
-import { request } from '../../utility/functions';
+import { request } from '../../functions';
 import createDataContext from '../createDataContext';
 import { GENERATE_PHP_CODE } from './GeneratorActions';
 import generatorReducer from './GeneratorReducer';

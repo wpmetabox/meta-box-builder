@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { useToggle } from '../useToggle';
+import { useToggle } from '../../hooks/useToggle';
 import DivRow from './DivRow';
 
 const Select = ( { componentId, name, options, multiple, defaultValue, onChange, placeholder, style, ...rest } ) => {

@@ -1,4 +1,4 @@
-import { request } from '../../utility/functions';
+import { request } from '../../functions';
 import createDataContext from '../createDataContext';
 import { GET_MB_FIELDS } from './CommonDataActions';
 import commonDataReducer from './CommonDataReducer';

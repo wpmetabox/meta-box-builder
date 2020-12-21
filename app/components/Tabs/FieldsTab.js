@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { useFormContext } from 'react-hook-form';
-import { ucwords, uniqid } from '../../utility/functions';
+import { ucwords, uniqid } from '../../functions';
 import { Inserter } from '../Common/Inserter';
 import Node from './FieldsTab/Node';
 

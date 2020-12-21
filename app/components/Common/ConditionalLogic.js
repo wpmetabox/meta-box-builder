@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 import { useFormContext } from 'react-hook-form';
 import { Context } from '../../context/ConditionalList/ConditionalContext';
-import { uniqid } from '../../utility/functions';
+import { uniqid } from '../../functions';
 import DivRow from '../Common/DivRow';
 
 const { useState, useContext, useEffect } = wp.element;
