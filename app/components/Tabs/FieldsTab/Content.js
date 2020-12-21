@@ -3,9 +3,6 @@ const { lazy, memo, Suspense } = wp.element;
 
 const Content = ( { id, data, field, parent = '' } ) => {
 	const getElement = name => {
-		if ( 'type' === name ) {
-			return null;
-		}
 		let Component = lazy( () => import( `../../Common/${ data[ name ].component }` ) );
 
 		return <Component
