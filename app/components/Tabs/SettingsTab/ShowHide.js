@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 import { Controller, useFormContext } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
-import { request, uniqid } from '../../../utility/functions';
+import { request, uniqid } from '../../../functions';
 import DivRow from '../../Common/DivRow';
 import KeyValue from '../../Common/KeyValue';
 const { useState } = wp.element;
