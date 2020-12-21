@@ -1,6 +1,5 @@
 import { Controller } from 'react-hook-form';
 import Select from 'react-select';
-import { objectToArray } from '../../utility/functions';
 
 const ReactSelect = ( { name, options, multiple, defaultValue, ...rest } ) => {
 	if ( !Array.isArray( options ) ) {
@@ -34,5 +33,7 @@ const ReactSelect = ( { name, options, multiple, defaultValue, ...rest } ) => {
 		) }
 	/>;
 };
+
+const objectToArray = object => Object.entries( object ).map( ( [ value, label ] ) => ( { value, label } ) );
 
 export default ReactSelect;
