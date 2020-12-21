@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 import { useFormContext } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { Context } from '../../../context/CommonData/CommonDataContext';
+import { Context } from '../../../context/FieldsData/FieldsDataContext';
 import { ucwords, uniqid } from '../../../functions';
 import { Inserter } from '../../Common/Inserter';
 import Content from './Content';
@@ -35,8 +35,8 @@ const Group = ( { id, field, parent = '' } ) => {
 		return newFields;
 	} );
 
-	const { MbFields } = useContext( Context );
-	const data = { ...MbFields[ field.type ] };
+	const { fieldsData } = useContext( Context );
+	const data = { ...fieldsData[ field.type ] };
 
 	return (
 		<>
