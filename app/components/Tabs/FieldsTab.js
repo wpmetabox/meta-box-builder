@@ -13,7 +13,7 @@ const FieldsTab = props => {
 	const [ fields, setFields ] = useState( props.fields );
 	const addField = type => setFields( prev => {
 		const id = uniqid();
-		return [ ...prev, { type, name: ucwords( type ), id, _id: id } ];
+		return [ ...prev, { type, name: ucwords( type, '_' ), id, _id: id } ];
 	} );
 	const removeField = id => setFields( prev => prev.filter( field => field._id !== id ) );
 	const duplicateField = id => setFields( prev => {
