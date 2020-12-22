@@ -54,4 +54,4 @@ const Node = ( { id, field, parent = '', index, removeField, duplicateField } ) 
 	</Draggable>;
 };
 
-export default memo( Node, ( prevProps, nextProps ) => nextProps.field.type !== 'group' && prevProps.id === nextProps.id );
+export default memo( Node, ( prevProps, nextProps ) => nextProps.field.type !== 'group' && prevProps.id === nextProps.id && prevProps.index === nextProps.index );
