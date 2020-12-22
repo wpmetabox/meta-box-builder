@@ -2,6 +2,7 @@ import dotProp from 'dot-prop';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { actions as ConditionalActions } from '../context/ConditionalList/ConditionalContext';
+import { Data } from './Data';
 import FieldsTab from './Tabs/FieldsTab';
 import Result from './Tabs/Result';
 import SettingsTab from './Tabs/SettingsTab';
@@ -12,14 +13,7 @@ const { __ } = wp.i18n;
 const MainTabs = () => {
 	const methods = useForm();
 
-	const onPublish = data => {
-		document.getElementById( 'data_raw' ).value = JSON.stringify( data );
-	};
-
 	useEffect( () => {
-		document.querySelector( '#publish' ).addEventListener( 'click', () => {
-			document.getElementById( 'btn-on-publish' ).click();
-		} );
 		if ( MbbApp.settings && MbbApp.settings.conditionalList ) {
 			ConditionalActions.updateConditionalList( 'initial', JSON.parse( MbbApp.settings.conditionalList ) );
 		}
@@ -45,9 +39,7 @@ const MainTabs = () => {
 					</TabPanel>
 				</Tabs>
 			</form>
-			<input type="hidden" id="data_raw" name="data_raw" />
-
-			<button style={ { display: 'none' } } id="btn-on-publish" onClick={ methods.handleSubmit( onPublish ) }>Publish</button>
+			<Data />
 		</FormProvider>
 	);
 };
