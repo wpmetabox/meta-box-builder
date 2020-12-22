@@ -52,7 +52,7 @@ const FieldsTab = props => {
 
 		setFields( prev => {
 			let newFields = [ ...prev ];
-			const sourceField = prev[ source.index ];
+			const sourceField = { ...prev[ source.index ] };
 			newFields.splice( source.index, 1 );
 			newFields.splice( destination.index, 0, sourceField );
 
