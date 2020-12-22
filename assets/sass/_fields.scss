@@ -4,6 +4,12 @@
   border-bottom: var(--border-lighter);
 }
 
+&-fields {
+  &--dragging {
+    background-color: #fffacd;
+  }
+}
+
 &-field {
   margin-bottom: 16px;
   display: flex;
@@ -58,16 +64,17 @@
 
   &__header {
     padding: 12px;
-  }
-
-  &__handle {
     cursor: move;
-    display: inline-flex;
-    margin-right: 4px;
   }
 
-  &--dragging > .og-item__header {
-    background: var(--color-lighter);
+  &--dragging {
+    border: var(--border);
+    z-index: 9999 !important;
+
+    & > .og-item__header {
+      background: var(--color-lighter);
+      border-bottom: var(--border);
+    }
   }
 
   &__title {
@@ -128,50 +135,6 @@
       color: var(--wp-admin-theme-color);
     }
   }
-
-  // Sorting.
-  &__sort {
-    position: absolute;
-    right: 0;
-    top: 0;
-    display: none;
-
-    .og-item:hover & {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
-  &__up,
-  &__down {
-    display: flex;
-    background: none;
-    border: var(--border);
-    padding: 2px 4px;
-
-    &:focus {
-      outline: none;
-    }
-
-    &:hover {
-      background-color: var(--color-light);
-    }
-  }
-
-  &__up {
-    border-radius: 4px 4px 0 0;
-    border-bottom-width: 0;
-  }
-
-  &__down {
-    border-radius: 0 0 4px 4px;
-    border-top-width: 0;
-  }
-}
-
-&-item--heading &-field--id,
-&-item--divider &-field--id {
-  display: none;
 }
 
 &-attribute {

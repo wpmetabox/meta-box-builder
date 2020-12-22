@@ -62,11 +62,19 @@ const FieldsTab = props => {
 
 	return (
 		<DragDropContext onDragEnd={ onDragEnd }>
-			{ fields.length === 0 && <p className="og-none" dangerouslySetInnerHTML={ { __html: __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) } } /> }
+			{
+				fields.length === 0 &&
+				<p
+					className="og-none"
+					dangerouslySetInnerHTML={ {
+						__html: __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' )
+					} }
+				/>
+			}
 			<Droppable droppableId="fields">
-				{ provided => (
+				{ ( provided, snapshot ) => (
 					<div
-						className="og-fields"
+						className={ `og-fields${ snapshot.isDraggingOver ? ' og-fields--dragging' : '' }` }
 						ref={ provided.innerRef }
 						{ ...provided.droppableProps }
 					>
