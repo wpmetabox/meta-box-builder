@@ -1,17 +1,12 @@
 <?php
 namespace MBB\Api;
 
-use MBB\Parsers\MetaBox;
+use MBB\Parsers\MetaBox as Parser;
+use MBB\Encoders\MetaBox as Encoder;
 use WP_REST_Server;
 use WP_REST_Request;
-use Riimu\Kit\PHPEncoder\PHPEncoder;
 
 class Generator {
-	private $encoded_string;
-	private $text_domain = 'your-text-domain';
-	private $prefix = '';
-	private $function_name = 'your_prefix_register_meta_boxes';
-
 	public function __construct() {
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
@@ -29,37 +24,13 @@ class Generator {
 	}
 
 	public function generate( WP_REST_Request $request ) {
-		$parser = new MetaBox( $request->get_json_params() );
+		$parser = new Parser( $request->get_json_params() );
 		$parser->parse();
 
 		$settings = $parser->get_settings();
-		// $encoder = new Encoders\MetaBox( $settings );
-		// $encoder->encode();
+		$encoder = new Encoder( $settings );
+		$encoder->encode();
 
-		$encoder = new PHPEncoder();
-		$this->encoded_string = $encoder->encode( $settings, [
-			'array.base'  => 4,
-			'array.align' => true,
-		] );
-
-		$this->wrap_function_call();
-
-		return $this->encoded_string;
-	}
-
-	private function wrap_function_call() {
-		$this->encoded_string = sprintf(
-			'<?php
-add_filter( \'rwmb_meta_boxes\', \'%1$s\' );
-function %1$s( $meta_boxes ) {
-    $prefix = \'%3$s\';
-    $meta_boxes[] = %2$s;
-    return $meta_boxes;
-}',
-			$this->function_name,
-			$this->encoded_string,
-			$this->prefix
-		);
-		return $this;
+		return $encoder->get_encoded_string();
 	}
 }
