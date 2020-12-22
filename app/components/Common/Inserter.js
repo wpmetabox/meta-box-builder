@@ -10,7 +10,7 @@ export const Inserter = ( { addField, type } ) => {
 	const [ closeCallback, setCloseCallback ] = useState( () => { } );
 
 	useEffect( () => {
-		request( 'field-types' ).then( data => setFieldTypes( data ) );
+		request( 'field-types' ).then( setFieldTypes );
 	}, [] );
 
 	const search = e => setSearchParam( e.target.value );

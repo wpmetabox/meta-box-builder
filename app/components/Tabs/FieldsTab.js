@@ -1,21 +1,31 @@
 import dotProp from 'dot-prop';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { useFormContext } from 'react-hook-form';
+import { FieldsDataContext } from '../../context/FieldsDataContext';
 import { ucwords, uniqid } from '../../functions';
 import { Inserter } from '../Common/Inserter';
 import Node from './FieldsTab/Node';
 
-const { useState, memo } = wp.element;
+const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = props => {
 	const { getValues } = useFormContext();
 	const [ fields, setFields ] = useState( props.fields );
+
+	// Don't render any field if fields data is not available.
+	const fieldsData = useContext( FieldsDataContext );
+	if ( Object.keys( fieldsData ).length === 0 ) {
+		return null;
+	}
+
 	const addField = type => setFields( prev => {
 		const id = uniqid();
-		return [ ...prev, { type, name: ucwords( type, '_' ), id, _id: id } ];
+		return [ ...prev, { _id: id, id, type, name: ucwords( type, '_' ) } ];
 	} );
+
 	const removeField = id => setFields( prev => prev.filter( field => field._id !== id ) );
+
 	const duplicateField = id => setFields( prev => {
 		// Get existing values from the current field with react-hook-form and dotProp.
 		const newId = uniqid();
