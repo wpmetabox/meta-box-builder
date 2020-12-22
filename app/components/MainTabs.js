@@ -1,10 +1,9 @@
 import dotProp from 'dot-prop';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { actions as ConditionalActions, Context } from '../context/ConditionalList/ConditionalContext';
-import { actions } from '../context/Generator/GeneratorContext';
-import Result from './Result';
+import { actions as ConditionalActions } from '../context/ConditionalList/ConditionalContext';
 import FieldsTab from './Tabs/FieldsTab';
+import Result from './Tabs/Result';
 import SettingsTab from './Tabs/SettingsTab';
 
 const { useEffect, useContext, memo } = wp.element;
@@ -13,21 +12,8 @@ const { __ } = wp.i18n;
 const MainTabs = () => {
 	const methods = useForm();
 
-	const state = useContext( Context );
-
-	const onSubmit = data => {
-		actions.generatePHPCode( data );
-	};
-
 	const onPublish = data => {
 		document.getElementById( 'data_raw' ).value = JSON.stringify( data );
-	};
-
-	const onSelect = ( index ) => {
-		const isGetCodeTab = index === 2;
-		if ( isGetCodeTab ) {
-			document.getElementById( 'submit-form' ).click();
-		}
 	};
 
 	useEffect( () => {
@@ -41,8 +27,8 @@ const MainTabs = () => {
 
 	return (
 		<FormProvider { ...methods }>
-			<form onSubmit={ methods.handleSubmit( onSubmit ) } id='myForm'>
-				<Tabs forceRenderTabPanel={ true } onSelect={ onSelect }>
+			<form>
+				<Tabs forceRenderTabPanel={ true }>
 					<TabList>
 						<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
 						<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
@@ -58,7 +44,6 @@ const MainTabs = () => {
 						<Result />
 					</TabPanel>
 				</Tabs>
-				<button type="submit" style={ { display: 'none' } } id="submit-form" />
 			</form>
 			<input type="hidden" id="data_raw" name="data_raw" />
 
