@@ -1,12 +1,12 @@
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { Context } from '../../../context/FieldsData/FieldsDataContext';
+import { FieldsDataContext } from '../../../context/FieldsDataContext';
 import Content from './Content';
 
 const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldSelected = ( { id, field, parent = '' } ) => {
-	const { fieldsData } = useContext( Context );
+	const fieldsData = useContext( FieldsDataContext );
 	const data = { ...fieldsData[ field.type ] };
 
 	if ( [ 'divider', 'tab' ].includes( field.type ) ) {
