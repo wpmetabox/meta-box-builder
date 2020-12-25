@@ -13,11 +13,14 @@ const { __ } = wp.i18n;
 const Group = ( { id, field, parent = '' } ) => {
 	const { getValues } = useFormContext();
 	const [ subFields, setSubFields ] = useState( Object.values( dotProp.get( field, 'fields', {} ) ) );
+
 	const addSubField = type => setSubFields( prev => {
 		const id = uniqid();
 		return [ ...prev, { type, name: ucwords( type ), id, _id: id } ];
 	} );
+
 	const removeSubField = subId => setSubFields( prev => prev.filter( field => field._id !== subId ) );
+
 	const duplicateSubField = subId => setSubFields( prev => {
 		// Get existing values from the current field with react-hook-form and dotProp.
 		const newId = uniqid();
@@ -31,6 +34,26 @@ const Group = ( { id, field, parent = '' } ) => {
 		const index = prev.findIndex( field => field._id === subId );
 		let newFields = [ ...prev ];
 		newFields.splice( index + 1, 0, newField );
+
+		return newFields;
+	} );
+
+	const moveSubField = ( index, direction ) => setSubFields( prev => {
+		let newFields = [ ...prev ];
+		const field = newFields[ index ];
+		if ( direction === 'up' ) {
+			if ( 0 === index ) {
+				return;
+			}
+			newFields[ index ] = newFields[ index - 1 ];
+			newFields[ index - 1 ] = field;
+		} else {
+			if ( index === prev.length - 1 ) {
+				return;
+			}
+			newFields[ index ] = newFields[ index + 1 ];
+			newFields[ index + 1 ] = field;
+		}
 
 		return newFields;
 	} );
@@ -56,13 +79,15 @@ const Group = ( { id, field, parent = '' } ) => {
 				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 				<div className="og-input">
 					{
-						subFields.map( subField => <Node
+						subFields.map( ( subField, index ) => <Node
 							key={ subField._id }
 							id={ subField._id }
 							field={ subField }
+							index={ index }
 							parent={ `${ parent }[${ id }][fields]` }
 							removeField={ removeSubField }
 							duplicateField={ duplicateSubField }
+							moveField={ moveSubField }
 						/> )
 					}
 					<Inserter addField={ addSubField } />
