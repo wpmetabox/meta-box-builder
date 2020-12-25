@@ -67,10 +67,11 @@ svg {
     > .og-collapsible__header {
       background: var(--color-lighter);
 
-      .dashicons-arrow-down-alt2 {
+      .og-item__action--toggle .dashicon {
         transform: rotate(180deg);
       }
     }
+
     > .og-collapsible__body {
       max-height: 999999px;
       padding-top: 12px;

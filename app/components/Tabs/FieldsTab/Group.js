@@ -43,13 +43,13 @@ const Group = ( { id, field, parent = '' } ) => {
 		const field = newFields[ index ];
 		if ( direction === 'up' ) {
 			if ( 0 === index ) {
-				return;
+				return newFields;
 			}
 			newFields[ index ] = newFields[ index - 1 ];
 			newFields[ index - 1 ] = field;
 		} else {
 			if ( index === prev.length - 1 ) {
-				return;
+				return newFields;
 			}
 			newFields[ index ] = newFields[ index + 1 ];
 			newFields[ index + 1 ] = field;
