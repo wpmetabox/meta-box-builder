@@ -1,5 +1,4 @@
 import dotProp from 'dot-prop';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { useFormContext } from 'react-hook-form';
 import { FieldsDataContext } from '../../context/FieldsDataContext';
 import { ucwords, uniqid } from '../../functions';
@@ -42,26 +41,28 @@ const FieldsTab = props => {
 		return newFields;
 	} );
 
-	const onDragEnd = ( { source, destination } ) => {
-		if ( !destination ) {
-			return;
-		}
-		if ( destination.index === source.index ) {
-			return;
+	const moveField = ( index, direction ) => setFields( prev => {
+		let newFields = [ ...prev ];
+		const field = newFields[ index ];
+		if ( direction === 'up' ) {
+			if ( 0 === index ) {
+				return;
+			}
+			newFields[ index ] = newFields[ index - 1 ];
+			newFields[ index - 1 ] = field;
+		} else {
+			if ( index === prev.length - 1 ) {
+				return;
+			}
+			newFields[ index ] = newFields[ index + 1 ];
+			newFields[ index + 1 ] = field;
 		}
 
-		setFields( prev => {
-			let newFields = [ ...prev ];
-			const sourceField = { ...prev[ source.index ] };
-			newFields.splice( source.index, 1 );
-			newFields.splice( destination.index, 0, sourceField );
-
-			return newFields;
-		} );
-	};
+		return newFields;
+	} );
 
 	return (
-		<DragDropContext onDragEnd={ onDragEnd }>
+		<>
 			{
 				fields.length === 0 &&
 				<p
@@ -71,29 +72,21 @@ const FieldsTab = props => {
 					} }
 				/>
 			}
-			<Droppable droppableId="fields">
-				{ ( provided, snapshot ) => (
-					<div
-						className={ `og-fields${ snapshot.isDraggingOver ? ' og-fields--dragging' : '' }` }
-						ref={ provided.innerRef }
-						{ ...provided.droppableProps }
-					>
-						{
-							fields.map( ( field, index ) => <Node
-								key={ field._id }
-								id={ field._id }
-								field={ field }
-								index={ index }
-								removeField={ removeField }
-								duplicateField={ duplicateField }
-							/> )
-						}
-						{ provided.placeholder }
-					</div>
-				) }
-			</Droppable>
+			<div className="og-fields">
+				{
+					fields.map( ( field, index ) => <Node
+						key={ field._id }
+						id={ field._id }
+						field={ field }
+						index={ index }
+						removeField={ removeField }
+						duplicateField={ duplicateField }
+						moveField={ moveField }
+					/> )
+				}
+			</div>
 			<Inserter addField={ addField } />
-		</DragDropContext>
+		</>
 	);
 };
 
