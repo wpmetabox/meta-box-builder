@@ -44,9 +44,9 @@ const Node = ( { id, field, parent = '', index, removeField, duplicateField, mov
 				<span className="og-item__type">{ field.type }</span>
 				<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Dashicon icon="trash" /></span>
 				<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Dashicon icon="admin-page" /></span>
-				<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle settings', 'meta-box-builder' ) }><Dashicon icon="arrow-down-alt2" /></span>
-				<button type="button" className="og-item__up" title="Move up" onClick={ moveUp }>Up</button>
-				<button type="button" className="og-item__down" title="Move down" onClick={ moveDown }>Down</button>
+				<span className="og-item__action og-item__action--up" title={ __( 'Move up', 'meta-box-builder' ) } onClick={ moveUp }><Dashicon icon="arrow-up-alt2" /></span>
+				<span className="og-item__action og-item__action--down" title={ __( 'Move down', 'meta-box-builder' ) } onClick={ moveDown }><Dashicon icon="arrow-down-alt2" /></span>
+				<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle settings', 'meta-box-builder' ) }><Dashicon icon="arrow-down" /></span>
 			</span>
 		</div>
 		{

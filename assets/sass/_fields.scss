@@ -64,7 +64,7 @@
 
   &__header {
     padding: 12px;
-    cursor: move;
+    cursor: pointer;
   }
 
   &--dragging {
@@ -92,7 +92,7 @@
 
   &__action {
     cursor: pointer;
-    margin-left: 16px;
+    margin-left: 8px;
     color: var(--color-gray);
     display: flex;
 
@@ -109,6 +109,11 @@
 
     &--remove:hover {
       color: var(--color-red);
+    }
+    &--toggle .dashicon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
     }
   }
 
