@@ -4,13 +4,13 @@ const { createContext, useState, useEffect } = wp.element;
 export const FieldsDataContext = createContext( {} );
 
 export const FieldsDataProvider = ( { children } ) => {
-    const [ fieldsData, setFieldsData ] = useState( {} );
+	const [ fieldsData, setFieldsData ] = useState( {} );
 
-    useEffect( () => {
-        request( 'fields' ).then( setFieldsData );
-    }, [] );
+	useEffect( () => {
+		request( 'fields' ).then( setFieldsData );
+	}, [] );
 
-    return <FieldsDataContext.Provider value={ fieldsData }>
-        { children }
-    </FieldsDataContext.Provider>;
+	return <FieldsDataContext.Provider value={ fieldsData }>
+		{ children }
+	</FieldsDataContext.Provider>;
 };

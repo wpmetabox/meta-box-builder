@@ -1,7 +1,6 @@
 import dotProp from 'dot-prop';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { actions as ConditionalActions } from '../context/ConditionalList/ConditionalContext';
 import { Data } from './Data';
 import FieldsTab from './Tabs/FieldsTab';
 import Result from './Tabs/Result';
@@ -12,12 +11,6 @@ const { __ } = wp.i18n;
 
 const MainTabs = () => {
 	const methods = useForm();
-
-	useEffect( () => {
-		if ( MbbApp.settings && MbbApp.settings.conditionalList ) {
-			ConditionalActions.updateConditionalList( 'initial', JSON.parse( MbbApp.settings.conditionalList ) );
-		}
-	}, [] );
 
 	return (
 		<FormProvider { ...methods }>

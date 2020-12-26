@@ -1,6 +1,7 @@
 import dotProp from 'dot-prop';
 import { useFormContext } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { ConditionalLogicContext } from '../../../context/ConditionalLogicContext';
 import { FieldsDataContext } from '../../../context/FieldsDataContext';
 import { ucwords, uniqid } from '../../../functions';
 import { Inserter } from '../../Common/Inserter';
@@ -12,14 +13,20 @@ const { __ } = wp.i18n;
 
 const Group = ( { id, field, parent = '' } ) => {
 	const { getValues } = useFormContext();
+	const { updateConditionalLogic, removeConditionalLogic } = useContext( ConditionalLogicContext );
 	const [ subFields, setSubFields ] = useState( Object.values( dotProp.get( field, 'fields', {} ) ) );
 
 	const addSubField = type => setSubFields( prev => {
 		const id = uniqid();
-		return [ ...prev, { type, name: ucwords( type ), id, _id: id } ];
+		const newField = { _id: id, id, type, name: ucwords( type, '_' ) };
+		updateConditionalLogic( id, newField );
+		return [ ...prev, newField ];
 	} );
 
-	const removeSubField = subId => setSubFields( prev => prev.filter( field => field._id !== subId ) );
+	const removeSubField = subId => setSubFields( prev => {
+		removeConditionalLogic( id );
+		return prev.filter( field => field._id !== subId );
+	} );
 
 	const duplicateSubField = subId => setSubFields( prev => {
 		// Get existing values from the current field with react-hook-form and dotProp.
@@ -30,6 +37,8 @@ const Group = ( { id, field, parent = '' } ) => {
 		newField.id = newId;
 		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
+
+		updateConditionalLogic( newId, newField );
 
 		const index = prev.findIndex( field => field._id === subId );
 		let newFields = [ ...prev ];

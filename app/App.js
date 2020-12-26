@@ -1,14 +1,14 @@
 import MainTabs from './components/MainTabs';
-import { Provider as UpdateConditionalProvider } from './context/ConditionalList/ConditionalContext';
+import { ConditionalLogicProvider } from './context/ConditionalLogicContext';
 import { FieldsDataProvider } from './context/FieldsDataContext';
 
 const { render } = wp.element;
 
 const App = () => (
 	<FieldsDataProvider>
-		<UpdateConditionalProvider>
+		<ConditionalLogicProvider>
 			<MainTabs />
-		</UpdateConditionalProvider>
+		</ConditionalLogicProvider>
 	</FieldsDataProvider>
 );
 

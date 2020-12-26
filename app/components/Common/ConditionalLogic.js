@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
 import { useFormContext } from 'react-hook-form';
-import { Context } from '../../context/ConditionalList/ConditionalContext';
+import { ConditionalLogicContext } from '../../context/ConditionalLogicContext';
 import { uniqid } from '../../functions';
 import DivRow from '../Common/DivRow';
 
@@ -57,8 +57,7 @@ const Intro = ( { name, id, defaultValue } ) => {
 
 const Rule = ( { rule, baseName, removeRule, id } ) => {
 	const { register } = useFormContext();
-	const state = useContext( Context );
-	const items = Object.values( state );
+	const { conditionalLogic } = useContext( ConditionalLogicContext );
 
 	return (
 		<div className="og-include-exclude__rule og-attribute">
@@ -68,10 +67,10 @@ const Rule = ( { rule, baseName, removeRule, id } ) => {
 				id={ `${ id }-name` }
 				className="og-include-exclude__name"
 				ref={ register }
-				defaultValue={ rule.name || items[ 0 ].id }
+				defaultValue={ rule.name || Object.values( conditionalLogic )[ 0 ].id }
 			>
 				{
-					items.map( item => <option value={ item.id } key={ item.id }>{ item.label ? `${ item.label } (${ item.id})` : item.id }</option> )
+					Object.values( conditionalLogic ).map( field => <option value={ field.id } key={ field.id }>{ field.name ? `${ field.name } (${ field.id })` : field.id }</option> )
 				}
 			</select>
 			<select

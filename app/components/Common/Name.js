@@ -1,21 +1,22 @@
 import { useFormContext } from 'react-hook-form';
 import slugify from 'slugify';
-import { actions as ConditionalActions } from '../../context/ConditionalList/ConditionalContext';
+import { ConditionalLogicContext } from '../../context/ConditionalLogicContext';
 import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
 
 const { __ } = wp.i18n;
-const { useEffect, useState } = wp.element;
+const { useContext, useEffect, useState } = wp.element;
 
 const Name = ( { name, componentId, defaultValue, ...rest } ) => {
 	const { register } = useFormContext();
+	const { updateConditionalLogic } = useContext( ConditionalLogicContext );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 
 	useEffect( () => {
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
 		if ( idElement && ( debounceValue || defaultValue ) ) {
-			ConditionalActions.updateConditionalList( 'add', { [ rest.fieldId ]: { label: debounceValue || defaultValue, id: idElement.value } } );
+			updateConditionalLogic( rest.fieldId, { id: idElement.value, name: debounceValue || defaultValue } );
 		}
 	}, [ debounceValue ] );
 

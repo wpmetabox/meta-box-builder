@@ -1,19 +1,20 @@
 import { useFormContext } from 'react-hook-form';
-import { actions as ConditionalActions } from '../../context/ConditionalList/ConditionalContext';
+import { ConditionalLogicContext } from '../../context/ConditionalLogicContext';
 import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
 
-const { useState, useEffect } = wp.element;
+const { useContext, useState, useEffect } = wp.element;
 
 const Input = ( { name, componentName, componentId, placeholder, defaultValue, type = 'text', ...rest } ) => {
 	const { register } = useFormContext();
+	const { updateConditionalLogic } = useContext( ConditionalLogicContext );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 
 	useEffect( () => {
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
 		if ( idElement && debounceValue ) {
-			ConditionalActions.updateConditionalList( 'add', { [ rest.fieldId ]: { id: debounceValue } } );
+			updateConditionalLogic( rest.fieldId, { id: debounceValue } );
 		}
 	}, [ debounceValue ] );
 
