@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
 import { useFormContext } from 'react-hook-form';
-import { ConditionalLogicContext } from '../../context/ConditionalLogicContext';
+import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
 import { uniqid } from '../../functions';
 import DivRow from '../Common/DivRow';
 

@@ -1,8 +1,8 @@
 import dotProp from 'dot-prop';
 import { useFormContext } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { ConditionalLogicContext } from '../../../context/ConditionalLogicContext';
-import { FieldsDataContext } from '../../../context/FieldsDataContext';
+import { ConditionalLogicContext } from '../../../contexts/ConditionalLogicContext';
+import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 import { ucwords, uniqid } from '../../../functions';
 import { Inserter } from '../../Common/Inserter';
 import Content from './Content';

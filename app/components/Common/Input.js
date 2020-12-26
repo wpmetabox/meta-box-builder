@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { ConditionalLogicContext } from '../../context/ConditionalLogicContext';
+import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
 import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
 

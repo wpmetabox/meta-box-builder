@@ -1,6 +1,6 @@
 import MainTabs from './components/MainTabs';
-import { ConditionalLogicProvider } from './context/ConditionalLogicContext';
-import { FieldsDataProvider } from './context/FieldsDataContext';
+import { ConditionalLogicProvider } from './contexts/ConditionalLogicContext';
+import { FieldsDataProvider } from './contexts/FieldsDataContext';
 
 const { render } = wp.element;
 

@@ -1,5 +1,5 @@
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { FieldsDataContext } from '../../../context/FieldsDataContext';
+import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 import Content from './Content';
 
 const { useContext, useState, memo } = wp.element;
