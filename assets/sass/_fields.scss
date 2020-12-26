@@ -42,7 +42,7 @@
 }
 
 &-label {
-  width: 25%;
+  flex: 0 0 180px;
 
   a {
     text-decoration: none;
@@ -146,6 +146,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   grid-gap: 6px;
   margin-bottom: 12px;
 

@@ -64,18 +64,16 @@ const Rule = ( { rule, baseName, removeRule, id } ) => {
 			<input type="hidden" name={ `${ baseName }[id]` } ref={ register } defaultValue={ rule.id } />
 			<select
 				name={ `${ baseName }[name]` }
-				id={ `${ id }-name` }
 				className="og-include-exclude__name"
 				ref={ register }
 				defaultValue={ rule.name || Object.values( conditionalLogic )[ 0 ].id }
 			>
 				{
-					Object.values( conditionalLogic ).map( field => <option value={ field.id } key={ field.id }>{ field.name ? `${ field.name } (${ field.id })` : field.id }</option> )
+					Object.values( conditionalLogic ).map( field => <option value={ field.id } key={ field.id }>{ field.name ? field.name : field.id }</option> )
 				}
 			</select>
 			<select
 				name={ `${ baseName }[operator]` }
-				id={ `${ id }-operator` }
 				className="og-include-exclude__operator"
 				ref={ register }
 				defaultValue={ rule.operator }
@@ -99,7 +97,7 @@ const Rule = ( { rule, baseName, removeRule, id } ) => {
 				<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
 				<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
 			</select>
-			<input defaultValue={ rule.value } id={ `${ id }-value` } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } ref={ register } name={ `${ baseName }[value]` } />
+			<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } ref={ register } name={ `${ baseName }[value]` } />
 			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
 		</div>
 	);
