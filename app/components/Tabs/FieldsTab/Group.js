@@ -1,5 +1,4 @@
 import dotProp from 'dot-prop';
-import { useFormContext } from 'react-hook-form';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { ConditionalLogicContext } from '../../../contexts/ConditionalLogicContext';
 import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
@@ -12,7 +11,6 @@ const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const Group = ( { id, field, parent = '' } ) => {
-	const { getValues } = useFormContext();
 	const { updateConditionalLogic, removeConditionalLogic } = useContext( ConditionalLogicContext );
 	const [ subFields, setSubFields ] = useState( Object.values( dotProp.get( field, 'fields', {} ) ) );
 

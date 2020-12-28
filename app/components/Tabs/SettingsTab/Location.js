@@ -1,15 +1,13 @@
 import dotProp from 'dot-prop';
-import { useFormContext } from 'react-hook-form';
 import Checkbox from '../../Common/Checkbox';
 import DivRow from '../../Common/DivRow';
 import ReactSelect from '../../Common/ReactSelect';
 const { __ } = wp.i18n;
 
-export const Location = ( { objectType, updateObjectType, postTypes, setPostTypes, defaultValues } ) => {
-	const { register } = useFormContext();
-	return <>
+export const Location = ( { objectType, updateObjectType, postTypes, setPostTypes, defaultValues } ) => (
+	<>
 		<DivRow label={ __( 'Location', 'meta-box-builder' ) } className="og-location" tooltip={ __( 'Select where to display the field group', 'meta-box-builder' ) }>
-			<select name="object_type" ref={ register } defaultValue={ objectType } onChange={ updateObjectType }>
+			<select name="object_type" defaultValue={ objectType } onChange={ updateObjectType }>
 				<option value="post">{ __( 'Post type', 'meta-box-builder' ) }</option>
 				{ MbbApp.extensions.termMeta && <option value="term">{ __( 'Taxonomy', 'meta-box-builder' ) }</option> }
 				{ MbbApp.extensions.userMeta && <option value="user">{ __( 'User', 'meta-box-builder' ) }</option> }
@@ -50,5 +48,5 @@ export const Location = ( { objectType, updateObjectType, postTypes, setPostType
 			'post' === objectType && postTypes.includes( 'attachment' ) &&
 			<Checkbox label={ __( 'Show in media modal', 'meta-box-builder' ) } name="media_modal" defaultValue={ defaultValues.media_modal } />
 		}
-	</>;
-};
+	</>
+);

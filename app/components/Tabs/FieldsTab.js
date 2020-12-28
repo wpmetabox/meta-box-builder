@@ -1,5 +1,4 @@
 import dotProp from 'dot-prop';
-import { useFormContext } from 'react-hook-form';
 import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
 import { FieldsDataContext } from '../../contexts/FieldsDataContext';
 import { ucwords, uniqid } from '../../functions';
@@ -10,7 +9,6 @@ const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = props => {
-	const { getValues } = useFormContext();
 	const { updateConditionalLogic, removeConditionalLogic } = useContext( ConditionalLogicContext );
 	const [ fields, setFields ] = useState( props.fields );
 

@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { uniqid } from '../../functions';
 import DivRow from './DivRow';
 
@@ -18,7 +17,7 @@ const KeyValue = ( {
 } ) => {
 	const [ items, setItems ] = useState( Object.values( defaultValue || {} ) );
 
-	const addItem = () => setItems( prev => [...prev, { key: '', value: '', id: uniqid() } ] );
+	const addItem = () => setItems( prev => [ ...prev, { key: '', value: '', id: uniqid() } ] );
 	const removeItem = id => setItems( prev => prev.filter( item => item.id !== id ) );
 
 	if ( link ) {
@@ -43,17 +42,13 @@ const KeyValue = ( {
 	);
 };
 
-const Item = ( { name, item, removeItem, keyPlaceholder, valuePlaceholder } ) => {
-	const { register } = useFormContext();
-
-	return (
-		<div className="og-attribute">
-			<input type="hidden" ref={ register } name={ `${ name }[id]` } defaultValue={ item.id } />
-			<input type="text" placeholder={ keyPlaceholder } ref={ register } name={ `${ name }[key]` } defaultValue={ item.key } />
-			<input type="text" placeholder={ valuePlaceholder } ref={ register } name={ `${ name }[value]` } defaultValue={ item.value } />
-			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.id ) }><Dashicon icon="dismiss" /></button>
-		</div>
-	);
-};
+const Item = ( { name, item, removeItem, keyPlaceholder, valuePlaceholder } ) => (
+	<div className="og-attribute">
+		<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
+		<input type="text" placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } />
+		<input type="text" placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } />
+		<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.id ) }><Dashicon icon="dismiss" /></button>
+	</div>
+);
 
 export default KeyValue;

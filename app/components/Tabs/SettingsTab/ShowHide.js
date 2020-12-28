@@ -1,5 +1,4 @@
 import dotProp from 'dot-prop';
-import { useFormContext } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
 import { request, uniqid } from '../../../functions';
 import DivRow from '../../Common/DivRow';
@@ -11,8 +10,8 @@ const { __ } = wp.i18n;
 export const ShowHide = ( { defaultValues } ) => {
 	const [ rules, setRules ] = useState( dotProp.get( defaultValues, 'rules', [] ) );
 
-	const addRule = () => setRules( prevRules => prevRules.concat( { name: 'template', value: '', id: uniqid() } ) );
-	const removeRule = id => setRules( prevRules => prevRules.filter( rule => rule.id !== id ) );
+	const addRule = () => setRules( prev => [...prev, { name: 'template', value: '', id: uniqid() } ] );
+	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
 	return (
 		<DivRow
@@ -34,27 +33,22 @@ export const ShowHide = ( { defaultValues } ) => {
 	);
 };
 
-const Intro = ( { defaultValues } ) => {
-	const { register } = useFormContext();
-
-	return (
-		<div className="og-include-exclude__intro">
-			<select name="show_hide[type]" ref={ register } defaultValue={ dotProp.get( defaultValues, 'type', 'show' ) }>
-				<option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
-				<option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
-			</select>
-			{ __( 'when', 'meta-box-builder' ) }
-			<select name="show_hide[relation]" ref={ register } defaultValue={ dotProp.get( defaultValues, 'relation', 'OR' ) }>
-				<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
-				<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
-			</select>
-			{ __( 'conditions match', 'meta-box-builder' ) }
-		</div>
-	);
-};
+const Intro = ( { defaultValues } ) => (
+	<div className="og-include-exclude__intro">
+		<select name="show_hide[type]" defaultValue={ dotProp.get( defaultValues, 'type', 'show' ) }>
+			<option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
+			<option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
+		</select>
+		{ __( 'when', 'meta-box-builder' ) }
+		<select name="show_hide[relation]" defaultValue={ dotProp.get( defaultValues, 'relation', 'OR' ) }>
+			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
+			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
+		</select>
+		{ __( 'conditions match', 'meta-box-builder' ) }
+	</div>
+);
 
 const Rule = ( { rule, baseName, removeRule } ) => {
-	const { register } = useFormContext();
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => {
 		setName( e.target.value );
@@ -69,8 +63,8 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 
 	return (
 		<div className={ `og-include-exclude__rule og-attribute${ name === 'input_value' ? ' og-show-hide__inputs' : '' }` }>
-			<input type="hidden" name={ `${ baseName }[id]` } ref={ register } defaultValue={ rule.id } />
-			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" ref={ register } defaultValue={ name } onChange={ onChangeName }>
+			<input type="hidden" name={ `${ baseName }[id]` } defaultValue={ rule.id } />
+			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" defaultValue={ name } onChange={ onChangeName }>
 				<option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option>
 				<option value="format">{ __( 'Post format', 'meta-box-builder' ) }</option>
 				{

@@ -1,5 +1,4 @@
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import { useFormContext } from 'react-hook-form';
 import Input from '../Common/Input';
 const { useContext, useState } = wp.element;
 const { __ } = wp.i18n;
@@ -9,13 +8,17 @@ const { withState } = wp.compose;
 const ResultCode = () => {
 	const [ data, setData ] = useState( '' );
 	const [ isGenerating, setIsGenerating ] = useState( false );
-	const { getValues } = useFormContext();
 
 	const generate = () => {
 		setData( '' );
 		setIsGenerating( true );
 
-		const formData = new FormData( document.querySelector( '#mbb-form' ) );
+		/**
+		 * Get all form fields, including WordPress fields.
+		 * Remove WordPress nonce to have correct permission.
+		 */
+		const formData = new FormData( document.querySelector( '#post' ) );
+		formData.delete( '_wpnonce' );
 
 		fetch( `${ MbbApp.rest }/mbb/generate`, {
 			method: 'POST',

@@ -1,6 +1,5 @@
 import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import { Controller } from 'react-hook-form';
 import Checkbox from '../../Common/Checkbox';
 import CheckboxList from '../../Common/CheckboxList';
 import DivRow from '../../Common/DivRow';
@@ -162,19 +161,10 @@ export const Block = ( { defaultValues } ) => {
 		{
 			renderWith === 'code' &&
 			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
-				<Controller
+				<CodeMirror
 					name="render_code"
-					defaultValue={ dotProp.get( defaultValues, 'render_code' ) }
-					render={ ( { onChange } ) => (
-						<CodeMirror
-							name="render_code"
-							options={ { mode: 'php' } }
-							value={ dotProp.get( defaultValues, 'render_code' ) }
-							onChange={ ( editor, data, value ) => {
-								onChange( value );
-							} }
-						/>
-					) }
+					options={ { mode: 'php' } }
+					value={ dotProp.get( defaultValues, 'render_code' ) }
 				/>
 				<table className="og-block-description">
 					<tbody>

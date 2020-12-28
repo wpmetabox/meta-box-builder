@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import slugify from 'slugify';
 import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
 import useDebounce from '../../hooks/useDebounce';
@@ -8,7 +7,6 @@ const { __ } = wp.i18n;
 const { useContext, useEffect, useState } = wp.element;
 
 const Name = ( { name, componentId, defaultValue, ...rest } ) => {
-	const { register } = useFormContext();
 	const { updateConditionalLogic } = useContext( ConditionalLogicContext );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
@@ -34,7 +32,7 @@ const Name = ( { name, componentId, defaultValue, ...rest } ) => {
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<input autoFocus type="text" id={ componentId } defaultValue={ defaultValue } name={ name } ref={ register } onChange={ onChange } />
+			<input autoFocus type="text" id={ componentId } defaultValue={ defaultValue } name={ name } onChange={ onChange } />
 		</DivRow>
 	);
 };

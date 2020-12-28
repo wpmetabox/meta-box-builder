@@ -1,18 +1,17 @@
 import dotProp from 'dot-prop';
-import { useFormContext } from 'react-hook-form';
 import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
 import { uniqid } from '../../functions';
 import DivRow from '../Common/DivRow';
 
-const { useState, useContext, useEffect } = wp.element;
+const { useState, useContext } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
 const ConditionalLogic = ( { defaultValue, name, componentId } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'when', {} ) ) );
 
-	const addRule = () => setRules( prevRules => prevRules.concat( { name: '', operator: '=', value: '', id: uniqid() } ) );
-	const removeRule = id => setRules( prevRules => prevRules.filter( rule => rule.id !== id ) );
+	const addRule = () => setRules( prev => [ ...prev, { name: '', operator: '=', value: '', id: uniqid() } ] );
+	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
 	return (
 		<DivRow
@@ -26,7 +25,7 @@ const ConditionalLogic = ( { defaultValue, name, componentId } ) => {
 					key={ rule.id }
 					id={ `${ componentId }-rules-${ rule.id }` }
 					rule={ rule }
-					baseName={ `${ name }[when][${ rule.id }]` }
+					name={ `${ name }[when][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
 			}
@@ -36,34 +35,29 @@ const ConditionalLogic = ( { defaultValue, name, componentId } ) => {
 	);
 };
 
-const Intro = ( { name, id, defaultValue } ) => {
-	const { register } = useFormContext();
+const Intro = ( { name, id, defaultValue } ) => (
+	<div className="og-include-exclude__intro">
+		<select name={ `${ name }[type]` } id={ `${ id }-type` } defaultValue={ dotProp.get( defaultValue, 'type', 'visible' ) }>
+			<option value="visible">{ __( 'Visible', 'meta-box-builder' ) }</option>
+			<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
+		</select>
+		{ __( 'when', 'meta-box-builder' ) }
+		<select name={ `${ name }[relation]` } id={ `${ id }-relation` } defaultValue={ dotProp.get( defaultValue, 'relation', 'or' ) }>
+			<option value="or">{ __( 'any', 'meta-box-builder' ) }</option>
+			<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
+		</select>
+		{ __( 'conditions match', 'meta-box-builder' ) }
+	</div>
+);
 
-	return (
-		<div className="og-include-exclude__intro">
-			<select name={ `${ name }[type]` } id={ `${ id }-type` } ref={ register } defaultValue={ dotProp.get( defaultValue, 'type', 'visible' ) }>
-				<option value="visible">{ __( 'Visible', 'meta-box-builder' ) }</option>
-				<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
-			</select>
-			{ __( 'when', 'meta-box-builder' ) }
-			<select name={ `${ name }[relation]` } id={ `${ id }-relation` } ref={ register } defaultValue={ dotProp.get( defaultValue, 'relation', 'or' ) }>
-				<option value="or">{ __( 'any', 'meta-box-builder' ) }</option>
-				<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
-			</select>
-			{ __( 'conditions match', 'meta-box-builder' ) }
-		</div>
-	);
-};
-
-const Rule = ( { rule, baseName, removeRule, id } ) => {
-	const { register } = useFormContext();
+const Rule = ( { rule, name, removeRule, id } ) => {
 	const { conditionalLogic } = useContext( ConditionalLogicContext );
 
 	return (
 		<div className="og-include-exclude__rule og-attribute">
-			<input type="hidden" name={ `${ baseName }[id]` } ref={ register } defaultValue={ rule.id } />
+			<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
 			<select
-				name={ `${ baseName }[name]` }
+				name={ `${ name }[name]` }
 				className="og-include-exclude__name"
 				ref={ register }
 				defaultValue={ rule.name || Object.values( conditionalLogic )[ 0 ].id }
@@ -73,7 +67,7 @@ const Rule = ( { rule, baseName, removeRule, id } ) => {
 				}
 			</select>
 			<select
-				name={ `${ baseName }[operator]` }
+				name={ `${ name }[operator]` }
 				className="og-include-exclude__operator"
 				ref={ register }
 				defaultValue={ rule.operator }
@@ -97,7 +91,7 @@ const Rule = ( { rule, baseName, removeRule, id } ) => {
 				<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
 				<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
 			</select>
-			<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } ref={ register } name={ `${ baseName }[value]` } />
+			<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ name }[value]` } />
 			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
 		</div>
 	);

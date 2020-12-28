@@ -1,4 +1,3 @@
-import { useFormContext } from 'react-hook-form';
 import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
 import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
@@ -6,7 +5,6 @@ import DivRow from './DivRow';
 const { useContext, useState, useEffect } = wp.element;
 
 const Input = ( { name, componentName, componentId, placeholder, defaultValue, type = 'text', ...rest } ) => {
-	const { register } = useFormContext();
 	const { updateConditionalLogic } = useContext( ConditionalLogicContext );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
@@ -19,7 +17,7 @@ const Input = ( { name, componentName, componentId, placeholder, defaultValue, t
 	}, [ debounceValue ] );
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
-		<input onChange={ e => componentName === 'id' && setValue( e.target.value ) } type={ type } id={ componentId } name={ name } ref={ register } defaultValue={ defaultValue } placeholder={ placeholder } />
+		<input onChange={ e => componentName === 'id' && setValue( e.target.value ) } type={ type } id={ componentId } name={ name } defaultValue={ defaultValue } placeholder={ placeholder } />
 	</DivRow>;
 };
 

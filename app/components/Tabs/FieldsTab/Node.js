@@ -1,5 +1,4 @@
 import dotProp from 'dot-prop';
-import { useFormContext } from 'react-hook-form';
 import FieldSelected from './FieldSelected';
 import Group from './Group';
 const { useState, memo } = wp.element;
@@ -9,7 +8,6 @@ const { __ } = wp.i18n;
 const Node = ( { id, field, parent = '', index, removeField, duplicateField, moveField } ) => {
 	const [ expanded, setExpanded ] = useState( dotProp.get( field, 'expanded', true ) );
 	const toggleSettings = () => setExpanded( prev => !prev );
-	const { register } = useFormContext();
 
 	const remove = e => {
 		e.stopPropagation();
@@ -35,9 +33,9 @@ const Node = ( { id, field, parent = '', index, removeField, duplicateField, mov
 		className={ `og-item og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }
 		title={ __( 'Click to reveal field settings.', 'meta-box-builder' ) }
 	>
-		<input ref={ register } type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
-		<input ref={ register } type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
-		<input ref={ register } type="checkbox" readOnly style={ { display: 'none' } } name={ `fields${ parent }[${ id }][expanded]` } checked={ expanded } />
+		<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
+		<input type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
+		<input type="checkbox" readOnly style={ { display: 'none' } } name={ `fields${ parent }[${ id }][expanded]` } checked={ expanded } />
 		<div className="og-item__header og-collapsible__header" onClick={ toggleSettings }>
 			<span className="og-item__title" id={ `og-item__title__${ id }` }>{ field.name || __( '(No label)', 'meta-box-builder' ) }</span>
 			<span className="og-item__actions">
