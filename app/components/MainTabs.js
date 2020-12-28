@@ -14,7 +14,7 @@ const MainTabs = () => {
 
 	return (
 		<FormProvider { ...methods }>
-			<form>
+			<form id="mbb-form">
 				<Tabs forceRenderTabPanel={ true }>
 					<TabList>
 						<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>

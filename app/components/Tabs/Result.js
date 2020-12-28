@@ -1,6 +1,5 @@
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { useFormContext } from 'react-hook-form';
-import { request } from '../../functions';
 import Input from '../Common/Input';
 const { useContext, useState } = wp.element;
 const { __ } = wp.i18n;
@@ -16,7 +15,13 @@ const ResultCode = () => {
 		setData( '' );
 		setIsGenerating( true );
 
-		request( 'generate', getValues(), 'POST', false ).then( response => {
+		const formData = new FormData( document.querySelector( '#mbb-form' ) );
+
+		fetch( `${ MbbApp.rest }/mbb/generate`, {
+			method: 'POST',
+			body: formData,
+			headers: { 'X-WP-Nonce': MbbApp.nonce }
+		} ).then( response => response.json() ).then( response => {
 			setData( response );
 			setIsGenerating( false );
 		} );

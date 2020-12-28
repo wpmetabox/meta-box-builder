@@ -24,7 +24,7 @@ class Generator {
 	}
 
 	public function generate( WP_REST_Request $request ) {
-		$parser = new Parser( $request->get_json_params() );
+		$parser = new Parser( $request->get_params() );
 		$parser->parse();
 
 		$settings = $parser->get_settings();
