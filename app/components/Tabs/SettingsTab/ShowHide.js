@@ -8,7 +8,7 @@ const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
 export const ShowHide = ( { defaultValues } ) => {
-	const [ rules, setRules ] = useState( dotProp.get( defaultValues, 'rules', [] ) );
+	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValues, 'rules', {} ) ) );
 
 	const addRule = () => setRules( prev => [...prev, { name: 'template', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
@@ -24,7 +24,7 @@ export const ShowHide = ( { defaultValues } ) => {
 				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					baseName={ `show_hide[rules][${ rule.id }]` }
+					baseName={ `settings[show_hide][rules][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
 			}
@@ -35,12 +35,12 @@ export const ShowHide = ( { defaultValues } ) => {
 
 const Intro = ( { defaultValues } ) => (
 	<div className="og-include-exclude__intro">
-		<select name="show_hide[type]" defaultValue={ dotProp.get( defaultValues, 'type', 'show' ) }>
+		<select name="settings[show_hide][type]" defaultValue={ dotProp.get( defaultValues, 'type', 'show' ) }>
 			<option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<select name="show_hide[relation]" defaultValue={ dotProp.get( defaultValues, 'relation', 'OR' ) }>
+		<select name="settings[show_hide][relation]" defaultValue={ dotProp.get( defaultValues, 'relation', 'OR' ) }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
@@ -50,15 +50,7 @@ const Intro = ( { defaultValues } ) => (
 
 const Rule = ( { rule, baseName, removeRule } ) => {
 	const [ name, setName ] = useState( rule.name );
-	const onChangeName = e => {
-		setName( e.target.value );
-
-		// Set default value for "inputs" as array.
-		if ( e.target.value === 'input_value' ) {
-			rule.value = [];
-		}
-	};
-
+	const onChangeName = e => setName( e.target.value );
 	const loadOptions = s => request( 'show-hide', { name, s } );
 
 	return (
@@ -99,6 +91,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 				<KeyValue
 					name={ `${ baseName }[value]` }
 					keyPlaceholder={ __( 'CSS selector', 'meta-box-builder' ) }
+					defaultValue={ name === rule.name ? rule.value : {} }
 				/>
 			}
 			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>

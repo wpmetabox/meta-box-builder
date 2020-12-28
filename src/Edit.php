@@ -23,17 +23,11 @@ class Edit {
 		wp_enqueue_code_editor( ['type' => 'application/x-httpd-php'] );
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['wp-element', 'wp-components', 'clipboard', 'wp-color-picker'], MBB_VER, true );
 
-		$saved_data = get_post_meta( get_the_ID(), 'data', true );
-		$saved_data = $saved_data ? json_decode( $saved_data, true ) : [];
-
-		$data_raw = get_post_meta( get_the_ID(), 'data_raw', true );
-		$data_raw = $data_raw ? json_decode( $data_raw, true ) : [];
-
 		$data = [
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
-			'settings'      => $saved_data,
-			'data_raw'      => $data_raw,
+			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
+			'fields'        => get_post_meta( get_the_ID(), 'fields', true ),
 			'postTypes'     => Helpers\Data::get_post_types(),
 			'taxonomies'    => Helpers\Data::get_taxonomies(),
 			'settingsPages' => Helpers\Data::get_setting_pages(),
@@ -69,11 +63,8 @@ class Edit {
 
 		// Save JSON data for JavaScript.
 		$request = rwmb_request();
-		$data = $request->post( 'data' );
-		$raw = $request->post( 'raw' );
-		update_post_meta( $post_id, 'data', $data );
-		update_post_meta( $post_id, 'raw', $raw );
-		update_post_meta( $post_id, 'data_raw', $request->post( 'data_raw' ) );
+		update_post_meta( $post_id, 'settings', $request->post( 'settings' ) );
+		update_post_meta( $post_id, 'fields', $request->post( 'fields' ) );
 	}
 
 	private function is_screen() {
