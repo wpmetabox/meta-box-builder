@@ -17,19 +17,19 @@ export const Post = ( { postTypes, defaultValues } ) => {
 
 	return <>
 		<Select
-			name="position"
+			name="settings[position]"
 			label={ __( 'Position', 'meta-box-builder' ) }
 			options={ contextOptions }
 			defaultValue={ dotProp.get( defaultValues, 'position', 'normal' ) }
 		/>
 		<Select
-			name="priority"
+			name="settings[priority]"
 			label={ __( 'Priority', 'meta-box-builder' ) }
 			options={ { high: __( 'High', 'meta-box-builder' ), low: __( 'Low', 'meta-box-builder' ) } }
 			defaultValue={ dotProp.get( defaultValues, 'priority', 'high' ) }
 		/>
 		<Select
-			name="style"
+			name="settings[style]"
 			label={ __( 'Style', 'meta-box-builder' ) }
 			options={ { default: __( 'Standard (WordPress meta box)', 'meta-box-builder' ), seamless: __( 'Seamless (no meta box)', 'meta-box-builder' ) } }
 			defaultValue={ dotProp.get( defaultValues, 'style', 'default' ) }
@@ -37,7 +37,7 @@ export const Post = ( { postTypes, defaultValues } ) => {
 		{
 			isClassic &&
 			<Checkbox
-				name="default_hidden"
+				name="settings[default_hidden]"
 				label={ __( 'Hidden by default', 'meta-box-builder' ) }
 				tooltip={ __( 'The meta box is hidden by default and requires users to select the corresponding checkbox in Screen Options to show it', 'meta-box-builder' ) }
 				defaultValue={ dotProp.get( defaultValues, 'default_hidden', false ) }
@@ -45,7 +45,7 @@ export const Post = ( { postTypes, defaultValues } ) => {
 		}
 		{
 			isClassic &&
-			<Checkbox name="autosave" label={ __( 'Autosave', 'meta-box-builder' ) } defaultValue={ dotProp.get( defaultValues, 'autosave', false ) } />
+			<Checkbox name="settings[autosave]" label={ __( 'Autosave', 'meta-box-builder' ) } defaultValue={ dotProp.get( defaultValues, 'autosave', false ) } />
 		}
 	</>;
 };

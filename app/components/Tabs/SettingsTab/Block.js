@@ -23,13 +23,13 @@ export const Block = ( { defaultValues } ) => {
 
 	return <>
 		<Input
-			name="description"
+			name="settings[description]"
 			label={ __( 'Description', 'meta-box-builder' ) }
 			componentId="settings-block-description"
 			defaultValue={ dotProp.get( defaultValues, 'description' ) }
 		/>
 		<Select
-			name="icon_type"
+			name="settings[icon_type]"
 			label={ __( 'Icon type', 'meta-box-builder' ) }
 			componentId="settings-block-icon_type"
 			options={ { dashicons: __( 'Dashicons', 'meta-box-builder' ), svg: __( 'Custom SVG', 'meta-box-builder' ) } }
@@ -39,7 +39,7 @@ export const Block = ( { defaultValues } ) => {
 		{
 			iconType === 'svg' &&
 			<Textarea
-				name="icon_svg"
+				name="settings[icon_svg]"
 				label={ __( 'SVG icon', 'meta-box-builder' ) }
 				componentId="settings-block-icon_svg"
 				placeholder={ __( 'Paste the SVG content here', 'meta-box-builder' ) }
@@ -50,7 +50,7 @@ export const Block = ( { defaultValues } ) => {
 		{
 			iconType === 'dashicons' &&
 			<Input
-				name="icon_foreground"
+				name="settings[icon_foreground]"
 				className="og-color-picker"
 				componentId="settings-block-icon_foreground"
 				label={ __( 'Custom icon color', 'meta-box-builder' ) }
@@ -61,7 +61,7 @@ export const Block = ( { defaultValues } ) => {
 		{
 			iconType === 'dashicons' &&
 			<Input
-				name="icon_background"
+				name="settings[icon_background]"
 				className="og-color-picker"
 				componentId="settings-block-icon_background"
 				label={ __( 'Custom icon background color', 'meta-box-builder' ) }
@@ -70,7 +70,7 @@ export const Block = ( { defaultValues } ) => {
 			/>
 		}
 		<Select
-			name="category"
+			name="settings[category]"
 			label={ __( 'Category', 'meta-box-builder' ) }
 			componentId="settings-block-category"
 			options={ {
@@ -83,14 +83,14 @@ export const Block = ( { defaultValues } ) => {
 			defaultValue={ dotProp.get( defaultValues, 'category', 'layout' ) }
 		/>
 		<Input
-			name="keywords"
+			name="settings[keywords]"
 			label={ __( 'Keywords', 'meta-box-builder' ) }
 			componentId="settings-block-keywords"
 			tooltip={ __( 'Separate by commas', 'meta-box-builder' ) }
 			defaultValue={ dotProp.get( defaultValues, 'keywords' ) }
 		/>
 		<Select
-			name="block_context"
+			name="settings[block_context]"
 			label={ __( 'Block Settings Position', 'meta-box-builder' ) }
 			componentId="settings-block-block_context"
 			options={ {
@@ -100,7 +100,7 @@ export const Block = ( { defaultValues } ) => {
 			defaultValue={ dotProp.get( defaultValues, 'block_context', 'content' ) }
 		/>
 		<CheckboxList
-			name="supports[align]"
+			name="settings[supports][align]"
 			label={ __( 'Alignment', 'meta-box-builder' ) }
 			componentId="settings-block-supports-align"
 			options={ {
@@ -113,13 +113,13 @@ export const Block = ( { defaultValues } ) => {
 			defaultValue={ dotProp.get( defaultValues, 'supports.align', [] ) }
 		/>
 		<Checkbox
-			name="supports[anchor]"
+			name="settings[supports][anchor]"
 			label={ __( 'Anchor', 'meta-box-builder' ) }
 			componentId="settings-block-supports-anchor"
 			defaultValue={ dotProp.get( defaultValues, 'supports.anchor', false ) }
 		/>
 		<Checkbox
-			name="supports[customClassName]"
+			name="settings[supports][customClassName]"
 			label={ __( 'Custom CSS class name', 'meta-box-builder' ) }
 			componentId="settings-block-supports-custom-class-name"
 			defaultValue={ dotProp.get( defaultValues, 'supports.customClassName', false ) }
@@ -127,7 +127,7 @@ export const Block = ( { defaultValues } ) => {
 
 		<h3>{ __( 'Block Render Settings', 'meta-box-builder' ) }</h3>
 		<Select
-			name="render_with"
+			name="settings[render_with]"
 			label={ __( 'Render with', 'meta-box-builder' ) }
 			componentId="settings-block-render_with"
 			options={ {
@@ -141,7 +141,7 @@ export const Block = ( { defaultValues } ) => {
 		{
 			renderWith === 'callback' &&
 			<Input
-				name="render_callback"
+				name="settings[render_callback]"
 				label={ __( 'Render callback', 'meta-box-builder' ) }
 				componentId="settings-block-render_callback"
 				placeholder={ __( 'Enter PHP function name', 'meta-box-builder' ) }
@@ -151,7 +151,7 @@ export const Block = ( { defaultValues } ) => {
 		{
 			renderWith === 'template' &&
 			<Input
-				name="render_template"
+				name="settings[render_template]"
 				label={ __( 'Render template', 'meta-box-builder' ) }
 				componentId="settings-block-render_template"
 				placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) }
@@ -162,7 +162,7 @@ export const Block = ( { defaultValues } ) => {
 			renderWith === 'code' &&
 			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
 				<CodeMirror
-					name="render_code"
+					name="settings[render_code]"
 					options={ { mode: 'php' } }
 					value={ dotProp.get( defaultValues, 'render_code' ) }
 				/>
@@ -193,21 +193,21 @@ export const Block = ( { defaultValues } ) => {
 			</DivRow>
 		}
 		<Input
-			name="enqueue_style"
+			name="settings[enqueue_style]"
 			label={ __( 'Custom CSS', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_style"
 			placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
 			defaultValue={ dotProp.get( defaultValues, 'enqueue_style' ) }
 		/>
 		<Input
-			name="enqueue_script"
+			name="settings[enqueue_script]"
 			label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_script"
 			placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
 			defaultValue={ dotProp.get( defaultValues, 'enqueue_script' ) }
 		/>
 		<Input
-			name="enqueue_assets"
+			name="settings[enqueue_assets]"
 			label={ __( 'Custom assets callback', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_assets"
 			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }

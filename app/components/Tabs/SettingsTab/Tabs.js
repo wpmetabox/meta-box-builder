@@ -5,7 +5,7 @@ const { __ } = wp.i18n;
 
 export const Tabs = ( { defaultValues } ) => <>
 	<Select
-		name="tab_style"
+		name="settings[tab_style]"
 		label={ __( 'Tab style', 'meta-box-builder' ) }
 		options={ {
 			default: __( 'Default', 'meta-box-builder' ),
@@ -16,7 +16,7 @@ export const Tabs = ( { defaultValues } ) => <>
 		defaultValue={ dotProp.get( defaultValues, 'tab_style', 'default' ) }
 	/>
 	<Checkbox
-		name="tab_wrapper"
+		name="settings[tab_wrapper]"
 		label={ __( 'Show meta box wrapper', 'meta-box-builder' ) }
 		componentId="settings-tab-wrapper"
 		defaultValue={ dotProp.get( defaultValues, 'tab_wrapper', true ) }

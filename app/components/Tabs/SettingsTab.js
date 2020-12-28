@@ -35,7 +35,7 @@ const SettingsTab = ( { defaultValues } ) => {
 			{ MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) && <CustomTable defaultValues={ dotProp.get( defaultValues, 'custom_table', {} ) } /> }
 			{ MbbApp.extensions.tabs && <Tabs defaultValues={ defaultValues } /> }
 			<KeyValue
-				name="custom_settings"
+				name="settings[custom_settings]"
 				defaultValue={ dotProp.get( defaultValues, 'custom_settings', {} ) }
 				label={ __( 'Custom settings', 'meta-box-builder' ) }
 				tooltip={ __( 'Apply to the current field group. For individual fields, please go to each field > tab Advanced.', 'meta-box-builder' ) }

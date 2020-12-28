@@ -23,7 +23,7 @@ export const ConditionalLogic = ( { defaultValues } ) => {
 				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					baseName={ `conditional_logic[when][${ rule.id }]` }
+					baseName={ `settings[conditional_logic][when][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
 			}
@@ -34,12 +34,12 @@ export const ConditionalLogic = ( { defaultValues } ) => {
 
 const Intro = ( { defaultValues } ) => (
 	<div className="og-include-exclude__intro">
-		<select name="conditional_logic[type]" defaultValue={ dotProp.get( defaultValues, 'type', 'visible' ) }>
+		<select name="settings[conditional_logic][type]" defaultValue={ dotProp.get( defaultValues, 'type', 'visible' ) }>
 			<option value="visible">{ __( 'Visible', 'meta-box-builder' ) }</option>
 			<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<select name="conditional_logic[relation]" defaultValue={ dotProp.get( defaultValues, 'relation', 'or' ) }>
+		<select name="settings[conditional_logic][relation]" defaultValue={ dotProp.get( defaultValues, 'relation', 'or' ) }>
 			<option value="or">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>

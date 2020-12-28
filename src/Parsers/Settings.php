@@ -17,11 +17,11 @@ class Settings extends Base {
 			->parse_custom_settings();
 
 		$this->remove_empty_values();
+		unset( $this->object_type );
 	}
 
 	private function parse_location() {
 		$object_type = $this->object_type ? $this->object_type : 'post';
-		unset( $this->object_type );
 
 		if ( in_array( $object_type, ['user', 'comment', 'block'], true ) ) {
 			unset( $this->$object_type );
