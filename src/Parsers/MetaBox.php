@@ -178,8 +178,6 @@ class MetaBox extends Base {
 			$value = $rule['value'];
 			if ( 'input_value' === $rule['name'] ) {
 				$value = wp_list_pluck( $value, 'value', 'key' );
-			} elseif ( is_array( $rule['value'] ) ) {
-				$value = wp_list_pluck( $value, 'value' );
 			}
 			$rules[ $rule['name'] ] = $value;
 		}

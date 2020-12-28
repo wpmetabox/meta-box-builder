@@ -1,5 +1,5 @@
 import dotProp from 'dot-prop';
-import { Controller, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import AsyncSelect from 'react-select/async';
 import { request, uniqid } from '../../../functions';
 import DivRow from '../../Common/DivRow';
@@ -21,10 +21,10 @@ export const IncludeExclude = ( { defaultValues } ) => {
 		>
 			{ rules.length > 0 && <Intro defaultValues={ defaultValues } /> }
 			{
-				rules.map( ( rule, index ) => <Rule
+				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					baseName={ `include_exclude[rules][${ index }]` }
+					baseName={ `include_exclude[rules][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
 			}
@@ -81,22 +81,15 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 			{
 				// Using an unused "key" prop for AsyncSelect forces rerendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
-				<Controller
+				<AsyncSelect
 					key={ name }
-					name={ `${ baseName }[value]` }
-					defaultValue={ rule.value } // Required to save field values if no changes.
-					render={ ( { onChange } ) => (
-						<AsyncSelect
-							key={ name }
-							className="react-select og-include-exclude__value"
-							classNamePrefix="react-select"
-							isMulti
-							defaultOptions
-							loadOptions={ loadOptions }
-							onChange={ onChange }
-							defaultValue={ name === rule.name ? rule.value : [] } // Conditional because the component is used for different rules.
-						/>
-					) }
+					name={ `${ baseName }[value][]` }
+					className="react-select og-include-exclude__value"
+					classNamePrefix="react-select"
+					isMulti
+					defaultOptions
+					loadOptions={ loadOptions }
+					defaultValue={ name === rule.name ? rule.value : [] } // Conditional because the component is used for different rules.
 				/>
 			}
 			{

@@ -1,4 +1,3 @@
-import { Controller } from 'react-hook-form';
 import Select from 'react-select';
 
 const ReactSelect = ( { name, options, multiple, defaultValue, ...rest } ) => {
@@ -12,25 +11,14 @@ const ReactSelect = ( { name, options, multiple, defaultValue, ...rest } ) => {
 		transformedDefaultValue = multiple ? defaultValue.map( transformValueToOption ) : transformValueToOption( defaultValue );
 	}
 
-	return <Controller
-		name={ name }
-		defaultValue={ defaultValue }
-		render={ ( { onChange } ) => (
-			<Select
-				className="react-select"
-				classNamePrefix="react-select"
-				isMulti={ multiple }
-				options={ options }
-				onChange={ items => {
-					const values = items ? items.map( item => item.value ) : [];
-					onChange( values );
-					if ( rest.onChange ) {
-						rest.onChange( values );
-					}
-				} }
-				defaultValue={ transformedDefaultValue }
-			/>
-		) }
+	return <Select
+		name={ multiple ? `${ name }[]` : name }
+		className="react-select"
+		classNamePrefix="react-select"
+		isMulti={ multiple }
+		options={ options }
+		defaultValue={ transformedDefaultValue }
+		{ ...rest }
 	/>;
 };
 
