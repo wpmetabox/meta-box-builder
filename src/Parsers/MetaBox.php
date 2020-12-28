@@ -1,9 +1,6 @@
 <?php
 namespace MBB\Parsers;
 
-use RWMB_Helpers_Array;
-use MBB\Helpers\Arr;
-
 class MetaBox extends Base {
 	protected $empty_keys = ['fields'];
 	private $settings_parser;
