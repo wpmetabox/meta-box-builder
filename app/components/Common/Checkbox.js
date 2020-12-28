@@ -5,7 +5,7 @@ const Checkbox = ( { name, componentId, label, className, defaultValue, ...rest 
 	const toggle = useToggle( componentId );
 
 	return <DivRow label={ label } className={ className } htmlFor={ componentId } { ...rest }>
-		<input type="checkbox" id={ componentId } name={ name } onChange={ toggle } defaultChecked={ defaultValue } />
+		<input type="checkbox" id={ componentId } name={ name } onChange={ toggle } defaultChecked={ defaultValue } value={ true } />
 	</DivRow>;
 };
 export default Checkbox;

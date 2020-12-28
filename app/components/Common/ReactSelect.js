@@ -12,7 +12,7 @@ const ReactSelect = ( { name, options, multiple, defaultValue, ...rest } ) => {
 	}
 
 	return <Select
-		name={ multiple ? `${ name }[]` : name }
+		name={ name }
 		className="react-select"
 		classNamePrefix="react-select"
 		isMulti={ multiple }
