@@ -59,7 +59,6 @@ const Rule = ( { rule, name, removeRule, id } ) => {
 			<select
 				name={ `${ name }[name]` }
 				className="og-include-exclude__name"
-				ref={ register }
 				defaultValue={ rule.name || Object.values( conditionalLogic )[ 0 ].id }
 			>
 				{
@@ -69,7 +68,6 @@ const Rule = ( { rule, name, removeRule, id } ) => {
 			<select
 				name={ `${ name }[operator]` }
 				className="og-include-exclude__operator"
-				ref={ register }
 				defaultValue={ rule.operator }
 			>
 				<option value="=">{ __( '=', 'meta-box-builder' ) }</option>

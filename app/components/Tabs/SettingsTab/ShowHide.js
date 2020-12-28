@@ -89,7 +89,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 			}
 			{
 				name === 'is_child' &&
-				<select className="og-include-exclude__value" name={ `${ baseName }[value]` } ref={ register } defaultValue={ rule.value }>
+				<select className="og-include-exclude__value" name={ `${ baseName }[value]` } defaultValue={ rule.value }>
 					<option value="true">{ __( 'Yes', 'meta-box-builder' ) }</option>
 					<option value="false">{ __( 'No', 'meta-box-builder' ) }</option>
 				</select>

@@ -10,7 +10,7 @@ const { __ } = wp.i18n;
 
 const FieldsTab = props => {
 	const { updateConditionalLogic, removeConditionalLogic } = useContext( ConditionalLogicContext );
-	const [ fields, setFields ] = useState( props.fields );
+	const [ fields, setFields ] = useState( Object.values( props.fields ) );
 
 	// Don't render any field if fields data is not available.
 	const fieldsData = useContext( FieldsDataContext );
