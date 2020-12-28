@@ -9,8 +9,8 @@ const { __ } = wp.i18n;
 export const IncludeExclude = ( { defaultValues } ) => {
 	const [ rules, setRules ] = useState( dotProp.get( defaultValues, 'rules', [] ) );
 
-	const addRule = () => setRules( prevRules => prevRules.concat( { name: 'ID', value: '', id: uniqid() } ) );
-	const removeRule = id => setRules( prevRules => prevRules.filter( rule => rule.id !== id ) );
+	const addRule = () => setRules( prev => [...prev, { name: 'ID', value: '', id: uniqid() } ] );
+	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
 	return (
 		<DivRow
@@ -23,7 +23,7 @@ export const IncludeExclude = ( { defaultValues } ) => {
 				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					baseName={ `include_exclude[rules][${ rule.id }]` }
+					baseName={ `settings[include_exclude][rules][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
 			}
@@ -34,12 +34,12 @@ export const IncludeExclude = ( { defaultValues } ) => {
 
 const Intro = ( { defaultValues } ) => (
 	<div className="og-include-exclude__intro">
-		<select name="include_exclude[type]" defaultValue={ dotProp.get( defaultValues, 'type', 'include' ) }>
+		<select name="settings[include_exclude][type]" defaultValue={ dotProp.get( defaultValues, 'type', 'include' ) }>
 			<option value="include">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<select name="include_exclude[relation]" defaultValue={ dotProp.get( defaultValues, 'relation', 'OR' ) }>
+		<select name="settings[include_exclude][relation]" defaultValue={ dotProp.get( defaultValues, 'relation', 'OR' ) }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
