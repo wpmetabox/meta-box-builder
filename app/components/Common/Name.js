@@ -1,5 +1,6 @@
 import slugify from 'slugify';
 import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
+import { getFieldValue } from '../../functions';
 import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
 
@@ -13,17 +14,8 @@ const Name = ( { name, componentId, defaultValue, ...rest } ) => {
 
 	// Update conditional logic.
 	useEffect( () => {
-		let field = { name: debounceValue || defaultValue };
-
-		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
-		if ( idElement ) {
-			field.id = idElement.value;
-		}
-
-		const typeElement = document.getElementById( `fields-${ rest.fieldId }-type` );
-		if ( typeElement ) {
-			field.type = typeElement.value;
-		}
+		const key = name.replace( /\[[^\]]+?\]$/, '' );
+		let field = getFieldValue( key );
 
 		updateConditionalLogic( rest.fieldId, field );
 	}, [ debounceValue ] );

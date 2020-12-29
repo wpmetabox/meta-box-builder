@@ -76,7 +76,7 @@ class Fields extends Base {
 
 	public function get_fields() {
 		// General tab.
-		$id = Component::Input( [
+		$id = Component::Id( [
 			'label'    => __( 'ID', 'meta-box-builder' ),
 			'required' => true,
 			'tooltip'  => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
