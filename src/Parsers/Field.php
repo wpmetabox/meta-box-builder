@@ -16,7 +16,7 @@ class Field extends Base {
 
 	public function parse() {
 		// Remove collapse/expand state.
-		unset( $this->expanded );
+		unset( $this->_state );
 
 		// Remove unique ID used for tracking in JS.
 		unset( $this->_id );

@@ -6,7 +6,7 @@ const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
 const Node = ( { id, field, parent = '', index, removeField, duplicateField, moveField } ) => {
-	const [ expanded, setExpanded ] = useState( dotProp.get( field, 'expanded', true ) );
+	const [ expanded, setExpanded ] = useState( 'expanded' === dotProp.get( field, '_state', 'expanded' ) );
 	const toggleSettings = () => setExpanded( prev => !prev );
 
 	const remove = e => {
@@ -34,8 +34,8 @@ const Node = ( { id, field, parent = '', index, removeField, duplicateField, mov
 		title={ __( 'Click to reveal field settings.', 'meta-box-builder' ) }
 	>
 		<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
-		<input type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } id={ `fields-${ id }-type` } />
-		<input type="checkbox" readOnly style={ { display: 'none' } } name={ `fields${ parent }[${ id }][expanded]` } checked={ expanded } />
+		<input type="hidden" name={ `fields${ parent }[${ id }][_state]` } defaultValue={ expanded ? 'expanded' : 'collapsed'} />
+		<input type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
 		<div className="og-item__header og-collapsible__header" onClick={ toggleSettings }>
 			<span className="og-item__title" id={ `og-item__title__${ id }` }>{ field.name || __( '(No label)', 'meta-box-builder' ) }</span>
 			<span className="og-item__actions">
