@@ -2,7 +2,7 @@ import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { ConditionalLogicContext } from '../../../contexts/ConditionalLogicContext';
 import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
-import { ucwords, uniqid } from '../../../functions';
+import { getFieldValue, ucwords, uniqid } from '../../../functions';
 import { Inserter } from '../../Common/Inserter';
 import Content from './Content';
 import Node from './Node';
@@ -27,11 +27,8 @@ const Group = ( { id, field, parent = '' } ) => {
 	} );
 
 	const duplicateSubField = subId => setSubFields( prev => {
-		// Get existing values from the current field with react-hook-form and dotProp.
+		let newField = getFieldValue( `fields${ parent }[${ id }][fields][${ subId }]` );
 		const newId = uniqid();
-		const values = getValues();
-		let parentKey = parent.replace( /\[/g, '.' ).replace( /\]/g, '' ); // Convert [parent1][parent2] to .parent1.parent2
-		let newField = dotProp.get( values, `fields${ parentKey }.${ id }.fields.${ subId }` );
 		newField.id = newId;
 		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );

@@ -1,7 +1,6 @@
-import dotProp from 'dot-prop';
 import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
 import { FieldsDataContext } from '../../contexts/FieldsDataContext';
-import { ucwords, uniqid } from '../../functions';
+import { getFieldValue, ucwords, uniqid } from '../../functions';
 import { Inserter } from '../Common/Inserter';
 import Node from './FieldsTab/Node';
 
@@ -31,10 +30,8 @@ const FieldsTab = props => {
 	} );
 
 	const duplicateField = id => setFields( prev => {
-		// Get existing values from the current field with react-hook-form and dotProp.
+		let newField = getFieldValue( `fields[${ id }]` );
 		const newId = uniqid();
-		const values = getValues();
-		let newField = dotProp.get( values, `fields.${ id }` );
 		newField.id = newId;
 		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
