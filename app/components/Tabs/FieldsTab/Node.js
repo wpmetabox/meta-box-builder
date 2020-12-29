@@ -29,14 +29,11 @@ const Node = ( { id, field, parent = '', index, removeField, duplicateField, mov
 		moveField( index, 'down' );
 	};
 
-	return <div
-		className={ `og-item og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }
-		title={ __( 'Click to reveal field settings.', 'meta-box-builder' ) }
-	>
+	return <div className={ `og-item og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 		<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
-		<input type="hidden" name={ `fields${ parent }[${ id }][_state]` } defaultValue={ expanded ? 'expanded' : 'collapsed'} />
+		<input type="hidden" name={ `fields${ parent }[${ id }][_state]` } defaultValue={ expanded ? 'expanded' : 'collapsed' } />
 		<input type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
-		<div className="og-item__header og-collapsible__header" onClick={ toggleSettings }>
+		<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings.', 'meta-box-builder' ) }>
 			<span className="og-item__title" id={ `og-item__title__${ id }` }>{ field.name || __( '(No label)', 'meta-box-builder' ) }</span>
 			<span className="og-item__actions">
 				<span className="og-item__type">{ field.type }</span>
