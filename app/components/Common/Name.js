@@ -11,20 +11,34 @@ const Name = ( { name, componentId, defaultValue, ...rest } ) => {
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 
+	// Update conditional logic.
 	useEffect( () => {
+		let field = { name: debounceValue || defaultValue };
+
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
-		if ( idElement && ( debounceValue || defaultValue ) ) {
-			updateConditionalLogic( rest.fieldId, { id: idElement.value, name: debounceValue || defaultValue } );
+		if ( idElement ) {
+			field.id = idElement.value;
 		}
+
+		const typeElement = document.getElementById( `fields-${ rest.fieldId }-type` );
+		if ( typeElement ) {
+			field.type = typeElement.value;
+		}
+
+		updateConditionalLogic( rest.fieldId, field );
 	}, [ debounceValue ] );
 
 	const onChange = e => {
 		setValue( e.target.value );
-		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
+
+		// Update field header bar.
 		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
 		if ( titleElement ) {
 			titleElement.textContent = e.target.value || __( '(No label)', 'meta-box-builder' );
 		}
+
+		// Auto generate ID.
+		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
 		if ( idElement ) {
 			idElement.value = slugify( e.target.value, { lower: true, replacement: '_' } );
 		}

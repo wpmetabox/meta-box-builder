@@ -19,13 +19,17 @@ export const ConditionalLogicProvider = ( { children } ) => {
 	const [ conditionalLogic, setConditionalLogic ] = useState( {} );
 
 	useEffect( () => {
-		setConditionalLogic( flatten( MbbApp.data_raw ) );
+		const fields = flatten( MbbApp );
+		Object.entries( fields ).forEach( ( [ id, field ] ) => updateConditionalLogic( id, field ) );
 	}, [] );
 
 	const updateConditionalLogic = ( id, field ) => setConditionalLogic( prev => {
 		const oldField = dotProp.get( prev, id, {} );
 		const newField = { ...oldField, ...field };
-		return { ...prev, [ id ]: newField };
+		const type = dotProp.get( newField, 'type', 'text' );
+		const ignoreTypes = [ 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
+
+		return ignoreTypes.includes( type ) ? { ...prev } : { ...prev, [ id ]: newField };
 	} );
 
 	const removeConditionalLogic = id => setConditionalLogic( prev => {
