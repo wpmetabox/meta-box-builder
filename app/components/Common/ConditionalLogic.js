@@ -7,7 +7,7 @@ const { useState, useContext } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
-const ConditionalLogic = ( { defaultValue, name, componentId } ) => {
+const ConditionalLogic = ( { defaultValue, name } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'when', {} ) ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: '', operator: '=', value: '', id: uniqid() } ] );
@@ -19,30 +19,28 @@ const ConditionalLogic = ( { defaultValue, name, componentId } ) => {
 			label={ `<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noopener norefferer">${ __( 'Conditional Logic', 'meta-box-builder' ) }</a>` }
 			tooltip={ __( 'Toggle the field based on other field values', 'meta-box-builder' ) }
 		>
-			{ rules.length > 0 && <Intro id={ componentId } name={ name } defaultValue={ defaultValue } /> }
+			{ rules.length > 0 && <Intro name={ name } defaultValue={ defaultValue } /> }
 			{
-				rules.map( ( rule ) => <Rule
+				rules.map( rule => <Rule
 					key={ rule.id }
-					id={ `${ componentId }-rules-${ rule.id }` }
 					rule={ rule }
 					name={ `${ name }[when][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
 			}
-			<input type='hidden' id={ componentId } value={ JSON.stringify( rules ) } />
 			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
 		</DivRow>
 	);
 };
 
-const Intro = ( { name, id, defaultValue } ) => (
+const Intro = ( { name, defaultValue } ) => (
 	<div className="og-include-exclude__intro">
-		<select name={ `${ name }[type]` } id={ `${ id }-type` } defaultValue={ dotProp.get( defaultValue, 'type', 'visible' ) }>
+		<select name={ `${ name }[type]` } defaultValue={ dotProp.get( defaultValue, 'type', 'visible' ) }>
 			<option value="visible">{ __( 'Visible', 'meta-box-builder' ) }</option>
 			<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<select name={ `${ name }[relation]` } id={ `${ id }-relation` } defaultValue={ dotProp.get( defaultValue, 'relation', 'or' ) }>
+		<select name={ `${ name }[relation]` } defaultValue={ dotProp.get( defaultValue, 'relation', 'or' ) }>
 			<option value="or">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
@@ -50,7 +48,7 @@ const Intro = ( { name, id, defaultValue } ) => (
 	</div>
 );
 
-const Rule = ( { rule, name, removeRule, id } ) => {
+const Rule = ( { rule, name, removeRule } ) => {
 	const { conditionalLogic } = useContext( ConditionalLogicContext );
 
 	return (

@@ -54,7 +54,6 @@ const Rule = ( { rule, baseName, removeRule } ) => (
 			type="text"
 			name={ `${ baseName }[name]` }
 			className="og-include-exclude__name"
-
 			placeholder={ __( 'Enter field ID', 'meta-box-builder' ) }
 			defaultValue={ rule.name }
 		/>
