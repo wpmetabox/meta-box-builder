@@ -51,6 +51,7 @@
 
 &-input {
   flex: 1;
+  min-width: 0; // To make the input not exceed parent's width (see conditional logic in a sub-field of nested groups).
 }
 
 &-description {
@@ -171,6 +172,10 @@
   // WordPress 5.6+
   .dashicon:hover {
     color: var(--color-red);
+  }
+
+  input {
+    min-width: 0; // To make the input not exceed parent's width (see conditional logic in a sub-field of nested groups).
   }
 }
 
