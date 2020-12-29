@@ -1,7 +1,7 @@
 <?php
 namespace MBB\Api;
 
-class Component {
+class Control {
 	public static function __callStatic( $name, $arguments ) {
 		// Convert title_case to TitleCase.
 		$component = str_replace( ' ', '', ucwords( str_replace( '_', ' ', $name ) ) );
