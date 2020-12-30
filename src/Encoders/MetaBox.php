@@ -34,6 +34,7 @@ class MetaBox {
 		$this->encoded_string = $encoder->encode( $this->settings, [
 			'array.base'  => 4,
 			'array.align' => true,
+			'string.escape' => false,
 		] );
 
 		$this->replace_get_text_function()
