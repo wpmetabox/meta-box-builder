@@ -1,15 +1,15 @@
 import dotProp from 'dot-prop';
-import AsyncSelect from 'react-select/async';
 import { request, uniqid } from '../../../functions';
 import DivRow from '../../Common/DivRow';
+import ReactAsyncSelect from '../../Common/ReactAsyncSelect';
 const { useState } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
 export const IncludeExclude = ( { defaultValues } ) => {
-	const [ rules, setRules ] = useState( dotProp.get( defaultValues, 'rules', [] ) );
+	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValues, 'rules', {} ) ) );
 
-	const addRule = () => setRules( prev => [...prev, { name: 'ID', value: '', id: uniqid() } ] );
+	const addRule = () => setRules( prev => [ ...prev, { name: 'ID', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
 	return (
@@ -73,17 +73,14 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 				<option value="custom">{ __( 'Custom', 'meta-box-builder' ) }</option>
 			</select>
 			{
-				// Using an unused "key" prop for AsyncSelect forces rerendering, which makes the loadOptions callback work.
+				// Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
-				<AsyncSelect
+				<ReactAsyncSelect
 					key={ name }
-					name={ `${ baseName }[value][]` }
-					className="react-select og-include-exclude__value"
-					classNamePrefix="react-select"
-					isMulti
-					defaultOptions
+					baseName={ baseName }
+					className="og-include-exclude__value"
+					defaultValue={ rule }
 					loadOptions={ loadOptions }
-					defaultValue={ name === rule.name ? rule.value : [] } // Conditional because the component is used for different rules.
 				/>
 			}
 			{
