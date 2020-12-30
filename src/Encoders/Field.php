@@ -24,9 +24,11 @@ class Field {
 	}
 
 	private function transform_id_prefix() {
-		if ( ! empty( $this->id ) ) {
-			$this->id = '{{ prefix }}' . $this->id;
+		if ( empty( $this->id ) ) {
+			return;
 		}
+		$this->id = substr( $this->id, strlen( $this->id_prefix ) );
+		$this->id = '{{ prefix }}' . $this->id;
 	}
 
 	private function make_options_translatable() {
