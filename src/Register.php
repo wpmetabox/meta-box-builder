@@ -23,6 +23,7 @@ class Register {
 		foreach ( $query->posts as $post_id ) {
 			$meta_box = get_post_meta( $post_id, 'meta_box', true );
 			$this->transform_for_block( $meta_box );
+			$this->create_custom_table( $meta_box, $post_id );
 			$meta_boxes[] = $meta_box;
 		}
 
@@ -30,7 +31,7 @@ class Register {
 	}
 
 	private function transform_for_block( &$meta_box ) {
-		if ( empty( $meta_box['type'] ) || 'block' !== $meta_box['type'] ) {
+		if ( ! Helpers\Data::is_extension_active( 'mb-blocks' ) || empty( $meta_box['type'] ) || 'block' !== $meta_box['type'] ) {
 			return;
 		}
 
@@ -57,5 +58,22 @@ class Register {
 
 			echo $twig->render( 'block', $data );
 		};
+	}
+
+	private function create_custom_table( $meta_box, $post_id ) {
+		if ( ! Helpers\Data::is_extension_active( 'mb-custom-table' ) || empty( $meta_box['table'] ) ) {
+			return;
+		}
+
+		// Get full custom table settings from JavaScript data.
+		$settings = get_post_meta( $post_id, 'settings', true );
+		if ( ! Helpers\Arr::get( $settings, 'custom_table.create' ) ) {
+			return;
+		}
+		$columns = [];
+		foreach ( $meta_box['fields'] as $field ) {
+			$columns[ $field['id'] ] = 'TEXT';
+		}
+		\MB_Custom_Table_API::create( $meta_box['table'], $columns );
 	}
 }
