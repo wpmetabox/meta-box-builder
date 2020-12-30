@@ -17,10 +17,10 @@ export const Post = ( { postTypes, defaultValues } ) => {
 
 	return <>
 		<Select
-			name="settings[position]"
+			name="settings[context]"
 			label={ __( 'Position', 'meta-box-builder' ) }
 			options={ contextOptions }
-			defaultValue={ dotProp.get( defaultValues, 'position', 'normal' ) }
+			defaultValue={ dotProp.get( defaultValues, 'context', 'normal' ) }
 		/>
 		<Select
 			name="settings[priority]"
