@@ -15,15 +15,14 @@ class Register {
 			'post_status'            => 'publish',
 			'posts_per_page'         => -1,
 			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
+			'fields'                 => 'ids',
 			'update_post_term_cache' => false,
+			// 'update_post_meta_cache' => false,
 		] );
 
-		foreach ( $query->posts as $post ) {
-			$meta_box = Helpers\Data::parse_meta_box_settings( $post->post_content );
-
+		foreach ( $query->posts as $post_id ) {
+			$meta_box = get_post_meta( $post_id, 'meta_box', true );
 			$this->transform_for_block( $meta_box );
-
 			$meta_boxes[] = $meta_box;
 		}
 

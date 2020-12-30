@@ -61,10 +61,16 @@ class Edit {
 			$post_id = $parent;
 		}
 
-		// Save JSON data for JavaScript.
+		// Save data for JavaScript (serialized arrays).
 		$request = rwmb_request();
 		update_post_meta( $post_id, 'settings', $request->post( 'settings' ) );
 		update_post_meta( $post_id, 'fields', $request->post( 'fields' ) );
+
+		// Save parsed data for PHP (serialized array).
+		$parser = new Parsers\MetaBox( $_POST );
+		$parser->parse();
+		$meta_box = $parser->get_settings();
+		update_post_meta( $post_id, 'meta_box', $meta_box );
 	}
 
 	private function is_screen() {
