@@ -19,7 +19,15 @@ class Fields extends Base {
 	}
 
 	private function update_fields( &$fields ) {
-		array_walk( $fields, [ $this, 'update_field' ] );
+		$new_fields = [];
+		foreach ( $fields as &$field ) {
+			$this->update_field( $field );
+			$id = uniqid();
+			$field['_id'] = $id;
+
+			$new_fields[ $id ] = $field;
+		}
+		$fields = $new_fields;
 	}
 
 	private function update_field( &$field ) {

@@ -19,6 +19,7 @@ class Field extends Base {
 		}
 
 		$field = $new_field;
+		$field['_state'] = 'collapsed';
 	}
 
 	private function update_key_value( $value ) {
