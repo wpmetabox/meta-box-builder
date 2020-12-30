@@ -26,7 +26,7 @@ class Base {
 		}
 
 		$new['when'] = $rules;
-		$new_data['conditional_lgoic'] = $new;
+		$new_data['conditional_logic'] = $new;
 	}
 
 	protected function update_custom_settings( $new_data, $data ) {

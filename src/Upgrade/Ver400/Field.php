@@ -1,6 +1,8 @@
 <?php
 namespace MBB\Upgrade\Ver400;
 
+use RWMB_Helpers_Array;
+
 /**
  * Update field settings from data for AngularJS to React.
  */
@@ -18,13 +20,15 @@ class Field extends Base {
 			$new_field[ $key ] = $value;
 		}
 
+		RWMB_Helpers_Array::change_key( $new_field, 'attrs', 'custom_settings' );
+
 		$field = $new_field;
 		$field['_state'] = 'collapsed';
 	}
 
 	private function update_key_value( $value ) {
 		if ( empty( $value ) || ! is_array( $value ) ) {
-			return;
+			return $value;
 		}
 
 		$new_value = [];
