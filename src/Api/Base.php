@@ -48,6 +48,9 @@ class Base {
 		$post_types = array_diff( $post_types, ['attachment'] );
 
 		$field = [
+			'id'         => 'mbb_api_post',
+			'type'       => 'post',
+			'clone'      => false,
 			'query_args' => [
 				's'              => $s,
 				'post_type'      => $post_types,
@@ -64,6 +67,9 @@ class Base {
 
 	protected function get_terms( $s, $taxonomy ) {
 		$field = [
+			'id'         => 'mbb_api_term',
+			'type'       => 'taxonomy',
+			'clone'      => false,
 			'query_args' => [
 				'taxonomy'   => $taxonomy,
 				'name__like' => $s,
@@ -78,6 +84,9 @@ class Base {
 
 	protected function get_users( $s ) {
 		$field = [
+			'id'            => 'mbb_api_user',
+			'type'          => 'user',
+			'clone'         => false,
 			'display_field' => 'display_name',
 			'query_args'    => [
 				'search'  => "*{$s}*",
