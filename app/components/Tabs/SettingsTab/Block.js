@@ -1,10 +1,10 @@
 import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Checkbox from '../../Common/Checkbox';
-import CheckboxList from '../../Common/CheckboxList';
 import DivRow from '../../Common/DivRow';
 import Icon from '../../Common/Icon';
 import Input from '../../Common/Input';
+import ReactSelect from '../../Common/ReactSelect';
 import Select from '../../Common/Select';
 import Textarea from '../../Common/Textarea';
 const { __ } = wp.i18n;
@@ -99,7 +99,7 @@ export const Block = ( { defaultValues } ) => {
 			} }
 			defaultValue={ dotProp.get( defaultValues, 'block_context', 'content' ) }
 		/>
-		<CheckboxList
+		<ReactSelect
 			name="settings[supports][align]"
 			label={ __( 'Alignment', 'meta-box-builder' ) }
 			componentId="settings-block-supports-align"

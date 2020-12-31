@@ -1,25 +1,55 @@
 import Select from 'react-select';
+import DivRow from './DivRow';
 
-const ReactSelect = ( { name, options, multiple, defaultValue, ...rest } ) => {
+const ReactSelect = ( {
+	// DivRow props.
+	label,
+	description,
+	tooltip,
+	className,
+	keyValue,
+	required,
+	dependency,
+
+	wrapper = true, // Whether to wrap in DivRow.
+	options,
+	defaultValue,
+	...rest
+} ) => {
 	if ( !Array.isArray( options ) ) {
 		options = objectToArray( options );
 	}
 
-	let transformedDefaultValue = defaultValue;
+	let newValue = defaultValue;
 	if ( defaultValue ) {
-		const transformValueToOption = value => options.find( item => item.value === value );
-		transformedDefaultValue = multiple ? defaultValue.map( transformValueToOption ) : transformValueToOption( defaultValue );
+		if ( !Array.isArray( newValue ) ) {
+			newValue = [ newValue ];
+		}
+		newValue = newValue.map( value => options.find( item => item.value === value ) );
 	}
 
-	return <Select
-		name={ name }
+	const select = <Select
 		className="react-select"
 		classNamePrefix="react-select"
-		isMulti={ multiple }
+		isMulti
 		options={ options }
-		defaultValue={ transformedDefaultValue }
+		defaultValue={ newValue }
 		{ ...rest }
 	/>;
+
+	return wrapper
+		? select
+		: <DivRow
+			label={ label }
+			description={ description }
+			tooltip={ tooltip }
+			className={ className }
+			keyValue={ keyValue }
+			required={ required }
+			dependency={ dependency }
+		>
+			{ select }
+		</DivRow>;
 };
 
 const objectToArray = object => Object.entries( object ).map( ( [ value, label ] ) => ( { value, label } ) );

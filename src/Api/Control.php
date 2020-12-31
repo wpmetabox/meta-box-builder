@@ -19,13 +19,13 @@ class Control {
 
 	private static function get_default_value( $component ) {
 		$defaults = [
-			'Checkbox'     => false,
-			'CheckboxList' => [],
-			'Input'        => '',
-			'KeyValue'     => [],
-			'Name'         => '',
-			'Select'       => '',
-			'Textarea'     => '',
+			'Checkbox'    => false,
+			'ReactSelect' => [],
+			'Input'       => '',
+			'KeyValue'    => [],
+			'Name'        => '',
+			'Select'      => '',
+			'Textarea'    => '',
 		];
 		return isset( $defaults[ $component ] ) ? $defaults[ $component ] : null;
 	}

@@ -155,10 +155,9 @@ class Fields extends Base {
 				'radio_list'      => __( 'Radio list', 'meta-box-builder' ),
 			],
 		], 'select_advanced' );
-		$taxonomy = Control::CheckboxList( [
-			'label'    => __( 'Taxonomies', 'meta-box-builder' ),
-			'options'  => $this->get_taxonomies(),
-			'multiple' => true,
+		$taxonomy = Control::ReactSelect( [
+			'label'   => __( 'Taxonomies', 'meta-box-builder' ),
+			'options' => $this->get_taxonomies(),
 		] );
 		$clone = Control::Checkbox( [
 			'label'   => __( 'Cloneable', 'meta-box-builder' ),
@@ -411,7 +410,7 @@ class Fields extends Base {
 			'osm' => array_merge( $general, $map_settings, $clone_settings ),
 			'password' => array_merge( $general, compact( 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ), $clone_settings ),
 			'post'     => array_merge( $general, [
-				'post_type' => Control::CheckboxList( [
+				'post_type' => Control::ReactSelect( [
 					'label'   => __( 'Post types', 'meta-box-builder' ),
 					'options' => $this->get_post_types(),
 				], ['post'] ),
@@ -594,7 +593,7 @@ class Fields extends Base {
 		$post_types = Data::get_post_types();
 		$options = [];
 		foreach ( $post_types as $post_type ) {
-			$options[ $post_type['slug'] ] = sprintf( '%s (<code>%s</code>)', $post_type['name'], $post_type['slug'] );
+			$options[ $post_type['slug'] ] = sprintf( '%s (%s)', $post_type['name'], $post_type['slug'] );
 		}
 		return $options;
 	}
@@ -603,7 +602,7 @@ class Fields extends Base {
 		$taxonomies = Data::get_taxonomies();
 		$options = [];
 		foreach ( $taxonomies as $taxonomy ) {
-			$options[ $taxonomy['slug'] ] = sprintf( '%s (<code>%s</code>)', $taxonomy['name'], $taxonomy['slug'] );
+			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
 		}
 		return $options;
 	}

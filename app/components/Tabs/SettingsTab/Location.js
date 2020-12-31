@@ -18,8 +18,8 @@ export const Location = ( { objectType, updateObjectType, postTypes, setPostType
 			{
 				'post' === objectType &&
 				<ReactSelect
+					wrapper={ false }
 					name="settings[post_types][]"
-					multiple={ true }
 					options={ MbbApp.postTypes.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
 					defaultValue={ postTypes }
 					onChange={ items => setPostTypes( items ? items.map( item => item.value ) : [] ) }
@@ -28,8 +28,8 @@ export const Location = ( { objectType, updateObjectType, postTypes, setPostType
 			{
 				'term' === objectType &&
 				<ReactSelect
+					wrapper={ false }
 					name="settings[taxonomies][]"
-					multiple={ true }
 					options={ MbbApp.taxonomies.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
 					defaultValue={ dotProp.get( defaultValues, 'taxonomies', [] ) }
 				/>
@@ -37,8 +37,8 @@ export const Location = ( { objectType, updateObjectType, postTypes, setPostType
 			{
 				'setting' === objectType &&
 				<ReactSelect
+					wrapper={ false }
 					name="settings[settings_pages][]"
-					multiple={ true }
 					options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.id })` } ) ) }
 					defaultValue={ dotProp.get( defaultValues, 'settings_pages', [] ) }
 				/>
