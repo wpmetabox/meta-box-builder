@@ -11,11 +11,16 @@ const { __ } = wp.i18n;
 const { render, useEffect } = wp.element;
 
 const App = () => {
+	const forceValidate = () => document.querySelector( '#post' ).removeAttribute( 'novalidate' );
 	useEffect( () => {
-		// Force validating when publish.
-		document.querySelector( '#publish' ).addEventListener( 'click', () => {
-			document.querySelector( '#post' ).removeAttribute( 'novalidate' );
-		} );
+		const publishButton = document.querySelector( '#publish' );
+		const saveButton = document.querySelector( '#save-post' );
+		if ( publishButton ) {
+			publishButton.addEventListener( 'click', forceValidate );
+		}
+		if ( saveButton ) {
+			saveButton.addEventListener( 'click', forceValidate );
+		}
 	}, [] );
 
 	return (
