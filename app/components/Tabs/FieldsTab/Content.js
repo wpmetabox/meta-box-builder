@@ -3,9 +3,9 @@ const { lazy, memo, Suspense } = wp.element;
 
 const Content = ( { id, data, field, parent = '' } ) => {
 	const getElement = name => {
-		let Component = lazy( () => import( `../../Common/${ data[ name ].component }` ) );
+		let Control = lazy( () => import( `../../Common/${ data[ name ].control }` ) );
 
-		return <Component
+		return <Control
 			fieldId={ id }
 			componentName={ name }
 			componentId={ `fields-${ id }-${ name }` }
