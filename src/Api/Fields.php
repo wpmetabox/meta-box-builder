@@ -114,7 +114,7 @@ class Fields extends Base {
 		] );
 		$upload_dir = Control::Input( [
 			'label'   => __( 'Custom upload folder', 'meta-box-builder' ),
-			'tooltip' => __( 'Relatively from the WordPress root path', 'meta-box-builder' ),
+			'tooltip' => __( 'Relatively to the WordPress root path', 'meta-box-builder' ),
 		] );
 		$max_status = Control::Checkbox( [
 			'label'   => __( 'Show status', 'meta-box-builder' ),
@@ -190,7 +190,7 @@ class Fields extends Base {
 		] );
 		$disabled        = Control::Checkbox( __( 'Disabled', 'meta-box-builder' ) );
 		$required        = Control::Checkbox( __( 'Required', 'meta-box-builder' ) );
-		$readonly        = Control::Checkbox( __( 'Read-only', 'meta-box-builder' ) );
+		$readonly        = Control::Checkbox( __( 'Read only', 'meta-box-builder' ) );
 		$select_all_none = Control::Checkbox( __( 'Display "Toggle All" button', 'meta-box-builder' ) );
 
 		$max_file_size = Control::Input( [
