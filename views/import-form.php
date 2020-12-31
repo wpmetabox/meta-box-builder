@@ -4,7 +4,7 @@
 
 <script type="text/template" id="mbb-import-form">
 	<div class="mbb-import-form">
-		<p><?php esc_html_e( 'Choose a ".dat" file from your computer:', 'meta-box-builder' ); ?></p>
+		<p><?php esc_html_e( 'Choose an exported ".json" file from your computer:', 'meta-box-builder' ); ?></p>
 		<form enctype="multipart/form-data" method="post" action="">
 			<?php wp_nonce_field( 'import', 'nonce' ); ?>
 			<input type="file" name="mbb_file">

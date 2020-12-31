@@ -48,13 +48,10 @@ class Import {
 
 		$data = [];
 		foreach ( $query->posts as $post ) {
-			$data[] = [
-				'title'    => $post->post_title,
-				'id'       => $post->post_name,
-				'modified' => $post->post_modified,
+			$data[] = array_merge( (array) $post, [
 				'settings' => get_post_meta( $post->ID, 'settings', true ),
 				'fields'   => get_post_meta( $post->ID, 'fields', true ),
-			];
+			] );
 		}
 
 		$file_name = 'field-groups-exported';
@@ -89,34 +86,31 @@ class Import {
 			wp_die( sprintf( __( 'Invalid form submit. <a href="%s">Go back</a>.', 'meta-box-builder' ), $url ) );
 		}
 
-		/**
-		 * Removed excerpt_save_pre filter for meta box, which adds rel="noopener"
-		 * to <a target="_blank"> links, thus braking JSON validity.
-		 *
-		 * @see https://elightup.freshdesk.com/a/tickets/27894
-		 */
-		remove_all_filters( 'excerpt_save_pre' );
-
-		$content    = file_get_contents( $_FILES['mbb_file']['tmp_name'] );
-		$meta_boxes = @unserialize( $content );
-
-		if ( false === $meta_boxes ) {
-			wp_die( sprintf( __( 'Invalid data file. <a href="%s">Go back</a>.', 'meta-box-builder' ), $url ) );
+		$data = file_get_contents( $_FILES['mbb_file']['tmp_name'] );
+		$posts = json_decode( $data, true );
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			wp_die( sprintf( __( 'Invalid file data. <a href="%s">Go back</a>.', 'meta-box-builder' ), $url ) );
 		}
 
-		foreach ( $meta_boxes as $meta_box ) {
-			$post    = unserialize( base64_decode( $meta_box ) );
-			$post    = (array) $post;
-			$excerpt = $post['post_excerpt'];
-			$excerpt = addslashes( $excerpt );
+		// If import only one post.
+		if ( isset( $posts['ID'] ) ) {
+			$posts = [ $posts ];
+		}
 
-			$post['post_excerpt'] = $excerpt;
+		foreach ( $posts as $post ) {
 			unset( $post['ID'] );
-
-			wp_insert_post( $post );
+			$post_id = wp_insert_post( $post );
+			if ( ! $post_id ) {
+				wp_die( sprintf( __( 'Cannot import the field group <strong>%s</strong>. <a href="%s">Go back</a>.', 'meta-box-builder' ), $post['post_title'], $url ) );
+			}
+			if ( is_wp_error( $post_id ) ) {
+				wp_die( implode( '<br>', $post_id->get_error_messages() ) );
+			}
+			update_post_meta( $post_id, 'settings', $post['settings'] );
+			update_post_meta( $post_id, 'fields', $post['fields'] );
 		}
 
-		$url = add_query_arg( 'imported', 'true' );
+		$url = add_query_arg( 'imported', 'true', $url );
 		wp_safe_redirect( $url );
 		die;
 	}
