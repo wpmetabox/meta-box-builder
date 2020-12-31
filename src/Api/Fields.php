@@ -105,7 +105,7 @@ class Fields extends Base {
 		$placeholder = Control::Input( __( 'Placeholder', 'meta-box-builder' ) );
 		$max_file_uploads = Control::Input( [
 			'type'    => 'number',
-			'label'   => __( 'Maximum number of files', 'meta-box-builder' ),
+			'label'   => __( 'Max number of files', 'meta-box-builder' ),
 			'tooltip' => __( 'Leave empty for unlimited uploads', 'meta-box-builder' ),
 		] );
 		$force_delete = Control::Checkbox( [
@@ -122,11 +122,11 @@ class Fields extends Base {
 		], true );
 		$min = Control::Input( [
 			'type'  => 'number',
-			'label' => __( 'Minumum value', 'meta-box-builder' ),
+			'label' => __( 'Min value', 'meta-box-builder' ),
 		] );
 		$max = Control::Input( [
 			'type'  => 'number',
-			'label' => __( 'Maximum value', 'meta-box-builder' ),
+			'label' => __( 'Max value', 'meta-box-builder' ),
 		] );
 		$step = Control::Input( [
 			'label'   => __( 'Step', 'meta-box-builder' ),
@@ -180,7 +180,7 @@ class Fields extends Base {
 		] );
 		$max_clone = Control::Input( [
 			'type'       => 'number',
-			'label'      => __( 'Maximum number of clones', 'meta-box-builder' ),
+			'label'      => __( 'Max number of clones', 'meta-box-builder' ),
 			'tooltip'    => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
 			'dependency' => 'clone:true',
 		] );
@@ -195,7 +195,7 @@ class Fields extends Base {
 		$select_all_none = Control::Checkbox( __( 'Display "Toggle All" button', 'meta-box-builder' ) );
 
 		$max_file_size = Control::Input( [
-			'label'   => __( 'Maximum file size', 'meta-box-builder' ),
+			'label'   => __( 'Max file size', 'meta-box-builder' ),
 			'tooltip' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
 		] );
 
