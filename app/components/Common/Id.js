@@ -21,7 +21,7 @@ const Id = ( { name, componentId, defaultValue, ...rest } ) => {
 	const onChange = e => setValue( e.target.value );
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
-		<input type="text" id={ componentId } name={ name } defaultValue={ defaultValue } onChange={ onChange } />
+		<input type="text" id={ componentId } name={ name } defaultValue={ defaultValue } onChange={ onChange } required />
 	</DivRow>;
 };
 
