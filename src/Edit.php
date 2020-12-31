@@ -6,6 +6,11 @@ class Edit {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 		add_action( 'edit_form_after_title', [ $this, 'render' ] );
 		add_action( 'save_post_meta-box', [ $this, 'save' ] );
+
+		add_action( 'add_meta_boxes_meta-box', [ $this, 'remove_slug_meta_box'] );
+		add_filter( 'rwmb_meta_boxes', [ $this, 'add_meta_boxes' ] );
+		add_filter( 'rwmb_post_name_field_meta', [ $this, 'get_post_name' ] );
+		add_filter( 'rwmb_post_name_value', '__return_empty_string' );
 	}
 
 	public function render() {
@@ -75,5 +80,30 @@ class Edit {
 
 	private function is_screen() {
 		return 'meta-box' === get_current_screen()->id;
+	}
+
+	public function remove_slug_meta_box() {
+		remove_meta_box( 'slugdiv', null, 'normal' );
+	}
+
+	public function add_meta_boxes( $meta_boxes ) {
+		$meta_boxes[] = [
+			'title'      => esc_html__( 'Field Group ID', 'meta-box-builder' ),
+			'id'         => 'field-group-id',
+			'post_types' => ['meta-box'],
+			'context'    => 'side',
+			'priority'   => 'low',
+			'fields'     => [
+				[
+					'type' => 'text',
+					'id'   => 'post_name',
+				],
+			],
+		];
+		return $meta_boxes;
+	}
+
+	public function get_post_name() {
+		return get_post_field( 'post_name' );
 	}
 }

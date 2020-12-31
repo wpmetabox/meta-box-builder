@@ -17,7 +17,6 @@ class Register {
 			'no_found_rows'          => true,
 			'fields'                 => 'ids',
 			'update_post_term_cache' => false,
-			// 'update_post_meta_cache' => false,
 		] );
 
 		foreach ( $query->posts as $post_id ) {

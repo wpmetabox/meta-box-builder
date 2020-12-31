@@ -33,7 +33,6 @@ class PostType {
 			'show_ui'         => true,
 			'show_in_menu'    => 'meta-box',
 			'query_var'       => true,
-			'rewrite'         => array( 'slug' => 'metabox' ),
 			'capability_type' => 'post',
 			'hierarchical'    => false,
 			'menu_position'   => null,
@@ -67,13 +66,6 @@ class PostType {
 		register_post_type( $post_type, $args );
 	}
 
-	/**
-	 * Modify the output message of meta-box post type
-	 *
-	 * @param  mixed $messages Message array
-	 *
-	 * @return mixed $messages Message after modified
-	 */
 	public function updated_messages( $messages ) {
 		$messages['meta-box'] = array(
 			0 => '', // Unused. Messages start at index 1.
