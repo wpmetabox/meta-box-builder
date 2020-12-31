@@ -1,6 +1,6 @@
 jQuery( function ( $ ) {
 	// Add "Export" option to the Bulk Actions dropdowns.
-	$( '<option value="export-meta-boxes">' )
+	$( '<option value="mbb-export">' )
 		.text( MBB.export )
 		.appendTo( 'select[name="action"], select[name="action2"]' );
 
