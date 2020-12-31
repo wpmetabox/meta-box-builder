@@ -396,7 +396,7 @@ class Fields extends Base {
 			'image_advanced' => array_merge( $general, $upload_settings, compact( 'image_size', 'add_to' ), $clone_settings ),
 			'image_select'   => array_merge( $general, compact( 'options', 'std', 'multiple', 'required' ), $clone_settings ),
 			'image_upload'   => array_merge( $general, compact( 'max_file_size', 'image_size', 'add_to' ), $upload_settings, $clone_settings ),
-			'key_value' => array_merge( $general, compact( 'size' ), [
+			'key_value'      => array_merge( $general, compact( 'size' ), [
 				'placeholder_key'   => Control::Input( __( 'Placeholder for key', 'meta-box-builder' ) ),
 				'placeholder_value' => Control::Input( __( 'Placeholder for value', 'meta-box-builder' ) ),
 			] ),
@@ -407,7 +407,7 @@ class Fields extends Base {
 					'tooltip' => __( 'The text message displayed to users when the embed media is not available. Accepts HTML.', 'meta-box-builder' ),
 				] ),
 			], $clone_settings ),
-			'osm' => array_merge( $general, $map_settings, $clone_settings ),
+			'osm'      => array_merge( $general, $map_settings, $clone_settings ),
 			'password' => array_merge( $general, compact( 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ), $clone_settings ),
 			'post'     => array_merge( $general, [
 				'post_type' => Control::ReactSelect( [
@@ -560,10 +560,10 @@ class Fields extends Base {
 		if ( Data::is_extension_active( 'meta-box-tabs' ) ) {
 			$fields['tab'] = [
 				'general'  => [
-					'name' => $name,
-					'id' => $id,
+					'name'      => $name,
+					'id'        => $id,
 					'icon_type' => Control::Select( [
-						'label' => __( 'Icon type', 'meta-box-builder' ),
+						'label'   => __( 'Icon type', 'meta-box-builder' ),
 						'options' => [
 							'dashicons'   => __( 'Dashicons', 'meta-box-builder' ),
 							'fontawesome' => __( 'Font Awesome', 'meta-box-builder' ),
@@ -575,7 +575,7 @@ class Fields extends Base {
 						'dependency' => 'icon_type:dashicons',
 					] ),
 					'icon_fa' => Control::Input( [
-						'label' => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank" rel="noopenner noreferrer">' . __( 'Icon CSS class', 'meta-box-builder' ) . '</a>',
+						'label'      => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank" rel="noopenner noreferrer">' . __( 'Icon CSS class', 'meta-box-builder' ) . '</a>',
 						'dependency' => 'icon_type:fontawesome',
 					] ),
 					'icon_url' => Control::Input( [
