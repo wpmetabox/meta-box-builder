@@ -249,10 +249,11 @@ class Fields extends Base {
 				'label'   => __( 'Default location', 'meta-box-builder' ),
 				'tooltip' => __( 'Format: latitude,longitude.', 'meta-box-builder' ),
 			] ),
-			'address_field' => Control::Input( [
-				'label'    => __( 'Address field', 'meta-box-builder' ),
-				'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
-				'required' => true,
+			'address_field' => Control::AddressField( [
+				'label'       => __( 'Address field', 'meta-box-builder' ),
+				'tooltip'     => __( 'The ID of address field. For multiple fields, separate them by comma.', 'meta-box-builder' ),
+				'placeholder' => __( 'Enter or select a field ID', 'meta-box-builder' ),
+				'required'    => true,
 			] ),
 			'language' => Control::Select( [
 				'label'   => __( 'Language', 'meta-box-builder' ),
