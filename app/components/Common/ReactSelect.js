@@ -37,7 +37,7 @@ const ReactSelect = ( {
 		{ ...rest }
 	/>;
 
-	return wrapper
+	return ! wrapper
 		? select
 		: <DivRow
 			label={ label }
