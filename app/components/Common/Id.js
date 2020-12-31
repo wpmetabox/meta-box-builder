@@ -1,4 +1,4 @@
-import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
+import { FieldIdsContext } from '../../contexts/FieldIdsContext';
 import { getFieldValue } from '../../functions';
 import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
@@ -6,7 +6,7 @@ import DivRow from './DivRow';
 const { useContext, useState, useEffect } = wp.element;
 
 const Id = ( { name, componentId, defaultValue, ...rest } ) => {
-	const { updateConditionalLogic } = useContext( ConditionalLogicContext );
+	const { updateFieldId } = useContext( FieldIdsContext );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 
@@ -15,7 +15,7 @@ const Id = ( { name, componentId, defaultValue, ...rest } ) => {
 		const key = name.replace( /\[[^\]]+?\]$/, '' );
 		let field = getFieldValue( key );
 
-		updateConditionalLogic( rest.fieldId, field );
+		updateFieldId( rest.fieldId, field );
 	}, [ debounceValue ] );
 
 	const onChange = e => setValue( e.target.value );

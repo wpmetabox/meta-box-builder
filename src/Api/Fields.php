@@ -313,11 +313,6 @@ class Fields extends Base {
 		$general = compact( 'name', 'id', 'label_description', 'desc' );
 		$advanced = compact( 'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' );
 		if ( Data::is_extension_active( 'meta-box-conditional-logic' ) ) {
-			$conditional_logic = Control::ConditionalLogic( [
-				'link' => 'https://docs.metabox.io/extensions/meta-box-conditional-logic/',
-				'label' => __( 'Conditional logic', 'meta-box-builder' ),
-				'tooltip' => __( 'Toogle the field visibility by other fields\' values', 'meta-box-builder' ),
-			] );
 			$advanced = array_merge( $advanced, [
 				'conditional_logic' => Control::ConditionalLogic( [
 					'link' => 'https://docs.metabox.io/extensions/meta-box-conditional-logic/',

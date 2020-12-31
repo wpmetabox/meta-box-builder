@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { ConditionalLogicContext } from '../../../contexts/ConditionalLogicContext';
+import { FieldIdsContext } from '../../../contexts/FieldIdsContext';
 import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 import { getFieldValue, ucwords, uniqid } from '../../../functions';
 import { Inserter } from '../../Common/Inserter';
@@ -11,18 +11,18 @@ const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const Group = ( { id, field, parent = '' } ) => {
-	const { updateConditionalLogic, removeConditionalLogic } = useContext( ConditionalLogicContext );
+	const { updateFieldId, removeFieldId } = useContext( FieldIdsContext );
 	const [ subFields, setSubFields ] = useState( Object.values( dotProp.get( field, 'fields', {} ) ) );
 
 	const addSubField = type => setSubFields( prev => {
 		const id = uniqid();
 		const newField = { _id: id, id, type, name: ucwords( type, '_' ) };
-		updateConditionalLogic( id, newField );
+		updateFieldId( id, newField );
 		return [ ...prev, newField ];
 	} );
 
 	const removeSubField = subId => setSubFields( prev => {
-		removeConditionalLogic( id );
+		removeFieldId( id );
 		return prev.filter( field => field._id !== subId );
 	} );
 
@@ -33,7 +33,7 @@ const Group = ( { id, field, parent = '' } ) => {
 		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
-		updateConditionalLogic( newId, newField );
+		updateFieldId( newId, newField );
 
 		const index = prev.findIndex( field => field._id === subId );
 		let newFields = [ ...prev ];

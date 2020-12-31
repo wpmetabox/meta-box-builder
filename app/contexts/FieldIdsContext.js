@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 const { createContext, useState, useEffect } = wp.element;
 
-export const ConditionalLogicContext = createContext( {} );
+export const FieldIdsContext = createContext( {} );
 
 const ignoreTypes = [ 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
 
@@ -20,15 +20,15 @@ const flatten = obj => {
 	return value;
 };
 
-export const ConditionalLogicProvider = ( { children } ) => {
-	const [ conditionalLogic, setConditionalLogic ] = useState( {} );
+export const FieldIdsProvider = ( { children } ) => {
+	const [ fieldIds, setFieldIds ] = useState( {} );
 
 	useEffect( () => {
 		const fields = flatten( MbbApp );
-		setConditionalLogic( fields );
+		setFieldIds( fields );
 	}, [] );
 
-	const updateConditionalLogic = ( id, field ) => setConditionalLogic( prev => {
+	const updateFieldId = ( id, field ) => setFieldIds( prev => {
 		const oldField = dotProp.get( prev, id, {} );
 		const newField = { ...oldField, ...field };
 		const type = dotProp.get( newField, 'type', 'text' );
@@ -36,13 +36,13 @@ export const ConditionalLogicProvider = ( { children } ) => {
 		return ignoreTypes.includes( type ) ? { ...prev } : { ...prev, [ id ]: newField };
 	} );
 
-	const removeConditionalLogic = id => setConditionalLogic( prev => {
-		let newConditionalLogic = { ...prev };
-		delete newConditionalLogic[ id ];
+	const removeFieldId = id => setFieldIds( prev => {
+		let newFieldIds = { ...prev };
+		delete newFieldIds[ id ];
 		return prev;
 	} );
 
-	return <ConditionalLogicContext.Provider value={ { conditionalLogic, updateConditionalLogic, removeConditionalLogic } }>
+	return <FieldIdsContext.Provider value={ { fieldIds, updateFieldId, removeFieldId } }>
 		{ children }
-	</ConditionalLogicContext.Provider>;
+	</FieldIdsContext.Provider>;
 };

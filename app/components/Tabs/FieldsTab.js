@@ -1,4 +1,4 @@
-import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
+import { FieldIdsContext } from '../../contexts/FieldIdsContext';
 import { FieldsDataContext } from '../../contexts/FieldsDataContext';
 import { getFieldValue, ucwords, uniqid } from '../../functions';
 import { Inserter } from '../Common/Inserter';
@@ -8,7 +8,7 @@ const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = props => {
-	const { updateConditionalLogic, removeConditionalLogic } = useContext( ConditionalLogicContext );
+	const { updateFieldId, removeFieldId } = useContext( FieldIdsContext );
 	const [ fields, setFields ] = useState( Object.values( props.fields ) );
 
 	// Don't render any field if fields data is not available.
@@ -20,12 +20,12 @@ const FieldsTab = props => {
 	const addField = type => setFields( prev => {
 		const id = uniqid();
 		const newField = { _id: id, id, type, name: ucwords( type, '_' ) };
-		updateConditionalLogic( id, newField );
+		updateFieldId( id, newField );
 		return [ ...prev, newField ];
 	} );
 
 	const removeField = id => setFields( prev => {
-		removeConditionalLogic( id );
+		removeFieldId( id );
 		return prev.filter( field => field._id !== id );
 	} );
 
@@ -36,7 +36,7 @@ const FieldsTab = props => {
 		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
-		updateConditionalLogic( newId, newField );
+		updateFieldId( newId, newField );
 
 		const index = prev.findIndex( field => field._id === id );
 		let newFields = [ ...prev ];

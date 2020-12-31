@@ -1,14 +1,14 @@
-import { ConditionalLogicContext } from '../contexts/ConditionalLogicContext';
+import { FieldIdsContext } from '../contexts/FieldIdsContext';
 const { useContext } = wp.element;
 
 export const Data = () => {
-	const { conditionalLogic } = useContext( ConditionalLogicContext );
+	const { fieldIds } = useContext( FieldIdsContext );
 
 	return (
 		<>
-			<datalist id="conditional-logic">
+			<datalist id="field-ids">
 				{
-					Object.entries( conditionalLogic ).map( ( [ id, field ] ) => <option key={ id } value={ field.id } /> )
+					Object.entries( fieldIds ).map( ( [ id, field ] ) => <option key={ id } value={ field.id } /> )
 				}
 			</datalist>
 		</>

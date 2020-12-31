@@ -1,5 +1,5 @@
 import slugify from 'slugify';
-import { ConditionalLogicContext } from '../../contexts/ConditionalLogicContext';
+import { FieldIdsContext } from '../../contexts/FieldIdsContext';
 import { getFieldValue } from '../../functions';
 import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
@@ -8,7 +8,7 @@ const { __ } = wp.i18n;
 const { useContext, useEffect, useState } = wp.element;
 
 const Name = ( { name, componentId, defaultValue, ...rest } ) => {
-	const { updateConditionalLogic } = useContext( ConditionalLogicContext );
+	const { updateFieldId } = useContext( FieldIdsContext );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 
@@ -17,7 +17,7 @@ const Name = ( { name, componentId, defaultValue, ...rest } ) => {
 		const key = name.replace( /\[[^\]]+?\]$/, '' );
 		let field = getFieldValue( key );
 
-		updateConditionalLogic( rest.fieldId, field );
+		updateFieldId( rest.fieldId, field );
 	}, [ debounceValue ] );
 
 	const onChange = e => {

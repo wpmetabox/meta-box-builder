@@ -4,7 +4,7 @@ import { Data } from './components/Data';
 import FieldsTab from './components/Tabs/FieldsTab';
 import Result from './components/Tabs/Result';
 import SettingsTab from './components/Tabs/SettingsTab';
-import { ConditionalLogicProvider } from './contexts/ConditionalLogicContext';
+import { FieldIdsProvider } from './contexts/FieldIdsContext';
 import { FieldsDataProvider } from './contexts/FieldsDataContext';
 
 const { __ } = wp.i18n;
@@ -12,7 +12,7 @@ const { render } = wp.element;
 
 const App = () => (
 	<FieldsDataProvider>
-		<ConditionalLogicProvider>
+		<FieldIdsProvider>
 			<Tabs forceRenderTabPanel={ true }>
 				<TabList>
 					<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
@@ -30,7 +30,7 @@ const App = () => (
 				</TabPanel>
 			</Tabs>
 			<Data />
-		</ConditionalLogicProvider>
+		</FieldIdsProvider>
 	</FieldsDataProvider>
 );
 
