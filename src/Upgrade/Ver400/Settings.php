@@ -42,8 +42,9 @@ class Settings extends Base {
 			$this->copy_data( $data, $settings, $names );
 
 			// Show in media modal for attachments.
-			if ( in_array( 'attachment', $settings['post_types'] ) ) {
-				$settings['media_modal'] = (bool) Arr::get( $data, 'media_modal' );
+			$post_types = Arr::get( $settings, 'post_types', ['post'] );
+			if ( in_array( 'attachment', $post_types ) ) {
+				$this->copy_data( $data, $settings, 'media_modal' );
 			}
 		}
 

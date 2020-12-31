@@ -9,6 +9,7 @@ class MetaBox extends Base {
 		$this->parse_settings();
 
 		// Remove array keys.
+		$this->fields = is_array( $this->fields ) ? $this->fields : [];
 		$this->fields = array_values( $this->fields );
 
 		$this->parse_boolean_values()
