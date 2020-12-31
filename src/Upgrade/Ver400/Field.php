@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Upgrade\Ver400;
 
+use MBB\Helpers\Arr;
 use RWMB_Helpers_Array;
 
 /**
@@ -22,6 +23,12 @@ class Field extends Base {
 
 		$this->update_conditional_logic( $new_field, $field );
 
+		// Field-specific parser.
+		$func = "update_field_{$field['type']}";
+		if ( method_exists( $this, $func ) ) {
+			$this->$func( $new_field, $field );
+		}
+
 		$field = $new_field;
 		$field['_state'] = 'collapsed';
 	}
@@ -38,5 +45,15 @@ class Field extends Base {
 		}
 
 		return $new_value;
+	}
+
+	private function update_field_key_value( &$new_field, $field ) {
+		if ( empty( $field['placeholder'] ) ) {
+			return;
+		}
+
+		$new_field['placeholder_key'] = Arr::get( $field, 'placeholder.key' );
+		$new_field['placeholder_value'] = Arr::get( $field, 'placeholder.value' );
+		unset( $new_field['placeholder'] );
 	}
 }
