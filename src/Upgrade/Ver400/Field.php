@@ -10,8 +10,6 @@ class Field extends Base {
 	public function update( &$field ) {
 		$new_field = [];
 
-		$this->update_conditional_logic( $new_field, $field );
-
 		$names = ['attrs', 'js_options', 'query_args', 'options'];
 		foreach ( $field as $key => $value ) {
 			if ( in_array( $key, $names ) ) {
@@ -21,6 +19,8 @@ class Field extends Base {
 		}
 
 		RWMB_Helpers_Array::change_key( $new_field, 'attrs', 'custom_settings' );
+
+		$this->update_conditional_logic( $new_field, $field );
 
 		$field = $new_field;
 		$field['_state'] = 'collapsed';
