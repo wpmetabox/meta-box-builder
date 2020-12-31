@@ -145,7 +145,7 @@ class Field extends Base {
 
 	private function parse_clone() {
 		if ( $this->clone ) {
-			return;
+			return $this;
 		}
 		$keys = ['sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button'];
 		foreach ( $keys as $key ) {
@@ -174,12 +174,13 @@ class Field extends Base {
 			$this->placeholder = $placeholder;
 		}
 		unset( $this->placeholder_key, $this->placeholder_value );
+		return $this;
 	}
 
 	private function parse_field_group() {
 		$this->remove_default( 'default_state', 'expanded' );
 		if ( $this->collapsible ) {
-			return;
+			return $this;
 		}
 		$keys = ['default_state', 'save_state', 'group_title'];
 		foreach ( $keys as $key ) {
