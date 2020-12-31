@@ -176,6 +176,7 @@
 
   input {
     min-width: 0; // To make the input not exceed parent's width (see conditional logic in a sub-field of nested groups).
+    flex: 1;
   }
 }
 

@@ -1,5 +1,6 @@
 import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { Data } from './components/Data';
 import FieldsTab from './components/Tabs/FieldsTab';
 import Result from './components/Tabs/Result';
 import SettingsTab from './components/Tabs/SettingsTab';
@@ -28,6 +29,7 @@ const App = () => (
 					<Result />
 				</TabPanel>
 			</Tabs>
+			<Data />
 		</ConditionalLogicProvider>
 	</FieldsDataProvider>
 );
