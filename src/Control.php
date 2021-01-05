@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Api;
+namespace MBB;
 
 class Control {
 	public static function __callStatic( $name, $arguments ) {

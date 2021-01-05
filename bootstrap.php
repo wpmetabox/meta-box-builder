@@ -28,6 +28,8 @@ if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 	new Api\ShowHide;
 }
 
+new Extensions\Columns;
+
 if ( is_admin() ) {
 	new Import;
 	new Edit;

@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Api;
 
+use MBB\Control;
 use MBB\Helpers\Data;
 
 class Fields extends Base {
@@ -553,8 +554,8 @@ class Fields extends Base {
 			], $clone_settings );
 		}
 
-		foreach ( $fields as $key => $general ) {
-			$fields[ $key ] = compact( 'general', 'advanced' );
+		foreach ( $fields as $type => $general ) {
+			$fields[ $type ] = compact( 'general', 'advanced' );
 		}
 
 		if ( Data::is_extension_active( 'meta-box-tabs' ) ) {
@@ -585,6 +586,8 @@ class Fields extends Base {
 				],
 			];
 		}
+
+		$fields = apply_filters( 'mbb_fields', $fields );
 
 		return $fields;
 	}
