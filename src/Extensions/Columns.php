@@ -3,6 +3,7 @@ namespace MBB\Extensions;
 
 use MBB\Control;
 use MBB\Helpers\Data;
+use MBB\Helpers\Arr;
 
 class Columns {
 	public function __construct() {
@@ -10,6 +11,7 @@ class Columns {
 			return;
 		}
 		add_filter( 'mbb_fields', [ $this, 'add_settings' ] );
+		add_filter( 'mbb_parsed_field', [ $this, 'parse_field' ] );
 	}
 
 	public function add_settings( $fields ) {
@@ -23,5 +25,12 @@ class Columns {
 		}
 
 		return $fields;
+	}
+
+	public function parse_field( $settings ) {
+		if ( 12 == Arr::get( $settings, 'columns', 12 ) ) {
+			unset( $settings['columns'] );
+		}
+		return $settings;
 	}
 }

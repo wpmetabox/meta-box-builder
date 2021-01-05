@@ -3,6 +3,7 @@ namespace MBB\Extensions;
 
 use MBB\Control;
 use MBB\Helpers\Data;
+use MBB\Helpers\Arr;
 
 class Tooltip {
 	public function __construct() {
@@ -10,6 +11,7 @@ class Tooltip {
 			return;
 		}
 		add_filter( 'mbb_fields', [ $this, 'add_settings' ] );
+		add_filter( 'mbb_parsed_field', [ $this, 'parse_field' ] );
 	}
 
 	public function add_settings( $fields ) {
@@ -43,5 +45,15 @@ class Tooltip {
 		}
 
 		return $fields;
+	}
+
+	public function parse_field( $settings ) {
+		if ( ! Arr::get( $settings, 'tooltip.enable' ) || ! Arr::get( $settings, 'tooltip.content' ) ) {
+			unset( $settings['tooltip'] );
+		}
+		if ( isset( $settings['tooltip'] ) ) {
+			unset( $settings['tooltip']['enable'] );
+		}
+		return $settings;
 	}
 }
