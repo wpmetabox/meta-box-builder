@@ -3,14 +3,14 @@ import { request, uniqid } from '../../../functions';
 import DivRow from '../../Controls/DivRow';
 import KeyValue from '../../Controls/KeyValue';
 import ReactAsyncSelect from '../../Controls/ReactAsyncSelect';
-const { useState } = wp.element;
+const { useState, useEffect } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
-export const ShowHide = ( { defaultValues } ) => {
+export const ShowHide = ( { objectType, defaultValues } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValues, 'rules', {} ) ) );
 
-	const addRule = () => setRules( prev => [...prev, { name: 'template', value: '', id: uniqid() } ] );
+	const addRule = () => setRules( prev => [ ...prev, { name: 'template', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
 	return (
@@ -26,6 +26,7 @@ export const ShowHide = ( { defaultValues } ) => {
 					rule={ rule }
 					baseName={ `settings[show_hide][rules][${ rule.id }]` }
 					removeRule={ removeRule }
+					objectType={ objectType }
 				/> )
 			}
 			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
@@ -48,28 +49,35 @@ const Intro = ( { defaultValues } ) => (
 	</div>
 );
 
-const Rule = ( { rule, baseName, removeRule } ) => {
+const Rule = ( { rule, baseName, removeRule, objectType } ) => {
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 	const loadOptions = s => request( 'show-hide', { name, s } );
+
+	// Validate rule name.
+	useEffect( () => {
+		if ( objectType !== 'post' && name !== 'input_value' ) {
+			setName( 'input_value' );
+		}
+	}, [ objectType ] );
 
 	return (
 		<div className={ `og-include-exclude__rule og-attribute${ name === 'input_value' ? ' og-show-hide__inputs' : '' }` }>
 			<input type="hidden" name={ `${ baseName }[id]` } defaultValue={ rule.id } />
 			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" defaultValue={ name } onChange={ onChangeName }>
-				<option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option>
-				<option value="format">{ __( 'Post format', 'meta-box-builder' ) }</option>
+				{ objectType === 'post' && <option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option> }
+				{ objectType === 'post' && <option value="format">{ __( 'Post format', 'meta-box-builder' ) }</option> }
 				{
-					MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ taxonomy.slug }>{ taxonomy.name } ({ taxonomy.slug })</option> )
+					objectType === 'post' && MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ taxonomy.slug }>{ taxonomy.name } ({ taxonomy.slug })</option> )
 				}
-				<option value="is_child">{ __( 'Is child post', 'meta-box-builder' ) }</option>
+				{ objectType === 'post' && <option value="is_child">{ __( 'Is child post', 'meta-box-builder' ) }</option> }
 				<option value="input_value">{ __( 'Input value', 'meta-box-builder' ) }</option>
 			</select>
 			{
 				// Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
 				![ 'is_child', 'input_value' ].includes( name ) &&
 				<ReactAsyncSelect
-					key={ name }
+					key={ name + objectType }
 					name={ `${ baseName }[value][]` }
 					baseName={ baseName }
 					className="og-include-exclude__value"
