@@ -7,6 +7,7 @@ use RWMB_Post_Field;
 use RWMB_Taxonomy_Field;
 use RWMB_User_Field;
 use MBB\Helpers\Data;
+use RWMB_Helpers_Array;
 
 class Base {
 	public function __construct() {
@@ -40,12 +41,8 @@ class Base {
 		} );
 	}
 
-	protected function get_posts( $s ) {
-		$post_types = Data::get_post_types();
-		$post_types = array_map( function( $post_type ) {
-			return $post_type['slug'];
-		}, $post_types );
-		$post_types = array_diff( $post_types, ['attachment'] );
+	protected function get_posts( $s, $name = '', $post_types = '' ) {
+		$post_types = RWMB_Helpers_Array::from_csv( $post_types );
 
 		$field = [
 			'id'         => 'mbb_api_post',

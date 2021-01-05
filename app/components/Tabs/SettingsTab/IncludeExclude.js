@@ -6,7 +6,7 @@ const { useState } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
-export const IncludeExclude = ( { defaultValues } ) => {
+export const IncludeExclude = ( { postTypes, defaultValues } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValues, 'rules', {} ) ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: 'ID', value: '', id: uniqid() } ] );
@@ -25,6 +25,7 @@ export const IncludeExclude = ( { defaultValues } ) => {
 					rule={ rule }
 					baseName={ `settings[include_exclude][rules][${ rule.id }]` }
 					removeRule={ removeRule }
+					postTypes={ postTypes }
 				/> )
 			}
 			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
@@ -47,11 +48,11 @@ const Intro = ( { defaultValues } ) => (
 	</div>
 );
 
-const Rule = ( { rule, baseName, removeRule } ) => {
+const Rule = ( { rule, baseName, removeRule, postTypes } ) => {
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 
-	const loadOptions = s => request( 'include-exclude', { name, s } );
+	const loadOptions = s => request( 'include-exclude', { name, s, post_types: postTypes } );
 	return (
 		<div className="og-include-exclude__rule og-attribute">
 			<input type="hidden" name={ `${ baseName }[id]` } defaultValue={ rule.id } />
@@ -76,7 +77,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 				// Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
 				<ReactAsyncSelect
-					key={ name }
+					key={ name + postTypes }
 					baseName={ baseName }
 					className="og-include-exclude__value"
 					defaultValue={ rule }

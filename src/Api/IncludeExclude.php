@@ -5,12 +5,13 @@ use WP_REST_Request;
 
 class IncludeExclude extends Base {
 	public function include_exclude( WP_REST_Request $request ) {
-		$name = $request->get_param( 'name' );
-		$s    = strtolower( $request->get_param( 's' ) );
+		$name       = $request->get_param( 'name' );
+		$s          = strtolower( $request->get_param( 's' ) );
+		$post_types = strtolower( $request->get_param( 'post_types' ) );
 
 		$method = $this->get_method( $name );
 		$name = 'get_terms' === $method ? str_replace( 'parent_', '', $name ) : $name;
-		return $this->$method( $s, $name );
+		return $this->$method( $s, $name, $post_types );
 	}
 
 	private function get_method( $name ) {
