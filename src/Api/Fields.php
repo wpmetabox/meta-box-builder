@@ -531,8 +531,7 @@ class Fields extends Base {
 		if ( Data::is_extension_active( 'meta-box-group' ) ) {
 			$fields['group'] = array_merge( $general, [
 				'collapsible' => Control::Checkbox( [
-					'label'   => __( 'Collapsible', 'meta-box-builder' ),
-					'setting' => 'collapsible',
+					'label' => __( 'Collapsible', 'meta-box-builder' ),
 				] ),
 				'default_state' => Control::Select( [
 					'label'      => __( 'Default state', 'meta-box-builder' ),

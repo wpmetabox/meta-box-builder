@@ -29,6 +29,7 @@ if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 }
 
 new Extensions\Columns;
+new Extensions\Tooltip;
 
 if ( is_admin() ) {
 	new Import;

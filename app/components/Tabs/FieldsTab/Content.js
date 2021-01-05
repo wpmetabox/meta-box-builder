@@ -2,16 +2,19 @@ import dotProp from 'dot-prop';
 const { lazy, memo, Suspense } = wp.element;
 
 const Content = ( { id, data, field, parent = '' } ) => {
+	// If API specifies control name, then use it. And name, name[subfield] to [name], [name][subfield].
+	const getControlName = name => dotProp.get( data[ name ].props, 'name', name ).replace( /^([^\[]+)/, '[$1]' );
+
 	const getControl = name => {
-		let Control = lazy( () => import( `../../Controls/${ data[ name ].control }` ) );
+		const Control = lazy( () => import( `../../Controls/${ data[ name ].control }` ) );
 
 		return <Control
 			fieldId={ id }
 			componentName={ name }
 			componentId={ `fields-${ id }-${ name }` }
-			name={ `fields${ parent }[${ id }][${ name }]` }
-			defaultValue={ dotProp.get( field, name, data[ name ].default ) }
 			{ ...data[ name ].props }
+			name={ `fields${ parent }[${ id }]${ getControlName( name ) }` }
+			defaultValue={ dotProp.get( field, name, data[ name ].default ) }
 		/>;
 	};
 

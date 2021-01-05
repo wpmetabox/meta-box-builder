@@ -345,6 +345,7 @@ class Data {
 			'meta-box-include-exclude' => 'MB_Include_Exclude',
 			'meta-box-show-hide'       => 'MB_Show_Hide',
 			'meta-box-tabs'            => 'MB_Tabs',
+			'meta-box-tooltip'         => 'MB_Tooltip',
 		];
 
 		if ( isset( $functions[ $extension ] ) ) {
