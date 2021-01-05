@@ -1,5 +1,6 @@
 import dotProp from 'dot-prop';
 import ConditionalLogic from '../Controls/ConditionalLogic';
+import Input from '../Controls/Input';
 import KeyValue from '../Controls/KeyValue';
 import { Block } from './SettingsTab/Block';
 import { CustomTable } from './SettingsTab/CustomTable';
@@ -34,6 +35,12 @@ const SettingsTab = ( { defaultValues } ) => {
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block defaultValues={ defaultValues } /> }
 			{ MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) && <CustomTable defaultValues={ dotProp.get( defaultValues, 'custom_table', {} ) } /> }
 			{ MbbApp.extensions.tabs && <Tabs defaultValues={ defaultValues } /> }
+			<Input
+				name="settings[prefix]"
+				label={ __( 'Field ID prefix', 'meta-box-builder' ) }
+				tooltip={ __( 'Auto add a prefix to all field IDs to keep them separated from other field groups or other plugins. Leave empty to ignore this or use underscore (_) to make the fields hidden.', 'meta-box-builder' ) }
+				componentId="prefix"
+			/>
 			<KeyValue
 				name="settings[custom_settings]"
 				defaultValue={ dotProp.get( defaultValues, 'custom_settings', {} ) }

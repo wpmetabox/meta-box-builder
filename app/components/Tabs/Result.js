@@ -40,12 +40,6 @@ const ResultCode = () => {
 
 	return <>
 		<Input
-			name="prefix"
-			label={ __( 'Field ID prefix', 'meta-box-builder' ) }
-			tooltip={ __( 'Auto add a prefix to all field IDs to keep them separated from other field groups or other plugins. Leave empty to ignore this or use underscore (_) to make the fields hidden.', 'meta-box-builder' ) }
-			componentId="prefix"
-		/>
-		<Input
 			name="text_domain"
 			label={ __( 'Text domain', 'meta-box-builder' ) }
 			tooltip={ __( 'Required for multilingual website. Used in the exported code only.', 'meta-box-builder' ) }
