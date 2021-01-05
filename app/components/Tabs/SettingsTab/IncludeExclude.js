@@ -2,11 +2,11 @@ import dotProp from 'dot-prop';
 import { request, uniqid } from '../../../functions';
 import DivRow from '../../Controls/DivRow';
 import ReactAsyncSelect from '../../Controls/ReactAsyncSelect';
-const { useState } = wp.element;
+const { useState, useEffect } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
-export const IncludeExclude = ( { postTypes, defaultValues } ) => {
+export const IncludeExclude = ( { objectType, postTypes, defaultValues } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValues, 'rules', {} ) ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: 'ID', value: '', id: uniqid() } ] );
@@ -25,6 +25,7 @@ export const IncludeExclude = ( { postTypes, defaultValues } ) => {
 					rule={ rule }
 					baseName={ `settings[include_exclude][rules][${ rule.id }]` }
 					removeRule={ removeRule }
+					objectType={ objectType }
 					postTypes={ postTypes }
 				/> )
 			}
@@ -48,36 +49,47 @@ const Intro = ( { defaultValues } ) => (
 	</div>
 );
 
-const Rule = ( { rule, baseName, removeRule, postTypes } ) => {
+const Rule = ( { rule, baseName, removeRule, objectType, postTypes } ) => {
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 
+	// Validate rule name.
+	useEffect( () => {
+		if ( ['term', 'comment', 'setting'].includes( objectType ) && ![ 'user_role', 'user_id', 'custom' ].includes( name ) ) {
+			setName( 'user_role' );
+		}
+		if ( objectType === 'user' && ![ 'user_role', 'user_id', 'edited_user_role', 'edited_user_id', 'custom' ].includes( name ) ) {
+			setName( 'user_role' );
+		}
+	}, [ objectType ] );
+
 	const loadOptions = s => request( 'include-exclude', { name, s, post_types: postTypes } );
+
 	return (
 		<div className="og-include-exclude__rule og-attribute">
 			<input type="hidden" name={ `${ baseName }[id]` } defaultValue={ rule.id } />
 			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" defaultValue={ name } onChange={ onChangeName }>
-				<option value="ID">{ __( 'Post', 'meta-box-builder' ) }</option>
-				<option value="parent">{ __( 'Parent post', 'meta-box-builder' ) }</option>
-				<option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option>
+				{ objectType === 'post' && <option value="ID">{ __( 'Post', 'meta-box-builder' ) }</option> }
+				{ objectType === 'post' && <option value="parent">{ __( 'Parent post', 'meta-box-builder' ) }</option> }
+				{ objectType === 'post' && <option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option> }
 				{
-					MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ taxonomy.slug }>{ taxonomy.name } ({ taxonomy.slug })</option> )
+					objectType === 'post' && MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ taxonomy.slug }>{ taxonomy.name } ({ taxonomy.slug })</option> )
 				}
 				{
-					MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ `parent_${ taxonomy.slug }` }>{ __( 'Parent', 'meta-box-builder' ) } { taxonomy.name } ({ taxonomy.slug })</option> )
+					objectType === 'post' && MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ `parent_${ taxonomy.slug }` }>{ __( 'Parent', 'meta-box-builder' ) } { taxonomy.name } ({ taxonomy.slug })</option> )
 				}
 				<option value="user_role">{ __( 'User role', 'meta-box-builder' ) }</option>
 				<option value="user_id">{ __( 'User', 'meta-box-builder' ) }</option>
-				<option value="edited_user_role">{ __( 'Edited user role', 'meta-box-builder' ) }</option>
-				<option value="edited_user_id">{ __( 'Edited user', 'meta-box-builder' ) }</option>
-				<option value="is_child">{ __( 'Is child post', 'meta-box-builder' ) }</option>
+				{ objectType === 'user' && <option value="edited_user_role">{ __( 'Edited user role', 'meta-box-builder' ) }</option> }
+				{ objectType === 'user' && <option value="edited_user_id">{ __( 'Edited user', 'meta-box-builder' ) }</option> }
+				{ objectType === 'post' && <option value="is_child">{ __( 'Is child post', 'meta-box-builder' ) }</option> }
 				<option value="custom">{ __( 'Custom', 'meta-box-builder' ) }</option>
 			</select>
 			{
 				// Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
 				<ReactAsyncSelect
-					key={ name + postTypes }
+					key={ name + objectType + postTypes }
 					baseName={ baseName }
 					className="og-include-exclude__value"
 					defaultValue={ rule }

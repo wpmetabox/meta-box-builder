@@ -28,8 +28,8 @@ const SettingsTab = ( { defaultValues } ) => {
 				defaultValues={ defaultValues }
 				setPostTypes={ setPostTypes }
 			/>
-			{ MbbApp.extensions.includeExclude && objectType !== 'block' && <IncludeExclude postTypes={ postTypes } defaultValues={ dotProp.get( defaultValues, 'include_exclude', {} ) } /> }
-			{ MbbApp.extensions.showHide && objectType !== 'block' && <ShowHide defaultValues={ dotProp.get( defaultValues, 'show_hide', {} ) } /> }
+			{ MbbApp.extensions.includeExclude && objectType !== 'block' && <IncludeExclude objectType={ objectType } postTypes={ postTypes } defaultValues={ dotProp.get( defaultValues, 'include_exclude', {} ) } /> }
+			{ MbbApp.extensions.showHide && objectType !== 'block' && <ShowHide objectType={ objectType } defaultValues={ dotProp.get( defaultValues, 'show_hide', {} ) } /> }
 			{ MbbApp.extensions.conditionalLogic && objectType !== 'block' && <ConditionalLogic defaultValue={ dotProp.get( defaultValues, 'conditional_logic', {} ) } name="settings[conditional_logic]" /> }
 			{ objectType === 'post' && postTypes.length > 0 && <Post defaultValues={ defaultValues } postTypes={ postTypes } /> }
 			{ MbbApp.extensions.blocks && objectType === 'block' && <Block defaultValues={ defaultValues } /> }
