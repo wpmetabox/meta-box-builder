@@ -1,6 +1,7 @@
 <?php
 namespace MBB;
 
+use MBBParser\Parsers\Base as BaseParser;
 use MBBParser\Parsers\MetaBox as Parser;
 
 class Edit {
@@ -31,10 +32,13 @@ class Edit {
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['wp-element', 'wp-components', 'clipboard', 'wp-color-picker'], MBB_VER, true );
 
 		$data = [
+			'fields'        => get_post_meta( get_the_ID(), 'fields', true ),
+			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
+			'data'          => get_post_meta( get_the_ID(), 'data', true ),
+
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
-			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
-			'fields'        => get_post_meta( get_the_ID(), 'fields', true ),
+
 			'postTypes'     => Helpers\Data::get_post_types(),
 			'taxonomies'    => Helpers\Data::get_taxonomies(),
 			'settingsPages' => Helpers\Data::get_setting_pages(),
@@ -70,8 +74,22 @@ class Edit {
 
 		// Save data for JavaScript (serialized arrays).
 		$request = rwmb_request();
-		update_post_meta( $post_id, 'settings', $request->post( 'settings' ) );
-		update_post_meta( $post_id, 'fields', $request->post( 'fields' ) );
+		$base_parser = new BaseParser( [] );
+
+		$settings = $request->post( 'settings' );
+		$base_parser->set_settings( $settings );
+		$base_parser->parse_boolean_values()->parse_numeric_values();
+		update_post_meta( $post_id, 'settings', $base_parser->get_settings() );
+
+		$settings = $request->post( 'fields' );
+		$base_parser->set_settings( $settings );
+		$base_parser->parse_boolean_values()->parse_numeric_values();
+		update_post_meta( $post_id, 'fields', $base_parser->get_settings() );
+
+		$settings = $request->post( 'data' );
+		$base_parser->set_settings( $settings );
+		$base_parser->parse_boolean_values()->parse_numeric_values();
+		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
 
 		// Save parsed data for PHP (serialized array).
 		$parser = new Parser( $_POST );

@@ -6,11 +6,12 @@ import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
 import { FieldIdsProvider } from './contexts/FieldIdsContext';
 import { FieldsDataProvider } from './contexts/FieldsDataContext';
-
 const { __ } = wp.i18n;
-const { render, useEffect } = wp.element;
+const { render, useEffect, useState } = wp.element;
 
 const App = () => {
+	const [ tabIndex, setTabIndex ] = useState( dotProp.get( MbbApp, 'data.tab_index', 0 ) );
+
 	const forceValidate = () => document.querySelector( '#post' ).removeAttribute( 'novalidate' );
 	useEffect( () => {
 		const publishButton = document.querySelector( '#publish' );
@@ -26,7 +27,7 @@ const App = () => {
 	return (
 		<FieldsDataProvider>
 			<FieldIdsProvider>
-				<Tabs forceRenderTabPanel={ true }>
+				<Tabs forceRenderTabPanel={ true } selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) }>
 					<TabList>
 						<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
 						<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
@@ -39,10 +40,11 @@ const App = () => {
 						<Settings defaultValues={ dotProp.get( MbbApp, 'settings', {} ) } />
 					</TabPanel>
 					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-						<Result />
+						<Result defaultValues={ dotProp.get( MbbApp, 'settings', {} ) } />
 					</TabPanel>
 				</Tabs>
 				<Data />
+				<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
 			</FieldIdsProvider>
 		</FieldsDataProvider>
 	);

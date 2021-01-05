@@ -1,3 +1,4 @@
+import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Input from '../Controls/Input';
 const { useContext, useState } = wp.element;
@@ -5,7 +6,7 @@ const { __ } = wp.i18n;
 const { ClipboardButton } = wp.components;
 const { withState } = wp.compose;
 
-const ResultCode = () => {
+const ResultCode = ( { defaultValues } ) => {
 	const [ data, setData ] = useState( '' );
 	const [ isGenerating, setIsGenerating ] = useState( false );
 
@@ -40,16 +41,16 @@ const ResultCode = () => {
 
 	return <>
 		<Input
-			name="text_domain"
+			name="settings[text_domain]"
 			label={ __( 'Text domain', 'meta-box-builder' ) }
 			tooltip={ __( 'Required for multilingual website. Used in the exported code only.', 'meta-box-builder' ) }
-			defaultValue="your-text-domain"
+			defaultValue={ dotProp.get( defaultValues, 'text_domain', 'your-text-domain' ) }
 			componentId="text-domain"
 		/>
 		<Input
-			name="function_name"
+			name="settings[function_name]"
 			label={ __( 'Function name', 'meta-box-builder' ) }
-			defaultValue="your_prefix_register_meta_boxes"
+			defaultValue={ dotProp.get( defaultValues, 'function_name', 'your_prefix_register_meta_boxes' ) }
 			componentId="function-name"
 		/>
 		<button type="button" className="button" onClick={ onClick } disabled={ isGenerating }>{ __( 'Generate', 'meta-box-builder' ) }</button>
