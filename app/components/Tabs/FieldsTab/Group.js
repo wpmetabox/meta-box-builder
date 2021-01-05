@@ -15,7 +15,7 @@ const Group = ( { id, field, parent = '' } ) => {
 	const [ subFields, setSubFields ] = useState( Object.values( dotProp.get( field, 'fields', {} ) ) );
 
 	const addSubField = type => setSubFields( prev => {
-		const id = uniqid();
+		const id = `${ type }_${ uniqid() }`;
 		const newField = { _id: id, id, type, name: ucwords( type, '_' ) };
 		updateFieldId( id, newField );
 		return [ ...prev, newField ];
@@ -28,7 +28,7 @@ const Group = ( { id, field, parent = '' } ) => {
 
 	const duplicateSubField = subId => setSubFields( prev => {
 		let newField = getFieldValue( `fields${ parent }[${ id }][fields][${ subId }]` );
-		const newId = uniqid();
+		const newId = `${ dotProp.get( newField, 'type' ) }_${ uniqid() }`;
 		newField.id = newId;
 		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );

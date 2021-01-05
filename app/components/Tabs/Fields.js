@@ -1,3 +1,4 @@
+import dotProp from 'dot-prop';
 import { FieldIdsContext } from '../../contexts/FieldIdsContext';
 import { FieldsDataContext } from '../../contexts/FieldsDataContext';
 import { getFieldValue, ucwords, uniqid } from '../../functions';
@@ -18,7 +19,7 @@ const FieldsTab = props => {
 	}
 
 	const addField = type => setFields( prev => {
-		const id = uniqid();
+		const id = `${ type }_${ uniqid() }`;
 		const newField = { _id: id, id, type, name: ucwords( type, '_' ) };
 		updateFieldId( id, newField );
 		return [ ...prev, newField ];
@@ -31,7 +32,8 @@ const FieldsTab = props => {
 
 	const duplicateField = id => setFields( prev => {
 		let newField = getFieldValue( `fields[${ id }]` );
-		const newId = uniqid();
+		const newId = `${ dotProp.get( newField, 'type' ) }_${ uniqid() }`;
+
 		newField.id = newId;
 		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
