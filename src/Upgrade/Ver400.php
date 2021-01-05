@@ -1,7 +1,7 @@
 <?php
 namespace MBB\Upgrade;
 
-use MBB\Parsers\MetaBox as Parser;
+use MBBParser\Parsers\MetaBox as Parser;
 
 /**
  * Convert from data for AngularJS to React.

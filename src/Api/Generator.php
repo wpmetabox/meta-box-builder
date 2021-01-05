@@ -1,8 +1,8 @@
 <?php
 namespace MBB\Api;
 
-use MBB\Parsers\MetaBox as Parser;
-use MBB\Encoders\MetaBox as Encoder;
+use MBBParser\Parsers\MetaBox as Parser;
+use MBBParser\Encoders\MetaBox as Encoder;
 use WP_REST_Server;
 use WP_REST_Request;
 

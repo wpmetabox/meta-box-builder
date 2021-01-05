@@ -1,6 +1,8 @@
 <?php
 namespace MBB;
 
+use MBBParser\Parsers\MetaBox as Parser;
+
 class Edit {
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
@@ -72,7 +74,7 @@ class Edit {
 		update_post_meta( $post_id, 'fields', $request->post( 'fields' ) );
 
 		// Save parsed data for PHP (serialized array).
-		$parser = new Parsers\MetaBox( $_POST );
+		$parser = new Parser( $_POST );
 		$parser->parse();
 		$meta_box = $parser->get_settings();
 		update_post_meta( $post_id, 'meta_box', $meta_box );
