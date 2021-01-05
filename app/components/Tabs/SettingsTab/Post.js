@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
-import Checkbox from '../../Common/Checkbox';
-import Select from '../../Common/Select';
+import Checkbox from '../../Controls/Checkbox';
+import Select from '../../Controls/Select';
 const { __ } = wp.i18n;
 
 export const Post = ( { postTypes, defaultValues } ) => {

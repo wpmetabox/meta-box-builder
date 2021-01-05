@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
-import Checkbox from '../../Common/Checkbox';
-import Input from '../../Common/Input';
+import Checkbox from '../../Controls/Checkbox';
+import Input from '../../Controls/Input';
 const { __ } = wp.i18n;
 const { useState } = wp.element;
 

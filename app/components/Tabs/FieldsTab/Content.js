@@ -2,8 +2,8 @@ import dotProp from 'dot-prop';
 const { lazy, memo, Suspense } = wp.element;
 
 const Content = ( { id, data, field, parent = '' } ) => {
-	const getElement = name => {
-		let Control = lazy( () => import( `../../Common/${ data[ name ].control }` ) );
+	const getControl = name => {
+		let Control = lazy( () => import( `../../Controls/${ data[ name ].control }` ) );
 
 		return <Control
 			fieldId={ id }
@@ -17,7 +17,7 @@ const Content = ( { id, data, field, parent = '' } ) => {
 
 	return (
 		<div className="og-item__content">
-			{ Object.keys( data ).map( name => <Suspense fallback={ null } key={ id + name }>{ getElement( name ) }</Suspense> ) }
+			{ Object.keys( data ).map( name => <Suspense fallback={ null } key={ id + name }>{ getControl( name ) }</Suspense> ) }
 		</div>
 	);
 };

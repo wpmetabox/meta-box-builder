@@ -1,5 +1,5 @@
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import Input from '../Common/Input';
+import Input from '../Controls/Input';
 const { useContext, useState } = wp.element;
 const { __ } = wp.i18n;
 const { ClipboardButton } = wp.components;
@@ -9,7 +9,7 @@ const ResultCode = () => {
 	const [ data, setData ] = useState( '' );
 	const [ isGenerating, setIsGenerating ] = useState( false );
 
-	const generate = () => {
+	const onClick = () => {
 		setData( '' );
 		setIsGenerating( true );
 
@@ -58,7 +58,7 @@ const ResultCode = () => {
 			defaultValue="your_prefix_register_meta_boxes"
 			componentId="function-name"
 		/>
-		<button type="button" className="button" onClick={ generate }>{ __( 'Generate', 'meta-box-builder' ) }</button>
+		<button type="button" className="button" onClick={ onClick } disabled={ isGenerating }>{ __( 'Generate', 'meta-box-builder' ) }</button>
 		{ isGenerating && <p>{ __( 'Generating code, please wait...', 'meta-box-builder' ) }</p> }
 		{
 			data.length > 0 &&

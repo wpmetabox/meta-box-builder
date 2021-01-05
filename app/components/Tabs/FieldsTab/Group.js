@@ -3,7 +3,7 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { FieldIdsContext } from '../../../contexts/FieldIdsContext';
 import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 import { getFieldValue, ucwords, uniqid } from '../../../functions';
-import { Inserter } from '../../Common/Inserter';
+import { Inserter } from '../../Controls/Inserter';
 import Content from './Content';
 import Node from './Node';
 

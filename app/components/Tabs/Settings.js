@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
-import ConditionalLogic from '../Common/ConditionalLogic';
-import KeyValue from '../Common/KeyValue';
+import ConditionalLogic from '../Controls/ConditionalLogic';
+import KeyValue from '../Controls/KeyValue';
 import { Block } from './SettingsTab/Block';
 import { CustomTable } from './SettingsTab/CustomTable';
 import { IncludeExclude } from './SettingsTab/IncludeExclude';

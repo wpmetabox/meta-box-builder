@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
 import { uniqid } from '../../functions';
-import DivRow from '../Common/DivRow';
+import DivRow from '../Controls/DivRow';
 
 const { useState, useContext } = wp.element;
 const { Dashicon } = wp.components;
