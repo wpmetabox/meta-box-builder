@@ -244,6 +244,13 @@ class Fields extends Base {
 		$language_codes = explode( ',', $language_codes );
 		$language_names = explode( ',', $language_names );
 		$languages      = array_combine( $language_codes, $language_names );
+
+		$region_codes = 'ac,ad,ae,af,ag,ai,al,am,ao,aq,ar,as,at,au,aw,ax,az,ba,bb,bd,be,bf,bg,bh,bi,bj,bm,bn,bo,bq,br,bs,bt,bw,by,bz,ca,cc,cd,cf,cg,ch,ci,ck,cl,cm,cn,co,cr,cu,cv,cw,cx,cy,cz,de,dj,dk,dm,do,dz,ec,ee,eg,eh,er,es,et,eu,fi,fj,fk,fm,fo,fr,ga,gd,ge,gf,gg,gh,gi,gl,gm,gn,gp,gq,gr,gs,gt,gu,gw,gy,hk,hm,hn,hr,ht,hu,id,ie,il,im,in,io,iq,ir,is,it,je,jm,jo,jp,ke,kg,kh,ki,km,kn,kp,kr,kw,ky,kz,la,lb,lc,li,lk,lr,ls,lt,lu,lv,ly,ma,mc,md,me,mg,mh,mk,ml,mm,mn,mo,mp,mq,mr,ms,mt,mu,mv,mw,mx,my,mz,na,nc,ne,nf,ng,ni,nl,no,np,nr,nu,nz,om,pa,pe,pf,pg,ph,pk,pl,pm,pn,pr,ps,pt,pw,py,qa,re,ro,rs,ru,rw,sa,sb,sc,sd,se,sg,sh,si,sk,sl,sm,sn,so,sr,ss,st,su,sv,sx,sy,sz,tc,td,tf,tg,th,tj,tk,tl,tm,tn,to,tr,tt,tv,tw,tz,ua,ug,uk,us,uy,uz,va,vc,ve,vg,vi,vn,vu,wf,ws,ye,yt,za,zm,zw';
+		$region_names = 'Ascension Island (United Kingdom),Andorra,United Arab Emirates,Afghanistan,Antigua and Barbuda,Anguilla (United Kingdom),Albania,Armenia,Angola,Antarctica,Argentina,American Samoa (United States),Austria,Australia,Aruba (Kingdom of the Netherlands),Åland (Finland),Azerbaijan,Bosnia and Herzegovina,Barbados,Bangladesh,Belgium,Burkina Faso,Bulgaria,Bahrain,Burundi,Benin,Bermuda (United Kingdom),Brunei,Bolivia,Caribbean Netherlands (Bonaire - Saba -Sint Eustatius),Brazil,Bahamas,Bhutan,Botswana,Belarus,Belize,Canada,Cocos (Keeling) Islands (Australia),Democratic Republic of the Congo,Central African Republic,Republic of the Congo,Switzerland,Ivory Coast,Cook Islands,Chile,Cameroon,People\'s Republic of China,Colombia,Costa Rica,Cuba,Cape Verde,Curaçao (Kingdom of the Netherlands),Christmas Island,Cyprus,Czech Republic,Germany,Djibouti,Denmark,Dominica,Dominican Republic,Algeria,Ecuador,Estonia,Egypt,Western Sahara,Eritrea,Spain,Ethiopia,European Union,Finland,Fiji,Falkland Islands (United Kingdom),Federated States of Micronesia,Faroe Islands (Kingdom of Denmark),France,Gabon,Grenada,Georgia,French Guiana (France),Guernsey (United Kingdom),Ghana,Gibraltar (United Kingdom),Greenland (Kingdom of Denmark),The Gambia,Guinea,Guadeloupe (France),Equatorial Guinea,Greece,South Georgia and the South Sandwich Islands (United Kingdom),Guatemala,Guam (United States),Guinea-Bissau,Guyana,Hong Kong,Heard Island and McDonald Islands,Honduras,Croatia,Haiti,Hungary,Indonesia,Ireland,Israel,Isle of Man (United Kingdom),India,British Indian Ocean Territory (United Kingdom),Iraq,Iran,Iceland,Italy,Jersey (United Kingdom),Jamaica,Jordan,Japan,Kenya,Kyrgyzstan,Cambodia,Kiribati,Comoros,Saint Kitts and Nevis,North Korea,South Korea,Kuwait,Cayman Islands (United Kingdom),Kazakhstan,Laos,Lebanon,Saint Lucia,Liechtenstein,Sri Lanka,Liberia,Lesotho,Lithuania,Luxembourg,Latvia,Libya,Morocco,Monaco,Moldova,Montenegro,Madagascar,Marshall Islands,North Macedonia,Mali,Myanmar,Mongolia,Macau,Northern Mariana Islands (United States),Martinique (France),Mauritania,Montserrat (United Kingdom),Malta,Mauritius,Maldives,Malawi,Mexico,Malaysia,Mozambique,Namibia,New Caledonia (France),Niger,Norfolk Island,Nigeria,Nicaragua,Netherlands,Norway,Nepal,Nauru,Niue,New Zealand,Oman,Panama,Peru,French Polynesia (France),Papua New Guinea,Philippines,Pakistan,Poland,Saint-Pierre and Miquelon (France),Pitcairn Islands (United Kingdom),Puerto Rico (United States),Palestine[34],Portugal,Palau,Paraguay,Qatar,Réunion (France),Romania,Serbia,Russia,Rwanda,Saudi Arabia,Solomon Islands,Seychelles,Sudan,Sweden,Singapore,Saint Helena (United Kingdom),Slovenia,Slovakia,Sierra Leone,San Marino,Senegal,Somalia,Suriname,South Sudan,São Tomé and Príncipe,Soviet Union,El Salvador,Sint Maarten (Kingdom of the Netherlands),Syria,Eswatini,Turks and Caicos Islands (United Kingdom),Chad,French Southern and Antarctic Lands,Togo,Thailand,Tajikistan,Tokelau,East Timor,Turkmenistan,Tunisia,Tonga,Turkey,Trinidad and Tobago,Tuvalu,Taiwan,Tanzania,Ukraine,Uganda,United Kingdom,United States of America,Uruguay,Uzbekistan,Vatican City,Saint Vincent and the Grenadines,Venezuela,British Virgin Islands (United Kingdom),United States Virgin Islands (United States),Vietnam,Vanuatu,Wallis and Futuna,Samoa,Yemen,Mayotte,South Africa,Zambia,Zimbabwe';
+		$region_codes = explode( ',', $region_codes );
+		$region_names = explode( ',', $region_names );
+		$regions      = array_combine( $region_codes, $region_names );
+
 		$map_settings   = [
 			'std' => Control::Input( [
 				'label'   => __( 'Default location', 'meta-box-builder' ),
@@ -259,9 +266,9 @@ class Fields extends Base {
 				'label'   => __( 'Language', 'meta-box-builder' ),
 				'options' => $languages,
 			] ),
-			'region' => Control::Input( [
-				'label'    => '<a href="https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains#Country_code_top-level_domains" target="_blank" rel="noopenner noreferrer">' . __( 'Region code', 'meta-box-builder' ) . '</a>',
-				'tooltip'  => __( 'The region code, specified as a country code top-level domain. Use for autocompleting addresses.' ),
+			'region' => Control::Select( [
+				'label'    => __( 'Region', 'meta-box-builder' ),
+				'options'  => $regions,
 			] ),
 		];
 		$taxonomy_settings = [
