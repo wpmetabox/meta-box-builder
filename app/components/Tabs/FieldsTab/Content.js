@@ -9,7 +9,7 @@ const Content = ( { id, controls, field, parent = '' } ) => {
 	const bracketsToDots = name => dotProp.get( controls[ name ].props, 'name', name ).replace( '[', '.' ).replace( ']', '' );
 
 	const getControl = name => {
-		const Control = lazy( () => import( `../../Controls/${ controls[ name ].control }` ) );
+		const Control = lazy( () => import( `../../Controls/${ controls[ name ].name }` ) );
 
 		return <Control
 			fieldId={ id }
