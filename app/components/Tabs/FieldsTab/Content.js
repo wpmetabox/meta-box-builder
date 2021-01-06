@@ -1,26 +1,26 @@
 import dotProp from 'dot-prop';
 const { lazy, memo, Suspense } = wp.element;
 
-const Content = ( { id, data, field, parent = '' } ) => {
+const Content = ( { id, controls, field, parent = '' } ) => {
 	// If API specifies control name, then use it. And name, name[subfield] to [name], [name][subfield].
-	const getControlName = name => dotProp.get( data[ name ].props, 'name', name ).replace( /^([^\[]+)/, '[$1]' );
+	const getControlName = name => dotProp.get( controls[ name ].props, 'name', name ).replace( /^([^\[]+)/, '[$1]' );
 
 	const getControl = name => {
-		const Control = lazy( () => import( `../../Controls/${ data[ name ].control }` ) );
+		const Control = lazy( () => import( `../../Controls/${ controls[ name ].control }` ) );
 
 		return <Control
 			fieldId={ id }
 			componentName={ name }
 			componentId={ `fields-${ id }-${ name }` }
-			{ ...data[ name ].props }
+			{ ...controls[ name ].props }
 			name={ `fields${ parent }[${ id }]${ getControlName( name ) }` }
-			defaultValue={ dotProp.get( field, name, data[ name ].default ) }
+			defaultValue={ dotProp.get( field, name, controls[ name ].default ) }
 		/>;
 	};
 
 	return (
 		<div className="og-item__content">
-			{ Object.keys( data ).map( name => <Suspense fallback={ null } key={ id + name }>{ getControl( name ) }</Suspense> ) }
+			{ Object.keys( controls ).map( name => <Suspense fallback={ null } key={ id + name }>{ getControl( name ) }</Suspense> ) }
 		</div>
 	);
 };

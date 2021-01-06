@@ -75,7 +75,7 @@ class Fields extends Base {
 		return $field_types;
 	}
 
-	public function get_fields() {
+	public function get_field_controls() {
 		// General tab.
 		$id = Control::Id( [
 			'label'    => __( 'ID', 'meta-box-builder' ),
@@ -593,7 +593,10 @@ class Fields extends Base {
 			];
 		}
 
-		$fields = apply_filters( 'mbb_fields', $fields );
+		$fields = apply_filters( 'mbb_field_controls', $fields );
+		foreach ( $fields as &$controls ) {
+			$controls = apply_filters( "mbb_field_controls_$type", $controls );
+		}
 
 		return $fields;
 	}

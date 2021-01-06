@@ -4,8 +4,8 @@ import { Data } from './components/Data';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
+import { FieldControlsProvider } from './contexts/FieldControlsContext';
 import { FieldIdsProvider } from './contexts/FieldIdsContext';
-import { FieldsDataProvider } from './contexts/FieldsDataContext';
 const { __ } = wp.i18n;
 const { render, useEffect, useState } = wp.element;
 
@@ -25,7 +25,7 @@ const App = () => {
 	}, [] );
 
 	return (
-		<FieldsDataProvider>
+		<FieldControlsProvider>
 			<FieldIdsProvider>
 				<Tabs forceRenderTabPanel={ true } selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) }>
 					<TabList>
@@ -46,7 +46,7 @@ const App = () => {
 				<Data />
 				<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
 			</FieldIdsProvider>
-		</FieldsDataProvider>
+		</FieldControlsProvider>
 	);
 };
 

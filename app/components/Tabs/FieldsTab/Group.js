@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { FieldControlsContext } from '../../../contexts/FieldControlsContext';
 import { FieldIdsContext } from '../../../contexts/FieldIdsContext';
-import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 import { getFieldValue, ucwords, uniqid } from '../../../functions';
 import { Inserter } from '../../Controls/Inserter';
 import Content from './Content';
@@ -62,8 +62,8 @@ const Group = ( { id, field, parent = '' } ) => {
 		return newFields;
 	} );
 
-	const fieldsData = useContext( FieldsDataContext );
-	const data = { ...fieldsData[ field.type ] };
+	const fieldControls = useContext( FieldControlsContext );
+	const controls = { ...fieldControls[ field.type ] };
 
 	return (
 		<>
@@ -73,10 +73,10 @@ const Group = ( { id, field, parent = '' } ) => {
 					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 				</TabList>
 				<TabPanel>
-					<Content id={ id } data={ data.general } field={ field } parent={ parent } />
+					<Content id={ id } controls={ controls.general } field={ field } parent={ parent } />
 				</TabPanel>
 				<TabPanel>
-					<Content id={ id } data={ data.advanced } field={ field } parent={ parent } />
+					<Content id={ id } controls={ controls.advanced } field={ field } parent={ parent } />
 				</TabPanel>
 			</Tabs>
 			<div className={ `og-group-fields og-field${ subFields.length === 0 ? ' og-group-fields--empty' : '' }` }>

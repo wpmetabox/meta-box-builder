@@ -10,23 +10,23 @@ class Tooltip {
 		if ( ! Data::is_extension_active( 'meta-box-tooltip' ) ) {
 			return;
 		}
-		add_filter( 'mbb_fields', [ $this, 'add_settings' ] );
+		add_filter( 'mbb_field_controls', [ $this, 'add_controls' ] );
 		add_filter( 'mbb_parsed_field', [ $this, 'parse_field' ] );
 	}
 
-	public function add_settings( $fields ) {
-		foreach ( $fields as &$data ) {
-			$data['general']['tooltip_enable'] = Control::Checkbox( [
+	public function add_controls( $fields ) {
+		foreach ( $fields as &$controls ) {
+			$controls['general']['tooltip_enable'] = Control::Checkbox( [
 				'name'  => 'tooltip[enable]',
 				'label' => '<a href="https://metabox.io/plugins/meta-box-tooltip/" target="_blank" rel="nofollow noopenner">' . __( 'Tooltip', 'meta-box-builder' ) . '</a>',
 			] );
-			$data['general']['tooltip_icon'] = Control::Input( [
+			$controls['general']['tooltip_icon'] = Control::Input( [
 				'name'       => 'tooltip[icon]',
 				'label'      => __( 'Icon', 'meta-box-builder' ),
 				'tooltip'    => __( 'Can be "info" (default), "help", Dashicons or URL of the custom icon image', 'meta-box-builder' ),
 				'dependency' => 'tooltip_enable:true',
 			] );
-			$data['general']['tooltip_position'] = Control::Select( [
+			$controls['general']['tooltip_position'] = Control::Select( [
 				'name'       => 'tooltip[position]',
 				'label'      => __( 'Position', 'meta-box-builder' ),
 				'dependency' => 'tooltip_enable:true',
@@ -37,7 +37,7 @@ class Tooltip {
 					'right'  => __( 'Right', 'meta-box-builder' ),
 				],
 			], 'top' );
-			$data['general']['tooltip_content'] = Control::Input( [
+			$controls['general']['tooltip_content'] = Control::Input( [
 				'name'       => 'tooltip[content]',
 				'label'      => __( 'Content', 'meta-box-builder' ),
 				'dependency' => 'tooltip_enable:true',
