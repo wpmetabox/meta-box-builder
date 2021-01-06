@@ -5,11 +5,13 @@ const { Dropdown } = wp.components;
 const { __ } = wp.i18n;
 
 export const Inserter = ( { addField, type } ) => {
-	const [ fieldTypes, setFieldTypes ] = useState( {} );
+	const [ categories, setCategories ] = useState( [] );
+	const [ fieldTypes, setFieldTypes ] = useState( [] );
 	const [ searchParam, setSearchParam ] = useState( '' );
 	const [ closeCallback, setCloseCallback ] = useState( () => { } );
 
 	useEffect( () => {
+		request( 'field-categories' ).then( setCategories );
 		request( 'field-types' ).then( setFieldTypes );
 	}, [] );
 
@@ -38,9 +40,9 @@ export const Inserter = ( { addField, type } ) => {
 						<input type="search" placeholder={ __( 'Search for a field type', 'meta-box-builder' ) } onChange={ search } />
 					</div>
 					{
-						Object.keys( fieldTypes ).length
-							? Object.entries( fieldTypes ).map( ( [ title, items ] ) =>
-								<Category key={ title } title={ title } items={ items } insert={ insert } searchParam={ searchParam } />
+						categories.length > 0 && fieldTypes.length > 0
+							? categories.map( category =>
+								<Category key={ category.slug } category={ category } fieldTypes={ fieldTypes } insert={ insert } searchParam={ searchParam } />
 							)
 							: <p>{ __( 'Fetching field types, please wait...', 'meta-box-builder' ) }</p>
 					}
@@ -50,25 +52,17 @@ export const Inserter = ( { addField, type } ) => {
 	);
 };
 
-const Category = ( { title, items, insert, searchParam } ) => {
-	let result = [];
-	Object.entries( items ).forEach( ( [ type, label ] ) => {
-		if ( label.toLowerCase().includes( searchParam.toLowerCase() ) ) {
-			result.push( { type, label } );
-		}
-	} );
+const Category = ( { category, fieldTypes, insert, searchParam } ) => {
+	const s = searchParam.toLowerCase();
+	const types = fieldTypes.filter( type => type.category === category.slug && type.title.toLowerCase().includes( s ) );
 
-	if ( !result.length ) {
-		return null;
-	}
-
-	return (
+	return types.length > 0 && (
 		<>
-			<div className="og-inserter__title">{ title }</div>
+			<div className="og-inserter__title">{ category.title }</div>
 			<div className="og-inserter__content">
 				{
-					result.map( ( { type, label } ) =>
-						<div className="og-inserter__item" key={ type } data-type={ type } onClick={ insert }>{ label }</div>
+					types.map( ( { name, title } ) =>
+						<div className="og-inserter__item" key={ name } data-type={ name } onClick={ insert }>{ title }</div>
 					)
 				}
 			</div>

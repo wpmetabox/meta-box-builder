@@ -5,74 +5,296 @@ use MBB\Control;
 use MBB\Helpers\Data;
 
 class Fields extends Base {
+	public function get_field_categories() {
+		$categories = [
+			[
+				'slug'  => 'basic',
+				'title' => __( 'Basic', 'meta-box-builder' ),
+			],
+			[
+				'slug'  => 'advanced',
+				'title' => __( 'Advanced', 'meta-box-builder' ),
+			],
+			[
+				'slug'  => 'wordpress',
+				'title' => __( 'WordPress', 'meta-box-builder' ),
+			],
+			[
+				'slug'  => 'upload',
+				'title' => __( 'Upload', 'meta-box-builder' ),
+			],
+			[
+				'slug'  => 'layout',
+				'title' => __( 'Layout', 'meta-box-builder' ),
+			],
+		];
+
+		$categories = apply_filters( 'mbb_field_categories', $categories );
+
+		return $categories;
+	}
+
 	public function get_field_types() {
-		$field_types = [
-			'Basic' => [
-				'button'          => 'Button',
-				'button_group'    => 'Button Group',
-				'checkbox'        => 'Checkbox',
-				'checkbox_list'   => 'Checkbox List',
-				'email'           => 'Email',
-				'hidden'          => 'Hidden',
-				'number'          => 'Number',
-				'password'        => 'Password',
-				'radio'           => 'Radio',
-				'range'           => 'Range',
-				'select'          => 'Select',
-				'select_advanced' => 'Select Advanced',
-				'text'            => 'Text',
-				'textarea'        => 'Textarea',
-				'url'             => 'URL',
+		$types = [
+			[
+				'name'     => 'button',
+				'title'    => __( 'Button', 'meta-box-builder' ),
+				'category' => 'basic',
 			],
-			'Advanced' => [
-				'autocomplete'  => 'Autocomplete',
-				'background'    => 'Background',
-				'color'         => 'Color Picker',
-				'custom_html'   => 'Custom HTML',
-				'date'          => 'Date Picker',
-				'datetime'      => 'Date Time Picker',
-				'fieldset_text' => 'Fieldset Text',
-				'map'           => 'Google Maps',
-				'slider'        => 'jQuery UI Slider',
-				'key_value'     => 'Key Value',
-				'image_select'  => 'Image Select',
-				'oembed'        => 'oEmbed',
-				'osm'           => 'Open Street Maps',
-				'switch'        => 'Switch',
-				'text_list'     => 'Text List',
-				'time'          => 'Time Picker',
-				'wysiwyg'       => 'WYSIWYG Editor',
+			[
+				'name'     => 'button_group',
+				'title'    => __( 'Button Group', 'meta-box-builder' ),
+				'category' => 'basic',
 			],
-			'WordPress' => [
-				'post'              => 'Post',
-				'sidebar'           => 'Sidebar',
-				'taxonomy'          => 'Taxonomy',
-				'taxonomy_advanced' => 'Taxonomy Advanced',
-				'user'              => 'User',
+			[
+				'name'     => 'checkbox',
+				'title'    => __( 'Checkbox', 'meta-box-builder' ),
+				'category' => 'basic',
 			],
-			'Upload' => [
-				'file'           => 'File',
-				'file_advanced'  => 'File Advanced',
-				'file_upload'    => 'File Upload',
-				'file_input'     => 'File Input',
-				'image'          => 'Image',
-				'image_advanced' => 'Image Advanced',
-				'image_upload'   => 'Image Upload',
-				'single_image'   => 'Single Image',
-				'video'          => 'Video',
+			[
+				'name'     => 'checkbox_list',
+				'title'    => __( 'Checkbox List', 'meta-box-builder' ),
+				'category' => 'basic',
 			],
-			'Layout' => [
-				'divider' => 'Divider',
-				'heading' => 'Heading',
+			[
+				'name'     => 'email',
+				'title'    => __( 'Email', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'hidden',
+				'title'    => __( 'Hidden', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'number',
+				'title'    => __( 'Number', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'password',
+				'title'    => __( 'Password', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'radio',
+				'title'    => __( 'Radio', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'range',
+				'title'    => __( 'Range', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'select',
+				'title'    => __( 'Select', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'select_advanced',
+				'title'    => __( 'Select Advanced', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'text',
+				'title'    => __( 'Text', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'textarea',
+				'title'    => __( 'Textarea', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'url',
+				'title'    => __( 'URL', 'meta-box-builder' ),
+				'category' => 'basic',
+			],
+			[
+				'name'     => 'autocomplete',
+				'title'    => __( 'Autocomplete', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'background',
+				'title'    => __( 'Background', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'color',
+				'title'    => __( 'Color Picker', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'custom_html',
+				'title'    => __( 'Custom HTML', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'date',
+				'title'    => __( 'Date Picker', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'datetime',
+				'title'    => __( 'Date Time Picker', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'fieldset_text',
+				'title'    => __( 'Fieldset Text', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'map',
+				'title'    => __( 'Google Maps', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'slider',
+				'title'    => __( 'jQuery UI Slider', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'key_value',
+				'title'    => __( 'Key Value', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'image_select',
+				'title'    => __( 'Image Select', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'oembed',
+				'title'    => __( 'oEmbed', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'osm',
+				'title'    => __( 'Open Street Maps', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'switch',
+				'title'    => __( 'Switch', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'text_list',
+				'title'    => __( 'Text List', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'time',
+				'title'    => __( 'Time Picker', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'wysiwyg',
+				'title'    => __( 'WYSIWYG Editor', 'meta-box-builder' ),
+				'category' => 'advanced',
+			],
+			[
+				'name'     => 'post',
+				'title'    => __( 'Post', 'meta-box-builder' ),
+				'category' => 'wordpress',
+			],
+			[
+				'name'     => 'sidebar',
+				'title'    => __( 'Sidebar', 'meta-box-builder' ),
+				'category' => 'wordpress',
+			],
+			[
+				'name'     => 'taxonomy',
+				'title'    => __( 'Taxonomy', 'meta-box-builder' ),
+				'category' => 'wordpress',
+			],
+			[
+				'name'     => 'taxonomy_advanced',
+				'title'    => __( 'Taxonomy Advanced', 'meta-box-builder' ),
+				'category' => 'wordpress',
+			],
+			[
+				'name'     => 'user',
+				'title'    => __( 'User', 'meta-box-builder' ),
+				'category' => 'wordpress',
+			],
+			[
+				'name'     => 'file',
+				'title'    => __( 'File', 'meta-box-builder' ),
+				'category' => 'upload',
+			],
+			[
+				'name'     => 'file_advanced',
+				'title'    => __( 'File Advanced', 'meta-box-builder' ),
+				'category' => 'upload',
+			],
+			[
+				'name'     => 'file_upload',
+				'title'    => __( 'File Upload', 'meta-box-builder' ),
+				'category' => 'upload',
+			],
+			[
+				'name'     => 'file_input',
+				'title'    => __( 'File Input', 'meta-box-builder' ),
+				'category' => 'upload',
+			],
+			[
+				'name'     => 'image',
+				'title'    => __( 'Image', 'meta-box-builder' ),
+				'category' => 'upload',
+			],
+			[
+				'name'     => 'image_advanced',
+				'title'    => __( 'Image Advanced', 'meta-box-builder' ),
+				'category' => 'upload',
+			],
+			[
+				'name'     => 'image_upload',
+				'title'    => __( 'Image Upload', 'meta-box-builder' ),
+				'category' => 'upload',
+			],
+			[
+				'name'     => 'single_image',
+				'title'    => __( 'Single Image', 'meta-box-builder' ),
+				'category' => 'upload',
+			],
+			[
+				'name'     => 'video',
+				'title'    => __( 'Video', 'meta-box-builder' ),
+				'category' => 'upload',
+			],
+			[
+				'name'     => 'divider',
+				'title'    => __( 'Divider', 'meta-box-builder' ),
+				'category' => 'layout',
+			],
+			[
+				'name'     => 'heading',
+				'title'    => __( 'Heading', 'meta-box-builder' ),
+				'category' => 'layout',
 			],
 		];
 		if ( Data::is_extension_active( 'meta-box-tabs' ) ) {
-			$field_types['Layout']['tab'] = 'Tab';
+			$type[] = [
+				'name'     => 'tab',
+				'title'    => __( 'Tab', 'meta-box-builder' ),
+				'category' => 'layout',
+			];
 		}
 		if ( Data::is_extension_active( 'meta-box-group' ) ) {
-			$field_types['Layout']['group'] = 'Group';
+			$type[] = [
+				'name'     => 'group',
+				'title'    => __( 'Group', 'meta-box-builder' ),
+				'category' => 'layout',
+			];
 		}
-		return $field_types;
+
+		$types = apply_filters( 'mbb_field_types', $types );
+
+		return $types;
 	}
 
 	public function get_field_controls() {
