@@ -2,6 +2,7 @@
 namespace MBB\Extensions;
 
 use MBB\Control;
+use MBB\Helpers\Arr;
 use MBB\Helpers\Data;
 
 class Tabs {
@@ -11,6 +12,7 @@ class Tabs {
 		}
 		add_filter( 'mbb_field_types', [ $this, 'add_field_types' ] );
 		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ] );
+		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_meta_box_settings' ] );
 	}
 
 	public function add_field_types( $types ) {
@@ -51,5 +53,61 @@ class Tabs {
 		];
 
 		return $fields;
+	}
+
+	public function parse_meta_box_settings( $settings ) {
+		$this->parse_tabs( $settings );
+		$this->set_fields_tab( $settings['fields'] );
+		return $settings;
+	}
+
+	private function parse_tabs( &$settings ) {
+		$tabs = [];
+
+		$fields = $settings['fields'];
+		foreach ( $fields as $field ) {
+			if ( 'tab' !== Arr::get( $field, 'type' ) ) {
+				continue;
+			}
+
+			$label = Arr::get( $field, 'name', '' );
+			$icon  = Arr::get( $field, 'icon', '' );
+
+			$tabs[ $field['id'] ] = compact( 'label', 'icon' );
+		}
+
+		if ( 'default' === Arr::get( $settings, 'tab_style' ) ) {
+			unset( $settings['tab_style'] );
+		}
+
+		if ( empty( $tabs ) ) {
+			unset( $settings['tab_style'] );
+			unset( $settings['tab_default_active'] );
+		} else {
+			$settings['tabs'] = $tabs;
+
+			// Move 'fields' to bottom.
+			unset( $settings['fields'] );
+			$settings['fields'] = $fields;
+		}
+	}
+
+	private function set_fields_tab( &$fields ) {
+		if ( empty( $fields ) ) {
+			return;
+		}
+		if ( 'tab' !== Arr::get( $fields[0], 'type' ) ) {
+			return;
+		}
+
+		$previous_tab = null;
+		foreach ( $fields as $k => &$field ) {
+			if ( 'tab' === $field['type'] ) {
+				$previous_tab = $field['id'];
+				unset( $fields[ $k ] );
+			} else {
+				$field['tab'] = $previous_tab;
+			}
+		}
 	}
 }
