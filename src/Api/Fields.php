@@ -277,15 +277,8 @@ class Fields extends Base {
 				'category' => 'layout',
 			],
 		];
-		if ( Data::is_extension_active( 'meta-box-tabs' ) ) {
-			$type[] = [
-				'name'     => 'tab',
-				'title'    => __( 'Tab', 'meta-box-builder' ),
-				'category' => 'layout',
-			];
-		}
 		if ( Data::is_extension_active( 'meta-box-group' ) ) {
-			$type[] = [
+			$types[] = [
 				'name'     => 'group',
 				'title'    => __( 'Group', 'meta-box-builder' ),
 				'category' => 'layout',
@@ -786,37 +779,8 @@ class Fields extends Base {
 			$fields[ $type ] = compact( 'general', 'advanced' );
 		}
 
-		if ( Data::is_extension_active( 'meta-box-tabs' ) ) {
-			$fields['tab'] = [
-				'general'  => [
-					'name'      => $name,
-					'id'        => $id,
-					'icon_type' => Control::Select( [
-						'label'   => __( 'Icon type', 'meta-box-builder' ),
-						'options' => [
-							'dashicons'   => __( 'Dashicons', 'meta-box-builder' ),
-							'fontawesome' => __( 'Font Awesome', 'meta-box-builder' ),
-							'url'         => __( 'Custom URL', 'meta-box-builder' ),
-						],
-					], 'dashicons' ),
-					'icon' => Control::Icon( [
-						'label'      => __( 'Icon', 'meta-box-builder' ),
-						'dependency' => 'icon_type:dashicons',
-					] ),
-					'icon_fa' => Control::Input( [
-						'label'      => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank" rel="noopenner noreferrer">' . __( 'Icon CSS class', 'meta-box-builder' ) . '</a>',
-						'dependency' => 'icon_type:fontawesome',
-					] ),
-					'icon_url' => Control::Input( [
-						'label'      => __( 'Icon URL', 'meta-box-builder' ),
-						'dependency' => 'icon_type:url',
-					] ),
-				],
-			];
-		}
-
 		$fields = apply_filters( 'mbb_field_controls', $fields );
-		foreach ( $fields as &$controls ) {
+		foreach ( $fields as $type => &$controls ) {
 			$controls = apply_filters( "mbb_field_controls_$type", $controls );
 		}
 

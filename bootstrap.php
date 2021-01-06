@@ -28,6 +28,7 @@ if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 	new Api\ShowHide;
 }
 
+new Extensions\Tabs;
 new Extensions\Columns;
 new Extensions\Tooltip;
 

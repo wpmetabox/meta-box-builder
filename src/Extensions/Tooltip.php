@@ -10,11 +10,11 @@ class Tooltip {
 		if ( ! Data::is_extension_active( 'meta-box-tooltip' ) ) {
 			return;
 		}
-		add_filter( 'mbb_field_controls', [ $this, 'add_controls' ] );
+		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ] );
 		add_filter( 'mbb_field_settings', [ $this, 'parse_field_settings' ] );
 	}
 
-	public function add_controls( $fields ) {
+	public function add_field_controls( $fields ) {
 		foreach ( $fields as &$controls ) {
 			$controls['general']['tooltip_enable'] = Control::Checkbox( [
 				'name'  => 'tooltip[enable]',

@@ -10,11 +10,11 @@ class Columns {
 		if ( ! Data::is_extension_active( 'meta-box-columns' ) ) {
 			return;
 		}
-		add_filter( 'mbb_field_controls', [ $this, 'add_controls' ] );
-		add_filter( 'mbb_parsed_field', [ $this, 'parse_field' ] );
+		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ] );
+		add_filter( 'mbb_field_settings', [ $this, 'parse_field_settings' ] );
 	}
 
-	public function add_controls( $fields ) {
+	public function add_field_controls( $fields ) {
 		foreach ( $fields as &$controls ) {
 			$controls['general']['columns'] = Control::Select( [
 				'label'      => '<a href="https://metabox.io/plugins/meta-box-columns/" target="_blank" rel="nofollow noopenner">' . __( 'Columns', 'meta-box-builder' ) . '</a>',
@@ -26,7 +26,7 @@ class Columns {
 		return $fields;
 	}
 
-	public function parse_field( $settings ) {
+	public function parse_field_settings( $settings ) {
 		if ( 12 == Arr::get( $settings, 'columns', 12 ) ) {
 			unset( $settings['columns'] );
 		}
