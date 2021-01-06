@@ -11,7 +11,7 @@ class Tooltip {
 			return;
 		}
 		add_filter( 'mbb_field_controls', [ $this, 'add_controls' ] );
-		add_filter( 'mbb_parsed_field', [ $this, 'parse_field' ] );
+		add_filter( 'mbb_field_settings', [ $this, 'parse_field_settings' ] );
 	}
 
 	public function add_controls( $fields ) {
@@ -47,7 +47,7 @@ class Tooltip {
 		return $fields;
 	}
 
-	public function parse_field( $settings ) {
+	public function parse_field_settings( $settings ) {
 		if ( ! Arr::get( $settings, 'tooltip.enable' ) || ! Arr::get( $settings, 'tooltip.content' ) ) {
 			unset( $settings['tooltip'] );
 		}

@@ -74,28 +74,21 @@ class Edit {
 
 		// Save data for JavaScript (serialized arrays).
 		$request = rwmb_request();
-		$base_parser = new BaseParser( [] );
+		$base_parser = new BaseParser;
 
-		$settings = $request->post( 'settings' );
-		$base_parser->set_settings( $settings );
-		$base_parser->parse_boolean_values()->parse_numeric_values();
+		$base_parser->set_settings( $request->post( 'settings' ) )->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'settings', $base_parser->get_settings() );
 
-		$settings = $request->post( 'fields' );
-		$base_parser->set_settings( $settings );
-		$base_parser->parse_boolean_values()->parse_numeric_values();
+		$base_parser->set_settings( $request->post( 'fields' ) )->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'fields', $base_parser->get_settings() );
 
-		$settings = $request->post( 'data' );
-		$base_parser->set_settings( $settings );
-		$base_parser->parse_boolean_values()->parse_numeric_values();
+		$base_parser->set_settings( $request->post( 'data' ) )->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
 
 		// Save parsed data for PHP (serialized array).
 		$parser = new Parser( $_POST );
 		$parser->parse();
-		$meta_box = $parser->get_settings();
-		update_post_meta( $post_id, 'meta_box', $meta_box );
+		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
 	}
 
 	private function is_screen() {
