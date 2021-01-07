@@ -19,8 +19,7 @@ class Tabs {
 			'title'    => __( 'Tab', 'meta-box-builder' ),
 			'category' => 'layout',
 			'controls' => [
-				'name',
-				'id',
+				'type', 'name', 'id',
 				Control::Select( 'icon_type', [
 					'label'   => __( 'Icon type', 'meta-box-builder' ),
 					'options' => [

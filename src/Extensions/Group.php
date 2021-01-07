@@ -17,7 +17,7 @@ class Group {
 			'title'    => __( 'Group', 'meta-box-builder' ),
 			'category' => 'layout',
 			'controls' => [
-				'name', 'id', 'label_description', 'desc',
+				'type', 'name', 'id', 'label_description', 'desc',
 				Control::Checkbox( 'collapsible', __( 'Collapsible', 'meta-box-builder' ) ),
 				Control::Select( 'default_state', [
 					'label'      => __( 'Default state', 'meta-box-builder' ),
