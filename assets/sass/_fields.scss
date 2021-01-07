@@ -4,12 +4,6 @@
   border-bottom: var(--border-lighter);
 }
 
-&-fields {
-  &--dragging {
-    background-color: #fffacd;
-  }
-}
-
 &-field {
   margin-bottom: 16px;
   display: flex;
@@ -65,17 +59,7 @@
 
   &__header {
     padding: 12px;
-    cursor: pointer;
-  }
-
-  &--dragging {
-    border: var(--border);
-    z-index: 9999 !important;
-
-    & > .og-item__header {
-      background: var(--color-lighter);
-      border-bottom: var(--border);
-    }
+    cursor: move;
   }
 
   &__title {

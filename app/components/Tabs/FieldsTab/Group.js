@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { FieldIdsContext } from '../../../contexts/FieldIdsContext';
 import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
@@ -29,8 +30,10 @@ const Group = ( { id, field, parent = '' } ) => {
 	const duplicateSubField = subId => setSubFields( prev => {
 		let newField = getFieldValue( `fields${ parent }[${ id }][fields][${ subId }]` );
 		const newId = `${ dotProp.get( newField, 'type' ) }_${ uniqid() }`;
+
 		newField.id = newId;
 		newField._id = newId;
+		newField._new = true;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
 		updateFieldId( newId, newField );
@@ -38,26 +41,6 @@ const Group = ( { id, field, parent = '' } ) => {
 		const index = prev.findIndex( field => field._id === subId );
 		let newFields = [ ...prev ];
 		newFields.splice( index + 1, 0, newField );
-
-		return newFields;
-	} );
-
-	const moveSubField = ( index, direction ) => setSubFields( prev => {
-		let newFields = [ ...prev ];
-		const field = newFields[ index ];
-		if ( direction === 'up' ) {
-			if ( 0 === index ) {
-				return newFields;
-			}
-			newFields[ index ] = newFields[ index - 1 ];
-			newFields[ index - 1 ] = field;
-		} else {
-			if ( index === prev.length - 1 ) {
-				return newFields;
-			}
-			newFields[ index ] = newFields[ index + 1 ];
-			newFields[ index + 1 ] = field;
-		}
 
 		return newFields;
 	} );
@@ -82,18 +65,19 @@ const Group = ( { id, field, parent = '' } ) => {
 			<div className={ `og-group-fields og-field${ subFields.length === 0 ? ' og-group-fields--empty' : '' }` }>
 				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 				<div className="og-input">
-					{
-						subFields.map( ( subField, index ) => <Node
-							key={ subField._id }
-							id={ subField._id }
-							field={ subField }
-							index={ index }
-							parent={ `${ parent }[${ id }][fields]` }
-							removeField={ removeSubField }
-							duplicateField={ duplicateSubField }
-							moveField={ moveSubField }
-						/> )
-					}
+					<ReactSortable list={ subFields } setList={ setSubFields } handle=".og-item__header">
+						{
+							subFields.map( ( subField, index ) => <Node
+								key={ subField._id }
+								id={ subField._id }
+								field={ subField }
+								index={ index }
+								parent={ `${ parent }[${ id }][fields]` }
+								removeField={ removeSubField }
+								duplicateField={ duplicateSubField }
+							/> )
+						}
+					</ReactSortable>
 					<Inserter addField={ addSubField } />
 				</div>
 			</div>

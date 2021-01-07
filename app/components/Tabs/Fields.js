@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+import { ReactSortable } from 'react-sortablejs';
 import { FieldIdsContext } from '../../contexts/FieldIdsContext';
 import { FieldsDataContext } from '../../contexts/FieldsDataContext';
 import { getFieldValue, ucwords, uniqid } from '../../functions';
@@ -36,6 +37,7 @@ const FieldsTab = props => {
 
 		newField.id = newId;
 		newField._id = newId;
+		newField._new = true;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
 		updateFieldId( newId, newField );
@@ -43,26 +45,6 @@ const FieldsTab = props => {
 		const index = prev.findIndex( field => field._id === id );
 		let newFields = [ ...prev ];
 		newFields.splice( index + 1, 0, newField );
-
-		return newFields;
-	} );
-
-	const moveField = ( index, direction ) => setFields( prev => {
-		let newFields = [ ...prev ];
-		const field = newFields[ index ];
-		if ( direction === 'up' ) {
-			if ( 0 === index ) {
-				return newFields;
-			}
-			newFields[ index ] = newFields[ index - 1 ];
-			newFields[ index - 1 ] = field;
-		} else {
-			if ( index === prev.length - 1 ) {
-				return newFields;
-			}
-			newFields[ index ] = newFields[ index + 1 ];
-			newFields[ index + 1 ] = field;
-		}
 
 		return newFields;
 	} );
@@ -78,7 +60,7 @@ const FieldsTab = props => {
 					} }
 				/>
 			}
-			<div className="og-fields">
+			<ReactSortable className="og-fields" list={ fields } setList={ setFields } handle=".og-item__header">
 				{
 					fields.map( ( field, index ) => <Node
 						key={ field._id }
@@ -87,10 +69,9 @@ const FieldsTab = props => {
 						index={ index }
 						removeField={ removeField }
 						duplicateField={ duplicateField }
-						moveField={ moveField }
 					/> )
 				}
-			</div>
+			</ReactSortable>
 			<Inserter addField={ addField } />
 		</>
 	);
