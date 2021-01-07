@@ -10,26 +10,18 @@ class Tabs {
 		if ( ! Data::is_extension_active( 'meta-box-tabs' ) ) {
 			return;
 		}
-		add_filter( 'mbb_field_types', [ $this, 'add_field_types' ] );
-		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ] );
+		add_action( 'mbb_fields', [ $this, 'add_field' ] );
 		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_meta_box_settings' ] );
 	}
 
-	public function add_field_types( $types ) {
-		$types[] = [
-			'name'     => 'tab',
+	public function add_field( $fields ) {
+		$fields['tab'] = [
 			'title'    => __( 'Tab', 'meta-box-builder' ),
 			'category' => 'layout',
-		];
-		return $types;
-	}
-
-	public function add_field_controls( $fields ) {
-		$fields['tab'] = [
-			'general'  => [
-				'name'      => $fields['text']['general']['name'],
-				'id'        => $fields['text']['general']['id'],
-				'icon_type' => Control::Select( [
+			'controls' => [
+				'name',
+				'id',
+				Control::Select( 'icon_type', [
 					'label'   => __( 'Icon type', 'meta-box-builder' ),
 					'options' => [
 						'dashicons'   => __( 'Dashicons', 'meta-box-builder' ),
@@ -37,15 +29,15 @@ class Tabs {
 						'url'         => __( 'Custom URL', 'meta-box-builder' ),
 					],
 				], 'dashicons' ),
-				'icon' => Control::Icon( [
+				Control::Icon( 'icon', [
 					'label'      => __( 'Icon', 'meta-box-builder' ),
 					'dependency' => 'icon_type:dashicons',
 				] ),
-				'icon_fa' => Control::Input( [
+				Control::Input( 'icon_fa', [
 					'label'      => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank" rel="noopenner noreferrer">' . __( 'Icon CSS class', 'meta-box-builder' ) . '</a>',
 					'dependency' => 'icon_type:fontawesome',
 				] ),
-				'icon_url' => Control::Input( [
+				Control::Input( 'icon_url', [
 					'label'      => __( 'Icon URL', 'meta-box-builder' ),
 					'dependency' => 'icon_type:url',
 				] ),

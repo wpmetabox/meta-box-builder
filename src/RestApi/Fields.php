@@ -41,7 +41,7 @@ class Fields extends Base {
 	public function get_fields() {
 		$this->api->register_default_controls();
 
-		$general  = ['name', 'id', 'label_description', 'desc' ];
+		$general  = ['name', 'id', 'label_description', 'desc'];
 		$advanced = ['before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings'];
 		$clone    = ['clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button'];
 		$date     = ['std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'required', 'disabled', 'readonly', 'js_options'];
@@ -293,11 +293,12 @@ class Fields extends Base {
 			],
 		];
 
+		$fields = apply_filters( 'mbb_fields', $fields );
+
 		foreach ( $fields as $type => $field ) {
+			$field['controls'] = apply_filters( 'mbb_field_controls', $field['controls'], $type );
 			$this->api->add_field( $type, $field );
 		}
-
-		do_action( 'mbb_fields_init', $this->api );
 
 		$this->api->transform_controls();
 

@@ -14,16 +14,14 @@ class Columns {
 		add_filter( 'mbb_field_settings', [ $this, 'parse_field_settings' ] );
 	}
 
-	public function add_field_controls( $fields ) {
-		foreach ( $fields as &$controls ) {
-			$controls['general']['columns'] = Control::Select( [
-				'label'      => '<a href="https://metabox.io/plugins/meta-box-columns/" target="_blank" rel="nofollow noopenner">' . __( 'Columns', 'meta-box-builder' ) . '</a>',
-				'tooltip'    => __( 'Select number of columns for this field in a 12-column grid', 'meta-box-builder' ),
-				'options'    => array_combine( range( 1, 12 ), range( 1, 12 ) ),
-			], 12 );
-		}
+	public function add_field_controls( $controls ) {
+		$controls[] = Control::Select( 'columns', [
+			'label'      => '<a href="https://metabox.io/plugins/meta-box-columns/" target="_blank" rel="nofollow noopenner">' . __( 'Columns', 'meta-box-builder' ) . '</a>',
+			'tooltip'    => __( 'Select number of columns for this field in a 12-column grid', 'meta-box-builder' ),
+			'options'    => array_combine( range( 1, 12 ), range( 1, 12 ) ),
+		], 12 );
 
-		return $fields;
+		return $controls;
 	}
 
 	public function parse_field_settings( $settings ) {
