@@ -21,7 +21,7 @@ class Tooltip {
 		] );
 		$controls[] = Control::Input( 'tooltip_icon', [
 			'name'       => 'tooltip[icon]',
-			'label'      => __( 'Icon', 'meta-box-builder' ),
+			'label'      => '<a href="https://developer.wordpress.org/resource/dashicons/" target="_blank" rel="nofollow noopenner">' . __( 'Icon', 'meta-box-builder' ) . '</a>',
 			'tooltip'    => __( 'Can be "info" (default), "help", Dashicons or URL of the custom icon image', 'meta-box-builder' ),
 			'dependency' => 'tooltip_enable:true',
 		] );
