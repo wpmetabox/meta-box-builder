@@ -46,7 +46,7 @@ class Fields extends Base {
 		$clone    = ['clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button'];
 		$date     = ['std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'required', 'disabled', 'readonly', 'js_options'];
 		$map      = ['std', 'address_field', 'language', 'region'];
-		$taxonomy = ['taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'query_args_taxonomy'];
+		$taxonomy = ['taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args'];
 		$upload   = ['max_file_uploads', 'max_status', 'force_delete'];
 		$input    = ['required', 'disabled', 'readonly'];
 
@@ -114,7 +114,7 @@ class Fields extends Base {
 			'fieldset_text' => [
 				'title'    => __( 'Fieldset Text', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['options_fieldset_text'], $clone, $advanced ),
+				'controls' => array_merge( $general, ['options'], $clone, $advanced ),
 			],
 			'file'          => [
 				'title'    => __( 'File', 'meta-box-builder' ),
@@ -279,7 +279,7 @@ class Fields extends Base {
 			'url'     => [
 				'title'    => __( 'URL', 'meta-box-builder' ),
 				'category' => 'basic',
-				'controls' => array_merge( $general, ['std', 'placeholder', 'field_type'], $input, $clone, $advanced ),
+				'controls' => array_merge( $general, ['std', 'placeholder', 'size'], $input, $clone, $advanced ),
 			],
 			'video'   => [
 				'title'    => __( 'Video', 'meta-box-builder' ),
