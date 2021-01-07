@@ -1,18 +1,17 @@
+import { FieldsDataContext } from '../../contexts/FieldsDataContext';
 import { request } from '../../functions';
 
-const { useState, useEffect } = wp.element;
+const { useContext, useEffect, useState } = wp.element;
 const { Dropdown } = wp.components;
 const { __ } = wp.i18n;
 
 export const Inserter = ( { addField, type } ) => {
 	const [ categories, setCategories ] = useState( [] );
-	const [ fieldTypes, setFieldTypes ] = useState( [] );
 	const [ searchParam, setSearchParam ] = useState( '' );
 	const [ closeCallback, setCloseCallback ] = useState( () => { } );
 
 	useEffect( () => {
 		request( 'field-categories' ).then( setCategories );
-		request( 'field-types' ).then( setFieldTypes );
 	}, [] );
 
 	const search = e => setSearchParam( e.target.value );
@@ -40,9 +39,9 @@ export const Inserter = ( { addField, type } ) => {
 						<input type="search" placeholder={ __( 'Search for a field type', 'meta-box-builder' ) } onChange={ search } />
 					</div>
 					{
-						categories.length > 0 && fieldTypes.length > 0
+						categories.length > 0
 							? categories.map( category =>
-								<Category key={ category.slug } category={ category } fieldTypes={ fieldTypes } insert={ insert } searchParam={ searchParam } />
+								<Category key={ category.slug } category={ category } insert={ insert } searchParam={ searchParam } />
 							)
 							: <p>{ __( 'Fetching field types, please wait...', 'meta-box-builder' ) }</p>
 					}
@@ -52,17 +51,18 @@ export const Inserter = ( { addField, type } ) => {
 	);
 };
 
-const Category = ( { category, fieldTypes, insert, searchParam } ) => {
+const Category = ( { category, insert, searchParam } ) => {
+	const fieldsData = useContext( FieldsDataContext );
 	const s = searchParam.toLowerCase();
-	const types = fieldTypes.filter( type => type.category === category.slug && type.title.toLowerCase().includes( s ) );
+	const fields = Object.entries( fieldsData ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( s ) );
 
-	return types.length > 0 && (
+	return fields.length > 0 && (
 		<>
 			<div className="og-inserter__title">{ category.title }</div>
 			<div className="og-inserter__content">
 				{
-					types.map( ( { name, title } ) =>
-						<div className="og-inserter__item" key={ name } data-type={ name } onClick={ insert }>{ title }</div>
+					fields.map( entry =>
+						<div className="og-inserter__item" key={ entry[0] } data-type={ entry[0] } onClick={ insert }>{ entry[1].title }</div>
 					)
 				}
 			</div>

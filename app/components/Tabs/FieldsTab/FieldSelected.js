@@ -1,17 +1,17 @@
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { FieldControlsContext } from '../../../contexts/FieldControlsContext';
+import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 import Content from './Content';
 
 const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldSelected = ( { id, field, parent = '' } ) => {
-	const fieldControls = useContext( FieldControlsContext );
-	const controls = { ...fieldControls[ field.type ] };
+	const fieldsData = useContext( FieldsDataContext );
+	const controls = [ ...fieldsData[ field.type ].controls ];
 
 	if ( [ 'divider', 'tab' ].includes( field.type ) ) {
 		return <div className="og-item__body og-collapsible__body">
-			<Content id={ id } controls={ controls.general } field={ field } />
+			<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } />
 		</div>;
 	}
 
@@ -21,10 +21,10 @@ const FieldSelected = ( { id, field, parent = '' } ) => {
 			<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 		</TabList>
 		<TabPanel>
-			<Content id={ id } controls={ controls.general } field={ field } parent={ parent } />
+			<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } />
 		</TabPanel>
 		<TabPanel>
-			<Content id={ id } controls={ controls.advanced } field={ field } parent={ parent } />
+			<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } />
 		</TabPanel>
 	</Tabs>;
 };

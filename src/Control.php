@@ -25,10 +25,10 @@ class Control {
 			$props = [ 'label' => $props ];
 		}
 
-		$default = isset( $arguments[2] ) ? $arguments[2] : self::get_default_value( $name );
-		$tab     = isset( $arguments[3] ) ? $arguments[3] : 'general';
+		$defaultValue = isset( $arguments[2] ) ? $arguments[2] : self::get_default_value( $name );
+		$tab          = isset( $arguments[3] ) ? $arguments[3] : 'general';
 
-		return compact( 'name', 'setting', 'props', 'default', 'tab' );
+		return compact( 'name', 'setting', 'props', 'defaultValue', 'tab' );
 	}
 
 	private static function get_default_value( $name ) {

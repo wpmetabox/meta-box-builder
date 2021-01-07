@@ -18,14 +18,15 @@ load_plugin_textdomain( 'meta-box-builder', false, plugin_basename( MBB_DIR ) . 
 new PostType;
 new Upgrade\Manager;
 new Register;
-new Api\Generator;
-new Api\Fields;
+new RestApi\Generator;
+
+new RestApi\Fields( new Registry );
 
 if ( Helpers\Data::is_extension_active( 'meta-box-include-exclude' ) ) {
-	new Api\IncludeExclude;
+	new RestApi\IncludeExclude;
 }
 if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
-	new Api\ShowHide;
+	new RestApi\ShowHide;
 }
 
 new Extensions\Tabs;

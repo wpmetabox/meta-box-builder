@@ -1,4 +1,8 @@
 <?php
+/**
+ * Registry to store all registered fields and default controls.
+ */
+
 namespace MBB;
 
 use MBB\Helpers\Arr;

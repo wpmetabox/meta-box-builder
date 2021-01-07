@@ -264,7 +264,7 @@ class Fields extends Base {
 			'textarea' => [
 				'title'    => __( 'Textarea', 'meta-box-builder' ),
 				'category' => 'basic',
-				'controls' => array_merge( $general, ['std', 'placeholder', 'rows', 'columns'], $input, $clone, $advanced ),
+				'controls' => array_merge( $general, ['std', 'placeholder', 'rows', 'cols'], $input, $clone, $advanced ),
 			],
 			'time' => [
 				'title'    => __( 'Time Picker', 'meta-box-builder' ),

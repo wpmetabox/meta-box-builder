@@ -2,28 +2,28 @@ import dotProp from 'dot-prop';
 const { lazy, memo, Suspense } = wp.element;
 
 const Content = ( { id, controls, field, parent = '' } ) => {
-	// If API specifies control name, then use it. Convert name, name[subfield] to [name], [name][subfield].
-	const getInputName = name => dotProp.get( controls[ name ].props, 'name', name ).replace( /^([^\[]+)/, '[$1]' );
+	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
+		const Control = lazy( () => import( `../../Controls/${ name }` ) );
 
-	// Convert name[subfield] to name.subfield to get default value.
-	const bracketsToDots = name => dotProp.get( controls[ name ].props, 'name', name ).replace( '[', '.' ).replace( ']', '' );
+		// If API specifies input name, then use it. Otherwise use setting. Convert name, name[subfield] to [name], [name][subfield].
+		const input = dotProp.get( props, 'name', setting ).replace( /^([^\[]+)/, '[$1]' );
 
-	const getControl = name => {
-		const Control = lazy( () => import( `../../Controls/${ controls[ name ].name }` ) );
+		// Convert name[subfield] to name.subfield to get default value.
+		const key = dotProp.get( props, 'name', setting ).replace( '[', '.' ).replace( ']', '' );
 
 		return <Control
 			fieldId={ id }
-			componentName={ name }
-			componentId={ `fields-${ id }-${ name }` }
-			{ ...controls[ name ].props }
-			name={ `fields${ parent }[${ id }]${ getInputName( name ) }` }
-			defaultValue={ dotProp.get( field, bracketsToDots( name ), controls[ name ].default ) }
+			componentName={ setting }
+			componentId={ `fields-${ id }-${ setting }` }
+			{ ...props }
+			name={ `fields${ parent }[${ id }]${ input }` }
+			defaultValue={ dotProp.get( field, key, defaultValue ) }
 		/>;
 	};
 
 	return (
 		<div className="og-item__content">
-			{ Object.keys( controls ).map( name => <Suspense fallback={ null } key={ id + name }>{ getControl( name ) }</Suspense> ) }
+			{ controls.map( control => <Suspense fallback={ null } key={ control.setting }>{ getControlComponent( control ) }</Suspense> ) }
 		</div>
 	);
 };

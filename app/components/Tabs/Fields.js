@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
-import { FieldControlsContext } from '../../contexts/FieldControlsContext';
 import { FieldIdsContext } from '../../contexts/FieldIdsContext';
+import { FieldsDataContext } from '../../contexts/FieldsDataContext';
 import { getFieldValue, ucwords, uniqid } from '../../functions';
 import { Inserter } from '../Controls/Inserter';
 import Node from './FieldsTab/Node';
@@ -13,8 +13,8 @@ const FieldsTab = props => {
 	const [ fields, setFields ] = useState( Object.values( props.fields ) );
 
 	// Don't render any field if fields data is not available.
-	const fieldControls = useContext( FieldControlsContext );
-	if ( Object.keys( fieldControls ).length === 0 ) {
+	const fieldsData = useContext( FieldsDataContext );
+	if ( Object.keys( fieldsData ).length === 0 ) {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
