@@ -2,11 +2,11 @@
 namespace MBB\RestApi;
 
 class Fields extends Base {
-	private $api;
+	private $registry;
 
-	public function __construct( $api ) {
+	public function __construct( $registry ) {
 		parent::__construct();
-		$this->api = $api;
+		$this->registry = $registry;
 	}
 
 	public function get_field_categories() {
@@ -39,7 +39,7 @@ class Fields extends Base {
 	}
 
 	public function get_fields() {
-		$this->api->register_default_controls();
+		$this->registry->register_default_controls();
 
 		$general  = ['name', 'id', 'label_description', 'desc'];
 		$advanced = ['before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings'];
@@ -297,11 +297,11 @@ class Fields extends Base {
 
 		foreach ( $fields as $type => $field ) {
 			$field['controls'] = apply_filters( 'mbb_field_controls', $field['controls'], $type );
-			$this->api->add_field( $type, $field );
+			$this->registry->add_field( $type, $field );
 		}
 
-		$this->api->transform_controls();
+		$this->registry->transform_controls();
 
-		return $this->api->get_fields();
+		return $this->registry->get_fields();
 	}
 }

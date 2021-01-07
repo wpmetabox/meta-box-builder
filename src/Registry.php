@@ -1,0 +1,534 @@
+<?php
+namespace MBB;
+
+use MBB\Helpers\Arr;
+
+class Registry {
+	private $fields = [];
+	private $controls = [];
+
+	/**
+	 * Register all default controls, so we can refer to them by id later.
+	 */
+	public function register_default_controls() {
+		// In the same order as in Fields class.
+		$controls = [
+			// General.
+			Control::Name( 'name', [
+				'label'   => __( 'Label', 'meta-box-builder' ),
+				'tooltip' => __( 'Leave empty to make the input 100% width.', 'meta-box-builder' ),
+			] ),
+			Control::Id( 'id', [
+				'label'    => __( 'ID', 'meta-box-builder' ),
+				'required' => true,
+				'tooltip'  => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
+			] ),
+			Control::Input( 'label_description', [
+				'label'   => __( 'Label description', 'meta-box-builder' ),
+				'tooltip' => __( 'Display below the field label', 'meta-box-builder' ),
+			] ),
+			Control::Input( 'desc', [
+				'label'   => __( 'Input description', 'meta-box-builder' ),
+				'tooltip' => __( 'Display below the field input', 'meta-box-builder' ),
+			] ),
+
+			// Advanced.
+			Control::Textarea( 'before', [
+				'label'   => __( 'Before', 'meta-box-builder' ),
+				'tooltip' => __( 'Custom HTML displayed before the field output', 'meta-box-builder' ),
+			], '', 'advanced' ),
+			Control::Textarea( 'after', [
+				'label'   => __( 'After', 'meta-box-builder' ),
+				'tooltip' => __( 'Custom HTML displayed after the field output', 'meta-box-builder' ),
+			], '', 'advanced' ),
+			Control::Input( 'class', __( 'Custom CSS class', 'meta-box-builder' ), '', 'advanced' ),
+			Control::Checkbox( 'save_field', [
+				'label'   => __( 'Save field value' ),
+				'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' )
+			], true, 'advanced' ),
+			Control::Input( 'sanitize_callback', [
+				'label'   => '<a href="https://docs.metabox.io/sanitization/" target="_blank" rel="noreferrer noopener">' . __( 'Custom sanitize callback', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'Enter PHP function name for custom sanitization. Enter "none" to disable sanitization.', 'meta-box-builder' ),
+			], '', 'advanced' ),
+			Control::KeyValue( 'attributes', [
+				'link'    => 'https://docs.metabox.io/custom-attributes/',
+				'label'   => __( 'Custom HTML5 attributes', 'meta-box-builder' ),
+				'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
+			], [], 'advanced' ),
+			Control::KeyValue( 'custom_settings', [
+				'link'    => 'https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes',
+				'label'   => __( 'Custom settings', 'meta-box-builder' ),
+				'tooltip' => __( 'Use this to add custom settings for the field. The custom settings will overwrite existing settings if they have the same key.', 'meta-box-builder' ),
+			], [], 'advanced' ),
+
+			// Clone.
+			Control::Checkbox( 'clone', [
+				'label'   => __( 'Cloneable', 'meta-box-builder' ),
+				'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
+			] ),
+			Control::Checkbox( 'sort_clone', [
+				'label'      => __( 'Sortable', 'meta-box-builder' ),
+				'tooltip'    => __( 'Allows to drag-and-drop reorder clones', 'meta-box-builder' ),
+				'dependency' => 'clone:true',
+			] ),
+			Control::Checkbox( 'clone_default', [
+				'label'      => __( 'Clone default value', 'meta-box-builder' ),
+				'dependency' => 'clone:true',
+			] ),
+			Control::Checkbox( 'clone_as_multiple', [
+				'label'      => __( 'Clone as multiple', 'meta-box-builder' ),
+				'tooltip'    => __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
+				'dependency' => 'clone:true',
+			] ),
+			Control::Input( 'max_clone', [
+				'type'       => 'number',
+				'label'      => __( 'Max number of clones', 'meta-box-builder' ),
+				'tooltip'    => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
+				'dependency' => 'clone:true',
+			] ),
+			Control::Input( 'add_button', [
+				'label'      => __( 'Add more text', 'meta-box-builder' ),
+				'tooltip'    => __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ),
+				'dependency' => 'clone:true',
+			] ),
+
+			// Date.
+			Control::Input( 'std', __( 'Default value', 'meta-box-builder' ) ),
+			Control::Input( 'placeholder', __( 'Placeholder', 'meta-box-builder' ) ),
+			Control::Input( 'size', [
+				'type'  => 'number',
+				'label' => __( 'Size of the input box', 'meta-box-builder' ),
+			] ),
+			Control::Input( 'save_format', [
+				'label'   => __( 'Save format', 'meta-box-builder' ),
+				'tooltip' => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
+			] ),
+			Control::Checkbox( 'timestamp', __( 'Save value as timestamp', 'meta-box-builder' ) ),
+			'inline_date' => Control::Checkbox( 'inline', [
+				'label'   => __( 'Inline', 'meta-box-builder' ),
+				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
+			] ),
+			'inline_datetime' => Control::Checkbox( 'inline', [
+				'label'   => __( 'Inline', 'meta-box-builder' ),
+				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
+			] ),
+			Control::Checkbox( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
+			Control::Checkbox( 'required', __( 'Required', 'meta-box-builder' ) ),
+			Control::Checkbox( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
+			'js_options_date' => Control::KeyValue( 'js_options', [
+				'link'  => 'https://api.jqueryui.com/datepicker/',
+				'label' => __( 'Date picker options', 'meta-box-builder' ),
+			] ),
+			'js_options_datetime' => Control::KeyValue( 'js_options', [
+				'link'  => 'https://api.jqueryui.com/datepicker/',
+				'label' => __( 'Date picker options', 'meta-box-builder' ),
+			] ),
+
+			// Map.
+			'std_map' => Control::Input( 'std', [
+				'label'   => __( 'Default location', 'meta-box-builder' ),
+				'tooltip' => __( 'Format: latitude,longitude.', 'meta-box-builder' ),
+			] ),
+			Control::AddressField( 'address_field', [
+				'label'       => __( 'Address field', 'meta-box-builder' ),
+				'tooltip'     => __( 'The ID of address field. For multiple fields, separate them by comma.', 'meta-box-builder' ),
+				'placeholder' => __( 'Enter or select a field ID', 'meta-box-builder' ),
+				'required'    => true,
+			] ),
+			Control::Select( 'language', [
+				'label'   => __( 'Language', 'meta-box-builder' ),
+				'options' => $this->get_languages(),
+			] ),
+			Control::Select( 'region', [
+				'label'    => __( 'Region', 'meta-box-builder' ),
+				'options'  => $this->get_regions(),
+			] ),
+
+			// Taxonomy.
+			Control::ReactSelect( 'taxonomy', [
+				'label'   => __( 'Taxonomies', 'meta-box-builder' ),
+				'options' => $this->get_taxonomies(),
+			] ),
+			Control::Select( 'field_type', [
+				'label'   => __( 'Field type', 'meta-box-builder' ),
+				'options' => [
+					'select'          => __( 'Select', 'meta-box-builder' ),
+					'select_advanced' => __( 'Select advanced', 'meta-box-builder' ),
+					'select_tree'     => __( 'Select tree', 'meta-box-builder' ),
+					'checkbox_list'   => __( 'Checkbox list', 'meta-box-builder' ),
+					'checkbox_tree'   => __( 'Checkbox tree', 'meta-box-builder' ),
+					'radio_list'      => __( 'Radio list', 'meta-box-builder' ),
+				],
+			], 'select_advanced' ),
+			Control::Checkbox( 'add_new', [
+				'label'   => __( 'Add new', 'meta-box-builder' ),
+				'tooltip' => __( 'Allow users to create a new term when submitting the post', 'meta-box-builder' ),
+			] ),
+			Control::Checkbox( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
+			Control::Checkbox( 'multiple', [
+				'label'   => __( 'Multiple', 'meta-box-builder' ),
+				'tooltip' => __( 'Allow to select multiple choices', 'meta-box-builder' ),
+			] ),
+			Control::Checkbox( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ) ),
+			'query_args_taxonomy' => Control::KeyValue( 'query_args', [
+				'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
+				'label'   => __( 'Query args', 'meta-box-builder' ),
+				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
+			] ),
+			'query_args_taxonomy_advanced' => Control::KeyValue( 'query_args', [
+				'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
+				'label'   => __( 'Query args', 'meta-box-builder' ),
+				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
+			] ),
+
+			// Upload.
+			Control::Input( 'max_file_uploads', [
+				'type'    => 'number',
+				'label'   => __( 'Max number of files', 'meta-box-builder' ),
+				'tooltip' => __( 'Leave empty for unlimited uploads', 'meta-box-builder' ),
+			] ),
+			Control::Checkbox( 'max_status', [
+				'label'   => __( 'Show status', 'meta-box-builder' ),
+				'tooltip' => __( 'Display how many files uploaded/remaining', 'meta-box-builder' ),
+			], true ),
+			Control::Checkbox( 'force_delete', [
+				'label'   => __( 'Force delete', 'meta-box-builder' ),
+				'tooltip' => __( 'Delete files from the Media Library when deleting them from post meta', 'meta-box-builder' ),
+			] ),
+
+			// Field specific.
+
+			// Autocomplete.
+			Control::Textarea( 'options', [
+				'label'   => __( 'Choices', 'meta-box-builder' ),
+				'tooltip' => __( "Enter each choice on a line. For more control, you may specify both value and label like 'red: Red' (without quotes)", 'meta-box-builder' ),
+			] ),
+
+			// Button.
+			'std_button' => Control::Input( 'std', __( 'Button text', 'meta-box-builder' ) ),
+
+			// Button group.
+			'options_button_group' => Control::Textarea( 'options', [
+				'label'   => __( 'Buttons', 'meta-box-builder' ),
+				'tooltip' => __( "Enter each button text on a line. For more control, you may specify both value and label like 'bold: B' (without quotes)", 'meta-box-builder' ),
+			] ),
+			'inline_button_group' => Control::Checkbox( 'inline', __( 'Display buttons horizontally', 'meta-box-builder' ), true ),
+
+			// Checkbox.
+			'std_checkbox' => Control::Checkbox( 'std', __( 'Checked by default', 'meta-box-builder' ) ),
+
+			// Checkbox list.
+			'std_checkbox_list' => Control::Textarea( 'std', [
+				'label'   => __( 'Default value' ),
+				'tooltip' => __( 'Enter each value on a line', 'meta-box-builder')
+			] ),
+			Control::Checkbox( 'inline', [
+				'label'   => __( 'Inline', 'meta-box-builder' ),
+				'tooltip' => __( 'Display choices on a single line', 'meta-box-builder' ),
+			] ),
+
+			// Color.
+			Control::Checkbox( 'alpha_channel', __( 'Allow to select opacity', 'meta-box-builder' ) ),
+			'js_options_color' => Control::KeyValue( 'js_options', [
+				'link'  => 'https://automattic.github.io/Iris/',
+				'label' => __( 'Custom color picker options', 'meta-box-builder' ),
+			] ),
+
+			// Custom HTML.
+			'std_custom_html' => Control::Textarea( 'std', __( 'Content (HTML allowed)' ) ),
+			Control::Input( 'callback', [
+				'label'   => __( 'PHP Callback', 'meta-box-builder' ),
+				'tooltip' => __( 'PHP function that is called to show custom HTML content. Will overwrite the content setting above.', 'meta-box-builder' ),
+			] ),
+
+			// Fieldset text.
+			'options_fieldset_text' => Control::KeyValue( 'options', [
+				'label'            => __( 'Inputs', 'meta-box-builder' ),
+				'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
+			] ),
+
+			// File.
+			Control::Input( 'upload_dir', [
+				'label'   => __( 'Custom upload folder', 'meta-box-builder' ),
+				'tooltip' => __( 'Relatively to the WordPress root path', 'meta-box-builder' ),
+			] ),
+
+			// File advanced.
+			Control::Input( 'mime_type', [
+				'label'   => __( 'MIME types', 'meta-box-builder' ),
+				'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload. Separate by commas.', 'meta-box-builder' ),
+			] ),
+
+			// File upload.
+			Control::Input( 'max_file_size', [
+				'label'   => __( 'Max file size', 'meta-box-builder' ),
+				'tooltip' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
+			] ),
+
+			// Map.
+			Control::Input( 'api_key', [
+				'label'    => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopenner noreferrer">' . __( 'Google Maps API key', 'meta-box-builder' ) . '</a>',
+				'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
+				'required' => true,
+			] ),
+
+			// Heading.
+			'desc_heading' => Control::Input( 'desc', [
+				'label'   => __( 'Input description', 'meta-box-builder' ),
+				'tooltip' => __( 'Display below the field input', 'meta-box-builder' ),
+			] ),
+
+			// Image advanced.
+			Control::Select( 'image_size', [
+				'label'   => __( 'Image size', 'meta-box-builder' ),
+				'tooltip' => __( 'Image size that displays in the edit page, used to make sure images are not blurry. It\'s not meant to display images with the exact width and height.', 'meta-box-builder' ),
+				'options' => $this->get_image_sizes(),
+			], 'thumbnail' ),
+			Control::Select( 'add_to', [
+				'label'   => __( 'New image placement', 'meta-box-builder' ),
+				'options' => [
+					'beginning' => __( 'Beginning of the list', 'meta-box-builder' ),
+					'end'       => __( 'End of the list', 'meta-box-builder' ),
+				],
+			], 'end' ),
+
+			// Key value.
+			Control::Input( 'placeholder_key', __( 'Placeholder for key', 'meta-box-builder' ) ),
+			Control::Input( 'placeholder_value', __( 'Placeholder for value', 'meta-box-builder' ) ),
+
+			// Number.
+			Control::Input( 'min', [
+				'type'  => 'number',
+				'label' => __( 'Min value', 'meta-box-builder' ),
+			] ),
+			Control::Input( 'max', [
+				'type'  => 'number',
+				'label' => __( 'Max value', 'meta-box-builder' ),
+			] ),
+			Control::Input( 'step', [
+				'label'   => __( 'Step', 'meta-box-builder' ),
+				'tooltip' => __( "Set the increments at which a numeric value can be set. Enter 'any' to accept any number.", 'meta-box-builder' ),
+			] ),
+
+			// Oembed.
+			Control::Input( 'not_available_string', [
+				'label'   => __( 'Not available text', 'meta-box-builder' ),
+				'tooltip' => __( 'The text message displayed to users when the embed media is not available. Accepts HTML.', 'meta-box-builder' ),
+			] ),
+
+			// Post.
+			Control::ReactSelect( 'post_type', [
+				'label'   => __( 'Post types', 'meta-box-builder' ),
+				'options' => $this->get_post_types(),
+			], ['post'] ),
+			Control::Checkbox( 'parent', [
+				'label'   => __( 'Set as parent', 'meta-box-builder' ),
+				'tooltip' => __( 'Set the selected post as the parent for the current being edited post.', 'meta-box-builder' ),
+			] ),
+			'query_args_post' => Control::KeyValue( 'query_args', [
+				'link'    => 'https://developer.wordpress.org/reference/classes/wp_query/',
+				'label'   => __( 'Query args', 'meta-box-builder' ),
+				'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
+			] ),
+
+			// Select advanced.
+			'js_options_select_advanced' => Control::KeyValue( 'js_options', [
+				'link'  => 'https://select2.org/configuration',
+				'label' => __( 'Select2 options', 'meta-box-builder' ),
+			] ),
+
+			// Slider.
+			Control::Input( 'prefix', [
+				'label'   => __( 'Prefix', 'meta-box-builder' ),
+				'tooltip' => __( 'Text displayed before the field value', 'meta-box-builder' ),
+			] ),
+			Control::Input( 'suffix', [
+				'label'   => __( 'Suffix', 'meta-box-builder' ),
+				'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
+			] ),
+			'js_options_slider' => Control::KeyValue( 'js_options', [
+				'link'  => 'https://api.jqueryui.com/slider',
+				'label' => __( 'jQueryUI slider options', 'meta-box-builder' ),
+			] ),
+
+			// Switch.
+			Control::Select( 'style', [
+				'label'   => __( 'Style', 'meta-box-builder' ),
+				'options' => [
+					'rounded' => __( 'Rounded', 'meta-box-builder' ),
+					'square'  => __( 'Square', 'meta-box-builder' ),
+				],
+			], 'rounded' ),
+			Control::Input( 'on_label', __( 'Custom ON status label', 'meta-box-builder' ) ),
+			Control::Input( 'off_label', __( 'Custom OFF status label', 'meta-box-builder' ) ),
+			'std_switch' => Control::Checkbox( 'std', __( 'ON by default', 'meta-box-builder' ) ),
+
+			// Text.
+			Control::Input( 'prepend', __( 'Prepend text', 'meta-box-builder' ) ),
+			Control::Input( 'append', __( 'Append text', 'meta-box-builder' ) ),
+			Control::Textarea( 'datalist_choices', [
+				'label'   => __( 'Predefined values', 'meta-box-builder' ),
+				'tooltip' => __( 'Known as "datalist", these are values that users can select from (they still can enter text if they want). Enter each value on a line.', 'meta-box-builder' ),
+			] ),
+
+			// Text list.
+			'options_text_list' => Control::KeyValue( 'options', [
+				'label'            => __( 'Inputs', 'meta-box-builder' ),
+				'keyPlaceholder'   => __( 'Placeholder', 'meta-box-builder' ),
+				'valuePlaceholder' => __( 'Label', 'meta-box-builder' ),
+			] ),
+
+			// Textarea.
+			Control::Input( 'rows', [
+				'type'  => 'number',
+				'label' => __( 'Rows', 'meta-box-builder' ),
+			] ),
+			Control::Input( 'cols', [
+				'type'  => 'number',
+				'label' => __( 'Columns', 'meta-box-builder' ),
+			] ),
+
+			// Time.
+			'inline_time' => Control::Checkbox( 'inline', [
+				'label'   => __( 'Inline', 'meta-box-builder' ),
+				'tooltip' => __( 'Display the time picker inline with the input. Do not require to click the input field to trigger the time picker.', 'meta-box-builder' ),
+			] ),
+			'js_options_time' => Control::KeyValue( 'js_options', [
+				'link'  => 'http://trentrichardson.com/examples/timepicker',
+				'label' => __( 'Time picker options', 'meta-box-builder' ),
+			] ),
+
+			// User.
+			'query_args_user' => Control::KeyValue( 'query_args', [
+				'link'    => 'https://codex.wordpress.org/Function_Reference/get_users',
+				'label'   => __( 'Query args', 'meta-box-builder' ),
+				'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
+			] ),
+
+			// Wysiwyg.
+			Control::Checkbox( 'raw', __( 'Save data in the raw format', 'meta-box-builder' ) ),
+			'options_wysiwyg' => Control::KeyValue( 'options', [
+				'link'  => 'https://developer.wordpress.org/reference/functions/wp_editor/',
+				'label' => __( 'Editor options', 'meta-box-builder' ),
+			] ),
+		];
+
+		foreach ( $controls as $id => $control ) {
+			$id = is_string( $id ) ? $id : $control['setting'];
+			$this->add_control( $id, $control );
+		}
+	}
+
+	/**
+	 * Add a new control to the registry.
+	 *
+	 * @param string $id      Control id.
+	 * @param array  $control Control parameters.
+	 *
+	 * [
+	 *     'setting'  => 'id',      // Setting name
+	 *     'name'     => 'Input',   // Control name
+	 *     'tab'      => 'general', // Tab: general or advanced
+	 *     'default'  => '',        // Default value
+	 *     'props'    => [          // Control props
+	 *         'label'    => __( 'ID', 'meta-box-builder' ),
+	 *         'required' => true,
+	 *         'tooltip'  => __( 'Must be unique,
+	 *     ],
+	 * ],
+	 */
+	private function add_control( $id, $control ) {
+		$this->controls[ $id ] = $control;
+	}
+
+	/**
+	 * Transform fields controls to proper format (array).
+	 */
+	public function transform_controls() {
+		foreach ( $this->fields as $type => &$field ) {
+			foreach ( $field['controls'] as &$control ) {
+				$control = $this->get_control( $control, $type );
+			}
+		}
+	}
+
+	/**
+	 * Get control array by its id (string) and field type. Order:
+	 * - If array, do nothing
+	 * - Get control with id = control_type
+	 * - Get control with id = control
+	 */
+	private function get_control( $control, $type ) {
+		if ( is_array( $control ) ) {
+			return $control;
+		}
+		return Arr::get( $this->controls, "{$control}_{$type}", Arr::get( $this->controls, $control ) );
+	}
+
+	/**
+	 * Add a new field.
+	 *
+	 * @param string $type Field type.
+	 * @param array  $args Field parameters.
+	 *
+	 * [
+	 *     'title'    => __( 'Text', 'meta-box-builder' ),
+	 *     'category' => 'basic',
+	 *     'controls' => [$control_1, $control_2]
+	 * ],
+	 */
+	public function add_field( $type, $args ) {
+		$this->fields[ $type ] = $args;
+	}
+
+	public function get_fields() {
+		return $this->fields;
+	}
+
+	private function get_image_sizes() {
+		$image_sizes    = [];
+		$wp_image_sizes = get_intermediate_image_sizes();
+		foreach ( $wp_image_sizes as $size_name ) {
+			$image_sizes[ $size_name ] = ucwords( str_replace( ['_', '-'], ' ', $size_name ) );
+		}
+		return $image_sizes;
+	}
+
+	private function get_languages() {
+		$language_codes = 'ar,bg,bn,ca,cs,da,de,el,en,en-AU,en-GB,es,eu,eu,fa,fi,fil,fr,gl,gu,hi,hr,hu,id,it,iw,ja,kn,ko,lt,lv,ml,mr,nl,no,pl,pt,pt-BR,pt-PT,ro,ru,sk,sl,sr,sv,ta,te,th,tl,tr,uk,vi,zh-CN,zh-TW';
+		$language_names = 'Arabic,Bulgarian,Bengali,Catalan,Czech,Danish,German,Greek,English,English (Australian),English (Great Britain),Spanish,Basque,Basque,Farsi,Finnish,Filipino,French,Galician,Gujarati,Hindi,Croatian,Hungarian,Indonesian,Italian,Hebrew,Japanese,Kannada,Korean,Lithuanian,Latvian,Malayalam,Marathi,Dutch,Norwegian,Polish,Portuguese,Portuguese (Brazil),Portuguese (Portugal),Romanian,Russian,Slovak,Slovenian,Serbian,Swedish,Tamil,Telugu,Thai,Tagalog,Turkish,Ukrainian,Vietnamese,Chinese (Simplified),Chinese (Traditional)';
+		$language_codes = explode( ',', $language_codes );
+		$language_names = explode( ',', $language_names );
+		$languages      = array_combine( $language_codes, $language_names );
+
+		return $languages;
+	}
+
+	private function get_regions() {
+		$region_codes = 'ac,ad,ae,af,ag,ai,al,am,ao,aq,ar,as,at,au,aw,ax,az,ba,bb,bd,be,bf,bg,bh,bi,bj,bm,bn,bo,bq,br,bs,bt,bw,by,bz,ca,cc,cd,cf,cg,ch,ci,ck,cl,cm,cn,co,cr,cu,cv,cw,cx,cy,cz,de,dj,dk,dm,do,dz,ec,ee,eg,eh,er,es,et,eu,fi,fj,fk,fm,fo,fr,ga,gd,ge,gf,gg,gh,gi,gl,gm,gn,gp,gq,gr,gs,gt,gu,gw,gy,hk,hm,hn,hr,ht,hu,id,ie,il,im,in,io,iq,ir,is,it,je,jm,jo,jp,ke,kg,kh,ki,km,kn,kp,kr,kw,ky,kz,la,lb,lc,li,lk,lr,ls,lt,lu,lv,ly,ma,mc,md,me,mg,mh,mk,ml,mm,mn,mo,mp,mq,mr,ms,mt,mu,mv,mw,mx,my,mz,na,nc,ne,nf,ng,ni,nl,no,np,nr,nu,nz,om,pa,pe,pf,pg,ph,pk,pl,pm,pn,pr,ps,pt,pw,py,qa,re,ro,rs,ru,rw,sa,sb,sc,sd,se,sg,sh,si,sk,sl,sm,sn,so,sr,ss,st,su,sv,sx,sy,sz,tc,td,tf,tg,th,tj,tk,tl,tm,tn,to,tr,tt,tv,tw,tz,ua,ug,uk,us,uy,uz,va,vc,ve,vg,vi,vn,vu,wf,ws,ye,yt,za,zm,zw';
+		$region_names = 'Ascension Island (United Kingdom),Andorra,United Arab Emirates,Afghanistan,Antigua and Barbuda,Anguilla (United Kingdom),Albania,Armenia,Angola,Antarctica,Argentina,American Samoa (United States),Austria,Australia,Aruba (Kingdom of the Netherlands),Åland (Finland),Azerbaijan,Bosnia and Herzegovina,Barbados,Bangladesh,Belgium,Burkina Faso,Bulgaria,Bahrain,Burundi,Benin,Bermuda (United Kingdom),Brunei,Bolivia,Caribbean Netherlands (Bonaire - Saba -Sint Eustatius),Brazil,Bahamas,Bhutan,Botswana,Belarus,Belize,Canada,Cocos (Keeling) Islands (Australia),Democratic Republic of the Congo,Central African Republic,Republic of the Congo,Switzerland,Ivory Coast,Cook Islands,Chile,Cameroon,People\'s Republic of China,Colombia,Costa Rica,Cuba,Cape Verde,Curaçao (Kingdom of the Netherlands),Christmas Island,Cyprus,Czech Republic,Germany,Djibouti,Denmark,Dominica,Dominican Republic,Algeria,Ecuador,Estonia,Egypt,Western Sahara,Eritrea,Spain,Ethiopia,European Union,Finland,Fiji,Falkland Islands (United Kingdom),Federated States of Micronesia,Faroe Islands (Kingdom of Denmark),France,Gabon,Grenada,Georgia,French Guiana (France),Guernsey (United Kingdom),Ghana,Gibraltar (United Kingdom),Greenland (Kingdom of Denmark),The Gambia,Guinea,Guadeloupe (France),Equatorial Guinea,Greece,South Georgia and the South Sandwich Islands (United Kingdom),Guatemala,Guam (United States),Guinea-Bissau,Guyana,Hong Kong,Heard Island and McDonald Islands,Honduras,Croatia,Haiti,Hungary,Indonesia,Ireland,Israel,Isle of Man (United Kingdom),India,British Indian Ocean Territory (United Kingdom),Iraq,Iran,Iceland,Italy,Jersey (United Kingdom),Jamaica,Jordan,Japan,Kenya,Kyrgyzstan,Cambodia,Kiribati,Comoros,Saint Kitts and Nevis,North Korea,South Korea,Kuwait,Cayman Islands (United Kingdom),Kazakhstan,Laos,Lebanon,Saint Lucia,Liechtenstein,Sri Lanka,Liberia,Lesotho,Lithuania,Luxembourg,Latvia,Libya,Morocco,Monaco,Moldova,Montenegro,Madagascar,Marshall Islands,North Macedonia,Mali,Myanmar,Mongolia,Macau,Northern Mariana Islands (United States),Martinique (France),Mauritania,Montserrat (United Kingdom),Malta,Mauritius,Maldives,Malawi,Mexico,Malaysia,Mozambique,Namibia,New Caledonia (France),Niger,Norfolk Island,Nigeria,Nicaragua,Netherlands,Norway,Nepal,Nauru,Niue,New Zealand,Oman,Panama,Peru,French Polynesia (France),Papua New Guinea,Philippines,Pakistan,Poland,Saint-Pierre and Miquelon (France),Pitcairn Islands (United Kingdom),Puerto Rico (United States),Palestine[34],Portugal,Palau,Paraguay,Qatar,Réunion (France),Romania,Serbia,Russia,Rwanda,Saudi Arabia,Solomon Islands,Seychelles,Sudan,Sweden,Singapore,Saint Helena (United Kingdom),Slovenia,Slovakia,Sierra Leone,San Marino,Senegal,Somalia,Suriname,South Sudan,São Tomé and Príncipe,Soviet Union,El Salvador,Sint Maarten (Kingdom of the Netherlands),Syria,Eswatini,Turks and Caicos Islands (United Kingdom),Chad,French Southern and Antarctic Lands,Togo,Thailand,Tajikistan,Tokelau,East Timor,Turkmenistan,Tunisia,Tonga,Turkey,Trinidad and Tobago,Tuvalu,Taiwan,Tanzania,Ukraine,Uganda,United Kingdom,United States of America,Uruguay,Uzbekistan,Vatican City,Saint Vincent and the Grenadines,Venezuela,British Virgin Islands (United Kingdom),United States Virgin Islands (United States),Vietnam,Vanuatu,Wallis and Futuna,Samoa,Yemen,Mayotte,South Africa,Zambia,Zimbabwe';
+		$region_codes = explode( ',', $region_codes );
+		$region_names = explode( ',', $region_names );
+		$regions      = array_combine( $region_codes, $region_names );
+
+		return $regions;
+	}
+
+	private function get_post_types() {
+		$post_types = Helpers\Data::get_post_types();
+		$options = [];
+		foreach ( $post_types as $post_type ) {
+			$options[ $post_type['slug'] ] = sprintf( '%s (%s)', $post_type['name'], $post_type['slug'] );
+		}
+		return $options;
+	}
+
+	private function get_taxonomies() {
+		$taxonomies = Helpers\Data::get_taxonomies();
+		$options = [];
+		foreach ( $taxonomies as $taxonomy ) {
+			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
+		}
+		return $options;
+	}
+}
