@@ -14,7 +14,7 @@ const FieldsTab = props => {
 	const [ fields, setFields ] = useState( Object.values( props.fields ) );
 
 	// Don't render any field if fields data is not available.
-	const fieldsData = useContext( FieldsDataContext );
+	const { fieldsData } = useContext( FieldsDataContext );
 	if ( Object.keys( fieldsData ).length === 0 ) {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}

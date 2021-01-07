@@ -5,12 +5,14 @@ export const FieldsDataContext = createContext( {} );
 
 export const FieldsDataProvider = ( { children } ) => {
 	const [ fieldsData, setFieldsData ] = useState( {} );
+	const [ fieldCategories, setFieldCategories ] = useState( [] );
 
 	useEffect( () => {
 		request( 'fields' ).then( setFieldsData );
+		request( 'field-categories' ).then( setFieldCategories );
 	}, [] );
 
-	return <FieldsDataContext.Provider value={ fieldsData }>
+	return <FieldsDataContext.Provider value={ { fieldsData, fieldCategories } }>
 		{ children }
 	</FieldsDataContext.Provider>;
 };

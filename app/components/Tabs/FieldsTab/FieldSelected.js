@@ -6,7 +6,7 @@ const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldSelected = ( { id, field, parent = '', updateFieldType } ) => {
-	const fieldsData = useContext( FieldsDataContext );
+	const { fieldsData } = useContext( FieldsDataContext );
 	const controls = [ ...fieldsData[ field.type ].controls ];
 
 	if ( [ 'divider', 'tab' ].includes( field.type ) ) {

@@ -1,18 +1,13 @@
 import { FieldsDataContext } from '../../contexts/FieldsDataContext';
-import { request } from '../../functions';
 
 const { useContext, useEffect, useState } = wp.element;
 const { Dropdown } = wp.components;
 const { __ } = wp.i18n;
 
 export const Inserter = ( { addField, type } ) => {
-	const [ categories, setCategories ] = useState( [] );
+	const { fieldCategories } = useContext( FieldsDataContext );
 	const [ searchParam, setSearchParam ] = useState( '' );
 	const [ closeCallback, setCloseCallback ] = useState( () => { } );
-
-	useEffect( () => {
-		request( 'field-categories' ).then( setCategories );
-	}, [] );
 
 	const search = e => setSearchParam( e.target.value );
 	const open = ( toggle, close ) => {
@@ -39,8 +34,8 @@ export const Inserter = ( { addField, type } ) => {
 						<input type="search" placeholder={ __( 'Search for a field type', 'meta-box-builder' ) } onChange={ search } />
 					</div>
 					{
-						categories.length > 0
-							? categories.map( category =>
+						fieldCategories.length > 0
+							? fieldCategories.map( category =>
 								<Category key={ category.slug } category={ category } insert={ insert } searchParam={ searchParam } />
 							)
 							: <p>{ __( 'Fetching field types, please wait...', 'meta-box-builder' ) }</p>
@@ -52,7 +47,7 @@ export const Inserter = ( { addField, type } ) => {
 };
 
 const Category = ( { category, insert, searchParam } ) => {
-	const fieldsData = useContext( FieldsDataContext );
+	const { fieldsData } = useContext( FieldsDataContext );
 	const s = searchParam.toLowerCase();
 	const fields = Object.entries( fieldsData ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( s ) );
 

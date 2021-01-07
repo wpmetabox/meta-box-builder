@@ -57,7 +57,7 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 		return newFields;
 	} );
 
-	const fieldsData = useContext( FieldsDataContext );
+	const { fieldsData } = useContext( FieldsDataContext );
 	const controls = [ ...fieldsData[ field.type ].controls ];
 
 	return (
