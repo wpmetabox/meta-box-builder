@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Api;
+namespace MBB\RestApi;
 
 class Fields extends Base {
 	private $api;
@@ -298,6 +298,8 @@ class Fields extends Base {
 		}
 
 		do_action( 'mbb_fields_init', $this->api );
+
+		$this->api->transform_controls();
 
 		return $this->api->get_fields();
 	}

@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Api;
+namespace MBB\RestApi;
 
 use MBBParser\Parsers\MetaBox as Parser;
 use MBBParser\Encoders\MetaBox as Encoder;

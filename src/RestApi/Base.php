@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Api;
+namespace MBB\RestApi;
 
 use WP_REST_Server;
 use ReflectionMethod;
