@@ -6,7 +6,7 @@ const { useState, memo } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
-const Node = ( { id, field, parent = '', index, removeField, duplicateField } ) => {
+const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
 	const [ expanded, setExpanded ] = useState( 'expanded' === dotProp.get( field, '_state', 'expanded' ) );
 	const toggleSettings = () => setExpanded( prev => !prev );
 
@@ -20,12 +20,11 @@ const Node = ( { id, field, parent = '', index, removeField, duplicateField } ) 
 		duplicateField( id );
 	};
 
-	let label = ['hidden', 'divider'].includes( field.type ) ? ucwords( field.type ) : field.name || __( '(No label)', 'meta-box-builder' );
+	let label = [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : field.name || __( '(No label)', 'meta-box-builder' );
 
 	return <div className={ `og-item og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 		<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
 		<input type="hidden" name={ `fields${ parent }[${ id }][_state]` } defaultValue={ expanded ? 'expanded' : 'collapsed' } />
-		<input type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
 		<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 			<span className="og-item__title" id={ `og-item__title__${ id }` }>{ label }</span>
 			<span className="og-item__actions">
@@ -37,10 +36,10 @@ const Node = ( { id, field, parent = '', index, removeField, duplicateField } ) 
 		</div>
 		{
 			field.type === 'group'
-				? <Group id={ id } field={ field } parent={ parent } />
-				: <FieldSelected id={ id } field={ field } parent={ parent } />
+				? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
+				: <FieldSelected id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
 		}
 	</div>;
 };
 
-export default memo( Node, ( prevProps, nextProps ) => nextProps.field.type !== 'group' && prevProps.id === nextProps.id && prevProps.index === nextProps.index );
+export default memo( Node, ( prevProps, nextProps ) => nextProps.field.type !== 'group' && prevProps.id === nextProps.id && prevProps.field.type === nextProps.field.type );

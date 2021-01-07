@@ -41,7 +41,7 @@ class Fields extends Base {
 	public function get_fields() {
 		$this->registry->register_default_controls();
 
-		$general  = ['name', 'id', 'label_description', 'desc'];
+		$general  = ['type', 'name', 'id', 'label_description', 'desc'];
 		$advanced = ['before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings'];
 		$clone    = ['clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button'];
 		$date     = ['std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'required', 'disabled', 'readonly', 'js_options'];
@@ -104,7 +104,7 @@ class Fields extends Base {
 			'divider'       => [
 				'title'    => __( 'Divider', 'meta-box-builder' ),
 				'category' => 'layout',
-				'controls' => ['before', 'after'],
+				'controls' => ['type', 'before', 'after'],
 			],
 			'email'         => [
 				'title'    => __( 'Email', 'meta-box-builder' ),
@@ -144,7 +144,7 @@ class Fields extends Base {
 			'heading'        => [
 				'title'    => __( 'Heading', 'meta-box-builder' ),
 				'category' => 'layout',
-				'controls' => array_merge( ['name', 'desc'], $advanced ),
+				'controls' => array_merge( ['type', 'name', 'desc'], $advanced ),
 			],
 			'hidden'         => [
 				'title'    => __( 'Hidden', 'meta-box-builder' ),

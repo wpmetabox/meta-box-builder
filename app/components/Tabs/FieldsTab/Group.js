@@ -11,7 +11,7 @@ import Node from './Node';
 const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
-const Group = ( { id, field, parent = '' } ) => {
+const Group = ( { id, field, parent = '', updateFieldType } ) => {
 	const { updateFieldId, removeFieldId } = useContext( FieldIdsContext );
 	const [ subFields, setSubFields ] = useState( Object.values( dotProp.get( field, 'fields', {} ) ) );
 
@@ -45,6 +45,18 @@ const Group = ( { id, field, parent = '' } ) => {
 		return newFields;
 	} );
 
+	const updateSubFieldType = ( subId, type ) => setSubFields( prev => {
+		// Maintain existing input values.
+		let newField = getFieldValue( `fields${ parent }[${ id }][fields][${ subId }]` );
+		newField.type = type;
+
+		const index = prev.findIndex( field => field._id === subId );
+		let newFields = [ ...prev ];
+		newFields[ index ] = newField;
+
+		return newFields;
+	} );
+
 	const fieldsData = useContext( FieldsDataContext );
 	const controls = [ ...fieldsData[ field.type ].controls ];
 
@@ -56,7 +68,7 @@ const Group = ( { id, field, parent = '' } ) => {
 					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 				</TabList>
 				<TabPanel>
-					<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } />
+					<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
 				</TabPanel>
 				<TabPanel>
 					<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } />
@@ -71,10 +83,10 @@ const Group = ( { id, field, parent = '' } ) => {
 								key={ subField._id }
 								id={ subField._id }
 								field={ subField }
-								index={ index }
 								parent={ `${ parent }[${ id }][fields]` }
 								removeField={ removeSubField }
 								duplicateField={ duplicateSubField }
+								updateFieldType={ updateSubFieldType }
 							/> )
 						}
 					</ReactSortable>

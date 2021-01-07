@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 const { lazy, memo, Suspense } = wp.element;
 
-const Content = ( { id, controls, field, parent = '' } ) => {
+const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
 	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
 		const Control = lazy( () => import( `../../Controls/${ name }` ) );
 
@@ -18,7 +18,12 @@ const Content = ( { id, controls, field, parent = '' } ) => {
 			{ ...props }
 			name={ `fields${ parent }[${ id }]${ input }` }
 			defaultValue={ dotProp.get( field, key, defaultValue ) }
-			_new={ dotProp.get( field, '_new', false ) } // Idicate if field is just added, for auto generating ID.
+
+			// For Name: idicate if field is just added, for auto generating ID.
+			_new={ dotProp.get( field, '_new', false ) }
+
+			// For Type: allow to change field type.
+			updateFieldType={ updateFieldType }
 		/>;
 	};
 
@@ -29,4 +34,4 @@ const Content = ( { id, controls, field, parent = '' } ) => {
 	);
 };
 
-export default memo( Content, ( prevProps, nextProps ) => prevProps.id === nextProps.id );
+export default memo( Content, ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.field.type === nextProps.field.type );

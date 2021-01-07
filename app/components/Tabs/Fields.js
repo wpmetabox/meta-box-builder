@@ -6,7 +6,7 @@ import { getFieldValue, ucwords, uniqid } from '../../functions';
 import { Inserter } from '../Controls/Inserter';
 import Node from './FieldsTab/Node';
 
-const { useContext, useState, memo } = wp.element;
+const { useContext, useState } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = props => {
@@ -49,6 +49,18 @@ const FieldsTab = props => {
 		return newFields;
 	} );
 
+	const updateFieldType = ( id, type ) => setFields( prev => {
+		// Maintain existing input values.
+		let newField = getFieldValue( `fields[${ id }]` );
+		newField.type = type;
+
+		const index = prev.findIndex( field => field._id === id );
+		let newFields = [ ...prev ];
+		newFields[ index ] = newField;
+
+		return newFields;
+	} );
+
 	return (
 		<>
 			{
@@ -66,9 +78,9 @@ const FieldsTab = props => {
 						key={ field._id }
 						id={ field._id }
 						field={ field }
-						index={ index }
 						removeField={ removeField }
 						duplicateField={ duplicateField }
+						updateFieldType={ updateFieldType }
 					/> )
 				}
 			</ReactSortable>
@@ -77,4 +89,4 @@ const FieldsTab = props => {
 	);
 };
 
-export default memo( FieldsTab );
+export default FieldsTab;

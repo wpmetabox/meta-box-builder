@@ -33,17 +33,10 @@ class Control {
 
 	private static function get_default_value( $name ) {
 		$defaults = [
-			'AddressField' => '',
-			'Checkbox'     => false,
-			'Icon'         => '',
-			'Id'           => '',
-			'Input'        => '',
-			'KeyValue'     => [],
-			'Name'         => '',
-			'ReactSelect'  => [],
-			'Select'       => '',
-			'Textarea'     => '',
+			'Checkbox'    => false,
+			'KeyValue'    => [],
+			'ReactSelect' => [],
 		];
-		return isset( $defaults[ $name ] ) ? $defaults[ $name ] : null;
+		return isset( $defaults[ $name ] ) ? $defaults[ $name ] : '';
 	}
 }
