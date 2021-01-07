@@ -20,7 +20,7 @@ const FieldsTab = props => {
 
 	const addField = type => setFields( prev => {
 		const id = `${ type }_${ uniqid() }`;
-		const newField = { _id: id, id, type, name: ucwords( type, '_' ) };
+		const newField = { _id: id, _new: true, id, type, name: ucwords( type, '_' ) };
 		updateFieldId( id, newField );
 		return [ ...prev, newField ];
 	} );

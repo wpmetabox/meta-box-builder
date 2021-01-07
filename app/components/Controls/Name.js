@@ -5,12 +5,13 @@ import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
 
 const { __ } = wp.i18n;
-const { useContext, useEffect, useState } = wp.element;
+const { useContext, useEffect, useRef, useState } = wp.element;
 
-const Name = ( { name, componentId, defaultValue, ...rest } ) => {
+const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 	const { updateFieldId } = useContext( FieldIdsContext );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
+	const isFirstEdit = useRef( _new );
 
 	// Update conditional logic.
 	useEffect( () => {
@@ -29,16 +30,21 @@ const Name = ( { name, componentId, defaultValue, ...rest } ) => {
 			titleElement.textContent = e.target.value || __( '(No label)', 'meta-box-builder' );
 		}
 
-		// Auto generate ID.
+		// Auto generate ID only when edit the label first time. E.g. don't generate when it's blur or after save.
+		if ( ! isFirstEdit.current ) {
+			return;
+		}
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
 		if ( idElement ) {
 			idElement.value = slugify( e.target.value, { lower: true, replacement: '_' } );
 		}
 	};
 
+	const onBlur = () => isFirstEdit.current = false;
+
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<input autoFocus type="text" id={ componentId } defaultValue={ defaultValue } name={ name } onChange={ onChange } />
+			<input autoFocus type="text" id={ componentId } defaultValue={ defaultValue } name={ name } onChange={ onChange } onBlur={ onBlur } />
 		</DivRow>
 	);
 };

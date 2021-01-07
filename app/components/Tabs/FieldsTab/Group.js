@@ -16,7 +16,7 @@ const Group = ( { id, field, parent = '' } ) => {
 
 	const addSubField = type => setSubFields( prev => {
 		const id = `${ type }_${ uniqid() }`;
-		const newField = { _id: id, id, type, name: ucwords( type, '_' ) };
+		const newField = { _id: id, _new: true, id, type, name: ucwords( type, '_' ) };
 		updateFieldId( id, newField );
 		return [ ...prev, newField ];
 	} );

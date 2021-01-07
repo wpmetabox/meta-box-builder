@@ -18,6 +18,7 @@ const Content = ( { id, controls, field, parent = '' } ) => {
 			{ ...props }
 			name={ `fields${ parent }[${ id }]${ input }` }
 			defaultValue={ dotProp.get( field, key, defaultValue ) }
+			_new={ dotProp.get( field, '_new', false ) } // Idicate if field is just added, for auto generating ID.
 		/>;
 	};
 
