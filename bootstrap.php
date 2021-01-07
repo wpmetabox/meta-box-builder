@@ -29,8 +29,10 @@ if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 	new RestApi\ShowHide;
 }
 
-new Extensions\Tabs;
 new Extensions\Columns;
+new Extensions\ConditionalLogic;
+new Extensions\Group;
+new Extensions\Tabs;
 new Extensions\Tooltip;
 
 if ( is_admin() ) {
