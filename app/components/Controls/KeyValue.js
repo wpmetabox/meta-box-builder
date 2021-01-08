@@ -7,24 +7,18 @@ const { Dashicon } = wp.components;
 
 const KeyValue = ( {
 	defaultValue,
-	componentId,
-	label,
 	name,
-	link = '',
-	tooltip = '',
 	keyPlaceholder = __( 'Enter key', 'meta-box-builder' ),
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
+	...rest
 } ) => {
 	const [ items, setItems ] = useState( Object.values( defaultValue || {} ) );
 
 	const addItem = () => setItems( prev => [ ...prev, { key: '', value: '', id: uniqid() } ] );
 	const removeItem = id => setItems( prev => prev.filter( item => item.id !== id ) );
 
-	if ( link ) {
-		label = `<a href="${ link }" target="_blank" rel="noreferrer noopener">${ label }</a>`;
-	}
 	return (
-		<DivRow label={ label } tooltip={ tooltip }>
+		<DivRow { ...rest }>
 			{
 				items.map( item => (
 					<Item

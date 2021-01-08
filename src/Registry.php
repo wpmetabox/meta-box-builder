@@ -56,13 +56,11 @@ class Registry {
 				'tooltip' => __( 'Enter PHP function name for custom sanitization. Enter "none" to disable sanitization.', 'meta-box-builder' ),
 			], '', 'advanced' ),
 			Control::KeyValue( 'attributes', [
-				'link'    => 'https://docs.metabox.io/custom-attributes/',
-				'label'   => __( 'Custom HTML5 attributes', 'meta-box-builder' ),
+				'label'   => '<a href="https://docs.metabox.io/custom-attributes/" target="_blank" rel="noreferrer noopener">' . __( 'Custom HTML5 attributes', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
 			], [], 'advanced' ),
 			Control::KeyValue( 'custom_settings', [
-				'link'    => 'https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes',
-				'label'   => __( 'Custom settings', 'meta-box-builder' ),
+				'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes">' . __( 'Custom settings', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Use this to add custom settings for the field. The custom settings will overwrite existing settings if they have the same key.', 'meta-box-builder' ),
 			], [], 'advanced' ),
 
@@ -120,15 +118,8 @@ class Registry {
 			Control::Checkbox( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
 			Control::Checkbox( 'required', __( 'Required', 'meta-box-builder' ) ),
 			Control::Checkbox( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
-			'js_options_date' => Control::KeyValue( 'js_options', [
-				'link'  => 'https://api.jqueryui.com/datepicker/',
-				'label' => __( 'Date picker options', 'meta-box-builder' ),
-			] ),
-			'js_options_datetime' => Control::KeyValue( 'js_options', [
-				'link'  => 'https://api.jqueryui.com/datepicker/',
-				'label' => __( 'Date picker options', 'meta-box-builder' ),
-			] ),
-
+			'js_options_date' => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_datetime' => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
 			// Map.
 			'std_map' => Control::Input( 'std', [
 				'label'   => __( 'Default location', 'meta-box-builder' ),
@@ -176,13 +167,11 @@ class Registry {
 			] ),
 			Control::Checkbox( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ) ),
 			'query_args_taxonomy' => Control::KeyValue( 'query_args', [
-				'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
-				'label'   => __( 'Query args', 'meta-box-builder' ),
+				'label'   => '<a href="https://developer.wordpress.org/reference/functions/get_terms/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 			] ),
 			'query_args_taxonomy_advanced' => Control::KeyValue( 'query_args', [
-				'link'    => 'https://developer.wordpress.org/reference/functions/get_terms/',
-				'label'   => __( 'Query args', 'meta-box-builder' ),
+				'label'   => '<a href="https://developer.wordpress.org/reference/functions/get_terms/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 			] ),
 
@@ -234,10 +223,7 @@ class Registry {
 
 			// Color.
 			Control::Checkbox( 'alpha_channel', __( 'Allow to select opacity', 'meta-box-builder' ) ),
-			'js_options_color' => Control::KeyValue( 'js_options', [
-				'link'  => 'https://automattic.github.io/Iris/',
-				'label' => __( 'Custom color picker options', 'meta-box-builder' ),
-			] ),
+			'js_options_color' => Control::KeyValue( 'js_options', '<a href="https://automattic.github.io/Iris/" target="_blank" rel="nofollow noopenner">' . __( 'Color picker options', 'meta-box-builder' ) . '</a>' ),
 
 			// Custom HTML.
 			'std_custom_html' => Control::Textarea( 'std', __( 'Content (HTML allowed)' ) ),
@@ -331,16 +317,12 @@ class Registry {
 				'tooltip' => __( 'Set the selected post as the parent for the current being edited post.', 'meta-box-builder' ),
 			] ),
 			'query_args_post' => Control::KeyValue( 'query_args', [
-				'link'    => 'https://developer.wordpress.org/reference/classes/wp_query/',
-				'label'   => __( 'Query args', 'meta-box-builder' ),
+				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
 			] ),
 
 			// Select advanced.
-			'js_options_select_advanced' => Control::KeyValue( 'js_options', [
-				'link'  => 'https://select2.org/configuration',
-				'label' => __( 'Select2 options', 'meta-box-builder' ),
-			] ),
+			'js_options_select_advanced' => Control::KeyValue( 'js_options', '<a href="https://select2.org/configuration" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>' ),
 
 			// Slider.
 			Control::Input( 'prefix', [
@@ -351,10 +333,7 @@ class Registry {
 				'label'   => __( 'Suffix', 'meta-box-builder' ),
 				'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
 			] ),
-			'js_options_slider' => Control::KeyValue( 'js_options', [
-				'link'  => 'https://api.jqueryui.com/slider',
-				'label' => __( 'jQueryUI slider options', 'meta-box-builder' ),
-			] ),
+			'js_options_slider' => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/slider" target="_blank" rel="nofollow noopenner">' . __( 'Slider options', 'meta-box-builder' ) . '</a>' ),
 
 			// Switch.
 			Control::Select( 'style', [
@@ -398,24 +377,17 @@ class Registry {
 				'label'   => __( 'Inline', 'meta-box-builder' ),
 				'tooltip' => __( 'Display the time picker inline with the input. Do not require to click the input field to trigger the time picker.', 'meta-box-builder' ),
 			] ),
-			'js_options_time' => Control::KeyValue( 'js_options', [
-				'link'  => 'http://trentrichardson.com/examples/timepicker',
-				'label' => __( 'Time picker options', 'meta-box-builder' ),
-			] ),
+			'js_options_time' => Control::KeyValue( 'js_options', '<a href="http://trentrichardson.com/examples/timepicker" target="_blank" rel="nofollow noopenner">' . __( 'Time picker options', 'meta-box-builder' ) . '<a/>' ),
 
 			// User.
 			'query_args_user' => Control::KeyValue( 'query_args', [
-				'link'    => 'https://codex.wordpress.org/Function_Reference/get_users',
-				'label'   => __( 'Query args', 'meta-box-builder' ),
+				'label'   => '<a href="https://codex.wordpress.org/Function_Reference/get_users" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
 			] ),
 
 			// Wysiwyg.
 			Control::Checkbox( 'raw', __( 'Save data in the raw format', 'meta-box-builder' ) ),
-			'options_wysiwyg' => Control::KeyValue( 'options', [
-				'link'  => 'https://developer.wordpress.org/reference/functions/wp_editor/',
-				'label' => __( 'Editor options', 'meta-box-builder' ),
-			] ),
+			'options_wysiwyg' => Control::KeyValue( 'options', '<a href="https://developer.wordpress.org/reference/functions/wp_editor/" target="_blank" rel="nofollow noopenner">' . __( 'Editor options', 'meta-box-builder' ) . '</a>' ),
 		];
 
 		foreach ( $controls as $id => $control ) {
