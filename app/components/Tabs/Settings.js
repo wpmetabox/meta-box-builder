@@ -36,10 +36,16 @@ const SettingsTab = ( { defaultValues } ) => {
 			{ MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) && <CustomTable defaultValues={ dotProp.get( defaultValues, 'custom_table', {} ) } /> }
 			{ MbbApp.extensions.tabs && <Tabs defaultValues={ defaultValues } /> }
 			<Input
+				name="settings[class]"
+				label={ __( 'Custom CSS class', 'meta-box-builder' ) }
+				tooltip={ __( 'Custom CSS class for the meta box wrapper', 'meta-box-builder' ) }
+				componentId="settings-class"
+			/>
+			<Input
 				name="settings[prefix]"
 				label={ __( 'Field ID prefix', 'meta-box-builder' ) }
 				tooltip={ __( 'Auto add a prefix to all field IDs to keep them separated from other field groups or other plugins. Leave empty to ignore this or use underscore (_) to make the fields hidden.', 'meta-box-builder' ) }
-				componentId="prefix"
+				componentId="settings-prefix"
 			/>
 			<KeyValue
 				name="settings[custom_settings]"
