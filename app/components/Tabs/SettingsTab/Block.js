@@ -8,7 +8,7 @@ import ReactSelect from '../../Controls/ReactSelect';
 import Select from '../../Controls/Select';
 import Textarea from '../../Controls/Textarea';
 const { __ } = wp.i18n;
-const { useState, useEffect } = wp.element;
+const { useState, useEffect, RawHTML } = wp.element;
 const { ColorPicker } = wp.components;
 
 export const Block = ( { defaultValues } ) => {
@@ -170,23 +170,23 @@ export const Block = ( { defaultValues } ) => {
 					<tbody>
 						<tr>
 							<td><code>{ "{{ attribute }}" }</code></td>
-							<td dangerouslySetInnerHTML={ { __html: __( 'Block attribute. Replace <code>attribute</code> with <code>anchor</code>, <code>align</code> or <code>className</code>).', 'meta-box-builder' ) } } />
+							<td><RawHTML>{ __( 'Block attribute. Replace <code>attribute</code> with <code>anchor</code>, <code>align</code> or <code>className</code>).', 'meta-box-builder' ) }</RawHTML></td>
 						</tr>
 						<tr>
 							<td><code>{ "{{ field_id }}" }</code></td>
-							<td dangerouslySetInnerHTML={ { __html: __( 'Field value. Replace <code>field_id</code> with a real field ID.', 'meta-box-builder' ) } } />
+							<td><RawHTML>{ __( 'Field value. Replace <code>field_id</code> with a real field ID.', 'meta-box-builder' ) }</RawHTML></td>
 						</tr>
 						<tr>
 							<td><code>{ "{{ is_preview }}" }</code></td>
-							<td dangerouslySetInnerHTML={ { __html: __( 'Whether in preview mode.', 'meta-box-builder' ) } } />
+							<td><RawHTML>{ __( 'Whether in preview mode.', 'meta-box-builder' ) }</RawHTML></td>
 						</tr>
 						<tr>
 							<td><code>{ "{{ post_id }}" }</code></td>
-							<td dangerouslySetInnerHTML={ { __html: __( 'Current post ID.', 'meta-box-builder' ) } } />
+							<td><RawHTML>{ __( 'Current post ID.', 'meta-box-builder' ) }</RawHTML></td>
 						</tr>
 						<tr>
 							<td><code>mb.function()</code></td>
-							<td dangerouslySetInnerHTML={ { __html: __( 'Run a PHP/WordPress function via <code>mb</code> namespace. Replace <code>function</code> with a valid PHP/WordPress function name.', 'meta-box-builder' ) } } />
+							<td><RawHTML>{ __( 'Run a PHP/WordPress function via <code>mb</code> namespace. Replace <code>function</code> with a valid PHP/WordPress function name.', 'meta-box-builder' ) }</RawHTML></td>
 						</tr>
 					</tbody>
 				</table>

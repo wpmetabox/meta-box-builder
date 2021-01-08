@@ -39,6 +39,9 @@ svg {
 	min-width: 255px;
 }
 
+&-label > div {
+  display: inline;
+}
 &-required {
   color: var(--color-red);
 }

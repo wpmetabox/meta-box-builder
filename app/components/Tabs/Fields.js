@@ -6,7 +6,7 @@ import { getFieldValue, ucwords, uniqid } from '../../functions';
 import { Inserter } from '../Controls/Inserter';
 import Node from './FieldsTab/Node';
 
-const { useContext, useState } = wp.element;
+const { useContext, useState, RawHTML } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldsTab = props => {
@@ -65,12 +65,7 @@ const FieldsTab = props => {
 		<>
 			{
 				fields.length === 0 &&
-				<p
-					className="og-none"
-					dangerouslySetInnerHTML={ {
-						__html: __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' )
-					} }
-				/>
+				<RawHTML className="og-none">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
 			}
 			<ReactSortable className="og-fields" list={ fields } setList={ setFields } handle=".og-item__header">
 				{

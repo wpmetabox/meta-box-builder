@@ -1,5 +1,7 @@
 import Tooltip from './Tooltip';
 
+const { RawHTML } = wp.element;
+
 const DivRow = ( {
 	children,
 	label,
@@ -16,7 +18,7 @@ const DivRow = ( {
 			{
 				label &&
 				<label className="og-label" htmlFor={ htmlFor }>
-					<span dangerouslySetInnerHTML={ { __html: label } } />
+					<RawHTML>{ label }</RawHTML>
 					{ required && <span className="og-required">*</span> }
 					{ tooltip && <Tooltip id={ htmlFor } content={ tooltip } /> }
 				</label>

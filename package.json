@@ -1,4 +1,5 @@
 {
+  "license": "GPL-2.0-or-later",
   "scripts": {
     "css": "node-sass --sourcemap none --output-style compressed assets/sass/style.scss -o assets/css",
     "watch:css": "node-sass --sourcemap none --output-style compressed -w assets/sass -r -o assets/css",
