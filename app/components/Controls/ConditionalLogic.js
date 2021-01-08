@@ -6,18 +6,14 @@ const { useState, useContext } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
 
-const ConditionalLogic = ( { defaultValue, name } ) => {
+const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'when', {} ) ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: '', operator: '=', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
 	return (
-		<DivRow
-			className="og-include-exclude"
-			label={ `<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noopener norefferer">${ __( 'Conditional Logic', 'meta-box-builder' ) }</a>` }
-			tooltip={ __( 'Toggle the field based on other field values', 'meta-box-builder' ) }
-		>
+		<DivRow className="og-include-exclude" { ...rest }>
 			{ rules.length > 0 && <Intro name={ name } defaultValue={ defaultValue } /> }
 			{
 				rules.map( rule => <Rule
