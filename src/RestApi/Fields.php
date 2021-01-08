@@ -20,6 +20,10 @@ class Fields extends Base {
 				'title' => __( 'Advanced', 'meta-box-builder' ),
 			],
 			[
+				'slug'  => 'html5',
+				'title' => __( 'HTML5', 'meta-box-builder' ),
+			],
+			[
 				'slug'  => 'wordpress',
 				'title' => __( 'WordPress', 'meta-box-builder' ),
 			],
@@ -49,6 +53,7 @@ class Fields extends Base {
 		$taxonomy = ['taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args'];
 		$upload   = ['max_file_uploads', 'max_status', 'force_delete'];
 		$input    = ['required', 'disabled', 'readonly'];
+		$html5    = ['std', 'placeholder', 'size', 'required', 'disabled', 'readonly'];
 
 		$fields = [
 			'autocomplete' => [
@@ -97,9 +102,14 @@ class Fields extends Base {
 				'controls' => array_merge( $general, $date, $clone, $advanced ),
 			],
 			'datetime'      => [
-				'title'    => __( 'Date Time Picker', 'meta-box-builder' ),
+				'title'    => __( 'Datetime Picker', 'meta-box-builder' ),
 				'category' => 'advanced',
 				'controls' => array_merge( $general, $date, $clone, $advanced ),
+			],
+			'datetime-local' => [
+				'title'    => __( 'Datetime Local', 'meta-box-builder' ),
+				'category' => 'html5',
+				'controls' => array_merge( $general, $html5, $clone, $advanced ),
 			],
 			'divider'       => [
 				'title'    => __( 'Divider', 'meta-box-builder' ),
@@ -108,8 +118,8 @@ class Fields extends Base {
 			],
 			'email'         => [
 				'title'    => __( 'Email', 'meta-box-builder' ),
-				'category' => 'basic',
-				'controls' => array_merge( $general, ['std', 'placeholder', 'size'], $input, $clone, $advanced ),
+				'category' => 'html5',
+				'controls' => array_merge( $general, $html5, $clone, $advanced ),
 			],
 			'fieldset_text' => [
 				'title'    => __( 'Fieldset Text', 'meta-box-builder' ),
@@ -129,7 +139,7 @@ class Fields extends Base {
 			'file_input'    => [
 				'title'    => __( 'File Input', 'meta-box-builder' ),
 				'category' => 'upload',
-				'controls' => array_merge( $general, ['std', 'placeholder', 'size'], $input, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, $clone, $advanced ),
 			],
 			'file_upload'   => [
 				'title'    => __( 'File Upload', 'meta-box-builder' ),
@@ -176,15 +186,20 @@ class Fields extends Base {
 				'category' => 'advanced',
 				'controls' => array_merge( $general, ['size', 'placeholder_key', 'placeholder_value'], $advanced ),
 			],
+			'month' => [
+				'title'    => __( 'Month', 'meta-box-builder' ),
+				'category' => 'html5',
+				'controls' => array_merge( $general, $html5, $clone, $advanced ),
+			],
 			'number' => [
 				'title'    => __( 'Number', 'meta-box-builder' ),
-				'category' => 'basic',
-				'controls' => array_merge( $general, ['std', 'min', 'max', 'step', 'placeholder', 'size'], $clone, $advanced ),
+				'category' => 'html5',
+				'controls' => array_merge( $general, ['min', 'max', 'step'], $html5, $clone, $advanced ),
 			],
 			'oembed' => [
 				'title'    => __( 'oEmbed', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['std', 'placeholder', 'size', 'not_available_string'], $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, ['not_available_string'], $clone, $advanced ),
 			],
 			'osm'      => [
 				'title'    => __( 'Open Street Maps', 'meta-box-builder' ),
@@ -194,7 +209,7 @@ class Fields extends Base {
 			'password' => [
 				'title'    => __( 'Password', 'meta-box-builder' ),
 				'category' => 'basic',
-				'controls' => array_merge( $general, ['std', 'placeholder', 'size'], $input, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, $clone, $advanced ),
 			],
 			'post'     => [
 				'title'    => __( 'Post', 'meta-box-builder' ),
@@ -208,7 +223,7 @@ class Fields extends Base {
 			],
 			'range'           => [
 				'title'    => __( 'Range', 'meta-box-builder' ),
-				'category' => 'basic',
+				'category' => 'html5',
 				'controls' => array_merge( $general, ['std', 'min', 'max', 'step'], $input, $clone, $advanced ),
 			],
 			'select'          => [
@@ -251,10 +266,15 @@ class Fields extends Base {
 				'category' => 'wordpress',
 				'controls' => array_merge( $general, $taxonomy, $clone, $advanced ),
 			],
+			'tel' => [
+				'title'    => __( 'Phone Number', 'meta-box-builder' ),
+				'category' => 'html5',
+				'controls' => array_merge( $general, $html5, $clone, $advanced ),
+			],
 			'text'              => [
 				'title'    => __( 'Text', 'meta-box-builder' ),
 				'category' => 'basic',
-				'controls' => array_merge( $general, ['std', 'placeholder', 'size', 'prepend', 'append', 'datalist_choices'], $input, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, ['prepend', 'append', 'datalist_choices'], $clone, $advanced ),
 			],
 			'text_list' => [
 				'title'    => __( 'Text List', 'meta-box-builder' ),
@@ -269,7 +289,7 @@ class Fields extends Base {
 			'time' => [
 				'title'    => __( 'Time Picker', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['std', 'size', 'placeholder', 'inline'], $input, ['js_options'], $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, ['inline', 'js_options'], $clone, $advanced ),
 			],
 			'user' => [
 				'title'    => __( 'User', 'meta-box-builder' ),
@@ -279,12 +299,17 @@ class Fields extends Base {
 			'url'     => [
 				'title'    => __( 'URL', 'meta-box-builder' ),
 				'category' => 'basic',
-				'controls' => array_merge( $general, ['std', 'placeholder', 'size'], $input, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, $clone, $advanced ),
 			],
 			'video'   => [
 				'title'    => __( 'Video', 'meta-box-builder' ),
 				'category' => 'upload',
 				'controls' => array_merge( $general, $upload, $clone, $advanced ),
+			],
+			'week' => [
+				'title'    => __( 'Week', 'meta-box-builder' ),
+				'category' => 'html5',
+				'controls' => array_merge( $general, $html5, $clone, $advanced ),
 			],
 			'wysiwyg' => [
 				'title'    => __( 'WYSIWYG Editor', 'meta-box-builder' ),
