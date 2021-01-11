@@ -6,6 +6,7 @@ import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
 import { FieldIdsProvider } from './contexts/FieldIdsContext';
 import { FieldsDataProvider } from './contexts/FieldsDataContext';
+import { SettingsDataProvider } from './contexts/SettingsDataContext';
 const { __ } = wp.i18n;
 const { render, useEffect, useState } = wp.element;
 
@@ -27,24 +28,26 @@ const App = () => {
 	return (
 		<FieldsDataProvider>
 			<FieldIdsProvider>
-				<Tabs forceRenderTabPanel={ true } selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) }>
-					<TabList>
-						<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
-						<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
-						<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
-					</TabList>
-					<TabPanel>
-						<Fields fields={ dotProp.get( MbbApp, 'fields', {} ) } />
-					</TabPanel>
-					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-						<Settings defaultValues={ dotProp.get( MbbApp, 'settings', {} ) } />
-					</TabPanel>
-					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-						<Result defaultValues={ dotProp.get( MbbApp, 'settings', {} ) } />
-					</TabPanel>
-				</Tabs>
-				<Data />
-				<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
+				<SettingsDataProvider>
+					<Tabs forceRenderTabPanel={ true } selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) }>
+						<TabList>
+							<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
+							<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
+							<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
+						</TabList>
+						<TabPanel>
+							<Fields fields={ dotProp.get( MbbApp, 'fields', {} ) } />
+						</TabPanel>
+						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
+							<Settings settings={ dotProp.get( MbbApp, 'settings', {} ) } />
+						</TabPanel>
+						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
+							<Result defaultValues={ dotProp.get( MbbApp, 'settings', {} ) } />
+						</TabPanel>
+					</Tabs>
+					<Data />
+					<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
+				</SettingsDataProvider>
 			</FieldIdsProvider>
 		</FieldsDataProvider>
 	);
