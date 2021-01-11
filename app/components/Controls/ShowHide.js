@@ -13,7 +13,7 @@ const ShowHide = ( { objectType, defaultValue } ) => {
 	const addRule = () => setRules( prev => [ ...prev, { name: 'template', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
-	return (
+	return ( objectType !== 'block' &&
 		<DivRow
 			className="og-include-exclude"
 			label={ `<a href="https://metabox.io/plugins/meta-box-show-hide/" target="_blank" rel="noopener norefferer">${ __( 'Toggle rules', 'meta-box-builder' ) }</a>` }

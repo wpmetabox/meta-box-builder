@@ -3,7 +3,7 @@ import Checkbox from './Checkbox';
 import Select from './Select';
 const { __ } = wp.i18n;
 
-const Post = ( { postTypes, settings } ) => {
+const Post = ( { objectType, postTypes, settings } ) => {
 	const isClassic = !MbbApp.postTypes.find( pt => postTypes.includes( pt.slug ) && pt.block_editor );
 
 	let contextOptions = {
@@ -15,7 +15,7 @@ const Post = ( { postTypes, settings } ) => {
 		contextOptions.after_title = __( 'After post title', 'meta-box-builder' );
 	}
 
-	return <>
+	return objectType === 'post' && postTypes.length > 0 && <>
 		<Select
 			name="settings[context]"
 			label={ __( 'Position', 'meta-box-builder' ) }

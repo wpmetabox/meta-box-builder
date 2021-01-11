@@ -4,8 +4,8 @@ import Input from './Input';
 const { __ } = wp.i18n;
 const { useState } = wp.element;
 
-const CustomTable = ( { defaultValue } ) => {
-	return <>
+const CustomTable = ( { objectType, defaultValue } ) => {
+	return ![ 'setting', 'block' ].includes( objectType ) && <>
 		<Checkbox
 			name="settings[custom_table][enable]"
 			label={ `<a href="https://metabox.io/plugins/mb-custom-table/" target="_blank" rel="noopener noreferrer">${ __( 'Save data in a custom table', 'meta-box-builder' ) }</a>` }

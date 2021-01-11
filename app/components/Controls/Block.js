@@ -11,7 +11,7 @@ const { __ } = wp.i18n;
 const { useState, useEffect, RawHTML } = wp.element;
 const { ColorPicker } = wp.components;
 
-const Block = ( { settings } ) => {
+const Block = ( { objectType, settings } ) => {
 	const [ iconType, setIconType ] = useState( dotProp.get( settings, 'icon_type', 'dashicons' ) );
 	const [ renderWith, setRenderWith ] = useState( dotProp.get( settings, 'render_with', 'callback' ) );
 	const updateIconType = e => setIconType( e.target.value );
@@ -21,7 +21,7 @@ const Block = ( { settings } ) => {
 		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
 	}, [ iconType ] );
 
-	return <>
+	return objectType === 'block' && <>
 		<Input
 			name="settings[description]"
 			label={ __( 'Description', 'meta-box-builder' ) }

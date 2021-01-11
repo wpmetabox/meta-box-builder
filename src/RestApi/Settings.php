@@ -17,7 +17,10 @@ class Settings extends Base {
 			$settings[] = Control::ShowHide( 'show_hide' );
 		}
 		if ( Data::is_extension_active( 'meta-box-conditional-logic' ) ) {
-			$settings[] = Control::ConditionalLogic( 'conditional_logic' );
+			$settings[] = Control::ConditionalLogic( 'conditional_logic', [
+				'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noreferrer noopenner">' . __( 'Conditional logic', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'Toogle the visibility of the field group by other fields\' values', 'meta-box-builder' ),
+			] );
 		}
 		$settings[] = Control::Post();
 		if ( Data::is_extension_active( 'mb-blocks' ) ) {

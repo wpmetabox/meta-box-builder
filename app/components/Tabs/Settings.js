@@ -14,8 +14,6 @@ const Settings = ( { settings } ) => {
 		return <p className="og-none">{ __( 'Loading settings, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
-	const updateObjectType = e => setObjectType( e.target.value );
-
 	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
 		const Control = lazy( () => import( `../Controls/${ name }` ) );
 
@@ -32,7 +30,7 @@ const Settings = ( { settings } ) => {
 			defaultValue={ dotProp.get( settings, key, defaultValue ) }
 			settings={ settings }
 			objectType={ objectType }
-			updateObjectType={ updateObjectType }
+			setObjectType={ setObjectType }
 			postTypes={ postTypes }
 			setPostTypes={ setPostTypes }
 		/>;

@@ -4,10 +4,10 @@ import DivRow from './DivRow';
 import ReactSelect from './ReactSelect';
 const { __ } = wp.i18n;
 
-const Location = ( { objectType, updateObjectType, postTypes, setPostTypes, settings } ) => (
+const Location = ( { objectType, setObjectType, postTypes, setPostTypes, settings } ) => (
 	<>
 		<DivRow label={ __( 'Location', 'meta-box-builder' ) } className="og-location" tooltip={ __( 'Select where to display the field group', 'meta-box-builder' ) }>
-			<select name="settings[object_type]" defaultValue={ objectType } onChange={ updateObjectType }>
+			<select name="settings[object_type]" defaultValue={ objectType } onChange={ e => setObjectType( e.target.value ) }>
 				<option value="post">{ __( 'Post type', 'meta-box-builder' ) }</option>
 				{ MbbApp.extensions.termMeta && <option value="term">{ __( 'Taxonomy', 'meta-box-builder' ) }</option> }
 				{ MbbApp.extensions.userMeta && <option value="user">{ __( 'User', 'meta-box-builder' ) }</option> }
