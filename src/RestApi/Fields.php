@@ -45,13 +45,13 @@ class Fields extends Base {
 	public function get_fields() {
 		$this->registry->register_default_controls();
 
-		$general  = ['type', 'name', 'id', 'label_description', 'desc'];
+		$general  = ['name', 'id', 'type', 'label_description', 'desc'];
 		$advanced = ['before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings'];
 		$clone    = ['clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button'];
 		$date     = ['std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'required', 'disabled', 'readonly', 'js_options'];
-		$map      = ['std', 'address_field', 'language', 'region'];
+		$map      = ['std', 'address_field', 'language', 'region', 'required'];
 		$taxonomy = ['taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args'];
-		$upload   = ['max_file_uploads', 'max_status', 'force_delete'];
+		$upload   = ['max_file_uploads', 'max_status', 'force_delete', 'required'];
 		$input    = ['required', 'disabled', 'readonly'];
 		$html5    = ['std', 'placeholder', 'size', 'required', 'disabled', 'readonly'];
 
@@ -79,17 +79,17 @@ class Fields extends Base {
 			'checkbox' => [
 				'title'    => __( 'Checkbox', 'meta-box-builder' ),
 				'category' => 'basic',
-				'controls' => array_merge( $general, ['std'], $clone, $advanced ),
+				'controls' => array_merge( $general, ['std', 'required'], $clone, $advanced ),
 			],
 			'checkbox_list' => [
 				'title'    => __( 'Checkbox List', 'meta-box-builder' ),
 				'category' => 'basic',
-				'controls' => array_merge( $general, ['options', 'std', 'inline', 'select_all_none'], $clone, $advanced ),
+				'controls' => array_merge( $general, ['options', 'std', 'inline', 'select_all_none', 'required'], $clone, $advanced ),
 			],
 			'color' => [
 				'title'    => __( 'Color Picker', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['std', 'alpha_channel', 'disabled', 'readonly', 'js_options'], $clone, $advanced ),
+				'controls' => array_merge( $general, ['std', 'js_options', 'alpha_channel'], $input, $clone, $advanced ),
 			],
 			'custom_html' => [
 				'title'    => __( 'Custom HTML', 'meta-box-builder' ),
@@ -124,7 +124,7 @@ class Fields extends Base {
 			'fieldset_text' => [
 				'title'    => __( 'Fieldset Text', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['options'], $clone, $advanced ),
+				'controls' => array_merge( $general, ['options', 'required'], $clone, $advanced ),
 			],
 			'file'          => [
 				'title'    => __( 'File', 'meta-box-builder' ),
@@ -184,7 +184,7 @@ class Fields extends Base {
 			'key_value'      => [
 				'title'    => __( 'Key Value', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['size', 'placeholder_key', 'placeholder_value'], $advanced ),
+				'controls' => array_merge( $general, ['size', 'placeholder_key', 'placeholder_value', 'required'], $advanced ),
 			],
 			'month' => [
 				'title'    => __( 'Month', 'meta-box-builder' ),
@@ -244,7 +244,7 @@ class Fields extends Base {
 			'single_image' => [
 				'title'    => __( 'Single Image', 'meta-box-builder' ),
 				'category' => 'upload',
-				'controls' => array_merge( $general, ['force_delete', 'image_size'], $clone, $advanced ),
+				'controls' => array_merge( $general, ['force_delete', 'image_size', 'required'], $clone, $advanced ),
 			],
 			'slider'       => [
 				'title'    => __( 'jQuery UI Slider', 'meta-box-builder' ),
@@ -254,7 +254,7 @@ class Fields extends Base {
 			'switch' => [
 				'title'    => __( 'Switch', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['style', 'on_label', 'off_label', 'std'], $clone, $advanced ),
+				'controls' => array_merge( $general, ['style', 'on_label', 'off_label', 'std', 'required'], $clone, $advanced ),
 			],
 			'taxonomy'          => [
 				'title'    => __( 'Taxonomy', 'meta-box-builder' ),
@@ -279,7 +279,7 @@ class Fields extends Base {
 			'text_list' => [
 				'title'    => __( 'Text List', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['options'], $clone, $advanced ),
+				'controls' => array_merge( $general, ['options', 'required'], $clone, $advanced ),
 			],
 			'textarea' => [
 				'title'    => __( 'Textarea', 'meta-box-builder' ),
@@ -314,7 +314,7 @@ class Fields extends Base {
 			'wysiwyg' => [
 				'title'    => __( 'WYSIWYG Editor', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['std', 'raw', 'options'], $clone, $advanced ),
+				'controls' => array_merge( $general, ['std', 'raw', 'options', 'required'], $clone, $advanced ),
 			],
 		];
 
