@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 import { SettingsDataContext } from '../../contexts/SettingsDataContext';
 
-const { useContext, useState } = wp.element;
+const { lazy, Suspense, useContext, useState } = wp.element;
 const { __ } = wp.i18n;
 
 const Settings = ( { settings } ) => {
@@ -30,7 +30,7 @@ const Settings = ( { settings } ) => {
 			name={ `settings${ input }` }
 			{ ...props }
 			defaultValue={ dotProp.get( settings, key, defaultValue ) }
-			defaultValues={ settings }
+			settings={ settings }
 			objectType={ objectType }
 			updateObjectType={ updateObjectType }
 			postTypes={ postTypes }

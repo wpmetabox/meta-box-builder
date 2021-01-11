@@ -3,7 +3,7 @@ import Input from './Input';
 import Select from './Select';
 const { __ } = wp.i18n;
 
-export const Tabs = ( { defaultValues } ) => <>
+const Tabs = ( { settings } ) => <>
 	<Select
 		name="settings[tab_style]"
 		label={ __( 'Tab style', 'meta-box-builder' ) }
@@ -14,12 +14,14 @@ export const Tabs = ( { defaultValues } ) => <>
 			left: __( 'Left', 'meta-box-builder' ),
 		} }
 		componentId="settings-tab-style"
-		defaultValue={ dotProp.get( defaultValues, 'tab_style', 'default' ) }
+		defaultValue={ dotProp.get( settings, 'tab_style', 'default' ) }
 	/>
 	<Input
 		name="settings[tab_default_active]"
 		label={ __( 'Default active tab ID', 'meta-box-builder' ) }
 		componentId="settings-tab-default-active"
-		defaultValue={ dotProp.get( defaultValues, 'tab_default_active' ) }
+		defaultValue={ dotProp.get( settings, 'tab_default_active' ) }
 	/>
 </>;
+
+export default Tabs;

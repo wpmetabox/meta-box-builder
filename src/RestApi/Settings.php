@@ -7,27 +7,27 @@ use MBB\Helpers\Data;
 class Settings extends Base {
 	public function get_settings() {
 		$settings = [
-			Control::Location()
+			Control::Location( 'location' ),
 		];
 
 		if ( Data::is_extension_active( 'meta-box-include-exclude' ) ) {
-			$settings[] = Control::IncludeExclude();
+			$settings[] = Control::IncludeExclude( 'include_exclude' );
 		}
 		if ( Data::is_extension_active( 'meta-box-show-hide' ) ) {
-			$settings[] = Control::ShowHide();
+			$settings[] = Control::ShowHide( 'show_hide' );
 		}
 		if ( Data::is_extension_active( 'meta-box-conditional-logic' ) ) {
-			$settings[] = Control::ConditionalLogic();
+			$settings[] = Control::ConditionalLogic( 'conditional_logic' );
 		}
 		$settings[] = Control::Post();
 		if ( Data::is_extension_active( 'mb-blocks' ) ) {
-			$settings[] = Control::Block();
+			$settings[] = Control::Block( 'block' );
 		}
 		if ( Data::is_extension_active( 'meta-box-custom-table' ) ) {
-			$settings[] = Control::CustomTable();
+			$settings[] = Control::CustomTable( 'custom_table' );
 		}
 		if ( Data::is_extension_active( 'meta-box-tabs' ) ) {
-			$settings[] = Control::Tabs();
+			$settings[] = Control::Tabs( 'tabs' );
 		}
 
 		$settings[] = Control::Input( 'class', [

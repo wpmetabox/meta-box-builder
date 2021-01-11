@@ -4,7 +4,7 @@ const { createContext, useState, useEffect } = wp.element;
 export const SettingsDataContext = createContext( {} );
 
 export const SettingsDataProvider = ( { children } ) => {
-	const [ settingsControls, setSettingsControls ] = useState( {} );
+	const [ settingsControls, setSettingsControls ] = useState( [] );
 
 	useEffect( () => {
 		request( 'settings' ).then( setSettingsControls );

@@ -33,9 +33,13 @@ class Control {
 
 	private static function get_default_value( $name ) {
 		$defaults = [
-			'Checkbox'    => false,
-			'KeyValue'    => [],
-			'ReactSelect' => [],
+			'Checkbox'         => false,
+			'KeyValue'         => [],
+			'ReactSelect'      => [],
+			'IncludeExclude'   => [],
+			'ShowHide'         => [],
+			'ConditionalLogic' => [],
+			'CustomTable'      => [],
 		];
 		return isset( $defaults[ $name ] ) ? $defaults[ $name ] : '';
 	}
