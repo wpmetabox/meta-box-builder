@@ -1,67 +1,47 @@
 import dotProp from 'dot-prop';
-import ConditionalLogic from '../Controls/ConditionalLogic';
-import Input from '../Controls/Input';
-import KeyValue from '../Controls/KeyValue';
-import { Block } from './SettingsTab/Block';
-import { CustomTable } from './SettingsTab/CustomTable';
-import { IncludeExclude } from './SettingsTab/IncludeExclude';
-import { Location } from './SettingsTab/Location';
-import { Post } from './SettingsTab/Post';
-import { ShowHide } from './SettingsTab/ShowHide';
-import { Tabs } from './SettingsTab/Tabs';
+import { SettingsDataContext } from '../../contexts/SettingsDataContext';
 
-const { useState } = wp.element;
+const { useContext, useState } = wp.element;
 const { __ } = wp.i18n;
 
-const SettingsTab = ( { defaultValues } ) => {
-	const [ objectType, setObjectType ] = useState( dotProp.get( defaultValues, 'object_type', 'post' ) );
-	const [ postTypes, setPostTypes ] = useState( dotProp.get( defaultValues, 'post_types', [ 'post' ] ) );
+const Settings = ( { settings } ) => {
+	const { settingsControls } = useContext( SettingsDataContext );
+
+	const [ objectType, setObjectType ] = useState( dotProp.get( settings, 'object_type', 'post' ) );
+	const [ postTypes, setPostTypes ] = useState( dotProp.get( settings, 'post_types', [ 'post' ] ) );
+
+	if ( settingsControls.length === 0 ) {
+		return <p className="og-none">{ __( 'Loading settings, please wait...', 'meta-box-builder' ) }</p>;
+	}
 
 	const updateObjectType = e => setObjectType( e.target.value );
 
+	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
+		const Control = lazy( () => import( `../Controls/${ name }` ) );
+
+		// If API specifies input name, then use it. Otherwise use setting. Convert name, name[subfield] to [name], [name][subfield].
+		const input = dotProp.get( props, 'name', setting ).replace( /^([^\[]+)/, '[$1]' );
+
+		// Convert name[subfield] to name.subfield to get default value.
+		const key = dotProp.get( props, 'name', setting ).replace( '[', '.' ).replace( ']', '' );
+
+		return <Control
+			componentId={ `settings-${ setting }` }
+			name={ `settings${ input }` }
+			{ ...props }
+			defaultValue={ dotProp.get( settings, key, defaultValue ) }
+			defaultValues={ settings }
+			objectType={ objectType }
+			updateObjectType={ updateObjectType }
+			postTypes={ postTypes }
+			setPostTypes={ setPostTypes }
+		/>;
+	};
+
 	return (
 		<>
-			<Location
-				objectType={ objectType }
-				updateObjectType={ updateObjectType }
-				postTypes={ postTypes }
-				defaultValues={ defaultValues }
-				setPostTypes={ setPostTypes }
-			/>
-			{ MbbApp.extensions.includeExclude && objectType !== 'block' && <IncludeExclude objectType={ objectType } postTypes={ postTypes } defaultValues={ dotProp.get( defaultValues, 'include_exclude', {} ) } /> }
-			{ MbbApp.extensions.showHide && objectType !== 'block' && <ShowHide objectType={ objectType } defaultValues={ dotProp.get( defaultValues, 'show_hide', {} ) } /> }
-			{
-				MbbApp.extensions.conditionalLogic && objectType !== 'block' &&
-				<ConditionalLogic
-					name="settings[conditional_logic]"
-					label={ `<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noreferrer noopenner">${ __( 'Conditional logic', 'meta-box-builder' ) }</a>` }
-					defaultValue={ dotProp.get( defaultValues, 'conditional_logic', {} ) }
-					tooltip={ __( 'Toogle the visibility of the field group by other fields\' values', 'meta-box-builder' ) }
-				/>
-			}
-			{ objectType === 'post' && postTypes.length > 0 && <Post defaultValues={ defaultValues } postTypes={ postTypes } /> }
-			{ MbbApp.extensions.blocks && objectType === 'block' && <Block defaultValues={ defaultValues } /> }
-			{ MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) && <CustomTable defaultValues={ dotProp.get( defaultValues, 'custom_table', {} ) } /> }
-			{ MbbApp.extensions.tabs && <Tabs defaultValues={ defaultValues } /> }
-			<Input
-				name="settings[class]"
-				label={ __( 'Custom CSS class', 'meta-box-builder' ) }
-				tooltip={ __( 'Custom CSS class for the meta box wrapper', 'meta-box-builder' ) }
-				componentId="settings-class"
-			/>
-			<Input
-				name="settings[prefix]"
-				label={ __( 'Field ID prefix', 'meta-box-builder' ) }
-				tooltip={ __( 'Auto add a prefix to all field IDs to keep them separated from other field groups or other plugins. Leave empty to ignore this or use underscore (_) to make the fields hidden.', 'meta-box-builder' ) }
-				componentId="settings-prefix"
-			/>
-			<KeyValue
-				name="settings[custom_settings]"
-				defaultValue={ dotProp.get( defaultValues, 'custom_settings', {} ) }
-				label={ __( 'Custom settings', 'meta-box-builder' ) }
-				tooltip={ __( 'Apply to the current field group. For individual fields, please go to each field > tab Advanced.', 'meta-box-builder' ) }
-			/>
+			{ settingsControls.map( control => <Suspense fallback={ null } key={ control.setting }>{ getControlComponent( control ) }</Suspense> ) }
 		</>
 	);
 };
-export default SettingsTab;
+export default Settings;

@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
-import Checkbox from '../../Controls/Checkbox';
-import DivRow from '../../Controls/DivRow';
-import ReactSelect from '../../Controls/ReactSelect';
+import Checkbox from './Checkbox';
+import DivRow from './DivRow';
+import ReactSelect from './ReactSelect';
 const { __ } = wp.i18n;
 
 export const Location = ( { objectType, updateObjectType, postTypes, setPostTypes, defaultValues } ) => (

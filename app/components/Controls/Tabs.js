@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
-import Input from '../../Controls/Input';
-import Select from '../../Controls/Select';
+import Input from './Input';
+import Select from './Select';
 const { __ } = wp.i18n;
 
 export const Tabs = ( { defaultValues } ) => <>
