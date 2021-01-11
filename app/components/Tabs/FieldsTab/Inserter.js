@@ -1,4 +1,4 @@
-import { FieldsDataContext } from '../../contexts/FieldsDataContext';
+import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 
 const { useContext, useEffect, useState } = wp.element;
 const { Dropdown } = wp.components;

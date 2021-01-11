@@ -3,7 +3,7 @@ import { ReactSortable } from 'react-sortablejs';
 import { FieldIdsContext } from '../../contexts/FieldIdsContext';
 import { FieldsDataContext } from '../../contexts/FieldsDataContext';
 import { getFieldValue, ucwords, uniqid } from '../../functions';
-import { Inserter } from '../Controls/Inserter';
+import { Inserter } from './FieldsTab/Inserter';
 import Node from './FieldsTab/Node';
 
 const { useContext, useState, RawHTML } = wp.element;
