@@ -7,7 +7,7 @@ export const SettingsDataProvider = ( { children } ) => {
 	const [ settingsControls, setSettingsControls ] = useState( [] );
 
 	useEffect( () => {
-		request( 'settings' ).then( setSettingsControls );
+		request( 'settings-controls' ).then( setSettingsControls );
 	}, [] );
 
 	return <SettingsDataContext.Provider value={ { settingsControls } }>

@@ -10,8 +10,10 @@ class Tabs {
 		if ( ! Data::is_extension_active( 'meta-box-tabs' ) ) {
 			return;
 		}
-		add_action( 'mbb_fields', [ $this, 'add_field' ] );
+		add_filter( 'mbb_fields', [ $this, 'add_field' ] );
 		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_meta_box_settings' ] );
+
+		add_filter( 'mbb_settings_controls', [ $this, 'add_settings_controls' ] );
 	}
 
 	public function add_field( $fields ) {
@@ -100,5 +102,20 @@ class Tabs {
 				$field['tab'] = $previous_tab;
 			}
 		}
+	}
+
+	public function add_settings_controls( $controls ) {
+		$controls[] = Control::Select( 'tab_style', [
+			'label'   => __( 'Tab style', 'meta-box-builder' ),
+			'tooltip' => __( 'Change how look and feel of tabs in Meta Box Tabs', 'meta-box-builder' ),
+			'options' => [
+				'default' => __( 'Default', 'meta-box-builder' ),
+				'box'     => __( 'Box', 'meta-box-builder' ),
+				'left'    => __( 'Left', 'meta-box-builder' ),
+			],
+		] );
+		$controls[] = Control::Select( 'tab_default_active', __( 'Default active tab ID', 'meta-box-builder' ) );
+
+		return $controls;
 	}
 }
