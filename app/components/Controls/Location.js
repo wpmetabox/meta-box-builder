@@ -6,8 +6,8 @@ const { __ } = wp.i18n;
 
 const Location = ( { objectType, setObjectType, postTypes, setPostTypes, settings } ) => (
 	<>
-		<DivRow label={ __( 'Location', 'meta-box-builder' ) } className="og-location" tooltip={ __( 'Select where to display the field group', 'meta-box-builder' ) }>
-			<select name="settings[object_type]" defaultValue={ objectType } onChange={ e => setObjectType( e.target.value ) }>
+		<DivRow label={ __( 'Location', 'meta-box-builder' ) } htmlFor="settings-object_type" className="og-location" tooltip={ __( 'Select where to display the field group', 'meta-box-builder' ) }>
+			<select id="settings-object_type" name="settings[object_type]" defaultValue={ objectType } onChange={ e => setObjectType( e.target.value ) }>
 				<option value="post">{ __( 'Post type', 'meta-box-builder' ) }</option>
 				{ MbbApp.extensions.termMeta && <option value="term">{ __( 'Taxonomy', 'meta-box-builder' ) }</option> }
 				{ MbbApp.extensions.userMeta && <option value="user">{ __( 'User', 'meta-box-builder' ) }</option> }
@@ -46,7 +46,12 @@ const Location = ( { objectType, setObjectType, postTypes, setPostTypes, setting
 		</DivRow>
 		{
 			'post' === objectType && postTypes.includes( 'attachment' ) &&
-			<Checkbox label={ __( 'Show in media modal', 'meta-box-builder' ) } name="settings[media_modal]" defaultValue={ dotProp.get( settings, 'media_modal', false ) } />
+			<Checkbox
+				label={ __( 'Show in media modal', 'meta-box-builder' ) }
+				name="settings[media_modal]"
+				defaultValue={ dotProp.get( settings, 'media_modal', false ) }
+				componentId="settings-media_modal"
+			/>
 		}
 	</>
 );

@@ -12,7 +12,7 @@ const Settings = ( { settings } ) => {
 	const [ postTypes, setPostTypes ] = useState( dotProp.get( settings, 'post_types', [ 'post' ] ) );
 
 	if ( settingsControls.length === 0 ) {
-		return <p className="og-none">{ __( 'Loading settings, please wait...', 'meta-box-builder' ) }</p>;
+		return <p>{ __( 'Loading settings, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
 	return <SettingsContent
