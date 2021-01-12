@@ -30,9 +30,13 @@ if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 	new RestApi\ShowHide;
 }
 
+new Extensions\Blocks;
 new Extensions\Columns;
 new Extensions\ConditionalLogic;
+new Extensions\CustomTable;
 new Extensions\Group;
+new Extensions\IncludeExclude;
+new Extensions\ShowHide;
 new Extensions\Tabs;
 new Extensions\Tooltip;
 
