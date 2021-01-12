@@ -25,7 +25,7 @@ class Settings extends Base {
 
 		$controls = apply_filters( 'mbb_settings_controls', $controls );
 
-		ksort( $controls );
+		ksort( $controls, SORT_NUMERIC );
 
 		return array_values( $controls );
 	}

@@ -105,7 +105,7 @@ class Tabs {
 	}
 
 	public function add_settings_controls( $controls ) {
-		$controls[12] = Control::Select( 'tab_style', [
+		$controls['14.1'] = Control::Select( 'tab_style', [
 			'label'   => __( 'Tab style', 'meta-box-builder' ),
 			'tooltip' => __( 'Change how look and feel of tabs in Meta Box Tabs', 'meta-box-builder' ),
 			'options' => [
@@ -114,7 +114,7 @@ class Tabs {
 				'left'    => __( 'Left', 'meta-box-builder' ),
 			],
 		] );
-		$controls[14] = Control::Input( 'tab_default_active', __( 'Default active tab ID', 'meta-box-builder' ) );
+		$controls['14.2'] = Control::Input( 'tab_default_active', __( 'Default active tab ID', 'meta-box-builder' ) );
 
 		return $controls;
 	}
