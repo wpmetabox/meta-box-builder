@@ -47,9 +47,9 @@ export const Inserter = ( { addField, type } ) => {
 };
 
 const Category = ( { category, insert, searchParam } ) => {
-	const { fieldsData } = useContext( FieldsDataContext );
+	const { fieldTypes } = useContext( FieldsDataContext );
 	const s = searchParam.toLowerCase();
-	const fields = Object.entries( fieldsData ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( s ) );
+	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( s ) );
 
 	return fields.length > 0 && (
 		<>

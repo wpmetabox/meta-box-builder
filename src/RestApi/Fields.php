@@ -42,7 +42,7 @@ class Fields extends Base {
 		return $categories;
 	}
 
-	public function get_fields() {
+	public function get_field_types() {
 		$this->registry->register_default_controls();
 
 		$general  = ['name', 'id', 'type', 'label_description', 'desc'];
@@ -55,7 +55,7 @@ class Fields extends Base {
 		$input    = ['required', 'disabled', 'readonly'];
 		$html5    = ['std', 'placeholder', 'size', 'required', 'disabled', 'readonly'];
 
-		$fields = [
+		$field_types = [
 			'autocomplete' => [
 				'title'    => __( 'Autocomplete', 'meta-box-builder' ),
 				'category' => 'advanced',
@@ -318,15 +318,15 @@ class Fields extends Base {
 			],
 		];
 
-		$fields = apply_filters( 'mbb_fields', $fields );
+		$field_types = apply_filters( 'mbb_field_types', $field_types );
 
-		foreach ( $fields as $type => $field ) {
-			$field['controls'] = apply_filters( 'mbb_field_controls', $field['controls'], $type );
-			$this->registry->add_field( $type, $field );
+		foreach ( $field_types as $type => $field_type ) {
+			$field_type['controls'] = apply_filters( 'mbb_field_controls', $field_type['controls'], $type );
+			$this->registry->add_field_type( $type, $field_type );
 		}
 
 		$this->registry->transform_controls();
 
-		return $this->registry->get_fields();
+		return $this->registry->get_field_types();
 	}
 }

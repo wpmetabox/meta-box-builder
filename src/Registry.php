@@ -8,7 +8,7 @@ namespace MBB;
 use MBB\Helpers\Arr;
 
 class Registry {
-	private $fields = [];
+	private $field_types = [];
 	private $controls = [];
 
 	/**
@@ -422,8 +422,8 @@ class Registry {
 	 * Transform fields controls to proper format (array).
 	 */
 	public function transform_controls() {
-		foreach ( $this->fields as $type => &$field ) {
-			foreach ( $field['controls'] as &$control ) {
+		foreach ( $this->field_types as $type => &$field_type ) {
+			foreach ( $field_type['controls'] as &$control ) {
 				$control = $this->get_control( $control, $type );
 			}
 		}
@@ -443,10 +443,10 @@ class Registry {
 	}
 
 	/**
-	 * Add a new field.
+	 * Add a new field type.
 	 *
 	 * @param string $type Field type.
-	 * @param array  $args Field parameters.
+	 * @param array  $args Field type parameters.
 	 *
 	 * [
 	 *     'title'    => __( 'Text', 'meta-box-builder' ),
@@ -454,12 +454,12 @@ class Registry {
 	 *     'controls' => [$control_1, $control_2]
 	 * ],
 	 */
-	public function add_field( $type, $args ) {
-		$this->fields[ $type ] = $args;
+	public function add_field_type( $type, $args ) {
+		$this->field_types[ $type ] = $args;
 	}
 
-	public function get_fields() {
-		return $this->fields;
+	public function get_field_types() {
+		return $this->field_types;
 	}
 
 	private function get_image_sizes() {

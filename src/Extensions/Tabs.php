@@ -10,12 +10,12 @@ class Tabs {
 		if ( ! Data::is_extension_active( 'meta-box-tabs' ) ) {
 			return;
 		}
-		add_action( 'mbb_fields', [ $this, 'add_field' ] );
+		add_action( 'mbb_field_types', [ $this, 'add_field_type' ] );
 		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_meta_box_settings' ] );
 	}
 
-	public function add_field( $fields ) {
-		$fields['tab'] = [
+	public function add_field_type( $field_types ) {
+		$field_types['tab'] = [
 			'title'    => __( 'Tab', 'meta-box-builder' ),
 			'category' => 'layout',
 			'controls' => [
@@ -43,7 +43,7 @@ class Tabs {
 			],
 		];
 
-		return $fields;
+		return $field_types;
 	}
 
 	public function parse_meta_box_settings( $settings ) {

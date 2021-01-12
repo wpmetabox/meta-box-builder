@@ -6,8 +6,8 @@ const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
 const FieldSelected = ( { id, field, parent = '', updateFieldType } ) => {
-	const { fieldsData } = useContext( FieldsDataContext );
-	const controls = [ ...fieldsData[ field.type ].controls ];
+	const { fieldTypes } = useContext( FieldsDataContext );
+	const controls = [ ...fieldTypes[ field.type ].controls ];
 
 	if ( [ 'divider', 'tab' ].includes( field.type ) ) {
 		return <div className="og-item__body og-collapsible__body">

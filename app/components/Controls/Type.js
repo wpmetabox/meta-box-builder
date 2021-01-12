@@ -18,8 +18,8 @@ const Type = ( { fieldId, name, componentId, defaultValue, updateFieldType, ...r
 };
 
 const Category = ( { category } ) => {
-	const { fieldsData } = useContext( FieldsDataContext );
-	const fields = Object.entries( fieldsData ).filter( ( [ type, field ] ) => field.category === category.slug );
+	const { fieldTypes } = useContext( FieldsDataContext );
+	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug );
 
 	return (
 		<optgroup label={ category.title }>

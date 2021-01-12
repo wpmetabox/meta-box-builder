@@ -9,15 +9,15 @@ class Group {
 		if ( ! Data::is_extension_active( 'meta-box-group' ) ) {
 			return;
 		}
-		add_filter( 'mbb_fields', [ $this, 'add_field' ] );
+		add_filter( 'mbb_field_types', [ $this, 'add_field_type' ] );
 	}
 
-	public function add_field( $fields ) {
-		$fields['group'] = [
+	public function add_field_type( $field_types ) {
+		$field_types['group'] = [
 			'title'    => __( 'Group', 'meta-box-builder' ),
 			'category' => 'layout',
 			'controls' => [
-				'type', 'name', 'id', 'label_description', 'desc',
+				'name', 'id', 'type', 'label_description', 'desc',
 				Control::Checkbox( 'collapsible', __( 'Collapsible', 'meta-box-builder' ) ),
 				Control::Select( 'default_state', [
 					'label'      => __( 'Default state', 'meta-box-builder' ),
@@ -41,6 +41,6 @@ class Group {
 			],
 		];
 
-		return $fields;
+		return $field_types;
 	}
 }
