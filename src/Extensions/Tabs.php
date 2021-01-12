@@ -21,7 +21,7 @@ class Tabs {
 			'title'    => __( 'Tab', 'meta-box-builder' ),
 			'category' => 'layout',
 			'controls' => [
-				'type', 'name', 'id',
+				'name', 'id', 'type',
 				Control::Select( 'icon_type', [
 					'label'   => __( 'Icon type', 'meta-box-builder' ),
 					'options' => [
@@ -114,7 +114,7 @@ class Tabs {
 				'left'    => __( 'Left', 'meta-box-builder' ),
 			],
 		] );
-		$controls[] = Control::Select( 'tab_default_active', __( 'Default active tab ID', 'meta-box-builder' ) );
+		$controls[] = Control::Input( 'tab_default_active', __( 'Default active tab ID', 'meta-box-builder' ) );
 
 		return $controls;
 	}

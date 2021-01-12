@@ -46,7 +46,7 @@ const Location = ( { objectType, setObjectType, postTypes, setPostTypes, setting
 		</DivRow>
 		{
 			'post' === objectType && postTypes.includes( 'attachment' ) &&
-			<Checkbox label={ __( 'Show in media modal', 'meta-box-builder' ) } name="settings[media_modal]" defaultValue={ settings.media_modal } />
+			<Checkbox label={ __( 'Show in media modal', 'meta-box-builder' ) } name="settings[media_modal]" defaultValue={ dotProp.get( settings, 'media_modal', false ) } />
 		}
 	</>
 );

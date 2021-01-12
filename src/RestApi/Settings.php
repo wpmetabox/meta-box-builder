@@ -22,7 +22,7 @@ class Settings extends Base {
 				'tooltip' => __( 'Toogle the visibility of the field group by other fields\' values', 'meta-box-builder' ),
 			] );
 		}
-		$controls[] = Control::Post();
+		$controls[] = Control::Post( 'post' );
 		if ( Data::is_extension_active( 'mb-blocks' ) ) {
 			$controls[] = Control::Block( 'block' );
 		}

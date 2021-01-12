@@ -29,7 +29,7 @@ const App = () => {
 		<FieldsDataProvider>
 			<FieldIdsProvider>
 				<SettingsDataProvider>
-					<Tabs forceRenderTabPanel={ true } selectedIndex={ tabIndex } onSelect={ index => setTabIndex( index ) }>
+					<Tabs forceRenderTabPanel={ true } defaultIndex={ dotProp.get( MbbApp, 'data.tab_index', 0 ) } onSelect={ setTabIndex }>
 						<TabList>
 							<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
 							<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
