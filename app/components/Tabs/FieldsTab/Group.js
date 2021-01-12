@@ -4,8 +4,8 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { FieldIdsContext } from '../../../contexts/FieldIdsContext';
 import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 import { getFieldValue, ucwords, uniqid } from '../../../functions';
-import { Inserter } from '../../Controls/Inserter';
 import Content from './Content';
+import { Inserter } from './Inserter';
 import Node from './Node';
 
 const { useContext, useState, memo } = wp.element;

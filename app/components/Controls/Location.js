@@ -1,13 +1,13 @@
 import dotProp from 'dot-prop';
-import Checkbox from '../../Controls/Checkbox';
-import DivRow from '../../Controls/DivRow';
-import ReactSelect from '../../Controls/ReactSelect';
+import Checkbox from './Checkbox';
+import DivRow from './DivRow';
+import ReactSelect from './ReactSelect';
 const { __ } = wp.i18n;
 
-export const Location = ( { objectType, updateObjectType, postTypes, setPostTypes, defaultValues } ) => (
+const Location = ( { objectType, setObjectType, postTypes, setPostTypes, settings } ) => (
 	<>
-		<DivRow label={ __( 'Location', 'meta-box-builder' ) } className="og-location" tooltip={ __( 'Select where to display the field group', 'meta-box-builder' ) }>
-			<select name="settings[object_type]" defaultValue={ objectType } onChange={ updateObjectType }>
+		<DivRow label={ __( 'Location', 'meta-box-builder' ) } htmlFor="settings-object_type" className="og-location" tooltip={ __( 'Select where to display the field group', 'meta-box-builder' ) }>
+			<select id="settings-object_type" name="settings[object_type]" defaultValue={ objectType } onChange={ e => setObjectType( e.target.value ) }>
 				<option value="post">{ __( 'Post type', 'meta-box-builder' ) }</option>
 				{ MbbApp.extensions.termMeta && <option value="term">{ __( 'Taxonomy', 'meta-box-builder' ) }</option> }
 				{ MbbApp.extensions.userMeta && <option value="user">{ __( 'User', 'meta-box-builder' ) }</option> }
@@ -31,7 +31,7 @@ export const Location = ( { objectType, updateObjectType, postTypes, setPostType
 					wrapper={ false }
 					name="settings[taxonomies][]"
 					options={ MbbApp.taxonomies.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
-					defaultValue={ dotProp.get( defaultValues, 'taxonomies', [] ) }
+					defaultValue={ dotProp.get( settings, 'taxonomies', [] ) }
 				/>
 			}
 			{
@@ -40,13 +40,20 @@ export const Location = ( { objectType, updateObjectType, postTypes, setPostType
 					wrapper={ false }
 					name="settings[settings_pages][]"
 					options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.id })` } ) ) }
-					defaultValue={ dotProp.get( defaultValues, 'settings_pages', [] ) }
+					defaultValue={ dotProp.get( settings, 'settings_pages', [] ) }
 				/>
 			}
 		</DivRow>
 		{
 			'post' === objectType && postTypes.includes( 'attachment' ) &&
-			<Checkbox label={ __( 'Show in media modal', 'meta-box-builder' ) } name="settings[media_modal]" defaultValue={ defaultValues.media_modal } />
+			<Checkbox
+				label={ __( 'Show in media modal', 'meta-box-builder' ) }
+				name="settings[media_modal]"
+				defaultValue={ dotProp.get( settings, 'media_modal', false ) }
+				componentId="settings-media_modal"
+			/>
 		}
 	</>
 );
+
+export default Location;

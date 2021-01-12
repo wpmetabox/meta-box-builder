@@ -17,10 +17,10 @@ class Control {
 		// Convert title_case to TitleCase.
 		$name = str_replace( ' ', '', ucwords( str_replace( '_', ' ', $name ) ) );
 
-		$setting = $arguments[0];
+		$setting = isset( $arguments[0] ) ? $arguments[0] : '';
 
 		// Allow to pass only label (string) or an array of props.
-		$props = $arguments[1];
+		$props = isset( $arguments[1] ) ? $arguments[1] : '';
 		if ( is_string( $props ) ) {
 			$props = [ 'label' => $props ];
 		}
@@ -33,9 +33,13 @@ class Control {
 
 	private static function get_default_value( $name ) {
 		$defaults = [
-			'Checkbox'    => false,
-			'KeyValue'    => [],
-			'ReactSelect' => [],
+			'Checkbox'         => false,
+			'KeyValue'         => [],
+			'ReactSelect'      => [],
+			'IncludeExclude'   => [],
+			'ShowHide'         => [],
+			'ConditionalLogic' => [],
+			'CustomTable'      => [],
 		];
 		return isset( $defaults[ $name ] ) ? $defaults[ $name ] : '';
 	}

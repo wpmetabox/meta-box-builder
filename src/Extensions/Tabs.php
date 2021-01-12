@@ -12,6 +12,8 @@ class Tabs {
 		}
 		add_action( 'mbb_field_types', [ $this, 'add_field_type' ] );
 		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_meta_box_settings' ] );
+
+		add_filter( 'mbb_settings_controls', [ $this, 'add_settings_controls' ] );
 	}
 
 	public function add_field_type( $field_types ) {
@@ -19,7 +21,7 @@ class Tabs {
 			'title'    => __( 'Tab', 'meta-box-builder' ),
 			'category' => 'layout',
 			'controls' => [
-				'type', 'name', 'id',
+				'name', 'id', 'type',
 				Control::Select( 'icon_type', [
 					'label'   => __( 'Icon type', 'meta-box-builder' ),
 					'options' => [
@@ -100,5 +102,20 @@ class Tabs {
 				$field['tab'] = $previous_tab;
 			}
 		}
+	}
+
+	public function add_settings_controls( $controls ) {
+		$controls['14.1'] = Control::Select( 'tab_style', [
+			'label'   => __( 'Tab style', 'meta-box-builder' ),
+			'tooltip' => __( 'Change how look and feel of tabs in Meta Box Tabs', 'meta-box-builder' ),
+			'options' => [
+				'default' => __( 'Default', 'meta-box-builder' ),
+				'box'     => __( 'Box', 'meta-box-builder' ),
+				'left'    => __( 'Left', 'meta-box-builder' ),
+			],
+		] );
+		$controls['14.2'] = Control::Input( 'tab_default_active', __( 'Default active tab ID', 'meta-box-builder' ) );
+
+		return $controls;
 	}
 }

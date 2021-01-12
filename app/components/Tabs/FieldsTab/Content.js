@@ -5,11 +5,14 @@ const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
 	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
 		const Control = lazy( () => import( `../../Controls/${ name }` ) );
 
-		// If API specifies input name, then use it. Otherwise use setting. Convert name, name[subfield] to [name], [name][subfield].
-		const input = dotProp.get( props, 'name', setting ).replace( /^([^\[]+)/, '[$1]' );
+		// If API specifies input name, then use it. Otherwise use setting.
+		const n = dotProp.get( props, 'name', setting );
+
+		// Convert name, name[subfield] to [name], [name][subfield].
+		const input = n.replace( /^([^\[]+)/, '[$1]' );
 
 		// Convert name[subfield] to name.subfield to get default value.
-		const key = dotProp.get( props, 'name', setting ).replace( '[', '.' ).replace( ']', '' );
+		const key = n.replace( '[', '.' ).replace( ']', '' );
 
 		return <Control
 			fieldId={ id }

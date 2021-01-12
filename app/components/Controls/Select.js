@@ -1,7 +1,7 @@
 import { useToggle } from '../../hooks/useToggle';
 import DivRow from './DivRow';
 
-const Select = ( { componentId, name, options, multiple, defaultValue, onChange, placeholder, style, ...rest } ) => {
+const Select = ( { componentId, name, options, defaultValue, onChange, placeholder, ...rest } ) => {
 	const toggle = useToggle( componentId );
 
 	const update = e => {
@@ -10,8 +10,8 @@ const Select = ( { componentId, name, options, multiple, defaultValue, onChange,
 	};
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
-		<select placeholder={ placeholder } style={ style } id={ componentId } name={ name } multiple={ multiple } defaultValue={ defaultValue } onChange={ update }>
-			{ !multiple && !defaultValue && <option value=""></option> }
+		<select placeholder={ placeholder } id={ componentId } name={ name } defaultValue={ defaultValue } onChange={ update }>
+			{ !defaultValue && <option value=""></option> }
 			{
 				Object.entries( options ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> )
 			}
