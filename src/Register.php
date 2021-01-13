@@ -1,10 +1,13 @@
 <?php
 namespace MBB;
 
+use MBB\Helpers\Arr;
 use Twig_Loader_Array;
 use Twig_Environment;
 
 class Register {
+	private $meta_box_post_ids = [];
+
 	public function __construct() {
 		add_filter( 'rwmb_meta_boxes', array( $this, 'register_meta_box' ) );
 	}
@@ -24,6 +27,15 @@ class Register {
 			$this->transform_for_block( $meta_box );
 			$this->create_custom_table( $meta_box, $post_id );
 			$meta_boxes[] = $meta_box;
+
+			$settings = get_post_meta( $post_id, 'settings', true );
+			if ( 'post' === Arr::get( $settings, 'object_type', 'post' ) ) {
+				$this->meta_box_post_ids[ $meta_box['id'] ] = $post_id;
+			}
+		}
+
+		if ( ! empty( $this->meta_box_post_ids ) ) {
+			add_action( 'rwmb_enqueue_scripts', [ $this, 'enqueue_assets' ] );
 		}
 
 		return $meta_boxes;
@@ -74,5 +86,15 @@ class Register {
 			$columns[ $field['id'] ] = 'TEXT';
 		}
 		\MB_Custom_Table_API::create( $meta_box['table'], $columns );
+	}
+
+	public function enqueue_assets() {
+		wp_enqueue_style( 'mbb-post', MBB_URL . '/assets/css/post.css' );
+		wp_enqueue_script( 'mbb-post', MBB_URL . '/assets/js/post.js', [], MBB_VER, true );
+		wp_localize_script( 'mbb-post', 'MBB', [
+			'meta_box_post_ids' => $this->meta_box_post_ids,
+			'base_url'          => admin_url( 'post.php?action=edit&post=' ),
+			'title'             => __( 'Edit the field group settings', 'meta-box-builder' )
+		] );
 	}
 }
