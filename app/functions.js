@@ -26,27 +26,43 @@ export const request = async ( apiName, params = {}, method = 'GET', cache = tru
 	return result;
 };
 
+export const ensureArray = arr => {
+	if ( Array.isArray( arr ) ) {
+		return arr;
+	}
+	const isObject = typeof arr === 'object' && null !== arr;
+	return isObject ? Object.values( arr ) : [];
+}
+
+export const parseQueryString = queryString => {
+	const params = new URLSearchParams( queryString );
+	return convert( params );
+};
+
 export const getFieldValue = key => {
 	const data = serializeForm( document.querySelector( '#post' ) );
 	return dotProp.get( data, bracketsToDots( key ) );
-}
+};
 
 const serializeForm = form => {
 	const formData = new FormData( form );
+	return convert( formData );
+};
 
-	let data = {};
+// Convert form data and query string to objects.
+const convert = params => {
+	const data = {};
 
-	// Convert `<select multiple>` and checkboxes values to array when more than one option is selected.
-	for ( let [ key, value ] of formData ) {
+	for ( let [ key, value ] of params ) {
 		key = bracketsToDots( key );
-		if ( key in data ) {
-			const oldValue = dotProp.get( data, key );
+		const oldValue = dotProp.get( data, key );
+		if ( oldValue !== undefined ) {
 			value = Array.isArray( oldValue ) ? [ ...oldValue, value ] : [ oldValue, value ];
 		}
 		dotProp.set( data, key, value );
 	}
 
 	return data;
-};
+}
 
 const bracketsToDots = key => key.replace( /\[\]/g, '' ).replace( /\[(.+?)\]/g, '.$1' );

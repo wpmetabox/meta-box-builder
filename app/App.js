@@ -7,6 +7,7 @@ import Settings from './components/Tabs/Settings';
 import { FieldIdsProvider } from './contexts/FieldIdsContext';
 import { FieldsDataProvider } from './contexts/FieldsDataContext';
 import { SettingsDataProvider } from './contexts/SettingsDataContext';
+import { parseQueryString } from './functions';
 const { __ } = wp.i18n;
 const { render, useEffect, useState } = wp.element;
 
@@ -25,6 +26,10 @@ const App = () => {
 		}
 	}, [] );
 
+	let settings = dotProp.get( MbbApp, 'settings', {} );
+	let urlParams = parseQueryString( window.location.search );
+	settings = { ...settings, ...urlParams.settings };
+
 	return (
 		<FieldsDataProvider>
 			<FieldIdsProvider>
@@ -39,10 +44,10 @@ const App = () => {
 							<Fields fields={ dotProp.get( MbbApp, 'fields', {} ) } />
 						</TabPanel>
 						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-							<Settings settings={ dotProp.get( MbbApp, 'settings', {} ) } />
+							<Settings settings={ settings } />
 						</TabPanel>
 						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-							<Result defaultValues={ dotProp.get( MbbApp, 'settings', {} ) } />
+							<Result defaultValues={ settings } />
 						</TabPanel>
 					</Tabs>
 					<Data />

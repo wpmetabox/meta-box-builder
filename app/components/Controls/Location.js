@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+import { ensureArray } from '../../functions';
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
 import ReactSelect from './ReactSelect';
@@ -31,7 +32,7 @@ const Location = ( { objectType, setObjectType, postTypes, setPostTypes, setting
 					wrapper={ false }
 					name="settings[taxonomies][]"
 					options={ MbbApp.taxonomies.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
-					defaultValue={ dotProp.get( settings, 'taxonomies', [] ) }
+					defaultValue={ ensureArray( dotProp.get( settings, 'taxonomies', [] ) ) }
 				/>
 			}
 			{
@@ -40,7 +41,7 @@ const Location = ( { objectType, setObjectType, postTypes, setPostTypes, setting
 					wrapper={ false }
 					name="settings[settings_pages][]"
 					options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.id })` } ) ) }
-					defaultValue={ dotProp.get( settings, 'settings_pages', [] ) }
+					defaultValue={ ensureArray( dotProp.get( settings, 'settings_pages', [] ) ) }
 				/>
 			}
 		</DivRow>
