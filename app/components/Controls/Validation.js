@@ -55,7 +55,11 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 				<option value="remote">{ __( 'Remote', 'meta-box-builder' ) }</option>
 			</select>
 			{
-				[ 'minlength', 'maxlength', 'min', 'max', 'step', 'equalTo', 'remote' ].includes( name ) &&
+				[ 'required', 'email', 'url', 'date', 'dateISO', 'number', 'digits', 'creditcard', 'phoneUS' ].includes( name ) &&
+				<input type="checkbox" style={ { display: 'none' } } defaultChecked defaultValue={ true } name={ `${ baseName }[value]` } />
+			}
+			{
+				[ 'minlength', 'maxlength', 'min', 'max', 'step', 'accept', 'extension', 'equalTo', 'remote' ].includes( name ) &&
 				<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ baseName }[value]` } />
 			}
 			{
