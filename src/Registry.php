@@ -38,6 +38,10 @@ class Registry {
 			] ),
 
 			// Advanced.
+			Control::Validation( 'validation', [
+				'label'   => '<a href="https://docs.metabox.io/validation/" target="_blank" rel="noreffer noopener">' . __( 'Validation', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'Advanced validation rules powered by jQuery validation', 'meta-box-builder' ),
+			], [], 'advanced' ),
 			Control::Textarea( 'before', [
 				'label'   => __( 'Before', 'meta-box-builder' ),
 				'tooltip' => __( 'Custom HTML displayed before the field output', 'meta-box-builder' ),
@@ -120,6 +124,7 @@ class Registry {
 			Control::Checkbox( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
 			'js_options_date' => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
 			'js_options_datetime' => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
+
 			// Map.
 			'std_map' => Control::Input( 'std', [
 				'label'   => __( 'Default location', 'meta-box-builder' ),
