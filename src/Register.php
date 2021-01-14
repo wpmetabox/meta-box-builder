@@ -89,8 +89,8 @@ class Register {
 	}
 
 	public function enqueue_assets() {
-		wp_enqueue_style( 'mbb-post', MBB_URL . '/assets/css/post.css' );
-		wp_enqueue_script( 'mbb-post', MBB_URL . '/assets/js/post.js', [], MBB_VER, true );
+		wp_enqueue_style( 'mbb-post', MBB_URL . 'assets/css/post.css' );
+		wp_enqueue_script( 'mbb-post', MBB_URL . 'assets/js/post.js', [], MBB_VER, true );
 		wp_localize_script( 'mbb-post', 'MBB', [
 			'meta_box_post_ids' => $this->meta_box_post_ids,
 			'base_url'          => admin_url( 'post.php?action=edit&post=' ),
