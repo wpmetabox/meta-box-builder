@@ -52,6 +52,13 @@
   font-style: italic;
   font-size: 12px;
   margin-top: 2px;
+
+  code {
+    font-style: normal;
+    font-size: 11px;
+    padding: 2px 4px;
+    border-radius: 2px;
+  }
 }
 
 &-item {

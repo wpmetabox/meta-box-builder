@@ -25,7 +25,7 @@ const DivRow = ( {
 			}
 			<div className="og-input">
 				{ children }
-				{ description && <div className="og-description">{ description }</div> }
+				{ description && <RawHTML className="og-description">{ description }</RawHTML> }
 			</div>
 		</div>
 	);
