@@ -5,7 +5,7 @@ import Content from './Content';
 const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
-const FieldSelected = ( { id, field, parent = '', updateFieldType } ) => {
+const Field = ( { id, field, parent = '', updateFieldType } ) => {
 	const { fieldTypes } = useContext( FieldsDataContext );
 	const controls = [ ...fieldTypes[ field.type ].controls ];
 
@@ -29,4 +29,4 @@ const FieldSelected = ( { id, field, parent = '', updateFieldType } ) => {
 	</Tabs>;
 };
 
-export default memo( ( FieldSelected ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.field.type === nextProps.field.type );
+export default memo( ( Field ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.field.type === nextProps.field.type );

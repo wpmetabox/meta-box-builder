@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
 import { ucwords } from '../../../functions';
-import FieldSelected from './FieldSelected';
+import Field from './Field';
 import Group from './Group';
 const { useState, memo } = wp.element;
 const { Dashicon } = wp.components;
@@ -37,7 +37,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 		{
 			field.type === 'group'
 				? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
-				: <FieldSelected id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
+				: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
 		}
 	</div>;
 };
