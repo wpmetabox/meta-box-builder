@@ -7,7 +7,7 @@ const { __ } = wp.i18n;
 
 const Validation = ( { defaultValue, name, ...rest } ) => {
 	const [ rules, setRules ] = useState( ensureArray( defaultValue ) );
-	const addRule = () => setRules( prev => [ ...prev, { name: '', value: '', message: '', id: uniqid() } ] );
+	const addRule = () => setRules( prev => [ ...prev, { name: 'required', value: '', message: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
 	return (
