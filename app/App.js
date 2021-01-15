@@ -11,7 +11,10 @@ import { parseQueryString } from './functions';
 const { __ } = wp.i18n;
 const { render, useEffect, useState } = wp.element;
 
-const App = () => {
+const urlParams = parseQueryString( window.location.search );
+const settings = { ...dotProp.get( MbbApp, 'settings', {} ), ...urlParams.settings };
+
+const App = ( { settings } ) => {
 	const [ tabIndex, setTabIndex ] = useState( dotProp.get( MbbApp, 'data.tab_index', 0 ) );
 
 	const forceValidate = () => document.querySelector( '#post' ).removeAttribute( 'novalidate' );
@@ -25,10 +28,6 @@ const App = () => {
 			saveButton.addEventListener( 'click', forceValidate );
 		}
 	}, [] );
-
-	let settings = dotProp.get( MbbApp, 'settings', {} );
-	let urlParams = parseQueryString( window.location.search );
-	settings = { ...settings, ...urlParams.settings };
 
 	return (
 		<FieldsDataProvider>
@@ -58,4 +57,4 @@ const App = () => {
 	);
 };
 
-render( <App />, document.getElementById( 'root' ) );
+render( <App settings={ settings } />, document.getElementById( 'root' ) );
