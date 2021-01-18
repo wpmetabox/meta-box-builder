@@ -26,9 +26,14 @@ class Ver400 {
 		$this->fields = new Ver400\Fields;
 
 		foreach ( $query->posts as $post ) {
+			$data = [];
+
 			// Update "settings" and "fields" for JavaScript.
-			$data = $this->settings->update( $post );
+			$data['settings'] = $this->settings->update( $post );
 			$data['fields'] = $this->fields->update( $post );
+
+			$data['post_title'] = $post->post_title;
+			$data['post_name'] = $post->post_name;
 
 			// Save parsed data for PHP.
 			$parser = new Parser( $data );
