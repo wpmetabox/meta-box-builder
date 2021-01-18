@@ -20,7 +20,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 		duplicateField( id );
 	};
 
-	let label = [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : field.name || __( '(No label)', 'meta-box-builder' );
+	let label = [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : field.name || field.group_title || __( '(No label)', 'meta-box-builder' );
 
 	return <div className={ `og-item og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 		<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />

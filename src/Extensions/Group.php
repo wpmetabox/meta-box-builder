@@ -31,7 +31,7 @@ class Group {
 					'label'      => __( 'Save state', 'meta-box-builder' ),
 					'dependency' => 'collapsible:true',
 				] ),
-				Control::Input( 'group_title', [
+				Control::GroupTitle( 'group_title', [
 					'label'      => __( 'Group title', 'meta-box-builder' ),
 					'tooltip'    => __( 'Use {field_id} for a sub-field value and {#} for the clone index (if the group is cloneable)', 'meta-box-builder' ),
 					'dependency' => 'collapsible:true',

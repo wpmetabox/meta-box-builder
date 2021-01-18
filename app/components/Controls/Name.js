@@ -25,10 +25,7 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 		setValue( e.target.value );
 
 		// Update field header bar.
-		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
-		if ( titleElement ) {
-			titleElement.textContent = e.target.value || __( '(No label)', 'meta-box-builder' );
-		}
+		updateTitle( e.target.value );
 
 		// Auto generate ID only when edit the label first time. E.g. don't generate when it's blur or after save.
 		if ( ! isFirstEdit.current ) {
@@ -39,6 +36,23 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 			idElement.value = slugify( e.target.value, { lower: true, replacement: '_' } );
 		}
 	};
+
+	const updateTitle = value => {
+		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
+		if ( ! titleElement ) {
+			return;
+		}
+		if ( value ) {
+			titleElement.textContent = value;
+			return;
+		}
+
+		// Use group title if needed.
+		const groupTitleElement = document.getElementById( `fields-${ rest.fieldId }-group_title` );
+		if ( groupTitleElement && groupTitleElement.value ) {
+			titleElement.textContent = groupTitleElement.value || __( '(No label)', 'meta-box-builder' );
+		}
+	}
 
 	const onBlur = () => isFirstEdit.current = false;
 
