@@ -26,8 +26,8 @@ class Edit {
 
 		$url = MBB_URL . 'modules/settings-page/assets';
 
-		wp_enqueue_style( 'mb-settings-page-ui', "$url/style.css", ['wp-components'], MBB_VER );
-		wp_enqueue_script( 'mb-settings-page-ui', "$url/scripts.js", ['wp-element', 'wp-components', 'wp-i18n'], MBB_VER, true );
+		wp_enqueue_style( 'mb-settings-page-ui', "$url/settings-page.css", ['wp-components'], MBB_VER );
+		wp_enqueue_script( 'mb-settings-page-ui', "$url/settings-page.js", ['wp-element', 'wp-components', 'wp-i18n'], MBB_VER, true );
 
 		global $post;
 		$register = new Register();
