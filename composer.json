@@ -2,15 +2,24 @@
 	"name": "meta-box/meta-box-builder",
 	"description": "Meta Box Builder extension for Meta Box",
 	"type": "wordpress-plugin",
+	"repositories": [
+		{
+			"type": "git",
+			"url": "git@github.com:wpmetabox/mbb-parser.git"
+		}
+	],
 	"autoload": {
 		"psr-4": {"MBB\\" : "src/"}
 	},
 	"require": {
 		"twig/twig": "~1.33.2",
-		"riimu/kit-phpencoder": "^2.4"
+		"meta-box/mbb-parser": "dev-master"
 	},
 	"extra": {
 		"light-ignore-plugin": {
+			"composer": [
+				"LICENSE"
+			],
 			"twig/twig": [
 				"doc",
 				"ext",
@@ -30,6 +39,11 @@
 				"*.md",
 				"*.json",
 				"LICENSE"
+			],
+			"meta-box/mbb-parser": [
+				".git",
+				".gitignore",
+				"*.json"
 			]
 		}
 	}

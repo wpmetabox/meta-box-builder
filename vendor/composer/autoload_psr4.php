@@ -8,4 +8,5 @@ $baseDir = dirname($vendorDir);
 return array(
     'Riimu\\Kit\\PHPEncoder\\' => array($vendorDir . '/riimu/kit-phpencoder/src'),
     'MBB\\' => array($baseDir . '/src'),
+    'MBBParser\\' => array($vendorDir . '/meta-box/mbb-parser/src'),
 );

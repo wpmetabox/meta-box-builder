@@ -1,5 +1,27 @@
 [
     {
+        "name": "meta-box/mbb-parser",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git@github.com:wpmetabox/mbb-parser.git",
+            "reference": "41f4b2190b8dd74879e6c3510c5e2aaaff4848ba"
+        },
+        "require": {
+            "riimu/kit-phpencoder": "^2.4"
+        },
+        "time": "2021-01-15T05:53:13+00:00",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-4": {
+                "MBBParser\\": "src/"
+            }
+        },
+        "description": "Parse meta box settings from JSON"
+    },
+    {
         "name": "riimu/kit-phpencoder",
         "version": "v2.4.1",
         "version_normalized": "2.4.1.0",

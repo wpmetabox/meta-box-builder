@@ -14,6 +14,7 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         'M' => 
         array (
             'MBB\\' => 4,
+            'MBBParser\\' => 10,
         ),
     );
 
@@ -25,6 +26,10 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         'MBB\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'MBBParser\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/meta-box/mbb-parser/src',
         ),
     );
 
