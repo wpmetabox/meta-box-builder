@@ -28,6 +28,7 @@ class Register {
 			$this->create_custom_table( $meta_box, $post_id );
 			$meta_boxes[] = $meta_box;
 
+			// Get list of meta box ID and meta box post ID to show the edit settings icon on the edit screen.
 			$settings = get_post_meta( $post_id, 'settings', true );
 			if ( 'post' === Arr::get( $settings, 'object_type', 'post' ) ) {
 				$this->meta_box_post_ids[ $meta_box['id'] ] = $post_id;
