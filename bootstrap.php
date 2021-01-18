@@ -36,6 +36,7 @@ new Extensions\ConditionalLogic;
 new Extensions\CustomTable;
 new Extensions\Group;
 new Extensions\IncludeExclude;
+new Extensions\SettingsPage;
 new Extensions\ShowHide;
 new Extensions\Tabs;
 new Extensions\Tooltip;

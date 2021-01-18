@@ -13,6 +13,7 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         ),
         'M' => 
         array (
+            'MBB\\SettingsPage\\' => 17,
             'MBB\\' => 4,
             'MBBParser\\' => 10,
         ),
@@ -22,6 +23,10 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         'Riimu\\Kit\\PHPEncoder\\' => 
         array (
             0 => __DIR__ . '/..' . '/riimu/kit-phpencoder/src',
+        ),
+        'MBB\\SettingsPage\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/settings-page/src',
         ),
         'MBB\\' => 
         array (
