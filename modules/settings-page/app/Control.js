@@ -1,6 +1,7 @@
 import dotProp from 'dot-prop';
 import { SettingsContext } from './SettingsContext';
 import Checkbox from '/components/Controls/Checkbox';
+import Icon from '/components/Controls/Icon';
 import Input from '/components/Controls/Input';
 import KeyValue from '/components/Controls/KeyValue';
 import Select from '/components/Controls/Select';
@@ -23,6 +24,8 @@ const Control = ( { field } ) => {
 			return <KeyValue { ...field } componentId={ `settings-${ field.name }` } name={`settings[${field.name}]`} />;
 		case 'select':
 			return <Select { ...field } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
+		case 'icon':
+			return <Icon icons={ MBSPUI.icons } { ...field } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
 	}
 };
 

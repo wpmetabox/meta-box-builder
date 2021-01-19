@@ -70,7 +70,7 @@ class Edit {
 	private function get_parents() {
 		global $menu;
 		$options = [
-			'true'  => esc_html__( 'Show as top-level menu', 'meta-box-builder' ),
+			'none'  => __( 'None', 'meta-box-builder' ),
 		];
 		foreach ( $menu as $params ) {
 			if ( ! empty( $params[0] ) && ! empty( $params[2] ) ) {
