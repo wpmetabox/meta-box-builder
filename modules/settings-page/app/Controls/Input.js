@@ -1,16 +1,9 @@
-const Input = ( { label, name, value, update, description = '', required = false } ) => {
-	return (
-		<div className="mb-spui-field">
-			<label className="mb-spui-label" htmlFor={ name }>
-				{ label }
-				{ required && <span className="mb-spui-required">*</span> }
-			</label>
-			<div className="mb-spui-input">
-				<input type="text" required={ required } id={ name } data-name={ name } value={ value } onChange={ update } />
-				{ description && <div className="mb-spui-description">{ description }</div> }
-			</div>
-		</div>
-	);
-};
+import DivRow from '/components/Controls/DivRow';
+
+const Input = ( { name, value, update, ...rest } ) => (
+	<DivRow htmlFor={ name } { ...rest }>
+		<input type="text" id={ name } name={ name } value={ value } required={ rest.required } onChange={ update } />
+	</DivRow>
+);
 
 export default Input;

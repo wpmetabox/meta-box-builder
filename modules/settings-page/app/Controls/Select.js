@@ -1,13 +1,14 @@
-const Select = ( { label, name, update, description = '', options, value } ) => (
-	<div className="mb-spui-field">
-		<label className="mb-spui-label" htmlFor={ name }>{ label }</label>
-		<div className="mb-spui-input">
-			<select id={ name } data-name={ name } value={ value } onChange={ update }>
-				{ options.map( ( option, key ) => <option key={ key } value={ option.value }>{ option.label }</option> ) }
-			</select>
-			{ description && <div className="mb-spui-description">{ description }</div> }
-		</div>
-	</div>
-);
+import DivRow from '/components/Controls/DivRow';
+
+const Select = ( { name, options, value, update, ...rest } ) => {
+	return <DivRow htmlFor={ name } { ...rest }>
+		<select id={ name } name={ name } value={ value } onChange={ update }>
+			{ !value && <option value=""></option> }
+			{
+				Object.entries( options ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> )
+			}
+		</select>
+	</DivRow>;
+};
 
 export default Select;

@@ -15,7 +15,7 @@ class Edit {
 
 	public function render() {
 		if ( $this->is_screen() ) {
-			echo '<div id="root" class="mb-spui"></div>';
+			echo '<div id="root" class="mb-spui og"></div>';
 		}
 	}
 
@@ -31,34 +31,31 @@ class Edit {
 
 		global $post;
 		$register = new Register();
-		wp_localize_script( 'mb-settings-page-ui', 'MBSPUI', [
-			'caps'              => $this->getAllCaps(),
+
+		$data                   = [
 			'settings'          => json_decode( $post->post_content, true ),
 			'settings_pages'    => $register->settings_pages,
 			'custom_post_types' => $this->getCustomPostTypes(),
 			'icons'             => $this->get_icons(),
-		] );
+			'capabilities'      => $this->get_capabilities(),
+			'menu_positions'    => $this->get_menu_positions(),
+			'parents'           => $this->get_parents(),
+		];
+
+		wp_localize_script( 'mb-settings-page-ui', 'MBSPUI', $data );
 	}
 
-	public function getAllCaps() {
-		global $wp_roles;
-
+	private function get_capabilities() {
 		$caps = [];
-
-		foreach ( $wp_roles->roles as $role ) {
-			$caps = array_merge( $role[ 'capabilities' ], $caps );
+		$roles = wp_roles();
+		foreach ( $roles->roles as $role ) {
+			$caps = array_merge( $caps, $role[ 'capabilities' ] );
 		}
 
-		$datas = [];
+		$caps = array_unique( $caps );
+		sort( $caps );
 
-		foreach ( $caps as $key => $value ) {
-			$datas[] = [
-				'value' => $key,
-				'label' => $key
-			];
-		}
-
-		return $datas;
+		return array_combine( $caps, $caps );
 	}
 
 	public function getCustomPostTypes() {
@@ -310,6 +307,34 @@ class Edit {
 			'wordpress-alt',
 			'wordpress',
 		];
+	}
+
+	private function get_menu_positions() {
+		global $menu;
+		$positions = [];
+		foreach ( $menu as $position => $params ) {
+			if ( ! empty( $params[0] ) ) {
+				$positions[ $position ] = $this->strip_span( $params[0] );
+			}
+		}
+		return $positions;
+	}
+
+	private function get_parents() {
+		global $menu;
+		$options = [
+			'true'  => esc_html__( 'Show as top-level menu', 'meta-box-builder' ),
+		];
+		foreach ( $menu as $params ) {
+			if ( ! empty( $params[0] ) && ! empty( $params[2] ) ) {
+				$options[ $params[2] ] = sprintf( __( 'Show as sub-menu of %s', 'meta-box-builder' ), $this->strip_span( $params[0] ) );
+			}
+		}
+		return $options;
+	}
+
+	private function strip_span( $html ) {
+		return preg_replace( '@<span .*>.*</span>@si', '', $html );
 	}
 
 	public function save( $post_id ) {

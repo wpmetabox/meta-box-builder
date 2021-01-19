@@ -1,14 +1,9 @@
-const Textarea = ( { label, name, placeholder, value, update, description = '', required = false } ) => (
-	<div className="mb-spui-field">
-		<label className="mb-spui-label" htmlFor={ name }>
-			{ label }
-			{ required && <span className="mb-spui-required">*</span> }
-		</label>
-		<div className="mb-spui-input">
-			<textarea id={ name } data-name={ name } placeholder={ placeholder } value={ value } onChange={ update } />
-			{ description && <div className="mb-spui-description">{ description }</div> }
-		</div>
-	</div>
+import DivRow from '/components/Controls/DivRow';
+
+const Textarea = ( { name, value, update, ...rest } ) => (
+	<DivRow { ...rest } htmlFor={ name }>
+		<textarea value={ value } id={ name } name={ name } rows="4" onChange={ update }></textarea>
+	</DivRow>
 );
 
 export default Textarea;

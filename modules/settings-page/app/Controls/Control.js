@@ -13,7 +13,7 @@ const Control = ( { field } ) => {
 	const { settings, updateSettings } = useContext( SettingsContext );
 
 	const update = e => {
-		const name = e.target.dataset.name;
+		const name = e.target.name || e.target.dataset.name;
 		let value = 'checkbox' === e.target.type ? e.target.checked : e.target.value;
 
 		let newSettings = { ...settings };
