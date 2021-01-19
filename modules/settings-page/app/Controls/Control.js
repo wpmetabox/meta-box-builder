@@ -1,11 +1,10 @@
 import dotProp from 'dot-prop';
 import { SettingsContext } from '../SettingsContext';
-import Checkbox from './Checkbox';
-import Form from './Form';
-import IconUrl from './IconUrl';
-import Select from './Select';
-import Textarea from './Textarea';
+import Checkbox from '/components/Controls/Checkbox';
+// import Form from '/components/Controls/Form';
 import Input from '/components/Controls/Input';
+import Select from '/components/Controls/Select';
+import Textarea from '/components/Controls/Textarea';
 const { useContext } = wp.element;
 
 const Control = ( { field } ) => {
@@ -15,17 +14,15 @@ const Control = ( { field } ) => {
 
 	switch ( field.type ) {
 		case 'text':
-			return <Input { ...field } componentId={ `settings[${ field.name }]` } />;
+			return <Input { ...field } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
 		case 'textarea':
-			return <Textarea { ...field } componentId={ `settings[${ field.name }]` } />;
+			return <Textarea { ...field } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
 		case 'checkbox':
 			return <Checkbox { ...field } checked={ value } />;
 		case 'form':
-			return <Form { ...field } componentId={ `settings[${ field.name }]` } />;
+		// return <Form { ...field } componentId={ `settings-${ field.name }` } name={`settings[${field.name}]`} />;
 		case 'select':
-			return <Select { ...field } componentId={ `settings[${ field.name }]` } />;
-		case 'icon_url':
-			return <IconUrl name={ field.name } componentId={ `settings[${ field.name }]` } type={ dotProp.get( settings, 'icon_type' ) } />;
+			return <Select { ...field } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
 	}
 };
 

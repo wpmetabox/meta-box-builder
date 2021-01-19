@@ -74,7 +74,7 @@ class Edit {
 		];
 		foreach ( $menu as $params ) {
 			if ( ! empty( $params[0] ) && ! empty( $params[2] ) ) {
-				$options[ $params[2] ] = sprintf( __( 'Show as sub-menu of %s', 'meta-box-builder' ), $this->strip_span( $params[0] ) );
+				$options[ $params[2] ] = $this->strip_span( $params[0] );
 			}
 		}
 		return $options;

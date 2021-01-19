@@ -24,6 +24,9 @@ export const useToggle = name => {
 			scope = el.closest( '.react-tabs__tab-panel' );
 		}
 		if ( !scope ) {
+			scope = el.closest( '.og' );
+		}
+		if ( !scope ) {
 			return;
 		}
 
