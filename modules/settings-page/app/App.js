@@ -1,4 +1,4 @@
-import Control from './Controls/Control';
+import Control from './Control';
 import DefaultSettings from './DefaultSettings';
 import { Options } from './Options';
 import { SettingsProvider } from './SettingsContext';

@@ -31,7 +31,7 @@ export const Options = [
 	{ type: 'textarea', name: 'help_tabs', label: __( 'Help tabs', 'mb-settings-page-ui' ), description: __( 'The content displayed when clicking on the Help button on the top right (near the Screen Options button).', 'mb-settings-page-ui' ) },
 	{ type: 'select', name: 'style', label: __( 'Style', 'mb-settings-page-ui' ), options: styles, defaultValue: 'boxes' },
 	{ type: 'select', name: 'columns', label: __( 'Columns', 'mb-settings-page-ui' ), options: columns, description: __( 'The number of columns in the meta boxes. Can be 1 or 2. You might want to use 1 column with no-boxes style to match WordPress style.', 'mb-settings-page-ui' ), defaultValue: 1 },
-	// { type: 'form', name: 'tabs', label: __( 'Tabs', 'mb-settings-page-ui' ) },
+	{ type: 'key_value', name: 'tabs', label: __( 'Tabs', 'mb-settings-page-ui' ) },
 	{ type: 'select', name: 'tab_style', label: __( 'Tab style', 'mb-settings-page-ui' ), options: tabStyles, defaultValue: 'top' },
 	{ type: 'text', name: 'submit_button', label: __( 'Custom submit button text', 'mb-settings-page-ui' ) },
 	{ type: 'text', name: 'message', label: __( 'Message', 'mb-settings-page-ui' ), description: __( 'The custom message displayed when saving options.', 'mb-settings-page-ui' ) },
