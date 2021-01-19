@@ -1,5 +1,5 @@
-import { useToggle } from '../../hooks/useToggle';
 import DivRow from './DivRow';
+import { useToggle } from '/hooks/useToggle';
 
 const Select = ( { componentId, name, options, defaultValue, onChange, placeholder, ...rest } ) => {
 	const toggle = useToggle( componentId );

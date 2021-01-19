@@ -1,5 +1,5 @@
-import { FieldsDataContext } from '../../contexts/FieldsDataContext';
 import DivRow from './DivRow';
+import { FieldsDataContext } from '/contexts/FieldsDataContext';
 
 const { useContext } = wp.element;
 

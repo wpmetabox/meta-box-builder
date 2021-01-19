@@ -1,5 +1,5 @@
-import { uniqid } from '../../functions';
 import DivRow from './DivRow';
+import { uniqid } from '/functions';
 
 const { useState } = wp.element;
 const { __ } = wp.i18n;

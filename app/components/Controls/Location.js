@@ -1,8 +1,8 @@
 import dotProp from 'dot-prop';
-import { ensureArray } from '../../functions';
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
 import ReactSelect from './ReactSelect';
+import { ensureArray } from '/functions';
 const { __ } = wp.i18n;
 
 const Location = ( { objectType, setObjectType, postTypes, setPostTypes, settings } ) => (

@@ -24,14 +24,19 @@ const commonModules = {
     ]
 };
 
+const resolve = {
+    roots: [ path.resolve( 'app' ) ]
+};
+
 // Main Meta Box Builder app.
 const main = {
     entry: './app/App.js',
     output: {
-        path: path.join( __dirname, 'assets/js' ),
+        path: path.resolve( 'assets/js' ),
         filename: 'app.js'
     },
     externals,
+    resolve,
     module: commonModules,
     plugins: [
         new webpack.optimize.LimitChunkCountPlugin( {
@@ -44,10 +49,11 @@ const main = {
 const settingsPage = {
     entry: './modules/settings-page/app/App.js',
     output: {
-        path: path.resolve( __dirname, './modules/settings-page/assets' ),
+        path: path.resolve( 'modules/settings-page/assets' ),
         filename: 'settings-page.js'
     },
     externals,
+    resolve,
     module: commonModules
 };
 

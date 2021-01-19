@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
-import { request, uniqid } from '../../functions';
 import DivRow from './DivRow';
 import ReactAsyncSelect from './ReactAsyncSelect';
+import { request, uniqid } from '/functions';
 const { useState, useEffect } = wp.element;
 const { Dashicon } = wp.components;
 const { __ } = wp.i18n;
