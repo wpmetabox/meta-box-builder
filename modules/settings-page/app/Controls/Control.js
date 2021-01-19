@@ -1,50 +1,31 @@
 import dotProp from 'dot-prop';
-import slugify from 'slugify';
 import { SettingsContext } from '../SettingsContext';
 import Checkbox from './Checkbox';
 import Form from './Form';
 import IconUrl from './IconUrl';
-import Input from './Input';
 import Select from './Select';
 import Textarea from './Textarea';
+import Input from '/components/Controls/Input';
 const { useContext } = wp.element;
 
 const Control = ( { field } ) => {
 	const { settings, updateSettings } = useContext( SettingsContext );
 
-	const update = e => {
-		const name = e.target.name || e.target.dataset.name;
-		let value = 'checkbox' === e.target.type ? e.target.checked : e.target.value;
-
-		let newSettings = { ...settings };
-		dotProp.set( newSettings, name, value );
-
-		if ( field.autoFill ) {
-			dotProp.set( newSettings, field.autoFill, slugify( value, { lower: true } ) );
-		}
-
-		if ( field.autoFillDash ) {
-			dotProp.set( newSettings, field.autoFillDash, slugify( value, { replacement: '_', lower: true } ) );
-		}
-
-		updateSettings( newSettings );
-	};
-
 	const value = dotProp.get( settings, field.name );
 
 	switch ( field.type ) {
 		case 'text':
-			return <Input { ...field } value={ value } update={ update } />;
+			return <Input { ...field } componentId={ `settings[${ field.name }]` } />;
 		case 'textarea':
-			return <Textarea { ...field } value={ value } update={ update } />;
+			return <Textarea { ...field } componentId={ `settings[${ field.name }]` } />;
 		case 'checkbox':
-			return <Checkbox { ...field } checked={ value } update={ update } />;
+			return <Checkbox { ...field } checked={ value } />;
 		case 'form':
-			return <Form { ...field } value={ value } />;
+			return <Form { ...field } componentId={ `settings[${ field.name }]` } />;
 		case 'select':
-			return <Select { ...field } value={ value } update={ update } />;
+			return <Select { ...field } componentId={ `settings[${ field.name }]` } />;
 		case 'icon_url':
-			return <IconUrl name={ field.name } value={ value } type={ dotProp.get( settings, 'icon_type' ) } update={ update } />;
+			return <IconUrl name={ field.name } componentId={ `settings[${ field.name }]` } type={ dotProp.get( settings, 'icon_type' ) } />;
 	}
 };
 
