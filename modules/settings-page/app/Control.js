@@ -5,24 +5,28 @@ import Input from '/components/Controls/Input';
 import KeyValue from '/components/Controls/KeyValue';
 import Select from '/components/Controls/Select';
 import Textarea from '/components/Controls/Textarea';
-const { useContext } = wp.element;
 
 const Control = ( { field } ) => {
-	const defaultValue = dotProp.get( MBSPUI.settings, field.name, field.defaultValue );
+	const props = {
+		...field,
+		defaultValue: dotProp.get( MBSPUI.settings, field.name, field.defaultValue ),
+		componentId: `settings-${ field.name }`,
+		name: `settings[${ field.name }]`
+	};
 
 	switch ( field.type ) {
 		case 'text':
-			return <Input { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
+			return <Input { ...props } />;
 		case 'textarea':
-			return <Textarea { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
+			return <Textarea { ...props } />;
 		case 'checkbox':
-			return <Checkbox { ...field } defaultValue={ defaultValue } />;
+			return <Checkbox { ...props } />;
 		case 'key_value':
-			return <KeyValue { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={`settings[${field.name}]`} />;
+			return <KeyValue { ...props } />;
 		case 'select':
-			return <Select { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
+			return <Select { ...props } />;
 		case 'icon':
-			return <Icon icons={ MBSPUI.icons } { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
+			return <Icon icons={ MBSPUI.icons } { ...props } />;
 	}
 };
 

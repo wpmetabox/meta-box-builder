@@ -1,9 +1,9 @@
 import Control from './Control';
-import { Options } from './Options';
+import { Fields } from './Fields';
 const { render } = wp.element;
 
 const App = () => <>
-	{ Options.map( field => <Control key={ field.name } field={ field } /> ) }
+	{ Fields.map( field => <Control key={ field.name } field={ field } /> ) }
 </>;
 
 render( <App />, document.getElementById( 'root' ) );

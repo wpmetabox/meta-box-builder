@@ -18,7 +18,7 @@ const iconTypes = {
 	custom: 'Custom URL'
 };
 
-export const Options = [
+export const Fields = [
 	{ type: 'text', name: 'option_name', label: __( 'Option name', 'meta-box-builder' ), tooltip: __( 'Option name where settings data is saved to. Takes settings page ID if missed. If you want to use theme mods, then set this to <code>theme_mods_$themeslug</code>.', 'meta-box-builder' ) },
 	{ type: 'text', name: 'class', label: __( 'Custom CSS class', 'meta-box-builder' ), tooltip: __( 'Custom CSS for the wrapper div.', 'meta-box-builder' ) },
 	{ type: 'select', name: 'capability', label: __( 'Capability', 'meta-box-builder' ), options: MBSPUI.capabilities, defaultValue: 'edit_theme_options', tooltip: __( 'Require capability to access the settings page', 'meta-box-builder' ) },
