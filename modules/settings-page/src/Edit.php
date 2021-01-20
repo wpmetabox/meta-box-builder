@@ -26,7 +26,7 @@ class Edit extends BaseEditPage {
 		$caps = [];
 		$roles = wp_roles();
 		foreach ( $roles->roles as $role ) {
-			$caps = array_merge( $caps, $role[ 'capabilities' ] );
+			$caps = array_merge( $caps, array_keys( $role[ 'capabilities' ] ) );
 		}
 
 		$caps = array_unique( $caps );

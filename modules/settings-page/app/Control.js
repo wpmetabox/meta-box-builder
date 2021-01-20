@@ -8,7 +8,7 @@ import Textarea from '/components/Controls/Textarea';
 const { useContext } = wp.element;
 
 const Control = ( { field } ) => {
-	const defaultValue = dotProp.get( MBSPUI.settings, field.name );
+	const defaultValue = dotProp.get( MBSPUI.settings, field.name, field.defaultValue );
 
 	switch ( field.type ) {
 		case 'text':
