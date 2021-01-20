@@ -1,5 +1,4 @@
 import dotProp from 'dot-prop';
-import { SettingsContext } from './SettingsContext';
 import Checkbox from '/components/Controls/Checkbox';
 import Icon from '/components/Controls/Icon';
 import Input from '/components/Controls/Input';
@@ -9,23 +8,21 @@ import Textarea from '/components/Controls/Textarea';
 const { useContext } = wp.element;
 
 const Control = ( { field } ) => {
-	const { settings, updateSettings } = useContext( SettingsContext );
-
-	const value = dotProp.get( settings, field.name );
+	const defaultValue = dotProp.get( MBSPUI.settings, field.name );
 
 	switch ( field.type ) {
 		case 'text':
-			return <Input { ...field } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
+			return <Input { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
 		case 'textarea':
-			return <Textarea { ...field } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
+			return <Textarea { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
 		case 'checkbox':
-			return <Checkbox { ...field } checked={ value } />;
+			return <Checkbox { ...field } defaultValue={ defaultValue } />;
 		case 'key_value':
-			return <KeyValue { ...field } componentId={ `settings-${ field.name }` } name={`settings[${field.name}]`} />;
+			return <KeyValue { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={`settings[${field.name}]`} />;
 		case 'select':
-			return <Select { ...field } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
+			return <Select { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
 		case 'icon':
-			return <Icon icons={ MBSPUI.icons } { ...field } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
+			return <Icon icons={ MBSPUI.icons } { ...field } defaultValue={ defaultValue } componentId={ `settings-${ field.name }` } name={ `settings[${ field.name }]` } />;
 	}
 };
 
