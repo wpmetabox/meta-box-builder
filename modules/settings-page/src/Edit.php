@@ -1,31 +1,11 @@
 <?php
 namespace MBB\SettingsPage;
 
+use MBB\BaseEditPage;
 use MBB\Helpers\Data;
 
-class Edit {
-	public function __construct() {
-		add_action( 'edit_form_after_title', [ $this, 'render' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
-		add_action( 'save_post_mb-settings-page', [ $this, 'save' ] );
-
-		add_action( 'add_meta_boxes_mb-settings-page', [ $this, 'remove_slug_meta_box'] );
-		add_filter( 'rwmb_meta_boxes', [ $this, 'add_meta_boxes' ] );
-		add_filter( 'rwmb_post_name_field_meta', [ $this, 'get_post_name' ] );
-		add_filter( 'rwmb_post_name_value', '__return_empty_string' );
-	}
-
-	public function render() {
-		if ( $this->is_screen() ) {
-			echo '<div id="root" class="mb-spui og"></div>';
-		}
-	}
-
+class Edit extends BaseEditPage {
 	public function enqueue() {
-		if ( ! $this->is_screen() ) {
-			return;
-		}
-
 		$url = MBB_URL . 'modules/settings-page/assets';
 
 		wp_enqueue_style( 'mb-settings-page-ui', "$url/settings-page.css", ['wp-components'], MBB_VER );
@@ -84,45 +64,11 @@ class Edit {
 	}
 
 	public function save( $post_id ) {
-		$parent = wp_is_post_revision( $post_id );
-		if ( $parent ) {
-			$post_id = $parent;
-		}
-
 		$parser = new Parser( rwmb_request()->post( 'settings' ) );
 		$parser->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'settings', $parser->get_settings() );
 
 		$parser->parse();
 		update_post_meta( $post_id, 'page', $parser->get_settings() );
-	}
-
-	private function is_screen() {
-		return 'mb-settings-page' === get_current_screen()->id;
-	}
-
-	public function remove_slug_meta_box() {
-		remove_meta_box( 'slugdiv', null, 'normal' );
-	}
-
-	public function add_meta_boxes( $meta_boxes ) {
-		$meta_boxes[] = [
-			'title'      => esc_html__( 'Settings Page ID', 'meta-box-builder' ),
-			'id'         => 'settings-page-id',
-			'post_types' => ['mb-settings-page'],
-			'context'    => 'side',
-			'priority'   => 'low',
-			'fields'     => [
-				[
-					'type' => 'text',
-					'id'   => 'post_name',
-				],
-			],
-		];
-		return $meta_boxes;
-	}
-
-	public function get_post_name() {
-		return get_post_field( 'post_name' );
 	}
 }

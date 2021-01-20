@@ -11,7 +11,7 @@ class SettingsPage {
 
 		new \MBB\SettingsPage\Register;
 		if ( is_admin() ) {
-			new \MBB\SettingsPage\Edit;
+			new \MBB\SettingsPage\Edit( 'mb-settings-page', __( 'Settings Page ID', 'meta-box-builder' ) );
 		}
 	}
 }

@@ -43,6 +43,6 @@ new Extensions\Tooltip;
 
 if ( is_admin() ) {
 	new Import;
-	new Edit;
+	new Edit( 'meta-box', __( 'Field Group ID', 'meta-box-builder' ) );
 	new AdminColumns;
 }
