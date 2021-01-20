@@ -28,6 +28,12 @@ const resolve = {
     roots: [ path.resolve( 'app' ) ]
 };
 
+const plugins = [
+    new webpack.optimize.LimitChunkCountPlugin( {
+        maxChunks: 1
+    } )
+];
+
 // Main Meta Box Builder app.
 const main = {
     entry: './app/App.js',
@@ -37,12 +43,8 @@ const main = {
     },
     externals,
     resolve,
-    module: commonModules,
-    plugins: [
-        new webpack.optimize.LimitChunkCountPlugin( {
-            maxChunks: 1
-        } ),
-    ]
+    plugins,
+    module: commonModules
 };
 
 // Settings page app.
@@ -54,6 +56,7 @@ const settingsPage = {
     },
     externals,
     resolve,
+    plugins,
     module: commonModules
 };
 
