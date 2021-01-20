@@ -25,7 +25,7 @@ export const Options = [
 	{ type: 'select', name: 'icon_type', options: iconTypes, label: __( 'Icon type', 'meta-box-builder' ), defaultValue: 'dashicons' },
 	{ type: 'icon', name: 'icon_dashicons', label: __( 'Icon', 'meta-box-builder' ), dependency: 'icon_type:dashicons' },
 	{ type: 'text', name: 'icon_svg', label: __( 'Icon SVG', 'meta-box-builder' ), tooltip: __( 'Must be in base64 encoded format', 'meta-box-builder' ), dependency: 'icon_type:svg' },
-	{ type: 'text', name: 'icon_url', label: __( 'Icon URL', 'meta-box-builder' ), dependency: 'icon_type:custom' },
+	{ type: 'text', name: 'icon_custom', label: __( 'Icon URL', 'meta-box-builder' ), dependency: 'icon_type:custom' },
 	{ type: 'select', name: 'position', label: __( 'Menu position after', 'meta-box-builder' ), options: MBSPUI.menu_positions },
 	{ type: 'select', name: 'parent', label: __( 'Parent menu', 'meta-box-builder' ), options: MBSPUI.parents, defaultValue: 'none' },
 	{ type: 'text', name: 'submenu_title', label: __( 'Submenu title', 'meta-box-builder' ), tooltip: __( 'Set this to the default submenu title (first submenu) if the settings page is a top-level menu.', 'meta-box-builder' ) },

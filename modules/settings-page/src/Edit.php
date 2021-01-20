@@ -31,9 +31,8 @@ class Edit {
 		wp_enqueue_style( 'mb-settings-page-ui', "$url/settings-page.css", ['wp-components'], MBB_VER );
 		wp_enqueue_script( 'mb-settings-page-ui', "$url/settings-page.js", ['wp-element', 'wp-components', 'wp-i18n'], MBB_VER, true );
 
-		global $post;
 		$data                   = [
-			'settings'       => json_decode( $post->post_content, true ),
+			'settings'       => get_post_meta( get_the_ID(), 'settings', true ),
 			'icons'          => Data::get_dashicons(),
 			'capabilities'   => $this->get_capabilities(),
 			'menu_positions' => $this->get_menu_positions(),
@@ -89,6 +88,13 @@ class Edit {
 		if ( $parent ) {
 			$post_id = $parent;
 		}
+
+		$parser = new Parser( rwmb_request()->post( 'settings' ) );
+		$parser->parse_boolean_values()->parse_numeric_values();
+		update_post_meta( $post_id, 'settings', $parser->get_settings() );
+
+		$parser->parse();
+		update_post_meta( $post_id, 'page', $parser->get_settings() );
 	}
 
 	private function is_screen() {
