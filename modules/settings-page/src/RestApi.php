@@ -40,8 +40,8 @@ class RestApi extends Base {
 					'dashicons' => __( 'Dashicons', 'meta-box-builder' ),
 					'svg'       => __( 'SVG', 'meta-box-builder' ),
 					'custom'    => __( 'Custom URL', 'meta-box-builder' ),
-					'dependency' => 'menu_type:top',
 				],
+				'dependency' => 'menu_type:top',
 			], 'dashicons' ),
 			Control::Icon( 'icon_dashicons', [
 				'label'      => __( 'Icon', 'meta-box-builder' ),

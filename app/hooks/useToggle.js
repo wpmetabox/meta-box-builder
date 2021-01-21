@@ -2,50 +2,21 @@ const { useState, useEffect } = wp.element;
 
 const normalizeBool = value => {
 	if ( 'true' === value ) {
-		value = true;
-	} else if ( 'false' === value ) {
-		value = false;
+		return true;
+	}
+	if ( 'false' === value ) {
+		return false;
 	}
 	return value;
 };
-const normalizeNumber = value => isNaN( parseInt( value ) ) ? value : parseInt( value );
+
 
 export const useToggle = name => {
 	const [ handle, setHandle ] = useState( () => () => {} );
 
 	useEffect( () => {
-		const el = document.getElementById( name );
-		if ( !el ) {
-			return;
-		}
-
-		let scope = el.closest( '.og-item' );
-		if ( !scope ) {
-			scope = el.closest( '.react-tabs__tab-panel' );
-		}
-		if ( !scope ) {
-			scope = el.closest( '.og' );
-		}
-		if ( !scope ) {
-			return;
-		}
-
-		// Strip `fields-uniqueId-` prefix.
-		const match = name.match( /-([^-]*)$/ );
-		const shortName = match ? match[ 1 ] : name;
-		const dependants = scope.querySelectorAll( `[class*="dep:${ shortName }:"]` );
-		if ( !dependants.length ) {
-			return;
-		}
-
 		const h = () => {
-			dependants.forEach( dependant => {
-				const dep = dependant.className.match( /dep:([^:]+):([^:]+)/ );
-				const depValue = normalizeBool( dep[ 2 ] );
-				const inputValue = el.type === 'checkbox' ? el.checked : el.value;
-
-				dependant.style.display = depValue === inputValue ? 'flex' : 'none';
-			} );
+			toggleDependants( getElement( name ) );
 		};
 		setHandle( () => h );
 
@@ -54,4 +25,51 @@ export const useToggle = name => {
 	}, [ name ] );
 
 	return handle;
+};
+
+const getElement = nameOrElement => typeof nameOrElement === 'string' ? document.getElementById( nameOrElement ) : nameOrElement;
+
+const toggleDependants = ( el, isElHidden = false ) => {
+	const deps = getDependants( el );
+	deps.forEach( dependant => {
+		const dep = dependant.className.match( /dep:([^:]+):([^:\s]+)/ );
+		const depValue = normalizeBool( dep[ 2 ] );
+		const inputValue = el.type === 'checkbox' ? el.checked : el.value;
+
+		// If el is hidden, always hide the dependant.
+		let isHidden = isElHidden || el.classList.contains( 'og-is-hidden' ) || depValue !== inputValue;
+
+		if ( isHidden ) {
+			dependant.classList.add( 'og-is-hidden' );
+		} else {
+			dependant.classList.remove( 'og-is-hidden' );
+		}
+
+		// Toggle sub-dependants.
+		dependant.querySelectorAll( '.og-input > input, .og-input > select' ).forEach( subEl => {
+			toggleDependants( subEl, isHidden );
+		 } );
+	} );
+};
+
+const getDependants = el => {
+	if ( !el ) {
+		return [];
+	}
+
+	let scope = el.closest( '.og-item' );
+	scope = scope || el.closest( '.react-tabs__tab-panel' );
+	scope = scope || el.closest( '.og' );
+	if ( !scope ) {
+		return [];
+	}
+
+	const shortName = getShortName( el.id );
+	return [ ...scope.querySelectorAll( `[class*="dep:${ shortName }:"]` ) ];
+};
+
+const getShortName = name => {
+	// Get last `-name` part.
+	const match = name.match( /-([^-]*)$/ );
+	return match ? match[ 1 ] : name;
 };

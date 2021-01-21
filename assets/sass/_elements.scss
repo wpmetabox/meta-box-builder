@@ -33,6 +33,11 @@ svg {
   color: var(--color-gray);
 }
 
+// Visibility.
+&-is-hidden.og-is-hidden {
+  display: none;
+}
+
 // Color picker
 .wp-picker-container {
   position: relative;
