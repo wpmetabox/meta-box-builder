@@ -30,11 +30,13 @@ const App = () => {
 		/>;
 	};
 
-	const loading = <p>{ __( 'Loading settings, please wait...', 'meta-box-builder' ) }</p>
+	const loading = <p>{ __( 'Loading settings, please wait...', 'meta-box-builder' ) }</p>;
 
-	return <>
-		{ controls.map( control => <Suspense fallback={ loading } key={ control.setting }>{ getControlComponent( control ) }</Suspense> ) }
-	</>;
+	return controls.length === 0
+		? loading
+		: <>
+			{ controls.map( control => <Suspense fallback={ null } key={ control.setting }>{ getControlComponent( control ) }</Suspense> ) }
+		</>;
 };
 
 render( <App />, document.getElementById( 'root' ) );

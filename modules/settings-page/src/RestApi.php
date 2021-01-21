@@ -49,16 +49,15 @@ class RestApi extends Base {
 				'label'      => __( 'Icon', 'meta-box-builder' ),
 				'dependency' => 'icon_type:dashicons',
 			] ),
-			Control::Text( 'icon_svg', [
+			Control::Input( 'icon_svg', [
 				'label'      => __( 'Icon SVG', 'meta-box-builder' ),
 				'tooltip'    => __( 'Must be in base64 encoded format', 'meta-box-builder' ),
 				'dependency' => 'icon_type:svg',
 			] ),
-			Control::Text( 'icon_custom', [
+			Control::Input( 'icon_custom', [
 				'label'      => __( 'Icon URL', 'meta-box-builder' ),
 				'dependency' => 'icon_type:custom',
 			] ),
-
 
 			Control::Select( 'capability', [
 				'label'   => __( 'Required capability', 'meta-box-builder' ),
