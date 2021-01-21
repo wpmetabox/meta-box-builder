@@ -12,7 +12,7 @@ const App = () => {
 
 	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
 		// Import control from current app first, then main app.
-		const Control = lazy( () => import( `./controls/${ name }` ).catch( () => import( `/components/Controls/${ name }` ) ) );
+		const Control = lazy( () => import( `./controls/${ name }` ).catch( () => import( `/controls/${ name }` ) ) );
 
 		// If API specifies input name, then use it. Otherwise use setting.
 		const n = dotProp.get( props, 'name', setting );
