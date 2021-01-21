@@ -4,7 +4,7 @@ const { lazy, memo, Suspense } = wp.element;
 
 const SettingsContent = ( { settings, settingsControls, objectType, setObjectType, postTypes, setPostTypes } ) => {
 	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
-		const Control = lazy( () => import( `../Controls/${ name }` ) );
+		const Control = lazy( () => import( `/controls/${ name }` ) );
 
 		// If API specifies input name, then use it. Otherwise use setting.
 		const n = dotProp.get( props, 'name', setting );
