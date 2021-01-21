@@ -1,8 +1,8 @@
 import slugify from 'slugify';
-import { FieldIdsContext } from '../../contexts/FieldIdsContext';
-import { getFieldValue } from '../../functions';
-import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
+import { FieldIdsContext } from '/contexts/FieldIdsContext';
+import { getFieldValue } from '/functions';
+import useDebounce from '/hooks/useDebounce';
 
 const { __ } = wp.i18n;
 const { useContext, useEffect, useRef, useState } = wp.element;

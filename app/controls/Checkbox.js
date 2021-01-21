@@ -1,5 +1,5 @@
-import { useToggle } from '../../hooks/useToggle';
 import DivRow from './DivRow';
+import { useToggle } from '/hooks/useToggle';
 
 const Checkbox = ( { name, componentId, label, className, defaultValue, ...rest } ) => {
 	const toggle = useToggle( componentId );

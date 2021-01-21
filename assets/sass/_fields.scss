@@ -38,9 +38,22 @@
 &-label {
   flex: 0 0 180px;
 
+  > div {
+    display: inline;
+  }
+
   a {
     text-decoration: none;
   }
+}
+
+&-required {
+  color: var(--color-red);
+}
+
+&-loading {
+  margin-left: 12px;
+  font-style: italic;
 }
 
 &-input {
@@ -201,25 +214,6 @@
       margin: 0;
     }
   }
-}
-
-&-group-drop-area {
-  border: 2px dashed var(--color-light);
-  border-radius: 4px;
-  text-align: center;
-  padding: 8px 12px;
-  margin-left: 36px;
-}
-
-// Drop area
-&-drop-area {
-  // height: 12px;
-}
-
-&-drop-area--active {
-  border: 2px dashed var(--color-light);
-  border-radius: 4px;
-  height: 42px;
 }
 
 // React select.

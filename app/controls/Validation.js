@@ -1,5 +1,5 @@
-import { ensureArray, uniqid } from '../../functions';
 import DivRow from './DivRow';
+import { ensureArray, uniqid } from '/functions';
 
 const { Dashicon } = wp.components;
 const { useState } = wp.element;

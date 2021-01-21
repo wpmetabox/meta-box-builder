@@ -36,12 +36,13 @@ new Extensions\ConditionalLogic;
 new Extensions\CustomTable;
 new Extensions\Group;
 new Extensions\IncludeExclude;
+new Extensions\SettingsPage;
 new Extensions\ShowHide;
 new Extensions\Tabs;
 new Extensions\Tooltip;
 
 if ( is_admin() ) {
 	new Import;
-	new Edit;
+	new Edit( 'meta-box', __( 'Field Group ID', 'meta-box-builder' ) );
 	new AdminColumns;
 }

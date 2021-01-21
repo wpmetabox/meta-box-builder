@@ -1,7 +1,7 @@
-import { FieldIdsContext } from '../../contexts/FieldIdsContext';
-import { getFieldValue } from '../../functions';
-import useDebounce from '../../hooks/useDebounce';
 import DivRow from './DivRow';
+import { FieldIdsContext } from '/contexts/FieldIdsContext';
+import { getFieldValue } from '/functions';
+import useDebounce from '/hooks/useDebounce';
 
 const { useContext, useState, useEffect } = wp.element;
 

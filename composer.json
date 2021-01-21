@@ -9,7 +9,10 @@
 		}
 	],
 	"autoload": {
-		"psr-4": {"MBB\\" : "src/"}
+		"psr-4": {
+			"MBB\\": "src/",
+			"MBB\\SettingsPage\\": "modules/settings-page/src/"
+		}
 	},
 	"require": {
 		"twig/twig": "~1.33.2",
