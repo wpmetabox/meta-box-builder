@@ -15,6 +15,7 @@ class Data {
 
 			// Meta Box post types.
 			'meta-box',
+			'mb-settings-page',
 			'mb-post-type',
 			'mb-taxonomy',
 			'mb-views',

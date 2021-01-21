@@ -14,30 +14,33 @@ const normalizeBool = value => {
 export const useToggle = name => {
 	const [ handle, setHandle ] = useState( () => () => {} );
 
+	const el = getElement( name );
+	const wrapper = el ? el.closest( '.og-field' ) : null;
+	const classList = wrapper ? wrapper.classList : '';
+
 	useEffect( () => {
-		const h = () => {
-			toggleDependants( getElement( name ) );
-		};
+		const h = () => el && toggleDependants( el );
 		setHandle( () => h );
 
 		// Kick-off the first time.
 		h();
-	}, [ name ] );
+	}, [ name, classList ] ); // Depends on classList in case it's set hidden by another field.
 
 	return handle;
 };
 
 const getElement = nameOrElement => typeof nameOrElement === 'string' ? document.getElementById( nameOrElement ) : nameOrElement;
 
-const toggleDependants = ( el, isElHidden = false ) => {
-	const deps = getDependants( el );
-	deps.forEach( dependant => {
+const toggleDependants = el => {
+	const inputValue = el.type === 'checkbox' ? el.checked : el.value;
+	const wrapper = el.closest( '.og-field' );
+
+	getDependants( el ).forEach( dependant => {
 		const dep = dependant.className.match( /dep:([^:]+):([^:\s]+)/ );
 		const depValue = normalizeBool( dep[ 2 ] );
-		const inputValue = el.type === 'checkbox' ? el.checked : el.value;
 
-		// If el is hidden, always hide the dependant.
-		let isHidden = isElHidden || el.classList.contains( 'og-is-hidden' ) || depValue !== inputValue;
+		// If current element is hidden, always hide the dependant.
+		let isHidden = wrapper.classList.contains( 'og-is-hidden' ) || depValue !== inputValue;
 
 		if ( isHidden ) {
 			dependant.classList.add( 'og-is-hidden' );
@@ -46,23 +49,14 @@ const toggleDependants = ( el, isElHidden = false ) => {
 		}
 
 		// Toggle sub-dependants.
-		dependant.querySelectorAll( '.og-input > input, .og-input > select' ).forEach( subEl => {
-			toggleDependants( subEl, isHidden );
-		 } );
+		dependant.querySelectorAll( '.og-input > input, .og-input > select' ).forEach( toggleDependants );
 	} );
 };
 
 const getDependants = el => {
-	if ( !el ) {
-		return [];
-	}
-
 	let scope = el.closest( '.og-item' );
 	scope = scope || el.closest( '.react-tabs__tab-panel' );
 	scope = scope || el.closest( '.og' );
-	if ( !scope ) {
-		return [];
-	}
 
 	const shortName = getShortName( el.id );
 	return [ ...scope.querySelectorAll( `[class*="dep:${ shortName }:"]` ) ];
