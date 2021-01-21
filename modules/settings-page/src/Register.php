@@ -2,8 +2,6 @@
 namespace MBB\SettingsPage;
 
 class Register {
-	public $settings_pages = [];
-
 	public function __construct() {
 		$this->register_post_type();
 
@@ -47,25 +45,27 @@ class Register {
 	}
 
 	public function register_settings_pages( $settings_pages ) {
-		$posts = get_posts( [
+		$query = new \WP_Query( [
 			'posts_per_page'         => -1,
 			'post_status'            => 'publish',
 			'post_type'              => 'mb-settings-page',
 			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
 		] );
 
-		foreach ( $posts as $post ) {
-			$data = $this->get_data( $post );
-
-			$settings_pages[] = $data;
+		foreach ( $query->posts as $post ) {
+			$settings_pages[] = $this->get_settings_page( $post );
 		}
 
 		return $settings_pages;
 	}
 
-	private function get_data( $post ) {
-		return json_decode( $post->post_content, true );
+	private function get_settings_page( $post ) {
+		$settings_page = get_post_meta( $post->ID, 'page', true );
+		$settings_page['menu_title'] = $post->post_title;
+		$settings_page['page_title'] = $post->post_title;
+		$settings_page['id'] = $post->post_name;
+
+		return $settings_page;
 	}
 }
