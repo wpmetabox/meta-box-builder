@@ -87,7 +87,7 @@ class RestApi extends Base {
 					'left' => __( 'Left', 'meta-box-builder' ),
 				],
 			] ),
-			Control::Input( 'submit_button', __( 'Custom submit button text', 'meta-box-builder' ) ),
+			Control::Input( 'submit_button', __( 'Custom submit button', 'meta-box-builder' ) ),
 			Control::Input( 'message', [
 				'label'   => __( 'Custom message', 'meta-box-builder' ),
 				'tooltip' => __( 'The custom message displayed when saving options', 'meta-box-builder' ),
@@ -97,11 +97,11 @@ class RestApi extends Base {
 				'tooltip' => __( 'The content displayed when clicking on the Help button on the top right (near the Screen Options button)', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'customizer', [
-				'label'   => __( 'Show in the Customizer', 'meta-box-builder' ),
+				'label'   => __( 'Customizer', 'meta-box-builder' ),
 				'tooltip' => __( 'Show this settings page as a panel in the Customizer', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'customizer_only', [
-				'label'   => __( 'Show in the Customizer only', 'meta-box-builder' ),
+				'label'   => __( 'Customizer only', 'meta-box-builder' ),
 				'tooltip' => __( 'Show only in the Customizer, no admin settings page', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'network', [

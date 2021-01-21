@@ -47,9 +47,7 @@ class Edit extends BaseEditPage {
 
 	private function get_menu_parents() {
 		global $menu;
-		$options = [
-			'none'  => __( 'None', 'meta-box-builder' ),
-		];
+		$options = [];
 		foreach ( $menu as $params ) {
 			if ( ! empty( $params[0] ) && ! empty( $params[2] ) ) {
 				$options[ $params[2] ] = $this->strip_span( $params[0] );
