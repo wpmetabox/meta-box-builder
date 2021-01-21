@@ -11,7 +11,8 @@ const App = () => {
 	}, [] );
 
 	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
-		const Control = lazy( () => import( `/components/Controls/${ name }` ) );
+		// Import control from current app first, then main app.
+		const Control = lazy( () => import( `./controls/${ name }` ).catch( () => import( `/components/Controls/${ name }` ) ) );
 
 		// If API specifies input name, then use it. Otherwise use setting.
 		const n = dotProp.get( props, 'name', setting );
@@ -25,7 +26,7 @@ const App = () => {
 		return <Control
 			componentId={ `settings-${ setting }` }
 			{ ...props }
-			name={ `settings[${ input }]` }
+			name={ `settings${ input }` }
 			defaultValue={ dotProp.get( MbbApp.settings, key, defaultValue ) }
 		/>;
 	};

@@ -6,7 +6,7 @@ use MBB\Control;
 
 class RestApi extends Base {
 	public function get_settings_page_controls() {
-		$fields = [
+		$controls = [
 			Control::Input( 'option_name', [
 				'label'   => __( 'Option name', 'meta-box-builder' ),
 				'tooltip' => __( 'Option name where settings data is saved to. Takes settings page ID if missed. If you want to use theme mods, then set this to <code>theme_mods_$themeslug</code>.', 'meta-box-builder' ),
@@ -20,18 +20,16 @@ class RestApi extends Base {
 					'submenu' => __( 'Submenu', 'meta-box-builder' ),
 				],
 			], 'top' ),
-			Control::Select( 'position', [
-				'label'   => __( 'Menu position after', 'meta-box-builder' ),
-				'options' => $this->get_menu_positions(),
+			Control::MenuPosition( 'position', [
+				'label'      => __( 'Show menu after', 'meta-box-builder' ),
 				'dependency' => 'menu_type:top',
 			] ),
 			Control::Input( 'submenu_title', [
-				'label' => __( 'Default first submenu title', 'meta-box-builder' ),
+				'label'      => __( 'Default first submenu title', 'meta-box-builder' ),
 				'dependency' => 'menu_type:top',
 			] ),
-			Control::Select( 'parent', [
-				'label'   => __( 'Parent menu', 'meta-box-builder' ),
-				'options' => $this->get_parents(),
+			Control::MenuParent( 'parent', [
+				'label'      => __( 'Parent menu', 'meta-box-builder' ),
 				'dependency' => 'menu_type:submenu',
 			] ),
 
@@ -112,7 +110,7 @@ class RestApi extends Base {
 			] ),
 		];
 
-		return $fields;
+		return $controls;
 	}
 
 	private function get_capabilities() {
@@ -126,33 +124,5 @@ class RestApi extends Base {
 		sort( $caps );
 
 		return array_combine( $caps, $caps );
-	}
-
-	private function get_menu_positions() {
-		global $menu;
-		$positions = [];
-		foreach ( $menu as $position => $params ) {
-			if ( ! empty( $params[0] ) ) {
-				$positions[ $position ] = $this->strip_span( $params[0] );
-			}
-		}
-		return $positions;
-	}
-
-	private function get_parents() {
-		global $menu;
-		$options = [
-			'none'  => __( 'None', 'meta-box-builder' ),
-		];
-		foreach ( $menu as $params ) {
-			if ( ! empty( $params[0] ) && ! empty( $params[2] ) ) {
-				$options[ $params[2] ] = $this->strip_span( $params[0] );
-			}
-		}
-		return $options;
-	}
-
-	private function strip_span( $html ) {
-		return preg_replace( '@<span .*>.*</span>@si', '', $html );
 	}
 }

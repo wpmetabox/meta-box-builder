@@ -17,6 +17,9 @@ class Edit extends BaseEditPage {
 
 			'rest'  => untrailingslashit( rest_url() ),
 			'nonce' => wp_create_nonce( 'wp_rest' ),
+
+			'menu_positions' => $this->get_menu_positions(),
+			'menu_parents'   => $this->get_menu_parents(),
 		];
 
 		wp_localize_script( 'mb-settings-page-ui', 'MbbApp', $data );
@@ -29,5 +32,33 @@ class Edit extends BaseEditPage {
 
 		$parser->parse();
 		update_post_meta( $post_id, 'page', $parser->get_settings() );
+	}
+
+	private function get_menu_positions() {
+		global $menu;
+		$positions = [];
+		foreach ( $menu as $position => $params ) {
+			if ( ! empty( $params[0] ) ) {
+				$positions[ $position ] = $this->strip_span( $params[0] );
+			}
+		}
+		return $positions;
+	}
+
+	private function get_menu_parents() {
+		global $menu;
+		$options = [
+			'none'  => __( 'None', 'meta-box-builder' ),
+		];
+		foreach ( $menu as $params ) {
+			if ( ! empty( $params[0] ) && ! empty( $params[2] ) ) {
+				$options[ $params[2] ] = $this->strip_span( $params[0] );
+			}
+		}
+		return $options;
+	}
+
+	private function strip_span( $html ) {
+		return preg_replace( '@<span .*>.*</span>@si', '', $html );
 	}
 }
