@@ -43,6 +43,8 @@ class Edit extends BaseEditPage {
 			]
 		];
 
+		$data = apply_filters( 'mbb_app_data', $data );
+
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}
 
