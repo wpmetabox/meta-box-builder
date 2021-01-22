@@ -164,3 +164,8 @@ svg {
   border: var(--border);
   margin-bottom: 12px;
 }
+
+// Settings tab.
+&-tab-panel--settings {
+	padding: 12px;
+}

@@ -11,6 +11,7 @@ class Relationships {
 
 		new \MBB\Relationships\Register;
 		new \MBB\Relationships\RestApi;
+		new \MBB\Relationships\Generator;
 
 		if ( is_admin() ) {
 			new \MBB\Relationships\Edit( 'mb-relationship', __( 'Relationship ID', 'meta-box-builder' ) );

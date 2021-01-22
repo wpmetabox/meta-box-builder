@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Input from '/controls/Input';
-const { useContext, useState } = wp.element;
+const { useState } = wp.element;
 const { __ } = wp.i18n;
 const { ClipboardButton } = wp.components;
 const { withState } = wp.compose;

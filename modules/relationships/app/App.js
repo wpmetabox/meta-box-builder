@@ -7,13 +7,14 @@ const { __ } = wp.i18n;
 
 const App = () => {
 	const [ sides, setSides ] = useState( [] );
+	const [ tabIndex, setTabIndex ] = useState( false );
 
 	useEffect( () => {
 		request( 'relationships-sides' ).then( setSides );
 	}, [] );
 
 	return (
-		<Tabs forceRenderTabPanel={ true }>
+		<Tabs forceRenderTabPanel={ true } onSelect={ setTabIndex }>
 			<TabList>
 				<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
 				<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
@@ -22,7 +23,7 @@ const App = () => {
 				{ sides.map( side => <Side key={ side.id } { ...side } /> ) }
 			</TabPanel>
 			<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-				<Result />
+				<Result key={ tabIndex } />
 			</TabPanel>
 		</Tabs>
 	);
