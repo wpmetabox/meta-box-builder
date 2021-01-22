@@ -29,4 +29,4 @@ const Content = ( { id, controls } ) => {
 	);
 };
 
-export default Content;
+export default memo( Content, ( prevProps, nextProps ) => prevProps.id === nextProps.id );
