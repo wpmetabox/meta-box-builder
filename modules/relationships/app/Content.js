@@ -12,12 +12,12 @@ const Content = ( { id, controls } ) => {
 		const input = n.replace( /^([^\[]+)/, '[$1]' );
 
 		// Convert name[subfield] to name.subfield to get default value.
-		const key = n.replace( '[', '.' ).replace( ']', '' );
+		const key = id + '.' + n.replace( '[', '.' ).replace( ']', '' );
 
 		return <Control
 			componentId={ `relationship-${ id }-${ setting }` }
 			{ ...props }
-			name={ `relationship[${ id }]${ input }` }
+			name={ `settings[${ id }]${ input }` }
 			defaultValue={ dotProp.get( MbbApp.settings, key, defaultValue ) }
 		/>;
 	};
