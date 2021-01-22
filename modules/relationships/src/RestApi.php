@@ -25,7 +25,7 @@ class RestApi extends Base {
 
 	private function get_controls( $side ) {
 		$controls = [
-			Control::Select( "{$side}_object_type", [
+			Control::Select( 'object_type', [
 				'label'   => __( 'Object type', 'meta-box-builder' ),
 				'options' => [
 					'post' => __( 'Post', 'meta-box-builder' ),
@@ -33,17 +33,17 @@ class RestApi extends Base {
 					'user' => __( 'User', 'meta-box-builder' ),
 				],
 			], 'post' ),
-			Control::Select( "{$side}_post_type", [
+			Control::Select( 'post_type', [
 				'label'      => __( 'Post type', 'meta-box-builder' ),
 				'options'    => $this->get_post_types(),
-				'dependency' => "{$side}_object_type:post",
+				'dependency' => 'object_type:post',
 			], 'post' ),
-			Control::Select( "{$side}_taxonomy", [
+			Control::Select( 'taxonomy', [
 				'label'      => __( 'Taxonomy', 'meta-box-builder' ),
 				'options'    => $this->get_taxonomies(),
-				'dependency' => "{$side}_object_type:term",
+				'dependency' => 'object_type:term',
 			], 'category' ),
-			Control::Input( "${side}_empty_message", [
+			Control::Input( 'empty_message', [
 				'label'   => __( 'Empty message', 'meta-box-builder' ),
 				'tooltip' => __( 'The message displayed when there’s no connections', 'meta-box-builder' ),
 			] ),

@@ -5,6 +5,8 @@
     "watch:css:main": "node-sass --sourcemap none --output-style compressed -w assets/sass -r -o assets/css",
     "css:settings": "node-sass --sourcemap none --include-path assets/sass --output-style compressed modules/settings-page/assets/settings-page.scss -o modules/settings-page/assets",
     "watch:css:settings": "node-sass --sourcemap none --include-path assets/sass --output-style compressed -w modules/settings-page/assets -r -o modules/settings-page/assets",
+    "css:relationships": "node-sass --sourcemap none --include-path assets/sass --output-style compressed modules/relationships/assets/relationships.scss -o modules/relationships/assets",
+    "watch:css:relationships": "node-sass --sourcemap none --include-path assets/sass --output-style compressed -w modules/relationships/assets -r -o modules/relationships/assets",
     "build": "webpack --mode production",
     "start": "webpack --mode development",
     "watch": "webpack --mode development --watch",

@@ -1,8 +1,18 @@
 .og {
 	@import "elements";
 	@import "fields";
+}
 
-	padding: 18px 12px;
-	border: 1px solid var(--color-light);
+.og-relationship-side {
+	border: var(--border);
 	background: #fff;
+	margin-top: 18px;
+
+	&__header {
+		cursor: auto;
+		border-bottom: var(--border);
+	}
+	&__body {
+		padding: 12px;
+	}
 }
