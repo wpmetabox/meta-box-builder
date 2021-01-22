@@ -2,17 +2,3 @@
 	@import "elements";
 	@import "fields";
 }
-
-.og-relationship-side {
-	border: var(--border);
-	background: #fff;
-	margin-top: 18px;
-
-	&__header {
-		cursor: auto;
-		border-bottom: var(--border);
-	}
-	&__body {
-		padding: 12px;
-	}
-}
