@@ -11,10 +11,9 @@ class Edit extends BaseEditPage {
 		wp_enqueue_script( 'mb-relationships-ui', "$url/relationships.js", ['wp-element', 'wp-components', 'wp-i18n'], MBB_VER, true );
 
 		$data = [
-			'settings' => get_post_meta( get_the_ID(), 'settings', true ),
-
-			'rest'  => untrailingslashit( rest_url() ),
-			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'settings' => get_post_meta( get_the_ID(), 'relationship', true ),
+			'rest'     => untrailingslashit( rest_url() ),
+			'nonce'    => wp_create_nonce( 'wp_rest' ),
 		];
 
 		wp_localize_script( 'mb-relationships-ui', 'MbbApp', $data );

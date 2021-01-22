@@ -14,6 +14,7 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         'M' => 
         array (
             'MBB\\SettingsPage\\' => 17,
+            'MBB\\Relationships\\' => 18,
             'MBB\\' => 4,
             'MBBParser\\' => 10,
         ),
@@ -27,6 +28,10 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         'MBB\\SettingsPage\\' => 
         array (
             0 => __DIR__ . '/../..' . '/modules/settings-page/src',
+        ),
+        'MBB\\Relationships\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/modules/relationships/src',
         ),
         'MBB\\' => 
         array (

@@ -5,20 +5,21 @@ class Data {
 	public static function get_post_types() {
 		$unsupported = [
 			// WordPress built-in post types.
-			'revision',
-			'nav_menu_item',
 			'customize_changeset',
-			'oembed_cache',
 			'custom_css',
+			'nav_menu_item',
+			'oembed_cache',
+			'revision',
 			'user_request',
 			'wp_block',
 
 			// Meta Box post types.
-			'meta-box',
-			'mb-settings-page',
 			'mb-post-type',
+			'mb-relationship',
+			'mb-settings-page',
 			'mb-taxonomy',
 			'mb-views',
+			'meta-box',
 		];
 		$post_types  = get_post_types( [], 'objects' );
 		$post_types  = array_diff_key( $post_types, array_flip( $unsupported ) );
@@ -342,6 +343,7 @@ class Data {
 			'meta-box-conditional-logic' => 'mb_conditional_logic_load',
 		];
 		$classes = [
+			'mb-relationships'         => 'MBR_Loader',
 			'meta-box-group'           => 'RWMB_Group',
 			'meta-box-include-exclude' => 'MB_Include_Exclude',
 			'meta-box-show-hide'       => 'MB_Show_Hide',

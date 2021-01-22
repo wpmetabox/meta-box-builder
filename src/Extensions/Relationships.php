@@ -13,7 +13,7 @@ class Relationships {
 		new \MBB\Relationships\RestApi;
 
 		if ( is_admin() ) {
-			new \MBB\Relationships\Edit( 'mb-relationships', __( 'Relationship ID', 'meta-box-builder' ) );
+			new \MBB\Relationships\Edit( 'mb-relationship', __( 'Relationship ID', 'meta-box-builder' ) );
 		}
 	}
 }
