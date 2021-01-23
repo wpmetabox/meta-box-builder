@@ -54,18 +54,9 @@ class Register {
 		] );
 
 		foreach ( $query->posts as $post ) {
-			$settings_pages[] = $this->get_settings_page( $post );
+			$settings_pages[] = get_post_meta( $post->ID, 'settings_page', true );
 		}
 
 		return $settings_pages;
-	}
-
-	private function get_settings_page( $post ) {
-		$settings_page = get_post_meta( $post->ID, 'page', true );
-		$settings_page['menu_title'] = $post->post_title;
-		$settings_page['page_title'] = $post->post_title;
-		$settings_page['id'] = $post->post_name;
-
-		return $settings_page;
 	}
 }
