@@ -73,13 +73,7 @@ const Block = ( { objectType, settings } ) => {
 			name="settings[category]"
 			label={ __( 'Category', 'meta-box-builder' ) }
 			componentId="settings-block-category"
-			options={ {
-				layout: __( 'Layout', 'meta-box-builder' ),
-				common: __( 'Common', 'meta-box-builder' ),
-				formatting: __( 'Formatting', 'meta-box-builder' ),
-				widgets: __( 'Widgets', 'meta-box-builder' ),
-				embed: __( 'Embed', 'meta-box-builder' ),
-			} }
+			options={ MbbApp.blockCategories }
 			defaultValue={ dotProp.get( settings, 'category', 'layout' ) }
 		/>
 		<Input

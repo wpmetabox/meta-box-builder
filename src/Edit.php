@@ -9,7 +9,7 @@ class Edit extends BaseEditPage {
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', ['wp-components'] );
 
 		wp_enqueue_code_editor( ['type' => 'application/x-httpd-php'] );
-		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['wp-element', 'wp-components', 'clipboard', 'wp-color-picker'], MBB_VER, true );
+		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['wp-element', 'wp-components', 'wp-i18n', 'clipboard', 'wp-color-picker'], MBB_VER, true );
 
 		$data = [
 			'fields'        => get_post_meta( get_the_ID(), 'fields', true ),
@@ -42,6 +42,8 @@ class Edit extends BaseEditPage {
 				'userMeta'           => Helpers\Data::is_extension_active( 'mb-user-meta' ),
 			]
 		];
+
+		$data = apply_filters( 'mbb_app_data', $data );
 
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}

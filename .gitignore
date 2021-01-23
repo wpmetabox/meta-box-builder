@@ -1,2 +1,5 @@
 node_modules
 *.lock
+
+modules/relationships/assets/relationships.js
+modules/relationships/assets/relationships.css
