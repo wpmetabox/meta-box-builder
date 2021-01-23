@@ -10,7 +10,7 @@ const App = () => (
 			<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
 			<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
 		</TabList>
-		<TabPanel>
+		<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
 			<Content />
 		</TabPanel>
 		<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
