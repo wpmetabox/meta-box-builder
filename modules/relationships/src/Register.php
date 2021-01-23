@@ -5,7 +5,7 @@ class Register {
 	public function __construct() {
 		$this->register_post_type();
 
-		add_filter( 'mb_relationships_init', [ $this, 'register_relationship' ] );
+		add_action( 'mb_relationships_init', [ $this, 'register_relationships' ] );
 	}
 
 	private function register_post_type() {
@@ -43,7 +43,7 @@ class Register {
 		register_post_type( 'mb-relationship', $args );
 	}
 
-	public function register_relationship() {
+	public function register_relationships() {
 		$query = new \WP_Query( [
 			'posts_per_page'         => -1,
 			'post_status'            => 'publish',
@@ -53,15 +53,8 @@ class Register {
 		] );
 
 		foreach ( $query->posts as $post ) {
-			$relationship = $this->get_relationship( $post );
+			$relationship = get_post_meta( $post->ID, 'relationship', true );
 			\MB_Relationships_API::register( $relationship );
 		}
-	}
-
-	private function get_relationship( $post ) {
-		$relationship = get_post_meta( $post->ID, 'relationship', true );
-		$relationship['id'] = $post->post_name;
-
-		return $relationship;
 	}
 }

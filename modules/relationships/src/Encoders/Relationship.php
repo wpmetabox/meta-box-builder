@@ -77,7 +77,7 @@ class Relationship {
 	private function wrap_function_call() {
 		$this->encoded_string = sprintf(
 			'<?php
-add_filter( \'mb_relationships_init\', \'%1$s\' );
+add_action( \'mb_relationships_init\', \'%1$s\' );
 
 function %1$s() {
     MB_Relationships_API::register( %2$s );
