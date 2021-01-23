@@ -16,11 +16,9 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'mb_builder_load' ) ) {
-	/**
-	 * Hook to 'init' with priority 4 to make sure all actions are registered before Meta Box 4.9.0 runs
-	 * And before MB Settings Page extension initializes.
-	 */
-	add_action( 'init', 'mb_builder_load', 4 );
+	// Hook to 'init' with priority 0 to run all extensions (for registering settings pages & relationships).
+	// And after MB Custom Post Type (for ordering submenu items in Meta Box menu).
+	add_action( 'init', 'mb_builder_load', 0 );
 
 	/**
 	 * Load plugin files after Meta Box is loaded

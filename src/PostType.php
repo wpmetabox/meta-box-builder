@@ -3,14 +3,12 @@ namespace MBB;
 
 class PostType {
 	public function __construct() {
-		add_action( 'init', array( $this, 'register_post_type' ) );
-		add_filter( 'post_updated_messages', array( $this, 'updated_messages' ) );
+		$this->register_post_type();
+		add_filter( 'post_updated_messages', [ $this, 'updated_messages' ] );
 	}
 
-	public function register_post_type() {
-		$post_type = 'meta-box';
-
-		$labels = array(
+	private function register_post_type() {
+		$labels = [
 			'name'               => _x( 'Field Groups', 'post type general name', 'meta-box-builder' ),
 			'singular_name'      => _x( 'Field Group', 'post type singular name', 'meta-box-builder' ),
 			'menu_name'          => _x( 'Custom Fields', 'admin menu', 'meta-box-builder' ),
@@ -25,9 +23,9 @@ class PostType {
 			'parent_item_colon'  => __( 'Parent Field Groups:', 'meta-box-builder' ),
 			'not_found'          => __( 'No field groups found.', 'meta-box-builder' ),
 			'not_found_in_trash' => __( 'No field groups found in Trash.', 'meta-box-builder' ),
-		);
+		];
 
-		$args = array(
+		$args = [
 			'labels'          => $labels,
 			'public'          => false,
 			'show_ui'         => true,
@@ -37,7 +35,7 @@ class PostType {
 			'supports'        => ['title'],
 
 			'map_meta_cap'    => true,
-			'capabilities'    => array(
+			'capabilities'    => [
 				// Meta capabilities.
 				'edit_post'              => 'edit_meta_box',
 				'read_post'              => 'read_meta_box',
@@ -58,14 +56,14 @@ class PostType {
 				'edit_private_posts'     => 'manage_options',
 				'edit_published_posts'   => 'manage_options',
 				'create_posts'           => 'manage_options',
-			),
-		);
+			],
+		];
 
-		register_post_type( $post_type, $args );
+		register_post_type( 'meta-box', $args );
 	}
 
 	public function updated_messages( $messages ) {
-		$messages['meta-box'] = array(
+		$messages['meta-box'] = [
 			0 => '', // Unused. Messages start at index 1.
 			1 => __( 'Field group updated.', 'meta-box-builder' ),
 			2 => __( 'Custom field updated.', 'meta-box-builder' ),
@@ -76,7 +74,7 @@ class PostType {
 			6 => __( 'Field group updated.', 'meta-box-builder' ),
 			7 => __( 'Field group updated.', 'meta-box-builder' ),
 			8 => __( 'Field group submitted.', 'meta-box-builder' ),
-		);
+		];
 
 		return $messages;
 	}
