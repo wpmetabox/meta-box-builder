@@ -94,9 +94,25 @@ class Data {
 			} elseif ( ! empty( $settings_page['page_title'] ) ) {
 				$title = $settings_page['page_title'];
 			}
+
+			$tabs = [];
+			if ( ! empty( $settings_page['tabs'] ) ) {
+				foreach ( $settings_page['tabs'] as $id => $tab ) {
+					if ( is_string( $tab ) ) {
+						$tab = ['label' => $tab];
+					}
+					$tab = wp_parse_args( $tab, [
+						'icon'  => '',
+						'label' => '',
+					] );
+					$tabs[ $id ] = $tab['label'];
+				}
+			}
+
 			$pages[] = [
 				'id'    => $settings_page['id'],
 				'title' => $title,
+				'tabs'  => $tabs,
 			];
 		}
 		return $pages;
