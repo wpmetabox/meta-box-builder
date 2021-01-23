@@ -32,10 +32,8 @@ class PostType {
 			'public'          => false,
 			'show_ui'         => true,
 			'show_in_menu'    => 'meta-box',
-			'query_var'       => true,
+			'rewrite'         => false,
 			'capability_type' => 'post',
-			'hierarchical'    => false,
-			'menu_position'   => null,
 			'supports'        => ['title'],
 
 			'map_meta_cap'    => true,

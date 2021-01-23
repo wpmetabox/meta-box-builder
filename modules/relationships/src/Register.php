@@ -27,17 +27,13 @@ class Register {
 			'not_found_in_trash' => __( 'Not found in Trash', 'meta-box-builder' ),
 		];
 
-		$args   = [
-			'label'         => __( 'Relationships', 'meta-box-builder' ),
+		$args = [
 			'labels'        => $labels,
-			'supports'      => ['title'],
 			'public'        => false,
 			'show_ui'       => true,
 			'show_in_menu'  => 'meta-box',
-			'can_export'    => true,
 			'rewrite'       => false,
-			'query_var'     => true,
-			'menu_position' => 200,
+			'supports'      => ['title'],
 		];
 
 		register_post_type( 'mb-relationship', $args );
