@@ -16,6 +16,9 @@
 .tippy-tooltip {
 	text-align: left;
 }
+.column-shortcode input {
+	max-width: 100%;
+}
 
 /* Import form */
 .mbb-import-form {
