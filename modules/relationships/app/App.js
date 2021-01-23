@@ -1,6 +1,6 @@
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import Result from './Result';
 import Side from './Side';
+import Result from '/components/Tabs/Result';
 import { request } from '/functions';
 const { render, useEffect, useState } = wp.element;
 const { __ } = wp.i18n;
@@ -23,7 +23,7 @@ const App = () => {
 				{ sides.map( side => <Side key={ side.id } { ...side } /> ) }
 			</TabPanel>
 			<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-				<Result key={ tabIndex } />
+				<Result settings={ MbbApp.settings } endPoint="relationships-generate" />
 			</TabPanel>
 		</Tabs>
 	);

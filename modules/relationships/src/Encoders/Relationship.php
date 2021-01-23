@@ -80,7 +80,7 @@ class Relationship {
 add_filter( \'mb_relationships_init\', \'%1$s\' );
 
 function %1$s() {
-	MB_Relationships_API::register( %2$s );
+    MB_Relationships_API::register( %2$s );
 }',
 			$this->function_name,
 			$this->encoded_string,

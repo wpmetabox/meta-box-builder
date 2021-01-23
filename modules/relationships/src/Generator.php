@@ -22,7 +22,7 @@ class Generator {
 	}
 
 	public function generate( WP_REST_Request $request ) {
-		$parser = new Parsers\Relationship( $request->get_params() );
+		$parser = new Parsers\Relationship( $request->get_param( 'settings' ) );
 		$parser->parse();
 
 		$settings = $parser->get_settings();

@@ -6,7 +6,7 @@ const { __ } = wp.i18n;
 const { ClipboardButton } = wp.components;
 const { withState } = wp.compose;
 
-const ResultCode = ( { defaultValues } ) => {
+const ResultCode = ( { settings, endPoint } ) => {
 	const [ data, setData ] = useState( '' );
 	const [ isGenerating, setIsGenerating ] = useState( false );
 
@@ -21,7 +21,7 @@ const ResultCode = ( { defaultValues } ) => {
 		const formData = new FormData( document.querySelector( '#post' ) );
 		formData.delete( '_wpnonce' );
 
-		fetch( `${ MbbApp.rest }/mbb/generate`, {
+		fetch( `${ MbbApp.rest }/mbb/${ endPoint }`, {
 			method: 'POST',
 			body: formData,
 			headers: { 'X-WP-Nonce': MbbApp.nonce }
@@ -31,9 +31,7 @@ const ResultCode = ( { defaultValues } ) => {
 		} );
 	};
 
-	const Button = withState( {
-		hasCopied: false,
-	} )( ( { hasCopied, setState } ) => (
+	const Button = withState( { hasCopied: false } )( ( { hasCopied, setState } ) => (
 		<ClipboardButton className="button" text={ data } onCopy={ () => setState( { hasCopied: true } ) } onFinishCopy={ () => setState( { hasCopied: false } ) }>
 			{ hasCopied ? __( 'Copied!', 'meta-box-builder' ) : __( 'Copy', 'meta-box-builder' ) }
 		</ClipboardButton>
@@ -44,13 +42,13 @@ const ResultCode = ( { defaultValues } ) => {
 			name="settings[text_domain]"
 			label={ __( 'Text domain', 'meta-box-builder' ) }
 			tooltip={ __( 'Required for multilingual website. Used in the exported code only.', 'meta-box-builder' ) }
-			defaultValue={ dotProp.get( defaultValues, 'text_domain', 'your-text-domain' ) }
+			defaultValue={ dotProp.get( settings, 'text_domain', 'your-text-domain' ) }
 			componentId="text-domain"
 		/>
 		<Input
 			name="settings[function_name]"
 			label={ __( 'Function name', 'meta-box-builder' ) }
-			defaultValue={ dotProp.get( defaultValues, 'function_name', 'your_prefix_register_meta_boxes' ) }
+			defaultValue={ dotProp.get( settings, 'function_name', 'your_prefix_function_name' ) }
 			componentId="function-name"
 		/>
 		<button type="button" className="button" onClick={ onClick } disabled={ isGenerating }>{ __( 'Generate', 'meta-box-builder' ) }</button>

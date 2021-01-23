@@ -46,7 +46,7 @@ const App = ( { settings } ) => {
 							<Settings settings={ settings } />
 						</TabPanel>
 						<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-							<Result defaultValues={ settings } />
+							<Result settings={ settings } endPoint="generate" />
 						</TabPanel>
 					</Tabs>
 					<Data />
