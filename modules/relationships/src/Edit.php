@@ -8,7 +8,9 @@ class Edit extends BaseEditPage {
 		$url = MBB_URL . 'modules/relationships/assets';
 
 		wp_enqueue_style( 'mb-relationships-ui', "$url/relationships.css", ['wp-components'], MBB_VER );
-		wp_enqueue_script( 'mb-relationships-ui', "$url/relationships.js", ['wp-element', 'wp-components', 'wp-i18n'], MBB_VER, true );
+
+		wp_enqueue_code_editor( ['type' => 'application/x-httpd-php'] );
+		wp_enqueue_script( 'mb-relationships-ui', "$url/relationships.js", ['wp-element', 'wp-components', 'wp-i18n', 'clipboard'], MBB_VER, true );
 
 		$data = [
 			'settings' => get_post_meta( get_the_ID(), 'settings', true ),

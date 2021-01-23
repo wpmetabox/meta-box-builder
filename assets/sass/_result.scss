@@ -1,0 +1,20 @@
+// Result
+&-result {
+	code {
+		font-size: 12px;
+	}
+
+	&__body {
+		position: relative;
+	}
+
+	.components-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		border-color: var(--color-light);
+		border-radius: 0 0 0 4px;
+		z-index: 9;
+		height: 30px;
+	}
+}
