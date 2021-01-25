@@ -159,7 +159,7 @@ class Fields extends Base {
 			'hidden'         => [
 				'title'    => __( 'Hidden', 'meta-box-builder' ),
 				'category' => 'basic',
-				'controls' => array_merge( ['id', 'std'], $advanced ),
+				'controls' => array_merge( ['id', 'type', 'std'], $advanced ),
 			],
 			'image'          => [
 				'title'    => __( 'Image', 'meta-box-builder' ),
