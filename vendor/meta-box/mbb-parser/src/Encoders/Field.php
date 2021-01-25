@@ -14,7 +14,7 @@ class Field {
 	}
 
 	public function encode() {
-		$translatable_fields = ['name', 'desc', 'label_description', 'add_button', 'placeholder', 'prefix', 'suffix'];
+		$translatable_fields = ['name', 'desc', 'label_description', 'add_button', 'placeholder', 'prefix', 'suffix', 'before', 'after'];
 		array_walk( $translatable_fields, [ $this, 'make_translatable' ] );
 
 		$this->transform_id_prefix();
