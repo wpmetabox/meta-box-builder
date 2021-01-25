@@ -1,8 +1,14 @@
 app export-ignore
 assets/sass export-ignore
 
+modules/relationships/app export-ignore
+modules/relationships/assets/*.scss export-ignore
+
+modules/settings-page/app export-ignore
+modules/settings-page/assets/*.scss export-ignore
+
 .gitattributes export-ignore
 .gitignore export-ignore
 *.yml export-ignore
-composer.json export-ignore
+*.json export-ignore
 webpack.config.js export-ignore
