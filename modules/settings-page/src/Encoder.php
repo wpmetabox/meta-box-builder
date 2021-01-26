@@ -69,7 +69,7 @@ function %1$s( $settings_pages ) {
 	return $settings_pages;
 }',
 			$this->function_name,
-			$this->encoded_string,
+			$this->encoded_string
 		);
 		return $this;
 	}

@@ -83,7 +83,7 @@ function %1$s() {
     MB_Relationships_API::register( %2$s );
 }',
 			$this->function_name,
-			$this->encoded_string,
+			$this->encoded_string
 		);
 		return $this;
 	}
