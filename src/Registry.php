@@ -413,9 +413,12 @@ class Registry {
 	 *     'tab'      => 'general', // Tab: general or advanced
 	 *     'default'  => '',        // Default value
 	 *     'props'    => [          // Control props
-	 *         'label'    => __( 'ID', 'meta-box-builder' ),
-	 *         'required' => true,
-	 *         'tooltip'  => __( 'Must be unique,
+	 *         'label'      => __( 'ID', 'meta-box-builder' ),            // Control label
+	 *         'required'   => true,                                      // Is it required?
+	 *         'tooltip'    => __( 'Must be unique, 'meta-box-builder' ), // Optional tooltip
+	 *         'name'       => 'custom_input[name]',                      // Custom input name if different from the setting name. Optional.
+	 *         'dependency' => 'other_field:value',                       // Show only another field has a specific value.
+	 *         'options'    => ['key' => 'value'],                        // Options for Select, SelectReact controls.
 	 *     ],
 	 * ],
 	 */
