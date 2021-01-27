@@ -32,6 +32,11 @@ class Parser extends Base {
 	private function parse_menu_icon() {
 		$type = Arr::get( $this->settings, 'icon_type', 'dashicons' );
 		$this->icon_url = Arr::get( $this->settings, "icon_$type" );
+
+		if ( 'dashicons' === $type ) {
+			$this->icon_url = 'dashicons-' . $this->icon_url;
+		}
+
 		$keys = ['icon_type', 'icon_dashicons', 'icon_svg', 'icon_custom'];
 		foreach ( $keys as $key ) {
 			unset( $this->$key );
