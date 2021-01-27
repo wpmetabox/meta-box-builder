@@ -41,18 +41,16 @@ class AdminColumns {
 	}
 
 	public function show_column( $name ) {
-		global $post;
 		if ( ! in_array( $name, array( 'for', 'location', 'shortcode' ) ) ) {
 			return;
 		}
-		$data = json_decode( $post->post_excerpt );
-		$saved_data = get_post_meta( get_the_ID(), 'raw', true );
-		$data = $saved_data ? json_decode( $saved_data, true ) : [];
+		$data = get_post_meta( get_the_ID(), 'settings', true );
 		$this->{"show_$name"}( $data );
 	}
 
 	private function show_for( $data ) {
 		$object_type = Arr::get( $data, 'object_type', 'post' );
+
 		switch ( $object_type ) {
 			case 'user':
 				esc_html_e( 'Users', 'meta-box-builder' );
