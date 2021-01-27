@@ -48,7 +48,7 @@ class Edit extends BaseEditPage {
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}
 
-	public function save( $post_id ) {
+	public function save( $post_id, $post ) {
 		// Save data for JavaScript (serialized arrays).
 		$request = rwmb_request();
 		$base_parser = new BaseParser;
@@ -63,7 +63,13 @@ class Edit extends BaseEditPage {
 		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
 
 		// Save parsed data for PHP (serialized array).
-		$parser = new Parser( $_POST );
+		$submitted_data = $_POST;
+
+		// Set post title and slug in case they're auto-generated.
+		$submitted_data['post_title'] = $post->post_title;
+		$submitted_data['post_name'] = $post->post_name;
+
+		$parser = new Parser( $submitted_data );
 		$parser->parse();
 		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
 	}

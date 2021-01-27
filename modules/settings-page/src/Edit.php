@@ -27,7 +27,7 @@ class Edit extends BaseEditPage {
 		wp_localize_script( 'mb-settings-page-ui', 'MbbApp', $data );
 	}
 
-	public function save( $post_id ) {
+	public function save( $post_id, $post ) {
 		$parser = new Parser( rwmb_request()->post( 'settings' ) );
 		$parser->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'settings', $parser->get_settings() );
