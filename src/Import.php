@@ -51,6 +51,8 @@ class Import {
 			$data[] = array_merge( (array) $post, [
 				'settings' => get_post_meta( $post->ID, 'settings', true ),
 				'fields'   => get_post_meta( $post->ID, 'fields', true ),
+				'data'     => get_post_meta( $post->ID, 'data', true ),
+				'meta_box' => get_post_meta( $post->ID, 'meta_box', true ),
 			] );
 		}
 
@@ -108,6 +110,8 @@ class Import {
 			}
 			update_post_meta( $post_id, 'settings', $post['settings'] );
 			update_post_meta( $post_id, 'fields', $post['fields'] );
+			update_post_meta( $post_id, 'data', $post['data'] );
+			update_post_meta( $post_id, 'meta_box', $post['meta_box'] );
 		}
 
 		$url = add_query_arg( 'imported', 'true', $url );
