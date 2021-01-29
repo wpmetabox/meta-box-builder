@@ -2,6 +2,9 @@
 	"name": "meta-box/meta-box-builder",
 	"description": "Meta Box Builder extension for Meta Box",
 	"type": "wordpress-plugin",
+	"config": {
+		"prepend-autoloader": false
+	},
 	"repositories": [
 		{
 			"type": "git",
@@ -83,11 +86,6 @@
 				"*.md",
 				"*.json",
 				"LICENSE"
-			],
-			"meta-box/mbb-parser": [
-				".git",
-				".gitignore",
-				"*.json"
 			]
 		},
 		"mozart": {

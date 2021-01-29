@@ -24,7 +24,7 @@ class ComposerAutoloaderInitb514f273ab9a36d3fea19808c7c51d62
 
         require __DIR__ . '/platform_check.php';
 
-        spl_autoload_register(array('ComposerAutoloaderInitb514f273ab9a36d3fea19808c7c51d62', 'loadClassLoader'), true, true);
+        spl_autoload_register(array('ComposerAutoloaderInitb514f273ab9a36d3fea19808c7c51d62', 'loadClassLoader'), true, false);
         self::$loader = $loader = new \Composer\Autoload\ClassLoader();
         spl_autoload_unregister(array('ComposerAutoloaderInitb514f273ab9a36d3fea19808c7c51d62', 'loadClassLoader'));
 
@@ -50,7 +50,7 @@ class ComposerAutoloaderInitb514f273ab9a36d3fea19808c7c51d62
             }
         }
 
-        $loader->register(true);
+        $loader->register(false);
 
         return $loader;
     }
