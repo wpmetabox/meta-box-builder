@@ -13,6 +13,7 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         ),
         'M' => 
         array (
+            'MetaBox\\Dependencies\\' => 21,
             'MBB\\SettingsPage\\' => 17,
             'MBB\\Relationships\\' => 18,
             'MBB\\' => 4,
@@ -24,6 +25,10 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         'Riimu\\Kit\\PHPEncoder\\' => 
         array (
             0 => __DIR__ . '/..' . '/riimu/kit-phpencoder/src',
+        ),
+        'MetaBox\\Dependencies\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/dependencies',
         ),
         'MBB\\SettingsPage\\' => 
         array (
@@ -43,16 +48,6 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         ),
     );
 
-    public static $prefixesPsr0 = array (
-        'T' => 
-        array (
-            'Twig_' => 
-            array (
-                0 => __DIR__ . '/..' . '/twig/twig/lib',
-            ),
-        ),
-    );
-
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
@@ -62,7 +57,6 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62::$classMap;
 
         }, null, ClassLoader::class);

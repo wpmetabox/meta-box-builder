@@ -2,8 +2,6 @@
 namespace MBB;
 
 use MBB\Helpers\Arr;
-use Twig_Loader_Array;
-use Twig_Environment;
 
 class Register {
 	private $meta_box_post_ids = [];
@@ -61,11 +59,12 @@ class Register {
 				$data[ $field['id'] ] = 'group' === $field['type'] ? mb_get_block_field( $field['id'], [] ) : mb_the_block_field( $field['id'], [], false );
 			}
 
-			// Proxy for all PHP/WordPress functions.
-			$loader     = new Twig_Loader_Array( [
-			    'block' => '{% autoescape false %}' . $meta_box['render_code'] . '{% endautoescape %}',
+			$loader = new \MetaBox\Dependencies\Twig\Loader\ArrayLoader( [
+				'block' => '{% autoescape false %}' . $meta_box['render_code'] . '{% endautoescape %}',
 			] );
-			$twig       = new Twig_Environment( $loader );
+			$twig = new \MetaBox\Dependencies\Twig\Environment( $loader );
+
+			// Proxy for all PHP/WordPress functions.
 			$data['mb'] = new TwigProxy;
 
 			echo $twig->render( 'block', $data );

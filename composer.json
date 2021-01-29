@@ -12,31 +12,71 @@
 		"psr-4": {
 			"MBB\\": "src/",
 			"MBB\\SettingsPage\\": "modules/settings-page/src/",
-			"MBB\\Relationships\\": "modules/relationships/src/"
+			"MBB\\Relationships\\": "modules/relationships/src/",
+			"MetaBox\\Dependencies\\": "dependencies/"
 		}
 	},
 	"require": {
-		"twig/twig": "~1.33.2",
 		"meta-box/mbb-parser": "dev-master"
 	},
 	"extra": {
-		"light-ignore-plugin": {
-			"composer": [
-				"LICENSE"
+		"dev-files": {
+			"/": [
+			  ".github/",
+			  ".gitattributes",
+			  ".gitignore",
+
+			  ".editoconfig",
+
+			  "LICENSE",
+			  "*.md",
+
+			  "test/",
+			  "tests/"
 			],
-			"twig/twig": [
-				"doc",
-				"ext",
-				"test",
-				".editorconfig",
-				".gitignore",
-				"*.dist",
-				".php_cs.dist",
-				".travis.yml",
-				"*.json",
-				"*.rst",
-				"CHANGELOG",
-				"LICENSE"
+			"meta-box/*": [
+			  ".git",
+
+			  ".distignore",
+			  ".babelrc",
+			  "webpack.config.js",
+
+			  "*.lock",
+			  "*.json",
+			  "*.yml",
+
+			  "*.txt",
+			  "*.less",
+			  "*.scss",
+			  "*.po",
+			  "*.pot",
+
+			  "demo.php",
+			  "demo/",
+			  "sass/",
+			  "vendor/"
+			],
+			"wpmetabox/*": [
+			  ".git",
+
+			  ".distignore",
+			  ".babelrc",
+			  "webpack.config.js",
+
+			  "*.lock",
+			  "*.json",
+			  "*.yml",
+
+			  "*.txt",
+			  "*.less",
+			  "*.scss",
+			  "*.po",
+			  "*.pot",
+
+			  "demo.php",
+			  "demo/",
+			  "sass/",
+			  "vendor/"
 			],
 			"riimu/kit-phpencoder": [
 				"examples",
@@ -49,6 +89,16 @@
 				".gitignore",
 				"*.json"
 			]
+		},
+		"mozart": {
+			"dep_namespace": "MetaBox\\Dependencies\\",
+			"dep_directory": "/dependencies/",
+			"classmap_directory": "/dependencies/classes/",
+			"classmap_prefix": "MetaBox_Dependencies_",
+			"packages": [
+				"twig/twig"
+			],
+			"delete_vendor_directories": true
 		}
 	}
 }
