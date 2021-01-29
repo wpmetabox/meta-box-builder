@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
 import Icon from './Icon';
@@ -13,13 +14,21 @@ const { ColorPicker } = wp.components;
 const Block = ( { objectType, settings } ) => {
 	const [ iconType, setIconType ] = useState( dotProp.get( settings, 'icon_type', 'dashicons' ) );
 	const [ renderWith, setRenderWith ] = useState( dotProp.get( settings, 'render_with', 'callback' ) );
-	const updateIconType = e => setIconType( e.target.value );
-	const updateRenderWith = e => setRenderWith( e.target.value );
+	const [ codeEditor, setCodeEditor ] = useState();
 	const codeRef = useRef();
 
 	useEffect( () => {
 		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
 	}, [ iconType ] );
+
+	const updateIconType = e => setIconType( e.target.value );
+	const updateRenderWith = e => setRenderWith( e.target.value );
+
+	useEffect( () => {
+		if ( codeEditor ) {
+			setTimeout( () => codeEditor.refresh(), 3000 );
+		}
+	}, [ codeEditor ] );
 
 	return objectType === 'block' && <>
 		<Input
@@ -155,12 +164,13 @@ const Block = ( { objectType, settings } ) => {
 		{
 			renderWith === 'code' &&
 			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
-				<Textarea
-					name="settings[render_code]"
-					defaultValue={ dotProp.get( settings, 'render_code' ) }
-					rows="15"
-					textareaClassName="code"
+				<CodeMirror
+					options={ { mode: 'php' } }
+					value={ dotProp.get( settings, 'render_code' ) }
+					onChange={ ( editor, data, value ) => codeRef.current.value = value }
+					editorDidMount={ setCodeEditor }
 				/>
+				<input type="hidden" name="settings[render_code]" ref={ codeRef } defaultValue={ dotProp.get( settings, 'render_code' ) } />
 				<table className="og-block-description">
 					<tbody>
 						<tr>
