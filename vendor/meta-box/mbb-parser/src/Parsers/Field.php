@@ -2,7 +2,10 @@
 namespace MBBParser\Parsers;
 
 class Field extends Base {
+	// Allow these settings to be empty.
 	protected $empty_keys = ['save_field'];
+
+	// These settings can be empty, but will be remove if has "true" value.
 	protected $non_empty_keys = [
 		'button_group'   => ['inline'],
 		'radio'          => ['inline'],

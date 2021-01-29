@@ -5,6 +5,9 @@ use RWMB_Helpers_Array;
 use MBBParser\Arr;
 
 class Settings extends Base {
+	// Allow these settings to be empty.
+	protected $empty_keys = ['post_types', 'taxonomies', 'settings_pages'];
+
 	public function parse() {
 		$this->remove_default( 'context', 'normal' )
 			->parse_boolean_values()
