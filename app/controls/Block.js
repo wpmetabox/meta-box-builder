@@ -1,5 +1,4 @@
 import dotProp from 'dot-prop';
-import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
 import Icon from './Icon';
@@ -8,7 +7,7 @@ import ReactSelect from './ReactSelect';
 import Select from './Select';
 import Textarea from './Textarea';
 const { __ } = wp.i18n;
-const { useState, useEffect, RawHTML } = wp.element;
+const { useState, useEffect, useRef, RawHTML } = wp.element;
 const { ColorPicker } = wp.components;
 
 const Block = ( { objectType, settings } ) => {
@@ -16,6 +15,7 @@ const Block = ( { objectType, settings } ) => {
 	const [ renderWith, setRenderWith ] = useState( dotProp.get( settings, 'render_with', 'callback' ) );
 	const updateIconType = e => setIconType( e.target.value );
 	const updateRenderWith = e => setRenderWith( e.target.value );
+	const codeRef = useRef();
 
 	useEffect( () => {
 		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
@@ -155,10 +155,11 @@ const Block = ( { objectType, settings } ) => {
 		{
 			renderWith === 'code' &&
 			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
-				<CodeMirror
+				<Textarea
 					name="settings[render_code]"
-					options={ { mode: 'php' } }
-					value={ dotProp.get( settings, 'render_code' ) }
+					defaultValue={ dotProp.get( settings, 'render_code' ) }
+					rows="15"
+					textareaClassName="code"
 				/>
 				<table className="og-block-description">
 					<tbody>
