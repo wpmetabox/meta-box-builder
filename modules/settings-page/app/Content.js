@@ -20,8 +20,8 @@ const Content = () => {
 		// Convert name, name[subfield] to [name], [name][subfield].
 		const input = n.replace( /^([^\[]+)/, '[$1]' );
 
-		// Convert name[subfield] to name.subfield to get default value.
-		const key = n.replace( '[', '.' ).replace( ']', '' );
+		// Convert name[] to name, name[subfield] to name.subfield to get default value.
+		const key = n.replace( '[]', '' ).replace( '[', '.' ).replace( ']', '' );
 
 		return <Control
 			componentId={ `settings-${ setting }` }
