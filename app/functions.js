@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+const { lazy } = wp.element;
 
 const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
@@ -32,7 +33,7 @@ export const ensureArray = arr => {
 	}
 	const isObject = typeof arr === 'object' && null !== arr;
 	return isObject ? Object.values( arr ) : [];
-}
+};
 
 export const parseQueryString = queryString => {
 	const params = new URLSearchParams( queryString );
@@ -63,6 +64,46 @@ const convert = params => {
 	}
 
 	return data;
-}
+};
 
-const bracketsToDots = key => key.replace( /\[\]/g, '' ).replace( /\[(.+?)\]/g, '.$1' );
+const bracketsToDots = key => key.replace( '[]', '' ).replace( /\[(.+?)\]/g, '.$1' );
+
+/**
+ * Get parameters for a dynamic control.
+ *
+ * Returns array of:
+ * - Lazy loaded control component
+ * - Input name in format [name] or [name][subfield]
+ * - Default value
+ */
+export const getControlParams = ( control, objectValue, importFallback ) => {
+	const Control = lazy( () => import( `/controls/${ control.name }` ).catch( importFallback ) );
+
+	const name = dotProp.get( control.props, 'name', control.setting );
+
+	// Convert name => [name], name[subfield] => [name][subfield].
+	const input = name.replace( /^([^\[]+)/, '[$1]' );
+
+	const key = bracketsToDots( name );
+	let defaultValue = dotProp.get( objectValue, key );
+
+	if ( defaultValue === undefined ) {
+		const isNew = dotProp.get( objectValue, '_new', false );
+		defaultValue = isNew ? control.defaultValue : getDefaultControlValue( control.name );
+	}
+
+	return [ Control, input, defaultValue ];
+};
+
+const getDefaultControlValue = name => {
+	const defaultValues = {
+		Checkbox: false,
+		KeyValue: [],
+		ReactSelect: [],
+		IncludeExclude: [],
+		ShowHide: [],
+		ConditionalLogic: [],
+		CustomTable: [],
+	};
+	return defaultValues.hasOwnProperty( name ) ? defaultValues[ name ] : '';
+};

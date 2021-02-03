@@ -1,26 +1,18 @@
 import dotProp from 'dot-prop';
-const { lazy, memo, Suspense } = wp.element;
+import { getControlParams } from '/functions';
+const { memo, Suspense } = wp.element;
 
 const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
-	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
-		const Control = lazy( () => import( `/controls/${ name }` ) );
-
-		// If API specifies input name, then use it. Otherwise use setting.
-		const n = dotProp.get( props, 'name', setting );
-
-		// Convert name, name[subfield] to [name], [name][subfield].
-		const input = n.replace( /^([^\[]+)/, '[$1]' );
-
-		// Convert name[] to name, name[subfield] to name.subfield to get default value.
-		const key = n.replace( '[]', '' ).replace( '[', '.' ).replace( ']', '' );
+	const getControlComponent = control => {
+		const [ Control, input, defaultValue ] = getControlParams( control, field );
 
 		return <Control
 			fieldId={ id }
-			componentName={ setting }
-			componentId={ `fields-${ id }-${ setting }` }
-			{ ...props }
+			componentName={ control.setting }
+			componentId={ `fields-${ id }-${ control.setting }` }
+			{ ...control.props }
 			name={ `fields${ parent }[${ id }]${ input }` }
-			defaultValue={ dotProp.get( field, key, defaultValue ) }
+			defaultValue={ defaultValue }
 
 			// For Name: idicate if field is just added, for auto generating ID.
 			_new={ dotProp.get( field, '_new', false ) }

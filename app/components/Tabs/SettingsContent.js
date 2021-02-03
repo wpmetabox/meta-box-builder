@@ -1,25 +1,15 @@
-import dotProp from 'dot-prop';
-
-const { lazy, memo, Suspense } = wp.element;
+import { getControlParams } from '/functions';
+const { memo, Suspense } = wp.element;
 
 const SettingsContent = ( { settings, settingsControls, objectType, setObjectType, postTypes, setPostTypes } ) => {
-	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
-		const Control = lazy( () => import( `/controls/${ name }` ) );
-
-		// If API specifies input name, then use it. Otherwise use setting.
-		const n = dotProp.get( props, 'name', setting );
-
-		// Convert name, name[subfield] to [name], [name][subfield].
-		const input = n.replace( /^([^\[]+)/, '[$1]' );
-
-		// Convert name[] to name, name[subfield] to name.subfield to get default value.
-		const key = n.replace( '[]', '' ).replace( '[', '.' ).replace( ']', '' );
+	const getControlComponent = control => {
+		const [ Control, input, defaultValue ] = getControlParams( control, settings );
 
 		return <Control
-			componentId={ `settings-${ setting }` }
+			componentId={ `settings-${ control.setting }` }
 			name={ `settings${ input }` }
-			{ ...props }
-			defaultValue={ dotProp.get( settings, key, defaultValue ) }
+			{ ...control.props }
+			defaultValue={ defaultValue }
 			settings={ settings }
 			objectType={ objectType }
 			setObjectType={ setObjectType }

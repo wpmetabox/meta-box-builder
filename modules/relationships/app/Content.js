@@ -1,24 +1,15 @@
-import dotProp from 'dot-prop';
-const { lazy, memo, Suspense } = wp.element;
+import { getControlParams } from '/functions';
+const { memo, Suspense } = wp.element;
 
 const Content = ( { id, controls } ) => {
-	const getControlComponent = ( { name, setting, props, defaultValue } ) => {
-		const Control = lazy( () => import( `/controls/${ name }` ) );
-
-		// If API specifies input name, then use it. Otherwise use setting.
-		const n = dotProp.get( props, 'name', setting );
-
-		// Convert name, name[subfield] to [name], [name][subfield].
-		const input = n.replace( /^([^\[]+)/, '[$1]' );
-
-		// Convert name[] to name, name[subfield] to name.subfield to get default value.
-		const key = n.replace( '[]', '' ).replace( '[', '.' ).replace( ']', '' );
+	const getControlComponent = control => {
+		const [ Control, input, defaultValue ] = getControlParams( control, MbbApp.settings[ id ] );
 
 		return <Control
-			componentId={ `relationship-${ id }-${ setting }` }
-			{ ...props }
+			componentId={ `relationship-${ id }-${ control.setting }` }
+			{ ...control.props }
 			name={ `settings[${ id }]${ input }` }
-			defaultValue={ dotProp.get( MbbApp.settings, key, defaultValue ) }
+			defaultValue={ defaultValue }
 		/>;
 	};
 
