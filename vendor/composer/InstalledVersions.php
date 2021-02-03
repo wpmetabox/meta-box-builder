@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '81d2ff4ebf501c1bf5a09ad9da6729eca07c4897',
+    'reference' => '7587298fc5bad376b7276f2a15ee8fba73cd2ac3',
     'name' => 'meta-box/meta-box-builder',
   ),
   'versions' => 
@@ -42,7 +42,7 @@ private static $installed = array (
       array (
         0 => '9999999-dev',
       ),
-      'reference' => '0fec7813ef43c4cb474125bbbf2c40385d548b3f',
+      'reference' => 'f5b02a47842e839288a865c77694faf3e1708cea',
     ),
     'meta-box/meta-box-builder' => 
     array (
@@ -51,7 +51,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '81d2ff4ebf501c1bf5a09ad9da6729eca07c4897',
+      'reference' => '7587298fc5bad376b7276f2a15ee8fba73cd2ac3',
     ),
     'riimu/kit-phpencoder' => 
     array (

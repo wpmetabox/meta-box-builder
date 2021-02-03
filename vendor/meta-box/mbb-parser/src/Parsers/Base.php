@@ -9,7 +9,6 @@ class Base {
 	use SettingsTrait;
 
 	protected $empty_keys = [];
-	protected $non_empty_keys = [];
 
 	public function __construct( $settings = [] ) {
 		$this->settings = (array) $settings;
@@ -43,23 +42,18 @@ class Base {
 	}
 
 	protected function remove_empty_values() {
-		$non_empty = $this->type && isset( $this->non_empty_keys[ $this->type ] ) ? $this->non_empty_keys[ $this->type ] : [];
-
 		foreach ( $this->settings as $key => $value ) {
 			// Remove empty values in an array.
 			$value = is_array( $value ) ? array_filter( $value ) : $value;
 
-			// Don't remove allowed empty keys or key that has non-empty values.
-			if ( in_array( $key, $this->empty_keys ) || in_array( $key, $non_empty ) ) {
+			// Don't remove allowed empty keys.
+			if ( in_array( $key, $this->empty_keys ) ) {
 				continue;
 			}
 
 			if ( empty( $value ) ) {
 				unset( $this->settings[ $key ] );
 			}
-		}
-		foreach ( $non_empty as $key ) {
-			$this->remove_default( $key, true );
 		}
 
 		return $this;

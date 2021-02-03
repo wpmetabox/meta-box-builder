@@ -5,8 +5,8 @@ class Field extends Base {
 	// Allow these settings to be empty.
 	protected $empty_keys = ['save_field'];
 
-	// These settings can be empty, but will be remove if has "true" value.
-	protected $non_empty_keys = [
+	// Remove if "true", set to "false" if missing.
+	protected $default_true = [
 		'button_group'   => ['inline'],
 		'radio'          => ['inline'],
 		'file_advanced'  => ['max_status'],
@@ -42,7 +42,8 @@ class Field extends Base {
 			->parse_custom_settings()
 			->parse_conditional_logic()
 			->parse_upload_dir()
-			->remove_empty_values();
+			->remove_empty_values()
+			->parse_default_true();
 
 		// Field-specific parser.
 		$func = "parse_field_{$this->type}";
@@ -167,6 +168,20 @@ class Field extends Base {
 			$this->upload_dir = trailingslashit( ABSPATH ) . untrailingslashit( $this->upload_dir );
 		}
 		return $this;
+	}
+
+	protected function parse_default_true() {
+		if ( ! isset( $this->default_true[ $this->type ] ) ) {
+			return $this;
+		}
+		$default_true = $this->default_true[ $this->type ];
+		foreach ( $default_true as $key ) {
+			if ( $this->$key === true ) {
+				unset( $this->$key );
+			} else {
+				$this->$key = false;
+			}
+		}
 	}
 
 	private function parse_field_key_value() {
