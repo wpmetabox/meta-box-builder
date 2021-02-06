@@ -173,11 +173,11 @@ class Registry {
 			] ),
 			Control::Checkbox( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ) ),
 			'query_args_taxonomy' => Control::KeyValue( 'query_args', [
-				'label'   => '<a href="https://developer.wordpress.org/reference/functions/get_terms/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
+				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 			] ),
 			'query_args_taxonomy_advanced' => Control::KeyValue( 'query_args', [
-				'label'   => '<a href="https://developer.wordpress.org/reference/functions/get_terms/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
+				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 			] ),
 
@@ -388,7 +388,7 @@ class Registry {
 
 			// User.
 			'query_args_user' => Control::KeyValue( 'query_args', [
-				'label'   => '<a href="https://codex.wordpress.org/Function_Reference/get_users" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
+				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_user_query/prepare_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
 			] ),
 
