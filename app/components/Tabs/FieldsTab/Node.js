@@ -12,7 +12,9 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 
 	const remove = e => {
 		e.stopPropagation();
-		removeField( id );
+		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
+			removeField( id );
+		}
 	};
 
 	const duplicate = e => {
