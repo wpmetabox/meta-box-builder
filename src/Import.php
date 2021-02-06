@@ -15,17 +15,32 @@ class Import {
 	}
 
 	public function add_export_link( $actions, $post ) {
-		if ( 'meta-box' !== $post->post_type ) {
-			return $actions;
+		if ( 'meta-box' === $post->post_type ) {
+			$actions['export'] = '<a href="' . add_query_arg( ['action' => 'mbb-export', 'post[]' => $post->ID] ) . '">' . esc_html__( 'Export', 'meta-box-builder' ) . '</a>';
 		}
-		$actions['export'] = '<a href="' . add_query_arg( ['action' => 'mbb-export', 'post[]' => $post->ID] ) . '">' . esc_html__( 'Export', 'meta-box-builder' ) . '</a>';
 		return $actions;
 	}
 
 	public function output_js_templates() {
-		if ( 'edit-meta-box' === get_current_screen()->id ) {
-			require MBB_DIR . 'views/import-form.php';
+		if ( 'edit-meta-box' !== get_current_screen()->id ) {
+			return;
 		}
+		?>
+		<?php if ( isset( $_GET['imported'] ) ) : ?>
+			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Field groups have been imported successfully!', 'meta-box-builder' ); ?></p></div>
+		<?php endif; ?>
+
+		<script type="text/template" id="mbb-import-form">
+			<div class="mbb-import-form">
+				<p><?php esc_html_e( 'Choose an exported ".json" file from your computer:', 'meta-box-builder' ); ?></p>
+				<form enctype="multipart/form-data" method="post" action="">
+					<?php wp_nonce_field( 'import', 'nonce' ); ?>
+					<input type="file" name="mbb_file">
+					<?php submit_button( esc_attr__( 'Import', 'meta-box-builder' ), 'secondary', 'submit', false, ['disabled' => true] ); ?>
+				</form>
+			</div>
+		</script>
+		<?php
 	}
 
 	public function export() {
@@ -50,7 +65,7 @@ class Import {
 		foreach ( $query->posts as $post ) {
 			$data[] = array_merge( (array) $post, [
 				'settings' => get_post_meta( $post->ID, 'settings', true ),
-				'fields'   => get_post_meta( $post->ID, 'fields', true ),
+				'fields'    => get_post_meta( $post->ID, 'fields', true ),
 				'data'     => get_post_meta( $post->ID, 'data', true ),
 				'meta_box' => get_post_meta( $post->ID, 'meta_box', true ),
 			] );
