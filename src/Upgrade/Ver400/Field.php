@@ -56,4 +56,10 @@ class Field extends Base {
 		$new_field['placeholder_value'] = Arr::get( $field, 'placeholder.value' );
 		unset( $new_field['placeholder'] );
 	}
+
+	private function update_field_tab( &$new_field, $field ) {
+		RWMB_Helpers_Array::change_key( $new_field, 'label', 'name' );
+		$new_field['icon_type'] = 'dashicons';
+		$new_field['icon'] = str_replace( 'dashicons-', '', $new_field['icon'] );
+	}
 }
