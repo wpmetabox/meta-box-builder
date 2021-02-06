@@ -1,12 +1,16 @@
 <?php
 namespace MBB;
 
-class Import {
-	public function __construct() {
-		add_action( 'admin_footer-edit.php', [ $this, 'output_js_templates' ] );
+use MBB\Upgrade\Ver400;
 
-		// Must run before upgrade.
-		$this->import();
+class Import {
+	private $upgrader_400;
+
+	public function __construct() {
+		$this->upgrader_400 = new Ver400;
+
+		add_action( 'admin_footer-edit.php', [ $this, 'output_js_templates' ] );
+		add_action( 'admin_init', [ $this, 'import' ] );
 	}
 
 	public function output_js_templates() {
@@ -31,7 +35,7 @@ class Import {
 		<?php
 	}
 
-	private function import() {
+	public function import() {
 		// No file uploaded.
 		if ( empty( $_FILES['mbb_file'] ) || empty( $_FILES['mbb_file']['tmp_name'] ) ) {
 			return;
@@ -112,14 +116,16 @@ class Import {
 
 		foreach ( $meta_boxes as $meta_box ) {
 			$post    = unserialize( base64_decode( $meta_box ) );
-			$post    = (array) $post;
-			$excerpt = $post['post_excerpt'];
+			$excerpt = $post->post_excerpt;
 			$excerpt = addslashes( $excerpt );
 
-			$post['post_excerpt'] = $excerpt;
-			unset( $post['ID'] );
+			$post_arr = (array) $post;
+			$post_arr['post_excerpt'] = $excerpt;
+			unset( $post_arr['ID'] );
 
-			wp_insert_post( $post );
+			$post->ID = wp_insert_post( $post_arr );
+
+			$this->upgrader_400->migrate_post( $post );
 		}
 
 		return true;

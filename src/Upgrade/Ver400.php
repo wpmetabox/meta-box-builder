@@ -2,6 +2,8 @@
 namespace MBB\Upgrade;
 
 use MBBParser\Parsers\MetaBox as Parser;
+use WP_Post;
+use WP_Query;
 
 /**
  * Convert from data for AngularJS to React.
@@ -13,7 +15,12 @@ class Ver400 {
 	private $fields;
 
 	public function __construct() {
-		$query = new \WP_Query( [
+		$this->settings = new Ver400\Settings;
+		$this->fields    = new Ver400\Fields;
+	}
+
+	public function migrate() {
+		$query = new WP_Query( [
 			'post_type'              => 'meta-box',
 			'post_status'            => 'any',
 			'posts_per_page'         => -1,
@@ -22,24 +29,23 @@ class Ver400 {
 			'update_post_term_cache' => false,
 		] );
 
-		$this->settings = new Ver400\Settings;
-		$this->fields = new Ver400\Fields;
+		array_walk( $query->posts, [ $this, 'migrate_post' ] );
+	}
 
-		foreach ( $query->posts as $post ) {
-			$data = [];
+	public function migrate_post( WP_Post $post ) {
+		$data = [];
 
-			// Update "settings" and "fields" for JavaScript.
-			$data['settings'] = $this->settings->update( $post );
-			$data['fields'] = $this->fields->update( $post );
+		// Update "settings" and "fields" for JavaScript.
+		$data['settings'] = $this->settings->update( $post );
+		$data['fields'] = $this->fields->update( $post );
 
-			$data['post_title'] = $post->post_title;
-			$data['post_name'] = $post->post_name;
+		$data['post_title'] = $post->post_title;
+		$data['post_name'] = $post->post_name;
 
-			// Save parsed data for PHP.
-			$parser = new Parser( $data );
-			$parser->parse();
-			$meta_box = $parser->get_settings();
-			update_post_meta( $post->ID, 'meta_box', $meta_box );
-		}
+		// Save parsed data for PHP.
+		$parser = new Parser( $data );
+		$parser->parse();
+		$meta_box = $parser->get_settings();
+		update_post_meta( $post->ID, 'meta_box', $meta_box );
 	}
 }
