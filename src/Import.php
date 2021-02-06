@@ -104,9 +104,28 @@ class Import {
 		}
 
 		$data = file_get_contents( $_FILES['mbb_file']['tmp_name'] );
+
+		$result = $this->import_json( $data );
+		if ( ! $result ) {
+			$result = $this->import_dat( $data );
+		}
+
+		if ( ! $result ) {
+			wp_die( sprintf( __( 'Invalid file data. <a href="%s">Go back</a>.', 'meta-box-builder' ), $url ) );
+		}
+
+		$url = add_query_arg( 'imported', 'true', $url );
+		wp_safe_redirect( $url );
+		die;
+	}
+
+	/**
+	 * Import .json from v4.
+	 */
+	private function import_json( $data ) {
 		$posts = json_decode( $data, true );
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			wp_die( sprintf( __( 'Invalid file data. <a href="%s">Go back</a>.', 'meta-box-builder' ), $url ) );
+			return false;
 		}
 
 		// If import only one post.
@@ -129,8 +148,38 @@ class Import {
 			update_post_meta( $post_id, 'meta_box', $post['meta_box'] );
 		}
 
-		$url = add_query_arg( 'imported', 'true', $url );
-		wp_safe_redirect( $url );
-		die;
+		return true;
+	}
+
+	/**
+	 * Import .dat files from < v4.
+	 */
+	private function import_dat( $data ) {
+		/**
+		 * Removed excerpt_save_pre filter for meta box, which adds rel="noopener"
+		 * to <a target="_blank"> links, thus braking JSON validity.
+		 *
+		 * @see https://elightup.freshdesk.com/a/tickets/27894
+		 */
+		remove_all_filters( 'excerpt_save_pre' );
+
+		$meta_boxes = @unserialize( $data );
+		if ( false === $meta_boxes ) {
+			return false;
+		}
+
+		foreach ( $meta_boxes as $meta_box ) {
+			$post    = unserialize( base64_decode( $meta_box ) );
+			$post    = (array) $post;
+			$excerpt = $post['post_excerpt'];
+			$excerpt = addslashes( $excerpt );
+
+			$post['post_excerpt'] = $excerpt;
+			unset( $post['ID'] );
+
+			wp_insert_post( $post );
+		}
+
+		return true;
 	}
 }
