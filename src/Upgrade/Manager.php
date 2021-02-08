@@ -15,10 +15,11 @@ class Manager {
 				continue;
 			}
 			$class = __NAMESPACE__ . '\Ver' . str_replace( '.', '', $version );
-			new $class;
+			$ver = new $class;
+			$ver->migrate();
 		}
 
-		if ( version_compare( $current_version, MBB_VER, '<' ) ) {
+		if ( $current_version !== MBB_VER ) {
 			update_option( 'mbb_version', MBB_VER );
 		}
 	}

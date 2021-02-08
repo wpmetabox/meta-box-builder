@@ -2,7 +2,7 @@
 namespace MBB\Upgrade;
 
 class Ver301 {
-	public function __construct() {
+	public function migrate() {
 		$query = new \WP_Query( [
 			'post_type'              => 'meta-box',
 			'post_status'            => 'any',
