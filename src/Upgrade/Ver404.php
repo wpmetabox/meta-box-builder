@@ -10,13 +10,13 @@ use WP_Query;
  * - JavaScript data stored in post meta "settings" and "fields" instead of "post_excerpt"
  * - PHP data stored in post meta "meta_box" instead of "post_content"
  */
-class Ver400 {
+class Ver404 {
 	private $settings;
 	private $fields;
 
 	public function __construct() {
-		$this->settings = new Ver400\Settings;
-		$this->fields    = new Ver400\Fields;
+		$this->settings = new Ver404\Settings;
+		$this->fields    = new Ver404\Fields;
 	}
 
 	public function migrate() {
@@ -33,6 +33,10 @@ class Ver400 {
 	}
 
 	public function migrate_post( WP_Post $post ) {
+		if ( ! $this->is_updatable( $post ) ) {
+			return;
+		}
+
 		$data = [];
 
 		// Update "settings" and "fields" for JavaScript.
@@ -47,5 +51,16 @@ class Ver400 {
 		$parser->parse();
 		$meta_box = $parser->get_settings();
 		update_post_meta( $post->ID, 'meta_box', $meta_box );
+	}
+
+	private function is_updatable( WP_Post $post ) {
+		// Update only field groups created in version < 4.
+		if ( empty( $post->post_excerpt ) ) {
+			return false;
+		}
+
+		// Ignore already updated field groups.
+		$meta_box = get_post_meta( $post->ID, 'meta_box', true );
+		return empty( $meta_box );
 	}
 }

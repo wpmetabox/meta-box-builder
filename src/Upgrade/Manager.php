@@ -9,7 +9,7 @@ class Manager {
 	public function upgrade() {
 		$current_version = get_option( 'mbb_version', '1.0.0' );
 
-		$vesions = ['3.0.0', '3.0.1', '4.0.0'];
+		$vesions = ['3.0.0', '3.0.1', '4.0.4'];
 		foreach ( $vesions as $version ) {
 			if ( version_compare( $current_version, $version, '>=' ) ) {
 				continue;

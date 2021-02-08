@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Upgrade\Ver400;
+namespace MBB\Upgrade\Ver404;
 
 use MBB\Helpers\Arr;
 use RWMB_Helpers_Array;

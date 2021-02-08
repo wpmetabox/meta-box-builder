@@ -1,13 +1,13 @@
 <?php
 namespace MBB;
 
-use MBB\Upgrade\Ver400;
+use MBB\Upgrade\Ver404;
 
 class Import {
-	private $upgrader_400;
+	private $upgrader_v4;
 
 	public function __construct() {
-		$this->upgrader_400 = new Ver400;
+		$this->upgrader_v4 = new Ver404;
 
 		add_action( 'admin_footer-edit.php', [ $this, 'output_js_templates' ] );
 		add_action( 'admin_init', [ $this, 'import' ] );
@@ -125,7 +125,7 @@ class Import {
 
 			$post->ID = wp_insert_post( $post_arr );
 
-			$this->upgrader_400->migrate_post( $post );
+			$this->upgrader_v4->migrate_post( $post );
 		}
 
 		return true;
