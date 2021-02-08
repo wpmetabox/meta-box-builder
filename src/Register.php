@@ -22,6 +22,10 @@ class Register {
 
 		foreach ( $query->posts as $post_id ) {
 			$meta_box = get_post_meta( $post_id, 'meta_box', true );
+			if ( empty( $meta_box ) ) {
+				continue;
+			}
+
 			$this->transform_for_block( $meta_box );
 			$this->create_custom_table( $meta_box, $post_id );
 			$meta_boxes[] = $meta_box;
