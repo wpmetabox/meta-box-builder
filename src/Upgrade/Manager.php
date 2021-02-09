@@ -7,7 +7,15 @@ class Manager {
 	}
 
 	public function upgrade() {
+		/**
+		 * Get current version to check.
+		 * - Allow to set via query string `mbb_version`.
+		 * - Make sure it <= MBB_VER, in case users already installed a newer version that will bypass the upgrade.
+		 */
 		$current_version = rwmb_request()->get( 'mbb_version', get_option( 'mbb_version', '1.0.0' ) );
+		if ( version_compare( $current_version, MBB_VER, '>' ) ) {
+			$current_version = MBB_VER;
+		}
 
 		$vesions = ['3.0.0', '3.0.1', '4.0.4'];
 		foreach ( $vesions as $version ) {
@@ -19,6 +27,7 @@ class Manager {
 			$ver->migrate();
 		}
 
+		// Always update the DB version to the plugin version.
 		if ( $current_version !== MBB_VER ) {
 			update_option( 'mbb_version', MBB_VER );
 		}
