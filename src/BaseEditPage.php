@@ -21,6 +21,7 @@ abstract class BaseEditPage {
 
 	public function render() {
 		if ( $this->is_screen() ) {
+			wp_nonce_field( 'mbb-save', 'mbb_nonce' );
 			echo '<div id="root" class="og"></div>';
 		}
 	}
@@ -39,6 +40,10 @@ abstract class BaseEditPage {
 		$parent = wp_is_post_revision( $post_id );
 		if ( $parent ) {
 			$post_id = $parent;
+		}
+
+		if ( ! wp_verify_nonce( rwmb_request()->post( 'mbb_nonce' ), 'mbb-save' ) ) {
+			return;
 		}
 
 		$this->save( $post_id, $post );
