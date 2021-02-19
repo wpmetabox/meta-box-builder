@@ -22,7 +22,11 @@ class Generator {
 	}
 
 	public function generate( WP_REST_Request $request ) {
-		$parser   = new Parser( $request->get_param( 'settings' ) );
+		$settings = array_merge( [
+			'menu_title' => $request->get_param( 'post_title' ),
+		], $request->get_param( 'settings' ) );
+
+		$parser = new Parser( $settings );
 		$parser->parse();
 
 		$encoder = new Encoder( $parser->get_settings() );

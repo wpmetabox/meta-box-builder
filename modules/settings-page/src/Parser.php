@@ -6,15 +6,6 @@ use MBBParser\Arr;
 
 class Parser extends Base {
 	public function parse() {
-		// Set extra params from post title and post name.
-		$settings = $this->settings;
-		$request = rwmb_request();
-		$this->settings = [
-			'menu_title' => $request->post( 'post_title' ),
-			'id'         => $request->post( 'post_name' ),
-		];
-		$this->settings = array_merge( $this->settings, $settings );
-
 		$this->parse_menu_icon()
 			->parse_tabs();
 
