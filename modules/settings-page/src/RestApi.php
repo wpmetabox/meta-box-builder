@@ -23,7 +23,7 @@ class RestApi extends Base {
 			Control::MenuPosition( 'position', [
 				'label'      => __( 'Show menu after', 'meta-box-builder' ),
 				'dependency' => 'menu_type:top',
-			] ),
+			], 25 ),
 			Control::Input( 'submenu_title', [
 				'label'      => __( 'Default first submenu title', 'meta-box-builder' ),
 				'dependency' => 'menu_type:top',
@@ -84,9 +84,9 @@ class RestApi extends Base {
 				'label'   => __( 'Tab style', 'meta-box-builder' ),
 				'options' => [
 					'default' => __( 'Top', 'meta-box-builder' ),
-					'left' => __( 'Left', 'meta-box-builder' ),
+					'left'    => __( 'Left', 'meta-box-builder' ),
 				],
-			] ),
+			], 'default' ),
 			Control::Input( 'submit_button', __( 'Custom submit button', 'meta-box-builder' ) ),
 			Control::Input( 'message', [
 				'label'   => __( 'Custom message', 'meta-box-builder' ),
