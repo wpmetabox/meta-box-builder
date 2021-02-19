@@ -4,7 +4,7 @@ const { memo, Suspense } = wp.element;
 
 const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
 	const getControlComponent = control => {
-		const [ Control, input, defaultValue ] = getControlParams( control, field );
+		const [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
 
 		return <Control
 			fieldId={ id }

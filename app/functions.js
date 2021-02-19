@@ -76,7 +76,7 @@ const bracketsToDots = key => key.replace( '[]', '' ).replace( /\[(.+?)\]/g, '.$
  * - Input name in format [name] or [name][subfield]
  * - Default value
  */
-export const getControlParams = ( control, objectValue, importFallback ) => {
+export const getControlParams = ( control, objectValue, importFallback, checkNewField = false ) => {
 	const Control = lazy( () => import( `/controls/${ control.name }` ).catch( importFallback ) );
 
 	const name = dotProp.get( control.props, 'name', control.setting );
@@ -84,13 +84,13 @@ export const getControlParams = ( control, objectValue, importFallback ) => {
 	// Convert name => [name], name[subfield] => [name][subfield].
 	const input = name.replace( /^([^\[]+)/, '[$1]' );
 
-	const key = bracketsToDots( name );
-	let defaultValue = dotProp.get( objectValue, key );
-
-	if ( defaultValue === undefined ) {
-		const isNew = dotProp.get( objectValue, '_new', false );
-		defaultValue = isNew ? control.defaultValue : getDefaultControlValue( control.name );
+	let defaultFallbackValue = control.defaultValue;
+	if ( checkNewField && ! dotProp.get( objectValue, '_new', false ) ) {
+		defaultFallbackValue = getDefaultControlValue( control.name );
 	}
+
+	const key = bracketsToDots( name );
+	const defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
 
 	return [ Control, input, defaultValue ];
 };
