@@ -9,6 +9,10 @@ class Parser extends Base {
 		$this->parse_menu_icon()
 			->parse_tabs();
 
+		if ( 'top' === $this->menu_type ) {
+			unset( $this->parent );
+		}
+
 		// Cleanup.
 		unset( $this->menu_type );
 		$this->parse_boolean_values()
