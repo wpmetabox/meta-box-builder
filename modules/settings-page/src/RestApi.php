@@ -31,7 +31,7 @@ class RestApi extends Base {
 			Control::MenuParent( 'parent', [
 				'label'      => __( 'Parent menu', 'meta-box-builder' ),
 				'dependency' => 'menu_type:submenu',
-			] ),
+			], 'index.php' ),
 
 			// Icon, only if menu_type = top.
 			Control::Select( 'icon_type', [
@@ -46,7 +46,7 @@ class RestApi extends Base {
 			Control::Icon( 'icon_dashicons', [
 				'label'      => __( 'Icon', 'meta-box-builder' ),
 				'dependency' => 'icon_type:dashicons',
-			] ),
+			], 'admin-generic' ),
 			Control::Input( 'icon_svg', [
 				'label'      => __( 'Icon SVG', 'meta-box-builder' ),
 				'tooltip'    => __( 'Must be in base64 encoded format', 'meta-box-builder' ),
