@@ -1,7 +1,7 @@
 <?php
 namespace MBB;
 
-define( 'MBB_VER', '4.0.4' );
+define( 'MBB_VER', '4.0.5' );
 define( 'MBB_DIR', trailingslashit( __DIR__ ) );
 
 list( , $url ) = \RWMB_Loader::get_path( MBB_DIR );
