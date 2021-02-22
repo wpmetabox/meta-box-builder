@@ -16,6 +16,10 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'mb_builder_load' ) ) {
+	if ( file_exists( __DIR__ . '/vendor' ) ) {
+		require __DIR__ . '/vendor/autoload.php';
+	}
+
 	// Hook to 'init' with priority 0 to run all extensions (for registering settings pages & relationships).
 	// And after MB Custom Post Type (for ordering submenu items in Meta Box menu).
 	add_action( 'init', 'mb_builder_load', 0 );

@@ -1,10 +1,6 @@
 <?php
 namespace MBB;
 
-if ( file_exists( __DIR__ . '/vendor' ) ) {
-	require __DIR__ . '/vendor/autoload.php';
-}
-
 define( 'MBB_VER', '4.0.4' );
 define( 'MBB_DIR', trailingslashit( __DIR__ ) );
 
