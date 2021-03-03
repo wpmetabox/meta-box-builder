@@ -55,14 +55,14 @@ const Block = ( { objectType, settings } ) => {
 				defaultValue={ dotProp.get( settings, 'icon_svg' ) }
 			/>
 		}
-		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="icon" defaultValue={ dotProp.get( settings, 'icon' ) } /> }
+		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" defaultValue={ dotProp.get( settings, 'icon' ) } /> }
 		{
 			iconType === 'dashicons' &&
 			<Input
 				name="settings[icon_foreground]"
 				className="og-color-picker"
 				componentId="settings-block-icon_foreground"
-				label={ __( 'Custom icon color', 'meta-box-builder' ) }
+				label={ __( 'Icon color', 'meta-box-builder' ) }
 				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
 				defaultValue={ dotProp.get( settings, 'icon_foreground' ) }
 			/>
@@ -73,7 +73,7 @@ const Block = ( { objectType, settings } ) => {
 				name="settings[icon_background]"
 				className="og-color-picker"
 				componentId="settings-block-icon_background"
-				label={ __( 'Custom icon background color', 'meta-box-builder' ) }
+				label={ __( 'Icon background color', 'meta-box-builder' ) }
 				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
 				defaultValue={ dotProp.get( settings, 'icon_background' ) }
 			/>
