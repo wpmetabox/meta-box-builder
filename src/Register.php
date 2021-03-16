@@ -87,6 +87,10 @@ class Register {
 		}
 		$columns = [];
 		foreach ( $meta_box['fields'] as $field ) {
+			if ( empty( $field['id'] ) || in_array( $field['type'], ['heading', 'divider', 'button'] ) ) {
+				continue;
+			}
+
 			$columns[ $field['id'] ] = 'TEXT';
 		}
 		\MB_Custom_Table_API::create( $meta_box['table'], $columns );
