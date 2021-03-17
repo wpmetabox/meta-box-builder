@@ -5,13 +5,15 @@ import Content from './Content';
 const { useContext, useState, memo } = wp.element;
 const { __ } = wp.i18n;
 
-const Field = ( { id, field, parent = '', updateFieldType } ) => {
+const Field = props => {
 	const { fieldTypes } = useContext( FieldsDataContext );
-	const controls = [ ...fieldTypes[ field.type ].controls ];
+	const controls = [ ...fieldTypes[ props.field.type ].controls ];
+	const general = controls.filter( control => control.tab === 'general' );
+	const advanced = controls.filter( control => control.tab === 'advanced' );
 
-	if ( [ 'divider', 'tab' ].includes( field.type ) ) {
+	if ( advanced.length === 0 ) {
 		return <div className="og-item__body og-collapsible__body">
-			<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } updateFieldType={ updateFieldType } />
+			<Content { ...props } controls={ general } />
 		</div>;
 	}
 
@@ -21,10 +23,10 @@ const Field = ( { id, field, parent = '', updateFieldType } ) => {
 			<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 		</TabList>
 		<TabPanel>
-			<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
+			<Content { ...props } controls={ general } />
 		</TabPanel>
 		<TabPanel>
-			<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } />
+			<Content { ...props } controls={ advanced } />
 		</TabPanel>
 	</Tabs>;
 };
