@@ -8,7 +8,7 @@ export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
 let apiCache = {};
 export const request = async ( apiName, params = {}, method = 'GET', cache = true ) => {
-	let cacheKey = JSON.stringify( { apiName, params, method } );
+	const cacheKey = JSON.stringify( { apiName, params, method } );
 	if ( cache && apiCache[ cacheKey ] ) {
 		return apiCache[ cacheKey ];
 	}
@@ -17,12 +17,15 @@ export const request = async ( apiName, params = {}, method = 'GET', cache = tru
 		method,
 		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
 	};
+	let url = `${ MbbApp.rest }/mbb/${ apiName }`;
+
+	const query = ( new URLSearchParams( params ) ).toString();
 	if ( 'POST' === method ) {
 		options.body = JSON.stringify( params );
-	} else {
-		apiName += '?' + ( new URLSearchParams( params ) ).toString();
+	} else if ( query ) {
+		url += MbbApp.rest.includes( '?' ) ? query : `?${ query }`;
 	}
-	const result = await fetch( `${ MbbApp.rest }/mbb/${ apiName }`, options ).then( response => response.json() );
+	const result = await fetch( url, options ).then( response => response.json() );
 	apiCache[ cacheKey ] = result;
 	return result;
 };
@@ -85,7 +88,7 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	const input = name.replace( /^([^\[]+)/, '[$1]' );
 
 	let defaultFallbackValue = control.defaultValue;
-	if ( checkNewField && ! dotProp.get( objectValue, '_new', false ) ) {
+	if ( checkNewField && !dotProp.get( objectValue, '_new', false ) ) {
 		defaultFallbackValue = getDefaultControlValue( control.name );
 	}
 
