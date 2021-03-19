@@ -11,19 +11,19 @@ class RestApi extends Base {
 			[
 				'title'    => __( 'From', 'meta-box-builder' ),
 				'id'       => 'from',
-				'controls' => $this->get_controls(),
+				'controls' => $this->get_side_controls(),
 			],
 			[
 				'title'    => __( 'To', 'meta-box-builder' ),
 				'id'       => 'to',
-				'controls' => $this->get_controls(),
+				'controls' => $this->get_side_controls(),
 			],
 		];
 
 		return $sides;
 	}
 
-	private function get_controls() {
+	private function get_side_controls() {
 		$controls = [
 			// General.
 			Control::Select( 'object_type', [
@@ -48,6 +48,37 @@ class RestApi extends Base {
 				'label'   => __( 'Empty message', 'meta-box-builder' ),
 				'tooltip' => __( 'The message displayed when there’s no connections', 'meta-box-builder' ),
 			] ),
+
+			// Admin columns.
+			Control::Checkbox( 'admin_column_enable', [
+				'name'    => 'admin_column[enable]',
+				'label'   => __( 'Show as an admin column', 'meta-box-builder' ),
+				'tooltip' => __( 'Show this connection as a column in the All posts/terms/users table list in the admin area', 'meta-box-builder' ),
+			] ),
+			Control::AdminColumnsPosition( 'admin_column_position', [
+				'name'       => 'admin_column[position]',
+				'className'  => 'og-admin-columns-position',
+				'label'      => __( 'Column position', 'meta-box-builder' ),
+				'tooltip'    => __( 'Specify where to show the column in the table', 'meta-box-builder' ),
+				'dependency' => 'admin_column_enable:true',
+			] ),
+			Control::Input( 'admin_column_title', [
+				'name'    => 'admin_column[title]',
+				'label'   => __( 'Column title', 'meta-box-builder' ),
+				'tooltip' => __( 'Leave empty to use the meta box title', 'meta-box-builder' ),
+				'dependency' => 'admin_column_enable:true',
+			] ),
+			Control::Select( 'admin_column_link', [
+				'name'    => 'admin_column[link]',
+				'label'   => __( 'Item link type', 'meta-box-builder' ),
+				'tooltip' => __( 'The link for the items displayed in the admin column', 'meta-box-builder' ),
+				'options' => [
+					'view'  => __( 'View', 'meta-box-builder' ),
+					'edit'  => __( 'Edit', 'meta-box-builder' ),
+					'false' => __( 'No link', 'meta-box-builder' ),
+				],
+				'dependency' => 'admin_column_enable:true',
+			], 'view' ),
 
 			// Meta box settings.
 			Control::Input( 'meta_box_title', [
