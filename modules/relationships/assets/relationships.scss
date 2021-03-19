@@ -4,6 +4,8 @@
 	@import "result";
 
 	.relationships-plain {
-		padding: 12px 12px 0 12px;
+		padding: 12px;
+		margin-bottom: 0;
+		border-bottom: var(--border-lighter);
 	}
 }
