@@ -1,6 +1,8 @@
+import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Side from './Side';
 import Result from '/components/Tabs/Result';
+import Checkbox from '/controls/Checkbox';
 import { request } from '/functions';
 const { render, useEffect, useState } = wp.element;
 const { __ } = wp.i18n;
@@ -19,6 +21,13 @@ const App = () => {
 				<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
 			</TabList>
 			<TabPanel>
+				<Checkbox
+					name="settings[reciprocal]"
+					componentId="settings-reciprocal"
+					label={ __( 'Reciprocal relationship' ) }
+					defaultValue={ dotProp.get( MbbApp.settings, 'reciprocal', false ) }
+					className="relationships-plain"
+				/>
 				{ sides.map( side => <Side key={ side.id } { ...side } /> ) }
 			</TabPanel>
 			<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">

@@ -7,14 +7,13 @@ use MBBParser\Parsers\Base;
 class Relationship extends Base {
 	public function parse() {
 		// Set extra params from post title and post name.
-		$settings = $this->settings;
-		$this->settings = [
+		$this->settings = array_merge( [
 			'id' => rwmb_request()->post( 'post_name' ),
-		];
-		$this->settings = array_merge( $this->settings, $settings );
+		], $this->settings );
 
-		// Parse from and to sides.
-		$this->parse_side( 'from' )->parse_side( 'to' );
+		$this->parse_boolean_values()
+			->parse_side( 'from' )
+			->parse_side( 'to' );
 	}
 
 	private function parse_side( $side ) {
