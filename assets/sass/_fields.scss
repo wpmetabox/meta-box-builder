@@ -303,3 +303,17 @@
     }
   }
 }
+
+// Admin columns.
+&-admin-columns-position .og-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  grid-gap: 6px;
+}
+&-admin-columns-position .og-input select {
+  width: auto;
+}
+&-admin-columns-position .og-input input {
+  flex: 1;
+}

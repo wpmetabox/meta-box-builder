@@ -1,5 +1,6 @@
 import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { AdminColumnsData } from './components/AdminColumnsData';
 import { Data } from './components/Data';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
@@ -50,6 +51,7 @@ const App = ( { settings } ) => {
 						</TabPanel>
 					</Tabs>
 					<Data />
+					<AdminColumnsData />
 					<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
 				</SettingsDataProvider>
 			</FieldIdsProvider>

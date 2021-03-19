@@ -26,6 +26,7 @@ if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 	new RestApi\ShowHide;
 }
 
+new Extensions\AdminColumns;
 new Extensions\Blocks;
 new Extensions\Columns;
 new Extensions\ConditionalLogic;

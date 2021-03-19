@@ -348,6 +348,7 @@ class Data {
 
 	public static function is_extension_active( $extension ) {
 		$functions = [
+			'mb-admin-columns'           => 'mb_admin_columns_load',
 			'mb-blocks'                  => 'mb_blocks_load',
 			'mb-comment-meta'            => 'mb_comment_meta_load',
 			'mb-custom-table'            => 'mb_custom_table_load',
