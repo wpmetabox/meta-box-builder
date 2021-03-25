@@ -22,7 +22,12 @@ class Edit extends BaseEditPage {
 	}
 
 	public function save( $post_id, $post ) {
-		$parser = new Parsers\Relationship( rwmb_request()->post( 'settings' ) );
+		$settings = array_merge( [
+			'menu_title' => $post->post_title,
+			'id'         => $post->post_name,
+		], rwmb_request()->post( 'settings' ) );
+
+		$parser = new Parsers\Relationship( $settings );
 		$parser->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'settings', $parser->get_settings() );
 
