@@ -34,31 +34,32 @@ final class DebugExtension extends AbstractExtension
 }
 
 namespace {
-use MetaBox\Dependencies\Twig\Environment;
-use MetaBox\Dependencies\Twig\Template;
-use MetaBox\Dependencies\Twig\TemplateWrapper;
+    use MetaBox\Dependencies\Twig\Environment;
+    use MetaBox\Dependencies\Twig\Template;
+    use MetaBox\Dependencies\Twig\TemplateWrapper;
 
-function twig_var_dump(Environment $env, $context, ...$vars)
-{
-    if (!$env->isDebug()) {
-        return;
-    }
-
-    ob_start();
-
-    if (!$vars) {
-        $vars = [];
-        foreach ($context as $key => $value) {
-            if (!$value instanceof Template && !$value instanceof TemplateWrapper) {
-                $vars[$key] = $value;
+    if ( ! function_exists( 'twig_var_dump' ) ) {
+        function twig_var_dump(Environment $env, $context, ...$vars) {
+            if (!$env->isDebug()) {
+                return;
             }
+
+            ob_start();
+
+            if (!$vars) {
+                $vars = [];
+                foreach ($context as $key => $value) {
+                    if (!$value instanceof Template && !$value instanceof TemplateWrapper) {
+                        $vars[$key] = $value;
+                    }
+                }
+
+                var_dump($vars);
+            } else {
+                var_dump(...$vars);
+            }
+
+            return ob_get_clean();
         }
-
-        var_dump($vars);
-    } else {
-        var_dump(...$vars);
     }
-
-    return ob_get_clean();
-}
 }

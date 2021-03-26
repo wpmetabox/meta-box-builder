@@ -24,19 +24,20 @@ final class StringLoaderExtension extends AbstractExtension
 }
 
 namespace {
-use MetaBox\Dependencies\Twig\Environment;
-use MetaBox\Dependencies\Twig\TemplateWrapper;
+    use MetaBox\Dependencies\Twig\Environment;
+    use MetaBox\Dependencies\Twig\TemplateWrapper;
 
-/**
- * Loads a template from a string.
- *
- *     {{ include(template_from_string("Hello {{ name }}")) }}
- *
- * @param string $template A template as a string or object implementing __toString()
- * @param string $name     An optional name of the template to be used in error messages
- */
-function twig_template_from_string(Environment $env, $template, string $name = null): TemplateWrapper
-{
-    return $env->createTemplate((string) $template, $name);
-}
+    /**
+     * Loads a template from a string.
+     *
+     *     {{ include(template_from_string("Hello {{ name }}")) }}
+     *
+     * @param string $template A template as a string or object implementing __toString()
+     * @param string $name     An optional name of the template to be used in error messages
+     */
+    if ( ! function_exists( 'twig_template_from_string' ) ) {
+        function twig_template_from_string(Environment $env, $template, string $name = null): TemplateWrapper {
+            return $env->createTemplate((string) $template, $name);
+        }
+    }
 }
