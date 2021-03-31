@@ -7,6 +7,11 @@
 	line-height: 36px;
 }
 
+.block-editor-page .mbb-settings {
+	height: 44px;
+	line-height: 44px;
+}
+
 .mbb-settings:hover {
 	color: inherit;
 }
