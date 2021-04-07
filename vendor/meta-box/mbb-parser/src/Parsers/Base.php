@@ -35,8 +35,12 @@ class Base {
 		return $this;
 	}
 
+	/**
+	 * Ignore scientific number (123e45, etc..)
+	 */
 	protected function convert_string_to_number( &$value ) {
-		if ( is_numeric( $value ) ) {
+		$value = (string) $value;
+		if ( is_numeric( $value ) && false === strpos( $value, 'e' ) ) {
 			$value = 0 + $value;
 		}
 	}
