@@ -265,7 +265,7 @@ class Registry {
 			// Map.
 			Control::Input( 'api_key', [
 				'label'    => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopenner noreferrer">' . __( 'Google Maps API key', 'meta-box-builder' ) . '</a>',
-				'tooltip'  => __( 'The ID of address field. For multiple fields, separate them by comma.' ),
+				'tooltip'  => __( 'Your unique API Key for Google Maps Platform', 'meta-box-builder' ),
 				'required' => true,
 			] ),
 
