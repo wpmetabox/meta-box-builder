@@ -40,6 +40,7 @@ new Extensions\Tabs;
 new Extensions\Tooltip;
 
 if ( is_admin() ) {
+	new About;
 	new Import;
 	new Export;
 	new Edit( 'meta-box', __( 'Field Group ID', 'meta-box-builder' ) );
