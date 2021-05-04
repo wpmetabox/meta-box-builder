@@ -28,6 +28,13 @@ const App = ( { settings } ) => {
 		if ( saveButton ) {
 			saveButton.addEventListener( 'click', forceValidate );
 		}
+
+		// Don't submit form when press Enter.
+		jQuery( '#post' ).on( 'keypress keydown keyup', function( e ) {
+			if ( e.keyCode == 13 ) {
+				e.preventDefault();
+			}
+		} );
 	}, [] );
 
 	return (

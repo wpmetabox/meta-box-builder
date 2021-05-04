@@ -11,7 +11,7 @@ class Edit extends BaseEditPage {
 		wp_enqueue_style( 'mb-settings-page-ui', "$url/settings-page.css", ['wp-components'], MBB_VER );
 
 		wp_enqueue_code_editor( ['type' => 'application/x-httpd-php'] );
-		wp_enqueue_script( 'mb-settings-page-ui', "$url/settings-page.js", ['wp-element', 'wp-components', 'wp-i18n', 'clipboard'], MBB_VER, true );
+		wp_enqueue_script( 'mb-settings-page-ui', "$url/settings-page.js", ['jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard'], MBB_VER, true );
 
 		$data = [
 			'settings' => get_post_meta( get_the_ID(), 'settings', true ),
