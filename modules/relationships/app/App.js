@@ -16,7 +16,7 @@ const App = () => {
 		request( 'relationships-sides' ).then( setSides );
 
 		// Don't submit form when press Enter.
-		jQuery( '#post' ).on( 'keypress keydown keyup', function( e ) {
+		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function( e ) {
 			if ( e.keyCode == 13 ) {
 				e.preventDefault();
 			}
