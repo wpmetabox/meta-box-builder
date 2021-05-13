@@ -1,11 +1,15 @@
 import dotProp from 'dot-prop';
 import AsyncSelect from 'react-select/async';
+import { ensureArray } from '/functions';
+
 const { useState } = wp.element;
 
 const ReactAsyncSelect = ( { baseName, className, defaultValue, ...rest } ) => {
-	const [ labels, setLabels ] = useState( dotProp.get( defaultValue, 'label', [] ) );
+	const [ labels, setLabels ] = useState( ensureArray( dotProp.get( defaultValue, 'label', [] ) ) );
 
 	let values = dotProp.get( defaultValue, 'value', [] );
+	values = ensureArray( values );
+
 	let transformedDefaultValue;
 	if ( values ) {
 		transformedDefaultValue = values.map( ( value, index ) => ( { value, label: labels[ index ] } ) );

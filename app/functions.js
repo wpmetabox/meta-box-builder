@@ -34,8 +34,10 @@ export const ensureArray = arr => {
 	if ( Array.isArray( arr ) ) {
 		return arr;
 	}
-	const isObject = typeof arr === 'object' && null !== arr;
-	return isObject ? Object.values( arr ) : [];
+	if ( ! arr ) {
+		return [];
+	}
+	return typeof arr === 'object' ? Object.values( arr ) : [ arr ];
 };
 
 export const parseQueryString = queryString => {
