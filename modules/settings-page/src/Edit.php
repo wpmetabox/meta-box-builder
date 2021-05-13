@@ -2,7 +2,7 @@
 namespace MBB\SettingsPage;
 
 use MBB\BaseEditPage;
-use MBB\Helpers\Data;
+use MetaBox\Support\Data;
 
 class Edit extends BaseEditPage {
 	public function enqueue() {
