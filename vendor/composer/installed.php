@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '739673190017a28fcb95e434d4cb9b06730da816',
+    'reference' => 'b5018791e49ff296dcf4acd539462f7d6d0432d0',
     'name' => 'meta-box/meta-box-builder',
   ),
   'versions' => 
@@ -19,7 +19,7 @@
       array (
         0 => '9999999-dev',
       ),
-      'reference' => '0cb8bddd3fafb8e122cbecc03f9edec686e8c96f',
+      'reference' => 'a94a5bba1529dea62aa78dd4fef291a13f72db49',
     ),
     'meta-box/meta-box-builder' => 
     array (
@@ -28,7 +28,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '739673190017a28fcb95e434d4cb9b06730da816',
+      'reference' => 'b5018791e49ff296dcf4acd539462f7d6d0432d0',
     ),
     'meta-box/support' => 
     array (

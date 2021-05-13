@@ -19,18 +19,20 @@ class Base {
 	}
 
 	public function parse_boolean_values() {
-		array_walk_recursive( $this->settings, array( $this, 'convert_string_to_boolean' ) );
+		array_walk_recursive( $this->settings, [ $this, 'convert_string_to_boolean' ] );
 		return $this;
 	}
 
 	protected function convert_string_to_boolean( &$value ) {
-		if ( in_array( $value, array( 'true', 'false' ), true ) ) {
-			$value = filter_var( $value, FILTER_VALIDATE_BOOLEAN );
+		if ( $value === 'true' ) {
+			$value = true;
+		} elseif ( $value === 'false' ) {
+			$value = false;
 		}
 	}
 
 	public function parse_numeric_values() {
-		array_walk_recursive( $this->settings, array( $this, 'convert_string_to_number' ) );
+		array_walk_recursive( $this->settings, [ $this, 'convert_string_to_number' ] );
 		return $this;
 	}
 
@@ -38,7 +40,6 @@ class Base {
 	 * Ignore scientific number (123e45, etc..)
 	 */
 	protected function convert_string_to_number( &$value ) {
-		$value = (string) $value;
 		if ( is_numeric( $value ) && false === strpos( $value, 'e' ) ) {
 			$value = 0 + $value;
 		}
