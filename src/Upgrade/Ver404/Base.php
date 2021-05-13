@@ -1,7 +1,7 @@
 <?php
 namespace MBB\Upgrade\Ver404;
 
-use MBB\Helpers\Arr;
+use MetaBox\Support\Arr;
 
 class Base {
 	protected function update_conditional_logic( &$new_data, $data ) {

@@ -7,7 +7,7 @@ use RWMB_Post_Field;
 use RWMB_Taxonomy_Field;
 use RWMB_User_Field;
 use MBB\Helpers\Data;
-use RWMB_Helpers_Array;
+use MetaBox\Support\Arr;
 
 class Base {
 	public function __construct() {
@@ -42,7 +42,7 @@ class Base {
 	}
 
 	protected function get_posts( $s, $name = '', $post_types = '' ) {
-		$post_types = RWMB_Helpers_Array::from_csv( $post_types );
+		$post_types = Arr::from_csv( $post_types );
 
 		$field = [
 			'id'         => 'mbb_api_post',

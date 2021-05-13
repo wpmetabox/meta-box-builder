@@ -1,7 +1,7 @@
 <?php
 namespace MBB\Relationships\Parsers;
 
-use MBB\Helpers\Arr;
+use MetaBox\Support\Arr;
 use MBBParser\Parsers\Base;
 
 class Relationship extends Base {

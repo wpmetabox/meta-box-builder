@@ -1,7 +1,7 @@
 <?php
 namespace MBB\Upgrade\Ver404;
 
-use MBB\Helpers\Arr;
+use MetaBox\Support\Arr;
 
 /**
  * Update fields settings from data for AngularJS to React.

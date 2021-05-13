@@ -1,8 +1,7 @@
 <?php
 namespace MBB\Upgrade\Ver404;
 
-use MBB\Helpers\Arr;
-use RWMB_Helpers_Array;
+use MetaBox\Support\Arr;
 
 /**
  * Update field settings from data for AngularJS to React.
@@ -19,7 +18,7 @@ class Field extends Base {
 			$new_field[ $key ] = $value;
 		}
 
-		RWMB_Helpers_Array::change_key( $new_field, 'attrs', 'custom_settings' );
+		Arr::change_key( $new_field, 'attrs', 'custom_settings' );
 
 		$this->update_conditional_logic( $new_field, $field );
 
@@ -58,7 +57,7 @@ class Field extends Base {
 	}
 
 	private function update_field_tab( &$new_field, $field ) {
-		RWMB_Helpers_Array::change_key( $new_field, 'label', 'name' );
+		Arr::change_key( $new_field, 'label', 'name' );
 		$new_field['icon_type'] = 'dashicons';
 		$new_field['icon'] = str_replace( 'dashicons-', '', $new_field['icon'] );
 	}

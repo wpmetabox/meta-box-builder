@@ -5,7 +5,7 @@
 
 namespace MBB;
 
-use MBB\Helpers\Arr;
+use MetaBox\Support\Arr;
 
 class Registry {
 	private $field_types = [];

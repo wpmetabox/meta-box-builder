@@ -2,7 +2,7 @@
 namespace MBB\Extensions;
 
 use MBB\Control;
-use MBB\Helpers\Arr;
+use MetaBox\Support\Arr;
 use MBB\Helpers\Data;
 
 class Tabs {

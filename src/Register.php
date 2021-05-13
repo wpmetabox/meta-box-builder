@@ -1,7 +1,7 @@
 <?php
 namespace MBB;
 
-use MBB\Helpers\Arr;
+use MetaBox\Support\Arr;
 
 class Register {
 	private $meta_box_post_ids = [];

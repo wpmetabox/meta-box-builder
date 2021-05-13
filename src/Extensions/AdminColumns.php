@@ -3,7 +3,7 @@ namespace MBB\Extensions;
 
 use MBB\Control;
 use MBB\Helpers\Data;
-use MBB\Helpers\Arr;
+use MetaBox\Support\Arr;
 
 class AdminColumns {
 	public function __construct() {
