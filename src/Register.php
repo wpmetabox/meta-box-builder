@@ -82,7 +82,7 @@ class Register {
 
 		// Get full custom table settings from JavaScript data.
 		$settings = get_post_meta( $post_id, 'settings', true );
-		if ( ! Helpers\Arr::get( $settings, 'custom_table.create' ) ) {
+		if ( ! Arr::get( $settings, 'custom_table.create' ) ) {
 			return;
 		}
 		$columns = [];
