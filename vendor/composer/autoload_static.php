@@ -13,6 +13,7 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         ),
         'M' => 
         array (
+            'MetaBox\\Support\\' => 16,
             'MetaBox\\Dependencies\\' => 21,
             'MBB\\SettingsPage\\' => 17,
             'MBB\\Relationships\\' => 18,
@@ -25,6 +26,10 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         'Riimu\\Kit\\PHPEncoder\\' => 
         array (
             0 => __DIR__ . '/..' . '/riimu/kit-phpencoder/src',
+        ),
+        'MetaBox\\Support\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/meta-box/support',
         ),
         'MetaBox\\Dependencies\\' => 
         array (

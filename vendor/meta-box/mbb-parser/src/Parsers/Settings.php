@@ -1,8 +1,7 @@
 <?php
 namespace MBBParser\Parsers;
 
-use RWMB_Helpers_Array;
-use MBBParser\Arr;
+use MetaBox\Support\Arr;
 
 class Settings extends Base {
 	// Allow these settings to be empty.
@@ -97,7 +96,7 @@ class Settings extends Base {
 			return $this;
 		}
 
-		$this->keywords = RWMB_Helpers_Array::from_csv( $this->keywords );
+		$this->keywords = Arr::from_csv( $this->keywords );
 
 		// Icon.
 		if ( 'dashicons' === $this->icon_type ) {

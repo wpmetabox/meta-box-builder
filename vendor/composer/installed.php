@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '489948263110f94e73b7166a9f1596ce7686c016',
+    'reference' => '739673190017a28fcb95e434d4cb9b06730da816',
     'name' => 'meta-box/meta-box-builder',
   ),
   'versions' => 
@@ -19,7 +19,7 @@
       array (
         0 => '9999999-dev',
       ),
-      'reference' => '3cbbb64cc12d37cd3d45c828983642d2ef4165f6',
+      'reference' => '0cb8bddd3fafb8e122cbecc03f9edec686e8c96f',
     ),
     'meta-box/meta-box-builder' => 
     array (
@@ -28,7 +28,17 @@
       'aliases' => 
       array (
       ),
-      'reference' => '489948263110f94e73b7166a9f1596ce7686c016',
+      'reference' => '739673190017a28fcb95e434d4cb9b06730da816',
+    ),
+    'meta-box/support' => 
+    array (
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
+      'aliases' => 
+      array (
+        0 => '9999999-dev',
+      ),
+      'reference' => '7be71d73b2dd0e8d02b30e4d29a178096a3e0c99',
     ),
     'riimu/kit-phpencoder' => 
     array (

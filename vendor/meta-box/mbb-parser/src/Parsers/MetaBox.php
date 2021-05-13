@@ -1,7 +1,7 @@
 <?php
 namespace MBBParser\Parsers;
 
-use RWMB_Helpers_Array;
+use MetaBox\Support\Arr;
 
 class MetaBox extends Base {
 	protected $empty_keys = ['fields'];
@@ -90,7 +90,7 @@ class MetaBox extends Base {
 			$name  = $rule['name'];
 			$value = $rule['value'];
 			if ( in_array( $name, ['rangelength', 'range'], true ) ) {
-				$value = array_map( 'intval', RWMB_Helpers_Array::from_csv( $value ) );
+				$value = array_map( 'intval', Arr::from_csv( $value ) );
 			}
 
 			$rules[ $key ][ $name ]    = $value;
