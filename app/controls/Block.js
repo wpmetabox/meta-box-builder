@@ -7,6 +7,8 @@ import Input from './Input';
 import ReactSelect from './ReactSelect';
 import Select from './Select';
 import Textarea from './Textarea';
+import { ensureArray } from '/functions';
+
 const { __ } = wp.i18n;
 const { useState, useEffect, useRef, RawHTML } = wp.element;
 const { ColorPicker } = wp.components;
@@ -103,7 +105,7 @@ const Block = ( { objectType, settings } ) => {
 			defaultValue={ dotProp.get( settings, 'block_context', 'content' ) }
 		/>
 		<ReactSelect
-			name="settings[supports][align]"
+			name="settings[supports][align][]"
 			label={ __( 'Alignment', 'meta-box-builder' ) }
 			componentId="settings-block-supports-align"
 			options={ {
@@ -113,7 +115,7 @@ const Block = ( { objectType, settings } ) => {
 				wide: __( 'Wide', 'meta-box-builder' ),
 				full: __( 'Full', 'meta-box-builder' ),
 			} }
-			defaultValue={ dotProp.get( settings, 'supports.align', [] ) }
+			defaultValue={ ensureArray( dotProp.get( settings, 'supports.align', [] ) ) }
 		/>
 		<Checkbox
 			name="settings[supports][anchor]"
