@@ -30,61 +30,62 @@
 	"extra": {
 		"dev-files": {
 			"/": [
-			  ".github/",
-			  ".gitattributes",
-			  ".gitignore",
+				".git",
+				".github/",
+				".gitattributes",
+				".gitignore",
 
-			  ".editoconfig",
+				".editoconfig",
 
-			  "LICENSE",
-			  "*.md",
+				"LICENSE",
+				"*.md",
 
-			  "test/",
-			  "tests/"
+				"test/",
+				"tests/"
 			],
 			"meta-box/*": [
-			  ".git",
+				".git",
 
-			  ".distignore",
-			  ".babelrc",
-			  "webpack.config.js",
+				".distignore",
+				".babelrc",
+				"webpack.config.js",
 
-			  "*.lock",
-			  "*.json",
-			  "*.yml",
+				"*.lock",
+				"*.json",
+				"*.yml",
 
-			  "*.txt",
-			  "*.less",
-			  "*.scss",
-			  "*.po",
-			  "*.pot",
+				"*.txt",
+				"*.less",
+				"*.scss",
+				"*.po",
+				"*.pot",
 
-			  "demo.php",
-			  "demo/",
-			  "sass/",
-			  "vendor/"
+				"demo.php",
+				"demo/",
+				"sass/",
+				"vendor/"
 			],
 			"wpmetabox/*": [
-			  ".git",
+				".git",
 
-			  ".distignore",
-			  ".babelrc",
-			  "webpack.config.js",
+				".distignore",
+				".babelrc",
+				"webpack.config.js",
 
-			  "*.lock",
-			  "*.json",
-			  "*.yml",
+				"*.lock",
+				"*.json",
+				"*.yml",
 
-			  "*.txt",
-			  "*.less",
-			  "*.scss",
-			  "*.po",
-			  "*.pot",
+				"*.txt",
+				"*.less",
+				"*.scss",
+				"*.po",
+				"*.pot",
 
-			  "demo.php",
-			  "demo/",
-			  "sass/",
-			  "vendor/"
+				"demo.php",
+				"demo/",
+				"sass/",
+				"vendor/"
 			],
 			"riimu/kit-phpencoder": [
 				"examples",

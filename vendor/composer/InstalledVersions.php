@@ -32,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'b5018791e49ff296dcf4acd539462f7d6d0432d0',
+    'reference' => '8923beb8dc062c7937c8d80212fb978381cfe7e3',
     'name' => 'meta-box/meta-box-builder',
   ),
   'versions' => 
@@ -54,7 +54,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'b5018791e49ff296dcf4acd539462f7d6d0432d0',
+      'reference' => '8923beb8dc062c7937c8d80212fb978381cfe7e3',
     ),
     'meta-box/support' => 
     array (
