@@ -2,7 +2,7 @@
 namespace MBB\SettingsPage;
 
 use MBBParser\Parsers\Base;
-use MBBParser\Arr;
+use MetaBox\Support\Arr;
 
 class Parser extends Base {
 	public function parse() {
