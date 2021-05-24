@@ -109,7 +109,7 @@ class Fields extends Base {
 			'datetime-local' => [
 				'title'    => __( 'Datetime Local', 'meta-box-builder' ),
 				'category' => 'html5',
-				'controls' => array_merge( $general, $html5, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
 			],
 			'divider'       => [
 				'title'    => __( 'Divider', 'meta-box-builder' ),
@@ -119,7 +119,7 @@ class Fields extends Base {
 			'email'         => [
 				'title'    => __( 'Email', 'meta-box-builder' ),
 				'category' => 'html5',
-				'controls' => array_merge( $general, $html5, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
 			],
 			'fieldset_text' => [
 				'title'    => __( 'Fieldset Text', 'meta-box-builder' ),
@@ -189,12 +189,12 @@ class Fields extends Base {
 			'month' => [
 				'title'    => __( 'Month', 'meta-box-builder' ),
 				'category' => 'html5',
-				'controls' => array_merge( $general, $html5, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
 			],
 			'number' => [
 				'title'    => __( 'Number', 'meta-box-builder' ),
 				'category' => 'html5',
-				'controls' => array_merge( $general, ['min', 'max', 'step'], $html5, $clone, $advanced ),
+				'controls' => array_merge( $general, ['min', 'max', 'step'], $html5, ['prepend', 'append'], $clone, $advanced ),
 			],
 			'oembed' => [
 				'title'    => __( 'oEmbed', 'meta-box-builder' ),
@@ -269,7 +269,7 @@ class Fields extends Base {
 			'tel' => [
 				'title'    => __( 'Phone Number', 'meta-box-builder' ),
 				'category' => 'html5',
-				'controls' => array_merge( $general, $html5, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
 			],
 			'text'              => [
 				'title'    => __( 'Text', 'meta-box-builder' ),
@@ -299,7 +299,7 @@ class Fields extends Base {
 			'url'     => [
 				'title'    => __( 'URL', 'meta-box-builder' ),
 				'category' => 'basic',
-				'controls' => array_merge( $general, $html5, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
 			],
 			'video'   => [
 				'title'    => __( 'Video', 'meta-box-builder' ),
@@ -309,7 +309,7 @@ class Fields extends Base {
 			'week' => [
 				'title'    => __( 'Week', 'meta-box-builder' ),
 				'category' => 'html5',
-				'controls' => array_merge( $general, $html5, $clone, $advanced ),
+				'controls' => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
 			],
 			'wysiwyg' => [
 				'title'    => __( 'WYSIWYG Editor', 'meta-box-builder' ),
