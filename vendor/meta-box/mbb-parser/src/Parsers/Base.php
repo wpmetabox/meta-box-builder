@@ -47,8 +47,10 @@ class Base {
 
 	protected function remove_empty_values() {
 		foreach ( $this->settings as $key => $value ) {
-			// Remove empty values in an array.
-			$value = is_array( $value ) ? array_filter( $value ) : $value;
+			// Remove empty string in an array.
+			$value = ! is_array( $value ) ? $value : array_filter( $value, function( $v ) {
+				return $v !== '';
+			} );
 
 			// Don't remove allowed empty keys.
 			if ( in_array( $key, $this->empty_keys ) ) {
@@ -76,8 +78,8 @@ class Base {
 		}
 
 		// Options aren't affected with taxonomies.
-		$tmp_array = array();
-		$tmp_std   = array();
+		$tmp_array = [];
+		$tmp_std   = [];
 
 		foreach ( $value as $arr ) {
 			$tmp_array[ $arr['key'] ] = $arr['value'];
@@ -97,7 +99,7 @@ class Base {
 		}
 
 		// Parse JSON and dot notations.
-		$this->{$key} = $this->parse_json_dot_notations( $tmp_array );
+		$this->$key = $this->parse_json_dot_notations( $tmp_array );
 
 		if ( $tmp_std ) {
 			$this->std = $tmp_std;
