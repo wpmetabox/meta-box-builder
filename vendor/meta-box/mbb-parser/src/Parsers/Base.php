@@ -57,7 +57,7 @@ class Base {
 				continue;
 			}
 
-			if ( empty( $value ) ) {
+			if ( $value === '' || $value === [] ) {
 				unset( $this->settings[ $key ] );
 			}
 		}
@@ -132,7 +132,7 @@ class Base {
 			if ( false !== strpos( $condition['value'], ',' ) ) {
 				$condition['value'] = Arr::from_csv( $condition['value'] );
 			}
-			if ( empty( $condition['name'] ) || empty( $condition['value'] ) ) {
+			if ( $condition['name'] === '' ) {
 				$condition = null;
 				continue;
 			}
