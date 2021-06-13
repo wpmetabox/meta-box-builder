@@ -66,8 +66,10 @@ class AdminColumns {
 				break;
 			case 'term':
 				esc_html_e( 'Taxonomies', 'meta-box-builder' );
+				break;
 			case 'block':
 				esc_html_e( 'Blocks', 'meta-box-builder' );
+				break;
 		}
 	}
 
