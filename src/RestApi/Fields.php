@@ -184,7 +184,7 @@ class Fields extends Base {
 			'key_value'      => [
 				'title'    => __( 'Key Value', 'meta-box-builder' ),
 				'category' => 'advanced',
-				'controls' => array_merge( $general, ['size', 'placeholder_key', 'placeholder_value', 'required'], $advanced ),
+				'controls' => array_merge( $general, ['placeholder_key', 'placeholder_value', 'required'], $advanced ),
 			],
 			'month' => [
 				'title'    => __( 'Month', 'meta-box-builder' ),
