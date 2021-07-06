@@ -152,6 +152,7 @@ svg {
 
   &__tab-panel {
     display: none;
+    max-width: none;
 
     &--selected {
       display: block;
