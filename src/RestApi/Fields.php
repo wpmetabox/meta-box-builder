@@ -259,7 +259,7 @@ class Fields extends Base {
 			'taxonomy'          => [
 				'title'    => __( 'Taxonomy', 'meta-box-builder' ),
 				'category' => 'wordpress',
-				'controls' => array_merge( $general, $taxonomy, $clone, $advanced ),
+				'controls' => array_merge( $general, $taxonomy, $advanced ),
 			],
 			'taxonomy_advanced' => [
 				'title'    => __( 'Taxonomy Advanced', 'meta-box-builder' ),
