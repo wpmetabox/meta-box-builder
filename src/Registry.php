@@ -370,6 +370,7 @@ class Registry {
 			] ),
 
 			// Textarea.
+			'std_textarea' => Control::Textarea( 'std', __( 'Default value' ) ),
 			Control::Input( 'rows', [
 				'type'  => 'number',
 				'label' => __( 'Rows', 'meta-box-builder' ),
