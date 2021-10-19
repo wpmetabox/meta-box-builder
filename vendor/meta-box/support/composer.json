@@ -1,0 +1,12 @@
+{
+    "name": "meta-box/support",
+    "description": "Helpers for Meta Box plugins",
+    "license": "GNU GPL-2.0",
+    "homepage": "https://metabox.io",
+    "autoload": {
+        "psr-4": {
+            "MetaBox\\Support\\": ""
+        }
+    },
+    "minimum-stability": "dev"
+}

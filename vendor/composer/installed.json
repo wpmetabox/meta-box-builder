@@ -32,9 +32,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/support.git",
-                "reference": "7be71d73b2dd0e8d02b30e4d29a178096a3e0c99"
+                "reference": "3a02b1a2391afeb31751241d38606b2b0368da7b"
             },
-            "time": "2021-04-24T03:06:48+00:00",
+            "time": "2021-10-19T03:08:18+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "source",
