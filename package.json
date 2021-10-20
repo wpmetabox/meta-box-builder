@@ -13,20 +13,20 @@
     "sync": "browser-sync start --proxy \"metabox.test/wp-admin/post-new.php?post_type=meta-box\" --files \"assets/css/style.css, assets/js/app.js\""
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/plugin-transform-react-jsx": "^7.12.12",
-    "babel-loader": "^8.1.0",
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-transform-react-jsx": "^7.14.9",
+    "babel-loader": "^8.2.2",
     "node-sass": "^6.0.1",
-    "webpack": "^4.44.2",
+    "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "dot-prop": "^6.0.1",
     "react-codemirror2": "^7.2.1",
-    "react-select": "^3.1.0",
+    "react-select": "^3.2.0",
     "react-sortablejs": "^6.0.0",
-    "react-tabs": "^3.1.1",
-    "slugify": "^1.4.5",
-    "sortablejs": "^1.10.2"
+    "react-tabs": "^3.2.2",
+    "slugify": "^1.6.1",
+    "sortablejs": "^1.14.0"
   }
 }

@@ -12,6 +12,13 @@
 		if ( actions ) {
 			actions.prepend( a );
 		}
+		//check when there is cols attribute of textarea
+		jQuery('textarea').each(function () {
+		  if( jQuery(this).attr('cols') ){
+			  jQuery(this).css('width','unset');
+		  }
+	    });
+
 	};
 
 	Object.keys( meta_box_post_ids ).forEach( addIcon );
