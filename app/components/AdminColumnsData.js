@@ -3,9 +3,9 @@ const { useContext } = wp.element;
 
 export const AdminColumnsData = () => {
 	const { fieldIds } = useContext( FieldIdsContext );
-	let value = jQuery(document).find("#settings-object_type").val();
+	let value          = jQuery(document).find("#settings-object_type").val();
 	jQuery(document).on('change','#settings-object_type', function() {
-		let value = jQuery(this).val();
+		let value  = jQuery(this).val();
 	});
     if ( value == 'term' ) {
     	return (
@@ -18,7 +18,7 @@ export const AdminColumnsData = () => {
     		{ Object.entries( fieldIds ).map( ( [ id, field ] ) => <option key={ id } value={ field.id } /> ) }
     		</datalist>
     	);
-    }else if ( value == 'user' ) {
+    } else if ( value == 'user' ) {
     	return (
     		<datalist id="admin-columns">
     		<option value="cb" />
