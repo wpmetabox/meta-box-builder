@@ -7,6 +7,33 @@ use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
 class Edit extends BaseEditPage {
+	public function __construct( $post_type, $slug_meta_box_title ) {
+		parent::__construct( $post_type, $slug_meta_box_title );
+
+		add_filter( 'rwmb_meta_boxes', [ $this, 'add_help_meta_box' ] );
+	}
+
+	public function add_help_meta_box( $meta_boxes ) {
+		$meta_boxes[] = [
+			'title'      => esc_html__( 'Video tutorials', 'meta-box' ),
+			'id'         => 'video-tutorials',
+			'post_types' => [ $this->post_type ],
+			'context'    => 'side',
+			'priority'   => 'low',
+			'fields'     => [
+				[
+					'type' => 'custom_html',
+					'std'  => '<ul>
+						<li><a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box' ) . '</a></li>
+						<li><a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box' ) . '</a></li>
+					</ul>',
+				],
+			],
+		];
+
+		return $meta_boxes;
+	}
+
 	public function enqueue() {
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', ['wp-components'] );
 
