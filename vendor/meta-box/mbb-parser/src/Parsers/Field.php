@@ -108,6 +108,7 @@ class Field extends Base {
 		}
 
 		// Use callback: function_name format.
+        /*
 		if ( is_string( $this->options ) && 0 === strpos( $this->options, 'callback:' ) ) {
 			$callback = trim( str_replace( 'callback:', '', $this->options ) );
 			if ( is_callable( $callback ) ) {
@@ -115,7 +116,7 @@ class Field extends Base {
 				$this->_callback = $callback; // For using in the encoders.
 			}
 			return $this;
-		}
+		}*/
 
 		$options = array();
 
