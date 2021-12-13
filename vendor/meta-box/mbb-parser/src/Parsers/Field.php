@@ -113,6 +113,7 @@ class Field extends Base {
 			if ( is_callable( $callback ) ) {
 				$this->_callback = $callback; // For using in the encoders.
 			}
+			return $this;
 		}
 
 		$options = array();
