@@ -7,7 +7,7 @@ use MetaBox\Support\Arr;
 class Parser extends Base {
 	public function parse() {
 		$this->parse_menu_icon()
-		    ->parse_help_tabs()
+			->parse_help_tabs()
 			->parse_tabs();
 
 		if ( 'top' === $this->menu_type ) {
