@@ -7,6 +7,7 @@ use MetaBox\Support\Arr;
 class Parser extends Base {
 	public function parse() {
 		$this->parse_menu_icon()
+		    -> parse_help_tabs()
 			->parse_tabs();
 
 		if ( 'top' === $this->menu_type ) {
@@ -36,6 +37,25 @@ class Parser extends Base {
 		foreach ( $keys as $key ) {
 			unset( $this->$key );
 		}
+
+		return $this;
+	}
+
+	private function parse_help_tabs() {
+		$help_tabs = $this->help_tabs;
+		if ( !( $help_tabs ) ) {
+			return $this;
+		}
+		$new_help_tabs = [];
+		foreach ( $help_tabs as $key => $value ) {
+			$value['title']   = $value['key'];
+			$value['content'] = $value['value'];
+			unset( $value['id'] );
+			unset( $value['key'] );
+			unset( $value['value']);
+			$new_help_tabs[] = $value;
+		}
+		$this->help_tabs = $new_help_tabs;
 
 		return $this;
 	}
