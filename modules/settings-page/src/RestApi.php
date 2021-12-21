@@ -92,9 +92,11 @@ class RestApi extends Base {
 				'label'   => __( 'Custom message', 'meta-box-builder' ),
 				'tooltip' => __( 'The custom message displayed when saving options', 'meta-box-builder' ),
 			] ),
-			Control::Textarea( 'help_tabs', [
-				'label'   => __( 'Help content', 'meta-box-builder' ),
-				'tooltip' => __( 'The content displayed when clicking on the Help button on the top right (near the Screen Options button)', 'meta-box-builder' ),
+			Control::KeyValue( 'help_tabs', [
+				'label'            => __( 'Help tabs', 'meta-box-builder' ),
+				'tooltip'          => __( 'The content displayed when clicking on the Help button on the top right (near the Screen Options button). HTML is allowed.', 'meta-box-builder' ),
+				'keyPlaceholder'   => __( 'Title', 'meta-box-builder' ),
+				'valuePlaceholder' => __( 'Content', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'customizer', [
 				'label'   => __( 'Customizer', 'meta-box-builder' ),

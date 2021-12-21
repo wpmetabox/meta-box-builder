@@ -27,7 +27,6 @@ class Encoder {
 		$this->make_translatable( 'menu_title' );
 		$this->make_translatable( 'submit_button' );
 		$this->make_translatable( 'message' );
-		$this->make_translatable( 'help_tabs' );
 
 		$encoder = new PHPEncoder;
 		$this->encoded_string = $encoder->encode( $this->settings, [
