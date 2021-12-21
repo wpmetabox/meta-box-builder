@@ -94,7 +94,7 @@ class RestApi extends Base {
 			] ),
 			Control::KeyValue( 'help_tabs', [
 				'label'            => __( 'Help tabs', 'meta-box-builder' ),
-				'tooltip'          => __( 'The content displayed when clicking on the Help button on the top right (near the Screen Options button)', 'meta-box-builder' ),
+				'tooltip'          => __( 'The content displayed when clicking on the Help button on the top right (near the Screen Options button). HTML is allowed.', 'meta-box-builder' ),
 				'keyPlaceholder'   => __( 'Title', 'meta-box-builder' ),
 				'valuePlaceholder' => __( 'Content', 'meta-box-builder' ),
 			] ),
