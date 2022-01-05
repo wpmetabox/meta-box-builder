@@ -62,9 +62,15 @@ class Tabs {
 			if ( 'tab' !== Arr::get( $field, 'type' ) ) {
 				continue;
 			}
-
 			$label = Arr::get( $field, 'name', '' );
 			$icon  = Arr::get( $field, 'icon', '' );
+
+			if ( 'url' === Arr::get( $field, 'icon_type' ) ) {
+				$icon = Arr::get( $field, 'icon_url', '' );
+			}
+			if ( 'fontawesome' === Arr::get( $field, 'icon_type' ) ) {
+				$icon = Arr::get( $field, 'icon_fa', '' );
+			}
 
 			$tabs[ $field['id'] ] = compact( 'label', 'icon' );
 		}
