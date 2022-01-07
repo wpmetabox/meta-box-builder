@@ -16,7 +16,7 @@ const IncludeExclude = ( { objectType, postTypes, defaultValue } ) => {
 		<DivRow
 			className="og-include-exclude"
 			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced location rules', 'meta-box-builder' ) }</a>` }
-			tooltip={ __( 'More rules on where to display the field group.', 'meta-box-builder' ) }
+			tooltip={ __( 'More rules on where to display the field group. For each rule, maximum 10 items are displayed. To select other items, please use the search.', 'meta-box-builder' ) }
 		>
 			{ rules.length > 0 && <Intro defaultValue={ defaultValue } /> }
 			{
