@@ -63,8 +63,18 @@ class Tabs {
 				continue;
 			}
 
-			$label = Arr::get( $field, 'name', '' );
-			$icon  = Arr::get( $field, 'icon', '' );
+			$type   = Arr::get( $field, 'icon_type', 'dashicons' );
+			$label  = Arr::get( $field, 'name', '' );
+			$params = [
+				'dashicons'   => 'icon',
+				'url'         => 'icon_url',
+				'fontawesome' => 'icon_fa',
+			];
+			$icon   = Arr::get( $field, $params[ $type ], '' );
+
+			if ( $type === 'dashicons' && $icon ) {
+				$icon = "dashicons-$icon";
+			}
 
 			$tabs[ $field['id'] ] = compact( 'label', 'icon' );
 		}
