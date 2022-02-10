@@ -1,3 +1,5 @@
+import { render, useEffect, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { AdminColumnsData } from './components/AdminColumnsData';
@@ -9,8 +11,6 @@ import { FieldIdsProvider } from './contexts/FieldIdsContext';
 import { FieldsDataProvider } from './contexts/FieldsDataContext';
 import { SettingsDataProvider } from './contexts/SettingsDataContext';
 import { parseQueryString } from './functions';
-const { __ } = wp.i18n;
-const { render, useEffect, useState } = wp.element;
 
 const urlParams = parseQueryString( window.location.search );
 const settings = { ...dotProp.get( MbbApp, 'settings', {} ), ...urlParams.settings };

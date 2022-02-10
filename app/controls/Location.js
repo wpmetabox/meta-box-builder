@@ -1,11 +1,11 @@
+import { useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
 import ReactSelect from './ReactSelect';
 import Select from './Select';
 import { ensureArray } from '/functions';
-const { useState } = wp.element;
-const { __ } = wp.i18n;
 
 const Location = ( { objectType, setObjectType, postTypes, setPostTypes, settings } ) => {
 	const [ settingsPages, setSettingsPages ] = useState( ensureArray( dotProp.get( settings, 'settings_pages', [] ) ) );

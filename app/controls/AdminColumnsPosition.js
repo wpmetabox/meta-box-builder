@@ -1,6 +1,6 @@
 import dotProp from 'dot-prop';
 import DivRow from './DivRow';
-const { __ } = wp.i18n;
+import { __ } from "@wordpress/i18n";
 
 const AdminColumnsPosition = ( { name, defaultValue, ...rest } ) => {
 	let value = jQuery( document ).find( '#settings-object_type' ).val();

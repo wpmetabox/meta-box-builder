@@ -1,9 +1,10 @@
+import { ClipboardButton } from "@wordpress/components";
+import { useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Input from '/controls/Input';
-const { useState } = wp.element;
-const { __ } = wp.i18n;
-const { ClipboardButton } = wp.components;
+// TODO: replace with useCopyToClipboard from @wordpress/compose.
 const { withState } = wp.compose;
 
 const ResultCode = ( { settings, endPoint } ) => {

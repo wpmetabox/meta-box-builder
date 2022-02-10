@@ -1,4 +1,4 @@
-const { Tooltip: T, Dashicon } = wp.components;
+import { Dashicon, Tooltip as T } from "@wordpress/components";
 
 const Tooltip = ( { content } ) => (
   <T text={ content }>

@@ -1,5 +1,5 @@
+import { useContext } from "@wordpress/element";
 import { FieldIdsContext } from '../contexts/FieldIdsContext';
-const { useContext } = wp.element;
 
 export const Data = () => {
 	const { fieldIds } = useContext( FieldIdsContext );

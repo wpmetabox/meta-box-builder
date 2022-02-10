@@ -1,4 +1,4 @@
-const { useState, useEffect } = wp.element;
+import { useEffect, useState } from "@wordpress/element";
 
 const normalizeBool = value => {
 	if ( 'true' === value ) {

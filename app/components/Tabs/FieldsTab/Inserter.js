@@ -1,8 +1,7 @@
+import { Dropdown } from "@wordpress/components";
+import { useContext, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
-
-const { useContext, useEffect, useState } = wp.element;
-const { Dropdown } = wp.components;
-const { __ } = wp.i18n;
 
 export const Inserter = ( { addField, type } ) => {
 	const { fieldCategories } = useContext( FieldsDataContext );

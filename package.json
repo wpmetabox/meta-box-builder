@@ -1,12 +1,9 @@
 {
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "css:main": "node-sass --sourcemap none --output-style compressed assets/sass/style.scss -o assets/css",
-    "watch:css:main": "node-sass --sourcemap none --output-style compressed -w assets/sass -r -o assets/css",
+    "css:main": "sass --no-source-map --style=compressed assets/sass/style.scss assets/css/style.css",
     "css:settings": "node-sass --sourcemap none --include-path assets/sass --output-style compressed modules/settings-page/assets/settings-page.scss -o modules/settings-page/assets",
-    "watch:css:settings": "node-sass --sourcemap none --include-path assets/sass --output-style compressed -w modules/settings-page/assets -r -o modules/settings-page/assets",
     "css:relationships": "node-sass --sourcemap none --include-path assets/sass --output-style compressed modules/relationships/assets/relationships.scss -o modules/relationships/assets",
-    "watch:css:relationships": "node-sass --sourcemap none --include-path assets/sass --output-style compressed -w modules/relationships/assets -r -o modules/relationships/assets",
     "build": "webpack --mode production",
     "start": "webpack --mode development",
     "watch": "webpack --mode development --watch",
@@ -15,8 +12,10 @@
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/plugin-transform-react-jsx": "^7.12.12",
+    "@wordpress/components": "^19.3.0",
+    "@wordpress/element": "^4.1.0",
+    "@wordpress/i18n": "^4.3.0",
     "babel-loader": "^8.1.0",
-    "node-sass": "^6.0.1",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
   },

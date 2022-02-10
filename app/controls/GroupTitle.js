@@ -1,5 +1,5 @@
 import DivRow from './DivRow';
-const { __ } = wp.i18n;
+import { __ } from "@wordpress/i18n";
 
 const GroupTitle = ( { name, componentId, defaultValue, ...rest } ) => {
 	const onChange = e => {

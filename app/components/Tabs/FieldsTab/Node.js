@@ -1,10 +1,10 @@
+import { Dashicon } from "@wordpress/components";
+import { memo, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import { ucwords } from '../../../functions';
 import Field from './Field';
 import Group from './Group';
-const { useState, memo } = wp.element;
-const { Dashicon } = wp.components;
-const { __ } = wp.i18n;
 
 const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
 	const [ expanded, setExpanded ] = useState( 'expanded' === dotProp.get( field, '_state', 'expanded' ) );

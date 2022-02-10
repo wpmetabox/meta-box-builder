@@ -1,5 +1,5 @@
+import { lazy } from "@wordpress/element";
 import dotProp from 'dot-prop';
-const { lazy } = wp.element;
 
 const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );

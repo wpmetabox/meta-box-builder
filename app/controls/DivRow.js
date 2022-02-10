@@ -1,6 +1,5 @@
+import { RawHTML } from "@wordpress/element";
 import Tooltip from './Tooltip';
-
-const { RawHTML } = wp.element;
 
 const DivRow = ( {
 	children,

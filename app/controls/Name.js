@@ -1,11 +1,10 @@
+import { useContext, useEffect, useRef, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import slugify from 'slugify';
 import DivRow from './DivRow';
 import { FieldIdsContext } from '/contexts/FieldIdsContext';
 import { getFieldValue } from '/functions';
 import useDebounce from '/hooks/useDebounce';
-
-const { __ } = wp.i18n;
-const { useContext, useEffect, useRef, useState } = wp.element;
 
 const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 	const { updateFieldId } = useContext( FieldIdsContext );

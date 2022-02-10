@@ -1,10 +1,9 @@
+import { useContext, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import { SettingsDataContext } from '../../contexts/SettingsDataContext';
 import { ensureArray } from '../../functions';
 import SettingsContent from './SettingsContent';
-
-const { useContext, useState } = wp.element;
-const { __ } = wp.i18n;
 
 const Settings = ( { settings } ) => {
 	const { settingsControls } = useContext( SettingsDataContext );

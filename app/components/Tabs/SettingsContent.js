@@ -1,5 +1,5 @@
+import { memo, Suspense } from "@wordpress/element";
 import { getControlParams } from '/functions';
-const { memo, Suspense } = wp.element;
 
 const SettingsContent = ( { settings, settingsControls, objectType, setObjectType, postTypes, setPostTypes } ) => {
 	const getControlComponent = control => {

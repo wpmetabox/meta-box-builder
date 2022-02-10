@@ -1,7 +1,7 @@
 import dotProp from 'dot-prop';
 import Checkbox from './Checkbox';
 import Select from './Select';
-const { __ } = wp.i18n;
+import { __ } from "@wordpress/i18n";
 
 const Post = ( { objectType, postTypes, settings } ) => {
 	const isClassic = !MbbApp.postTypes.find( pt => postTypes.includes( pt.slug ) && pt.block_editor );

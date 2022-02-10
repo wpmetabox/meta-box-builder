@@ -1,10 +1,10 @@
+import { Dashicon } from "@wordpress/components";
+import { useEffect, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import DivRow from './DivRow';
 import ReactAsyncSelect from './ReactAsyncSelect';
 import { request, uniqid } from '/functions';
-const { useState, useEffect } = wp.element;
-const { Dashicon } = wp.components;
-const { __ } = wp.i18n;
 
 const IncludeExclude = ( { objectType, postTypes, defaultValue } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'rules', {} ) ) );

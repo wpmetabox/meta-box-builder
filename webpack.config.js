@@ -3,10 +3,15 @@ const webpack = require( 'webpack' );
 
 // https://www.cssigniter.com/how-to-use-external-react-components-in-your-gutenberg-blocks/
 const externals = {
-	'react': 'React',
+	react: 'React',
 	'react-dom': 'ReactDOM',
-	'codemirror': 'wp.CodeMirror',
-	'clipboard': 'ClipboardJS',
+	'@wordpress/i18n': 'wp.i18n',
+	'@wordpress/element': 'wp.element',
+	'@wordpress/components': 'wp.components',
+	'jquery': 'jQuery',
+	'jquery-ui': 'jQuery',
+	codemirror: 'wp.CodeMirror',
+	clipboard: 'ClipboardJS',
 };
 
 const commonModules = {

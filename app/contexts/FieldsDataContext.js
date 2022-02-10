@@ -1,5 +1,5 @@
+import { createContext, useEffect, useState } from "@wordpress/element";
 import { request } from '../functions';
-const { createContext, useState, useEffect } = wp.element;
 
 export const FieldsDataContext = createContext( {} );
 

@@ -1,10 +1,9 @@
+import { Dashicon } from "@wordpress/components";
+import { useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import DivRow from './DivRow';
 import { uniqid } from '/functions';
-
-const { useState, useContext } = wp.element;
-const { Dashicon } = wp.components;
-const { __ } = wp.i18n;
 
 const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'when', {} ) ) );

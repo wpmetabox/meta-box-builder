@@ -1,3 +1,5 @@
+import { RawHTML, useEffect, useRef, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Checkbox from './Checkbox';
@@ -8,10 +10,6 @@ import ReactSelect from './ReactSelect';
 import Select from './Select';
 import Textarea from './Textarea';
 import { ensureArray } from '/functions';
-
-const { __ } = wp.i18n;
-const { useState, useEffect, useRef, RawHTML } = wp.element;
-const { ColorPicker } = wp.components;
 
 const Block = ( { objectType, settings } ) => {
 	const [ iconType, setIconType ] = useState( dotProp.get( settings, 'icon_type', 'dashicons' ) );

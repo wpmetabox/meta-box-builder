@@ -1,3 +1,5 @@
+import { memo, useContext, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
@@ -7,9 +9,6 @@ import { getFieldValue, ucwords, uniqid } from '../../../functions';
 import Content from './Content';
 import { Inserter } from './Inserter';
 import Node from './Node';
-
-const { useContext, useState, memo } = wp.element;
-const { __ } = wp.i18n;
 
 const Group = ( { id, field, parent = '', updateFieldType } ) => {
 	const { updateFieldId, removeFieldId } = useContext( FieldIdsContext );

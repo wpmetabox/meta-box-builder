@@ -1,9 +1,8 @@
-import DivRow from './DivRow';
-import { uniqid } from '/functions';
-
-const { useState } = wp.element;
-const { __ } = wp.i18n;
-const { Dashicon } = wp.components;
+import { Dashicon } from "@wordpress/components";
+import { useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
+import DivRow from "./DivRow";
+import { uniqid } from "/functions";
 
 const KeyValue = ( {
 	defaultValue,

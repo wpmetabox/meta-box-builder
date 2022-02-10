@@ -1,5 +1,5 @@
+import { Dashicon } from "@wordpress/components";
 import DivRow from './DivRow';
-const { Dashicon } = wp.components;
 
 const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, ...rest } ) => (
 	<DivRow htmlFor={ componentId } className="og-icon" { ...rest }>

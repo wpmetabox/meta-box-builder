@@ -1,8 +1,7 @@
+import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import Checkbox from './Checkbox';
 import Input from './Input';
-const { __ } = wp.i18n;
-const { useState } = wp.element;
 
 const CustomTable = ( { objectType, defaultValue } ) => {
 	return ![ 'setting', 'block' ].includes( objectType ) && <>

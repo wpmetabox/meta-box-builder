@@ -1,5 +1,5 @@
+import { createContext, useEffect, useState } from "@wordpress/element";
 import dotProp from 'dot-prop';
-const { createContext, useState, useEffect } = wp.element;
 
 export const FieldIdsContext = createContext( {} );
 

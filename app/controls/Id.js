@@ -1,9 +1,8 @@
+import { useContext, useEffect, useState } from "@wordpress/element";
 import DivRow from './DivRow';
 import { FieldIdsContext } from '/contexts/FieldIdsContext';
 import { getFieldValue } from '/functions';
 import useDebounce from '/hooks/useDebounce';
-
-const { useContext, useState, useEffect } = wp.element;
 
 const Id = ( { name, componentId, defaultValue, ...rest } ) => {
 	const { updateFieldId } = useContext( FieldIdsContext );

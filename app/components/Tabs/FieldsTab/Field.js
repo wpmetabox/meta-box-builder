@@ -1,9 +1,8 @@
+import { memo, useContext } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 import Content from './Content';
-
-const { useContext, useState, memo } = wp.element;
-const { __ } = wp.i18n;
 
 const Field = props => {
 	const { fieldTypes } = useContext( FieldsDataContext );

@@ -1,6 +1,6 @@
+import { memo, Suspense } from "@wordpress/element";
 import dotProp from 'dot-prop';
 import { getControlParams } from '/functions';
-const { memo, Suspense } = wp.element;
 
 const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
 	const getControlComponent = control => {

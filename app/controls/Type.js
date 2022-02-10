@@ -1,7 +1,6 @@
+import { useContext } from "@wordpress/element";
 import DivRow from './DivRow';
 import { FieldsDataContext } from '/contexts/FieldsDataContext';
-
-const { useContext } = wp.element;
 
 const Type = ( { fieldId, name, componentId, defaultValue, updateFieldType, ...rest } ) => {
 	const { fieldCategories } = useContext( FieldsDataContext );

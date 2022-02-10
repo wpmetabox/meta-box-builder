@@ -1,9 +1,8 @@
+import { Dashicon } from "@wordpress/components";
+import { useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
 import { ensureArray, uniqid } from '/functions';
-
-const { Dashicon } = wp.components;
-const { useState } = wp.element;
-const { __ } = wp.i18n;
 
 const Validation = ( { defaultValue, name, ...rest } ) => {
 	const [ rules, setRules ] = useState( ensureArray( defaultValue ) );

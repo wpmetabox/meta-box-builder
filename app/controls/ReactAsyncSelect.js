@@ -1,8 +1,7 @@
+import { useState } from "@wordpress/element";
 import dotProp from 'dot-prop';
 import AsyncSelect from 'react-select/async';
 import { ensureArray } from '/functions';
-
-const { useState } = wp.element;
 
 const ReactAsyncSelect = ( { baseName, className, defaultValue, ...rest } ) => {
 	const [ labels, setLabels ] = useState( ensureArray( dotProp.get( defaultValue, 'label', [] ) ) );
