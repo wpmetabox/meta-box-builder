@@ -62,6 +62,7 @@ class Registry {
 			Control::KeyValue( 'attributes', [
 				'label'   => '<a href="https://docs.metabox.io/custom-attributes/" target="_blank" rel="noreferrer noopener">' . __( 'Custom HTML5 attributes', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
+				'options' => ['max', 'maxlength', 'min', 'minlength', 'pattern', 'required', 'step', 'type'],
 			], [], 'advanced' ),
 			Control::KeyValue( 'custom_settings', [
 				'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes">' . __( 'Custom settings', 'meta-box-builder' ) . '</a>',
@@ -201,7 +202,7 @@ class Registry {
 			// Autocomplete.
 			Control::Textarea( 'options', [
 				'label'   => __( 'Choices', 'meta-box-builder' ),
-				'description' => __( "Enter each choice per line. You can also set both value and label like <code>red: Red</code>.", 'meta-box-builder' ) . 
+				'description' => __( "Enter each choice per line. You can also set both value and label like <code>red: Red</code>.", 'meta-box-builder' ) .
 				     '<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ).
 				     '<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
 			] ),
