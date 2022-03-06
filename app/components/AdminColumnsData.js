@@ -15,7 +15,7 @@ export const AdminColumnsData = () => {
 				<option value="description" />
 				<option value="slug" />
 				<option value="count" />
-				{ Object.entries( fieldIds ).map( ( [ id, field ] ) => <option key={ id } value={ field.id } /> ) }
+				{ Object.entries( fieldIds ).map( ( [ id, fieldId ] ) => <option key={ id } value={ fieldId } /> ) }
 			</datalist>
 		);
 	} else if ( value == 'user' ) {
@@ -27,7 +27,7 @@ export const AdminColumnsData = () => {
 				<option value="email" />
 				<option value="role" />
 				<option value="posts" />
-				{ Object.entries( fieldIds ).map( ( [ id, field ] ) => <option key={ id } value={ field.id } /> ) }
+				{ Object.entries( fieldIds ).map( ( [ id, fieldId ] ) => <option key={ id } value={ fieldId } /> ) }
 			</datalist>
 		);
 	} else {
@@ -40,7 +40,7 @@ export const AdminColumnsData = () => {
 				<option value="tags" />
 				<option value="comments" />
 				<option value="date" />
-				{ Object.entries( fieldIds ).map( ( [ id, field ] ) => <option key={ id } value={ field.id } /> ) }
+				{ Object.entries( fieldIds ).map( ( [ id, fieldId ] ) => <option key={ id } value={ fieldId } /> ) }
 			</datalist>
 		);
 	}

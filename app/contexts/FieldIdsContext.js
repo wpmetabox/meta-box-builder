@@ -13,7 +13,7 @@ const flatten = obj => {
 		const type = dotProp.get( field, 'type', 'text' );
 		value = { ...value, ...flatten( field ) };
 		if ( !ignoreTypes.includes( type ) ) {
-			value = { ...value, [ id ]: field };
+			value = { ...value, [ id ]: field.id };
 		}
 	} );
 
@@ -29,11 +29,9 @@ export const FieldIdsProvider = ( { children } ) => {
 	}, [] );
 
 	const updateFieldId = ( id, field ) => setFieldIds( prev => {
-		const oldField = dotProp.get( prev, id, {} );
-		const newField = { ...oldField, ...field };
-		const type = dotProp.get( newField, 'type', 'text' );
+		const type = dotProp.get( field, 'type', 'text' );
 
-		return ignoreTypes.includes( type ) ? { ...prev } : { ...prev, [ id ]: newField };
+		return ignoreTypes.includes( type ) ? { ...prev } : { ...prev, [ id ]: field.id };
 	} );
 
 	const removeFieldId = id => setFieldIds( prev => {

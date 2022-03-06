@@ -6,7 +6,7 @@ export const Data = () => {
 
 	return (
 		<datalist id="field-ids">
-			{ Object.entries( fieldIds ).map( ( [ id, field ] ) => <option key={ id } value={ field.id } /> ) }
+			{ Object.entries( fieldIds ).map( ( [ id, fieldId ] ) => <option key={ id } value={ fieldId } /> ) }
 		</datalist>
 	);
 };
