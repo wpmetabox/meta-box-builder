@@ -1,66 +1,26 @@
-import { RawHTML, useContext, useState } from "@wordpress/element";
+import { RawHTML, useContext } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import { ReactSortable } from 'react-sortablejs';
-import { FieldIdsContext } from '../../contexts/FieldIdsContext';
 import { FieldsDataContext } from '../../contexts/FieldsDataContext';
-import { getFieldValue, ucwords, uniqid } from '../../functions';
+import useFields from "../../hooks/useFields";
 import { Inserter } from './FieldsTab/Inserter';
 import Node from './FieldsTab/Node';
 
 const Fields = props => {
-	const { updateFieldId, removeFieldId } = useContext( FieldIdsContext );
-	const [ fields, setFields ] = useState( Object.values( props.fields ) );
+	const {
+		fields,
+		addField,
+		removeField,
+		duplicateField,
+		updateFieldType,
+		setFields,
+	} = useFields( Object.values( props.fields ), 'fields' );
 
 	// Don't render any field if fields data is not available.
 	const { fieldTypes, fieldCategories } = useContext( FieldsDataContext );
 	if ( Object.keys( fieldTypes ).length === 0 || fieldCategories.length === 0 ) {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
-
-	const addField = type => {
-		const id = `${ type }_${ uniqid() }`;
-
-		updateFieldId( id, newField );
-		setFields( prev => {
-			const newField = { _id: id, _new: true, id, type, name: ucwords( type, '_' ) };
-			return [ ...prev, newField ];
-		} );
-	};
-
-	const removeField = id => {
-		removeFieldId( id );
-		setFields( prev => prev.filter( field => field._id !== id ) );
-	};
-
-	const duplicateField = id => {
-		let newField = getFieldValue( `fields[${ id }]` );
-		const newId = `${ dotProp.get( newField, 'type' ) }_${ uniqid() }`;
-
-		newField.id = newId;
-		newField._id = newId;
-		newField._new = true;
-		newField.name += __( ' (Copy)', 'meta-box-builder' );
-
-		updateFieldId( newId, newField );
-		setFields( prev => {
-			const index = prev.findIndex( field => field._id === id );
-			let newFields = [ ...prev ];
-			newFields.splice( index + 1, 0, newField );
-
-			return newFields;
-		} );
-	};
-
-	const updateFieldType = ( id, type ) => setFields( prev => {
-		const index = prev.findIndex( field => field._id === id );
-		let newFields = [ ...prev ];
-
-		// Maintain existing input values.
-		newFields[ index ] = { ...getFieldValue( `fields[${ id }]` ), type };
-
-		return newFields;
-	} );
 
 	return (
 		<>
