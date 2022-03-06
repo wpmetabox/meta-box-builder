@@ -6,28 +6,23 @@ import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
 export const Inserter = ( { addField, type } ) => {
 	const { fieldCategories } = useContext( FieldsDataContext );
 	const [ searchParam, setSearchParam ] = useState( '' );
-	const [ closeCallback, setCloseCallback ] = useState( () => { } );
 
 	const search = e => setSearchParam( e.target.value );
-	const open = ( toggle, close ) => {
-		toggle();
-		setCloseCallback( prevCallback => close );
-	};
-	const insert = e => {
+	const insert = ( e, toggle ) => {
 		addField( e.target.dataset.type );
-		closeCallback();
+		toggle();
 	};
 
 	return (
 		<Dropdown
 			className="og-inserter"
 			onClose={ () => setSearchParam( '' ) }
-			renderToggle={ ( { onToggle, onClose } ) => (
-				<button type="button" id={ `og-inserter${ type }` } className="button button-primary" onClick={ () => open( onToggle, onClose ) }>
+			renderToggle={ ( { onToggle } ) => (
+				<button type="button" id={ `og-inserter${ type }` } className="button button-primary" onClick={ onToggle }>
 					{ __( '+ Add Field', 'meta-box-builder' ) }
 				</button>
 			) }
-			renderContent={ () => (
+			renderContent={ ( { onToggle } ) => (
 				<>
 					<div className="og-inserter__search">
 						<input type="search" placeholder={ __( 'Search for a field type', 'meta-box-builder' ) } onChange={ search } />
@@ -35,7 +30,7 @@ export const Inserter = ( { addField, type } ) => {
 					{
 						fieldCategories.length > 0
 							? fieldCategories.map( category =>
-								<Category key={ category.slug } category={ category } insert={ insert } searchParam={ searchParam } />
+								<Category key={ category.slug } category={ category } insert={ e => insert( e, onToggle ) } searchParam={ searchParam } />
 							)
 							: <p>{ __( 'Fetching field types, please wait...', 'meta-box-builder' ) }</p>
 					}
