@@ -18,19 +18,22 @@ const Fields = props => {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
-	const addField = type => setFields( prev => {
+	const addField = type => {
 		const id = `${ type }_${ uniqid() }`;
-		const newField = { _id: id, _new: true, id, type, name: ucwords( type, '_' ) };
+
 		updateFieldId( id, newField );
-		return [ ...prev, newField ];
-	} );
+		setFields( prev => {
+			const newField = { _id: id, _new: true, id, type, name: ucwords( type, '_' ) };
+			return [ ...prev, newField ];
+		} );
+	};
 
-	const removeField = id => setFields( prev => {
+	const removeField = id => {
 		removeFieldId( id );
-		return prev.filter( field => field._id !== id );
-	} );
+		setFields( prev => prev.filter( field => field._id !== id ) );
+	};
 
-	const duplicateField = id => setFields( prev => {
+	const duplicateField = id => {
 		let newField = getFieldValue( `fields[${ id }]` );
 		const newId = `${ dotProp.get( newField, 'type' ) }_${ uniqid() }`;
 
@@ -40,22 +43,21 @@ const Fields = props => {
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
 		updateFieldId( newId, newField );
+		setFields( prev => {
+			const index = prev.findIndex( field => field._id === id );
+			let newFields = [ ...prev ];
+			newFields.splice( index + 1, 0, newField );
 
-		const index = prev.findIndex( field => field._id === id );
-		let newFields = [ ...prev ];
-		newFields.splice( index + 1, 0, newField );
-
-		return newFields;
-	} );
+			return newFields;
+		} );
+	};
 
 	const updateFieldType = ( id, type ) => setFields( prev => {
-		// Maintain existing input values.
-		let newField = getFieldValue( `fields[${ id }]` );
-		newField.type = type;
-
 		const index = prev.findIndex( field => field._id === id );
 		let newFields = [ ...prev ];
-		newFields[ index ] = newField;
+
+		// Maintain existing input values.
+		newFields[ index ] = { ...getFieldValue( `fields[${ id }]` ), type };
 
 		return newFields;
 	} );
