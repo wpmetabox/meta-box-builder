@@ -1,24 +1,30 @@
-import { useContext, useState } from "@wordpress/element";
+import { useContext } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
+import { useImmer } from "use-immer";
 import { FieldIdsContext } from "../contexts/FieldIdsContext";
 import { getFieldValue, ucwords, uniqid } from '../functions';
 
 const useFields = ( initialFields, baseId ) => {
 	const { updateFieldId, removeFieldId } = useContext( FieldIdsContext );
-	const [ fields, setFields ] = useState( initialFields );
+	const [ fields, setFields ] = useImmer( initialFields );
 
 	const addField = type => {
 		const id = `${ type }_${ uniqid() }`;
 		const newField = { _id: id, _new: true, id, type, name: ucwords( type, '_' ) };
 
 		updateFieldId( id, newField );
-		setFields( prev => [ ...prev, newField ] );
+		setFields( draft => {
+			draft.push( newField );
+		} );
 	};
 
 	const removeField = id => {
 		removeFieldId( id );
-		setFields( prev => prev.filter( field => field._id !== id ) );
+		setFields( draft => {
+			const index = draft.findIndex( field => field._id === id );
+			draft.splice( index, 1 );
+		} );
 	};
 
 	const duplicateField = id => {
@@ -31,23 +37,16 @@ const useFields = ( initialFields, baseId ) => {
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
 		updateFieldId( newId, newField );
-		setFields( prev => {
-			const index = prev.findIndex( field => field._id === id );
-			let newFields = [ ...prev ];
-			newFields.splice( index + 1, 0, newField );
-
-			return newFields;
+		setFields( draft => {
+			const index = draft.findIndex( field => field._id === id );
+			draft.splice( index + 1, 0, newField );
 		} );
 	};
 
-	const updateFieldType = ( id, type ) => setFields( prev => {
-		const index = prev.findIndex( field => field._id === id );
-		let newFields = [ ...prev ];
-
+	const updateFieldType = ( id, type ) => setFields( draft => {
+		const index = draft.findIndex( field => field._id === id );
 		// Maintain existing input values.
-		newFields[ index ] = { ...getFieldValue( `${ baseId }[${ id }]` ), type };
-
-		return newFields;
+		draft[ index ] = { ...getFieldValue( `${ baseId }[${ id }]` ), type };
 	} );
 
 	return {
