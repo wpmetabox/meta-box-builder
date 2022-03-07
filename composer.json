@@ -8,6 +8,10 @@
 	"repositories": [
 		{
 			"type": "git",
+			"url": "https://github.com/elightup/twig.git"
+		},
+		{
+			"type": "git",
 			"url": "https://github.com/wpmetabox/support.git"
 		},
 		{
@@ -19,13 +23,13 @@
 		"psr-4": {
 			"MBB\\": "src/",
 			"MBB\\SettingsPage\\": "modules/settings-page/src/",
-			"MBB\\Relationships\\": "modules/relationships/src/",
-			"MetaBox\\Dependencies\\": "dependencies/"
+			"MBB\\Relationships\\": "modules/relationships/src/"
 		}
 	},
 	"require": {
 		"meta-box/support": "dev-master",
-		"meta-box/mbb-parser": "dev-master"
+		"meta-box/mbb-parser": "dev-master",
+		"elightup/twig": "^3.3"
 	},
 	"extra": {
 		"dev-files": {
@@ -92,17 +96,12 @@
 				"*.md",
 				"*.json",
 				"LICENSE"
-			]
-		},
-		"mozart": {
-			"dep_namespace": "MetaBox\\Dependencies\\",
-			"dep_directory": "/dependencies/",
-			"classmap_directory": "/dependencies/classes/",
-			"classmap_prefix": "MetaBox_Dependencies_",
-			"packages": [
-				"twig/twig"
 			],
-			"delete_vendor_directories": true
+			"elightup/twig": [
+				".git",
+				"*.json",
+				"twig.php"
+			]
 		}
 	}
 }

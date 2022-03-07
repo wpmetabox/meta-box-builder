@@ -5,11 +5,20 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '74faf173ec666216874dba3bf1f241e2ab710493',
+        'reference' => '1d7fbe6aa824783b035301d4c85b87ab2207dc9f',
         'name' => 'meta-box/meta-box-builder',
         'dev' => true,
     ),
     'versions' => array(
+        'elightup/twig' => array(
+            'pretty_version' => '3.3.8',
+            'version' => '3.3.8.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../elightup/twig',
+            'aliases' => array(),
+            'reference' => '75d4d59c93ee35a58c9f5f5b7e7e73299780573a',
+            'dev_requirement' => false,
+        ),
         'meta-box/mbb-parser' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
@@ -27,7 +36,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '74faf173ec666216874dba3bf1f241e2ab710493',
+            'reference' => '1d7fbe6aa824783b035301d4c85b87ab2207dc9f',
             'dev_requirement' => false,
         ),
         'meta-box/support' => array(

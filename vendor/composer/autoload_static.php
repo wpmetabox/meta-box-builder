@@ -7,6 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
 {
     public static $prefixLengthsPsr4 = array (
+        'e' => 
+        array (
+            'eLightUp\\' => 9,
+        ),
         'R' => 
         array (
             'Riimu\\Kit\\PHPEncoder\\' => 21,
@@ -14,7 +18,6 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         'M' => 
         array (
             'MetaBox\\Support\\' => 16,
-            'MetaBox\\Dependencies\\' => 21,
             'MBB\\SettingsPage\\' => 17,
             'MBB\\Relationships\\' => 18,
             'MBB\\' => 4,
@@ -23,6 +26,10 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
     );
 
     public static $prefixDirsPsr4 = array (
+        'eLightUp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/elightup/twig',
+        ),
         'Riimu\\Kit\\PHPEncoder\\' => 
         array (
             0 => __DIR__ . '/..' . '/riimu/kit-phpencoder/src',
@@ -30,10 +37,6 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         'MetaBox\\Support\\' => 
         array (
             0 => __DIR__ . '/..' . '/meta-box/support',
-        ),
-        'MetaBox\\Dependencies\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/dependencies',
         ),
         'MBB\\SettingsPage\\' => 
         array (

@@ -1,6 +1,47 @@
 {
     "packages": [
         {
+            "name": "elightup/twig",
+            "version": "3.3.8",
+            "version_normalized": "3.3.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elightup/twig.git",
+                "reference": "75d4d59c93ee35a58c9f5f5b7e7e73299780573a"
+            },
+            "time": "2022-02-21T10:53:17+00:00",
+            "type": "library",
+            "extra": {
+                "mozart": {
+                    "dep_namespace": "eLightUp\\",
+                    "dep_directory": "/",
+                    "classmap_directory": "/",
+                    "classmap_prefix": "eLightUp_",
+                    "packages": [
+                        "twig/twig"
+                    ],
+                    "delete_vendor_directories": true
+                }
+            },
+            "installation-source": "source",
+            "autoload": {
+                "psr-4": {
+                    "eLightUp\\": "./"
+                }
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "mozart compose",
+                    "composer dump-autoload"
+                ],
+                "post-update-cmd": [
+                    "mozart compose",
+                    "composer dump-autoload"
+                ]
+            },
+            "install-path": "../elightup/twig"
+        },
+        {
             "name": "meta-box/mbb-parser",
             "version": "dev-master",
             "version_normalized": "dev-master",

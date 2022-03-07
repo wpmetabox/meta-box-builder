@@ -63,10 +63,10 @@ class Register {
 				$data[ $field['id'] ] = 'group' === $field['type'] ? mb_get_block_field( $field['id'], [] ) : mb_the_block_field( $field['id'], [], false );
 			}
 
-			$loader = new \MetaBox\Dependencies\Twig\Loader\ArrayLoader( [
+			$loader = new \eLightUp\Twig\Loader\ArrayLoader( [
 				'block' => '{% autoescape false %}' . $meta_box['render_code'] . '{% endautoescape %}',
 			] );
-			$twig = new \MetaBox\Dependencies\Twig\Environment( $loader );
+			$twig = new \eLightUp\Twig\Environment( $loader );
 
 			// Proxy for all PHP/WordPress functions.
 			$data['mb'] = new TwigProxy;

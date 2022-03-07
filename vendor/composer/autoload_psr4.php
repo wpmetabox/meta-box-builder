@@ -6,9 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'eLightUp\\' => array($vendorDir . '/elightup/twig'),
     'Riimu\\Kit\\PHPEncoder\\' => array($vendorDir . '/riimu/kit-phpencoder/src'),
     'MetaBox\\Support\\' => array($vendorDir . '/meta-box/support'),
-    'MetaBox\\Dependencies\\' => array($baseDir . '/dependencies'),
     'MBB\\SettingsPage\\' => array($baseDir . '/modules/settings-page/src'),
     'MBB\\Relationships\\' => array($baseDir . '/modules/relationships/src'),
     'MBB\\' => array($baseDir . '/src'),
