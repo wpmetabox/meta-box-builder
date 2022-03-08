@@ -21,11 +21,13 @@
   },
   "dependencies": {
     "dot-prop": "^6.0.1",
+    "immer": "^9.0.12",
     "react-codemirror2": "^7.2.1",
     "react-select": "^3.1.0",
     "react-sortablejs": "^6.0.0",
     "react-tabs": "^3.1.1",
     "slugify": "^1.4.5",
-    "sortablejs": "^1.10.2"
+    "sortablejs": "^1.10.2",
+    "use-immer": "^0.6.0"
   }
 }

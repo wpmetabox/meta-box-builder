@@ -1,5 +1,5 @@
 import { Dashicon } from "@wordpress/components";
-import { memo, useState } from "@wordpress/element";
+import { memo, useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import { ucwords } from '../../../functions';
@@ -7,8 +7,7 @@ import Field from './Field';
 import Group from './Group';
 
 const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
-	const [ expanded, setExpanded ] = useState( 'expanded' === dotProp.get( field, '_state', 'expanded' ) );
-	const toggleSettings = () => setExpanded( prev => !prev );
+	const [ expanded, toggle ] = useReducer( expanded => !expanded, 'expanded' === dotProp.get( field, '_state', 'expanded' ) );
 
 	const remove = e => {
 		e.stopPropagation();
@@ -27,7 +26,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	return <div className={ `og-item og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
 		<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
 		<input type="hidden" name={ `fields${ parent }[${ id }][_state]` } defaultValue={ expanded ? 'expanded' : 'collapsed' } />
-		<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
+		<div className="og-item__header og-collapsible__header" onClick={ toggle } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 			<span className="og-item__title" id={ `og-item__title__${ id }` }>{ label }</span>
 			<span className="og-item__actions">
 				<span className="og-item__type">{ field.type }</span>
