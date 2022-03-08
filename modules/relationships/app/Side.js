@@ -1,16 +1,15 @@
+import { Dashicon } from "@wordpress/components";
+import { useReducer } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Content from './Content';
-const { useState } = wp.element;
-const { Dashicon } = wp.components;
-const { __ } = wp.i18n;
 
 const Side = ( { id, title, controls } ) => {
-	const [ expanded, setExpanded ] = useState( true );
-	const toggleSettings = () => setExpanded( prev => !prev );
+	const [ expanded, toggle ] = useReducer( expanded => !expanded, true );
 
 	return (
 		<div className={ `og-item og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
-			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to toggle side settings', 'meta-box-builder' ) }>
+			<div className="og-item__header og-collapsible__header" onClick={ toggle } title={ __( 'Click to toggle side settings', 'meta-box-builder' ) }>
 				<span className="og-item__title">{ title }</span>
 				<span className="og-item__actions">
 					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle settings', 'meta-box-builder' ) }><Dashicon icon="arrow-down" /></span>
