@@ -2,7 +2,7 @@
 	margin: 16px 12px;
 
 	.components-popover__content {
-		width: 400px;
+		width: 300px;
 	}
 
 	input {
@@ -11,27 +11,20 @@
 	}
 
 	&__title {
-		margin: 18px 0 0;
+		margin: 16px 0 4px;
 		text-transform: uppercase;
 		font-size: 11px;
 		font-weight: 500;
 		color: var(--color-gray);
 	}
 
-	&__content {
-		margin-top: 12px;
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		grid-gap: 2px;
-	}
-
 	&__item {
-		padding: 4px;
+		padding: 4px 8px;
 		cursor: pointer;
 		border-radius: 4px;
 
 		&:hover {
-			background: var(--color-light);
+			background: var(--color-lighter);
 		}
 	}
 }
