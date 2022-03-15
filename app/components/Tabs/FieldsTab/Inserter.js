@@ -50,8 +50,8 @@ const Category = ( { category, insert, searchParam } ) => {
 			<div className="og-inserter__title">{ category.title }</div>
 			<div className="og-inserter__content">
 				{
-					fields.map( entry =>
-						<div className="og-inserter__item" key={ entry[0] } data-type={ entry[0] } onClick={ insert }>{ entry[1].title }</div>
+					fields.map( ( [ type, { title, description } ] ) =>
+						<div className="og-inserter__item" key={ type } data-type={ type } onClick={ insert } title={ description }>{ title }</div>
 					)
 				}
 			</div>
