@@ -6,7 +6,12 @@ import Content from './Content';
 
 const Field = props => {
 	const { fieldTypes } = useContext( FieldsDataContext );
-	const controls = [ ...fieldTypes[ props.field.type ].controls ];
+
+	// Safe fallback to 'text' for not-recommended HTML5 field types.
+	const ignore = [ 'datetime-local', 'month', 'tel', 'week' ];
+	const type = ignore.includes( props.field.type ) ? 'text' : props.field.type;
+
+	const controls = [ ...fieldTypes[ type ].controls ];
 	const general = controls.filter( control => control.tab === 'general' );
 	const advanced = controls.filter( control => control.tab === 'advanced' );
 

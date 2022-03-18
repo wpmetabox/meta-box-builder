@@ -116,12 +116,6 @@ class Fields extends Base {
 				'controls'    => array_merge( $general, $date, $clone, $advanced ),
 				'description' => __( 'Date and time picker', 'meta-box-builder' ),
 			],
-			'datetime-local' => [
-				'title'       => __( 'Datetime Local', 'meta-box-builder' ),
-				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
-				'description' => __( 'Date and time picker. Not recommended, use Datetime picker field type instead.', 'meta-box-builder' ),
-			],
 			'divider'       => [
 				'title'       => __( 'Divider', 'meta-box-builder' ),
 				'category'    => 'layout',
@@ -211,12 +205,6 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge( $general, ['placeholder_key', 'placeholder_value', 'required'], $advanced ),
 				'description' => __( 'Add an unlimited group of key-value pairs', 'meta-box-builder' ),
-			],
-			'month' => [
-				'title'       => __( 'Month', 'meta-box-builder' ),
-				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
-				'description' => __( 'Month picker', 'meta-box-builder' ),
 			],
 			'number' => [
 				'title'       => __( 'Number', 'meta-box-builder' ),
@@ -308,12 +296,6 @@ class Fields extends Base {
 				'controls'    => array_merge( $general, $taxonomy, $clone, $advanced ),
 				'description' => __( 'For selecting taxonomy terms and saving term IDs in post meta as a comma-separated string. It doesn\'t set post terms.', 'meta-box-builder' ),
 			],
-			'tel' => [
-				'title'       => __( 'Phone Number', 'meta-box-builder' ),
-				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
-				'description' => __( 'For entering a formatted phone number', 'meta-box-builder' ),
-			],
 			'text'              => [
 				'title'       => __( 'Text', 'meta-box-builder' ),
 				'category'    => 'basic',
@@ -355,12 +337,6 @@ class Fields extends Base {
 				'category'    => 'upload',
 				'controls'    => array_merge( $general, $upload, $clone, $advanced ),
 				'description' => __( 'Multiple video uploads with WordPress media popup', 'meta-box-builder' ),
-			],
-			'week' => [
-				'title'       => __( 'Week', 'meta-box-builder' ),
-				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, ['prepend', 'append'], $clone, $advanced ),
-				'description' => __( 'Week picker', 'meta-box-builder' ),
 			],
 			'wysiwyg' => [
 				'title'       => __( 'WYSIWYG Editor', 'meta-box-builder' ),

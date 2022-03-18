@@ -4,7 +4,12 @@ import { getControlParams } from '/functions';
 
 const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
 	const getControlComponent = control => {
-		const [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
+		let [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
+
+		// Safe fallback to 'text' for not-recommended HTML5 field types.
+		if ( control.setting === 'type' ) {
+			defaultValue = [ 'datetime-local', 'month', 'tel', 'week' ].includes( defaultValue ) ? 'text' : defaultValue;
+		}
 
 		return <Control
 			fieldId={ id }
