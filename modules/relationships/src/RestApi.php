@@ -75,7 +75,7 @@ class RestApi extends Base {
 				'options' => [
 					'view'  => __( 'View', 'meta-box-builder' ),
 					'edit'  => __( 'Edit', 'meta-box-builder' ),
-					'false' => __( 'No link', 'meta-box-builder' ),
+					'no-link' => __( 'No link', 'meta-box-builder' ),
 				],
 				'dependency' => 'admin_column_enable:true',
 			], 'view' ),
