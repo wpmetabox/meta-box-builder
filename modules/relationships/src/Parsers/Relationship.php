@@ -67,7 +67,11 @@ class Relationship extends Base {
 		$admin_column = &$settings['admin_column'];
 		unset( $admin_column['enable'] );
 		$admin_column['position'] = trim( implode( ' ', $admin_column['position'] ) );
-		$admin_column = array_filter( $admin_column );
+		array_walk_recursive($admin_column, function ( $value, $key ) use ( &$admin_column ) {
+			if ( '' !== $value ) {
+				$admin_column[ $key ] = $value;
+			}
+		});
 		if ( empty( $admin_column ) ) {
 			$admin_column = true;
 		}
