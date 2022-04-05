@@ -68,8 +68,14 @@ class Data {
 	public static function get_setting_pages() {
 		$pages = [];
 		$settings_pages = apply_filters( 'mb_settings_pages', [] );
+		$mb_key = 1;
 		foreach ( $settings_pages as $settings_page ) {
 			$title = '';
+			//add id if not exist
+			if(!isset($settings_page['id']) || $settings_page['id'] == ""){
+				$settings_page['id'] = 'mb-options-'.$mb_key;
+				$mb_key++;
+			}
 			if ( ! empty( $settings_page['menu_title'] ) ) {
 				$title = $settings_page['menu_title'];
 			} elseif ( ! empty( $settings_page['page_title'] ) ) {
@@ -89,7 +95,7 @@ class Data {
 					$tabs[ $id ] = $tab['label'];
 				}
 			}
-
+			
 			$pages[] = [
 				'id'    => $settings_page['id'],
 				'title' => $title,
