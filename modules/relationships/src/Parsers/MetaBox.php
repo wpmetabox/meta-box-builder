@@ -8,6 +8,7 @@ class MetaBox extends Base {
 		$this->remove_default( 'context', 'side' )
 			->remove_default( 'priority', 'low' )
 			->remove_default( 'style', 'default' )
+            ->parse_array_attributes( 'query_args' )
 			->remove_empty_values();
 	}
 }
