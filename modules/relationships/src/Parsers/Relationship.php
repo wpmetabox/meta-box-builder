@@ -42,7 +42,7 @@ class Relationship extends Base {
 		}
 
 		// Field settings.
-		$field_parser = new MetaBox( $settings['field'] );
+		$field_parser = new Field( $settings['field'] );
 		$field_parser->parse();
 		$settings['field'] = $field_parser->get_settings();
 		if ( empty( $settings['field'] ) ) {
