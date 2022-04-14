@@ -24,6 +24,7 @@ class Generator {
 	public function generate( WP_REST_Request $request ) {
 		$settings = array_merge( [
 			'menu_title' => $request->get_param( 'post_title' ),
+			'id' => $request->get_param( 'post_name' ) ?: sanitize_title( $request->get_param( 'post_title' ) ),
 		], $request->get_param( 'settings' ) );
 
 		$parser = new Parser( $settings );
