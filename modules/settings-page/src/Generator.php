@@ -24,7 +24,7 @@ class Generator {
 	public function generate( WP_REST_Request $request ) {
 		$settings = array_merge( [
 			'menu_title' => $request->get_param( 'post_title' ),
-			'id' => sanitize_title( $request->get_param( 'post_title' ) ),//generate code for settings page missing the ID
+			'id' => ( $request->get_param( 'post_name' ) != "" ) ? $request->get_param( 'post_name' ) : sanitize_title( $request->get_param( 'post_title' ) ),
 		], $request->get_param( 'settings' ) );
 
 		$parser = new Parser( $settings );
