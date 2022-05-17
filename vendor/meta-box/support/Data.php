@@ -12,6 +12,10 @@ class Data {
 			'revision',
 			'user_request',
 			'wp_block',
+			'wp_template',
+			'wp_template_part',
+			'wp_global_styles',
+			'wp_navigation',
 
 			// Meta Box post types.
 			'mb-post-type',
@@ -20,6 +24,12 @@ class Data {
 			'mb-settings-page',
 			'mb-views',
 			'meta-box',
+
+			// Elementor post types.
+			'elementor_library',
+			'elementor_font',
+			'elementor_icons',
+			'elementor_snippet',
 		];
 		$post_types = get_post_types( [], 'objects' );
 		$post_types = array_diff_key( $post_types, array_flip( $unsupported ) );

@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '1d7fbe6aa824783b035301d4c85b87ab2207dc9f',
+        'reference' => '4424c2cdf1d79cb7551395622b49820db25919d0',
         'name' => 'meta-box/meta-box-builder',
         'dev' => true,
     ),
@@ -36,7 +36,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '1d7fbe6aa824783b035301d4c85b87ab2207dc9f',
+            'reference' => '4424c2cdf1d79cb7551395622b49820db25919d0',
             'dev_requirement' => false,
         ),
         'meta-box/support' => array(
@@ -47,7 +47,7 @@
             'aliases' => array(
                 0 => '9999999-dev',
             ),
-            'reference' => '3a02b1a2391afeb31751241d38606b2b0368da7b',
+            'reference' => '1862afb57b7ea45e4d7aeab2054f3d91fc3557fb',
             'dev_requirement' => false,
         ),
         'riimu/kit-phpencoder' => array(
