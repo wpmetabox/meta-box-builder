@@ -12,4 +12,5 @@ modules/settings-page/assets/*.scss export-ignore
 .gitignore export-ignore
 *.yml export-ignore
 *.json export-ignore
+phpcs.xml export-ignore
 webpack.config.js export-ignore
