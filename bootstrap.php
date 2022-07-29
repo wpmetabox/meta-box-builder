@@ -33,6 +33,7 @@ new Extensions\ShowHide;
 new Extensions\Tabs;
 new Extensions\Tooltip;
 new Extensions\RestApi;
+new Extensions\FrontendSubmission;
 
 if ( is_admin() ) {
 	new About;
