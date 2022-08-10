@@ -5,6 +5,7 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { AdminColumnsData } from './components/AdminColumnsData';
 import { Data } from './components/Data';
 import Fields from './components/Tabs/Fields';
+import Codes from "./components/Tabs/Codes";
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
 import { FieldIdsProvider } from './contexts/FieldIdsContext';
@@ -59,6 +60,18 @@ const App = ( { settings } ) => {
 					</Tabs>
 					<Data />
 					<AdminColumnsData />
+					<br />
+					<Tabs forceRenderTabPanel={true}>
+						<TabList>
+						<Tab>{__("Theme code", "meta-box-builder")}</Tab>
+						</TabList>
+						<TabPanel className="react-tabs__tab-panel og-tab-panel--theme-code">
+						<Codes
+							settings={settings}
+							fields={dotProp.get(MbbApp, "fields", {})}
+						/>
+						</TabPanel>
+					</Tabs>					
 					<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
 				</SettingsDataProvider>
 			</FieldIdsProvider>
