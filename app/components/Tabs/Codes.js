@@ -1,13 +1,42 @@
-import useFields from "../../hooks/useFields";
+import { useContext } from "@wordpress/element";
+import dotProp from "dot-prop";
+import { FieldIdsContext } from "../../contexts/FieldIdsContext";
 import ThemeCode from "./CodeTypes/ThemeCode";
 
 const Codes = (props) => {
-  const { fields, setFields } = useFields(
-    Object.values(props.fields),
-    "fields"
-  );
+  const { fieldIds } = useContext(FieldIdsContext);
+  console.log("Field Context OK: ", fieldIds);
 
-  console.log(props);
+  const fields = Object.entries(fieldIds).map(([_id, id]) => {
+    let name = dotProp.get(props.fields, `${_id}.name`, '');
+
+    // if (name === '') {
+    //   name = document.getElementById(`fields-${_id}-name`).value;
+    // }
+
+    return { _id, id, name }
+  })
+
+  // const changeSettings = () => {
+  //   console.log(MbbApp);
+  // }
+
+  // useEffect(() => {
+  //   const timmer = setInterval(() => {
+
+  //     const settingsObjectType = document.querySelector('#settings-object_type');
+  //     if (settingsObjectType != null) {
+  //       if (settingsObjectType) {
+  //         settingsObjectType.addEventListener('change', changeSettings);
+  //       }
+
+  //       clearInterval(timmer);
+  //     }
+
+  //   }, 200);
+  // }, [])
+
+  // console.log(props);
   return (
     <>
       {fields.length > 0 &&
