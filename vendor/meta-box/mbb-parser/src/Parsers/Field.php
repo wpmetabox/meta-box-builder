@@ -111,7 +111,11 @@ class Field extends Base {
 		if ( is_string( $this->options ) && 0 === strpos( $this->options, 'callback:' ) ) {
 			$callback = trim( str_replace( 'callback:', '', $this->options ) );
 			if ( is_callable( $callback ) ) {
-				$this->options = call_user_func( $callback );
+				try {
+					$this->options = call_user_func( $callback );
+				} catch (\Throwable $th) {
+					//throw $th;
+				}
 				$this->_callback = $callback; // For using in the encoders.
 			}
 			return $this;

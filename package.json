@@ -6,8 +6,7 @@
     "css:relationships": "node-sass --sourcemap none --include-path assets/sass --output-style compressed modules/relationships/assets/relationships.scss -o modules/relationships/assets",
     "build": "webpack --mode production",
     "start": "webpack --mode development",
-    "watch": "webpack --mode development --watch",
-    "sync": "browser-sync start --proxy \"metabox.test/wp-admin/post-new.php?post_type=meta-box\" --files \"assets/css/style.css, assets/js/app.js\""
+    "watch": "webpack --mode development --watch"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -16,18 +15,16 @@
     "@wordpress/element": "^4.1.0",
     "@wordpress/i18n": "^4.3.0",
     "babel-loader": "^8.1.0",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
   },
   "dependencies": {
     "dot-prop": "^6.0.1",
-    "immer": "^9.0.12",
     "react-codemirror2": "^7.2.1",
     "react-select": "^3.1.0",
-    "react-sortablejs": "^6.0.0",
+    "react-sortablejs": "^6.1.4",
     "react-tabs": "^3.1.1",
     "slugify": "^1.4.5",
-    "sortablejs": "^1.10.2",
-    "use-immer": "^0.6.0"
+    "sortablejs": "^1.15.0"
   }
 }

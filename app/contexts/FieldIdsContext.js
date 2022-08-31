@@ -1,6 +1,5 @@
-import { createContext, useEffect } from "@wordpress/element";
+import { createContext, useEffect, useState } from "@wordpress/element";
 import dotProp from 'dot-prop';
-import { useImmer } from "use-immer";
 
 export const FieldIdsContext = createContext( {} );
 
@@ -22,23 +21,23 @@ const flatten = obj => {
 };
 
 export const FieldIdsProvider = ( { children } ) => {
-	const [ fieldIds, setFieldIds ] = useImmer( {} );
+	const [ fieldIds, setFieldIds ] = useState( {} );
 
 	useEffect( () => {
 		const fields = flatten( MbbApp );
 		setFieldIds( fields );
 	}, [] );
 
-	const updateFieldId = ( id, field ) => setFieldIds( draft => {
+	const updateFieldId = ( id, field ) => setFieldIds( prev => {
 		const type = dotProp.get( field, 'type', 'text' );
 
-		if ( !ignoreTypes.includes( type ) ) {
-			draft[ id ] = field.id;
-		}
+		return ignoreTypes.includes( type ) ? { ...prev } : { ...prev, [ id ]: field.id };
 	} );
 
-	const removeFieldId = id => setFieldIds( draft => {
-		delete draft[ id ];
+	const removeFieldId = id => setFieldIds( prev => {
+		let newFieldIds = { ...prev };
+		delete newFieldIds[ id ];
+		return prev;
 	} );
 
 	return <FieldIdsContext.Provider value={ { fieldIds, updateFieldId, removeFieldId } }>
