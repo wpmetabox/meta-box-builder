@@ -32,12 +32,21 @@ export const useCodes = (field) => {
                 args.push("'object_type' => 'term'");
                 object_id = dotProp.get(settings, "taxonomies.0", "");
                 break;
+            case "comment":
+                args.push("'object_type' => 'comment'");
+                break;
         }
 
         if (args.length > 0) {
-            setValue(
-                `<?php \n\t $value = rwmb_meta( '${field.id}', [${args.join(', ')}], '${object_id}'); \n\t echo $value; \n ?>`
-            );
+            if (object_id === '') {
+                setValue(
+                    `<?php \n\t $value = rwmb_meta( '${field.id}', [${args.join(', ')}]); \n\t echo $value; \n ?>`
+                );
+            } else {
+                setValue(
+                    `<?php \n\t $value = rwmb_meta( '${field.id}', [${args.join(', ')}], '${object_id}'); \n\t echo $value; \n ?>`
+                );
+            }
         }
     }, [settings]);
 
