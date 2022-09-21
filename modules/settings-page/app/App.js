@@ -5,7 +5,17 @@ const { render, useEffect } = wp.element;
 const { __ } = wp.i18n;
 
 const App = () => {
-	useEffect( () => {
+	const forceValidate = () => document.querySelector('#post').removeAttribute('novalidate');
+
+	useEffect(() => {
+		const publishButton = document.querySelector('#publish');
+		const saveButton = document.querySelector('#save-post');
+		if (publishButton) {
+			publishButton.addEventListener('click', forceValidate);
+		}
+		if (saveButton) {
+			saveButton.addEventListener('click', forceValidate);
+		}		
 		// Don't submit form when press Enter.
 		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function( e ) {
 			if ( e.keyCode == 13 ) {
