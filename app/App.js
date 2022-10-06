@@ -7,7 +7,6 @@ import { Data } from './components/Data';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
-import { SettingsDataProvider } from './contexts/SettingsDataContext';
 import { parseQueryString } from './functions';
 
 const urlParams = parseQueryString( window.location.search );
@@ -36,7 +35,7 @@ const App = ( { settings } ) => {
 	}, [] );
 
 	return (
-		<SettingsDataProvider>
+		<>
 			<Tabs forceRenderTabPanel={ true } defaultIndex={ dotProp.get( MbbApp, 'data.tab_index', 0 ) } onSelect={ setTabIndex }>
 				<TabList>
 					<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
@@ -56,7 +55,7 @@ const App = ( { settings } ) => {
 			<Data />
 			<AdminColumnsData />
 			<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
-		</SettingsDataProvider>
+		</>
 	);
 };
 
