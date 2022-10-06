@@ -7,7 +7,7 @@ export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( 
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
-const fetcher = ( apiName, params = {} ) => {
+export const fetcher = ( apiName, params = {} ) => {
 	let options = {
 		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
 	};

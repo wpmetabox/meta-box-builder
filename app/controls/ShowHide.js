@@ -2,10 +2,10 @@ import { Dashicon } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
+import { fetcher, uniqid } from "../functions";
 import DivRow from './DivRow';
 import KeyValue from './KeyValue';
 import ReactAsyncSelect from './ReactAsyncSelect';
-import { request, uniqid } from '/functions';
 
 const ShowHide = ( { objectType, defaultValue } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'rules', {} ) ) );
@@ -52,7 +52,7 @@ const Intro = ( { defaultValue } ) => (
 const Rule = ( { rule, baseName, removeRule, objectType } ) => {
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
-	const loadOptions = s => request( 'show-hide', { name, s } );
+	const loadOptions = s => fetcher( 'show-hide', { name, s } );
 
 	// Validate rule name.
 	useEffect( () => {
