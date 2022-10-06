@@ -5,9 +5,6 @@ use MBB\BaseEditPage;
 use MetaBox\Support\Data;
 
 class Edit extends BaseEditPage {
-	public function __construct( $post_type, $slug_meta_box_title ) {
-		parent::__construct( $post_type, $slug_meta_box_title );
-	}	
 
 	public function add_meta_boxes( $meta_boxes ){
 		$request = rwmb_request();
