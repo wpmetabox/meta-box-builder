@@ -7,8 +7,6 @@ import { Data } from './components/Data';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
-import { FieldsDataProvider } from './contexts/FieldsDataContext';
-import { SettingsDataProvider } from './contexts/SettingsDataContext';
 import { parseQueryString } from './functions';
 
 const urlParams = parseQueryString( window.location.search );
@@ -37,29 +35,27 @@ const App = ( { settings } ) => {
 	}, [] );
 
 	return (
-		<FieldsDataProvider>
-			<SettingsDataProvider>
-				<Tabs forceRenderTabPanel={ true } defaultIndex={ dotProp.get( MbbApp, 'data.tab_index', 0 ) } onSelect={ setTabIndex }>
-					<TabList>
-						<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
-						<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
-						<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
-					</TabList>
-					<TabPanel>
-						<Fields fields={ dotProp.get( MbbApp, 'fields', {} ) } />
-					</TabPanel>
-					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-						<Settings settings={ settings } />
-					</TabPanel>
-					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-						<Result settings={ settings } endPoint="generate" />
-					</TabPanel>
-				</Tabs>
-				<Data />
-				<AdminColumnsData />
-				<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
-			</SettingsDataProvider>
-		</FieldsDataProvider>
+		<>
+			<Tabs forceRenderTabPanel={ true } defaultIndex={ dotProp.get( MbbApp, 'data.tab_index', 0 ) } onSelect={ setTabIndex }>
+				<TabList>
+					<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
+					<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
+					<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
+				</TabList>
+				<TabPanel>
+					<Fields fields={ dotProp.get( MbbApp, 'fields', {} ) } />
+				</TabPanel>
+				<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
+					<Settings settings={ settings } />
+				</TabPanel>
+				<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
+					<Result settings={ settings } endPoint="generate" />
+				</TabPanel>
+			</Tabs>
+			<Data />
+			<AdminColumnsData />
+			<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
+		</>
 	);
 };
 

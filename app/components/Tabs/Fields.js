@@ -1,7 +1,7 @@
-import { RawHTML, useContext } from "@wordpress/element";
+import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
-import { FieldsDataContext } from '../../contexts/FieldsDataContext';
+import { get } from "../../functions";
 import useFields from "../../hooks/useFields";
 import { Inserter } from './FieldsTab/Inserter';
 import Node from './FieldsTab/Node';
@@ -17,8 +17,8 @@ const Fields = props => {
 	} = useFields( Object.values( props.fields ), 'fields' );
 
 	// Don't render any field if fields data is not available.
-	const { fieldTypes, fieldCategories } = useContext( FieldsDataContext );
-	if ( Object.keys( fieldTypes ).length === 0 || fieldCategories.length === 0 ) {
+	const fieldTypes = get( 'field-types' ) || {};
+	if ( Object.keys( fieldTypes ).length === 0 ) {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
 

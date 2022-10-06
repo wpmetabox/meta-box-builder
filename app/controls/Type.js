@@ -1,9 +1,8 @@
-import { useContext } from "@wordpress/element";
+import { get } from "../functions";
 import DivRow from './DivRow';
-import { FieldsDataContext } from '/contexts/FieldsDataContext';
 
 const Type = ( { fieldId, name, componentId, defaultValue, updateFieldType, ...rest } ) => {
-	const { fieldCategories } = useContext( FieldsDataContext );
+	const fieldCategories = get( 'field-categories' ) || [];
 
 	const onChange = e => updateFieldType( fieldId, e.target.value );
 
@@ -17,7 +16,7 @@ const Type = ( { fieldId, name, componentId, defaultValue, updateFieldType, ...r
 };
 
 const Category = ( { category } ) => {
-	const { fieldTypes } = useContext( FieldsDataContext );
+	const fieldTypes = get( 'field-types' ) || {};
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug );
 
 	return (

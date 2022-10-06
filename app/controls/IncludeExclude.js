@@ -2,9 +2,9 @@ import { Dashicon } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
+import { fetcher, uniqid } from "../functions";
 import DivRow from './DivRow';
 import ReactAsyncSelect from './ReactAsyncSelect';
-import { request, uniqid } from '/functions';
 
 const IncludeExclude = ( { objectType, postTypes, defaultValue } ) => {
 	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'rules', {} ) ) );
@@ -63,7 +63,7 @@ const Rule = ( { rule, baseName, removeRule, objectType, postTypes } ) => {
 		}
 	}, [ objectType ] );
 
-	const loadOptions = s => request( 'include-exclude', { name, s, post_types: postTypes } );
+	const loadOptions = s => fetcher( 'include-exclude', { name, s, post_types: postTypes } );
 
 	return (
 		<div className="og-include-exclude__rule og-attribute">

@@ -1,9 +1,9 @@
-import { memo, useContext } from "@wordpress/element";
+import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
+import { get } from "../../../functions";
 import useFields from "../../../hooks/useFields";
 import Content from './Content';
 import { Inserter } from './Inserter';
@@ -22,7 +22,7 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 		`fields${ parent }[${ id }][fields]`
 	);
 
-	const { fieldTypes } = useContext( FieldsDataContext );
+	const fieldTypes = get( 'field-types' ) || {};
 	const controls = [ ...fieldTypes[ field.type ].controls ];
 
 	return (
