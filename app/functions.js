@@ -1,10 +1,28 @@
 import { lazy } from "@wordpress/element";
 import dotProp from 'dot-prop';
+import useSWR from 'swr';
 
 const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
+
+const fetcher = ( apiName, params = {} ) => {
+	let options = {
+		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
+	};
+	let url = `${ MbbApp.rest }/mbb/${ apiName }`;
+
+	const query = ( new URLSearchParams( params ) ).toString();
+	url += MbbApp.rest.includes( '?' ) ? query : `?${ query }`;
+
+	return fetch( url, options ).then( response => response.json() );
+};
+
+export const get = ( apiName, params = {}, defaultValue ) => {
+	const { data, error } = useSWR( apiName, fetcher );
+	return error || !data ? defaultValue : data;
+};
 
 let apiCache = {};
 export const request = async ( apiName, params = {}, method = 'GET', cache = true ) => {
@@ -34,7 +52,7 @@ export const ensureArray = arr => {
 	if ( Array.isArray( arr ) ) {
 		return arr;
 	}
-	if ( ! arr ) {
+	if ( !arr ) {
 		return [];
 	}
 	return typeof arr === 'object' ? Object.values( arr ) : [ arr ];
