@@ -1,13 +1,9 @@
-import { getControlParams, request } from '/functions';
+import { get, getControlParams } from '/functions';
 const { Suspense, useEffect, useState } = wp.element;
 const { __ } = wp.i18n;
 
 const Content = () => {
-	const [ controls, setControls ] = useState( [] );
-
-	useEffect( () => {
-		request( 'settings-page-controls' ).then( setControls );
-	}, [] );
+	const controls = get( 'settings-page-controls' ) || [];
 
 	const getControlComponent = control => {
 		const [ Control, input, defaultValue ] = getControlParams( control, MbbApp.settings, () => import( `./controls/${ control.name }` ) );

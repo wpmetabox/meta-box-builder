@@ -4,16 +4,12 @@ import Side from './Side';
 import { AdminColumnsData } from '/components/AdminColumnsData';
 import Result from '/components/Tabs/Result';
 import Checkbox from '/controls/Checkbox';
-import { request } from '/functions';
+import { get } from '/functions';
 const { render, useEffect, useState } = wp.element;
 const { __ } = wp.i18n;
 
 const App = () => {
-	const [ sides, setSides ] = useState( [] );
-
 	useEffect( () => {
-		request( 'relationships-sides' ).then( setSides );
-
 		// Don't submit form when press Enter.
 		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function( e ) {
 			if ( e.keyCode == 13 ) {
@@ -21,6 +17,8 @@ const App = () => {
 			}
 		} );
 	}, [] );
+
+	const sides = get( 'relationships-sides' ) || [];
 
 	return (
 		<>
