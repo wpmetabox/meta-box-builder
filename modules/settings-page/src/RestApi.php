@@ -7,11 +7,6 @@ use MBB\Control;
 class RestApi extends Base {
 	public function get_settings_page_controls() {
 		$controls = [
-			Control::Input( 'option_name', [
-				'label'   => __( 'Option name', 'meta-box-builder' ),
-				'tooltip' => __( 'Option name where settings data is saved to. Takes settings page ID if missed. If you want to use theme mods, then set this to <code>theme_mods_$themeslug</code>.', 'meta-box-builder' ),
-			] ),
-
 			// Menu.
 			Control::Select( 'menu_type', [
 				'label'   => __( 'Menu type', 'meta-box-builder' ),
