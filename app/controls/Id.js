@@ -1,11 +1,11 @@
-import { useContext, useEffect, useState } from "@wordpress/element";
+import { useEffect, useState } from "@wordpress/element";
+import { useFieldIdsStore } from "../contexts/FieldIdsContext";
 import DivRow from './DivRow';
-import { FieldIdsContext } from '/contexts/FieldIdsContext';
 import { getFieldValue } from '/functions';
 import useDebounce from '/hooks/useDebounce';
 
 const Id = ( { name, componentId, defaultValue, ...rest } ) => {
-	const { updateFieldId } = useContext( FieldIdsContext );
+	const updateFieldId = useFieldIdsStore( state => state.update );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 
