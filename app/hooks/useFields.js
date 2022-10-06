@@ -5,8 +5,8 @@ import { useFieldIdsStore } from "../contexts/FieldIdsContext";
 import { getFieldValue, ucwords, uniqid } from '../functions';
 
 const useFields = ( initialFields, baseId ) => {
-	const updateFieldId = useFieldIdsStore( state => state.updateFieldId );
-	const removeFieldId = useFieldIdsStore( state => state.removeFieldId );
+	const updateFieldId = useFieldIdsStore( state => state.update );
+	const removeFieldId = useFieldIdsStore( state => state.remove );
 	const [ fields, setFields ] = useState( initialFields );
 
 	const addField = type => {

@@ -19,19 +19,18 @@ const flatten = obj => {
 };
 
 export const useFieldIdsStore = create( set => ( {
-	fieldIds: flatten( MbbApp ),
+	ids: flatten( MbbApp ),
 
-	updateFieldId: ( id, field ) => set( state => {
+	update: ( id, field ) => set( state => {
 		const type = dotProp.get( field, 'type', 'text' );
+		const ids  = ignoreTypes.includes( type ) ? { ...state.ids } : { ...state.ids, [ id ]: field.id };
 
-		const fieldIds = ignoreTypes.includes( type ) ? { ...state.fieldIds } : { ...state.fieldIds, [ id ]: field.id };
-
-		return { fieldIds };
+		return { ids };
 	} ),
 
-	removeFieldId: id => set( state => {
-		let fieldIds = { ...state.fieldIds };
-		delete fieldIds[ id ];
-		return { fieldIds };
+	remove: id => set( state => {
+		let ids = { ...state.ids };
+		delete ids[ id ];
+		return { ids };
 	} )
 } ) );

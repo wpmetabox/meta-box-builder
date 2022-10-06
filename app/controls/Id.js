@@ -5,7 +5,7 @@ import { getFieldValue } from '/functions';
 import useDebounce from '/hooks/useDebounce';
 
 const Id = ( { name, componentId, defaultValue, ...rest } ) => {
-	const updateFieldId = useFieldIdsStore( state => state.updateFieldId );
+	const updateFieldId = useFieldIdsStore( state => state.update );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 

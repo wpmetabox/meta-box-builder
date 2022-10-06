@@ -1,7 +1,7 @@
 import { useFieldIdsStore } from "../contexts/FieldIdsContext";
 
 export const AdminColumnsData = () => {
-	const fieldIds = useFieldIdsStore( state => state.fieldIds );
+	const fieldIds = useFieldIdsStore( state => state.ids );
 	let value = jQuery( document ).find( '#settings-object_type' ).val();
 	jQuery( document ).on( 'change', '#settings-object_type', function() {
 		value = jQuery( this ).val();

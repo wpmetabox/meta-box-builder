@@ -7,7 +7,7 @@ import { getFieldValue } from '/functions';
 import useDebounce from '/hooks/useDebounce';
 
 const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
-	const updateFieldId = useFieldIdsStore( state => state.updateFieldId );
+	const updateFieldId = useFieldIdsStore( state => state.update );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 	const isFirstEdit = useRef( _new );
