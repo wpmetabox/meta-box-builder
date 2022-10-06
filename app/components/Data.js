@@ -1,8 +1,7 @@
-import { useContext } from "@wordpress/element";
-import { FieldIdsContext } from '../contexts/FieldIdsContext';
+import { useFieldIdsStore } from '../contexts/FieldIdsContext';
 
 export const Data = () => {
-	const { fieldIds } = useContext( FieldIdsContext );
+	const fieldIds = useFieldIdsStore( state => state.fieldIds );
 
 	return (
 		<datalist id="field-ids">

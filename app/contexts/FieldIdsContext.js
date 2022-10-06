@@ -1,7 +1,5 @@
-import { createContext, useEffect, useState } from "@wordpress/element";
 import dotProp from 'dot-prop';
-
-export const FieldIdsContext = createContext( {} );
+import create from 'zustand';
 
 const ignoreTypes = [ 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
 
@@ -20,27 +18,20 @@ const flatten = obj => {
 	return value;
 };
 
-export const FieldIdsProvider = ( { children } ) => {
-	const [ fieldIds, setFieldIds ] = useState( {} );
+export const useFieldIdsStore = create( set => ( {
+	fieldIds: flatten( MbbApp ),
 
-	useEffect( () => {
-		const fields = flatten( MbbApp );
-		setFieldIds( fields );
-	}, [] );
-
-	const updateFieldId = ( id, field ) => setFieldIds( prev => {
+	updateFieldId: ( id, field ) => set( state => {
 		const type = dotProp.get( field, 'type', 'text' );
 
-		return ignoreTypes.includes( type ) ? { ...prev } : { ...prev, [ id ]: field.id };
-	} );
+		const fieldIds = ignoreTypes.includes( type ) ? { ...state.fieldIds } : { ...state.fieldIds, [ id ]: field.id };
 
-	const removeFieldId = id => setFieldIds( prev => {
-		let newFieldIds = { ...prev };
-		delete newFieldIds[ id ];
-		return prev;
-	} );
+		return { fieldIds };
+	} ),
 
-	return <FieldIdsContext.Provider value={ { fieldIds, updateFieldId, removeFieldId } }>
-		{ children }
-	</FieldIdsContext.Provider>;
-};
+	removeFieldId: id => set( state => {
+		let fieldIds = { ...state.fieldIds };
+		delete fieldIds[ id ];
+		return { fieldIds };
+	} )
+} ) );

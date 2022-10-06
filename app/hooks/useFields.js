@@ -1,11 +1,12 @@
-import { useContext, useState } from "@wordpress/element";
+import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
-import { FieldIdsContext } from "../contexts/FieldIdsContext";
+import { useFieldIdsStore } from "../contexts/FieldIdsContext";
 import { getFieldValue, ucwords, uniqid } from '../functions';
 
 const useFields = ( initialFields, baseId ) => {
-	const { updateFieldId, removeFieldId } = useContext( FieldIdsContext );
+	const updateFieldId = useFieldIdsStore( state => state.updateFieldId );
+	const removeFieldId = useFieldIdsStore( state => state.removeFieldId );
 	const [ fields, setFields ] = useState( initialFields );
 
 	const addField = type => {

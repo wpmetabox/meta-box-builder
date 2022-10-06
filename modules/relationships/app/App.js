@@ -3,7 +3,6 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Side from './Side';
 import { AdminColumnsData } from '/components/AdminColumnsData';
 import Result from '/components/Tabs/Result';
-import { FieldIdsProvider } from '/contexts/FieldIdsContext';
 import Checkbox from '/controls/Checkbox';
 import { request } from '/functions';
 const { render, useEffect, useState } = wp.element;
@@ -24,7 +23,7 @@ const App = () => {
 	}, [] );
 
 	return (
-		<FieldIdsProvider>
+		<>
 			<Tabs forceRenderTabPanel={ true }>
 				<TabList>
 					<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
@@ -45,7 +44,7 @@ const App = () => {
 				</TabPanel>
 			</Tabs>
 			<AdminColumnsData />
-		</FieldIdsProvider>
+		</>
 	);
 };
 

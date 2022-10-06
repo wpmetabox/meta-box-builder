@@ -1,8 +1,7 @@
-import { useContext } from "@wordpress/element";
-import { FieldIdsContext } from '/contexts/FieldIdsContext';
+import { useFieldIdsStore } from "../contexts/FieldIdsContext";
 
 export const AdminColumnsData = () => {
-	const { fieldIds } = useContext( FieldIdsContext );
+	const fieldIds = useFieldIdsStore( state => state.fieldIds );
 	let value = jQuery( document ).find( '#settings-object_type' ).val();
 	jQuery( document ).on( 'change', '#settings-object_type', function() {
 		value = jQuery( this ).val();
