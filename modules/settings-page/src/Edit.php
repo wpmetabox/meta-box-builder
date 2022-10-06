@@ -5,6 +5,42 @@ use MBB\BaseEditPage;
 use MetaBox\Support\Data;
 
 class Edit extends BaseEditPage {
+	public function __construct( $post_type, $slug_meta_box_title ) {
+		parent::__construct( $post_type, $slug_meta_box_title );
+		
+		add_filter( 'rwmb_meta_boxes', [ $this, 'add_option_name' ] );
+	}	
+
+	public function add_option_name( $meta_boxes ){
+		$request = rwmb_request();
+		$settings = get_post_meta( $request->get('post'), 'settings', true );
+
+		$meta_boxes[] = [
+			'title'      => __( $this->slug_meta_box_title, 'meta-box-builder' ),
+			'post_types' => [ $this->post_type ],
+			'context'    => 'side',
+			'priority'   => 'low',
+			'fields'     => [
+				[
+					'type' => 'text',
+					'id'   => 'ID',
+				],				
+				[
+					'type' => 'custom_html',
+					'std'  => '<a class="toggle_option_name" href="javascript:void(0)">'.__( 'Advanced', 'meta-box-builder' ).'</a>',
+				],				
+				[
+					'type' => 'text',
+					'id'=> 'settings[option_name]',
+					'name'   => __( 'Option name', 'meta-box-builder' ),
+					'tooltip' => __( 'Option name where settings data is saved to. Takes settings page ID if missed. If you want to use theme mods, then set this to <code>theme_mods_$themeslug</code>.', 'meta-box-builder' ),					
+					'std' => !empty( $settings ) && isset( $settings['option_name'] ) ? $settings['option_name'] : ''
+				]
+			],
+		];
+		return $meta_boxes;
+	}
+
 	public function enqueue() {
 		$url = MBB_URL . 'modules/settings-page/assets';
 
