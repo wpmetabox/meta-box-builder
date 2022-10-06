@@ -7,11 +7,9 @@ use MetaBox\Support\Data;
 class Edit extends BaseEditPage {
 	public function __construct( $post_type, $slug_meta_box_title ) {
 		parent::__construct( $post_type, $slug_meta_box_title );
-		
-		add_filter( 'rwmb_meta_boxes', [ $this, 'add_option_name' ] );
 	}	
 
-	public function add_option_name( $meta_boxes ){
+	public function add_meta_boxes( $meta_boxes ){
 		$request = rwmb_request();
 		$settings = get_post_meta( $request->get('post'), 'settings', true );
 
@@ -23,7 +21,8 @@ class Edit extends BaseEditPage {
 			'fields'     => [
 				[
 					'type' => 'text',
-					'id'   => 'ID',
+					'id'   => 'post_name',
+					'name' => __( 'ID', 'meta-box-builder' )
 				],				
 				[
 					'type' => 'custom_html',
