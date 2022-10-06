@@ -5,13 +5,18 @@ const { render, useEffect } = wp.element;
 const { __ } = wp.i18n;
 
 const App = () => {
-	useEffect( () => {
+	useEffect(() => {
+		//Default hidden option name
+		jQuery('.toggle_option_name').closest( '.rwmb-field' ).next().hide();
 		// Don't submit form when press Enter.
 		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function( e ) {
 			if ( e.keyCode == 13 ) {
 				e.preventDefault();
 			}
-		} );
+		} ).on( 'click', 
+		'.toggle_option_name', function ( e ) {
+			jQuery( this ).closest( '.rwmb-field' ).next().toggle();
+	  	} );
 	} );
 
 	return (

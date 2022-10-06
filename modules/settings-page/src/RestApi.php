@@ -7,10 +7,6 @@ use MBB\Control;
 class RestApi extends Base {
 	public function get_settings_page_controls() {
 		$controls = [
-			Control::Input( 'option_name', [
-				'type' => 'hidden'
-			] ),
-
 			// Menu.
 			Control::Select( 'menu_type', [
 				'label'   => __( 'Menu type', 'meta-box-builder' ),
