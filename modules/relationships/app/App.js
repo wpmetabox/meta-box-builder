@@ -18,7 +18,7 @@ const App = () => {
 		} );
 	}, [] );
 
-	const sides = get( 'relationships-sides' ) || [];
+	const sides = get( 'relationships-sides', [] );
 
 	return (
 		<>

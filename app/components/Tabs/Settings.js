@@ -5,7 +5,7 @@ import { ensureArray, get } from '../../functions';
 import SettingsContent from './SettingsContent';
 
 const Settings = ( { settings } ) => {
-	const settingsControls = get( 'settings-controls' ) || [];
+	const settingsControls = get( 'settings-controls', [] );
 
 	const [ objectType, setObjectType ] = useState( dotProp.get( settings, 'object_type', 'post' ) );
 	const [ postTypes, setPostTypes ] = useState( ensureArray( dotProp.get( settings, 'post_types', [ 'post' ] ) ) );

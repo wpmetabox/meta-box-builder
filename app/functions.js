@@ -7,20 +7,26 @@ export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( 
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
-export const fetcher = ( apiName, params = {} ) => {
+export const fetcher = ( api, params = {} ) => {
 	let options = {
 		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
 	};
-	let url = `${ MbbApp.rest }/mbb/${ apiName }`;
+	let url = `${ MbbApp.rest }/mbb/${ api }`;
 
 	const query = ( new URLSearchParams( params ) ).toString();
-	url += MbbApp.rest.includes( '?' ) ? query : `?${ query }`;
+	if ( query ) {
+		url += MbbApp.rest.includes( '?' ) ? query : `?${ query }`;
+	}
 
 	return fetch( url, options ).then( response => response.json() );
 };
 
-export const get = ( apiName, params = {}, defaultValue ) => {
-	const { data, error } = useSWR( apiName, fetcher );
+export const get = ( api, defaultValue ) => {
+	const { data, error } = useSWR( api, fetcher, {
+		dedupingInterval: 60 * 60 * 1000, // Cache requests for 1 hour.
+	} );
+
+	console.log( api );
 	return error || !data ? defaultValue : data;
 };
 

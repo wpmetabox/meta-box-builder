@@ -2,7 +2,7 @@ import { get } from "../functions";
 import DivRow from './DivRow';
 
 const Type = ( { fieldId, name, componentId, defaultValue, updateFieldType, ...rest } ) => {
-	const fieldCategories = get( 'field-categories' ) || [];
+	const fieldCategories = get( 'field-categories', [] );
 
 	const onChange = e => updateFieldType( fieldId, e.target.value );
 
@@ -16,7 +16,7 @@ const Type = ( { fieldId, name, componentId, defaultValue, updateFieldType, ...r
 };
 
 const Category = ( { category } ) => {
-	const fieldTypes = get( 'field-types' ) || {};
+	const fieldTypes = get( 'field-types', {} );
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug );
 
 	return (

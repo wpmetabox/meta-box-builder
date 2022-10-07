@@ -5,7 +5,7 @@ import { get } from "../../../functions";
 import Content from './Content';
 
 const Field = props => {
-	const fieldTypes = get( 'field-types' ) || {};
+	const fieldTypes = get( 'field-types', {} );
 
 	// Safe fallback to 'text' for not-recommended HTML5 field types.
 	const ignore = [ 'datetime-local', 'month', 'tel', 'week' ];

@@ -4,7 +4,7 @@ import { __ } from "@wordpress/i18n";
 import { get } from "../../../functions";
 
 export const Inserter = ( { addField, type } ) => {
-	const fieldCategories = get( 'field-categories' ) || [];
+	const fieldCategories = get( 'field-categories', [] );
 	const [ searchParam, setSearchParam ] = useState( '' );
 
 	const search = e => setSearchParam( e.target.value );
@@ -41,7 +41,7 @@ export const Inserter = ( { addField, type } ) => {
 };
 
 const Category = ( { category, insert, searchParam } ) => {
-	const fieldTypes = get( 'field-types' ) || {};
+	const fieldTypes = get( 'field-types', {} );
 	const s = searchParam.toLowerCase();
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( s ) );
 

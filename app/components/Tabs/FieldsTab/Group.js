@@ -22,7 +22,7 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 		`fields${ parent }[${ id }][fields]`
 	);
 
-	const fieldTypes = get( 'field-types' ) || {};
+	const fieldTypes = get( 'field-types', {} );
 	const controls = [ ...fieldTypes[ field.type ].controls ];
 
 	return (

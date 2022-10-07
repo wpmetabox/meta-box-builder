@@ -3,7 +3,7 @@ const { Suspense, useEffect, useState } = wp.element;
 const { __ } = wp.i18n;
 
 const Content = () => {
-	const controls = get( 'settings-page-controls' ) || [];
+	const controls = get( 'settings-page-controls', [] );
 
 	const getControlComponent = control => {
 		const [ Control, input, defaultValue ] = getControlParams( control, MbbApp.settings, () => import( `./controls/${ control.name }` ) );
