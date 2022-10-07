@@ -57,7 +57,7 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<input autoFocus type="text" id={ componentId } defaultValue={ defaultValue } name={ name } onChange={ onChange } onBlur={ onBlur } />
+			<input type="text" id={ componentId } defaultValue={ defaultValue } name={ name } onChange={ onChange } onBlur={ onBlur } />
 		</DivRow>
 	);
 };

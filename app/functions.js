@@ -26,7 +26,6 @@ export const get = ( api, defaultValue ) => {
 		dedupingInterval: 60 * 60 * 1000, // Cache requests for 1 hour.
 	} );
 
-	console.log( api );
 	return error || !data ? defaultValue : data;
 };
 
