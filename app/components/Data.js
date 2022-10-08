@@ -1,7 +1,7 @@
-import { useFieldIdsStore } from '../contexts/FieldIdsContext';
+import useFieldIds from '../hooks/useFieldIds';
 
 export const Data = ( { id = "field-ids", children } ) => {
-	const ids = useFieldIdsStore( state => state.ids );
+	const ids = useFieldIds( state => state.ids );
 
 	return (
 		<datalist id={ id }>

@@ -17,7 +17,7 @@ const flatten = obj => {
 	return value;
 };
 
-export const useFieldIdsStore = create( set => ( {
+const useFieldIds = create( set => ( {
 	ids: flatten( MbbApp ),
 
 	update: ( id, field ) => set( state => {
@@ -33,3 +33,5 @@ export const useFieldIdsStore = create( set => ( {
 		return { ids };
 	} )
 } ) );
+
+export default useFieldIds;
