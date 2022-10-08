@@ -1,10 +1,10 @@
 import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import useApi from '../../../app/hooks/useApi';
 import Side from './Side';
 import { AdminColumnsData } from '/components/AdminColumnsData';
 import Result from '/components/Tabs/Result';
 import Checkbox from '/controls/Checkbox';
-import { get } from '/functions';
 const { render, useEffect, useState } = wp.element;
 const { __ } = wp.i18n;
 
@@ -18,7 +18,7 @@ const App = () => {
 		} );
 	}, [] );
 
-	const sides = get( 'relationships-sides', [] );
+	const sides = useApi( 'relationships-sides', [] );
 
 	return (
 		<>

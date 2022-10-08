@@ -1,11 +1,12 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
-import { ensureArray, get } from '../../functions';
+import { ensureArray } from '../../functions';
+import useApi from "../../hooks/useApi";
 import SettingsContent from './SettingsContent';
 
 const Settings = ( { settings } ) => {
-	const settingsControls = get( 'settings-controls', [] );
+	const settingsControls = useApi( 'settings-controls', [] );
 
 	const [ objectType, setObjectType ] = useState( dotProp.get( settings, 'object_type', 'post' ) );
 	const [ postTypes, setPostTypes ] = useState( ensureArray( dotProp.get( settings, 'post_types', [ 'post' ] ) ) );

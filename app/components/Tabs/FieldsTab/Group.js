@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 import dotProp from 'dot-prop';
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { get } from "../../../functions";
+import useApi from "../../../hooks/useApi";
 import useFields from "../../../hooks/useFields";
 import Content from './Content';
 import { Inserter } from './Inserter';
@@ -22,7 +22,7 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 		`fields${ parent }[${ id }][fields]`
 	);
 
-	const fieldTypes = get( 'field-types', {} );
+	const fieldTypes = useApi( 'field-types', {} );
 	const controls = [ ...fieldTypes[ field.type ].controls ];
 
 	return (

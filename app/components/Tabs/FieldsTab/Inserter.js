@@ -1,10 +1,10 @@
 import { Dropdown } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { get } from "../../../functions";
+import useApi from "../../../hooks/useApi";
 
 export const Inserter = ( { addField, type } ) => {
-	const fieldCategories = get( 'field-categories', [] );
+	const fieldCategories = useApi( 'field-categories', [] );
 	const [ searchParam, setSearchParam ] = useState( '' );
 
 	const search = e => setSearchParam( e.target.value );
@@ -41,7 +41,7 @@ export const Inserter = ( { addField, type } ) => {
 };
 
 const Category = ( { category, insert, searchParam } ) => {
-	const fieldTypes = get( 'field-types', {} );
+	const fieldTypes = useApi( 'field-types', {} );
 	const s = searchParam.toLowerCase();
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( s ) );
 

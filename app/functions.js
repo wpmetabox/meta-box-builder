@@ -1,6 +1,5 @@
 import { lazy } from "@wordpress/element";
 import dotProp from 'dot-prop';
-import useSWR from 'swr';
 
 const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
@@ -19,14 +18,6 @@ export const fetcher = ( api, params = {} ) => {
 	}
 
 	return fetch( url, options ).then( response => response.json() );
-};
-
-export const get = ( api, defaultValue ) => {
-	const { data, error } = useSWR( api, fetcher, {
-		dedupingInterval: 60 * 60 * 1000, // Cache requests for 1 hour.
-	} );
-
-	return error || !data ? defaultValue : data;
 };
 
 export const ensureArray = arr => {
