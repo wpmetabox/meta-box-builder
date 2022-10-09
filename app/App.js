@@ -41,10 +41,10 @@ const App = () => {
 					<Fields fields={ MbbApp.fields } />
 				</TabPanel>
 				<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-					<Settings settings={ settings } />
+					<Settings />
 				</TabPanel>
 				<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-					<Result settings={ settings } endPoint="generate" />
+					<Result endPoint="generate" />
 				</TabPanel>
 			</Tabs>
 			<Data />

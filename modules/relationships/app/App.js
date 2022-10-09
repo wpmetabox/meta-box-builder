@@ -37,7 +37,7 @@ const App = () => {
 					{ sides.map( side => <Side key={ side.id } { ...side } /> ) }
 				</TabPanel>
 				<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-					<Result settings={ MbbApp.settings } endPoint="relationships-generate" />
+					<Result endPoint="relationships-generate" />
 				</TabPanel>
 			</Tabs>
 			<AdminColumnsData />

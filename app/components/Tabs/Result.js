@@ -2,11 +2,13 @@ import { ClipboardButton } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { getSettings } from "../../functions";
 import Input from '/controls/Input';
 // TODO: replace with useCopyToClipboard from @wordpress/compose.
 const { withState } = wp.compose;
 
-const ResultCode = ( { settings, endPoint } ) => {
+const ResultCode = ( { endPoint } ) => {
+	const settings = getSettings();
 	const [ data, setData ] = useState( '' );
 	const [ isGenerating, setIsGenerating ] = useState( false );
 

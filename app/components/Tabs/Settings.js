@@ -13,7 +13,6 @@ const getControlComponent = control => {
 		name={ `settings${ input }` }
 		{ ...control.props }
 		defaultValue={ defaultValue }
-		settings={ settings }
 	/>;
 };
 

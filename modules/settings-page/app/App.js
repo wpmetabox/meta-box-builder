@@ -32,7 +32,7 @@ const App = () => {
 				<Content />
 			</TabPanel>
 			<TabPanel className='react-tabs__tab-panel og-tab-panel--settings'>
-				<Result settings={ MbbApp.settings } endPoint='settings-page-generate' />
+				<Result endPoint='settings-page-generate' />
 			</TabPanel>
 		</Tabs>
 	);

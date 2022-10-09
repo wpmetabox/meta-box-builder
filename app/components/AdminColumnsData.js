@@ -1,12 +1,10 @@
+import useObjectType from "../hooks/useObjectType";
 import { Data } from "./Data";
 
 export const AdminColumnsData = () => {
-	let value = jQuery( document ).find( '#settings-object_type' ).val();
-	jQuery( document ).on( 'change', '#settings-object_type', function() {
-		value = jQuery( this ).val();
-	} );
+	const objectType = useObjectType( state => state.type );
 
-	if ( value == 'term' ) {
+	if ( objectType === 'term' ) {
 		return (
 			<Data id="admin-columns">
 				<option value="cb" />
@@ -18,7 +16,7 @@ export const AdminColumnsData = () => {
 		);
 	}
 
-	if ( value == 'user' ) {
+	if ( objectType === 'user' ) {
 		return (
 			<Data id="admin-columns">
 				<option value="cb" />
