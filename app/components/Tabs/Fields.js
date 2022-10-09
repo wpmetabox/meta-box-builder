@@ -9,10 +9,10 @@ import Node from './FieldsTab/Node';
 const Fields = props => {
 	const {
 		fields,
-		addField,
-		removeField,
-		duplicateField,
-		updateFieldType,
+		add,
+		remove,
+		duplicate,
+		updateType,
 		setFields,
 	} = useFields( Object.values( props.fields ), 'fields' );
 
@@ -30,17 +30,17 @@ const Fields = props => {
 			}
 			<ReactSortable className="og-fields" list={ fields } setList={ setFields } handle=".og-item__header">
 				{
-					fields.map( ( field, index ) => <Node
+					fields.map( field => <Node
 						key={ field._id }
 						id={ field._id }
 						field={ field }
-						removeField={ removeField }
-						duplicateField={ duplicateField }
-						updateFieldType={ updateFieldType }
+						removeField={ remove }
+						duplicateField={ duplicate }
+						updateFieldType={ updateType }
 					/> )
 				}
 			</ReactSortable>
-			<Inserter addField={ addField } />
+			<Inserter addField={ add } />
 		</>
 	);
 };

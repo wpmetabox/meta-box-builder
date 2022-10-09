@@ -12,10 +12,10 @@ import Node from './Node';
 const Group = ( { id, field, parent = '', updateFieldType } ) => {
 	const {
 		fields,
-		addField,
-		removeField,
-		duplicateField,
-		updateFieldType: updateSubFieldType,
+		add,
+		remove,
+		duplicate,
+		updateType,
 		setFields,
 	} = useFields(
 		Object.values( dotProp.get( field, 'fields', {} ) ),
@@ -49,13 +49,13 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 								id={ field._id }
 								field={ field }
 								parent={ `${ parent }[${ id }][fields]` }
-								removeField={ removeField }
-								duplicateField={ duplicateField }
-								updateFieldType={ updateSubFieldType }
+								removeField={ remove }
+								duplicateField={ duplicate }
+								updateFieldType={ updateType }
 							/> )
 						}
 					</ReactSortable>
-					<Inserter addField={ addField } />
+					<Inserter addField={ add } />
 				</div>
 			</div>
 		</>
