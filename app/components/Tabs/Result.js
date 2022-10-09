@@ -1,16 +1,20 @@
-import { ClipboardButton } from "@wordpress/components";
+import { useCopyToClipboard } from "@wordpress/compose";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { getSettings } from "../../functions";
 import Input from '/controls/Input';
-// TODO: replace with useCopyToClipboard from @wordpress/compose.
-const { withState } = wp.compose;
 
 const ResultCode = ( { endPoint } ) => {
 	const settings = getSettings();
 	const [ data, setData ] = useState( '' );
 	const [ isGenerating, setIsGenerating ] = useState( false );
+	const [ copied, setCopied ] = useState( false );
+
+	const copyRef = useCopyToClipboard( data, () => {
+		setCopied( true );
+		setTimeout( () => setCopied( false ), 2000 );
+	} );
 
 	const onClick = () => {
 		setData( '' );
@@ -32,12 +36,6 @@ const ResultCode = ( { endPoint } ) => {
 			setIsGenerating( false );
 		} );
 	};
-
-	const Button = withState( { hasCopied: false } )( ( { hasCopied, setState } ) => (
-		<ClipboardButton className="button" text={ data } onCopy={ () => setState( { hasCopied: true } ) } onFinishCopy={ () => setState( { hasCopied: false } ) }>
-			{ hasCopied ? __( 'Copied!', 'meta-box-builder' ) : __( 'Copy', 'meta-box-builder' ) }
-		</ClipboardButton>
-	) );
 
 	return <>
 		<Input
@@ -61,7 +59,9 @@ const ResultCode = ( { endPoint } ) => {
 				<p>{ __( 'Copy the code and paste into your theme\'s functions.php file.', 'meta-box-builder' ) }</p>
 				<div className="og-result__body">
 					<CodeMirror value={ data } options={ { mode: 'php', lineNumbers: true } } />
-					<Button />
+					<button type="button" className="button" text={ data } ref={ copyRef }>
+						{ copied ? __( 'Copied!', 'meta-box-builder' ) : __( 'Copy', 'meta-box-builder' ) }
+					</button>
 				</div>
 			</div>
 		}

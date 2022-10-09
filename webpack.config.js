@@ -8,6 +8,7 @@ const externals = {
 	'@wordpress/i18n': 'wp.i18n',
 	'@wordpress/element': 'wp.element',
 	'@wordpress/components': 'wp.components',
+	'@wordpress/compose': 'wp.compose',
 	'jquery': 'jQuery',
 	'jquery-ui': 'jQuery',
 	codemirror: 'wp.CodeMirror',

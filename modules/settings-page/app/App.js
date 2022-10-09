@@ -6,15 +6,16 @@ const { __ } = wp.i18n;
 
 const App = () => {
 	useEffect( () => {
-		//Default hidden option name
+		// Hide option name by default.
 		jQuery( '.toggle_option_name' ).closest( '.rwmb-field' ).next().hide();
-		// Don't submit form when press Enter.
 		jQuery( '#post' )
+			// Don't submit form when press Enter.
 			.on( 'keypress keydown keyup', 'input', function ( e ) {
 				if ( e.keyCode == 13 ) {
 					e.preventDefault();
 				}
 			} )
+			// Toggle option name.
 			.on( 'click', '.toggle_option_name', function ( e ) {
 				jQuery( this ).closest( '.rwmb-field' ).next().toggle();
 			} );
