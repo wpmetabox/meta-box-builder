@@ -1,23 +1,34 @@
-import { useState } from "@wordpress/element";
+import { Suspense } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { ensureArray } from '../../functions';
+import { getControlParams, getSettings } from "../../functions";
 import useApi from "../../hooks/useApi";
-import SettingsContent from './SettingsContent';
 
-const Settings = ( { settings } ) => {
+const settings = getSettings();
+
+const getControlComponent = control => {
+	const [ Control, input, defaultValue ] = getControlParams( control, settings );
+
+	return <Control
+		componentId={ `settings-${ control.setting }` }
+		name={ `settings${ input }` }
+		{ ...control.props }
+		defaultValue={ defaultValue }
+		settings={ settings }
+	/>;
+};
+
+const Settings = () => {
 	const settingsControls = useApi( 'settings-controls', [] );
 
-	const [ postTypes, setPostTypes ] = useState( ensureArray( settings.post_types || [ 'post' ] ) );
-
-	if ( settingsControls.length === 0 ) {
-		return <p>{ __( 'Loading settings, please wait...', 'meta-box-builder' ) }</p>;
-	}
-
-	return <SettingsContent
-		settings={ settings }
-		settingsControls={ settingsControls }
-		postTypes={ postTypes }
-		setPostTypes={ setPostTypes }
-	></SettingsContent>;
+	return settingsControls.length === 0
+		? <p>{ __( 'Loading settings, please wait...', 'meta-box-builder' ) }</p>
+		: <>
+			{
+				settingsControls.map( control => (
+					<Suspense fallback={ null } key={ control.setting }>{ getControlComponent( control ) }</Suspense> )
+				)
+			}
+		</>;
 };
+
 export default Settings;

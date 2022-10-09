@@ -1,10 +1,14 @@
 import { __ } from "@wordpress/i18n";
+import { getSettings } from "../functions";
 import useObjectType from "../hooks/useObjectType";
+import usePostTypes from "../hooks/usePostTypes";
 import Checkbox from './Checkbox';
 import Select from './Select';
 
-const Post = ( { postTypes, settings } ) => {
+const Post = () => {
+	const settings = getSettings();
 	const objectType = useObjectType( state => state.type );
+	const postTypes = usePostTypes( state => state.types );
 	const isClassic = !MbbApp.postTypes.find( pt => postTypes.includes( pt.slug ) && pt.block_editor );
 
 	let contextOptions = {

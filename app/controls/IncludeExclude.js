@@ -3,11 +3,13 @@ import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { fetcher, uniqid } from "../functions";
 import useObjectType from "../hooks/useObjectType";
+import usePostTypes from "../hooks/usePostTypes";
 import DivRow from './DivRow';
 import ReactAsyncSelect from './ReactAsyncSelect';
 
-const IncludeExclude = ( { postTypes, defaultValue } ) => {
+const IncludeExclude = ( { defaultValue } ) => {
 	const objectType = useObjectType( state => state.type );
+	const postTypes = usePostTypes( state => state.types );
 	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: 'ID', value: '', id: uniqid() } ] );
@@ -26,8 +28,6 @@ const IncludeExclude = ( { postTypes, defaultValue } ) => {
 					rule={ rule }
 					baseName={ `settings[include_exclude][rules][${ rule.id }]` }
 					removeRule={ removeRule }
-					objectType={ objectType }
-					postTypes={ postTypes }
 				/> )
 			}
 			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
@@ -50,7 +50,9 @@ const Intro = ( { defaultValue } ) => (
 	</div>
 );
 
-const Rule = ( { rule, baseName, removeRule, objectType, postTypes } ) => {
+const Rule = ( { rule, baseName, removeRule } ) => {
+	const objectType = useObjectType( state => state.type );
+	const postTypes = usePostTypes( state => state.types );
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 
