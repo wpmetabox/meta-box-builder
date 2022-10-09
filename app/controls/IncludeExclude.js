@@ -1,13 +1,12 @@
 import { Dashicon } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import { fetcher, uniqid } from "../functions";
 import DivRow from './DivRow';
 import ReactAsyncSelect from './ReactAsyncSelect';
 
 const IncludeExclude = ( { objectType, postTypes, defaultValue } ) => {
-	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'rules', {} ) ) );
+	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: 'ID', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
@@ -36,12 +35,12 @@ const IncludeExclude = ( { objectType, postTypes, defaultValue } ) => {
 
 const Intro = ( { defaultValue } ) => (
 	<div className="og-include-exclude__intro">
-		<select name="settings[include_exclude][type]" defaultValue={ dotProp.get( defaultValue, 'type', 'include' ) }>
+		<select name="settings[include_exclude][type]" defaultValue={ defaultValue.type || 'include' }>
 			<option value="include">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<select name="settings[include_exclude][relation]" defaultValue={ dotProp.get( defaultValue, 'relation', 'OR' ) }>
+		<select name="settings[include_exclude][relation]" defaultValue={ defaultValue.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>

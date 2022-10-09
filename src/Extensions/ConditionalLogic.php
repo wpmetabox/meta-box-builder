@@ -17,7 +17,7 @@ class ConditionalLogic {
 	public function add_field_controls( $controls ) {
 		$controls[] = Control::ConditionalLogic( 'conditional_logic', [
 			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noreferrer noopenner">' . __( 'Conditional logic', 'meta-box-builder' ) . '</a>',
-			'tooltip' => __( 'Toogle the field visibility by other fields\' values', 'meta-box-builder' ),
+			'tooltip' => __( 'Toggle the field visibility by other fields\' values', 'meta-box-builder' ),
 		], [], 'advanced' );
 
 		return $controls;
@@ -26,7 +26,7 @@ class ConditionalLogic {
 	public function add_settings_controls( $controls ) {
 		$controls[6] = Control::ConditionalLogic( 'conditional_logic', [
 			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noreferrer noopenner">' . __( 'Conditional logic', 'meta-box-builder' ) . '</a>',
-			'tooltip' => __( 'Toogle the visibility of the field group by other fields\' values', 'meta-box-builder' ),
+			'tooltip' => __( 'Toggle the visibility of the field group by other fields\' values', 'meta-box-builder' ),
 		] );
 
 		return $controls;

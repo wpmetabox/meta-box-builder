@@ -1,7 +1,6 @@
-import dotProp from 'dot-prop';
+import { __ } from "@wordpress/i18n";
 import Checkbox from './Checkbox';
 import Select from './Select';
-import { __ } from "@wordpress/i18n";
 
 const Post = ( { objectType, postTypes, settings } ) => {
 	const isClassic = !MbbApp.postTypes.find( pt => postTypes.includes( pt.slug ) && pt.block_editor );
@@ -20,28 +19,28 @@ const Post = ( { objectType, postTypes, settings } ) => {
 			name="settings[context]"
 			label={ __( 'Position', 'meta-box-builder' ) }
 			options={ contextOptions }
-			defaultValue={ dotProp.get( settings, 'context', 'normal' ) }
+			defaultValue={ settings.context || 'normal' }
 			componentId="settings-context"
 		/>
 		<Select
 			name="settings[priority]"
 			label={ __( 'Priority', 'meta-box-builder' ) }
 			options={ { high: __( 'High', 'meta-box-builder' ), low: __( 'Low', 'meta-box-builder' ) } }
-			defaultValue={ dotProp.get( settings, 'priority', 'high' ) }
+			defaultValue={ settings.priority || 'high' }
 			componentId="settings-priority"
 		/>
 		<Select
 			name="settings[style]"
 			label={ __( 'Style', 'meta-box-builder' ) }
 			options={ { default: __( 'Standard (WordPress meta box)', 'meta-box-builder' ), seamless: __( 'Seamless (no meta box)', 'meta-box-builder' ) } }
-			defaultValue={ dotProp.get( settings, 'style', 'default' ) }
+			defaultValue={ settings.style || 'default' }
 			componentId="settings-style"
 		/>
 		<Checkbox
 			name="settings[closed]"
 			label={ __( 'Collapsed by default', 'meta-box-builder' ) }
 			tooltip={ __( 'Whether to collapse the meta box when page loads', 'meta-box-builder' ) }
-			defaultValue={ dotProp.get( settings, 'closed', false ) }
+			defaultValue={ !!settings.closed }
 			componentId="settings-closed"
 		/>
 		{
@@ -50,7 +49,7 @@ const Post = ( { objectType, postTypes, settings } ) => {
 				name="settings[default_hidden]"
 				label={ __( 'Hidden by default', 'meta-box-builder' ) }
 				tooltip={ __( 'The meta box is hidden by default and requires users to select the corresponding checkbox in Screen Options to show it', 'meta-box-builder' ) }
-				defaultValue={ dotProp.get( settings, 'default_hidden', false ) }
+				defaultValue={ !!settings.default_hidden }
 				componentId="settings-default_hidden"
 			/>
 		}
@@ -59,7 +58,7 @@ const Post = ( { objectType, postTypes, settings } ) => {
 			<Checkbox
 				name="settings[autosave]"
 				label={ __( 'Autosave', 'meta-box-builder' ) }
-				defaultValue={ dotProp.get( settings, 'autosave', false ) }
+				defaultValue={ !!settings.autosave }
 				componentId="settings-autosave"
 			/>
 		}

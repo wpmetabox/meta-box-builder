@@ -1,7 +1,6 @@
 import { ClipboardButton } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Input from '/controls/Input';
 // TODO: replace with useCopyToClipboard from @wordpress/compose.
@@ -43,13 +42,13 @@ const ResultCode = ( { settings, endPoint } ) => {
 			name="settings[text_domain]"
 			label={ __( 'Text domain', 'meta-box-builder' ) }
 			tooltip={ __( 'Required for multilingual website. Used in the exported code only.', 'meta-box-builder' ) }
-			defaultValue={ dotProp.get( settings, 'text_domain', 'your-text-domain' ) }
+			defaultValue={ settings.text_domain || 'your-text-domain' }
 			componentId="text-domain"
 		/>
 		<Input
 			name="settings[function_name]"
 			label={ __( 'Function name', 'meta-box-builder' ) }
-			defaultValue={ dotProp.get( settings, 'function_name', 'your_prefix_function_name' ) }
+			defaultValue={ settings.function_name || 'your_prefix_function_name' }
 			componentId="function-name"
 		/>
 		<button type="button" className="button" onClick={ onClick } disabled={ isGenerating }>{ __( 'Generate', 'meta-box-builder' ) }</button>

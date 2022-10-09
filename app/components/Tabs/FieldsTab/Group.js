@@ -1,6 +1,5 @@
 import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
@@ -18,7 +17,7 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 		updateType,
 		setFields,
 	} = useFields(
-		Object.values( dotProp.get( field, 'fields', {} ) ),
+		Object.values( field.fields || {} ),
 		`fields${ parent }[${ id }][fields]`
 	);
 

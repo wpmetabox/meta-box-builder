@@ -1,6 +1,5 @@
-import dotProp from 'dot-prop';
-import DivRow from './DivRow';
 import { __ } from "@wordpress/i18n";
+import DivRow from './DivRow';
 
 const AdminColumnsPosition = ( { name, defaultValue, ...rest } ) => {
 	let value = jQuery( document ).find( '#settings-object_type' ).val();
@@ -15,12 +14,12 @@ const AdminColumnsPosition = ( { name, defaultValue, ...rest } ) => {
 	}
 	return (
 		<DivRow { ...rest }>
-			<select name={ `${ name }[type]` } defaultValue={ dotProp.get( defaultValue, 'type', 'after' ) }>
+			<select name={ `${ name }[type]` } defaultValue={ defaultValue.type || 'after' }>
 				<option value="after">{ __( 'After', 'meta-box-builder' ) }</option>
 				<option value="before">{ __( 'Before', 'meta-box-builder' ) }</option>
 				<option value="replace">{ __( 'Replace', 'meta-box-builder' ) }</option>
 			</select>
-			<input type="text" name={ `${ name }[column]` } defaultValue={ dotProp.get( defaultValue, 'column', valueColumn ) } list="admin-columns" />
+			<input type="text" name={ `${ name }[column]` } defaultValue={ defaultValue.column || valueColumn } list="admin-columns" />
 		</DivRow>
 	);
 };

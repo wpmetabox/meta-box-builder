@@ -1,6 +1,5 @@
-import { render, useEffect, useState } from "@wordpress/element";
+import { render, useEffect } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { AdminColumnsData } from './components/AdminColumnsData';
 import { Data } from './components/Data';
@@ -10,11 +9,10 @@ import Settings from './components/Tabs/Settings';
 import { parseQueryString } from './functions';
 
 const urlParams = parseQueryString( window.location.search );
-const settings = { ...dotProp.get( MbbApp, 'settings', {} ), ...urlParams.settings };
+let settings = MbbApp.settings || {};
+settings = { ...settings, ...urlParams.settings };
 
 const App = ( { settings } ) => {
-	const [ tabIndex, setTabIndex ] = useState( dotProp.get( MbbApp, 'data.tab_index', 0 ) );
-
 	const forceValidate = () => document.querySelector( '#post' ).removeAttribute( 'novalidate' );
 	useEffect( () => {
 		const publishButton = document.querySelector( '#publish' );
@@ -36,14 +34,14 @@ const App = ( { settings } ) => {
 
 	return (
 		<>
-			<Tabs forceRenderTabPanel={ true } defaultIndex={ dotProp.get( MbbApp, 'data.tab_index', 0 ) } onSelect={ setTabIndex }>
+			<Tabs forceRenderTabPanel={ true }>
 				<TabList>
 					<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
 					<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
 					<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
 				</TabList>
 				<TabPanel>
-					<Fields fields={ dotProp.get( MbbApp, 'fields', {} ) } />
+					<Fields fields={ MbbApp.fields } />
 				</TabPanel>
 				<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
 					<Settings settings={ settings } />
@@ -54,7 +52,6 @@ const App = ( { settings } ) => {
 			</Tabs>
 			<Data />
 			<AdminColumnsData />
-			<input type="hidden" name="data[tab_index]" defaultValue={ tabIndex } />
 		</>
 	);
 };

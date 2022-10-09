@@ -1,6 +1,5 @@
 import { RawHTML, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
@@ -12,8 +11,8 @@ import Textarea from './Textarea';
 import { ensureArray } from '/functions';
 
 const Block = ( { objectType, settings } ) => {
-	const [ iconType, setIconType ] = useState( dotProp.get( settings, 'icon_type', 'dashicons' ) );
-	const [ renderWith, setRenderWith ] = useState( dotProp.get( settings, 'render_with', 'callback' ) );
+	const [ iconType, setIconType ] = useState( settings.icon_type || 'dashicons' );
+	const [ renderWith, setRenderWith ] = useState( settings.render_with || 'callback' );
 	const [ codeEditor, setCodeEditor ] = useState();
 	const codeRef = useRef();
 
@@ -35,7 +34,7 @@ const Block = ( { objectType, settings } ) => {
 			name="settings[description]"
 			label={ __( 'Description', 'meta-box-builder' ) }
 			componentId="settings-block-description"
-			defaultValue={ dotProp.get( settings, 'description' ) }
+			defaultValue={ settings.description }
 		/>
 		<Select
 			name="settings[icon_type]"
@@ -52,10 +51,10 @@ const Block = ( { objectType, settings } ) => {
 				label={ __( 'SVG icon', 'meta-box-builder' ) }
 				componentId="settings-block-icon_svg"
 				placeholder={ __( 'Paste the SVG content here', 'meta-box-builder' ) }
-				defaultValue={ dotProp.get( settings, 'icon_svg' ) }
+				defaultValue={ settings.icon_svg }
 			/>
 		}
-		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" defaultValue={ dotProp.get( settings, 'icon' ) } /> }
+		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" defaultValue={ settings.icon } /> }
 		{
 			iconType === 'dashicons' &&
 			<Input
@@ -64,7 +63,7 @@ const Block = ( { objectType, settings } ) => {
 				componentId="settings-block-icon_foreground"
 				label={ __( 'Icon color', 'meta-box-builder' ) }
 				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
-				defaultValue={ dotProp.get( settings, 'icon_foreground' ) }
+				defaultValue={ settings.icon_foreground }
 			/>
 		}
 		{
@@ -75,7 +74,7 @@ const Block = ( { objectType, settings } ) => {
 				componentId="settings-block-icon_background"
 				label={ __( 'Icon background color', 'meta-box-builder' ) }
 				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
-				defaultValue={ dotProp.get( settings, 'icon_background' ) }
+				defaultValue={ settings.icon_background }
 			/>
 		}
 		<Select
@@ -83,14 +82,14 @@ const Block = ( { objectType, settings } ) => {
 			label={ __( 'Category', 'meta-box-builder' ) }
 			componentId="settings-block-category"
 			options={ MbbApp.blockCategories }
-			defaultValue={ dotProp.get( settings, 'category', 'layout' ) }
+			defaultValue={ settings.category, 'layout' }
 		/>
 		<Input
 			name="settings[keywords]"
 			label={ __( 'Keywords', 'meta-box-builder' ) }
 			componentId="settings-block-keywords"
 			tooltip={ __( 'Separate by commas', 'meta-box-builder' ) }
-			defaultValue={ dotProp.get( settings, 'keywords' ) }
+			defaultValue={ settings.keywords }
 		/>
 		<Select
 			name="settings[block_context]"
@@ -100,7 +99,7 @@ const Block = ( { objectType, settings } ) => {
 				content: __( 'In the content area', 'meta-box-builder' ),
 				side: __( 'On the right sidebar', 'meta-box-builder' ),
 			} }
-			defaultValue={ dotProp.get( settings, 'block_context', 'content' ) }
+			defaultValue={ settings.block_context || 'content' }
 		/>
 		<ReactSelect
 			name="settings[supports][align][]"
@@ -113,19 +112,19 @@ const Block = ( { objectType, settings } ) => {
 				wide: __( 'Wide', 'meta-box-builder' ),
 				full: __( 'Full', 'meta-box-builder' ),
 			} }
-			defaultValue={ ensureArray( dotProp.get( settings, 'supports.align', [] ) ) }
+			defaultValue={ ensureArray( settings.supports?.align || [] ) }
 		/>
 		<Checkbox
 			name="settings[supports][anchor]"
 			label={ __( 'Anchor', 'meta-box-builder' ) }
 			componentId="settings-block-supports-anchor"
-			defaultValue={ dotProp.get( settings, 'supports.anchor', false ) }
+			defaultValue={ !!settings.supports?.anchor }
 		/>
 		<Checkbox
 			name="settings[supports][customClassName]"
 			label={ __( 'Custom CSS class name', 'meta-box-builder' ) }
 			componentId="settings-block-supports-custom-class-name"
-			defaultValue={ dotProp.get( settings, 'supports.customClassName', false ) }
+			defaultValue={ !!settings.supports?.customClassName }
 		/>
 
 		<h3>{ __( 'Block Render Settings', 'meta-box-builder' ) }</h3>
@@ -148,7 +147,7 @@ const Block = ( { objectType, settings } ) => {
 				label={ __( 'Render callback', 'meta-box-builder' ) }
 				componentId="settings-block-render_callback"
 				placeholder={ __( 'Enter PHP function name', 'meta-box-builder' ) }
-				defaultValue={ dotProp.get( settings, 'render_callback' ) }
+				defaultValue={ settings.render_callback }
 			/>
 		}
 		{
@@ -158,7 +157,7 @@ const Block = ( { objectType, settings } ) => {
 				label={ __( 'Render template', 'meta-box-builder' ) }
 				componentId="settings-block-render_template"
 				placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) }
-				defaultValue={ dotProp.get( settings, 'render_template' ) }
+				defaultValue={ settings.render_template }
 			/>
 		}
 		{
@@ -166,11 +165,11 @@ const Block = ( { objectType, settings } ) => {
 			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
 				<CodeMirror
 					options={ { mode: 'php' } }
-					value={ dotProp.get( settings, 'render_code' ) }
+					value={ settings.render_code }
 					onChange={ ( editor, data, value ) => codeRef.current.value = value }
 					editorDidMount={ setCodeEditor }
 				/>
-				<input type="hidden" name="settings[render_code]" ref={ codeRef } defaultValue={ dotProp.get( settings, 'render_code' ) } />
+				<input type="hidden" name="settings[render_code]" ref={ codeRef } defaultValue={ settings.render_code } />
 				<table className="og-block-description">
 					<tbody>
 						<tr>
@@ -202,21 +201,21 @@ const Block = ( { objectType, settings } ) => {
 			label={ __( 'Custom CSS', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_style"
 			placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
-			defaultValue={ dotProp.get( settings, 'enqueue_style' ) }
+			defaultValue={ settings.enqueue_style }
 		/>
 		<Input
 			name="settings[enqueue_script]"
 			label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_script"
 			placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
-			defaultValue={ dotProp.get( settings, 'enqueue_script' ) }
+			defaultValue={ settings.enqueue_script }
 		/>
 		<Input
 			name="settings[enqueue_assets]"
 			label={ __( 'Custom assets callback', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_assets"
 			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
-			defaultValue={ dotProp.get( settings, 'enqueue_assets' ) }
+			defaultValue={ settings.enqueue_assets }
 		/>
 		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
 			<table className="og-block-description">

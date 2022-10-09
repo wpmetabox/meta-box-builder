@@ -1,5 +1,4 @@
 import { memo, Suspense } from "@wordpress/element";
-import dotProp from 'dot-prop';
 import { getControlParams } from '/functions';
 
 const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
@@ -19,8 +18,8 @@ const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
 			name={ `fields${ parent }[${ id }]${ input }` }
 			defaultValue={ defaultValue }
 
-			// For Name: idicate if field is just added, for auto generating ID.
-			_new={ dotProp.get( field, '_new', false ) }
+			// For Name: indicate if field is just added, for auto generating ID.
+			_new={ !!field._new }
 
 			// For Type: allow to change field type.
 			updateFieldType={ updateFieldType }

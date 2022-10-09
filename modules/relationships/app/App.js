@@ -1,4 +1,3 @@
-import dotProp from 'dot-prop';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from '../../../app/hooks/useApi';
 import Side from './Side';
@@ -32,7 +31,7 @@ const App = () => {
 						name="settings[reciprocal]"
 						componentId="settings-reciprocal"
 						label={ __( 'Reciprocal relationship' ) }
-						defaultValue={ dotProp.get( MbbApp.settings, 'reciprocal', false ) }
+						defaultValue={ !!MbbApp.settings.reciprocal }
 						className="relationships-plain"
 					/>
 					{ sides.map( side => <Side key={ side.id } { ...side } /> ) }

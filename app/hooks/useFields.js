@@ -1,6 +1,5 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import { getFieldValue, ucwords, uniqid } from '../functions';
 import useFieldIds from "./useFieldIds";
 
@@ -24,7 +23,7 @@ const useFields = ( initialFields, baseId ) => {
 
 	const duplicate = id => {
 		let newField = getFieldValue( `${ baseId }[${ id }]` );
-		const newId = `${ dotProp.get( newField, 'type' ) }_${ uniqid() }`;
+		const newId = `${ newField.type }_${ uniqid() }`;
 
 		newField.id = newId;
 		newField._id = newId;

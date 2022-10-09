@@ -6,7 +6,7 @@ import useFields from "../../hooks/useFields";
 import { Inserter } from './FieldsTab/Inserter';
 import Node from './FieldsTab/Node';
 
-const Fields = props => {
+const Fields = prop => {
 	const {
 		fields,
 		add,
@@ -14,7 +14,7 @@ const Fields = props => {
 		duplicate,
 		updateType,
 		setFields,
-	} = useFields( Object.values( props.fields ), 'fields' );
+	} = useFields( prop.fields, 'fields' );
 
 	// Don't render any field if fields data is not available.
 	const fieldTypes = useApi( 'field-types', {} );

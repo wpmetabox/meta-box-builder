@@ -1,6 +1,5 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
 import ReactSelect from './ReactSelect';
@@ -8,7 +7,7 @@ import Select from './Select';
 import { ensureArray } from '/functions';
 
 const Location = ( { objectType, setObjectType, postTypes, setPostTypes, settings } ) => {
-	const [ settingsPages, setSettingsPages ] = useState( ensureArray( dotProp.get( settings, 'settings_pages', [] ) ) );
+	const [ settingsPages, setSettingsPages ] = useState( ensureArray( settings.settings_pages || [] ) );
 
 	const selectedSettingsPage = MbbApp.settingsPages.find( p => settingsPages.includes( p.id ) );
 	const tabs = selectedSettingsPage ? selectedSettingsPage.tabs : [];
@@ -40,7 +39,7 @@ const Location = ( { objectType, setObjectType, postTypes, setPostTypes, setting
 						wrapper={ false }
 						name="settings[taxonomies][]"
 						options={ MbbApp.taxonomies.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
-						defaultValue={ ensureArray( dotProp.get( settings, 'taxonomies', [] ) ) }
+						defaultValue={ ensureArray( settings.taxonomies || [] ) }
 					/>
 				}
 				{
@@ -49,7 +48,7 @@ const Location = ( { objectType, setObjectType, postTypes, setPostTypes, setting
 						wrapper={ false }
 						name="settings[settings_pages][]"
 						options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.id })` } ) ) }
-						defaultValue={ ensureArray( dotProp.get( settings, 'settings_pages', [] ) ) }
+						defaultValue={ ensureArray( settings.settings_pages || [] ) }
 						onChange={ items => setSettingsPages( items ? items.map( item => item.value ) : [] ) }
 					/>
 				}
@@ -59,7 +58,7 @@ const Location = ( { objectType, setObjectType, postTypes, setPostTypes, setting
 				<Checkbox
 					label={ __( 'Show in media modal', 'meta-box-builder' ) }
 					name="settings[media_modal]"
-					defaultValue={ dotProp.get( settings, 'media_modal', false ) }
+					defaultValue={ !!settings.media_modal }
 					componentId="settings-media_modal"
 				/>
 			}
@@ -70,7 +69,7 @@ const Location = ( { objectType, setObjectType, postTypes, setPostTypes, setting
 					tooltip={ __( 'Select a tab in the settings page that the field group belongs to', 'meta-box-builder' ) }
 					name="settings[tab]"
 					options={ tabs }
-					defaultValue={ dotProp.get( settings, 'tab' ) }
+					defaultValue={ settings.tab }
 					componentId="settings-tab"
 				/>
 			}
