@@ -7,7 +7,6 @@ import SettingsContent from './SettingsContent';
 const Settings = ( { settings } ) => {
 	const settingsControls = useApi( 'settings-controls', [] );
 
-	const [ objectType, setObjectType ] = useState( settings.object_type || 'post' );
 	const [ postTypes, setPostTypes ] = useState( ensureArray( settings.post_types || [ 'post' ] ) );
 
 	if ( settingsControls.length === 0 ) {
@@ -17,8 +16,6 @@ const Settings = ( { settings } ) => {
 	return <SettingsContent
 		settings={ settings }
 		settingsControls={ settingsControls }
-		objectType={ objectType }
-		setObjectType={ setObjectType }
 		postTypes={ postTypes }
 		setPostTypes={ setPostTypes }
 	></SettingsContent>;

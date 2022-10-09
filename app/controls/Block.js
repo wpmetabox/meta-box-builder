@@ -1,6 +1,7 @@
 import { RawHTML, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
+import useObjectType from "../hooks/useObjectType";
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
 import Icon from './Icon';
@@ -10,11 +11,12 @@ import Select from './Select';
 import Textarea from './Textarea';
 import { ensureArray } from '/functions';
 
-const Block = ( { objectType, settings } ) => {
+const Block = ( { settings } ) => {
 	const [ iconType, setIconType ] = useState( settings.icon_type || 'dashicons' );
 	const [ renderWith, setRenderWith ] = useState( settings.render_with || 'callback' );
 	const [ codeEditor, setCodeEditor ] = useState();
 	const codeRef = useRef();
+	const objectType = useObjectType( state => state.type );
 
 	useEffect( () => {
 		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();

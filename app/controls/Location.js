@@ -1,16 +1,20 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import useObjectType from "../hooks/useObjectType";
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
 import ReactSelect from './ReactSelect';
 import Select from './Select';
 import { ensureArray } from '/functions';
 
-const Location = ( { objectType, setObjectType, postTypes, setPostTypes, settings } ) => {
+const Location = ( { postTypes, setPostTypes, settings } ) => {
 	const [ settingsPages, setSettingsPages ] = useState( ensureArray( settings.settings_pages || [] ) );
 
 	const selectedSettingsPage = MbbApp.settingsPages.find( p => settingsPages.includes( p.id ) );
 	const tabs = selectedSettingsPage ? selectedSettingsPage.tabs : [];
+
+	const objectType = useObjectType( state => state.type );
+	const setObjectType = useObjectType( state => state.update );
 
 	return (
 		<>

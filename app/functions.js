@@ -30,7 +30,14 @@ export const ensureArray = arr => {
 	return typeof arr === 'object' ? Object.values( arr ) : [ arr ];
 };
 
-export const parseQueryString = queryString => {
+export const getSettings = () => {
+	const urlParams = parseQueryString( window.location.search );
+	const settings = MbbApp.settings || {};
+
+	return { ...settings, ...urlParams.settings };
+}
+
+const parseQueryString = queryString => {
 	const params = new URLSearchParams( queryString );
 	return convert( params );
 };

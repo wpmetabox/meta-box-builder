@@ -1,7 +1,7 @@
 import { memo, Suspense } from "@wordpress/element";
 import { getControlParams } from '/functions';
 
-const SettingsContent = ( { settings, settingsControls, objectType, setObjectType, postTypes, setPostTypes } ) => {
+const SettingsContent = ( { settings, settingsControls, postTypes, setPostTypes } ) => {
 	const getControlComponent = control => {
 		const [ Control, input, defaultValue ] = getControlParams( control, settings );
 
@@ -11,8 +11,6 @@ const SettingsContent = ( { settings, settingsControls, objectType, setObjectTyp
 			{ ...control.props }
 			defaultValue={ defaultValue }
 			settings={ settings }
-			objectType={ objectType }
-			setObjectType={ setObjectType }
 			postTypes={ postTypes }
 			setPostTypes={ setPostTypes }
 		/>;

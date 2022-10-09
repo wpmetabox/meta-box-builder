@@ -6,13 +6,10 @@ import { Data } from './components/Data';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
-import { parseQueryString } from './functions';
+import { getSettings } from './functions';
 
-const urlParams = parseQueryString( window.location.search );
-let settings = MbbApp.settings || {};
-settings = { ...settings, ...urlParams.settings };
-
-const App = ( { settings } ) => {
+const App = () => {
+	const settings = getSettings();
 	const forceValidate = () => document.querySelector( '#post' ).removeAttribute( 'novalidate' );
 	useEffect( () => {
 		const publishButton = document.querySelector( '#publish' );
@@ -56,4 +53,4 @@ const App = ( { settings } ) => {
 	);
 };
 
-render( <App settings={ settings } />, document.getElementById( 'root' ) );
+render( <App />, document.getElementById( 'root' ) );

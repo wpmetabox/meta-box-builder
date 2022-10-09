@@ -2,11 +2,13 @@ import { Dashicon } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { fetcher, uniqid } from "../functions";
+import useObjectType from "../hooks/useObjectType";
 import DivRow from './DivRow';
 import KeyValue from './KeyValue';
 import ReactAsyncSelect from './ReactAsyncSelect';
 
-const ShowHide = ( { objectType, defaultValue } ) => {
+const ShowHide = ( { defaultValue } ) => {
+	const objectType = useObjectType( state => state.type );
 	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: 'template', value: '', id: uniqid() } ] );

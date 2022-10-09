@@ -1,8 +1,10 @@
 import { __ } from "@wordpress/i18n";
+import useObjectType from "../hooks/useObjectType";
 import Checkbox from './Checkbox';
 import Input from './Input';
 
-const CustomTable = ( { objectType, defaultValue } ) => {
+const CustomTable = ( { defaultValue } ) => {
+	const objectType = useObjectType( state => state.type );
 	return ![ 'setting', 'block' ].includes( objectType ) && <>
 		<Checkbox
 			name="settings[custom_table][enable]"
