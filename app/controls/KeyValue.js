@@ -1,6 +1,7 @@
 import { Dashicon } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import DataList from "./DataList";
 import DivRow from "./DivRow";
 import { uniqid } from "/functions";
 
@@ -9,14 +10,14 @@ const KeyValue = ( {
 	name,
 	keyPlaceholder = __( 'Enter key', 'meta-box-builder' ),
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
-	options = [],
+	keys = [],
 	values = [],
 	...rest
 } ) => {
 	const [ items, setItems ] = useState( Object.values( defaultValue || {} ) );
 
-	const addItem = () => setItems( prev => [ ...prev, { key: '', value: '', id: uniqid() } ] );
-	const removeItem = id => setItems( prev => prev.filter( item => item.id !== id ) );
+	const add = () => setItems( prev => [ ...prev, { key: '', value: '', id: uniqid() } ] );
+	const remove = id => setItems( prev => prev.filter( item => item.id !== id ) );
 
 	return (
 		<DivRow { ...rest }>
@@ -25,42 +26,28 @@ const KeyValue = ( {
 					<Item
 						key={ item.id }
 						item={ item }
-						removeItem={ removeItem }
+						remove={ remove }
 						name={ `${ name }[${ item.id }]` }
-						listKeys={ `${ name }-keys` }
-						listValues={ `${ name }-values` }
+						keys={ `${ name }-keys` }
+						values={ `${ name }-values` }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
 					/>
 				) )
 			}
-			<button type="button" className="button" onClick={ addItem }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
-			{
-				options.length > 0 &&
-				<datalist id={ `${ name }-keys` }>
-					{
-						options.map( option => <option key={ option }>{ option }</option> )
-					}
-				</datalist>
-			}
-			{
-				values.length > 0 &&
-				<datalist id={ `${ name }-values` }>
-					{
-						values.map( value => <option key={ value }>{ value }</option> )
-					}
-				</datalist>
-			}
+			<button type="button" className="button" onClick={ add }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
+			<DataList id={ `${ name }-keys` } options={ keys } />
+			<DataList id={ `${ name }-values` } options={ values } />
 		</DivRow>
 	);
 };
 
-const Item = ( { name, listKeys, listValues, item, removeItem, keyPlaceholder, valuePlaceholder } ) => (
+const Item = ( { name, keys, values, item, remove, keyPlaceholder, valuePlaceholder } ) => (
 	<div className="og-attribute">
 		<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
-		<input type="text" placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } list={ listKeys } />
-		<input type="text" placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } list={ listValues } />
-		<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.id ) }><Dashicon icon="dismiss" /></button>
+		<input type="text" placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } list={ keys } />
+		<input type="text" placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } list={ values } />
+		<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => remove( item.id ) }><Dashicon icon="dismiss" /></button>
 	</div>
 );
 

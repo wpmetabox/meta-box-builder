@@ -62,7 +62,7 @@ class Registry {
 			Control::KeyValue( 'attributes', [
 				'label'   => '<a href="https://docs.metabox.io/custom-attributes/" target="_blank" rel="noreferrer noopener">' . __( 'Custom HTML5 attributes', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
-				'options' => [ 'max', 'maxlength', 'min', 'minlength', 'pattern', 'required', 'step', 'type' ],
+				'keys'    => [ 'max', 'maxlength', 'min', 'minlength', 'pattern', 'required', 'step', 'type' ],
 			], [], 'advanced' ),
 			Control::KeyValue( 'custom_settings', [
 				'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes">' . __( 'Custom settings', 'meta-box-builder' ) . '</a>',
@@ -403,7 +403,7 @@ class Registry {
 			'options_wysiwyg'              => Control::KeyValue( 'options', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/functions/wp_editor/" target="_blank" rel="nofollow noopenner">' . __( 'Editor options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'The editor options, the same as settings for wp_editor() function', 'meta-box-builder' ),
-				'options' => [ 'media_buttons', 'default_editor', 'textarea_rows', 'teeny', 'quicktags' ],
+				'keys'    => [ 'media_buttons', 'default_editor', 'textarea_rows', 'teeny', 'quicktags' ],
 				'values'  => [ 'true', 'false', 'tinymce', 'html' ],
 			] ),
 		];
