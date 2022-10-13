@@ -123,8 +123,18 @@ class Registry {
 			Control::Checkbox( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
 			Control::Checkbox( 'required', __( 'Required', 'meta-box-builder' ) ),
 			Control::Checkbox( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
-			'js_options_date'              => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
-			'js_options_datetime'          => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_date'              => Control::KeyValue( 'js_options', [
+				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'jQueryUI date picker options', 'meta-box-builder' ),
+				'keys'    => [ 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'currentText', 'dateFormat', 'dayNames', 'dayNamesShort', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'nextText', 'numberOfMonths', 'prevText', 'showButtonPanel', 'stepMonths', 'yearRange' ],
+				'values'  => [ 'true', 'false', 'yy-mm-dd', 'mm/dd/yy', 'dd-mm-yy' ],
+			] ),
+			'js_options_datetime'          => Control::KeyValue( 'js_options', [
+				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'jQueryUI date and time picker options', 'meta-box-builder' ),
+				'keys'    => [ 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'controlType', 'currentText', 'dateFormat', 'dayNames', 'dayNamesShort', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'nextText', 'numberOfMonths', 'prevText', 'showButtonPanel', 'stepMonths', 'timeFormat', 'yearRange' ],
+				'values'  => [ 'true', 'false', 'yy-mm-dd HH:mm', 'mm/dd/yy HH:mm', 'dd-mm-yy HH:mm' ],
+			] ),
 
 			// Map.
 			'std_map'                      => Control::Input( 'std', [
@@ -176,10 +186,14 @@ class Registry {
 			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
+				'keys'    => [ 'object_ids', 'orderby', 'order', 'hide_empty', 'include', 'exclude', 'exclude_tree', 'number', 'offset', 'name', 'slug', 'hierarchical', 'search', 'name__like', 'description__like', 'child_of', 'parent', 'childless', 'meta_key', 'meta_value', 'meta_compare' ],
+				'values'  => [ 'true', 'false' ],
 			] ),
 			'query_args_taxonomy_advanced' => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
+				'keys'    => [ 'object_ids', 'orderby', 'order', 'hide_empty', 'include', 'exclude', 'exclude_tree', 'number', 'offset', 'name', 'slug', 'hierarchical', 'search', 'name__like', 'description__like', 'child_of', 'parent', 'childless', 'meta_key', 'meta_value', 'meta_compare' ],
+				'values'  => [ 'true', 'false' ],
 			] ),
 
 			// Upload.
@@ -234,7 +248,12 @@ class Registry {
 
 			// Color.
 			Control::Checkbox( 'alpha_channel', __( 'Allow to select opacity', 'meta-box-builder' ) ),
-			'js_options_color'             => Control::KeyValue( 'js_options', '<a href="https://automattic.github.io/Iris/" target="_blank" rel="nofollow noopenner">' . __( 'Color picker options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_color'             => Control::KeyValue( 'js_options', [
+				'label'   => '<a href="https://automattic.github.io/Iris/" target="_blank" rel="nofollow noopenner">' . __( 'Color picker options', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'Color picker options', 'meta-box-builder' ),
+				'keys'    => [ 'mode', 'width', 'palettes' ],
+				'values'  => [],
+			] ),
 
 			// Custom HTML.
 			'std_custom_html'              => Control::Textarea( 'std', __( 'Content (HTML allowed)' ) ),
@@ -331,10 +350,44 @@ class Registry {
 			'query_args_post'              => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
+				'keys'    => [
+					'author', 'author_name', 'author__in', 'author__not_in',
+					'cat', 'category_name', 'category__and', 'category__in', 'category__not_in',
+					'tag', 'tag_id', 'tag__and', 'tag__in', 'tag__not_in', 'tag_slug__and', 'tag_slug__in',
+					'tax_query.relation', 'tax_query.0.taxonomy', 'tax_query.0.field', 'tax_query.0.terms', 'tax_query.0.include_children', 'tax_query.0.operator',
+					's',
+					'p', 'name', 'page_id', 'pagename', 'post_parent', 'post_parent__in', 'post_parent__not_in', 'post__in', 'post__not_in', 'post_name__in',
+					'has_password',
+					'post_type',
+					'post_status',
+					'nopaging',
+					'posts_per_page',
+					'offset',
+					'paged',
+					'ignore_sticky_posts',
+					'order', 'orderby',
+					'year', 'monthnum', 'date_query',
+					'meta_key', 'meta_value', 'meta_value_num', 'meta_compare', 'meta_query.relation', 'meta_query.0.key', 'meta_query.0.value', 'meta_query.0.compare', 'meta_query.0.type',
+				],
+				'values'  => [
+					'true', 'false',
+					'AND', 'OR',
+					'term_id', 'name', 'slug', 'term_taxonomy_id',
+					'publish', 'pending', 'draft', 'future', 'private', 'any',
+					'ASC', 'DESC',
+					'author', 'title', 'type', 'date', 'modified', 'parent', 'comment_count', 'relevance', 'menu_order', 'meta_value', 'meta_value_num', 'post__in', 'post_name__in', 'post_parent__in',
+					'=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE',
+					'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED',
+				],
 			] ),
 
 			// Select advanced.
-			'js_options_select_advanced'   => Control::KeyValue( 'js_options', '<a href="https://select2.org/configuration" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_select_advanced'   => Control::KeyValue( 'js_options', [
+				'label'   => '<a href="https://select2.org/configuration/options-api" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
+				'keys'    => [ 'ajax', 'allowClear', 'closeOnSelect', 'dir', 'disabled', 'dropdownAutoWidth', 'dropdownCssClass', 'language', 'maximumInputLength', 'maximumSelectionLength', 'minimumInputLength', 'minimumResultsForSearch', 'selectionCssClass', 'selectOnClose', 'width', 'scrollAfterSelect' ],
+				'values'  => [ 'true', 'false' ],
+			] ),
 
 			// Slider.
 			Control::Input( 'prefix', [
@@ -345,7 +398,12 @@ class Registry {
 				'label'   => __( 'Suffix', 'meta-box-builder' ),
 				'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
 			] ),
-			'js_options_slider'            => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/slider" target="_blank" rel="nofollow noopenner">' . __( 'Slider options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_slider'            => Control::KeyValue( 'js_options', [
+				'label'   => '<a href="https://api.jqueryui.com/slider" target="_blank" rel="nofollow noopenner">' . __( 'Slider options', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'jQueryUI slider options', 'meta-box-builder' ),
+				'keys'    => [ 'animate', 'max', 'min', 'orientation' 'step' ],
+				'values'  => [ 'true', 'false' ],
+			] ),
 
 			// Switch.
 			Control::Select( 'style', [
@@ -390,12 +448,35 @@ class Registry {
 				'label'   => __( 'Inline', 'meta-box-builder' ),
 				'tooltip' => __( 'Display the time picker inline with the input. Do not require to click the input field to trigger the time picker.', 'meta-box-builder' ),
 			] ),
-			'js_options_time'              => Control::KeyValue( 'js_options', '<a href="http://trentrichardson.com/examples/timepicker" target="_blank" rel="nofollow noopenner">' . __( 'Time picker options', 'meta-box-builder' ) . '<a/>' ),
+			'js_options_time'              => Control::KeyValue( 'js_options', [
+				'label'   => '<a href="http://trentrichardson.com/examples/timepicker" target="_blank" rel="nofollow noopenner">' . __( 'Time picker options', 'meta-box-builder' ) . '<a/>',
+				'tooltip' => __( 'jQueryUI time picker options', 'meta-box-builder' ),
+				'keys'    => [ 'controlType', 'timeFormat' ],
+				'values'  => [ 'select', 'slider', 'HH:mm', 'HH:mm T' ],
+			] ),
 
 			// User.
 			'query_args_user'              => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_user_query/prepare_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
+				'keys'    => [
+					'blog_id', 'role', 'role__in', 'role__not_in',
+					'meta_key', 'meta_value', 'meta_compare', 'meta_compare_key', 'meta_type', 'meta_type_key',
+					'meta_query.relation', 'meta_query.0.key', 'meta_query.0.value', 'meta_query.0.compare', 'meta_query.0.type',
+					'capability', 'capability__in', 'capability__not_in',
+					'include', 'exclude',
+					'search', 'search_columns',
+					'orderby', 'order',
+					'offset', 'number', 'paged',
+					'who', 'has_published_posts',
+					'nicename', 'nicename__in', 'nicename__not_in',
+					'login', 'login__in', 'login__not_in',
+				],
+				'values'  => [
+					'ASC', 'DESC',
+					'ID', 'display_name', 'include', 'user_login', 'login__in', 'user_nicename', 'nicename__in', 'user_email', 'user_url', 'user_registered', 'post_count'
+					'meta_value', 'meta_value_num'
+				],
 			] ),
 
 			// Wysiwyg.
