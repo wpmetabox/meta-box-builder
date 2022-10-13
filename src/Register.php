@@ -59,14 +59,15 @@ class Register {
 			$data['post_id']    = $post_id;
 
 			// Get all fields data.
-			foreach ( $meta_box['fields'] as $field ) {
+			$fields = array_filter( $meta_box['fields'], [ $this, 'has_value' ] );
+			foreach ( $fields as $field ) {
 				$data[ $field['id'] ] = 'group' === $field['type'] ? mb_get_block_field( $field['id'], [] ) : mb_the_block_field( $field['id'], [], false );
 			}
 
 			$loader = new \eLightUp\Twig\Loader\ArrayLoader( [
 				'block' => '{% autoescape false %}' . $meta_box['render_code'] . '{% endautoescape %}',
 			] );
-			$twig = new \eLightUp\Twig\Environment( $loader );
+			$twig   = new \eLightUp\Twig\Environment( $loader );
 
 			// Proxy for all PHP/WordPress functions.
 			$data['mb'] = new TwigProxy;
@@ -86,11 +87,8 @@ class Register {
 			return;
 		}
 		$columns = [];
-		foreach ( $meta_box['fields'] as $field ) {
-			if ( empty( $field['id'] ) || in_array( $field['type'], ['heading', 'divider', 'button'] ) ) {
-				continue;
-			}
-
+		$fields  = array_filter( $meta_box['fields'], [ $this, 'has_value' ] );
+		foreach ( $fields as $field ) {
 			$columns[ $field['id'] ] = 'TEXT';
 		}
 		\MB_Custom_Table_API::create( $meta_box['table'], $columns );
@@ -102,7 +100,11 @@ class Register {
 		\RWMB_Helpers_Field::localize_script_once( 'mbb-post', 'MBB', [
 			'meta_box_post_ids' => $this->meta_box_post_ids,
 			'base_url'          => admin_url( 'post.php?action=edit&post=' ),
-			'title'             => __( 'Edit the field group settings', 'meta-box-builder' )
+			'title'             => __( 'Edit the field group settings', 'meta-box-builder' ),
 		] );
+	}
+
+	private function has_value( $field ) {
+		return ! empty( $field['id'] ) && ! in_array( $field['type'], [ 'heading', 'divider', 'button', 'custom_html', 'tab' ], true );
 	}
 }
