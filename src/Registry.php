@@ -9,7 +9,7 @@ use MetaBox\Support\Arr;
 
 class Registry {
 	private $field_types = [];
-	private $controls = [];
+	private $controls    = [];
 
 	/**
 	 * Register all default controls, so we can refer to them by id later.
@@ -53,7 +53,7 @@ class Registry {
 			Control::Input( 'class', __( 'Custom CSS class', 'meta-box-builder' ), '', 'advanced' ),
 			Control::Checkbox( 'save_field', [
 				'label'   => __( 'Save field value' ),
-				'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' )
+				'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' ),
 			], true, 'advanced' ),
 			Control::Input( 'sanitize_callback', [
 				'label'   => '<a href="https://docs.metabox.io/sanitization/" target="_blank" rel="noreferrer noopener">' . __( 'Custom sanitize callback', 'meta-box-builder' ) . '</a>',
@@ -62,7 +62,7 @@ class Registry {
 			Control::KeyValue( 'attributes', [
 				'label'   => '<a href="https://docs.metabox.io/custom-attributes/" target="_blank" rel="noreferrer noopener">' . __( 'Custom HTML5 attributes', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
-				'options' => ['max', 'maxlength', 'min', 'minlength', 'pattern', 'required', 'step', 'type'],
+				'options' => [ 'max', 'maxlength', 'min', 'minlength', 'pattern', 'required', 'step', 'type' ],
 			], [], 'advanced' ),
 			Control::KeyValue( 'custom_settings', [
 				'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes">' . __( 'Custom settings', 'meta-box-builder' ) . '</a>',
@@ -112,22 +112,22 @@ class Registry {
 				'tooltip' => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'timestamp', __( 'Save value as timestamp', 'meta-box-builder' ) ),
-			'inline_date' => Control::Checkbox( 'inline', [
+			'inline_date'                  => Control::Checkbox( 'inline', [
 				'label'   => __( 'Inline', 'meta-box-builder' ),
 				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
 			] ),
-			'inline_datetime' => Control::Checkbox( 'inline', [
+			'inline_datetime'              => Control::Checkbox( 'inline', [
 				'label'   => __( 'Inline', 'meta-box-builder' ),
 				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
 			Control::Checkbox( 'required', __( 'Required', 'meta-box-builder' ) ),
 			Control::Checkbox( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
-			'js_options_date' => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
-			'js_options_datetime' => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_date'              => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_datetime'          => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>' ),
 
 			// Map.
-			'std_map' => Control::Input( 'std', [
+			'std_map'                      => Control::Input( 'std', [
 				'label'   => __( 'Default location', 'meta-box-builder' ),
 				'tooltip' => __( 'Format: latitude,longitude.', 'meta-box-builder' ),
 			] ),
@@ -142,8 +142,8 @@ class Registry {
 				'options' => $this->get_languages(),
 			] ),
 			Control::Select( 'region', [
-				'label'    => __( 'Region', 'meta-box-builder' ),
-				'options'  => $this->get_regions(),
+				'label'   => __( 'Region', 'meta-box-builder' ),
+				'options' => $this->get_regions(),
 			] ),
 
 			// Taxonomy.
@@ -173,7 +173,7 @@ class Registry {
 				'tooltip' => __( 'Allow to select multiple choices', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ) ),
-			'query_args_taxonomy' => Control::KeyValue( 'query_args', [
+			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 			] ),
@@ -201,31 +201,31 @@ class Registry {
 
 			// Autocomplete.
 			Control::Textarea( 'options', [
-				'label'   => __( 'Choices', 'meta-box-builder' ),
-				'description' => __( "Enter each choice per line. You can also set both value and label like <code>red: Red</code>.", 'meta-box-builder' ) .
-				     '<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ).
-				     '<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
+				'label'       => __( 'Choices', 'meta-box-builder' ),
+				'description' => __( 'Enter each choice per line. You can also set both value and label like <code>red: Red</code>.', 'meta-box-builder' ) .
+					 '<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ) .
+					 '<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
 			] ),
 
 			// Button.
-			'std_button' => Control::Input( 'std', __( 'Button text', 'meta-box-builder' ) ),
+			'std_button'                   => Control::Input( 'std', __( 'Button text', 'meta-box-builder' ) ),
 
 			// Button group.
-			'options_button_group' => Control::Textarea( 'options', [
+			'options_button_group'         => Control::Textarea( 'options', [
 				'label'       => __( 'Buttons', 'meta-box-builder' ),
-				'description' => __( "Enter each button text per line. You can also set both value and label like <code>red: Red</code>.", 'meta-box-builder' ) .
-				     '<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ).
-				     '<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
+				'description' => __( 'Enter each button text per line. You can also set both value and label like <code>red: Red</code>.', 'meta-box-builder' ) .
+					 '<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ) .
+					 '<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
 			] ),
-			'inline_button_group' => Control::Checkbox( 'inline', __( 'Display buttons horizontally', 'meta-box-builder' ), true ),
+			'inline_button_group'          => Control::Checkbox( 'inline', __( 'Display buttons horizontally', 'meta-box-builder' ), true ),
 
 			// Checkbox.
-			'std_checkbox' => Control::Checkbox( 'std', __( 'Checked by default', 'meta-box-builder' ) ),
+			'std_checkbox'                 => Control::Checkbox( 'std', __( 'Checked by default', 'meta-box-builder' ) ),
 
 			// Checkbox list.
-			'std_checkbox_list' => Control::Textarea( 'std', [
+			'std_checkbox_list'            => Control::Textarea( 'std', [
 				'label'   => __( 'Default value' ),
-				'tooltip' => __( 'Enter each value on a line', 'meta-box-builder')
+				'tooltip' => __( 'Enter each value on a line', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'inline', [
 				'label'   => __( 'Inline', 'meta-box-builder' ),
@@ -234,17 +234,17 @@ class Registry {
 
 			// Color.
 			Control::Checkbox( 'alpha_channel', __( 'Allow to select opacity', 'meta-box-builder' ) ),
-			'js_options_color' => Control::KeyValue( 'js_options', '<a href="https://automattic.github.io/Iris/" target="_blank" rel="nofollow noopenner">' . __( 'Color picker options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_color'             => Control::KeyValue( 'js_options', '<a href="https://automattic.github.io/Iris/" target="_blank" rel="nofollow noopenner">' . __( 'Color picker options', 'meta-box-builder' ) . '</a>' ),
 
 			// Custom HTML.
-			'std_custom_html' => Control::Textarea( 'std', __( 'Content (HTML allowed)' ) ),
+			'std_custom_html'              => Control::Textarea( 'std', __( 'Content (HTML allowed)' ) ),
 			Control::Input( 'callback', [
 				'label'   => __( 'PHP Callback', 'meta-box-builder' ),
 				'tooltip' => __( 'PHP function that is called to show custom HTML content. Will overwrite the content setting above.', 'meta-box-builder' ),
 			] ),
 
 			// Fieldset text.
-			'options_fieldset_text' => Control::KeyValue( 'options', [
+			'options_fieldset_text'        => Control::KeyValue( 'options', [
 				'label'            => __( 'Inputs', 'meta-box-builder' ),
 				'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
 			] ),
@@ -275,7 +275,7 @@ class Registry {
 			] ),
 
 			// Heading.
-			'desc_heading' => Control::Input( 'desc', [
+			'desc_heading'                 => Control::Input( 'desc', [
 				'label'   => __( 'Input description', 'meta-box-builder' ),
 				'tooltip' => __( 'Display below the field input', 'meta-box-builder' ),
 			] ),
@@ -323,18 +323,18 @@ class Registry {
 				'name'    => 'post_type[]',
 				'label'   => __( 'Post types', 'meta-box-builder' ),
 				'options' => $this->get_post_types(),
-			], ['post'] ),
+			], [ 'post' ] ),
 			Control::Checkbox( 'parent', [
 				'label'   => __( 'Set as parent', 'meta-box-builder' ),
 				'tooltip' => __( 'Set the selected post as the parent for the current being edited post.', 'meta-box-builder' ),
 			] ),
-			'query_args_post' => Control::KeyValue( 'query_args', [
+			'query_args_post'              => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
 			] ),
 
 			// Select advanced.
-			'js_options_select_advanced' => Control::KeyValue( 'js_options', '<a href="https://select2.org/configuration" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_select_advanced'   => Control::KeyValue( 'js_options', '<a href="https://select2.org/configuration" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>' ),
 
 			// Slider.
 			Control::Input( 'prefix', [
@@ -345,7 +345,7 @@ class Registry {
 				'label'   => __( 'Suffix', 'meta-box-builder' ),
 				'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
 			] ),
-			'js_options_slider' => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/slider" target="_blank" rel="nofollow noopenner">' . __( 'Slider options', 'meta-box-builder' ) . '</a>' ),
+			'js_options_slider'            => Control::KeyValue( 'js_options', '<a href="https://api.jqueryui.com/slider" target="_blank" rel="nofollow noopenner">' . __( 'Slider options', 'meta-box-builder' ) . '</a>' ),
 
 			// Switch.
 			Control::Select( 'style', [
@@ -357,7 +357,7 @@ class Registry {
 			], 'rounded' ),
 			Control::Input( 'on_label', __( 'Custom ON status label', 'meta-box-builder' ) ),
 			Control::Input( 'off_label', __( 'Custom OFF status label', 'meta-box-builder' ) ),
-			'std_switch' => Control::Checkbox( 'std', __( 'ON by default', 'meta-box-builder' ) ),
+			'std_switch'                   => Control::Checkbox( 'std', __( 'ON by default', 'meta-box-builder' ) ),
 
 			// Text.
 			Control::Input( 'prepend', __( 'Prepend text', 'meta-box-builder' ) ),
@@ -368,14 +368,14 @@ class Registry {
 			] ),
 
 			// Text list.
-			'options_text_list' => Control::KeyValue( 'options', [
+			'options_text_list'            => Control::KeyValue( 'options', [
 				'label'            => __( 'Inputs', 'meta-box-builder' ),
 				'keyPlaceholder'   => __( 'Placeholder', 'meta-box-builder' ),
 				'valuePlaceholder' => __( 'Label', 'meta-box-builder' ),
 			] ),
 
 			// Textarea.
-			'std_textarea' => Control::Textarea( 'std', __( 'Default value' ) ),
+			'std_textarea'                 => Control::Textarea( 'std', __( 'Default value' ) ),
 			Control::Input( 'rows', [
 				'type'  => 'number',
 				'label' => __( 'Rows', 'meta-box-builder' ),
@@ -386,21 +386,26 @@ class Registry {
 			] ),
 
 			// Time.
-			'inline_time' => Control::Checkbox( 'inline', [
+			'inline_time'                  => Control::Checkbox( 'inline', [
 				'label'   => __( 'Inline', 'meta-box-builder' ),
 				'tooltip' => __( 'Display the time picker inline with the input. Do not require to click the input field to trigger the time picker.', 'meta-box-builder' ),
 			] ),
-			'js_options_time' => Control::KeyValue( 'js_options', '<a href="http://trentrichardson.com/examples/timepicker" target="_blank" rel="nofollow noopenner">' . __( 'Time picker options', 'meta-box-builder' ) . '<a/>' ),
+			'js_options_time'              => Control::KeyValue( 'js_options', '<a href="http://trentrichardson.com/examples/timepicker" target="_blank" rel="nofollow noopenner">' . __( 'Time picker options', 'meta-box-builder' ) . '<a/>' ),
 
 			// User.
-			'query_args_user' => Control::KeyValue( 'query_args', [
+			'query_args_user'              => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_user_query/prepare_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
 			] ),
 
 			// Wysiwyg.
 			Control::Checkbox( 'raw', __( 'Save data in the raw format', 'meta-box-builder' ) ),
-			'options_wysiwyg' => Control::KeyValue( 'options', '<a href="https://developer.wordpress.org/reference/functions/wp_editor/" target="_blank" rel="nofollow noopenner">' . __( 'Editor options', 'meta-box-builder' ) . '</a>' ),
+			'options_wysiwyg'              => Control::KeyValue( 'options', [
+				'label'   => '<a href="https://developer.wordpress.org/reference/functions/wp_editor/" target="_blank" rel="nofollow noopenner">' . __( 'Editor options', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'The editor options, the same as settings for wp_editor() function', 'meta-box-builder' ),
+				'options' => [ 'media_buttons', 'default_editor', 'textarea_rows', 'teeny', 'quicktags' ],
+				'values'  => [ 'true', 'false', 'tinymce', 'html' ],
+			] ),
 		];
 
 		foreach ( $controls as $id => $control ) {
@@ -482,7 +487,7 @@ class Registry {
 		$image_sizes    = [];
 		$wp_image_sizes = get_intermediate_image_sizes();
 		foreach ( $wp_image_sizes as $size_name ) {
-			$image_sizes[ $size_name ] = ucwords( str_replace( ['_', '-'], ' ', $size_name ) );
+			$image_sizes[ $size_name ] = ucwords( str_replace( [ '_', '-' ], ' ', $size_name ) );
 		}
 		return $image_sizes;
 	}
@@ -509,7 +514,7 @@ class Registry {
 
 	private function get_post_types() {
 		$post_types = Helpers\Data::get_post_types();
-		$options = [];
+		$options    = [];
 		foreach ( $post_types as $post_type ) {
 			$options[ $post_type['slug'] ] = sprintf( '%s (%s)', $post_type['name'], $post_type['slug'] );
 		}
@@ -518,7 +523,7 @@ class Registry {
 
 	private function get_taxonomies() {
 		$taxonomies = Helpers\Data::get_taxonomies();
-		$options = [];
+		$options    = [];
 		foreach ( $taxonomies as $taxonomy ) {
 			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
 		}

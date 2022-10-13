@@ -10,6 +10,7 @@ const KeyValue = ( {
 	keyPlaceholder = __( 'Enter key', 'meta-box-builder' ),
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
 	options = [],
+	values = [],
 	...rest
 } ) => {
 	const [ items, setItems ] = useState( Object.values( defaultValue || {} ) );
@@ -26,7 +27,8 @@ const KeyValue = ( {
 						item={ item }
 						removeItem={ removeItem }
 						name={ `${ name }[${ item.id }]` }
-						list={ `${ name }-options` }
+						listKeys={ `${ name }-keys` }
+						listValues={ `${ name }-values` }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
 					/>
@@ -35,9 +37,17 @@ const KeyValue = ( {
 			<button type="button" className="button" onClick={ addItem }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
 			{
 				options.length > 0 &&
-				<datalist id={ `${ name }-options` }>
+				<datalist id={ `${ name }-keys` }>
 					{
 						options.map( option => <option key={ option }>{ option }</option> )
+					}
+				</datalist>
+			}
+			{
+				values.length > 0 &&
+				<datalist id={ `${ name }-values` }>
+					{
+						values.map( value => <option key={ value }>{ value }</option> )
 					}
 				</datalist>
 			}
@@ -45,11 +55,11 @@ const KeyValue = ( {
 	);
 };
 
-const Item = ( { name, list, item, removeItem, keyPlaceholder, valuePlaceholder } ) => (
+const Item = ( { name, listKeys, listValues, item, removeItem, keyPlaceholder, valuePlaceholder } ) => (
 	<div className="og-attribute">
 		<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
-		<input type="text" placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } list={ list } />
-		<input type="text" placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } />
+		<input type="text" placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } list={ listKeys } />
+		<input type="text" placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } list={ listValues } />
 		<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeItem( item.id ) }><Dashicon icon="dismiss" /></button>
 	</div>
 );
