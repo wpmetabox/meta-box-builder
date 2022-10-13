@@ -2,22 +2,21 @@ import useApi from "../hooks/useApi";
 import DivRow from './DivRow';
 
 const Type = ( { fieldId, name, componentId, defaultValue, updateFieldType, ...rest } ) => {
-	const fieldCategories = useApi( 'field-categories', [] );
-
+	const categories = useApi( 'field-categories', [] );
 	const onChange = e => updateFieldType( fieldId, e.target.value );
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
 			<select id={ componentId } name={ name } defaultValue={ defaultValue } onChange={ onChange }>
-				{ fieldCategories.map( category => <Category key={ category.slug } category={ category } /> ) }
+				{ categories.map( category => <Category key={ category.slug } category={ category } /> ) }
 			</select>
 		</DivRow>
 	);
 };
 
 const Category = ( { category } ) => {
-	const fieldTypes = useApi( 'field-types', {} );
-	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug );
+	const types = useApi( 'field-types', {} );
+	const fields = Object.entries( types ).filter( ( [ type, field ] ) => field.category === category.slug );
 
 	return (
 		<optgroup label={ category.title }>

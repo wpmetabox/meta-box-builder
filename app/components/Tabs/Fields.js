@@ -17,8 +17,10 @@ const Fields = prop => {
 	} = useFields( prop.fields, 'fields' );
 
 	// Don't render any field if fields data is not available.
-	const fieldTypes = useApi( 'field-types', {} );
-	if ( Object.keys( fieldTypes ).length === 0 ) {
+	const types = useApi( 'field-types', {} );
+	const categories = useApi( 'field-categories', [] );
+
+	if ( Object.keys( types ).length === 0 || Object.keys( categories ).length === 0 ) {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
