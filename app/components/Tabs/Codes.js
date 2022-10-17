@@ -7,13 +7,30 @@ import ThemeCode from "./CodeTypes/ThemeCode";
 const merge_in_group = ( fields ) => {
 	let all_fields = Object.assign( {}, fields );
 	Object.entries( fields ).map( ( field ) => {
-		if ( field[ 1 ].type !== 'group' ) {
+		if ( field[ 1 ].type !== 'group' || field[ 1 ].fields === undefined || field[ 1 ].fields.length === 0 ) {
 			return;
+		}
+
+		const group = Object.values( field[ 1 ][ 'fields' ] ).find( attr => attr.type === 'group' )
+		if ( group !== undefined ) {
+			all_fields = Object.assign( all_fields, merge_in_sub_group( all_fields, group ) );
 		}
 
 		delete all_fields[field[ 1 ]._id];
 		all_fields = Object.assign( all_fields, field[ 1 ].fields );
 	} );
+	return all_fields;
+};
+
+const merge_in_sub_group = ( all_fields, group ) => {
+	all_fields = Object.assign( all_fields, group.fields );
+	delete all_fields[ group._id ];
+
+	const sub_group = Object.values( group.fields ).find( attr => attr.type === 'group' );
+	if ( sub_group !== undefined ) {
+		all_fields = Object.assign( all_fields, merge_in_sub_group( all_fields, sub_group ) );
+	}	
+
 	return all_fields;
 };
 
