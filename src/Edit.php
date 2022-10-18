@@ -35,13 +35,16 @@ class Edit extends BaseEditPage {
 	}
 
 	public function enqueue() {
-		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', ['wp-components'] );
+		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components' ] );
 
-		wp_enqueue_code_editor( ['type' => 'application/x-httpd-php'] );
-		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', ['jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard', 'wp-color-picker'], MBB_VER, true );
+		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
+		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', [ 'jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard', 'wp-color-picker' ], MBB_VER, true );
+
+		$fields = get_post_meta( get_the_ID(), 'fields', true ) ?: [];
+		$fields = array_values( $fields );
 
 		$data = [
-			'fields'        => get_post_meta( get_the_ID(), 'fields', true ),
+			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
 			'data'          => get_post_meta( get_the_ID(), 'data', true ),
 
@@ -55,7 +58,7 @@ class Edit extends BaseEditPage {
 			'icons'         => DataHelper::get_dashicons(),
 
 			// Extensions check.
-			'extensions' => [
+			'extensions'    => [
 				'blocks'             => Data::is_extension_active( 'mb-blocks' ),
 				'columns'            => Data::is_extension_active( 'meta-box-columns' ),
 				'commentMeta'        => Data::is_extension_active( 'mb-comment-meta' ),
@@ -69,7 +72,7 @@ class Edit extends BaseEditPage {
 				'tabs'               => Data::is_extension_active( 'meta-box-tabs' ),
 				'termMeta'           => Data::is_extension_active( 'mb-term-meta' ),
 				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
-			]
+			],
 		];
 
 		$data = apply_filters( 'mbb_app_data', $data );
@@ -79,7 +82,7 @@ class Edit extends BaseEditPage {
 
 	public function save( $post_id, $post ) {
 		// Save data for JavaScript (serialized arrays).
-		$request = rwmb_request();
+		$request     = rwmb_request();
 		$base_parser = new BaseParser;
 
 		$base_parser->set_settings( $request->post( 'settings' ) )->parse_boolean_values()->parse_numeric_values();
@@ -96,7 +99,7 @@ class Edit extends BaseEditPage {
 
 		// Set post title and slug in case they're auto-generated.
 		$submitted_data['post_title'] = $post->post_title;
-		$submitted_data['post_name'] = $post->post_name;
+		$submitted_data['post_name']  = $post->post_name;
 
 		$parser = new Parser( $submitted_data );
 		$parser->parse();

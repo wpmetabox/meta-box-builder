@@ -1,14 +1,15 @@
 import { Dashicon } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
+import { fetcher, uniqid } from "../functions";
+import useObjectType from "../hooks/useObjectType";
 import DivRow from './DivRow';
 import KeyValue from './KeyValue';
 import ReactAsyncSelect from './ReactAsyncSelect';
-import { request, uniqid } from '/functions';
 
-const ShowHide = ( { objectType, defaultValue } ) => {
-	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'rules', {} ) ) );
+const ShowHide = ( { defaultValue } ) => {
+	const objectType = useObjectType( state => state.type );
+	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: 'template', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
@@ -36,12 +37,12 @@ const ShowHide = ( { objectType, defaultValue } ) => {
 
 const Intro = ( { defaultValue } ) => (
 	<div className="og-include-exclude__intro">
-		<select name="settings[show_hide][type]" defaultValue={ dotProp.get( defaultValue, 'type', 'show' ) }>
+		<select name="settings[show_hide][type]" defaultValue={ defaultValue.type || 'show' }>
 			<option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<select name="settings[show_hide][relation]" defaultValue={ dotProp.get( defaultValue, 'relation', 'OR' ) }>
+		<select name="settings[show_hide][relation]" defaultValue={ defaultValue.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
@@ -52,7 +53,7 @@ const Intro = ( { defaultValue } ) => (
 const Rule = ( { rule, baseName, removeRule, objectType } ) => {
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
-	const loadOptions = s => request( 'show-hide', { name, s } );
+	const loadOptions = s => fetcher( 'show-hide', { name, s } );
 
 	// Validate rule name.
 	useEffect( () => {

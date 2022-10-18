@@ -23,9 +23,9 @@ class AdminColumns {
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
 		] );
 
-		wp_register_script( 'popper', MBB_URL . 'assets/js/popper.min.js', [], '1.15.0', true );
-		wp_enqueue_script( 'tippy', MBB_URL . 'assets/js/tippy.min.js', ['popper'], '4.3.1', true );
-		wp_add_inline_script( 'tippy', 'tippy( document.body, {target: ".mbb-tooltip", placement: "top-start", arrow: true, animation: "fade"} );' );
+		wp_register_script( 'popper', 'https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js', [], '2.11.6', true );
+		wp_enqueue_script( 'tippy', 'https://unpkg.com/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js', [ 'popper' ], '6.3.7', true );
+		wp_add_inline_script( 'tippy', 'tippy( ".mbb-tooltip", {placement: "top-start", arrow: true, animation: "fade"} );' );
 	}
 
 	public function add_columns( $columns ) {
@@ -93,7 +93,7 @@ class AdminColumns {
 				echo implode( '<br>', array_filter( array_map( function( $post_type ) {
 					$post_type_object = get_post_type_object( $post_type );
 					return $post_type_object ? $post_type_object->labels->singular_name : '';
-				}, Arr::get( $data, 'post_types', ['post'] ) ) ) );
+				}, Arr::get( $data, 'post_types', [ 'post' ] ) ) ) );
 				break;
 			case 'term':
 				echo implode( '<br>', array_filter( array_map( function( $taxonomy ) {

@@ -1,11 +1,11 @@
-import { memo, useContext } from "@wordpress/element";
+import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
+import useApi from "../../../hooks/useApi";
 import Content from './Content';
 
 const Field = props => {
-	const { fieldTypes } = useContext( FieldsDataContext );
+	const fieldTypes = useApi( 'field-types', {} );
 
 	// Safe fallback to 'text' for not-recommended HTML5 field types.
 	const ignore = [ 'datetime-local', 'month', 'tel', 'week' ];

@@ -6,41 +6,38 @@ export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( 
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
-let apiCache = {};
-export const request = async ( apiName, params = {}, method = 'GET', cache = true ) => {
-	const cacheKey = JSON.stringify( { apiName, params, method } );
-	if ( cache && apiCache[ cacheKey ] ) {
-		return apiCache[ cacheKey ];
-	}
-
+export const fetcher = ( api, params = {} ) => {
 	let options = {
-		method,
 		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
 	};
-	let url = `${ MbbApp.rest }/mbb/${ apiName }`;
+	let url = `${ MbbApp.rest }/mbb/${ api }`;
 
 	const query = ( new URLSearchParams( params ) ).toString();
-	if ( 'POST' === method ) {
-		options.body = JSON.stringify( params );
-	} else if ( query ) {
+	if ( query ) {
 		url += MbbApp.rest.includes( '?' ) ? query : `?${ query }`;
 	}
-	const result = await fetch( url, options ).then( response => response.json() );
-	apiCache[ cacheKey ] = result;
-	return result;
+
+	return fetch( url, options ).then( response => response.json() );
 };
 
 export const ensureArray = arr => {
 	if ( Array.isArray( arr ) ) {
 		return arr;
 	}
-	if ( ! arr ) {
+	if ( !arr ) {
 		return [];
 	}
 	return typeof arr === 'object' ? Object.values( arr ) : [ arr ];
 };
 
-export const parseQueryString = queryString => {
+export const getSettings = () => {
+	const urlParams = parseQueryString( window.location.search );
+	const settings = MbbApp.settings || {};
+
+	return { ...settings, ...urlParams.settings };
+}
+
+const parseQueryString = queryString => {
 	const params = new URLSearchParams( queryString );
 	return convert( params );
 };

@@ -1,9 +1,8 @@
-import { memo, useContext } from "@wordpress/element";
+import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { FieldsDataContext } from '../../../contexts/FieldsDataContext';
+import useApi from "../../../hooks/useApi";
 import useFields from "../../../hooks/useFields";
 import Content from './Content';
 import { Inserter } from './Inserter';
@@ -12,17 +11,17 @@ import Node from './Node';
 const Group = ( { id, field, parent = '', updateFieldType } ) => {
 	const {
 		fields,
-		addField,
-		removeField,
-		duplicateField,
-		updateFieldType: updateSubFieldType,
+		add,
+		remove,
+		duplicate,
+		updateType,
 		setFields,
 	} = useFields(
-		Object.values( dotProp.get( field, 'fields', {} ) ),
+		Object.values( field.fields || {} ),
 		`fields${ parent }[${ id }][fields]`
 	);
 
-	const { fieldTypes } = useContext( FieldsDataContext );
+	const fieldTypes = useApi( 'field-types', {} );
 	const controls = [ ...fieldTypes[ field.type ].controls ];
 
 	return (
@@ -49,13 +48,13 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 								id={ field._id }
 								field={ field }
 								parent={ `${ parent }[${ id }][fields]` }
-								removeField={ removeField }
-								duplicateField={ duplicateField }
-								updateFieldType={ updateSubFieldType }
+								removeField={ remove }
+								duplicateField={ duplicate }
+								updateFieldType={ updateType }
 							/> )
 						}
 					</ReactSortable>
-					<Inserter addField={ addField } />
+					<Inserter addField={ add } />
 				</div>
 			</div>
 		</>

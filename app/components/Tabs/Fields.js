@@ -1,24 +1,26 @@
-import { RawHTML, useContext } from "@wordpress/element";
+import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
-import { FieldsDataContext } from '../../contexts/FieldsDataContext';
+import useApi from "../../hooks/useApi";
 import useFields from "../../hooks/useFields";
 import { Inserter } from './FieldsTab/Inserter';
 import Node from './FieldsTab/Node';
 
-const Fields = props => {
+const Fields = prop => {
 	const {
 		fields,
-		addField,
-		removeField,
-		duplicateField,
-		updateFieldType,
+		add,
+		remove,
+		duplicate,
+		updateType,
 		setFields,
-	} = useFields( Object.values( props.fields ), 'fields' );
+	} = useFields( prop.fields, 'fields' );
 
 	// Don't render any field if fields data is not available.
-	const { fieldTypes, fieldCategories } = useContext( FieldsDataContext );
-	if ( Object.keys( fieldTypes ).length === 0 || fieldCategories.length === 0 ) {
+	const types = useApi( 'field-types', {} );
+	const categories = useApi( 'field-categories', [] );
+
+	if ( Object.keys( types ).length === 0 || Object.keys( categories ).length === 0 ) {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
@@ -30,17 +32,17 @@ const Fields = props => {
 			}
 			<ReactSortable className="og-fields" list={ fields } setList={ setFields } handle=".og-item__header">
 				{
-					fields.map( ( field, index ) => <Node
+					fields.map( field => <Node
 						key={ field._id }
 						id={ field._id }
 						field={ field }
-						removeField={ removeField }
-						duplicateField={ duplicateField }
-						updateFieldType={ updateFieldType }
+						removeField={ remove }
+						duplicateField={ duplicate }
+						updateFieldType={ updateType }
 					/> )
 				}
 			</ReactSortable>
-			<Inserter addField={ addField } />
+			<Inserter addField={ add } />
 		</>
 	);
 };

@@ -1,12 +1,11 @@
 import { Dashicon } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
 import DivRow from './DivRow';
 import { uniqid } from '/functions';
 
 const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
-	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'when', {} ) ) );
+	const [ rules, setRules ] = useState( Object.values( defaultValue.when || {} ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: '', operator: '=', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
@@ -29,12 +28,12 @@ const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
 
 const Intro = ( { name, defaultValue } ) => (
 	<div className="og-include-exclude__intro">
-		<select name={ `${ name }[type]` } defaultValue={ dotProp.get( defaultValue, 'type', 'visible' ) }>
+		<select name={ `${ name }[type]` } defaultValue={ defaultValue.type || 'visible' }>
 			<option value="visible">{ __( 'Visible', 'meta-box-builder' ) }</option>
 			<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<select name={ `${ name }[relation]` } defaultValue={ dotProp.get( defaultValue, 'relation', 'or' ) }>
+		<select name={ `${ name }[relation]` } defaultValue={ defaultValue.relation || 'or' }>
 			<option value="or">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>

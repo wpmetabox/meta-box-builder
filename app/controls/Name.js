@@ -1,13 +1,13 @@
-import { useContext, useEffect, useRef, useState } from "@wordpress/element";
+import { useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import slugify from 'slugify';
+import useFieldIds from "../hooks/useFieldIds";
 import DivRow from './DivRow';
-import { FieldIdsContext } from '/contexts/FieldIdsContext';
 import { getFieldValue } from '/functions';
 import useDebounce from '/hooks/useDebounce';
 
 const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
-	const { updateFieldId } = useContext( FieldIdsContext );
+	const updateFieldId = useFieldIds( state => state.update );
 	const [ value, setValue ] = useState( '' );
 	const debounceValue = useDebounce( value );
 	const isFirstEdit = useRef( _new );
@@ -27,7 +27,7 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 		updateTitle( e.target.value );
 
 		// Auto generate ID only when edit the label first time. E.g. don't generate when it's blur or after save.
-		if ( ! isFirstEdit.current ) {
+		if ( !isFirstEdit.current ) {
 			return;
 		}
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
@@ -38,7 +38,7 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 
 	const updateTitle = value => {
 		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
-		if ( ! titleElement ) {
+		if ( !titleElement ) {
 			return;
 		}
 		if ( value ) {
@@ -51,13 +51,13 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 		if ( groupTitleElement && groupTitleElement.value ) {
 			titleElement.textContent = groupTitleElement.value || __( '(No label)', 'meta-box-builder' );
 		}
-	}
+	};
 
 	const onBlur = () => isFirstEdit.current = false;
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<input autoFocus type="text" id={ componentId } defaultValue={ defaultValue } name={ name } onChange={ onChange } onBlur={ onBlur } />
+			<input type="text" id={ componentId } defaultValue={ defaultValue } name={ name } onChange={ onChange } onBlur={ onBlur } />
 		</DivRow>
 	);
 };

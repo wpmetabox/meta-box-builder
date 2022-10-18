@@ -1,13 +1,16 @@
 import { Dashicon } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import dotProp from 'dot-prop';
+import { fetcher, uniqid } from "../functions";
+import useObjectType from "../hooks/useObjectType";
+import usePostTypes from "../hooks/usePostTypes";
 import DivRow from './DivRow';
 import ReactAsyncSelect from './ReactAsyncSelect';
-import { request, uniqid } from '/functions';
 
-const IncludeExclude = ( { objectType, postTypes, defaultValue } ) => {
-	const [ rules, setRules ] = useState( Object.values( dotProp.get( defaultValue, 'rules', {} ) ) );
+const IncludeExclude = ( { defaultValue } ) => {
+	const objectType = useObjectType( state => state.type );
+	const postTypes = usePostTypes( state => state.types );
+	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: 'ID', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
@@ -25,8 +28,6 @@ const IncludeExclude = ( { objectType, postTypes, defaultValue } ) => {
 					rule={ rule }
 					baseName={ `settings[include_exclude][rules][${ rule.id }]` }
 					removeRule={ removeRule }
-					objectType={ objectType }
-					postTypes={ postTypes }
 				/> )
 			}
 			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
@@ -36,12 +37,12 @@ const IncludeExclude = ( { objectType, postTypes, defaultValue } ) => {
 
 const Intro = ( { defaultValue } ) => (
 	<div className="og-include-exclude__intro">
-		<select name="settings[include_exclude][type]" defaultValue={ dotProp.get( defaultValue, 'type', 'include' ) }>
+		<select name="settings[include_exclude][type]" defaultValue={ defaultValue.type || 'include' }>
 			<option value="include">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<select name="settings[include_exclude][relation]" defaultValue={ dotProp.get( defaultValue, 'relation', 'OR' ) }>
+		<select name="settings[include_exclude][relation]" defaultValue={ defaultValue.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
@@ -49,7 +50,9 @@ const Intro = ( { defaultValue } ) => (
 	</div>
 );
 
-const Rule = ( { rule, baseName, removeRule, objectType, postTypes } ) => {
+const Rule = ( { rule, baseName, removeRule } ) => {
+	const objectType = useObjectType( state => state.type );
+	const postTypes = usePostTypes( state => state.types );
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 
@@ -63,7 +66,7 @@ const Rule = ( { rule, baseName, removeRule, objectType, postTypes } ) => {
 		}
 	}, [ objectType ] );
 
-	const loadOptions = s => request( 'include-exclude', { name, s, post_types: postTypes } );
+	const loadOptions = s => fetcher( 'include-exclude', { name, s, post_types: postTypes } );
 
 	return (
 		<div className="og-include-exclude__rule og-attribute">
