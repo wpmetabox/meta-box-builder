@@ -1,1 +1,0 @@
-<?php echo "<?php rwmb_the_value( '[field_id]' ) ?>"; ?>
