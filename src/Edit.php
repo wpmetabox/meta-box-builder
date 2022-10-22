@@ -15,8 +15,8 @@ class Edit extends BaseEditPage {
 
 	public function add_help_meta_box( $meta_boxes ) {
 		$meta_boxes[] = [
-			'title'      => esc_html__( 'Video tutorials', 'meta-box' ),
-			'id'         => 'video-tutorials',
+			'title'      => esc_html__( 'Documentation', 'meta-box' ),
+			'id'         => 'mbb-documentation',
 			'post_types' => [ $this->post_type ],
 			'context'    => 'side',
 			'priority'   => 'low',
@@ -24,8 +24,9 @@ class Edit extends BaseEditPage {
 				[
 					'type' => 'custom_html',
 					'std'  => '<ul>
-						<li><a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box' ) . '</a></li>
-						<li><a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box' ) . '</a></li>
+						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box' ) . '</a></li>
+						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box' ) . '</a></li>
+						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box' ) . '</a></li>
 					</ul>',
 				],
 			],
