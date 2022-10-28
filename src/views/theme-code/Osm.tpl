@@ -1,4 +1,5 @@
 <?php
+    {args}
     $args = [
         'width'        => '640px',
         'height'       => '480px',
@@ -11,5 +12,6 @@
             'doubleClickZoom' => false,
         ],    
     ];
-    rwmb_the_value( '{field_id}', $args );
+    {/args}
+    rwmb_the_value( '{field_id}', $args, '{object_id}' );
 ?>

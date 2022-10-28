@@ -1,1 +1,1 @@
-<?php rwmb_the_value( '{field_id}' ) ?>
+<?php rwmb_the_value( '{field_id}', [ '{args}' ], '{object_id}' ) ?>

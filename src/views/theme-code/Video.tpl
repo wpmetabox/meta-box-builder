@@ -1,4 +1,4 @@
-<?php $videos = rwmb_meta( '{field_id}' ) ?>
+<?php $videos = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' ) ?>
 <ul>
     <?php foreach ( $videos as $video ) : ?>
         <li>
