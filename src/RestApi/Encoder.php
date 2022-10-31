@@ -89,7 +89,7 @@ class Encoder {
 				'string.escape' => false,
 			] );
 			
-			$this->encoded_string = str_replace( $matches[0], '$args = ' . $args, $this->encoded_string );			
+			$this->encoded_string = str_replace( $matches[0], '$args = ' . $args . ';', $this->encoded_string );			
 		}		
 
 		return $this;
