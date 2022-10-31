@@ -3,7 +3,6 @@ namespace MBB\RestApi;
 
 use WP_REST_Server;
 use WP_REST_Request;
-use MBB\RestApi\Parser as Parser;
 
 class ThemeCode {
 	public function __construct() {

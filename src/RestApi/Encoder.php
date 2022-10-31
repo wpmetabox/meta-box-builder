@@ -8,7 +8,6 @@ class Encoder {
 
 	private $text_domain;
 	private $fields;
-
 	private $encoded_string;
 
 	public function __construct( $settings ) {
@@ -27,11 +26,11 @@ class Encoder {
 		//Path for Template code
 		$path_folder_code = plugin_dir_path( dirname( __FILE__ ) ).'views/theme-code';
 
-		$this->field_object_id = $this->settings['object_id'] ?? '';
-		$this->field_args = empty( $this->settings['args'] ) ? [ ] : implode( ', ', $this->settings['args'] );		
+		$this->field_object_id = $this->settings['object_id'] ?? '';		
 		$objectType = $this->settings['object_type'] ?? '';
 	
 		foreach( $this->fields as $key => $field ){
+			$this->field_args = empty( $this->settings['args'] ) ? [ ] : implode( ', ', $this->settings['args'] );			
 			$fieldType = str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );			
 			$this->field_type = $fieldType;
 			$this->field_id = $field[ 'id' ];
@@ -46,7 +45,7 @@ class Encoder {
 
 			$this->replace_placeholders();			
 			$this->fields[ $key ]['theme_code'] = $this->encoded_string;
-		}		
+		}
 	}
 
 	private function replace_placeholders() {
