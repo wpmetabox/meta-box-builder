@@ -24,7 +24,7 @@ class Encoder {
 
 	public function encode() {
 		//Path for Template code
-		$path_folder_code = plugin_dir_path( dirname( __FILE__ ) ).'views/theme-code';
+		$path_folder_code = plugin_dir_path( dirname( dirname( __FILE__ ) ) ).'views/theme-code';
 
 		$this->field_object_id = $this->settings['object_id'] ?? '';		
 		$objectType = $this->settings['object_type'] ?? '';
@@ -64,32 +64,36 @@ class Encoder {
 		// Field Object ID.
 		if( !empty( $this->field_object_id ) ) {
 			$this->encoded_string = str_replace( ', \'{object_id}\'', ', \'' . $this->field_object_id . '\'', $this->encoded_string );				
+		}else{
+			$this->encoded_string = str_replace( ', \'{object_id}\'', '', $this->encoded_string );				
 		}
 
 		// Field Args.
-		if( !empty( $this->field_args ) ) {
-			// Have args Default
-			preg_match( "'{args}(.*){/args}'si", $this->encoded_string, $matches );
-			if( empty( $matches ) || count( $matches ) === 0 ) {
+		// Have args Default
+		preg_match( "'{args}(.*){/args}'si", $this->encoded_string, $matches );
+		if( empty( $matches ) || count( $matches ) === 0 ) {
+			if( !empty( $this->field_args ) ) {
 				$this->encoded_string = str_replace( '\'{args}\'', $this->field_args, $this->encoded_string );	
-				return $this;
+			}else{
+				$this->encoded_string = str_replace( [ ', [ \'{args}\' ]', '\'{args}\'' ], '', $this->encoded_string );
 			}
+			return $this;
+		}
 
-			//Parser String to array
-			$args = eval('return '. $matches[1] . ';');
-			$this->field_args = eval('return ['. $this->field_args . '];');
+		//Parser String to array
+		$args = eval('return '. $matches[1] . ';');
+		$this->field_args = !empty( $this->field_args ) ? eval('return ['. $this->field_args . '];') : [ ];
 
-			$args = array_merge( $this->field_args, $args );
+		$args = array_merge( $this->field_args, $args );
 
-			$encoder = new PHPEncoder;
-			$args = $encoder->encode( $args, [
-				'array.base'    => 4,
-				'array.align'   => true,
-				'string.escape' => false,
-			] );
-			
-			$this->encoded_string = str_replace( $matches[0], '$args = ' . $args . ';', $this->encoded_string );			
-		}		
+		$encoder = new PHPEncoder;
+		$args = $encoder->encode( $args, [
+			'array.base'    => 4,
+			'array.align'   => true,
+			'string.escape' => false,
+		] );
+		
+		$this->encoded_string = str_replace( $matches[0], '$args = ' . $args . ';', $this->encoded_string );
 
 		return $this;
 	}
