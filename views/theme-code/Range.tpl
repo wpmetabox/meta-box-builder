@@ -1,4 +1,7 @@
-<?php $values = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' ) ?>
-<?php foreach ( $values as $value ) : ?>
-    <p><?= $value ?></p>
-<?php endforeach ?>
+<?php
+rwmb_the_value( '{field_id}', [ '{args}' ], '{object_id}' );
+
+// or
+$value = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' );
+echo $value;
+?>

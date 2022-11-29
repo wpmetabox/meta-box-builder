@@ -1,4 +1,7 @@
-<?php $videos = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' ) ?>
+<?php
+// Displaying list of videos with video player for each video.
+$videos = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' );
+?>
 <ul>
     <?php foreach ( $videos as $video ) : ?>
         <li>
