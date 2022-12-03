@@ -2,14 +2,15 @@
     "packages": [
         {
             "name": "elightup/twig",
-            "version": "3.3.8",
-            "version_normalized": "3.3.8.0",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elightup/twig.git",
-                "reference": "75d4d59c93ee35a58c9f5f5b7e7e73299780573a"
+                "reference": "878f6cfa57ac080192f53922f93e5bdbeda314dd"
             },
-            "time": "2022-02-21T10:53:17+00:00",
+            "time": "2022-12-03T14:54:46+00:00",
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "mozart": {
@@ -48,13 +49,13 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpmetabox/mbb-parser.git",
-                "reference": "1d2f384cca4a503f19176e540167d92e9dbbf051"
+                "reference": "5bc051263a062490d051d27ec184b32a91bb688f"
             },
             "require": {
                 "meta-box/support": "dev-master",
                 "riimu/kit-phpencoder": "^2.4"
             },
-            "time": "2022-08-25T03:02:48+00:00",
+            "time": "2021-06-07T02:07:26+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "source",
@@ -73,9 +74,9 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/support.git",
-                "reference": "1862afb57b7ea45e4d7aeab2054f3d91fc3557fb"
+                "reference": "3a02b1a2391afeb31751241d38606b2b0368da7b"
             },
-            "time": "2022-05-17T06:41:57+00:00",
+            "time": "2021-10-19T03:08:18+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "source",

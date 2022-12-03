@@ -29,7 +29,7 @@
 	"require": {
 		"meta-box/support": "dev-master",
 		"meta-box/mbb-parser": "dev-master",
-		"elightup/twig": "^3.3"
+		"elightup/twig": "dev-master"
 	},
 	"extra": {
 		"dev-files": {

@@ -27,7 +27,7 @@ final class DebugExtension extends AbstractExtension
         ;
 
         return [
-            new TwigFunction('dump', 'twig_var_dump', ['is_safe' => $isDumpOutputHtmlSafe ? ['html'] : [], 'needs_context' => true, 'needs_environment' => true, 'is_variadic' => true]),
+            new TwigFunction('dump', 'elightup_twig_var_dump', ['is_safe' => $isDumpOutputHtmlSafe ? ['html'] : [], 'needs_context' => true, 'needs_environment' => true, 'is_variadic' => true]),
         ];
     }
 }
@@ -38,8 +38,8 @@ use eLightUp\Twig\Environment;
 use eLightUp\Twig\Template;
 use eLightUp\Twig\TemplateWrapper;
 
-    if (!function_exists('twig_var_dump')) {
-        function twig_var_dump(Environment $env, $context, ...$vars)
+    if (!function_exists('elightup_twig_var_dump')) {
+        function elightup_twig_var_dump(Environment $env, $context, ...$vars)
         {
             if (!$env->isDebug()) {
                 return;

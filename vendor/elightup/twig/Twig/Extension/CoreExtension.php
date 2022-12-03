@@ -175,50 +175,50 @@ final class CoreExtension extends AbstractExtension
     {
         return [
             // formatting filters
-            new TwigFilter('date', 'twig_date_format_filter', ['needs_environment' => true]),
-            new TwigFilter('date_modify', 'twig_date_modify_filter', ['needs_environment' => true]),
-            new TwigFilter('format', 'twig_sprintf'),
-            new TwigFilter('replace', 'twig_replace_filter'),
-            new TwigFilter('number_format', 'twig_number_format_filter', ['needs_environment' => true]),
+            new TwigFilter('date', 'elightup_twig_date_format_filter', ['needs_environment' => true]),
+            new TwigFilter('date_modify', 'elightup_twig_date_modify_filter', ['needs_environment' => true]),
+            new TwigFilter('format', 'elightup_twig_sprintf'),
+            new TwigFilter('replace', 'elightup_twig_replace_filter'),
+            new TwigFilter('number_format', 'elightup_twig_number_format_filter', ['needs_environment' => true]),
             new TwigFilter('abs', 'abs'),
-            new TwigFilter('round', 'twig_round'),
+            new TwigFilter('round', 'elightup_twig_round'),
 
             // encoding
-            new TwigFilter('url_encode', 'twig_urlencode_filter'),
+            new TwigFilter('url_encode', 'elightup_twig_urlencode_filter'),
             new TwigFilter('json_encode', 'json_encode'),
-            new TwigFilter('convert_encoding', 'twig_convert_encoding'),
+            new TwigFilter('convert_encoding', 'elightup_twig_convert_encoding'),
 
             // string filters
-            new TwigFilter('title', 'twig_title_string_filter', ['needs_environment' => true]),
-            new TwigFilter('capitalize', 'twig_capitalize_string_filter', ['needs_environment' => true]),
-            new TwigFilter('upper', 'twig_upper_filter', ['needs_environment' => true]),
-            new TwigFilter('lower', 'twig_lower_filter', ['needs_environment' => true]),
-            new TwigFilter('striptags', 'twig_striptags'),
-            new TwigFilter('trim', 'twig_trim_filter'),
-            new TwigFilter('nl2br', 'twig_nl2br', ['pre_escape' => 'html', 'is_safe' => ['html']]),
-            new TwigFilter('spaceless', 'twig_spaceless', ['is_safe' => ['html']]),
+            new TwigFilter('title', 'elightup_twig_title_string_filter', ['needs_environment' => true]),
+            new TwigFilter('capitalize', 'elightup_twig_capitalize_string_filter', ['needs_environment' => true]),
+            new TwigFilter('upper', 'elightup_twig_upper_filter', ['needs_environment' => true]),
+            new TwigFilter('lower', 'elightup_twig_lower_filter', ['needs_environment' => true]),
+            new TwigFilter('striptags', 'elightup_twig_striptags'),
+            new TwigFilter('trim', 'elightup_twig_trim_filter'),
+            new TwigFilter('nl2br', 'elightup_twig_nl2br', ['pre_escape' => 'html', 'is_safe' => ['html']]),
+            new TwigFilter('spaceless', 'elightup_twig_spaceless', ['is_safe' => ['html']]),
 
             // array helpers
-            new TwigFilter('join', 'twig_join_filter'),
-            new TwigFilter('split', 'twig_split_filter', ['needs_environment' => true]),
-            new TwigFilter('sort', 'twig_sort_filter', ['needs_environment' => true]),
-            new TwigFilter('merge', 'twig_array_merge'),
-            new TwigFilter('batch', 'twig_array_batch'),
-            new TwigFilter('column', 'twig_array_column'),
-            new TwigFilter('filter', 'twig_array_filter', ['needs_environment' => true]),
-            new TwigFilter('map', 'twig_array_map', ['needs_environment' => true]),
-            new TwigFilter('reduce', 'twig_array_reduce', ['needs_environment' => true]),
+            new TwigFilter('join', 'elightup_twig_join_filter'),
+            new TwigFilter('split', 'elightup_twig_split_filter', ['needs_environment' => true]),
+            new TwigFilter('sort', 'elightup_twig_sort_filter', ['needs_environment' => true]),
+            new TwigFilter('merge', 'elightup_twig_array_merge'),
+            new TwigFilter('batch', 'elightup_twig_array_batch'),
+            new TwigFilter('column', 'elightup_twig_array_column'),
+            new TwigFilter('filter', 'elightup_twig_array_filter', ['needs_environment' => true]),
+            new TwigFilter('map', 'elightup_twig_array_map', ['needs_environment' => true]),
+            new TwigFilter('reduce', 'elightup_twig_array_reduce', ['needs_environment' => true]),
 
             // string/array filters
-            new TwigFilter('reverse', 'twig_reverse_filter', ['needs_environment' => true]),
-            new TwigFilter('length', 'twig_length_filter', ['needs_environment' => true]),
-            new TwigFilter('slice', 'twig_slice', ['needs_environment' => true]),
-            new TwigFilter('first', 'twig_first', ['needs_environment' => true]),
-            new TwigFilter('last', 'twig_last', ['needs_environment' => true]),
+            new TwigFilter('reverse', 'elightup_twig_reverse_filter', ['needs_environment' => true]),
+            new TwigFilter('length', 'elightup_twig_length_filter', ['needs_environment' => true]),
+            new TwigFilter('slice', 'elightup_twig_slice', ['needs_environment' => true]),
+            new TwigFilter('first', 'elightup_twig_first', ['needs_environment' => true]),
+            new TwigFilter('last', 'elightup_twig_last', ['needs_environment' => true]),
 
             // iteration and runtime
-            new TwigFilter('default', '_twig_default_filter', ['node_class' => DefaultFilter::class]),
-            new TwigFilter('keys', 'twig_get_array_keys_filter'),
+            new TwigFilter('default', '_elightup_twig_default_filter', ['node_class' => DefaultFilter::class]),
+            new TwigFilter('keys', 'elightup_twig_get_array_keys_filter'),
         ];
     }
 
@@ -228,12 +228,12 @@ final class CoreExtension extends AbstractExtension
             new TwigFunction('max', 'max'),
             new TwigFunction('min', 'min'),
             new TwigFunction('range', 'range'),
-            new TwigFunction('constant', 'twig_constant'),
-            new TwigFunction('cycle', 'twig_cycle'),
-            new TwigFunction('random', 'twig_random', ['needs_environment' => true]),
-            new TwigFunction('date', 'twig_date_converter', ['needs_environment' => true]),
-            new TwigFunction('include', 'twig_include', ['needs_environment' => true, 'needs_context' => true, 'is_safe' => ['all']]),
-            new TwigFunction('source', 'twig_source', ['needs_environment' => true, 'is_safe' => ['all']]),
+            new TwigFunction('constant', 'elightup_twig_constant'),
+            new TwigFunction('cycle', 'elightup_twig_cycle'),
+            new TwigFunction('random', 'elightup_twig_random', ['needs_environment' => true]),
+            new TwigFunction('date', 'elightup_twig_date_converter', ['needs_environment' => true]),
+            new TwigFunction('include', 'elightup_twig_include', ['needs_environment' => true, 'needs_context' => true, 'is_safe' => ['all']]),
+            new TwigFunction('source', 'elightup_twig_source', ['needs_environment' => true, 'is_safe' => ['all']]),
         ];
     }
 
@@ -248,8 +248,8 @@ final class CoreExtension extends AbstractExtension
             new TwigTest('null', null, ['node_class' => NullTest::class]),
             new TwigTest('divisible by', null, ['node_class' => DivisiblebyTest::class, 'one_mandatory_argument' => true]),
             new TwigTest('constant', null, ['node_class' => ConstantTest::class]),
-            new TwigTest('empty', 'twig_test_empty'),
-            new TwigTest('iterable', 'twig_test_iterable'),
+            new TwigTest('empty', 'elightup_twig_test_empty'),
+            new TwigTest('iterable', 'elightup_twig_test_iterable'),
         ];
     }
 
@@ -313,7 +313,7 @@ namespace {
     use eLightUp\Twig\Template;
     use eLightUp\Twig\TemplateWrapper;
 
-    if (!function_exists('twig_cycle')) {
+    if (!function_exists('elightup_twig_cycle')) {
         /**
          * Cycles over a value.
          *
@@ -322,7 +322,7 @@ namespace {
          *
          * @return string The next value in the cycle
          */
-        function twig_cycle($values, $position)
+        function elightup_twig_cycle($values, $position)
         {
             if (!\is_array($values) && !$values instanceof \ArrayAccess) {
                 return $values;
@@ -332,7 +332,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_random')) {
+    if (!function_exists('elightup_twig_random')) {
         /**
          * Returns a random value depending on the supplied parameter type:
          * - a random item from a \Traversable or array
@@ -346,7 +346,7 @@ namespace {
          *
          * @return mixed A random value from the given sequence
          */
-        function twig_random(Environment $env, $values = null, $max = null)
+        function elightup_twig_random(Environment $env, $values = null, $max = null)
         {
             if (null === $values) {
                 return null === $max ? mt_rand() : mt_rand(0, (int) $max);
@@ -377,7 +377,7 @@ namespace {
                 $charset = $env->getCharset();
 
                 if ('UTF-8' !== $charset) {
-                    $values = twig_convert_encoding($values, 'UTF-8', $charset);
+                    $values = elightup_twig_convert_encoding($values, 'UTF-8', $charset);
                 }
 
                 // unicode version of str_split()
@@ -386,16 +386,16 @@ namespace {
 
                 if ('UTF-8' !== $charset) {
                     foreach ($values as $i => $value) {
-                        $values[$i] = twig_convert_encoding($value, $charset, 'UTF-8');
+                        $values[$i] = elightup_twig_convert_encoding($value, $charset, 'UTF-8');
                     }
                 }
             }
 
-            if (!twig_test_iterable($values)) {
+            if (!elightup_twig_test_iterable($values)) {
                 return $values;
             }
 
-            $values = twig_to_array($values);
+            $values = elightup_twig_to_array($values);
 
             if (0 === \count($values)) {
                 throw new RuntimeError('The random function cannot pick from an empty array.');
@@ -405,7 +405,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_date_format_filter')) {
+    if (!function_exists('elightup_twig_date_format_filter')) {
         /**
          * Converts a date to the given format.
          *
@@ -417,7 +417,7 @@ namespace {
          *
          * @return string The formatted date
          */
-        function twig_date_format_filter(Environment $env, $date, $format = null, $timezone = null)
+        function elightup_twig_date_format_filter(Environment $env, $date, $format = null, $timezone = null)
         {
             if (null === $format) {
                 $formats = $env->getExtension(CoreExtension::class)->getDateFormat();
@@ -428,11 +428,11 @@ namespace {
                 return $date->format($format);
             }
 
-            return twig_date_converter($env, $date, $timezone)->format($format);
+            return elightup_twig_date_converter($env, $date, $timezone)->format($format);
         }
     }
 
-    if (!function_exists('twig_date_modify_filter')) {
+    if (!function_exists('elightup_twig_date_modify_filter')) {
         /**
          * Returns a new date object modified.
          *
@@ -443,15 +443,15 @@ namespace {
          *
          * @return \DateTimeInterface
          */
-        function twig_date_modify_filter(Environment $env, $date, $modifier)
+        function elightup_twig_date_modify_filter(Environment $env, $date, $modifier)
         {
-            $date = twig_date_converter($env, $date, false);
+            $date = elightup_twig_date_converter($env, $date, false);
 
             return $date->modify($modifier);
         }
     }
 
-    if (!function_exists('twig_sprintf')) {
+    if (!function_exists('elightup_twig_sprintf')) {
         /**
          * Returns a formatted string.
          *
@@ -460,13 +460,13 @@ namespace {
          *
          * @return string
          */
-        function twig_sprintf($format, ...$values)
+        function elightup_twig_sprintf($format, ...$values)
         {
             return sprintf($format ?? '', ...$values);
         }
     }
 
-    if (!function_exists('twig_date_converter')) {
+    if (!function_exists('elightup_twig_date_converter')) {
         /**
          * Converts an input to a \DateTime instance.
          *
@@ -479,7 +479,7 @@ namespace {
          *
          * @return \DateTimeInterface
          */
-        function twig_date_converter(Environment $env, $date = null, $timezone = null)
+        function elightup_twig_date_converter(Environment $env, $date = null, $timezone = null)
         {
             // determine the timezone
             if (false !== $timezone) {
@@ -527,7 +527,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_replace_filter')) {
+    if (!function_exists('elightup_twig_replace_filter')) {
         /**
          * Replaces strings within a string.
          *
@@ -536,17 +536,17 @@ namespace {
          *
          * @return string
          */
-        function twig_replace_filter($str, $from)
+        function elightup_twig_replace_filter($str, $from)
         {
-            if (!twig_test_iterable($from)) {
+            if (!elightup_twig_test_iterable($from)) {
                 throw new RuntimeError(sprintf('The "replace" filter expects an array or "Traversable" as replace values, got "%s".', \is_object($from) ? \get_class($from) : \gettype($from)));
             }
 
-            return strtr($str ?? '', twig_to_array($from));
+            return strtr($str ?? '', elightup_twig_to_array($from));
         }
     }
 
-    if (!function_exists('twig_round')) {
+    if (!function_exists('elightup_twig_round')) {
         /**
          * Rounds a number.
          *
@@ -556,7 +556,7 @@ namespace {
          *
          * @return int|float The rounded number
          */
-        function twig_round($value, $precision = 0, $method = 'common')
+        function elightup_twig_round($value, $precision = 0, $method = 'common')
         {
             $value = (float) $value;
 
@@ -572,7 +572,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_number_format_filter')) {
+    if (!function_exists('elightup_twig_number_format_filter')) {
         /**
          * Number format filter.
          *
@@ -587,7 +587,7 @@ namespace {
          *
          * @return string The formatted number
          */
-        function twig_number_format_filter(Environment $env, $number, $decimal = null, $decimalPoint = null, $thousandSep = null)
+        function elightup_twig_number_format_filter(Environment $env, $number, $decimal = null, $decimalPoint = null, $thousandSep = null)
         {
             $defaults = $env->getExtension(CoreExtension::class)->getNumberFormat();
             if (null === $decimal) {
@@ -606,7 +606,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_urlencode_filter')) {
+    if (!function_exists('elightup_twig_urlencode_filter')) {
         /**
          * URL encodes (RFC 3986) a string as a path segment or an array as a query string.
          *
@@ -614,7 +614,7 @@ namespace {
          *
          * @return string The URL encoded value
          */
-        function twig_urlencode_filter($url)
+        function elightup_twig_urlencode_filter($url)
         {
             if (\is_array($url)) {
                 return http_build_query($url, '', '&', \PHP_QUERY_RFC3986);
@@ -624,7 +624,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_array_merge')) {
+    if (!function_exists('elightup_twig_array_merge')) {
         /**
          * Merges an array with another one.
          *
@@ -639,21 +639,21 @@ namespace {
          *
          * @return array The merged array
          */
-        function twig_array_merge($arr1, $arr2)
+        function elightup_twig_array_merge($arr1, $arr2)
         {
-            if (!twig_test_iterable($arr1)) {
+            if (!elightup_twig_test_iterable($arr1)) {
                 throw new RuntimeError(sprintf('The merge filter only works with arrays or "Traversable", got "%s" as first argument.', \gettype($arr1)));
             }
 
-            if (!twig_test_iterable($arr2)) {
+            if (!elightup_twig_test_iterable($arr2)) {
                 throw new RuntimeError(sprintf('The merge filter only works with arrays or "Traversable", got "%s" as second argument.', \gettype($arr2)));
             }
 
-            return array_merge(twig_to_array($arr1), twig_to_array($arr2));
+            return array_merge(elightup_twig_to_array($arr1), elightup_twig_to_array($arr2));
         }
     }
 
-    if (!function_exists('twig_slice')) {
+    if (!function_exists('elightup_twig_slice')) {
         /**
          * Slices a variable.
          *
@@ -664,7 +664,7 @@ namespace {
          *
          * @return mixed The sliced variable
          */
-        function twig_slice(Environment $env, $item, $start, $length = null, $preserveKeys = false)
+        function elightup_twig_slice(Environment $env, $item, $start, $length = null, $preserveKeys = false)
         {
             if ($item instanceof \Traversable) {
                 while ($item instanceof \IteratorAggregate) {
@@ -690,7 +690,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_first')) {
+    if (!function_exists('elightup_twig_first')) {
         /**
          * Returns the first element of the item.
          *
@@ -698,15 +698,15 @@ namespace {
          *
          * @return mixed The first element of the item
          */
-        function twig_first(Environment $env, $item)
+        function elightup_twig_first(Environment $env, $item)
         {
-            $elements = twig_slice($env, $item, 0, 1, false);
+            $elements = elightup_twig_slice($env, $item, 0, 1, false);
 
             return \is_string($elements) ? $elements : current($elements);
         }
     }
 
-    if (!function_exists('twig_last')) {
+    if (!function_exists('elightup_twig_last')) {
         /**
          * Returns the last element of the item.
          *
@@ -714,15 +714,15 @@ namespace {
          *
          * @return mixed The last element of the item
          */
-        function twig_last(Environment $env, $item)
+        function elightup_twig_last(Environment $env, $item)
         {
-            $elements = twig_slice($env, $item, -1, 1, false);
+            $elements = elightup_twig_slice($env, $item, -1, 1, false);
 
             return \is_string($elements) ? $elements : current($elements);
         }
     }
 
-    if (!function_exists('twig_join_filter')) {
+    if (!function_exists('elightup_twig_join_filter')) {
         /**
          * Joins the values to a string.
          *
@@ -743,13 +743,13 @@ namespace {
          *
          * @return string The concatenated string
          */
-        function twig_join_filter($value, $glue = '', $and = null)
+        function elightup_twig_join_filter($value, $glue = '', $and = null)
         {
-            if (!twig_test_iterable($value)) {
+            if (!elightup_twig_test_iterable($value)) {
                 $value = (array) $value;
             }
 
-            $value = twig_to_array($value, false);
+            $value = elightup_twig_to_array($value, false);
 
             if (0 === \count($value)) {
                 return '';
@@ -767,7 +767,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_split_filter')) {
+    if (!function_exists('elightup_twig_split_filter')) {
         /**
          * Splits the string into an array.
          *
@@ -789,7 +789,7 @@ namespace {
          *
          * @return array The split string as an array
          */
-        function twig_split_filter(Environment $env, $value, $delimiter, $limit = null)
+        function elightup_twig_split_filter(Environment $env, $value, $delimiter, $limit = null)
         {
             $value = $value ?? '';
 
@@ -815,16 +815,16 @@ namespace {
         }
     }
 
-    if (!function_exists('_twig_default_filter')) {
+    if (!function_exists('_elightup_twig_default_filter')) {
         // The '_default' filter is used internally to avoid using the ternary operator
         // which costs a lot for big contexts (before PHP 5.4). So, on average,
         // a function call is cheaper.
         /**
          * @internal
          */
-        function _twig_default_filter($value, $default = '')
+        function _elightup_twig_default_filter($value, $default = '')
         {
-            if (twig_test_empty($value)) {
+            if (elightup_twig_test_empty($value)) {
                 return $default;
             }
 
@@ -832,7 +832,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_get_array_keys_filter')) {
+    if (!function_exists('elightup_twig_get_array_keys_filter')) {
         /**
          * Returns the keys for the given array.
          *
@@ -846,7 +846,7 @@ namespace {
          *
          * @return array The keys
          */
-        function twig_get_array_keys_filter($array)
+        function elightup_twig_get_array_keys_filter($array)
         {
             if ($array instanceof \Traversable) {
                 while ($array instanceof \IteratorAggregate) {
@@ -879,7 +879,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_reverse_filter')) {
+    if (!function_exists('elightup_twig_reverse_filter')) {
         /**
          * Reverses a variable.
          *
@@ -888,7 +888,7 @@ namespace {
          *
          * @return mixed The reversed input
          */
-        function twig_reverse_filter(Environment $env, $item, $preserveKeys = false)
+        function elightup_twig_reverse_filter(Environment $env, $item, $preserveKeys = false)
         {
             if ($item instanceof \Traversable) {
                 return array_reverse(iterator_to_array($item), $preserveKeys);
@@ -903,7 +903,7 @@ namespace {
             $charset = $env->getCharset();
 
             if ('UTF-8' !== $charset) {
-                $string = twig_convert_encoding($string, 'UTF-8', $charset);
+                $string = elightup_twig_convert_encoding($string, 'UTF-8', $charset);
             }
 
             preg_match_all('/./us', $string, $matches);
@@ -911,14 +911,14 @@ namespace {
             $string = implode('', array_reverse($matches[0]));
 
             if ('UTF-8' !== $charset) {
-                $string = twig_convert_encoding($string, $charset, 'UTF-8');
+                $string = elightup_twig_convert_encoding($string, $charset, 'UTF-8');
             }
 
             return $string;
         }
     }
 
-    if (!function_exists('twig_sort_filter')) {
+    if (!function_exists('elightup_twig_sort_filter')) {
         /**
          * Sorts an array.
          *
@@ -926,7 +926,7 @@ namespace {
          *
          * @return array
          */
-        function twig_sort_filter(Environment $env, $array, $arrow = null)
+        function elightup_twig_sort_filter(Environment $env, $array, $arrow = null)
         {
             if ($array instanceof \Traversable) {
                 $array = iterator_to_array($array);
@@ -935,7 +935,7 @@ namespace {
             }
 
             if (null !== $arrow) {
-                twig_check_arrow_in_sandbox($env, $arrow, 'sort', 'filter');
+                elightup_twig_check_arrow_in_sandbox($env, $arrow, 'sort', 'filter');
 
                 uasort($array, $arrow);
             } else {
@@ -946,11 +946,11 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_in_filter')) {
+    if (!function_exists('elightup_twig_in_filter')) {
         /**
          * @internal
          */
-        function twig_in_filter($value, $compare)
+        function elightup_twig_in_filter($value, $compare)
         {
             if ($value instanceof Markup) {
                 $value = (string) $value;
@@ -986,7 +986,7 @@ namespace {
             }
 
             foreach ($compare as $item) {
-                if (0 === twig_compare($value, $item)) {
+                if (0 === elightup_twig_compare($value, $item)) {
                     return true;
                 }
             }
@@ -995,7 +995,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_compare')) {
+    if (!function_exists('elightup_twig_compare')) {
         /**
          * Compares two values using a more strict version of the PHP non-strict comparison operator.
          *
@@ -1004,7 +1004,7 @@ namespace {
          *
          * @internal
          */
-        function twig_compare($a, $b)
+        function elightup_twig_compare($a, $b)
         {
             // int <=> string
             if (\is_int($a) && \is_string($b)) {
@@ -1059,7 +1059,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_trim_filter')) {
+    if (!function_exists('elightup_twig_trim_filter')) {
         /**
          * Returns a trimmed string.
          *
@@ -1071,7 +1071,7 @@ namespace {
          *
          * @throws RuntimeError When an invalid trimming side is used (not a string or not 'left', 'right', or 'both')
          */
-        function twig_trim_filter($string, $characterMask = null, $side = 'both')
+        function elightup_twig_trim_filter($string, $characterMask = null, $side = 'both')
         {
             if (null === $characterMask) {
                 $characterMask = " \t\n\r\0\x0B";
@@ -1090,7 +1090,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_nl2br')) {
+    if (!function_exists('elightup_twig_nl2br')) {
         /**
          * Inserts HTML line breaks before all newlines in a string.
          *
@@ -1098,13 +1098,13 @@ namespace {
          *
          * @return string
          */
-        function twig_nl2br($string)
+        function elightup_twig_nl2br($string)
         {
             return nl2br($string ?? '');
         }
     }
 
-    if (!function_exists('twig_spaceless')) {
+    if (!function_exists('elightup_twig_spaceless')) {
         /**
          * Removes whitespaces between HTML tags.
          *
@@ -1112,13 +1112,13 @@ namespace {
          *
          * @return string
          */
-        function twig_spaceless($content)
+        function elightup_twig_spaceless($content)
         {
             return trim(preg_replace('/>\s+</', '><', $content ?? ''));
         }
     }
 
-    if (!function_exists('twig_convert_encoding')) {
+    if (!function_exists('elightup_twig_convert_encoding')) {
         /**
          * @param string|null $string
          * @param string      $to
@@ -1126,7 +1126,7 @@ namespace {
          *
          * @return string
          */
-        function twig_convert_encoding($string, $to, $from)
+        function elightup_twig_convert_encoding($string, $to, $from)
         {
             if (!\function_exists('iconv')) {
                 throw new RuntimeError('Unable to convert encoding: required function iconv() does not exist. You should install ext-iconv or symfony/polyfill-iconv.');
@@ -1136,7 +1136,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_length_filter')) {
+    if (!function_exists('elightup_twig_length_filter')) {
         /**
          * Returns the length of a variable.
          *
@@ -1144,7 +1144,7 @@ namespace {
          *
          * @return int The length of the value
          */
-        function twig_length_filter(Environment $env, $thing)
+        function elightup_twig_length_filter(Environment $env, $thing)
         {
             if (null === $thing) {
                 return 0;
@@ -1170,7 +1170,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_upper_filter')) {
+    if (!function_exists('elightup_twig_upper_filter')) {
         /**
          * Converts a string to uppercase.
          *
@@ -1178,13 +1178,13 @@ namespace {
          *
          * @return string The uppercased string
          */
-        function twig_upper_filter(Environment $env, $string)
+        function elightup_twig_upper_filter(Environment $env, $string)
         {
             return mb_strtoupper($string ?? '', $env->getCharset());
         }
     }
 
-    if (!function_exists('twig_lower_filter')) {
+    if (!function_exists('elightup_twig_lower_filter')) {
         /**
          * Converts a string to lowercase.
          *
@@ -1192,13 +1192,13 @@ namespace {
          *
          * @return string The lowercased string
          */
-        function twig_lower_filter(Environment $env, $string)
+        function elightup_twig_lower_filter(Environment $env, $string)
         {
             return mb_strtolower($string ?? '', $env->getCharset());
         }
     }
 
-    if (!function_exists('twig_striptags')) {
+    if (!function_exists('elightup_twig_striptags')) {
         /**
          * Strips HTML and PHP tags from a string.
          *
@@ -1207,13 +1207,13 @@ namespace {
          *
          * @return string
          */
-        function twig_striptags($string, $allowable_tags = null)
+        function elightup_twig_striptags($string, $allowable_tags = null)
         {
             return strip_tags($string ?? '', $allowable_tags);
         }
     }
 
-    if (!function_exists('twig_title_string_filter')) {
+    if (!function_exists('elightup_twig_title_string_filter')) {
         /**
          * Returns a titlecased string.
          *
@@ -1221,7 +1221,7 @@ namespace {
          *
          * @return string The titlecased string
          */
-        function twig_title_string_filter(Environment $env, $string)
+        function elightup_twig_title_string_filter(Environment $env, $string)
         {
             if (null !== $charset = $env->getCharset()) {
                 return mb_convert_case($string ?? '', \MB_CASE_TITLE, $charset);
@@ -1231,7 +1231,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_capitalize_string_filter')) {
+    if (!function_exists('elightup_twig_capitalize_string_filter')) {
         /**
          * Returns a capitalized string.
          *
@@ -1239,7 +1239,7 @@ namespace {
          *
          * @return string The capitalized string
          */
-        function twig_capitalize_string_filter(Environment $env, $string)
+        function elightup_twig_capitalize_string_filter(Environment $env, $string)
         {
             $charset = $env->getCharset();
 
@@ -1247,11 +1247,11 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_call_macro')) {
+    if (!function_exists('elightup_twig_call_macro')) {
         /**
          * @internal
          */
-        function twig_call_macro(Template $template, string $method, array $args, int $lineno, array $context, Source $source)
+        function elightup_twig_call_macro(Template $template, string $method, array $args, int $lineno, array $context, Source $source)
         {
             if (!method_exists($template, $method)) {
                 $parent = $template;
@@ -1268,11 +1268,11 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_ensure_traversable')) {
+    if (!function_exists('elightup_twig_ensure_traversable')) {
         /**
          * @internal
          */
-        function twig_ensure_traversable($seq)
+        function elightup_twig_ensure_traversable($seq)
         {
             if ($seq instanceof \Traversable || \is_array($seq)) {
                 return $seq;
@@ -1282,11 +1282,11 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_to_array')) {
+    if (!function_exists('elightup_twig_to_array')) {
         /**
          * @internal
          */
-        function twig_to_array($seq, $preserveKeys = true)
+        function elightup_twig_to_array($seq, $preserveKeys = true)
         {
             if ($seq instanceof \Traversable) {
                 return iterator_to_array($seq, $preserveKeys);
@@ -1300,7 +1300,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_test_empty')) {
+    if (!function_exists('elightup_twig_test_empty')) {
         /**
          * Checks if a variable is empty.
          *
@@ -1313,7 +1313,7 @@ namespace {
          *
          * @return bool true if the value is empty, false otherwise
          */
-        function twig_test_empty($value)
+        function elightup_twig_test_empty($value)
         {
             if ($value instanceof \Countable) {
                 return 0 === \count($value);
@@ -1331,7 +1331,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_test_iterable')) {
+    if (!function_exists('elightup_twig_test_iterable')) {
         /**
          * Checks if a variable is traversable.
          *
@@ -1344,13 +1344,13 @@ namespace {
          *
          * @return bool true if the value is traversable
          */
-        function twig_test_iterable($value)
+        function elightup_twig_test_iterable($value)
         {
             return $value instanceof \Traversable || \is_array($value);
         }
     }
 
-    if (!function_exists('twig_include')) {
+    if (!function_exists('elightup_twig_include')) {
         /**
          * Renders a template.
          *
@@ -1363,7 +1363,7 @@ namespace {
          *
          * @return string The rendered template
          */
-        function twig_include(Environment $env, $context, $template, $variables = [], $withContext = true, $ignoreMissing = false, $sandboxed = false)
+        function elightup_twig_include(Environment $env, $context, $template, $variables = [], $withContext = true, $ignoreMissing = false, $sandboxed = false)
         {
             $alreadySandboxed = false;
             $sandbox = null;
@@ -1404,7 +1404,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_source')) {
+    if (!function_exists('elightup_twig_source')) {
         /**
          * Returns a template content without rendering it.
          *
@@ -1413,7 +1413,7 @@ namespace {
          *
          * @return string The template source
          */
-        function twig_source(Environment $env, $name, $ignoreMissing = false)
+        function elightup_twig_source(Environment $env, $name, $ignoreMissing = false)
         {
             $loader = $env->getLoader();
             try {
@@ -1426,7 +1426,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_constant')) {
+    if (!function_exists('elightup_twig_constant')) {
         /**
          * Provides the ability to get constants from instances as well as class/global constants.
          *
@@ -1435,7 +1435,7 @@ namespace {
          *
          * @return string
          */
-        function twig_constant($constant, $object = null)
+        function elightup_twig_constant($constant, $object = null)
         {
             if (null !== $object) {
                 $constant = \get_class($object).'::'.$constant;
@@ -1445,7 +1445,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_constant_is_defined')) {
+    if (!function_exists('elightup_twig_constant_is_defined')) {
         /**
          * Checks if a constant exists.
          *
@@ -1454,7 +1454,7 @@ namespace {
          *
          * @return bool
          */
-        function twig_constant_is_defined($constant, $object = null)
+        function elightup_twig_constant_is_defined($constant, $object = null)
         {
             if (null !== $object) {
                 $constant = \get_class($object).'::'.$constant;
@@ -1464,7 +1464,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_array_batch')) {
+    if (!function_exists('elightup_twig_array_batch')) {
         /**
          * Batches item.
          *
@@ -1474,15 +1474,15 @@ namespace {
          *
          * @return array
          */
-        function twig_array_batch($items, $size, $fill = null, $preserveKeys = true)
+        function elightup_twig_array_batch($items, $size, $fill = null, $preserveKeys = true)
         {
-            if (!twig_test_iterable($items)) {
+            if (!elightup_twig_test_iterable($items)) {
                 throw new RuntimeError(sprintf('The "batch" filter expects an array or "Traversable", got "%s".', \is_object($items) ? \get_class($items) : \gettype($items)));
             }
 
             $size = ceil($size);
 
-            $result = array_chunk(twig_to_array($items, $preserveKeys), $size, $preserveKeys);
+            $result = array_chunk(elightup_twig_to_array($items, $preserveKeys), $size, $preserveKeys);
 
             if (null !== $fill && $result) {
                 $last = \count($result) - 1;
@@ -1497,7 +1497,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_get_attribute')) {
+    if (!function_exists('elightup_twig_get_attribute')) {
         /**
          * Returns the attribute value for a given array/object.
          *
@@ -1515,7 +1515,7 @@ namespace {
          *
          * @internal
          */
-        function twig_get_attribute(Environment $env, Source $source, $object, $item, array $arguments = [], $type = /* Template::ANY_CALL */ 'any', $isDefinedTest = false, $ignoreStrictCheck = false, $sandboxed = false, int $lineno = -1)
+        function elightup_twig_get_attribute(Environment $env, Source $source, $object, $item, array $arguments = [], $type = /* Template::ANY_CALL */ 'any', $isDefinedTest = false, $ignoreStrictCheck = false, $sandboxed = false, int $lineno = -1)
         {
             // array
             if (/* Template::METHOD_CALL */ 'method' !== $type) {
@@ -1693,7 +1693,7 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_array_column')) {
+    if (!function_exists('elightup_twig_array_column')) {
         /**
          * Returns the values from a single column in the input array.
          *
@@ -1711,7 +1711,7 @@ namespace {
          *
          * @return array The array of values
          */
-        function twig_array_column($array, $name, $index = null): array
+        function elightup_twig_array_column($array, $name, $index = null): array
         {
             if ($array instanceof Traversable) {
                 $array = iterator_to_array($array);
@@ -1723,14 +1723,14 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_array_filter')) {
-        function twig_array_filter(Environment $env, $array, $arrow)
+    if (!function_exists('elightup_twig_array_filter')) {
+        function elightup_twig_array_filter(Environment $env, $array, $arrow)
         {
-            if (!twig_test_iterable($array)) {
+            if (!elightup_twig_test_iterable($array)) {
                 throw new RuntimeError(sprintf('The "filter" filter expects an array or "Traversable", got "%s".', \is_object($array) ? \get_class($array) : \gettype($array)));
             }
 
-            twig_check_arrow_in_sandbox($env, $arrow, 'filter', 'filter');
+            elightup_twig_check_arrow_in_sandbox($env, $arrow, 'filter', 'filter');
 
             if (\is_array($array)) {
                 return array_filter($array, $arrow, \ARRAY_FILTER_USE_BOTH);
@@ -1741,10 +1741,10 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_array_map')) {
-        function twig_array_map(Environment $env, $array, $arrow)
+    if (!function_exists('elightup_twig_array_map')) {
+        function elightup_twig_array_map(Environment $env, $array, $arrow)
         {
-            twig_check_arrow_in_sandbox($env, $arrow, 'map', 'filter');
+            elightup_twig_check_arrow_in_sandbox($env, $arrow, 'map', 'filter');
 
             $r = [];
             foreach ($array as $k => $v) {
@@ -1755,10 +1755,10 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_array_reduce')) {
-        function twig_array_reduce(Environment $env, $array, $arrow, $initial = null)
+    if (!function_exists('elightup_twig_array_reduce')) {
+        function elightup_twig_array_reduce(Environment $env, $array, $arrow, $initial = null)
         {
-            twig_check_arrow_in_sandbox($env, $arrow, 'reduce', 'filter');
+            elightup_twig_check_arrow_in_sandbox($env, $arrow, 'reduce', 'filter');
 
             if (!\is_array($array)) {
                 if (!$array instanceof \Traversable) {
@@ -1772,8 +1772,8 @@ namespace {
         }
     }
 
-    if (!function_exists('twig_check_arrow_in_sandbox')) {
-        function twig_check_arrow_in_sandbox(Environment $env, $arrow, $thing, $type)
+    if (!function_exists('elightup_twig_check_arrow_in_sandbox')) {
+        function elightup_twig_check_arrow_in_sandbox(Environment $env, $arrow, $thing, $type)
         {
             if (!$arrow instanceof Closure && $env->hasExtension('\eLightUp\Twig\Extension\SandboxExtension') && $env->getExtension('\eLightUp\Twig\Extension\SandboxExtension')->isSandboxed()) {
                 throw new RuntimeError(sprintf('The callable passed to the "%s" %s must be a Closure in sandbox mode.', $thing, $type));

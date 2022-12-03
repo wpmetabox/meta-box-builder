@@ -3,7 +3,7 @@
         'name' => 'meta-box/meta-box-builder',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '15b449fac430c81e764219d476ad73d737aea7f7',
+        'reference' => 'aa1316bc57c49ef016b07b3d6a9f93ec7493130a',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,18 +11,20 @@
     ),
     'versions' => array(
         'elightup/twig' => array(
-            'pretty_version' => '3.3.8',
-            'version' => '3.3.8.0',
-            'reference' => '75d4d59c93ee35a58c9f5f5b7e7e73299780573a',
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '878f6cfa57ac080192f53922f93e5bdbeda314dd',
             'type' => 'library',
             'install_path' => __DIR__ . '/../elightup/twig',
-            'aliases' => array(),
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
             'dev_requirement' => false,
         ),
         'meta-box/mbb-parser' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '1d2f384cca4a503f19176e540167d92e9dbbf051',
+            'reference' => '5bc051263a062490d051d27ec184b32a91bb688f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../meta-box/mbb-parser',
             'aliases' => array(
@@ -33,7 +35,7 @@
         'meta-box/meta-box-builder' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '15b449fac430c81e764219d476ad73d737aea7f7',
+            'reference' => 'aa1316bc57c49ef016b07b3d6a9f93ec7493130a',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -42,7 +44,7 @@
         'meta-box/support' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '1862afb57b7ea45e4d7aeab2054f3d91fc3557fb',
+            'reference' => '3a02b1a2391afeb31751241d38606b2b0368da7b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../meta-box/support',
             'aliases' => array(

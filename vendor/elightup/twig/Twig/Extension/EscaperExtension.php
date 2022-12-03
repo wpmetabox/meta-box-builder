@@ -49,9 +49,9 @@ final class EscaperExtension extends AbstractExtension
     public function getFilters(): array
     {
         return [
-            new TwigFilter('escape', 'twig_escape_filter', ['needs_environment' => true, 'is_safe_callback' => 'twig_escape_filter_is_safe']),
-            new TwigFilter('e', 'twig_escape_filter', ['needs_environment' => true, 'is_safe_callback' => 'twig_escape_filter_is_safe']),
-            new TwigFilter('raw', 'twig_raw_filter', ['is_safe' => ['all']]),
+            new TwigFilter('escape', 'elightup_twig_escape_filter', ['needs_environment' => true, 'is_safe_callback' => 'elightup_twig_escape_filter_is_safe']),
+            new TwigFilter('e', 'elightup_twig_escape_filter', ['needs_environment' => true, 'is_safe_callback' => 'elightup_twig_escape_filter_is_safe']),
+            new TwigFilter('raw', 'elightup_twig_raw_filter', ['is_safe' => ['all']]),
         ];
     }
 
@@ -143,19 +143,19 @@ use eLightUp\Twig\Markup;
 use eLightUp\Twig\Node\Expression\ConstantExpression;
 use eLightUp\Twig\Node\Node;
 
-    if (!function_exists('twig_raw_filter')) {
+    if (!function_exists('elightup_twig_raw_filter')) {
         /**
          * Marks a variable as being safe.
          *
          * @param string $string A PHP variable
          */
-        function twig_raw_filter($string)
+        function elightup_twig_raw_filter($string)
         {
             return $string;
         }
     }
 
-    if (!function_exists('twig_escape_filter')) {
+    if (!function_exists('elightup_twig_escape_filter')) {
         /**
          * Escapes a string.
          *
@@ -166,7 +166,7 @@ use eLightUp\Twig\Node\Node;
          *
          * @return string
          */
-        function twig_escape_filter(Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
+        function elightup_twig_escape_filter(Environment $env, $string, $strategy = 'html', $charset = null, $autoescape = false)
         {
             if ($autoescape && $string instanceof Markup) {
                 return $string;
@@ -242,7 +242,7 @@ use eLightUp\Twig\Node\Node;
                         return htmlspecialchars($string, \ENT_QUOTES | \ENT_SUBSTITUTE, $charset);
                     }
 
-                    $string = twig_convert_encoding($string, 'UTF-8', $charset);
+                    $string = elightup_twig_convert_encoding($string, 'UTF-8', $charset);
                     $string = htmlspecialchars($string, \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
 
                     return iconv('UTF-8', $charset, $string);
@@ -251,7 +251,7 @@ use eLightUp\Twig\Node\Node;
                     // escape all non-alphanumeric characters
                     // into their \x or \uHHHH representations
                     if ('UTF-8' !== $charset) {
-                        $string = twig_convert_encoding($string, 'UTF-8', $charset);
+                        $string = elightup_twig_convert_encoding($string, 'UTF-8', $charset);
                     }
 
                     if (!preg_match('//u', $string)) {
@@ -302,7 +302,7 @@ use eLightUp\Twig\Node\Node;
 
                 case 'css':
                     if ('UTF-8' !== $charset) {
-                        $string = twig_convert_encoding($string, 'UTF-8', $charset);
+                        $string = elightup_twig_convert_encoding($string, 'UTF-8', $charset);
                     }
 
                     if (!preg_match('//u', $string)) {
@@ -323,7 +323,7 @@ use eLightUp\Twig\Node\Node;
 
                 case 'html_attr':
                     if ('UTF-8' !== $charset) {
-                        $string = twig_convert_encoding($string, 'UTF-8', $charset);
+                        $string = elightup_twig_convert_encoding($string, 'UTF-8', $charset);
                     }
 
                     if (!preg_match('//u', $string)) {
@@ -407,11 +407,11 @@ use eLightUp\Twig\Node\Node;
         }
     }
 
-    if (!function_exists('twig_escape_filter_is_safe')) {
+    if (!function_exists('elightup_twig_escape_filter_is_safe')) {
         /**
          * @internal
          */
-        function twig_escape_filter_is_safe(Node $filterArgs)
+        function elightup_twig_escape_filter_is_safe(Node $filterArgs)
         {
             foreach ($filterArgs as $arg) {
                 if ($arg instanceof ConstantExpression) {
