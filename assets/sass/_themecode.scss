@@ -1,0 +1,45 @@
+&-theme-code {
+    .og-tab-panel--theme-code {
+        .theme-code--list {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+
+            .og-item__header {
+                display: block;
+                padding: 12px 0px 12px 0px;
+                cursor: pointer;
+                border-right: 1px solid #ccd0d4;
+
+                .og-item__title {
+                    font-weight: normal;
+                    color: #3c434a;
+                    border-bottom: 1px solid #ccd0d4;                    
+                    display: block;
+                    cursor: pointer;
+                    padding: 5px 10px;
+                    margin-bottom: 5px;
+
+                    &.og-item__title-active {
+                        font-weight: bold;
+                    }
+                }
+            }
+
+            .og-result__body {
+                margin: 12px 12px 0px 12px;
+
+                .theme-code--block-code {
+                    position: relative;
+
+                    .components-clipboard-button {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        cursor: pointer;
+                        z-index: 50;
+                    }
+                }
+            }
+        }
+    }
+}

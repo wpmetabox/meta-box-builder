@@ -37,7 +37,7 @@ class Encoder {
 
 			// Not exists file template code
 			if( ! file_exists( "$path_folder_code/$fieldType.tpl" ) ) {		
-				$this->encoded_string = empty( $this->field_args ) ? '<?php rwmb_the_value( \'{field_id}\' ) ?>' :  file_get_contents("$path_folder_code/Default.tpl");
+				$this->encoded_string = empty( $this->field_args ) ? file_get_contents("$path_folder_code/Default.tpl") : '';
 			}else{
 				//Check and Get Template code			
 				$this->encoded_string = file_exists( "$path_folder_code/$fieldType-$objectType.tpl" ) ? file_get_contents("$path_folder_code/$fieldType-$objectType.tpl") : file_get_contents("$path_folder_code/$fieldType.tpl");

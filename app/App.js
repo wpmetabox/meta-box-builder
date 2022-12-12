@@ -51,17 +51,20 @@ const App = () => {
 			<Data />
 			<AdminColumnsData />
 			<br />
-			<Tabs forceRenderTabPanel={ true }>
-				<TabList>
-					<Tab>{ __( "Theme code", "meta-box-builder" ) }</Tab>
-				</TabList>
-				<TabPanel className="react-tabs__tab-panel og-tab-panel--theme-code">
-					<Codes
-						settings={ settings }
-						fields={ MbbApp.fields }
-					/>
-				</TabPanel>
-			</Tabs>			
+			{
+				MbbApp.fields.length > 0 &&
+				<Tabs forceRenderTabPanel={ true } className="react-tabs og-theme-code">
+					<TabList>
+						<Tab>{ __( "Theme code", "meta-box-builder" ) }</Tab>
+					</TabList>
+					<TabPanel className="react-tabs__tab-panel og-tab-panel--theme-code">
+						<Codes
+							settings={ settings }
+							fields={ MbbApp.fields }
+						/>
+					</TabPanel>
+				</Tabs>
+			}			
 		</>
 	);
 };

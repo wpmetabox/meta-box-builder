@@ -1,4 +1,4 @@
-import { useEffect } from "@wordpress/element";
+import { useEffect, useState } from "@wordpress/element";
 import useApi from "../../hooks/useApi";
 import useFieldIds from "../../hooks/useFieldIds";
 import useFields from "../../hooks/useFields";
@@ -51,7 +51,7 @@ const Codes = ( props ) => {
 			const last_field = listFields[ listFields.length - 1 ];
 			timmer = setInterval( () => {
 				if ( last_field.name === '' && jQuery( `#fields-${ last_field._id }-name` ).length > 0 ) {
-					jQuery( `.og-tab-panel--theme-code .og-result span[item_id="${ last_field._id }"]` ).text( jQuery( `#fields-${ last_field._id }-name` ).val() );
+					jQuery( `.og-tab-panel--theme-code .og-item__header span[item_id="${ last_field._id }"]` ).text( jQuery( `#fields-${ last_field._id }-name` ).val() );
 					clearInterval( timmer );
 				}
 
@@ -69,21 +69,25 @@ const Codes = ( props ) => {
 		settings: JSON.stringify( props.settings )
 	}, 'POST' ] );
 
+	const [ choose, setChoose ] = useState( 0 );
+	const handleChangeTab = ( index ) => {
+		setChoose( index );
+	};
+
+	if ( themeCode === undefined || themeCode.length === 0 ) return '';
+
 	return (
-		<>
-			{ themeCode != undefined && themeCode.length > 0 &&
-				themeCode.map( ( field, index ) => (
-					<div key={ `code_${ field._id }` } className="og-result">
-						<div className="og-item__header og-collapsible__header">
-							<span id={ `code-item-title-${ field._id }` } item_id={ field._id } className="og-item__title">{ field.name }</span>
-						</div>
-						<div className="og-result__body">
-							<ThemeCode codeValue={ field.theme_code } />
-						</div>
-					</div>
-				) )
-			}
-		</>
+		<div className="theme-code--list">
+			<div className="og-item__header og-collapsible__header">
+				{
+					themeCode.map( ( field, index ) => <span key={ `header_${ field._id }` } onClick={ () => handleChangeTab( index ) } id={ `code-item-title-${ field._id }` } item_id={ field._id } className={ `og-item__title ${ choose === index ? 'og-item__title-active' : '' }` }>{ field.name }</span> )
+				}
+			</div>
+
+			<div className="og-result__body">
+				{ themeCode[ choose ] && <ThemeCode codeValue={ themeCode[ choose ].theme_code } /> }
+			</div>
+		</div>
 	);
 };
 

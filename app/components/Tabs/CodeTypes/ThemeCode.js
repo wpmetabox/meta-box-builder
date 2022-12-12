@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from "react-codemirror2";
 const { withState } = wp.compose;
 
-const ThemeCode = ( { codeValue } ) => {
+const ThemeCode = ( { show, codeValue } ) => {
 	const Button = withState( { hasCopied: false } )(
 		( { hasCopied, setState, textCode } ) => (
 			<ClipboardButton
@@ -20,7 +20,7 @@ const ThemeCode = ( { codeValue } ) => {
 	);
 
 	return (
-		<>
+		<div className="theme-code--block-code">
 			<CodeMirror
 				value={ codeValue }
 				editorDidMount={ ( editor ) => {
@@ -37,7 +37,7 @@ const ThemeCode = ( { codeValue } ) => {
 			/>
 
 			<Button textCode={ codeValue } />
-		</>
+		</div>
 	);
 };
 

@@ -1,6 +1,7 @@
-<?php
+<?php 
 // Displaying uploaded files with links.
-<?php $files = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' ); ?>
+$files = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' );
+?>
 <h3>Uploaded files</h3>
 <ul>
     <?php foreach ( $files as $file ) : ?>
