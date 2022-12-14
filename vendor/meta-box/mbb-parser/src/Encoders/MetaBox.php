@@ -33,10 +33,10 @@ class MetaBox {
 			$this->encode_fields( $this->settings['fields'] );
 		}
 
-		$encoder = new PHPEncoder;
+		$encoder              = new PHPEncoder;
 		$this->encoded_string = $encoder->encode( $this->settings, [
-			'array.base'  => 4,
-			'array.align' => true,
+			'array.base'    => 4,
+			'array.align'   => true,
 			'string.escape' => false,
 		] );
 

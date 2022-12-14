@@ -9,12 +9,12 @@ class Field {
 	private $id_prefix;
 
 	public function __construct( $settings, $id_prefix ) {
-		$this->settings    = $settings;
-		$this->id_prefix   = $id_prefix;
+		$this->settings  = $settings;
+		$this->id_prefix = $id_prefix;
 	}
 
 	public function encode() {
-		$translatable_fields = ['name', 'desc', 'label_description', 'add_button', 'placeholder', 'prefix', 'suffix', 'before', 'after'];
+		$translatable_fields = [ 'name', 'desc', 'label_description', 'add_button', 'placeholder', 'prefix', 'suffix', 'before', 'after' ];
 		array_walk( $translatable_fields, [ $this, 'make_translatable' ] );
 
 		$this->transform_id_prefix();
@@ -30,7 +30,7 @@ class Field {
 	}
 
 	private function make_options_translatable() {
-		$choice_types = ['select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete'];
+		$choice_types = [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ];
 		if ( ! in_array( $this->type, $choice_types ) ) {
 			return;
 		}

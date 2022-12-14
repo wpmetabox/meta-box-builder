@@ -4,7 +4,7 @@ namespace MBBParser\Parsers;
 use MetaBox\Support\Arr;
 
 class MetaBox extends Base {
-	protected $empty_keys = ['fields'];
+	protected $empty_keys = [ 'fields' ];
 	private $settings_parser;
 	private $validation = [
 		'rules'    => [],
@@ -27,7 +27,7 @@ class MetaBox extends Base {
 		// Remove array keys again. Some methods like parse tabs change fields.
 		$this->fields = array_values( $this->fields );
 
-		$settings = $this->settings_parser->get_settings();
+		$settings       = $this->settings_parser->get_settings();
 		$this->settings = array_merge( $settings, [ 'fields' => $this->fields ] );
 		if ( $this->validation['rules'] ) {
 			if ( empty( $this->validation['messages'] ) ) {
@@ -89,11 +89,11 @@ class MetaBox extends Base {
 		foreach ( $field['validation'] as $rule ) {
 			$name  = $rule['name'];
 			$value = $rule['value'];
-			if ( in_array( $name, ['rangelength', 'range'], true ) ) {
+			if ( in_array( $name, [ 'rangelength', 'range' ], true ) ) {
 				$value = array_map( 'intval', Arr::from_csv( $value ) );
 			}
 
-			$rules[ $key ][ $name ]    = $value;
+			$rules[ $key ][ $name ] = $value;
 			if ( ! empty( $rule['message'] ) ) {
 				$messages[ $key ][ $name ] = $rule['message'];
 			}

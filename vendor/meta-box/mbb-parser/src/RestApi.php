@@ -22,7 +22,7 @@ class RestApi {
 		$parser->parse();
 
 		$settings = $parser->get_settings();
-		$encoder = new Encoders\MetaBox( $settings );
+		$encoder  = new Encoders\MetaBox( $settings );
 		$encoder->encode();
 
 		return $encoder->get_encoded_string();

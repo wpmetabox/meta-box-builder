@@ -3,19 +3,19 @@ namespace MBBParser\Parsers;
 
 class Field extends Base {
 	// Allow these settings to be empty.
-	protected $empty_keys = ['save_field'];
+	protected $empty_keys = [ 'save_field' ];
 
 	// Remove if "true", set to "false" if missing.
 	protected $default_true = [
-		'button_group'   => ['inline'],
-		'radio'          => ['inline'],
-		'file_advanced'  => ['max_status'],
-		'file_upload'    => ['max_status'],
-		'image_advanced' => ['max_status'],
-		'image_upload'   => ['max_status'],
-		'video'          => ['max_status'],
+		'button_group'   => [ 'inline' ],
+		'radio'          => [ 'inline' ],
+		'file_advanced'  => [ 'max_status' ],
+		'file_upload'    => [ 'max_status' ],
+		'image_advanced' => [ 'max_status' ],
+		'image_upload'   => [ 'max_status' ],
+		'video'          => [ 'max_status' ],
 	];
-	private $choice_types = ['select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete'];
+	private $choice_types   = [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ];
 
 	public function parse() {
 		// Remove collapse/expand state.
@@ -111,7 +111,11 @@ class Field extends Base {
 		if ( is_string( $this->options ) && 0 === strpos( $this->options, 'callback:' ) ) {
 			$callback = trim( str_replace( 'callback:', '', $this->options ) );
 			if ( is_callable( $callback ) ) {
-				$this->options = call_user_func( $callback );
+				try {
+					$this->options = call_user_func( $callback );
+				} catch ( \Throwable $th ) {
+					// throw $th;
+				}
 				$this->_callback = $callback; // For using in the encoders.
 			}
 			return $this;
@@ -138,11 +142,11 @@ class Field extends Base {
 
 	private function parse_choice_std() {
 		$is_multiple = $this->multiple
-			|| in_array( $this->type, ['checkbox_list', 'autocomplete'] )
-			|| in_array( $this->field_type, ['select_tree', 'checkbox_tree', 'checkbox_list', 'checkbox_tree'] );
+			|| in_array( $this->type, [ 'checkbox_list', 'autocomplete' ] )
+			|| in_array( $this->field_type, [ 'select_tree', 'checkbox_tree', 'checkbox_list', 'checkbox_tree' ] );
 
 		if ( $is_multiple ) {
-			$this->std = is_string( $this->std ) && ! empty( $this->std ) ? preg_split('/\r\n|\r|\n/', $this->std ) : $this->std;
+			$this->std = is_string( $this->std ) && ! empty( $this->std ) ? preg_split( '/\r\n|\r|\n/', $this->std ) : $this->std;
 		}
 
 		if ( empty( $this->std ) ) {
@@ -156,7 +160,7 @@ class Field extends Base {
 		if ( $this->clone ) {
 			return $this;
 		}
-		$keys = ['sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button'];
+		$keys = [ 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button' ];
 		foreach ( $keys as $key ) {
 			unset( $this->$key );
 		}
@@ -205,7 +209,7 @@ class Field extends Base {
 		if ( $this->collapsible ) {
 			return $this;
 		}
-		$keys = ['default_state', 'save_state', 'group_title'];
+		$keys = [ 'default_state', 'save_state', 'group_title' ];
 		foreach ( $keys as $key ) {
 			unset( $this->$key );
 		}

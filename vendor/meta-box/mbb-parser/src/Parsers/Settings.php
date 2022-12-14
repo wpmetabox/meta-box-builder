@@ -5,7 +5,7 @@ use MetaBox\Support\Arr;
 
 class Settings extends Base {
 	// Allow these settings to be empty.
-	protected $empty_keys = ['post_types', 'taxonomies', 'settings_pages'];
+	protected $empty_keys = [ 'post_types', 'taxonomies', 'settings_pages' ];
 
 	public function parse() {
 		$this->remove_default( 'context', 'normal' )
@@ -24,18 +24,20 @@ class Settings extends Base {
 	}
 
 	private function parse_location() {
-		$object_type = $this->object_type ? $this->object_type : 'post';
+		$object_type = $this->object_type ?: 'post';
 
-		if ( in_array( $object_type, ['user', 'comment', 'block'], true ) ) {
+		if ( in_array( $object_type, [ 'user', 'comment', 'block' ], true ) ) {
 			unset( $this->$object_type );
 			$this->type = $object_type;
 		}
 
 		if ( 'post' === $object_type ) {
-			$this->remove_default( 'post_types', ['post'] );
+			$this->remove_default( 'post_types', [ 'post' ] );
 			$this->remove_default( 'priority', 'high' );
 			$this->remove_default( 'style', 'default' );
 			$this->remove_default( 'position', 'normal' );
+
+			$this->post_types = array_filter( $this->post_types );
 		}
 
 		return $this;
@@ -68,12 +70,12 @@ class Settings extends Base {
 
 	private function parse_custom_table() {
 		$enable = Arr::get( $this->settings, 'custom_table.enable', false );
-		$name = Arr::get( $this->settings, 'custom_table.name', '' );
+		$name   = Arr::get( $this->settings, 'custom_table.name', '' );
 		if ( $enable && $name ) {
 			$this->storage_type = 'custom_table';
 
 			global $wpdb;
-			$prefix = Arr::get( $this->settings, 'custom_table.prefix', false );
+			$prefix      = Arr::get( $this->settings, 'custom_table.prefix', false );
 			$this->table = ( $prefix ? $wpdb->prefix : '' ) . $name;
 		}
 
@@ -85,10 +87,23 @@ class Settings extends Base {
 		// Remove block settings.
 		if ( 'block' !== $this->object_type ) {
 			$params = [
-				'description', 'category', 'keywords', 'supports', 'block_context',
-				'icon', 'icon_type', 'icon_svg', 'icon_background', 'icon_foreground',
-				'render_with', 'render_template', 'render_callback', 'render_code',
-				'enqueue_style', 'enqueue_script', 'enqueue_assets'
+				'description',
+				'category',
+				'keywords',
+				'supports',
+				'block_context',
+				'icon',
+				'icon_type',
+				'icon_svg',
+				'icon_background',
+				'icon_foreground',
+				'render_with',
+				'render_template',
+				'render_callback',
+				'render_code',
+				'enqueue_style',
+				'enqueue_script',
+				'enqueue_assets',
 			];
 			foreach ( $params as $param ) {
 				unset( $this->{$param} );
@@ -128,7 +143,7 @@ class Settings extends Base {
 			unset( $this->render_template );
 			unset( $this->render_callback );
 		}
-		$this->enqueue_style = $this->replace_variables( $this->enqueue_style );
+		$this->enqueue_style  = $this->replace_variables( $this->enqueue_style );
 		$this->enqueue_script = $this->replace_variables( $this->enqueue_script );
 
 		unset( $this->render_with );

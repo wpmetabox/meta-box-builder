@@ -45,7 +45,9 @@
 				"*.md",
 
 				"test/",
-				"tests/"
+				"tests/",
+
+				"phpcs.xml"
 			],
 			"meta-box/*": [
 				".git",
