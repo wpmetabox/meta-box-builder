@@ -1,16 +1,16 @@
 import create from 'zustand';
-import { ensureArray, getSettings } from '../functions';
+import { getSettings } from '../functions';
 
 const sanitize = types => {
+	let t = types && Array.isArray( types ) ? types : [ 'post' ];
 	// Remove empty value.
-	let t = types.filter( type => /\S/.test( type ) );
-	return t.length > 0 ? t : [ 'post' ];
+	return t.filter( type => /\S/.test( type ) );
 };
 
 const settings = getSettings();
 
 const usePostTypes = create( set => ( {
-	types: ensureArray( sanitize( settings.post_types ) ),
+	types: sanitize( settings.post_types ),
 	update: types => set( state => ( { types: sanitize( types ) } ) ),
 } ) );
 
