@@ -3,7 +3,7 @@
         'name' => 'meta-box/meta-box-builder',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '3578382d7a1b00b32b61e555e6f8b600092e30ee',
+        'reference' => '1cf7c217303204f178a6b8c291d159d145b64751',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -24,7 +24,7 @@
         'meta-box/mbb-parser' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '040075b30bbbcd0ee7193b51d8e76f50712e0c6a',
+            'reference' => 'c259afc48ad3dbeb1e50c200862f492d7f230175',
             'type' => 'library',
             'install_path' => __DIR__ . '/../meta-box/mbb-parser',
             'aliases' => array(
@@ -35,7 +35,7 @@
         'meta-box/meta-box-builder' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '3578382d7a1b00b32b61e555e6f8b600092e30ee',
+            'reference' => '1cf7c217303204f178a6b8c291d159d145b64751',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -44,7 +44,7 @@
         'meta-box/support' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '3a02b1a2391afeb31751241d38606b2b0368da7b',
+            'reference' => '21ac638244f63c9372ff9958810552a1a26135d9',
             'type' => 'library',
             'install_path' => __DIR__ . '/../meta-box/support',
             'aliases' => array(
@@ -53,9 +53,9 @@
             'dev_requirement' => false,
         ),
         'riimu/kit-phpencoder' => array(
-            'pretty_version' => 'v2.4.1',
-            'version' => '2.4.1.0',
-            'reference' => 'ca6f004e1290aec7ef4bebf6c0807b30fcf981d7',
+            'pretty_version' => 'v2.4.2',
+            'version' => '2.4.2.0',
+            'reference' => '72ff7825de193b272e17b228394819dbfc638e72',
             'type' => 'library',
             'install_path' => __DIR__ . '/../riimu/kit-phpencoder',
             'aliases' => array(),
