@@ -10,24 +10,31 @@ class Export {
 	}
 
 	public function add_export_link( $actions, $post ) {
-		if ( 'meta-box' === $post->post_type ) {
+		if ( in_array( $post->post_type, [ 'meta-box', 'mb-relationship' ], true ) ) {
+			$url               = wp_nonce_url( add_query_arg( [
+				'action'    => 'mbb-export',
+				'post_type' => $post->post_type,
+				'post[]'    => $post->ID,
+			] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
+			$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'mb-custom-post-type' ) . '</a>';
 			$actions['export'] = '<a href="' . add_query_arg( ['action' => 'mbb-export', 'post[]' => $post->ID] ) . '">' . esc_html__( 'Export', 'meta-box-builder' ) . '</a>';
+
+			return $actions;
 		}
-		return $actions;
 	}
 
 	public function export() {
 		$action  = isset( $_REQUEST['action'] ) && 'mbb-export' === $_REQUEST['action'];
 		$action2 = isset( $_REQUEST['action2'] ) && 'mbb-export' === $_REQUEST['action2'];
 
-		if ( ( ! $action && ! $action2 ) || empty( $_REQUEST['post'] ) ) {
+		if ( ( ! $action && ! $action2 ) || empty( $_REQUEST['post'] ) || empty( $_REQUEST['post_type'] ) ) {
 			return;
 		}
 
 		$post_ids = $_REQUEST['post'];
 
 		$query = new WP_Query( [
-			'post_type'              => 'meta-box',
+			'post_type'              => sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) ),
 			'post__in'               => $post_ids,
 			'posts_per_page'         => count( $post_ids ),
 			'no_found_rows'          => true,
@@ -36,15 +43,21 @@ class Export {
 
 		$data = [];
 		foreach ( $query->posts as $post ) {
-			$data[] = array_merge( (array) $post, [
-				'settings' => get_post_meta( $post->ID, 'settings', true ),
-				'fields'    => get_post_meta( $post->ID, 'fields', true ),
-				'data'     => get_post_meta( $post->ID, 'data', true ),
-				'meta_box' => get_post_meta( $post->ID, 'meta_box', true ),
-			] );
+			$settings = [];
+			foreach ( $this->post_metas_key( $post->post_type ) as $meta ) {
+				$settings[ $meta ] = get_post_meta( $post->ID, $meta, true );
+			}
+			$data[] = [
+				'post_type'             => $post->post_type,
+				'post_title'            => $post->post_title,
+				'post_date'             => $post->post_date,
+				'post_status'           => $post->post_status,
+				'post_content'          => $post->post_content,
+				'settings'              => $settings,
+			];
 		}
 
-		$file_name = 'field-groups-exported';
+		$file_name = str_replace( 'mb-', '', $post->post_type ) . '-exported';
 		if ( count( $post_ids ) === 1 ) {
 			$data = reset( $data );
 			$file_name = $query->posts[0]->post_name;
@@ -60,5 +73,18 @@ class Export {
 		header( 'Content-Length: ' . strlen( $data ) );
 		echo $data;
 		die;
+	}
+	public function post_metas_key( $post_type ) {
+		switch ( $post_type ) {
+			case 'meta-box':
+				return [ 'settings', 'fields', 'data', 'meta_box' ];
+				break;
+			case 'mb-relationship':
+				return [ 'settings', 'relationship' ];
+				break;
+			default:
+				return [];
+				break;
+		}
 	}
 }
