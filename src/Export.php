@@ -10,7 +10,7 @@ class Export {
 	}
 
 	public function add_export_link( $actions, $post ) {
-		if ( in_array( $post->post_type, [ 'meta-box', 'mb-relationship' ], true ) ) {
+		if ( in_array( $post->post_type, [ 'meta-box', 'mb-relationship', 'mb-settings-page' ], true ) ) {
 			$url               = wp_nonce_url( add_query_arg( [
 				'action'    => 'mbb-export',
 				'post_type' => $post->post_type,
@@ -43,17 +43,17 @@ class Export {
 
 		$data = [];
 		foreach ( $query->posts as $post ) {
-			$settings = [];
+			$metas = [];
 			foreach ( $this->post_metas_key( $post->post_type ) as $meta ) {
-				$settings[ $meta ] = get_post_meta( $post->ID, $meta, true );
+				$metas[ $meta ] = get_post_meta( $post->ID, $meta, true );
 			}
 			$data[] = [
-				'post_type'             => $post->post_type,
-				'post_title'            => $post->post_title,
-				'post_date'             => $post->post_date,
-				'post_status'           => $post->post_status,
-				'post_content'          => $post->post_content,
-				'settings'              => $settings,
+				'post_type'    => $post->post_type,
+				'post_title'   => $post->post_title,
+				'post_date'    => $post->post_date,
+				'post_status'  => $post->post_status,
+				'post_content' => $post->post_content,
+				'metas'        => $metas,
 			];
 		}
 
@@ -81,6 +81,9 @@ class Export {
 				break;
 			case 'mb-relationship':
 				return [ 'settings', 'relationship' ];
+				break;
+			case 'mb-settings-page':
+				return [ 'settings', 'settings_page' ];
 				break;
 			default:
 				return [];

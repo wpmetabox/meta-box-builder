@@ -12,7 +12,7 @@ class AdminColumns {
 	}
 
 	public function enqueue() {
-		if ( ! in_array( get_current_screen()->id, [ 'edit-meta-box', 'edit-mb-relationship' ], true ) ) {
+		if ( ! in_array( get_current_screen()->id, [ 'edit-meta-box', 'edit-mb-relationship', 'edit-mb-settings-page' ], true ) ) {
 			return;
 		}
 

@@ -14,7 +14,7 @@ class Import {
 	}
 
 	public function output_js_templates() {
-		if ( ! in_array( get_current_screen()->id, [ 'edit-meta-box', 'edit-mb-relationship' ], true ) ) {
+		if ( ! in_array( get_current_screen()->id, [ 'edit-meta-box', 'edit-mb-relationship', 'edit-mb-settings-page' ], true ) ) {
 			return;
 		}
 		?>
@@ -85,7 +85,7 @@ class Import {
 				wp_die( implode( '<br>', $post_id->get_error_messages() ) );
 			}
 
-			foreach ( $post['settings'] as $meta => $value ) {
+			foreach ( $post['metas'] as $meta => $value ) {
 				$this->update_postmeta( $post_id, $meta, $value );
 			}
 		}
