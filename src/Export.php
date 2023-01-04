@@ -10,17 +10,19 @@ class Export {
 	}
 
 	public function add_export_link( $actions, $post ) {
-		if ( in_array( $post->post_type, [ 'meta-box', 'mb-relationship', 'mb-settings-page' ], true ) ) {
-			$url               = wp_nonce_url( add_query_arg( [
-				'action'    => 'mbb-export',
-				'post_type' => $post->post_type,
-				'post[]'    => $post->ID,
-			] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
-			$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'mb-custom-post-type' ) . '</a>';
-			$actions['export'] = '<a href="' . add_query_arg( ['action' => 'mbb-export', 'post[]' => $post->ID] ) . '">' . esc_html__( 'Export', 'meta-box-builder' ) . '</a>';
-
+		if ( ! in_array( $post->post_type, [ 'meta-box', 'mb-relationship', 'mb-settings-page' ], true ) ) {
 			return $actions;
 		}
+
+		$url               = wp_nonce_url( add_query_arg( [
+			'action'    => 'mbb-export',
+			'post_type' => $post->post_type,
+			'post[]'    => $post->ID,
+		] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
+		$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'mb-custom-post-type' ) . '</a>';
+
+		return $actions;
+
 	}
 
 	public function export() {
@@ -43,18 +45,23 @@ class Export {
 
 		$data = [];
 		foreach ( $query->posts as $post ) {
-			$metas = [];
-			foreach ( $this->post_metas_key( $post->post_type ) as $meta ) {
+			$metas_keys = $this->post_metas_keys( $post->post_type );
+			foreach ( $metas_keys as $meta ) {
 				$metas[ $meta ] = get_post_meta( $post->ID, $meta, true );
 			}
-			$data[] = [
-				'post_type'    => $post->post_type,
-				'post_title'   => $post->post_title,
-				'post_date'    => $post->post_date,
-				'post_status'  => $post->post_status,
-				'post_content' => $post->post_content,
-				'metas'        => $metas,
-			];
+
+			if ( 'meta-box' === $post->post_type ) {
+				$data[] = $this->get_meta_box( $post, $metas );
+			} else {
+				$data[]   = array(
+					'post_type'    => $post->post_type,
+					'post_title'   => $post->post_title,
+					'post_date'    => $post->post_date,
+					'post_status'  => $post->post_status,
+					'post_content' => $post->post_content,
+					'metas'        => $metas,
+				);
+			}
 		}
 
 		$file_name = str_replace( 'mb-', '', $post->post_type ) . '-exported';
@@ -74,20 +81,24 @@ class Export {
 		echo $data;
 		die;
 	}
-	public function post_metas_key( $post_type ) {
+	public function get_meta_box( $post, $metas ) {
+		return array_merge( array(
+				'post_type'    => $post->post_type,
+				'post_title'   => $post->post_title,
+				'post_date'    => $post->post_date,
+				'post_status'  => $post->post_status,
+				'post_content' => $post->post_content,
+			), $metas );
+	}
+	public function post_metas_keys( $post_type ) {
 		switch ( $post_type ) {
 			case 'meta-box':
 				return [ 'settings', 'fields', 'data', 'meta_box' ];
-				break;
 			case 'mb-relationship':
 				return [ 'settings', 'relationship' ];
-				break;
 			case 'mb-settings-page':
 				return [ 'settings', 'settings_page' ];
-				break;
-			default:
-				return [];
-				break;
+			default: return [];
 		}
 	}
 }

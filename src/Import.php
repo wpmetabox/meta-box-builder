@@ -85,8 +85,15 @@ class Import {
 				wp_die( implode( '<br>', $post_id->get_error_messages() ) );
 			}
 
-			foreach ( $post['metas'] as $meta => $value ) {
-				$this->update_postmeta( $post_id, $meta, $value );
+			if ( 'meta-box' === $post['post_type'] ) {
+				update_post_meta( $post_id, 'settings', $post['settings'] );
+				update_post_meta( $post_id, 'fields', $post['fields'] );
+				update_post_meta( $post_id, 'data', $post['data'] );
+				update_post_meta( $post_id, 'meta_box', $post['meta_box'] );
+			} else {
+				foreach ( $post['metas'] as $meta => $value ) {
+					update_post_meta( $post_id, $meta, $value );
+				}
 			}
 		}
 
@@ -125,9 +132,5 @@ class Import {
 		}
 
 		return true;
-	}
-
-	private function update_postmeta( $post_id, $meta, $value ) {
-		update_post_meta( $post_id, $meta, $value );
 	}
 }
