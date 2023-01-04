@@ -5,7 +5,7 @@ use WP_Query;
 
 class Export {
 	public function __construct() {
-		add_filter( 'post_row_actions', [$this, 'add_export_link'], 10, 2 );
+		add_filter( 'post_row_actions', [ $this, 'add_export_link' ], 10, 2 );
 		add_action( 'admin_init', [ $this, 'export' ] );
 	}
 
@@ -33,7 +33,9 @@ class Export {
 			return;
 		}
 
-		$post_ids = $_REQUEST['post'];
+		check_ajax_referer( 'bulk-posts' );
+
+		$post_ids = wp_parse_id_list( wp_unslash( $_REQUEST['post'] ) );
 
 		$query = new WP_Query( [
 			'post_type'              => sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) ),
@@ -45,32 +47,30 @@ class Export {
 
 		$data = [];
 		foreach ( $query->posts as $post ) {
-			$metas_keys = $this->post_metas_keys( $post->post_type );
-			foreach ( $metas_keys as $meta ) {
-				$metas[ $meta ] = get_post_meta( $post->ID, $meta, true );
+			$post_data = [
+				'post_type'    => $post->post_type,
+				'post_title'   => $post->post_title,
+				'post_date'    => $post->post_date,
+				'post_status'  => $post->post_status,
+				'post_content' => $post->post_content,
+			];
+
+			$meta_keys = $this->get_meta_keys( $post->post_type );
+			foreach ( $meta_keys as $meta_key ) {
+				$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
 			}
 
-			if ( 'meta-box' === $post->post_type ) {
-				$data[] = $this->get_meta_box( $post, $metas );
-			} else {
-				$data[]   = array(
-					'post_type'    => $post->post_type,
-					'post_title'   => $post->post_title,
-					'post_date'    => $post->post_date,
-					'post_status'  => $post->post_status,
-					'post_content' => $post->post_content,
-					'metas'        => $metas,
-				);
-			}
+			$data[] = $post_data;
 		}
 
 		$file_name = str_replace( 'mb-', '', $post->post_type ) . '-exported';
 		if ( count( $post_ids ) === 1 ) {
-			$data = reset( $data );
-			$file_name = $query->posts[0]->post_name;
+			$data      = reset( $data );
+			$post      = $query->posts[0];
+			$file_name = $post->post_name ?: sanitize_key( $post->post_title );
 		}
 
-		$data = json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
+		$data = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
 		header( 'Content-Type: application/octet-stream' );
 		header( "Content-Disposition: attachment; filename=$file_name.json" );
@@ -81,16 +81,8 @@ class Export {
 		echo $data;
 		die;
 	}
-	public function get_meta_box( $post, $metas ) {
-		return array_merge( array(
-				'post_type'    => $post->post_type,
-				'post_title'   => $post->post_title,
-				'post_date'    => $post->post_date,
-				'post_status'  => $post->post_status,
-				'post_content' => $post->post_content,
-			), $metas );
-	}
-	public function post_metas_keys( $post_type ) {
+
+	private function get_meta_keys( $post_type ) {
 		switch ( $post_type ) {
 			case 'meta-box':
 				return [ 'settings', 'fields', 'data', 'meta_box' ];
@@ -98,7 +90,8 @@ class Export {
 				return [ 'settings', 'relationship' ];
 			case 'mb-settings-page':
 				return [ 'settings', 'settings_page' ];
-			default: return [];
+			default:
+				return [];
 		}
 	}
 }

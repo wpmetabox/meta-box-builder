@@ -29,7 +29,7 @@ class Import {
 					<?php wp_nonce_field( 'import' ); ?>
 					<input type="file" name="mbb_file">
 					<input type="hidden" name="mbb_post_type" value="<?= esc_attr( get_current_screen()->post_type ) ?>">
-					<?php submit_button( esc_attr__( 'Import', 'meta-box-builder' ), 'secondary', 'submit', false, ['disabled' => true] ); ?>
+					<?php submit_button( esc_attr__( 'Import', 'meta-box-builder' ), 'secondary', 'submit', false, [ 'disabled' => true ] ); ?>
 				</form>
 			</div>
 		</script>
@@ -45,7 +45,6 @@ class Import {
 		check_ajax_referer( 'import' );
 
 		$url    = admin_url( 'edit.php?post_type=' . sanitize_text_field( wp_unslash( $_POST['mbb_post_type'] ) ) );
-
 		$data   = file_get_contents( sanitize_text_field( wp_unslash( $_FILES['mbb_file']['tmp_name'] ) ) );
 		$result = $this->import_json( $data );
 
@@ -54,7 +53,8 @@ class Import {
 		}
 
 		if ( ! $result ) {
-			wp_die( sprintf( __( 'Invalid file data. <a href="%s">Go back</a>.', 'meta-box-builder' ), $url ) );
+			// Translators: %s - go back URL.
+			wp_die( wp_kses_post( sprintf( __( 'Invalid file data. <a href="%s">Go back</a>.', 'meta-box-builder' ), $url ) ) );
 		}
 
 		$url = add_query_arg( 'imported', 'true', $url );
@@ -79,21 +79,21 @@ class Import {
 		foreach ( $posts as $post ) {
 			$post_id = wp_insert_post( $post );
 			if ( ! $post_id ) {
-				wp_die( sprintf( __( 'Cannot import the %s <strong>%s</strong>. <a href="%s">Go back</a>.', 'meta-box-builder' ), str_replace( 'mb-', '', $post['post_type'] ), $post['post_title'], $url ) );
+				wp_die( wp_kses_post( sprintf(
+					// Translators: %1$s - post type, %2$s - post title, %3$s - go back URL.
+					__( 'Cannot import the %1$s <strong>%2$s</strong>. <a href="%3$s">Go back</a>.', 'mb-custom-post-type' ),
+					str_replace( 'mb-', '', $post['post_type'] ),
+					$post['post_title'],
+					admin_url( "edit.php?post_type={$post['post_type']}" )
+				) ) );
 			}
 			if ( is_wp_error( $post_id ) ) {
-				wp_die( implode( '<br>', $post_id->get_error_messages() ) );
+				wp_die( wp_kses_post( implode( '<br>', $post_id->get_error_messages() ) ) );
 			}
 
-			if ( 'meta-box' === $post['post_type'] ) {
-				update_post_meta( $post_id, 'settings', $post['settings'] );
-				update_post_meta( $post_id, 'fields', $post['fields'] );
-				update_post_meta( $post_id, 'data', $post['data'] );
-				update_post_meta( $post_id, 'meta_box', $post['meta_box'] );
-			} else {
-				foreach ( $post['metas'] as $meta => $value ) {
-					update_post_meta( $post_id, $meta, $value );
-				}
+			$meta_keys = $this->get_meta_keys( $post['post_type'] );
+			foreach ( $meta_keys as $meta_key ) {
+				update_post_meta( $post_id, $meta_key, $post[ $meta_key ] );
 			}
 		}
 
@@ -122,7 +122,7 @@ class Import {
 			$excerpt = $post->post_excerpt;
 			$excerpt = addslashes( $excerpt );
 
-			$post_arr = (array) $post;
+			$post_arr                 = (array) $post;
 			$post_arr['post_excerpt'] = $excerpt;
 			unset( $post_arr['ID'] );
 
@@ -132,5 +132,18 @@ class Import {
 		}
 
 		return true;
+	}
+
+	private function get_meta_keys( $post_type ) {
+		switch ( $post_type ) {
+			case 'meta-box':
+				return [ 'settings', 'fields', 'data', 'meta_box' ];
+			case 'mb-relationship':
+				return [ 'settings', 'relationship' ];
+			case 'mb-settings-page':
+				return [ 'settings', 'settings_page' ];
+			default:
+				return [];
+		}
 	}
 }
