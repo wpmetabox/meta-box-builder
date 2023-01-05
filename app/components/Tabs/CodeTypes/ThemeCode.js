@@ -13,21 +13,19 @@ const ThemeCode = ( { show, codeValue } ) => {
 				onFinishCopy={ () => setState( { hasCopied: false } ) }
 			>
 				{ hasCopied
-					? __( "Copied!", "meta-box-builder" )
-					: __( "Copy", "meta-box-builder" ) }
+					? __( 'Copied!', 'meta-box-builder' )
+					: __( 'Copy', 'meta-box-builder' ) }
 			</ClipboardButton>
 		)
 	);
 
 	return (
-		<div className="theme-code--block-code">
+		<div className="og-result__body">
 			<CodeMirror
 				value={ codeValue }
-				editorDidMount={ ( editor ) => {
-					editor.setSize( "", "100%" );
-				} }
+				editorDidMount={ editor => editor.setSize( '', '100%' ) }
 				options={ {
-					mode: "php",
+					mode: 'php',
 					lineNumbers: true,
 					smartIndent: true,
 					readOnly: true,

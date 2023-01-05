@@ -5,6 +5,8 @@ import useFieldIds from "../../hooks/useFieldIds";
 import useFields from "../../hooks/useFields";
 import ThemeCode from "./CodeTypes/ThemeCode";
 
+const $ = jQuery;
+
 const mergeInGroup = ( fields ) => {
 	let allFields = fields;
 	Object.entries( fields ).map( ( field ) => {
@@ -38,57 +40,69 @@ const mergeInSubGroup = ( allFields, group ) => {
 const Codes = ( props ) => {
 	const { fields } = useFields( props.fields, 'fields' );
 	const fieldIds = useFieldIds( state => state.ids );
-	//Not empty fields
-	if ( fields.length === 0 || fieldIds.length === 0 ) return '';
 
-	//merge all fields in group
+	// No fields?
+	if ( fields.length === 0 || fieldIds.length === 0 ) {
+		return '';
+	}
+
+	// Merge all fields in group.
 	const allFields = mergeInGroup( fields );
 	const listFields = Object.values( allFields );
 
-	// Show code add new field.  
+	// Show list of field names in the left tabs.
 	useEffect( () => {
-		let timmer = null;
+		let timer = null;
 		if ( listFields.length > 0 ) {
-			const last_field = listFields[ listFields.length - 1 ];
-			timmer = setInterval( () => {
-				if ( last_field.name === '' && jQuery( `#fields-${ last_field._id }-name` ).length > 0 ) {
-					jQuery( `.og-tab-panel--theme-code .og-item__header span[item_id="${ last_field._id }"]` ).text( jQuery( `#fields-${ last_field._id }-name` ).val() );
-					clearInterval( timmer );
+			const lastField = listFields[ listFields.length - 1 ];
+			timer = setInterval( () => {
+				const $nameElement = $( `#fields-${ lastField._id }-name` );
+				if ( lastField.name === '' && $nameElement.length > 0 ) {
+					$( `#og-theme-code__item-name--${ lastField._id }` ).text( $nameElement.val() );
+					clearInterval( timer );
 				}
 
-				return () => clearInterval( timmer );
+				return () => clearInterval( timer );
 			}, 200 );
 		}
 
-		return timmer != undefined && timmer != null ? clearInterval( timmer ) : '';
+		return timer != undefined && timer != null ? clearInterval( timer ) : '';
 	}, [ fieldIds ] );
-	//End Show code add new field.
 
-	//Generate Code
+	// Generate Code
 	const themeCode = useApi( [ 'theme-code-generate', {
 		fields: JSON.stringify( listFields ),
 		settings: JSON.stringify( props.settings )
 	}, 'POST' ] );
 
-	const [ choose, setChoose ] = useState( 0 );
-	const handleChangeTab = ( index ) => {
-		setChoose( index );
-	};
+	const [ tab, setTab ] = useState( 0 );
 
-	if ( themeCode === undefined || themeCode.length === 0 ) return '';
+	if ( themeCode === undefined || themeCode.length === 0 ) {
+		return '';
+	}
 
 	return (
-		<div className="theme-code--list">
-			<div className="og-item__header og-collapsible__header">
+		<>
+			<div className="og-theme-code__header">
 				{
-					themeCode.map( ( field, index ) => <span key={ `header_${ field._id }` } onClick={ () => handleChangeTab( index ) } id={ `code-item-title-${ field._id }` } item_id={ field._id } className={ `og-item__title ${ choose === index ? 'og-item__title-active' : '' }` }>{ field.name }</span> )
+					themeCode.map( ( field, index ) => (
+						<span
+							key={ `header_${ field._id }` }
+							onClick={ () => setTab( index ) }
+							id={ `og-theme-code__item-name--${ field._id }` }
+							item_id={ field._id }
+							className={ `og-theme-code__item-name ${ tab === index ? 'og-theme-code__item-name--active' : '' }` }
+						>
+							{ field.name }
+						</span>
+					) )
 				}
 			</div>
 
-			<div className="og-result__body">
-				{ themeCode[ choose ] && <ThemeCode codeValue={ htmlDecode(themeCode[ choose ].theme_code) } /> }
+			<div className="og-theme-code__body og-result">
+				{ themeCode[ tab ] && <ThemeCode codeValue={ htmlDecode( themeCode[ tab ].theme_code ) } /> }
 			</div>
-		</div>
+		</>
 	);
 };
 
