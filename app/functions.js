@@ -1,6 +1,8 @@
 import { lazy } from "@wordpress/element";
 import dotProp from 'dot-prop';
 
+export const htmlDecode = innerHTML => Object.assign( document.createElement( 'textarea' ), { innerHTML } ).value;
+
 const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
 

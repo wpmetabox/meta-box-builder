@@ -9,10 +9,19 @@ class Encoder {
 	private $text_domain;
 	private $fields;
 	private $encoded_string;
+	public $settings;
+	private $field_object_type;
+	private $field_args;
+	private $field_type;
+	private $field_id;
+	private $path_folder_code;
 
 	public function __construct( $settings ) {
-		$this->text_domain   = $settings['text_domain'] ?? 'meta-box-builder';
-		$this->fields = $settings['fields'] ?? [];
+		$this->text_domain       = $settings['text_domain'] ?? 'meta-box-builder';
+		$this->fields            = $settings['fields'] ?? [];
+		$this->field_object_type = $settings['object_type'] ?? '';
+		$this->field_args        = $settings['args'] ?? '';
+		$this->path_folder_code  = plugin_dir_path( dirname( dirname( __FILE__ ) ) ) . 'views/theme-code';
 
 		unset( $settings['text_domain'], $settings['fields'] );
 		$this->settings = $settings;
@@ -23,78 +32,105 @@ class Encoder {
 	}
 
 	public function encode() {
-		//Path for Template code
-		$path_folder_code = plugin_dir_path( dirname( dirname( __FILE__ ) ) ).'views/theme-code';
 
-		$this->field_object_id = $this->settings['object_id'] ?? '';		
-		$objectType = $this->settings['object_type'] ?? '';
-	
-		foreach( $this->fields as $key => $field ){
-			$this->field_args = empty( $this->settings['args'] ) ? [ ] : implode( ', ', $this->settings['args'] );			
-			$fieldType = str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );			
-			$this->field_type = $fieldType;
-			$this->field_id = $field[ 'id' ];
+		foreach ( $this->fields as $key => $field ) {
+			$fieldType = str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );
 
-			// Not exists file template code
-			if( ! file_exists( "$path_folder_code/$fieldType.tpl" ) ) {		
-				$this->encoded_string = empty( $this->field_args ) ? file_get_contents("$path_folder_code/Default.tpl") : '';
-			}else{
-				//Check and Get Template code			
-				$this->encoded_string = file_exists( "$path_folder_code/$fieldType-$objectType.tpl" ) ? file_get_contents("$path_folder_code/$fieldType-$objectType.tpl") : file_get_contents("$path_folder_code/$fieldType.tpl");
-			}
+			// get path template code
+			$path_template_code = $this->get_path( $fieldType );
 
-			$this->replace_placeholders();			
-			$this->fields[ $key ]['theme_code'] = $this->encoded_string;
+			// Get content template
+			ob_start();
+				include $path_template_code;
+				$encoded_string = ob_get_contents();
+			ob_end_clean();
+
+			// Set theme code for view
+			$this->fields[ $key ]['theme_code'] = $encoded_string;
 		}
+
 	}
 
-	private function replace_placeholders() {
-		// Translate.
-		$this->encoded_string = preg_replace( "!'{translate}(.*){/translate}'!", "__( '$1', '" . $this->text_domain . "' )", $this->encoded_string );
-
-		// Raw code.
-		$this->encoded_string = preg_replace( "!'{raw}(.*){/raw}'!", '$1', $this->encoded_string );
-
-		// Field ID.
-		$this->encoded_string = str_replace( '{field_id}', $this->field_id, $this->encoded_string );
-
-		// Field Type.
-		$this->encoded_string = str_replace( '{field_type}', $this->field_type, $this->encoded_string );		
-
-		// Field Object ID.
-		if( !empty( $this->field_object_id ) ) {
-			$this->encoded_string = str_replace( ', \'{object_id}\'', ', \'' . $this->field_object_id . '\'', $this->encoded_string );				
-		}else{
-			$this->encoded_string = str_replace( ', \'{object_id}\'', '', $this->encoded_string );				
+	private function get_path( $fieldType ) {
+		// Template Default
+		if ( file_exists( $this->path_folder_code . '/' . $fieldType . '.php' ) ) {
+			return $this->path_folder_code . '/' . $fieldType . '.php';
 		}
 
-		// Field Args.
-		// Have args Default
-		preg_match( "'{args}(.*){/args}'si", $this->encoded_string, $matches );
-		if( empty( $matches ) || count( $matches ) === 0 ) {
-			if( !empty( $this->field_args ) ) {
-				$this->encoded_string = str_replace( '\'{args}\'', $this->field_args, $this->encoded_string );	
-			}else{
-				$this->encoded_string = str_replace( [ ', [ \'{args}\' ]', '\'{args}\'' ], '', $this->encoded_string );
+		// Template Default for Object Type
+		if ( file_exists( $this->path_folder_code . '/' . $fieldType . '-' . $this->field_object_type . '.php' ) ) {
+			return $this->path_folder_code . '/' . $fieldType . '-' . $this->field_object_type . '.php';
+		}
+
+		// Template Default for Field Type
+		return $this->path_folder_code . '/Default.php';
+	}
+
+	private function get_encoded_args( $args = [] ) {
+
+		if ( ! empty( $args ) ) {
+			$return = (array) $this->field_args;
+			foreach ( $args as $key => $value ) {
+				// value is numeric
+				if ( is_numeric( $value ) ) {
+					$return[] = "'$key' => $value";
+					continue;
+				}
+				// value is boolean
+				if ( is_bool( $value ) ) {
+					$return[] = $value === true ? "'$key' => true" : "'$key' => false";
+					continue;
+				}
+				// value is string
+				$return[] = "'$key' => '$value'";
 			}
-			return $this;
+			return empty( $return ) ? '' : ', [ ' . implode( ', ', $return ) . ' ]';
 		}
 
-		//Parser String to array
-		$args = eval('return '. $matches[1] . ';');
-		$this->field_args = !empty( $this->field_args ) ? eval('return ['. $this->field_args . '];') : [ ];
+		return empty( $this->field_args ) ? '' : ', [ ' . implode( ', ', $this->field_args ) . ' ]';
+	}
 
-		$args = array_merge( $this->field_args, $args );
+	private function get_encoded_object_type() {
+		return ! empty( $this->field_object_type ) && $this->field_object_type !== 'post' ? ', \'' . $this->field_object_type . '\'' : '';
+	}
+
+	private function get_encoded_value( $field_id, $args = [], $argString = false ) {
+		$argEncode = $argString === false ? $this->get_encoded_args( $args ) : ', '.(string) $args;
+		return $field_id . "'" . $argEncode . $this->get_encoded_object_type();
+	}
+
+	private function indent( $size = 1 ) {
+		if ( ! $size ) {
+			return '';
+		}
+		return str_repeat( "\t", $size );
+	}
+
+	private function break( $size = 1 ) {
+		if ( ! $size ) {
+			return '';
+		}
+		return str_repeat( "\n", $size );
+	}
+
+	private function out( $str, $indent = true, $break = true ) {
+		return htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break ) );
+	}
+
+	private function format_args( $args = [] ) {
+
+		$fieldArgs = ! empty( $this->field_args ) ? eval( 'return [' . implode( ', ', $this->field_args ) . '];' ) : [];
+		$args      = array_merge( $fieldArgs, $args );
+
+		if ( empty( $args ) ) {
+			return '[]';
+		}
 
 		$encoder = new PHPEncoder;
-		$args = $encoder->encode( $args, [
+		return $encoder->encode( $args, [
 			'array.base'    => 4,
 			'array.align'   => true,
 			'string.escape' => false,
 		] );
-		
-		$this->encoded_string = str_replace( $matches[0], '$args = ' . $args . ';', $this->encoded_string );
-
-		return $this;
 	}
 }

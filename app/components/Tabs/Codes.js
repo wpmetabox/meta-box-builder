@@ -1,4 +1,5 @@
 import { useEffect, useState } from "@wordpress/element";
+import { htmlDecode } from "../../functions";
 import useApi from "../../hooks/useApi";
 import useFieldIds from "../../hooks/useFieldIds";
 import useFields from "../../hooks/useFields";
@@ -85,7 +86,7 @@ const Codes = ( props ) => {
 			</div>
 
 			<div className="og-result__body">
-				{ themeCode[ choose ] && <ThemeCode codeValue={ themeCode[ choose ].theme_code } /> }
+				{ themeCode[ choose ] && <ThemeCode codeValue={ htmlDecode(themeCode[ choose ].theme_code) } /> }
 			</div>
 		</div>
 	);
