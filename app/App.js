@@ -53,18 +53,18 @@ const App = () => {
 			<br />
 			{
 				MbbApp.fields.length > 0 &&
-				<Tabs forceRenderTabPanel={ true } className="react-tabs og-theme-code">
-					<TabList>
-						<Tab>{ __( "Theme code", "meta-box-builder" ) }</Tab>
-					</TabList>
-					<TabPanel className="react-tabs__tab-panel og-tab-panel--theme-code">
+				<div className="postbox og-theme-code">
+					<div className="postbox-header">
+						<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
+					</div>
+					<div className="inside">
 						<Codes
 							settings={ settings }
 							fields={ MbbApp.fields }
 						/>
-					</TabPanel>
-				</Tabs>
-			}			
+					</div>
+				</div>
+			}
 		</>
 	);
 };
