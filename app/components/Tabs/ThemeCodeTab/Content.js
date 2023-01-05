@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from "react-codemirror2";
 const { withState } = wp.compose;
 
-const ThemeCode = ( { show, codeValue } ) => {
+const Content = ( { show, codeValue } ) => {
 	const Button = withState( { hasCopied: false } )(
 		( { hasCopied, setState, textCode } ) => (
 			<ClipboardButton
@@ -39,4 +39,4 @@ const ThemeCode = ( { show, codeValue } ) => {
 	);
 };
 
-export default ThemeCode;
+export default Content;

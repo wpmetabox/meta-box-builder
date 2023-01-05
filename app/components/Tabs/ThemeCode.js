@@ -3,7 +3,7 @@ import { htmlDecode } from "../../functions";
 import useApi from "../../hooks/useApi";
 import useFieldIds from "../../hooks/useFieldIds";
 import useFields from "../../hooks/useFields";
-import ThemeCode from "./CodeTypes/ThemeCode";
+import Content from "./ThemeCodeTab/Content";
 
 const $ = jQuery;
 
@@ -100,7 +100,7 @@ const Codes = ( props ) => {
 			</div>
 
 			<div className="og-theme-code__body og-result">
-				{ themeCode[ tab ] && <ThemeCode codeValue={ htmlDecode( themeCode[ tab ].theme_code ) } /> }
+				{ themeCode[ tab ] && <Content codeValue={ htmlDecode( themeCode[ tab ].theme_code ) } /> }
 			</div>
 		</>
 	);

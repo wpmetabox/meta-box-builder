@@ -3,10 +3,10 @@ import { __ } from "@wordpress/i18n";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { AdminColumnsData } from './components/AdminColumnsData';
 import { Data } from './components/Data';
-import Codes from "./components/Tabs/Codes";
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
+import ThemeCode from "./components/Tabs/ThemeCode";
 import { getSettings } from './functions';
 
 const App = () => {
@@ -58,10 +58,7 @@ const App = () => {
 						<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
 					</div>
 					<div className="inside">
-						<Codes
-							settings={ settings }
-							fields={ MbbApp.fields }
-						/>
+						<ThemeCode settings={ settings } fields={ MbbApp.fields } />
 					</div>
 				</div>
 			}
