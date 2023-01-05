@@ -95,7 +95,7 @@ class Encoder {
 	}
 
 	private function get_encoded_value( $field_id, $args = [], $argString = false ) {
-		$argEncode = $argString === false ? $this->get_encoded_args( $args ) : ', '.(string) $args;
+		$argEncode = $argString === false ? $this->get_encoded_args( $args ) : ', ' . (string) $args;
 		return $field_id . "'" . $argEncode . $this->get_encoded_object_type();
 	}
 
@@ -117,20 +117,22 @@ class Encoder {
 		return htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break ) );
 	}
 
-	private function format_args( $args = [] ) {
-
-		$fieldArgs = ! empty( $this->field_args ) ? eval( 'return [' . implode( ', ', $this->field_args ) . '];' ) : [];
-		$args      = array_merge( $fieldArgs, $args );
-
-		if ( empty( $args ) ) {
+	private function format_variable( $vars = [] ) {
+		if ( empty( $vars ) ) {
 			return '[]';
 		}
 
 		$encoder = new PHPEncoder;
-		return $encoder->encode( $args, [
+		return $encoder->encode( $vars, [
 			'array.base'    => 4,
 			'array.align'   => true,
 			'string.escape' => false,
 		] );
+	}
+
+	private function format_args( $args = [] ) {
+		$fieldArgs = ! empty( $this->field_args ) ? eval( 'return [' . implode( ', ', $this->field_args ) . '];' ) : [];
+		$args      = array_merge( $fieldArgs, $args );
+		return $this->format_variable( $args );
 	}
 }

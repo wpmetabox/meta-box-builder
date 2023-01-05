@@ -7,8 +7,7 @@ if ( isset( $field['clone'] ) ) {
 		'js_options' => [
 			'mapTypeId'   => 'HYBRID',
 			'zoomControl' => false,
-		],
-		'api_key'    => 'your-API-key',
+		]
 	]);	
 
 	echo $this->out( '<?php', false );

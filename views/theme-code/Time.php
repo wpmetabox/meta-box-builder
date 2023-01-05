@@ -1,7 +1,7 @@
 <?php
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
-	echo $this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>', false );
+	echo $this->out( "<?php \$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>', false );
 	echo $this->out( '<?php foreach ( $values as $value ) : ?>', false );
 	echo $this->out( '<p><?= $value ?></p>' );
 	echo $this->out( '<?php endforeach ?>', false, false );
