@@ -11,14 +11,14 @@ if ( isset( $field['clone'] ) ) {
 		'api_key'    => 'your-API-key',
 	]);	
 
-	echo $this->out( '<?php', false );
-	echo $this->out( '$args = ' . $args . ';' );
-	echo $this->out( "\$group_values = rwmb_meta( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' );' );
+	$this->out( '<?php', false );
+	$this->out( '$args = ' . $args . ';' );
+	$this->out( "\$group_values = rwmb_meta( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' );' );
 	echo $this->break();
-	echo $this->out( 'foreach ( $group_values as $group_value ) :' );
-	echo $this->out( $this->indent() . 'echo RWMB_Map_Field::render_map( $group_value[\'map_id\'], $args );' );
-	echo $this->out( 'endforeach;' );
-	echo $this->out( '?>', false );
+	$this->out( 'foreach ( $group_values as $group_value ) :' );
+	$this->out( $this->indent() . 'echo RWMB_Map_Field::render_map( $group_value[\'map_id\'], $args );' );
+	$this->out( 'endforeach;' );
+	$this->out( '?>', false );
 
 	return;
 }
@@ -38,7 +38,7 @@ $args = $this->format_args([
 	],
 ]);
 
-echo $this->out( '<?php', false );
-echo $this->out( '$args = ' . $args . ';' );
-echo $this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' ); ?>' );
-echo $this->out( '?>', false );
+$this->out( '<?php', false );
+$this->out( '$args = ' . $args . ';' );
+$this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' ); ?>' );
+$this->out( '?>', false );

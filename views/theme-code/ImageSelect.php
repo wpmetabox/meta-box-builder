@@ -1,30 +1,30 @@
 <?php
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
-    echo $this->out( "<?php \$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', false );
-    echo $this->out( '<ul>', false );
-    echo $this->out( '<?php foreach ( $values as $value ) : ?>' );
-    echo $this->out( $this->indent() . '<li><?= $value ?></li>' );
-    echo $this->out( '<?php endforeach ?>' );
-    echo $this->out( '</ul>', false, false );
+    $this->out( "<?php \$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', false );
+    $this->out( '<ul>', false );
+    $this->out( '<?php foreach ( $values as $value ) : ?>' );
+    $this->out( $this->indent() . '<li><?= $value ?></li>' );
+    $this->out( '<?php endforeach ?>' );
+    $this->out( '</ul>', false, false );
 	return;
 }
 
 // Displaying the selected value:
-echo $this->out( '<?php', false );
-echo $this->out( '// Displaying the selected value:' );
-echo $this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-echo $this->out( '?>', false );
-echo $this->out( '<p>Selected: <?= $value ?></p>', false );
+$this->out( '<?php', false );
+$this->out( '// Displaying the selected value:' );
+$this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
+$this->out( '?>', false );
+$this->out( '<p>Selected: <?= $value ?></p>', false );
 echo $this->break();
 
 // Displaying the list of multiple choices:
-echo $this->out( '<?php', false );
-echo $this->out( '// Displaying the list of multiple choices:' );
-echo $this->out( "\$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-echo $this->out( '?>', false );
-echo $this->out( '<ul>', false );
-echo $this->out( '<?php foreach ( $values as $value ) : ?>' );
-echo $this->out( $this->indent() . '<li><?= $value ?></li>' );
-echo $this->out( '<?php endforeach ?>' );
-echo $this->out( '</ul>', false, false );
+$this->out( '<?php', false );
+$this->out( '// Displaying the list of multiple choices:' );
+$this->out( "\$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
+$this->out( '?>', false );
+$this->out( '<ul>', false );
+$this->out( '<?php foreach ( $values as $value ) : ?>' );
+$this->out( $this->indent() . '<li><?= $value ?></li>' );
+$this->out( '<?php endforeach ?>' );
+$this->out( '</ul>', false, false );

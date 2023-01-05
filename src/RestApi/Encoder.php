@@ -113,8 +113,11 @@ class Encoder {
 		return str_repeat( "\n", $size );
 	}
 
-	private function out( $str, $indent = true, $break = true ) {
-		return htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break ) );
+	private function out( $str, $indent = true, $break = true, $echo = true ) {
+		if ( $echo === false ) {
+			return htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break ) );
+		}
+		echo htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break ) );
 	}
 
 	private function format_variable( $vars = [] ) {
