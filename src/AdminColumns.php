@@ -17,22 +17,24 @@ class AdminColumns {
 		}
 
 		wp_enqueue_style( 'mbb-list', MBB_URL . 'assets/css/list.css', [], MBB_VER );
-		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], MBB_VER );
+		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], MBB_VER, true );
 		wp_localize_script( 'mbb-list', 'MBB', [
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
 		] );
 
-		wp_register_script( 'popper', 'https://unpkg.com/@popperjs/core@2.11.6/dist/umd/popper.min.js', [], '2.11.6', true );
-		wp_enqueue_script( 'tippy', 'https://unpkg.com/tippy.js@6.3.7/dist/tippy-bundle.umd.min.js', [ 'popper' ], '6.3.7', true );
-		wp_add_inline_script( 'tippy', 'tippy( ".mbb-tooltip", {placement: "top-start", arrow: true, animation: "fade"} );' );
+		if ( Data::is_extension_active( 'mb-frontend-submission' ) ) {
+			wp_register_script( 'popper', MBB_URL . 'assets/js/popper.js', [], '2.11.6', true );
+			wp_enqueue_script( 'tippy', MBB_URL . 'assets/js/tippy.js', [ 'popper' ], '6.3.7', true );
+			wp_add_inline_script( 'tippy', 'tippy( ".mbb-tooltip", {placement: "top", arrow: true, animation: "fade"} );' );
+		}
 	}
 
 	public function add_columns( $columns ) {
-		$new_columns = array(
+		$new_columns = [
 			'for'      => __( 'Show For', 'meta-box-builder' ),
 			'location' => __( 'Location', 'meta-box-builder' ),
-		);
+		];
 		if ( Data::is_extension_active( 'mb-frontend-submission' ) ) {
 			$new_columns['shortcode'] = __( 'Shortcode', 'meta-box-builder' ) . Data::tooltip( __( 'Embed the field group in the front end for users to submit posts.', 'meta-box-builder' ) );
 		}
@@ -41,7 +43,7 @@ class AdminColumns {
 	}
 
 	public function show_column( $name ) {
-		if ( ! in_array( $name, array( 'for', 'location', 'shortcode' ) ) ) {
+		if ( ! in_array( $name, [ 'for', 'location', 'shortcode' ], true ) ) {
 			return;
 		}
 		$data = get_post_meta( get_the_ID(), 'settings', true );
@@ -87,19 +89,19 @@ class AdminColumns {
 				$settings_pages = wp_list_pluck( $settings_pages, 'title', 'id' );
 				$ids            = Arr::get( $data, 'settings_pages', [] );
 				$saved          = array_intersect_key( $settings_pages, array_flip( $ids ) );
-				echo implode( '<br>', $saved );
+				echo wp_kses_post( implode( '<br>', $saved ) );
 				break;
 			case 'post':
-				echo implode( '<br>', array_filter( array_map( function( $post_type ) {
+				echo wp_kses_post( implode( '<br>', array_filter( array_map( function( $post_type ) {
 					$post_type_object = get_post_type_object( $post_type );
 					return $post_type_object ? $post_type_object->labels->singular_name : '';
-				}, Arr::get( $data, 'post_types', [ 'post' ] ) ) ) );
+				}, Arr::get( $data, 'post_types', [ 'post' ] ) ) ) ) );
 				break;
 			case 'term':
-				echo implode( '<br>', array_filter( array_map( function( $taxonomy ) {
+				echo wp_kses_post( implode( '<br>', array_filter( array_map( function( $taxonomy ) {
 					$taxonomy_object = get_taxonomy( $taxonomy );
 					return $taxonomy_object ? $taxonomy_object->labels->singular_name : '';
-				}, Arr::get( $data, 'taxonomies', [] ) ) ) );
+				}, Arr::get( $data, 'taxonomies', [] ) ) ) ) );
 		}
 	}
 
