@@ -1,4 +1,11 @@
 <?php
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	
+	return;
+}
+
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
 	$this->out( '<?php', false );
@@ -18,7 +25,7 @@ $this->out( '<?php // Display widgets for the selected sidebar: ?>', false );
 $this->out( '<div class="sidebar">', false );
 $this->out( "<?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', false );
 $this->out( '</div>', false );
-echo $this->break();
+$this->break();
 
 // Checking if the selected sidebar has widgets and displaying it:
 $this->out( '<?php', false );

@@ -1,24 +1,11 @@
 <?php
-// Displaying the selected value.
-$value = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' ); ?>
-<p>Selected: <?= $value ?></p>
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+    
+	return;
+}
 
-
-<?php // Displaying the selected label. ?>
-<p>My choice: <?php rwmb_the_value( '{field_id}', [ '{args}' ], '{object_id}' ) ?></p>
-
-
-<?php
-// Displaying both value and label.
-$field   = rwmb_get_field_settings( '{field_id}', [ '{args}' ], '{object_id}' );
-$options = $field['options'];
-$value   = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' );
-?>
-Value: <?= $value ?><br>
-Label: <?= $options[ $value ] ?>
-
-
-<?php
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
     $this->out( '<?php', false );
@@ -46,7 +33,7 @@ $this->out( '// Displaying the selected value:' );
 $this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>', false );
 $this->out( '<p>Selected: <?= $value ?></p>', false );
-echo $this->break();
+$this->break();
 
 // Displaying the selected label:
 $this->out( '<?php // Displaying the selected label: ?>', false );
@@ -59,6 +46,6 @@ $this->out( "\$field   = rwmb_get_field_settings( '" . $this->get_encoded_value(
 $this->out( "\$options = \$field['options'];" );
 $this->out( "\$value  = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>', false );
-echo $this->break();
+$this->break();
 $this->out( 'Value: <?= $value ?><br>', false );
 $this->out( 'Label: <?= $options[ $value ] ?>', false, false );

@@ -1,4 +1,11 @@
 <?php
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	
+	return;
+}
+
 if ( ! isset( $field['clone'] ) ) {
 	// Displaying selected values:
 	$this->out( '<?php', false );
@@ -10,13 +17,13 @@ if ( ! isset( $field['clone'] ) ) {
 	$this->out( '<li><?= $value ?></li>' );
 	$this->out( '<?php endforeach ?>', false );
 	$this->out( '</ul>', false );
-	echo $this->break();
+	$this->break();
 
 	// Displaying selected labels:
 	$this->out( '<?php // Displaying selected labels: ?>', false );
 	$this->out( '<p>Choices:</p>', false );
 	$this->out( "<?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>', false );
-	echo $this->break();
+	$this->break();
 
 	// Displaying both values and labels:
 	$this->out( '<?php', false );

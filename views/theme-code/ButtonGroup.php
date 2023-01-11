@@ -1,4 +1,11 @@
 <?php
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	
+	return;
+}
+
 if ( isset( $field['multiple'] ) ) {
 	// Displaying the list of multiple choices (values):
 	$this->out( '<?php', false );
@@ -10,7 +17,7 @@ if ( isset( $field['multiple'] ) ) {
 	$this->out( $this->indent() . '<li><?= $value ?></li>' );
 	$this->out( '<?php endforeach ?>' );
 	$this->out( '</ul>', false );
-	echo $this->break();
+	$this->break();
 
 	// Displaying the list of multiple choices (values and labels).
 	$this->out( '<?php', false );
@@ -19,7 +26,7 @@ if ( isset( $field['multiple'] ) ) {
 	$this->out( "\$options = \$field['options'];" );
 	$this->out( "\$values  = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 	$this->out( '?>', false );
-	echo $this->break();
+	$this->break();
 	$this->out( '<ul>', false );
 	$this->out( '<?php foreach ( $values as $value ) : ?>' );
 	$this->out( $this->indent() . '<li>' );
@@ -51,14 +58,14 @@ $this->out( '// Getting selected value.' );
 $this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( 'echo $value;' );
 $this->out( '?>', false );
-echo $this->break();
+$this->break();
 
 // Displaying selected label.
 $this->out( '<?php', false );
 $this->out( '// Displaying selected label.' );
 $this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>', false );
-echo $this->break();
+$this->break();
 
 // Displaying both value and label.
 $this->out( '<?php', false );
@@ -67,7 +74,7 @@ $this->out( "\$field   = rwmb_get_field_settings( '" . $this->get_encoded_value(
 $this->out( "\$options = \$field['options'];" );
 $this->out( "\$value  = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>', false );
-echo $this->break();
+$this->break();
 $this->out( 'Value: <?= $value ?><br>', false );
 $this->out( 'Label: <?= $options[ $value ] ?>', false );
-echo $this->break();
+$this->break();

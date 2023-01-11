@@ -1,4 +1,17 @@
 <?php
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->break();
+	$this->out( '// Get User in group' );
+	$this->out( "\$user_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( 'foreach ( $user_ids as $user_id ) :' );
+	$this->out( $this->indent() . '$user = get_userdata( $user_id );' );
+	$this->out( $this->indent() . '<p><?= $user->display_name ?></a></p>' );
+	$this->out( 'endforeach;' );
+
+	return;
+}
+
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
 	$this->out( "<?php \$user_ids = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', false );
@@ -23,7 +36,7 @@ if ( isset( $field['multiple'] ) ) {
 	$this->out( $this->indent() . '<li><?= $user->display_name ?></a></li>' );
 	$this->out( '<?php endforeach ?>' );
 	$this->out( '</ul>', false );
-	echo $this->break();
+	$this->break();
 
 	// or simpler:
 	$this->out( '<?php // or simpler: ?>', false );
@@ -40,7 +53,7 @@ $this->out( '// Getting selected post ID:' );
 $this->out( "\$user_id = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>', false );
 $this->out( '<p>Selected user ID: <?= $user_id ?></p>', false );
-echo $this->break();
+$this->break();
 
 // Getting selected user object:
 $this->out( '<?php', false );
@@ -52,7 +65,7 @@ $this->out( '<pre>', false );
 $this->out( '<!-- Show all data from the selected user -->' );
 $this->out( $this->indent() . '<?php print_r( $user ); ?>' );
 $this->out( '</pre>', false );
-echo $this->break();
+$this->break();
 
 // Displaying selected user info:
 $this->out( '<?php', false );
@@ -62,7 +75,7 @@ $this->out( '$user = get_userdata( $user_id );' );
 $this->out( '?>', false );
 $this->out( '<p>Display name: <?= $user->display_name ?></p>', false );
 $this->out( '<p>Email: <?= $user->user_email ?></p>', false );
-echo $this->break();
+$this->break();
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>', false );
@@ -71,4 +84,4 @@ $this->out( "<p>Email: <?php rwmb_the_value( '" . $this->get_encoded_value( $fie
 	'display_field' => 'user_email',
 	'link'          => false,
 ] ) . ' ); ?></p>', false );
-echo $this->break();
+$this->break();

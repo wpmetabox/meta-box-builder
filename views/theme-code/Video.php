@@ -1,4 +1,11 @@
 <?php
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	
+	return;
+}
+
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
 	$this->out( '<?php', false );
@@ -25,7 +32,7 @@ $this->out( '<?php foreach ( $videos as $video ) : ?>' );
 $this->out( $this->indent() . '<li><video src="<?= $video[\'src\']; ?>"></li>' );
 $this->out( '<?php endforeach ?>' );
 $this->out( '</ul>', false );
-echo $this->break();
+$this->break();
 
 // Displaying only one video:
 $this->out( '<?php', false );

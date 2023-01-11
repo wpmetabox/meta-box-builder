@@ -7,36 +7,6 @@ import Content from "./ThemeCodeTab/Content";
 
 const $ = jQuery;
 
-const mergeInGroup = ( fields ) => {
-	let allFields = fields;
-	Object.entries( fields ).map( ( field ) => {
-		if ( field[ 1 ].type !== 'group' || field[ 1 ].fields === undefined || field[ 1 ].fields.length === 0 ) {
-			return;
-		}
-
-		const group = Object.values( field[ 1 ][ 'fields' ] ).find( attr => attr.type === 'group' );
-		if ( group !== undefined ) {
-			allFields = { ...allFields, ...mergeInSubGroup( allFields, group ) };
-		}
-
-		delete allFields[ field[ 1 ]._id ];
-		allFields = { ...allFields, ...field[ 1 ].fields };
-	} );
-	return allFields;
-};
-
-const mergeInSubGroup = ( allFields, group ) => {
-	allFields = { ...allFields, ...group.fields };
-	delete allFields[ group._id ];
-
-	const subGroup = Object.values( group.fields ).find( attr => attr.type === 'group' );
-	if ( subGroup !== undefined ) {
-		allFields = { ...allFields, ...mergeInSubGroup( allFields, subGroup ) };
-	}
-
-	return allFields;
-};
-
 const Codes = ( props ) => {
 	const { fields } = useFields( props.fields, 'fields' );
 	const fieldIds = useFieldIds( state => state.ids );
@@ -46,9 +16,7 @@ const Codes = ( props ) => {
 		return '';
 	}
 
-	// Merge all fields in group.
-	const allFields = mergeInGroup( fields );
-	const listFields = Object.values( allFields );
+	const listFields = Object.values( fields );
 
 	// Show list of field names in the left tabs.
 	useEffect( () => {

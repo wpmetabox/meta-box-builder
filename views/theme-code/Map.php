@@ -1,4 +1,27 @@
 <?php
+if ( $is_group === true ) {
+	// Displaying in group
+	$args = $this->format_args([
+		'width'      => '640px',
+		'height'     => '480px',
+		'js_options' => [
+			'mapTypeId'   => 'HYBRID',
+			'zoomControl' => false,
+		],
+		'api_key'    => 'your-API-key',
+	]);
+
+	$this->break();
+	$this->out( '// Get Map in group' );
+	$this->out( "\$maps = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( '$args = ' . $args . ';' );
+	$this->out( 'foreach ( $maps as $map ) :' );
+	$this->out( $this->indent() . 'echo RWMB_Map_Field::render_map( $map, $args );' );
+	$this->out( 'endforeach;' );
+
+	return;
+}
+
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable maps:
 	$args = $this->format_args([
@@ -9,12 +32,12 @@ if ( isset( $field['clone'] ) ) {
 			'zoomControl' => false,
 		],
 		'api_key'    => 'your-API-key',
-	]);	
+	]);
 
 	$this->out( '<?php', false );
 	$this->out( '$args = ' . $args . ';' );
 	$this->out( "\$group_values = rwmb_meta( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' );' );
-	echo $this->break();
+	$this->break();
 	$this->out( 'foreach ( $group_values as $group_value ) :' );
 	$this->out( $this->indent() . 'echo RWMB_Map_Field::render_map( $group_value[\'map_id\'], $args );' );
 	$this->out( 'endforeach;' );

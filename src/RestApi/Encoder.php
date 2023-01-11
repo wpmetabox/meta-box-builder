@@ -14,6 +14,7 @@ class Encoder {
 	private $field_args;
 	private $field_type;
 	private $field_id;
+	private $size_indent = 0;
 	private $path_folder_code;
 
 	public function __construct( $settings ) {
@@ -36,19 +37,30 @@ class Encoder {
 		foreach ( $this->fields as $key => $field ) {
 			$fieldType = str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );
 
-			// get path template code
-			$path_template_code = $this->get_path( $fieldType );
-
-			// Get content template
-			ob_start();
-				include $path_template_code;
-				$encoded_string = ob_get_contents();
-			ob_end_clean();
+			$encoded_string = $this->get_theme_code( $field, $fieldType
+		
+		);
 
 			// Set theme code for view
 			$this->fields[ $key ]['theme_code'] = $encoded_string;
 		}
 
+	}
+
+	private function get_theme_code( $field, $fieldType, $is_group = false ) {
+
+		$fieldType = $fieldType ?: str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );
+
+		// get path template code
+		$path_template_code = $this->get_path( $fieldType );
+
+		// Get content template
+		ob_start();
+			include $path_template_code;
+			$encoded_string = ob_get_contents();
+		ob_end_clean();
+
+		return $encoded_string;
 	}
 
 	private function get_path( $fieldType ) {
@@ -99,25 +111,27 @@ class Encoder {
 		return $field_id . "'" . $argEncode . $this->get_encoded_object_type();
 	}
 
-	private function indent( $size = 1 ) {
-		if ( ! $size ) {
-			return '';
+	private function indent( $size = 1, $echo = false ) {
+		$return = ! $size ? '' : str_repeat( "\t", $size );
+		if ( $echo === false ) {
+			return $return;
 		}
-		return str_repeat( "\t", $size );
+		echo str_repeat( "\t", $size );
 	}
 
-	private function break( $size = 1 ) {
-		if ( ! $size ) {
-			return '';
+	private function break( $size = 1, $echo = true ) {
+		$return = ! $size ? '' : str_repeat( "\n", $size + $this->size_indent );
+		if ( $echo === false ) {
+			return $return;
 		}
-		return str_repeat( "\n", $size );
+		echo $return;
 	}
 
 	private function out( $str, $indent = true, $break = true, $echo = true ) {
 		if ( $echo === false ) {
-			return htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break ) );
+			return htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break, false ) );
 		}
-		echo htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break ) );
+		echo htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break, false ) );
 	}
 
 	private function format_variable( $vars = [] ) {

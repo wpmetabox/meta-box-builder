@@ -1,4 +1,11 @@
 <?php
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	
+	return;
+}
+
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
 	$this->out( "<?php \$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>', false );
@@ -19,7 +26,7 @@ $this->out( '<?php // Displaying field inputs\' values: ?>', false );
 $this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>', false );
 $this->out( '<span>Name: <?= $value[0] ?></span>', false );
 $this->out( '<span>Email: <?= $value[1] ?></span>', false );
-echo $this->break();
+$this->break();
 
 // Displaying field values in a table:
 $this->out( '<?php // Displaying field values in a table: ?>', false );

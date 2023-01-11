@@ -1,4 +1,11 @@
 <?php
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	
+	return;
+}
+
 if ( ! isset( $field['clone'] ) ) {
 	// Getting the background properties:
 	$this->out( '<?php', false );
@@ -7,7 +14,7 @@ if ( ! isset( $field['clone'] ) ) {
 	$this->out( "echo \$background['color'];" );
 	$this->out( "echo \$background['image'];" );
 	$this->out( '?>', false );
-	echo $this->break();
+	$this->break();
     
 	// GOutputting the CSS for the background:
 	$this->out( '<?php // Outputting the CSS for the background: ?>', false );

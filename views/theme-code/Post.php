@@ -1,4 +1,16 @@
 <?php
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->break();
+	$this->out( '// Get Post in group' );
+	$this->out( "\$post_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( 'foreach ( $post_ids as $post_id ) :' );
+	$this->out( $this->indent() . '<p><a href="<?= get_permalink( $post_id ) ?>"><?= get_the_title( $post_id ); ?></a></p>' );
+	$this->out( 'endforeach;' );
+
+	return;
+}
+
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
 	$this->out( "<?php \$post_ids = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', false );
@@ -21,7 +33,7 @@ if ( isset( $field['multiple'] ) ) {
 	$this->out( $this->indent() . '<li><a href="<?= get_permalink( $post_id ) ?>"><?= get_the_title( $post_id ); ?></a></li>' );
 	$this->out( '<?php endforeach ?>' );
 	$this->out( '</ul>', false );
-	echo $this->break();
+	$this->break();
 
 	// or simpler:
 	$this->out( '<?php // or simpler: ?>', false );
@@ -35,7 +47,7 @@ $this->out( '// Getting selected post ID:' );
 $this->out( "\$post_id = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>', false );
 $this->out( '<p>Selected post ID: <?= $post_id ?></p>', false );
-echo $this->break();
+$this->break();
 
 // Getting selected post object:
 $this->out( '<?php', false );
@@ -47,7 +59,7 @@ $this->out( '<pre>', false );
 $this->out( '<!-- Show all data from the selected post -->' );
 $this->out( $this->indent() . '<?php print_r( $post ); ?>' );
 $this->out( '</pre>', false );
-echo $this->break();
+$this->break();
 
 // Displaying selected post title:
 $this->out( '<?php', false );
@@ -55,12 +67,12 @@ $this->out( '// Displaying selected post title:' );
 $this->out( "\$post_id = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>', false );
 $this->out( '<h3><?= get_the_title( $post_id ); ?></h3>', false );
-echo $this->break();
+$this->break();
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>', false );
 $this->out( "<h3><?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?></h3>', false );
-echo $this->break();
+$this->break();
 
 // Displaying the selected post with link:
 $this->out( '<?php', false );
@@ -68,7 +80,7 @@ $this->out( '// Displaying the selected post with link:' );
 $this->out( "\$post_id = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>', false );
 $this->out( '<h3><a href="<?= get_permalink( $post_id ) ?>"><?= get_the_title( $post_id ); ?></a></h3>', false );
-echo $this->break();
+$this->break();
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>', false );

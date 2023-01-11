@@ -1,7 +1,8 @@
 <?php
-rwmb_the_value( '{field_id}', [ '{args}' ], '{object_id}' );
+if ( $is_group === true ) {
+	// Displaying in group
+	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 
-// or
-$value = rwmb_meta( '{field_id}', [ '{args}' ], '{object_id}' );
-echo $value;
+	return;
+}
 ?>
