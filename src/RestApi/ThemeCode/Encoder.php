@@ -5,7 +5,6 @@ use RWMB_Helpers_String;
 use Riimu\Kit\PHPEncoder\PHPEncoder;
 
 class Encoder {
-
 	private $text_domain;
 	private $fields;
 	private $encoded_string;
@@ -33,44 +32,35 @@ class Encoder {
 	}
 
 	public function encode() {
-
 		foreach ( $this->fields as $key => $field ) {
-			$fieldType = str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );
+			$field_type = str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );
 
-			$encoded_string = $this->get_theme_code( $field, $fieldType
-			);
+			$encoded_string = $this->get_theme_code( $field, $field_type );
 
 			// Set theme code for view
 			$this->fields[ $key ]['theme_code'] = $encoded_string;
 		}
-
 	}
 
-	private function get_theme_code( $field, $fieldType, $is_group = false ) {
-
-		$fieldType = $fieldType ?: str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );
-
-		// get path template code
-		$path_template_code = $this->get_path( $fieldType );
+	private function get_theme_code( $field, $field_type, $is_group = false ) : string {
+		$field_type         = $field_type ?: str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );
+		$path_template_code = $this->get_path( $field_type );
 
 		// Get content template
 		ob_start();
-			include $path_template_code;
-			$encoded_string = ob_get_contents();
-		ob_end_clean();
-
-		return $encoded_string;
+		include $path_template_code;
+		return ob_get_clean();
 	}
 
-	private function get_path( $fieldType ) {
+	private function get_path( string $field_type ) : string {
 		// Template Default
-		if ( file_exists( $this->path_folder_code . '/' . $fieldType . '.php' ) ) {
-			return $this->path_folder_code . '/' . $fieldType . '.php';
+		if ( file_exists( $this->path_folder_code . '/' . $field_type . '.php' ) ) {
+			return $this->path_folder_code . '/' . $field_type . '.php';
 		}
 
 		// Template Default for Object Type
-		if ( file_exists( $this->path_folder_code . '/' . $fieldType . '-' . $this->field_object_type . '.php' ) ) {
-			return $this->path_folder_code . '/' . $fieldType . '-' . $this->field_object_type . '.php';
+		if ( file_exists( $this->path_folder_code . '/' . $field_type . '-' . $this->field_object_type . '.php' ) ) {
+			return $this->path_folder_code . '/' . $field_type . '-' . $this->field_object_type . '.php';
 		}
 
 		// Template Default for Field Type
@@ -78,7 +68,6 @@ class Encoder {
 	}
 
 	private function get_encoded_args( $args = [] ) {
-
 		if ( ! empty( $args ) ) {
 			$return = (array) $this->field_args;
 			foreach ( $args as $key => $value ) {

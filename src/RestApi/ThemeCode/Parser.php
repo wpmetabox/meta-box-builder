@@ -5,11 +5,9 @@ use MBBParser\Parsers\Base;
 use MetaBox\Support\Arr;
 
 class Parser extends Base {
-	public function parse() {
-		$this->parse_params_setting();
-	}
+	private $theme_code;
 
-	private function parse_params_setting() {
+	public function parse() {
 		$object_types = [
 			'settings_pages' => 'setting',
 			'taxonomies'     => 'term',
@@ -37,6 +35,6 @@ class Parser extends Base {
 	}
 
 	public function get_settings() {
-		return isset( $this->theme_code ) ? $this->theme_code : [];
+		return $this->theme_code ?: [];
 	}
 }
