@@ -1,17 +1,69 @@
-import { Dashicon } from "@wordpress/components";
+import { useState } from "@wordpress/element";
 import DivRow from './DivRow';
 
-const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, ...rest } ) => (
-	<DivRow htmlFor={ componentId } className="og-icon" { ...rest }>
-		{
-			icons.map( icon => (
-				<label key={ icon } className="og-icon__select">
-					<input type="radio" name={ name } value={ icon } defaultChecked={ icon === defaultValue } />
-					<Dashicon icon={ icon } />
-				</label>
-			) )
+const getIconLabel = icon => {
+	let label = icon.replace( /-/g, ' ' ).trim();
+
+	const startsText = [ 'admin', 'controls', 'editor', 'format', 'image', 'media', 'welcome' ];
+	startsText.forEach( text => {
+		if ( label.startsWith( text ) ) {
+			label = label.replace( text, '' );
 		}
-	</DivRow>
-);
+	} );
+
+	const endsText = [ 'alt', 'alt2', 'alt3' ];
+	endsText.forEach( text => {
+		if ( label.endsWith( text ) ) {
+			label = label.replace( text, `(${ text })` );
+		}
+	} );
+
+	label = label.trim();
+	const specialText = {
+		businessman: 'business man',
+		aligncenter: 'align center',
+		alignleft: 'align left',
+		alignright: 'align right',
+		customchar: 'custom character',
+		distractionfree: 'distraction free',
+		removeformatting: 'remove formatting',
+		strikethrough: 'strike through',
+		skipback: 'skip back',
+		skipforward: 'skip forward',
+		leftright: 'left right',
+		screenoptions: 'screen options',
+	};
+	label = specialText[ label ] || label;
+
+	return label.trim().toLowerCase();
+};
+
+const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, ...rest } ) => {
+	const [ query, setQuery ] = useState( "" );
+	const [ value, setValue ] = useState( defaultValue );
+	let data = icons.map( icon => [ icon, getIconLabel( icon ) ] )
+		.filter( item => query === '' || item[ 1 ].includes( query.toLowerCase() ) );
+	return (
+		<DivRow htmlFor={ componentId } className="og-icon" { ...rest }>
+			<div className='og-icon-selected'>
+				<span className={ `dashicons dashicons-${ value }` }></span>
+				<input type="text" className="og-icon-search" placeholder="Search..." value={ query } onChange={ event => setQuery( event.target.value ) } />
+			</div>
+			<div className="og-icon-items">
+				{
+					data.map( ( [ icon, label ] ) => (
+						<div key={ icon } className='og-icon-item'>
+							<label key={ icon } className="og-icon__select">
+								<input type="radio" name={ name } value={ icon } defaultChecked={ icon === defaultValue } onChange={ event => setValue( event.target.value ) } />
+								<span className={ `dashicon dashicons dashicons-${ icon }` }></span>
+							</label>
+							<span className='og-icon-item__text'>{ label }</span>
+						</div>
+					) )
+				}
+			</div>
+		</DivRow >
+	);
+};
 
 export default Icon;
