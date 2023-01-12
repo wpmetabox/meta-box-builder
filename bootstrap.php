@@ -9,7 +9,7 @@ new PostType;
 new Upgrade\Manager;
 new Register;
 new RestApi\Generator;
-new RestApi\ThemeCode;
+new RestApi\ThemeCode\ThemeCode;
 
 new RestApi\Fields( new Registry );
 new RestApi\Settings;

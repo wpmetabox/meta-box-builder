@@ -1,5 +1,5 @@
 <?php
-namespace MBB\RestApi;
+namespace MBB\RestApi\ThemeCode;
 
 use WP_REST_Server;
 use WP_REST_Request;
@@ -22,22 +22,22 @@ class ThemeCode {
 	}
 
 	public function generate( WP_REST_Request $request ) {
-		$settings = !empty( $request->get_param('settings') ) ? json_decode( $request->get_param('settings'), true ) : [];
-		
-		$fields = !empty( $request->get_param('fields') ) ? json_decode( $request->get_param('fields'), true ) : [];
-		if( empty( $fields ) || empty( $settings ) ){
+		$settings = ! empty( $request->get_param( 'settings' ) ) ? json_decode( $request->get_param( 'settings' ), true ) : [];
+
+		$fields = ! empty( $request->get_param( 'fields' ) ) ? json_decode( $request->get_param( 'fields' ), true ) : [];
+		if ( empty( $fields ) || empty( $settings ) ) {
 			return '';
 		}
 
 		$parser = new Parser( $settings );
 		$parser->parse();
-		
-		$settings = $parser->get_settings();
+
+		$settings           = $parser->get_settings();
 		$settings['fields'] = $fields;
 
 		$encoder = new Encoder( $settings );
 		$encoder->encode();
 
 		return $encoder->get_encoded_string();
-	}	
+	}
 }

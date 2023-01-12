@@ -1,5 +1,5 @@
 <?php
-namespace MBB\RestApi;
+namespace MBB\RestApi\ThemeCode;
 
 use RWMB_Helpers_String;
 use Riimu\Kit\PHPEncoder\PHPEncoder;
@@ -22,7 +22,7 @@ class Encoder {
 		$this->fields            = $settings['fields'] ?? [];
 		$this->field_object_type = $settings['object_type'] ?? '';
 		$this->field_args        = $settings['args'] ?? '';
-		$this->path_folder_code  = plugin_dir_path( dirname( dirname( __FILE__ ) ) ) . 'views/theme-code';
+		$this->path_folder_code  = MBB_DIR . '/views/theme-code';
 
 		unset( $settings['text_domain'], $settings['fields'] );
 		$this->settings = $settings;
@@ -38,8 +38,7 @@ class Encoder {
 			$fieldType = str_replace( '_', '', RWMB_Helpers_String::title_case( $field['type'] ) );
 
 			$encoded_string = $this->get_theme_code( $field, $fieldType
-		
-		);
+			);
 
 			// Set theme code for view
 			$this->fields[ $key ]['theme_code'] = $encoded_string;
