@@ -30,11 +30,12 @@ class RestApi extends Base {
 
 			// Icon, only if menu_type = top.
 			Control::Select( 'icon_type', [
-				'label'   => __( 'Icon type', 'meta-box-builder' ),
-				'options' => [
-					'dashicons' => __( 'Dashicons', 'meta-box-builder' ),
-					'svg'       => __( 'SVG', 'meta-box-builder' ),
-					'custom'    => __( 'Custom URL', 'meta-box-builder' ),
+				'label'      => __( 'Icon type', 'meta-box-builder' ),
+				'options'    => [
+					'dashicons'    => __( 'Dashicons', 'meta-box-builder' ),
+					'svg'          => __( 'SVG', 'meta-box-builder' ),
+					'custom'       => __( 'Custom URL', 'meta-box-builder' ),
+					'font_awesome' => __( 'Font Awesome', 'meta-box-builder' ),
 				],
 				'dependency' => 'menu_type:top',
 			], 'dashicons' ),
@@ -51,6 +52,12 @@ class RestApi extends Base {
 				'label'      => __( 'Icon URL', 'meta-box-builder' ),
 				'dependency' => 'icon_type:custom',
 			] ),
+			Control::Fontawesome( 'icon_font_awesome', [
+				'label'       => __( 'Icon', 'meta-box-builder' ),
+				'tooltip'     => __( 'The icon to be used for the admin menu (FontAwesome)', 'meta-box-builder' ),
+				'description' => __( 'Enter <a href="https://fontawesome.com/search?o=r&m=free">FontAwesome</a> icon class here. Supports FontAwesome free version only.', 'meta-box-builder' ),
+				'dependency'  => 'icon_type:font_awesome',
+			] ),
 
 			Control::Select( 'capability', [
 				'label'   => __( 'Required capability', 'meta-box-builder' ),
@@ -63,7 +70,7 @@ class RestApi extends Base {
 			Control::Select( 'style', [
 				'label'   => __( 'Style', 'meta-box-builder' ),
 				'options' => [
-					'boxes' => __( 'Boxes', 'meta-box-builder' ),
+					'boxes'    => __( 'Boxes', 'meta-box-builder' ),
 					'no-boxes' => __( 'No boxes', 'meta-box-builder' ),
 				],
 			], 'no-boxes' ),
@@ -111,10 +118,10 @@ class RestApi extends Base {
 	}
 
 	private function get_capabilities() {
-		$caps = [];
+		$caps  = [];
 		$roles = wp_roles();
 		foreach ( $roles->roles as $role ) {
-			$caps = array_merge( $caps, array_keys( $role[ 'capabilities' ] ) );
+			$caps = array_merge( $caps, array_keys( $role['capabilities'] ) );
 		}
 
 		$caps = array_unique( $caps );

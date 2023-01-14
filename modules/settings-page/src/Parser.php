@@ -26,14 +26,14 @@ class Parser extends Base {
 	}
 
 	private function parse_menu_icon() {
-		$type = Arr::get( $this->settings, 'icon_type', 'dashicons' );
+		$type           = Arr::get( $this->settings, 'icon_type', 'dashicons' );
 		$this->icon_url = Arr::get( $this->settings, "icon_$type" );
 
-		if ( 'dashicons' === $type ) {
+		if ( 'dashicons' === $type || 'font_awesome' === $type ) {
 			$this->icon_url = 'dashicons-' . $this->icon_url;
 		}
 
-		$keys = ['icon_type', 'icon_dashicons', 'icon_svg', 'icon_custom'];
+		$keys = [ 'icon_type', 'icon_dashicons', 'icon_svg', 'icon_custom', 'font_awesome' ];
 		foreach ( $keys as $key ) {
 			unset( $this->$key );
 		}
@@ -43,7 +43,7 @@ class Parser extends Base {
 
 	private function parse_help_tabs() {
 		$help_tabs = $this->help_tabs;
-		if ( !( $help_tabs ) ) {
+		if ( ! ( $help_tabs ) ) {
 			return $this;
 		}
 		$new_help_tabs = [];
@@ -52,7 +52,7 @@ class Parser extends Base {
 			$value['content'] = $value['value'];
 			unset( $value['id'] );
 			unset( $value['key'] );
-			unset( $value['value']);
+			unset( $value['value'] );
 			$new_help_tabs[] = $value;
 		}
 		$this->help_tabs = $new_help_tabs;
