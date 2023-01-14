@@ -1,7 +1,7 @@
 import { useState } from "@wordpress/element";
 import DivRow from './DivRow';
 
-const FontAwesome = ( { name, componentId, defaultValue, icons = MbbApp.icons, ...rest } ) => {
+const FontAwesome = ( { name, componentId, defaultValue, ...rest } ) => {
 	const [ value, setValue ] = useState( defaultValue );
 	return (
 		<DivRow htmlFor={ componentId } className="og-icon" { ...rest }>
