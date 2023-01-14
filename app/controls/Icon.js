@@ -55,7 +55,7 @@ const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, ...rest 
 						<div key={ icon } className='og-icon-item'>
 							<label key={ icon } className="og-icon__select">
 								<input type="radio" name={ name } value={ icon } defaultChecked={ icon === defaultValue } onChange={ event => setValue( event.target.value ) } />
-								<span className={ `dashicon dashicons dashicons-${ icon }` }></span>
+								<span className={ `og-dashicon dashicons dashicons-${ icon }` }></span>
 							</label>
 							<span className='og-icon-item__text'>{ label }</span>
 						</div>
