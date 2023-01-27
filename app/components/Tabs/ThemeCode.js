@@ -26,7 +26,7 @@ const Codes = ( props ) => {
 			timer = setInterval( () => {
 				const $nameElement = $( `#fields-${ lastField._id }-name` );
 				if ( lastField.name === '' && $nameElement.length > 0 ) {
-					$( `#og-theme-code__item-name--${ lastField._id }` ).text( $nameElement.val() );
+					$( `#og-theme-code__field--${ lastField._id }` ).text( $nameElement.val() );
 					clearInterval( timer );
 				}
 
@@ -57,9 +57,9 @@ const Codes = ( props ) => {
 						<span
 							key={ `header_${ field._id }` }
 							onClick={ () => setTab( index ) }
-							id={ `og-theme-code__item-name--${ field._id }` }
+							id={ `og-theme-code__field--${ field._id }` }
 							item_id={ field._id }
-							className={ `og-theme-code__item-name ${ tab === index ? 'og-theme-code__item-name--active' : '' }` }
+							className={ `og-theme-code__field ${ tab === index ? 'og-theme-code__field--active' : '' }` }
 						>
 							{ field.name }
 						</span>
