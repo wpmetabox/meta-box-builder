@@ -97,7 +97,7 @@ class Encoder {
 		echo esc_html( $output );
 	}
 
-	private function out( string $str, int $indent = 1, int $break = 1, bool $echo = true ) {
+	private function out( string $str, int $indent = 0, int $break = 1, bool $echo = true ) {
 		$output = $this->indent( $indent ) . $str . $this->break( $break, false );
 		if ( $echo === false ) {
 			return esc_html( $output );
