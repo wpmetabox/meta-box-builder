@@ -4,7 +4,7 @@ import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from "react-codemirror2";
 const { withState } = wp.compose;
 
-const Content = ( { show, codeValue } ) => {
+const Content = ( { codeValue } ) => {
 	const [ copied, setCopied ] = useState( false );
 
 	const copyRef = useCopyToClipboard( codeValue, () => {
