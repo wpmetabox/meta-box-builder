@@ -47,6 +47,9 @@ class Encoder {
 	}
 
 	private function get_view_file( string $field_type ) : string {
+		if ( in_array( $field_type, [ 'button', 'custom_html', 'divider', 'heading', 'tab' ], true ) ) {
+			return '';
+		}
 		if ( file_exists( $this->views_dir . '/' . $field_type . '.php' ) ) {
 			return $this->views_dir . '/' . $field_type . '.php';
 		}
