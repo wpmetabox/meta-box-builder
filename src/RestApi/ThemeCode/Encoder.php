@@ -1,7 +1,6 @@
 <?php
 namespace MBB\RestApi\ThemeCode;
 
-use RWMB_Helpers_String;
 use Riimu\Kit\PHPEncoder\PHPEncoder;
 
 class Encoder {
@@ -9,19 +8,19 @@ class Encoder {
 	private $fields;
 	private $encoded_string;
 	public $settings;
-	private $field_object_type;
+	private $object_type;
 	private $field_args;
 	private $field_type;
 	private $field_id;
 	private $size_indent = 0;
-	private $path_folder_code;
+	private $views_dir;
 
 	public function __construct( $settings ) {
-		$this->text_domain       = $settings['text_domain'] ?? 'meta-box-builder';
-		$this->fields            = $settings['fields'] ?? [];
-		$this->field_object_type = $settings['object_type'] ?? '';
-		$this->field_args        = $settings['args'] ?? '';
-		$this->path_folder_code  = MBB_DIR . '/views/theme-code';
+		$this->text_domain = $settings['text_domain'] ?? 'meta-box-builder';
+		$this->fields      = $settings['fields'] ?? [];
+		$this->object_type = $settings['object_type'] ?? '';
+		$this->field_args  = $settings['args'] ?? '';
+		$this->views_dir   = MBB_DIR . '/views/theme-code';
 
 		unset( $settings['text_domain'], $settings['fields'] );
 		$this->settings = $settings;
@@ -40,50 +39,42 @@ class Encoder {
 	}
 
 	private function get_theme_code( $field, $field_type, $is_group = false ) : string {
-		$field_type         = $field_type ?: $field['type'];
-		$path_template_code = $this->get_path( $field_type );
+		$field_type = $field_type ?: $field['type'];
+		$view_file  = $this->get_view_file( $field_type );
 
-		// Get content template
 		ob_start();
-		include $path_template_code;
+		include $view_file;
 		return ob_get_clean();
 	}
 
-	private function get_path( string $field_type ) : string {
-		// Template Default
-		if ( file_exists( $this->path_folder_code . '/' . $field_type . '.php' ) ) {
-			return $this->path_folder_code . '/' . $field_type . '.php';
+	private function get_view_file( string $field_type ) : string {
+		if ( file_exists( $this->views_dir . '/' . $field_type . '.php' ) ) {
+			return $this->views_dir . '/' . $field_type . '.php';
 		}
-
-		// Template Default for Field Type
-		return $this->path_folder_code . '/default.php';
+		return $this->views_dir . '/default.php';
 	}
 
 	private function get_encoded_args( $args = [] ) {
-		if ( ! empty( $args ) ) {
-			$return = (array) $this->field_args;
-			foreach ( $args as $key => $value ) {
-				// value is numeric
-				if ( is_numeric( $value ) ) {
-					$return[] = "'$key' => $value";
-					continue;
-				}
-				// value is boolean
-				if ( is_bool( $value ) ) {
-					$return[] = $value === true ? "'$key' => true" : "'$key' => false";
-					continue;
-				}
-				// value is string
-				$return[] = "'$key' => '$value'";
+		$return = (array) $this->field_args;
+		foreach ( $args as $key => $value ) {
+			// value is numeric
+			if ( is_numeric( $value ) ) {
+				$return[] = "'$key' => $value";
+				continue;
 			}
-			return empty( $return ) ? '' : ', [ ' . implode( ', ', $return ) . ' ]';
+			// value is boolean
+			if ( is_bool( $value ) ) {
+				$return[] = $value === true ? "'$key' => true" : "'$key' => false";
+				continue;
+			}
+			// value is string
+			$return[] = "'$key' => '$value'";
 		}
-
-		return empty( $this->field_args ) ? '' : ', [ ' . implode( ', ', $this->field_args ) . ' ]';
+		return empty( $return ) ? '' : ', [ ' . implode( ', ', $return ) . ' ]';
 	}
 
 	private function get_encoded_object_type() {
-		return ! empty( $this->field_object_type ) && $this->field_object_type !== 'post' ? ', \'' . $this->field_object_type . '\'' : '';
+		return ! empty( $this->object_type ) && $this->object_type !== 'post' ? ', \'' . $this->object_type . '\'' : '';
 	}
 
 	private function get_encoded_value( $field_id, $args = [], $arg_string = false ) {
@@ -91,27 +82,28 @@ class Encoder {
 		return $field_id . "'" . $arg_encode . $this->get_encoded_object_type();
 	}
 
-	private function indent( $size = 1, $echo = false ) {
-		$return = ! $size ? '' : esc_html( str_repeat( "\t", $size ) );
+	private function indent( int $size = 1, bool $echo = false ) {
+		$output = $size ? str_repeat( "\t", $size ) : '';
 		if ( $echo === false ) {
-			return $return;
+			return esc_html( $output );
 		}
-		echo $return;
+		echo esc_html( $output );
 	}
 
-	private function break( $size = 1, $echo = true ) {
-		$return = ! $size ? '' : esc_html( str_repeat( "\n", $size + $this->size_indent ) );
+	private function break( int $size = 1, bool $echo = true ) {
+		$output = $size ? str_repeat( "\n", $size + $this->size_indent ) : '';
 		if ( $echo === false ) {
-			return $return;
+			return esc_html( $output );
 		}
-		echo $return;
+		echo esc_html( $output );
 	}
 
-	private function out( $str, $indent = false, $break = true, $echo = true ) {
+	private function out( $str, $indent = true, $break = true, $echo = true ) {
+		$output = $this->indent( $indent ) . $str . $this->break( $break, false );
 		if ( $echo === false ) {
-			return esc_html( htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break, false ) ) );
+			return esc_html( $output );
 		}
-		echo esc_html( htmlspecialchars( $this->indent( $indent ) . $str . $this->break( $break, false ) ) );
+		echo esc_html( $output );
 	}
 
 	private function format_variable( $vars = [] ) {
