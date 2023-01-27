@@ -1,7 +1,6 @@
 <?php
 namespace MBB\RestApi\ThemeCode;
 
-use RWMB_Helpers_String;
 use Riimu\Kit\PHPEncoder\PHPEncoder;
 
 class Encoder {
@@ -9,19 +8,19 @@ class Encoder {
 	private $fields;
 	private $encoded_string;
 	public $settings;
-	private $field_object_type;
+	private $object_type;
 	private $field_args;
 	private $field_type;
 	private $field_id;
 	private $size_indent = 0;
-	private $path_folder_code;
+	private $views_dir;
 
 	public function __construct( $settings ) {
-		$this->text_domain       = $settings['text_domain'] ?? 'meta-box-builder';
-		$this->fields            = $settings['fields'] ?? [];
-		$this->field_object_type = $settings['object_type'] ?? '';
-		$this->field_args        = $settings['args'] ?? '';
-		$this->path_folder_code  = MBB_DIR . '/views/theme-code';
+		$this->text_domain = $settings['text_domain'] ?? 'meta-box-builder';
+		$this->fields      = $settings['fields'] ?? [];
+		$this->object_type = $settings['object_type'] ?? '';
+		$this->field_args  = $settings['args'] ?? '';
+		$this->views_dir   = MBB_DIR . '/views/theme-code';
 
 		unset( $settings['text_domain'], $settings['fields'] );
 		$this->settings = $settings;
@@ -40,50 +39,42 @@ class Encoder {
 	}
 
 	private function get_theme_code( $field, $field_type, $is_group = false ) : string {
-		$field_type         = $field_type ?: $field['type'];
-		$path_template_code = $this->get_path( $field_type );
+		$field_type = $field_type ?: $field['type'];
+		$view_file  = $this->get_view_file( $field_type );
 
-		// Get content template
 		ob_start();
-		include $path_template_code;
+		include $view_file;
 		return ob_get_clean();
 	}
 
-	private function get_path( string $field_type ) : string {
-		// Template Default
-		if ( file_exists( $this->path_folder_code . '/' . $field_type . '.php' ) ) {
-			return $this->path_folder_code . '/' . $field_type . '.php';
+	private function get_view_file( string $field_type ) : string {
+		if ( file_exists( $this->views_dir . '/' . $field_type . '.php' ) ) {
+			return $this->views_dir . '/' . $field_type . '.php';
 		}
-
-		// Template Default for Field Type
-		return $this->path_folder_code . '/default.php';
+		return $this->views_dir . '/default.php';
 	}
 
 	private function get_encoded_args( $args = [] ) {
-		if ( ! empty( $args ) ) {
-			$return = (array) $this->field_args;
-			foreach ( $args as $key => $value ) {
-				// value is numeric
-				if ( is_numeric( $value ) ) {
-					$return[] = "'$key' => $value";
-					continue;
-				}
-				// value is boolean
-				if ( is_bool( $value ) ) {
-					$return[] = $value === true ? "'$key' => true" : "'$key' => false";
-					continue;
-				}
-				// value is string
-				$return[] = "'$key' => '$value'";
+		$return = (array) $this->field_args;
+		foreach ( $args as $key => $value ) {
+			// value is numeric
+			if ( is_numeric( $value ) ) {
+				$return[] = "'$key' => $value";
+				continue;
 			}
-			return empty( $return ) ? '' : ', [ ' . implode( ', ', $return ) . ' ]';
+			// value is boolean
+			if ( is_bool( $value ) ) {
+				$return[] = $value === true ? "'$key' => true" : "'$key' => false";
+				continue;
+			}
+			// value is string
+			$return[] = "'$key' => '$value'";
 		}
-
-		return empty( $this->field_args ) ? '' : ', [ ' . implode( ', ', $this->field_args ) . ' ]';
+		return empty( $return ) ? '' : ', [ ' . implode( ', ', $return ) . ' ]';
 	}
 
 	private function get_encoded_object_type() {
-		return ! empty( $this->field_object_type ) && $this->field_object_type !== 'post' ? ', \'' . $this->field_object_type . '\'' : '';
+		return ! empty( $this->object_type ) && $this->object_type !== 'post' ? ', \'' . $this->object_type . '\'' : '';
 	}
 
 	private function get_encoded_value( $field_id, $args = [], $arg_string = false ) {
