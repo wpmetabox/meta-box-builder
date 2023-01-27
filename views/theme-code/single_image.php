@@ -14,30 +14,30 @@ if ( $is_group === true ) {
 
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
-    $this->out( "<?php \$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', false );
-    $this->out( '<ul>', false );
+    $this->out( "<?php \$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', 0 );
+    $this->out( '<ul>', 0 );
     $this->out( '<?php foreach ( $values as $value ) : ?>' );
     $this->out( $this->indent() . '<li><?= $value ?></li>' );
     $this->out( '<?php endforeach ?>' );
-    $this->out( '</ul>', false, false );
+    $this->out( '</ul>', 0, 0 );
 	return;
 }
 
 // Displaying the selected value:
-$this->out( '<?php', false );
+$this->out( '<?php', 0 );
 $this->out( '// Displaying the selected value:' );
 $this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-$this->out( '?>', false );
-$this->out( '<p>Selected: <?= $value ?></p>', false );
+$this->out( '?>', 0 );
+$this->out( '<p>Selected: <?= $value ?></p>', 0 );
 $this->break();
 
 // Displaying the list of multiple choices:
-$this->out( '<?php', false );
+$this->out( '<?php', 0 );
 $this->out( '// Displaying the list of multiple choices:' );
 $this->out( "\$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-$this->out( '?>', false );
-$this->out( '<ul>', false );
+$this->out( '?>', 0 );
+$this->out( '<ul>', 0 );
 $this->out( '<?php foreach ( $values as $value ) : ?>' );
 $this->out( $this->indent() . '<li><?= $value ?></li>' );
 $this->out( '<?php endforeach ?>' );
-$this->out( '</ul>', false, false );
+$this->out( '</ul>', 0, 0 );

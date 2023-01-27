@@ -32,14 +32,14 @@ if ( isset( $field['clone'] ) ) {
 		]
 	]);	
 
-	$this->out( '<?php', false );
+	$this->out( '<?php', 0 );
 	$this->out( '$args = ' . $args . ';' );
 	$this->out( "\$group_values = rwmb_meta( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' );' );
 	$this->break();
 	$this->out( 'foreach ( $group_values as $group_value ) :' );
 	$this->out( $this->indent() . 'echo RWMB_OSM_Field::render_map( $group_value[\'map_id\'], $args );' );
 	$this->out( 'endforeach;' );
-	$this->out( '?>', false );
+	$this->out( '?>', 0 );
 
 	return;
 }
@@ -59,7 +59,7 @@ $args = $this->format_args([
 	],
 ]);
 
-$this->out( '<?php', false );
+$this->out( '<?php', 0 );
 $this->out( '$args = ' . $args . ';' );
 $this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' ); ?>' );
-$this->out( '?>', false );
+$this->out( '?>', 0 );

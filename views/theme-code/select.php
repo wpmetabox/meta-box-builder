@@ -8,64 +8,64 @@ if ( $is_group === true ) {
 
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
-	$this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>', false );
-	$this->out( '<?php foreach ( $values as $value ) : ?>', false );
+	$this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>', 0 );
+	$this->out( '<?php foreach ( $values as $value ) : ?>', 0 );
 	$this->out( '<p><?= $value ?></p>' );
-	$this->out( '<?php endforeach ?>', false, false );
+	$this->out( '<?php endforeach ?>', 0, 0 );
 
 	return;
 }
 
 if ( isset( $field['multiple'] ) ) {
 	// Displaying the list of multiple choices (values):
-	$this->out( '<?php // Displaying the list of multiple choices (values): ?>', false );
-	$this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>', false );
-	$this->out( '<?php foreach ( $values as $value ) : ?>', false );
+	$this->out( '<?php // Displaying the list of multiple choices (values): ?>', 0 );
+	$this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>', 0 );
+	$this->out( '<?php foreach ( $values as $value ) : ?>', 0 );
 	$this->out( '<p><?= $value ?></p>' );
-	$this->out( '<?php endforeach ?>', false );
+	$this->out( '<?php endforeach ?>', 0 );
 	$this->break();
 
 	// Displaying the list of multiple choices (values and labels):
-	$this->out( '<?php', false );
+	$this->out( '<?php', 0 );
 	$this->out( "\$field   = rwmb_get_field_settings( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 	$this->out( "\$options = \$field['options'];" );
 	$this->out( "\$values  = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-	$this->out( '?>', false );
+	$this->out( '?>', 0 );
 
-	$this->out( '<ul>', false );
+	$this->out( '<ul>', 0 );
 	$this->out( '<?php foreach ( $values as $value ) : ?>' );
 	$this->out( $this->indent() . '<li>' );
 	$this->out( $this->indent( 2 ) . 'Value: <?= $value ?><br>' );
 	$this->out( $this->indent( 2 ) . 'Label: <?= $options[ $value ] ?>' );
 	$this->out( $this->indent() . '</li>' );
 	$this->out( '<?php endforeach ?>' );
-	$this->out( '</ul>', false );
+	$this->out( '</ul>', 0 );
 
-	$this->out( '?>', false, false );
+	$this->out( '?>', 0, 0 );
 
 	return;
 }
 
 // Displaying the selected value:
-$this->out( '<?php', false );
+$this->out( '<?php', 0 );
 $this->out( '// Displaying the value:' );
-$this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );', false );
-$this->out( '?>', false );
-$this->out( '<p>Selected: <?= $value ?></p>', false );
+$this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );', 0 );
+$this->out( '?>', 0 );
+$this->out( '<p>Selected: <?= $value ?></p>', 0 );
 $this->break();
 
 // Displaying the selected label:
-$this->out( '<?php // Displaying the value: ?>', false );
-$this->out( "<p>My choice: <?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?></p>', false );
+$this->out( '<?php // Displaying the value: ?>', 0 );
+$this->out( "<p>My choice: <?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?></p>', 0 );
 $this->break();
 
 // Displaying both value and label:
-$this->out( '<?php', false );
+$this->out( '<?php', 0 );
 $this->out( '// Displaying both values and labels:' );
 $this->out( "\$field   = rwmb_get_field_settings( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( "\$options = \$field['options'];" );
 $this->out( "\$value  = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-$this->out( '?>', false );
+$this->out( '?>', 0 );
 $this->break();
-$this->out( 'Value: <?= $value ?><br>', false );
-$this->out( 'Label: <?= $options[ $value ] ?>', false, false );
+$this->out( 'Value: <?= $value ?><br>', 0 );
+$this->out( 'Label: <?= $options[ $value ] ?>', 0, 0 );

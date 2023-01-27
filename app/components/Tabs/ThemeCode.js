@@ -1,4 +1,4 @@
-import { useEffect, useState } from "@wordpress/element";
+import { useState } from "@wordpress/element";
 import { htmlDecode } from "../../functions";
 import useApi from "../../hooks/useApi";
 import useFieldIds from "../../hooks/useFieldIds";
@@ -17,25 +17,6 @@ const Codes = ( props ) => {
 	}
 
 	const listFields = Object.values( fields );
-
-	// Show list of field names in the left tabs.
-	useEffect( () => {
-		let timer = null;
-		if ( listFields.length > 0 ) {
-			const lastField = listFields[ listFields.length - 1 ];
-			timer = setInterval( () => {
-				const $nameElement = $( `#fields-${ lastField._id }-name` );
-				if ( lastField.name === '' && $nameElement.length > 0 ) {
-					$( `#og-theme-code__field--${ lastField._id }` ).text( $nameElement.val() );
-					clearInterval( timer );
-				}
-
-				return () => clearInterval( timer );
-			}, 200 );
-		}
-
-		return timer != undefined && timer != null ? clearInterval( timer ) : '';
-	}, [ fieldIds ] );
 
 	// Generate Code
 	const themeCode = useApi( [ 'theme-code-generate', {

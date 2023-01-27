@@ -8,7 +8,7 @@ if ( $is_group === true ) {
 
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
-	$this->out( '<?php', false );
+	$this->out( '<?php', 0 );
 	$this->out( "\$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 	$this->out( 'foreach ( $values as $value ) :' );
 	$this->out( $this->indent() . 'if ( $value ) {' );
@@ -17,12 +17,12 @@ if ( isset( $field['clone'] ) ) {
 	$this->out( $this->indent( 2 ) . 'echo \'Unchecked\';' );
 	$this->out( $this->indent() . '}' );
 	$this->out( 'endforeach' );
-	$this->out( '?>', false, false );
+	$this->out( '?>', 0, 0 );
 	return;
 }
 
 // Conditional check:
-$this->out( '<?php', false );
+$this->out( '<?php', 0 );
 $this->out( '// Conditional check:' );
 $this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( 'if ( $value ) {' );
@@ -30,12 +30,12 @@ $this->out( $this->indent() . 'echo \'Checked\';' );
 $this->out( '} else {' );
 $this->out( $this->indent() . 'echo \'Unchecked\';' );
 $this->out( '}' );
-$this->out( '?>', false );
+$this->out( '?>', 0 );
 $this->break();
 
 // Displaying "Yes/No":
-$this->out( '<?php', false );
+$this->out( '<?php', 0 );
 $this->out( '// Displaying "Yes/No":' );
 $this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-$this->out( '?>', false );
+$this->out( '?>', 0 );
 
