@@ -40,9 +40,7 @@ if ( ! isset( $field['clone'] ) ) {
 	$this->out( 'Label: <?= $options[ $value ] ?>', 3 );
 	$this->out( '</li>', 2 );
 	$this->out( '<?php endforeach ?>', 1 );
-	$this->out( '</ul>', 0 );
-
-	$this->out( '?>', 0 );
+	$this->out( '</ul>', 0, 0 );
 	return;
 }
 
@@ -68,4 +66,4 @@ $this->out( '<?php endforeach ?>', 4 );
 $this->out( '</ul>', 3 );
 $this->out( '</li>', 2 );
 $this->out( '<?php endforeach ?>', 1 );
-$this->out( '</ul>', 0 );
+$this->out( '</ul>', 0, 0 );
