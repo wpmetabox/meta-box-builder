@@ -14,20 +14,19 @@ if ( $is_group === true ) {
 
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
-	$this->out( "<?php \$files = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );', 0 );
-	$this->out( '<?php foreach ( $files as $file ) : ?>', 0 );
-	$this->out( '<p><a href="<?= $file >">Download file</a></p>' );
+	$this->out( "<?php \$files = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
+	$this->out( '<?php foreach ( $files as $file ) : ?>' );
+		$this->out( '<p><a href="<?= $file ?>">Download file</a></p>', 1 );
 	$this->out( '<?php endforeach ?>', 0, 0 );
 	return;
 }
 
 // Displaying file:
-$this->out( '<?php // Displaying file: ?>', 0 );
+$this->out( '<?php // Displaying file: ?>' );
 $this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>' );
-$this->out( '<p><a href="<?= $value >">Download file</a></p>', 0 );
-$this->break();
+$this->out( '<p><a href="<?= $value ?>">Download file</a></p>', 0, 3 );
 
 // Displaying uploaded image:
-$this->out( '<?php // Displaying file: ?>', 0 );
-$this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', 0 );
-$this->out( '<p><img src="<?= $value >"></p>', 0 );
+$this->out( '<?php // Displaying uploaded image: ?>' );
+$this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>' );
+$this->out( '<p><img src="<?= $value ?>"></p>', 0, 0 );
