@@ -51,24 +51,31 @@ const Codes = ( props ) => {
 
 	return (
 		<>
-			<div className="og-theme-code__header">
-				{
-					themeCode.map( ( field, index ) => (
-						<span
-							key={ `header_${ field._id }` }
-							onClick={ () => setTab( index ) }
-							id={ `og-theme-code__field--${ field._id }` }
-							item_id={ field._id }
-							className={ `og-theme-code__field ${ tab === index ? 'og-theme-code__field--active' : '' }` }
-						>
-							{ field.name }
-						</span>
-					) )
-				}
+			<div className="og-theme-code__intro">
+				<p>Below is the auto-generated code to display fields' values. Select a field from the left tab and you'll see the code to display its value on the right.</p>
+				<p>You can copy and paste the code into your theme's files. We also display several ways to output the fields' values (if possible), so choose which one is best for you.</p>
+				<p><strong>Note:</strong> you should use this code as a starting point and modify it to fit your needs. For more details about using code, please refer to the <a href="https://docs.metabox.io/fields">documentation</a>.</p>
 			</div>
+			<div className="og-theme-code__content">
+				<div className="og-theme-code__header">
+					{
+						themeCode.map( ( field, index ) => (
+							<span
+								key={ `header_${ field._id }` }
+								onClick={ () => setTab( index ) }
+								id={ `og-theme-code__field--${ field._id }` }
+								item_id={ field._id }
+								className={ `og-theme-code__field ${ tab === index ? 'og-theme-code__field--active' : '' }` }
+							>
+								{ field.name }
+							</span>
+						) )
+					}
+				</div>
 
-			<div className="og-theme-code__body og-result">
-				{ themeCode[ tab ] && <Content codeValue={ htmlDecode( themeCode[ tab ].theme_code ) } /> }
+				<div className="og-theme-code__body og-result">
+					{ themeCode[ tab ] && <Content codeValue={ htmlDecode( themeCode[ tab ].theme_code ) } /> }
+				</div>
 			</div>
 		</>
 	);
