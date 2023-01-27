@@ -6,7 +6,7 @@ if ( $is_group === true ) {
 	return;
 }
 
-if ( ! isset( $field['clone'] ) ) {
+if ( empty( $field['clone'] ) ) {
 	// Displaying selected values:
 	$this->out( '<?php', 0 );
 	$this->out( '// Displaying selected values:', 0 );

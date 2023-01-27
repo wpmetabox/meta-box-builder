@@ -6,7 +6,7 @@ if ( $is_group === true ) {
 	return;
 }
 
-if ( ! isset( $field['clone'] ) ) {
+if ( empty( $field['clone'] ) ) {
 	// Getting the background properties:
 	$this->out( '<?php', 0 );
 	$this->out( '// Getting the background properties:', 0 );
