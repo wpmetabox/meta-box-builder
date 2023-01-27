@@ -81,7 +81,7 @@ class Encoder {
 		return $field_id . "'" . $arg_encode . $this->get_encoded_object_type();
 	}
 
-	private function indent( int $size = 1, bool $echo = false ) : string {
+	private function indent( int $size = 1, bool $echo = false ) {
 		$output = $size ? str_repeat( "\t", $size ) : '';
 		if ( $echo === false ) {
 			return esc_html( $output );
@@ -89,7 +89,7 @@ class Encoder {
 		echo esc_html( $output );
 	}
 
-	private function break( int $size = 1, bool $echo = true ) : string {
+	private function break( int $size = 1, bool $echo = true ) {
 		$output = $size ? str_repeat( "\n", $size + $this->size_indent ) : '';
 		if ( $echo === false ) {
 			return esc_html( $output );
@@ -97,7 +97,7 @@ class Encoder {
 		echo esc_html( $output );
 	}
 
-	private function out( string $str, int $indent = 1, int $break = 1, bool $echo = true ) : string {
+	private function out( string $str, int $indent = 1, int $break = 1, bool $echo = true ) {
 		$output = $this->indent( $indent ) . $str . $this->break( $break, false );
 		if ( $echo === false ) {
 			return esc_html( $output );

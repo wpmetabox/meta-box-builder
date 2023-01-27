@@ -2,6 +2,14 @@
 	#poststuff & .inside {
 		padding: 0;
 		margin: 0;
+	}
+
+	&__intro {
+		padding-inline: 12px;
+	}
+
+	&__content {
+		border-top: var(--border-lighter);
 		display: grid;
 		grid-template-columns: 180px 1fr;
 	}
