@@ -79,7 +79,7 @@ class Encoder {
 		return ! empty( $this->object_type ) && $this->object_type !== 'post' ? ', \'' . $this->object_type . '\'' : '';
 	}
 
-	private function get_encoded_value( string $field_id, array $args = [], bool $arg_string = false ) : string {
+	private function get_encoded_value( string $field_id, $args = [], bool $arg_string = false ) : string {
 		$arg_encode = $arg_string === false ? $this->get_encoded_args( $args ) : ', ' . (string) $args;
 		return $field_id . "'" . $arg_encode . $this->get_encoded_object_type();
 	}
@@ -115,7 +115,7 @@ class Encoder {
 
 		$encoder = new PHPEncoder;
 		return $encoder->encode( $vars, [
-			'array.base'    => 4,
+			'array.base'    => 0,
 			'array.align'   => true,
 			'string.escape' => false,
 		] );

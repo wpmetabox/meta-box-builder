@@ -22,32 +22,8 @@ if ( $is_group === true ) {
 	return;
 }
 
-if ( isset( $field['clone'] ) ) {
-	// Displaying cloneable maps:
-	$args = $this->format_args([
-		'width'      => '640px',
-		'height'     => '480px',
-		'js_options' => [
-			'mapTypeId'   => 'HYBRID',
-			'zoomControl' => false,
-		],
-		'api_key'    => 'your-API-key',
-	]);
-
-	$this->out( '<?php', 0 );
-	$this->out( '$args = ' . $args . ';' );
-	$this->out( "\$group_values = rwmb_meta( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' );' );
-	$this->break();
-	$this->out( 'foreach ( $group_values as $group_value ) :' );
-	$this->out( $this->indent() . 'echo RWMB_Map_Field::render_map( $group_value[\'map_id\'], $args );' );
-	$this->out( 'endforeach;' );
-	$this->out( '?>', 0 );
-
-	return;
-}
-
 // Displaying maps
-$args = $this->format_args([
+$args = $this->format_args( [
 	'width'        => '640px',
 	'height'       => '480px',
 	'zoom'         => 14,
@@ -59,9 +35,19 @@ $args = $this->format_args([
 		'mapTypeId'   => 'HYBRID',
 		'zoomControl' => false,
 	],
-]);
+] );
 
-$this->out( '<?php', 0 );
+$this->out( '<?php' );
+$this->out( '// Displaying the map:' );
 $this->out( '$args = ' . $args . ';' );
-$this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' ); ?>' );
-$this->out( '?>', 0 );
+$this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' );' );
+$this->out( '?>', 0, 3 );
+
+
+$this->out( '<?php' );
+$this->out( '// Getting the location details:' );
+$this->out( "\$location = rwmb_get_value( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
+$this->out( 'echo $location[\'latitude\']' );
+$this->out( 'echo $location[\'longitude\']' );
+$this->out( 'echo $location[\'zoom\']' );
+$this->out( '?>', 0, 0 );
