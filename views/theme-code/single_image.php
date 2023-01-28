@@ -2,11 +2,11 @@
 if ( $is_group === true ) {
 	// Displaying in group
 	$this->break();
-	$this->out('// Get Image in group');
+	$this->out( '// Get Image in group' );
 	$this->out( "\$image_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'foreach ( $image_ids as $image_id ) :' );
-	$this->out( $this->indent()."\$image = RWMB_Image_Field::file_info( \$image_id, ['size' => 'thumbnail'] );" );
-	$this->out( $this->indent()."echo '<img src=\"' . \$image['url'] . '\">';" );
+	$this->out( $this->indent() . "\$image = RWMB_Image_Field::file_info( \$image_id, ['size' => 'thumbnail'] );" );
+	$this->out( $this->indent() . "echo '<img src=\"' . \$image['url'] . '\">';" );
 	$this->out( 'endforeach;' );
 
 	return;
@@ -14,30 +14,22 @@ if ( $is_group === true ) {
 
 if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
-    $this->out( "<?php \$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', 0 );
-    $this->out( '<ul>', 0 );
-    $this->out( '<?php foreach ( $values as $value ) : ?>' );
-    $this->out( $this->indent() . '<li><?= $value ?></li>' );
-    $this->out( '<?php endforeach ?>' );
-    $this->out( '</ul>', 0, 0 );
+	$this->out( "<?php \$images = rwmb_meta( '" . $this->get_encoded_value( $field['id'], [ 'size' => 'thumbnail' ] ) . ' ); ?>' );
+	$this->out( '<h3>Uploaded images</h3>' );
+	$this->out( '<ul>' );
+		$this->out( '<?php foreach ( $images as $image ) : ?>', 1 );
+			$this->out( '<li><img src="<?= $image[\'url\']; ?>"></li>', 2 );
+		$this->out( '<?php endforeach ?>', 1 );
+	$this->out( '</ul>', 0, 0 );
 	return;
 }
 
-// Displaying the selected value:
-$this->out( '<?php', 0 );
-$this->out( '// Displaying the selected value:' );
-$this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-$this->out( '?>', 0 );
-$this->out( '<p>Selected: <?= $value ?></p>', 0 );
-$this->break();
+// Displaying uploaded image:
+$this->out( "<?php \$image = rwmb_meta( '" . $this->get_encoded_value( $field['id'], [ 'size' => 'thumbnail' ] ) . ' ); ?>' );
+$this->out( '<h3>Logo</h3>' );
+$this->out( '<img src="<?= $image[\'url\']; ?>">', 0, 3 );
 
-// Displaying the list of multiple choices:
-$this->out( '<?php', 0 );
-$this->out( '// Displaying the list of multiple choices:' );
-$this->out( "\$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-$this->out( '?>', 0 );
-$this->out( '<ul>', 0 );
-$this->out( '<?php foreach ( $values as $value ) : ?>' );
-$this->out( $this->indent() . '<li><?= $value ?></li>' );
-$this->out( '<?php endforeach ?>' );
-$this->out( '</ul>', 0, 0 );
+// or simpler:
+$this->out( '<?php // or simpler: ?>' );
+$this->out( '<h3>Logo</h3>' );
+$this->out( "<?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'], [ 'size' => 'thumbnail' ] ) . ' ) ?>', 0, 0 );
