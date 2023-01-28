@@ -2,7 +2,7 @@
 if ( $is_group === true ) {
 	// Displaying in group
 	$args = $this->format_args([
-		'width'      => '640px',
+		'width'      => '100%',
 		'height'     => '480px',
 		'js_options' => [
 			'mapTypeId'   => 'HYBRID',
@@ -24,7 +24,7 @@ if ( $is_group === true ) {
 
 // Displaying maps
 $args = $this->format_args( [
-	'width'        => '640px',
+	'width'        => '100%',
 	'height'       => '480px',
 	'zoom'         => 14,
 	'marker'       => true,
