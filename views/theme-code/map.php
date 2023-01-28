@@ -16,7 +16,7 @@ if ( $is_group === true ) {
 	$this->out( "\$maps = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '$args = ' . $args . ';' );
 	$this->out( 'foreach ( $maps as $map ) :' );
-	$this->out( $this->indent() . 'echo RWMB_Map_Field::render_map( $map, $args );' );
+	$this->out( 'echo RWMB_Map_Field::render_map( $map, $args );' );
 	$this->out( 'endforeach;' );
 
 	return;

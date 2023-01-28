@@ -5,8 +5,8 @@ if ( $is_group === true ) {
 	$this->out('// Get file in group');
 	$this->out( "\$file_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'foreach ( $file_ids as $file_id ) :' );
-	$this->out( $this->indent()."\$file = RWMB_File_Field::file_info( \$file_id );" );
-	$this->out( $this->indent() . '<p><a href="<?= $file[\'url\']; ?>"><?= $file[\'name\']; ?></a><p>' );
+	$this->out( "\$file = RWMB_File_Field::file_info( \$file_id );" );
+	$this->out( '<p><a href="<?= $file[\'url\']; ?>"><?= $file[\'name\']; ?></a><p>' );
 	$this->out( 'endforeach;' );
 
 	return;
