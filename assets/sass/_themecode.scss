@@ -11,7 +11,7 @@
 	&__content {
 		border-top: var(--border-lighter);
 		display: grid;
-		grid-template-columns: 180px 1fr;
+		grid-template-columns: 180px minmax(0, 1fr);
 	}
 
 	&__header {

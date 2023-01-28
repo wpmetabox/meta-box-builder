@@ -21,9 +21,10 @@ const Content = ( { codeValue } ) => {
 					mode: 'php',
 					lineNumbers: true,
 					smartIndent: true,
+					indentWithTabs: true,
+					tabSize: 4,
 					readOnly: true,
-					lineWrapping: true,
-					viewportMargin: Infinity,
+					lineWrapping: false,
 				} }
 			/>
 
