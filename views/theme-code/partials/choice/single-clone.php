@@ -6,7 +6,7 @@ $this->out( "\$values  = rwmb_meta( '" . $this->get_encoded_value( $field['id'] 
 $this->out( '?>' );
 
 $this->out( '<ul>' );
-	$this->out( '<?php foreach ( $clone as $value ) : ?>', 1 );
+	$this->out( '<?php foreach ( $values as $value ) : ?>', 1 );
 		$this->out( '<li>', 2 );
 			$this->out( 'Value: <?= $value ?><br>', 3 );
 			$this->out( 'Label: <?= $options[ $value ] ?>', 3 );
