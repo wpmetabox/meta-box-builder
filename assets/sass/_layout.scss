@@ -1,0 +1,12 @@
+// Sticky sidebar.
+#poststuff #post-body.columns-2 {
+	display: grid;
+	grid-template-columns: 1fr 280px;
+	grid-gap: 20px;
+	margin-right: 0;
+}
+
+#side-sortables {
+	position: sticky;
+	top: 48px;
+}
