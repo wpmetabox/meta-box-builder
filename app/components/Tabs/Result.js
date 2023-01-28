@@ -58,7 +58,14 @@ const ResultCode = ( { endPoint } ) => {
 			<div className="og-result">
 				<p>{ __( 'Copy the code and paste into your theme\'s functions.php file.', 'meta-box-builder' ) }</p>
 				<div className="og-result__body">
-					<CodeMirror value={ data } options={ { mode: 'php', lineNumbers: true } } />
+					<CodeMirror
+						value={ data }
+						options={ {
+							mode: 'php',
+							lineNumbers: true,
+							readOnly: true
+						} }
+					/>
 					<button type="button" className="button" text={ data } ref={ copyRef }>
 						{ copied ? __( 'Copied!', 'meta-box-builder' ) : __( 'Copy', 'meta-box-builder' ) }
 					</button>
