@@ -49,13 +49,13 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpmetabox/mbb-parser.git",
-                "reference": "c259afc48ad3dbeb1e50c200862f492d7f230175"
+                "reference": "23c1a39c23fd6e10687505f4e26358b5c04f44bc"
             },
             "require": {
                 "meta-box/support": "dev-master",
                 "riimu/kit-phpencoder": "^2.4"
             },
-            "time": "2022-12-15T07:09:29+00:00",
+            "time": "2023-01-31T04:16:40+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "source",

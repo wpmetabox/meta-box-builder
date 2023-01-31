@@ -25,7 +25,8 @@ class Field extends Base {
 		unset( $this->_id );
 
 		// Remove default fields.
-		$this->remove_default( 'save_field', true )
+		$this->set_save_field()
+			->remove_default( 'save_field', true )
 			->remove_default( 'add_to', 'end' ) // image_advanced.
 			->remove_default( 'image_size', 'thumbnail' ) // image_advanced.
 			->parse_boolean_values()
@@ -55,6 +56,13 @@ class Field extends Base {
 		$this->settings = apply_filters( "mbb_field_settings_{$this->type}", $this->settings );
 	}
 
+	private function set_save_field() {
+		if ( ! isset( $this->settings['save_field'] ) ) {
+			$this->settings['save_field'] = false;
+		}
+		return $this;
+	}
+
 	private function parse_datalist() {
 		if ( empty( $this->settings['datalist_choices'] ) ) {
 			return $this;
@@ -68,7 +76,7 @@ class Field extends Base {
 	}
 
 	private function parse_object_field() {
-		if ( ! in_array( $this->type, array( 'taxonomy', 'taxonomy_advanced', 'post', 'user' ), true ) ) {
+		if ( ! in_array( $this->type, [ 'taxonomy', 'taxonomy_advanced', 'post', 'user' ], true ) ) {
 			return $this;
 		}
 		unset( $this->terms );
@@ -83,16 +91,16 @@ class Field extends Base {
 		 * - radio_list
 		 */
 
-		if ( in_array( $this->field_type, array( 'select', 'select_advanced', 'select_tree', 'checkbox_tree' ), true ) ) {
+		if ( in_array( $this->field_type, [ 'select', 'select_advanced', 'select_tree', 'checkbox_tree' ], true ) ) {
 			unset( $this->inline );
 		}
-		if ( in_array( $this->field_type, array( 'select_tree', 'checkbox_list', 'checkbox_tree', 'radio_list' ), true ) ) {
+		if ( in_array( $this->field_type, [ 'select_tree', 'checkbox_list', 'checkbox_tree', 'radio_list' ], true ) ) {
 			unset( $this->multiple );
 		}
-		if ( in_array( $this->field_type, array( 'select_tree', 'checkbox_tree', 'radio_list' ), true ) ) {
+		if ( in_array( $this->field_type, [ 'select_tree', 'checkbox_tree', 'radio_list' ], true ) ) {
 			unset( $this->select_all_none );
 		}
-		if ( empty( $this->multiple ) && in_array( $this->field_type, array( 'select', 'select_advanced' ), true ) ) {
+		if ( empty( $this->multiple ) && in_array( $this->field_type, [ 'select', 'select_advanced' ], true ) ) {
 			unset( $this->select_all_none );
 		}
 
@@ -121,7 +129,7 @@ class Field extends Base {
 			return $this;
 		}
 
-		$options = array();
+		$options = [];
 
 		$this->options = trim( wp_unslash( $this->options ) );
 		$this->options = explode( "\n", $this->options );
