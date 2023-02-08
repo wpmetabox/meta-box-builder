@@ -19,7 +19,6 @@ if ( $is_group === true ) {
 		$this->out( '<p>My section content</p>' );
 	$this->out( '</div>', 0, 3 );
 	$this->out( '<?php' );
-	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 
 	return;
 }
