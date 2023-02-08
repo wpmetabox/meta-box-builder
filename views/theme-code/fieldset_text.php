@@ -1,8 +1,27 @@
 <?php
 if ( $is_group === true ) {
 	// Displaying in group
-	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	if ( ! empty( $field['clone'] ) ) {		
+		$this->out( '// Displaying field inputs\' values:' );
+		$this->out( "\$clones = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( '?>' );
 
+		$this->out( '<?php foreach ( $clones as $clone ) : ?>' );
+			$this->out( "<p>Name: <?= \$clone['name'] ?></p>", 1 );
+			$this->out( "<p>Address: <?= \$clone['address'] ?></p>", 1 );
+			$this->out( "<p>Email: <?= \$clone['email'] ?></p>", 1 );
+		$this->out( 'endforeach', 1, 1 );
+		$this->out( '<?php' );
+		return;
+	}
+
+	$this->out( '// Displaying field inputs\' values:' );
+	$this->out( "\$clone = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( '?>' );
+	$this->out( "<p>Name: <?= \$clone['name'] ?></p>" );
+	$this->out( "<p>Address: <?= \$clone['address'] ?></p>" );
+	$this->out( "<p>Email: <?= \$clone['email'] ?></p>", 1, 1 );	
+	$this->out( '<?php' );
 	return;
 }
 
