@@ -1,8 +1,23 @@
 <?php
 if ( $is_group === true ) {
 	// Displaying in group
-	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	if ( ! empty( $field['clone'] ) ) {
+		// Displaying cloneable values:
+		$this->out( "\$dates = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( '?>' );
+		$this->out( '<ul>' );		
+			$this->out( '<?php foreach ( $dates as $date ) : ?>', 1 );
 
+				$value = empty( $field ['timestamp'] ) ? '$date' : 'date( \'F j, Y\', $value )';
+				$this->out( '<li><?= ' . $value . ' ?></li>', 2 );
+
+			$this->out( '<?php endforeach ?>', 1 );
+		$this->out( '</ul>', 0, 1 );
+		$this->out( '<?php' );
+		return;
+	}
+
+	require __DIR__ . '/partials/default/single-group.php';
 	return;
 }
 
