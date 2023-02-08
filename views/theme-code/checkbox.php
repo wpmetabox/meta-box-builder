@@ -1,7 +1,26 @@
 <?php
 if ( $is_group === true ) {
 	// Displaying in group
-	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	if ( ! empty( $field['clone'] ) ) {
+		$this->out( "\$checkboxs = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( 'foreach ( $checkboxs as $checkbox ) {' );
+			$this->out( 'if ( $checkbox ) {', 1 );
+				$this->out( 'echo \'Checked\';', 2 );
+			$this->out( '} else {', 1 );
+				$this->out( 'echo \'Unchecked\';', 2 );
+			$this->out( '}', 1 );
+		$this->out( '}' );
+
+		return;
+	}
+
+	$this->out( '// Conditional check:' );
+	$this->out( "\$checkbox = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( 'if ( $checkbox ) {' );
+		$this->out( 'echo \'Checked\';', 1 );
+	$this->out( '} else {' );
+		$this->out( 'echo \'Unchecked\';', 1 );
+	$this->out( '}' );
 
 	return;
 }
