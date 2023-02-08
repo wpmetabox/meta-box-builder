@@ -9,6 +9,7 @@ class Encoder {
 	private $encoded_string;
 	public $settings;
 	private $object_type;
+	private $object_id;	
 	private $field_args;
 	private $field_type;
 	private $field_id;
@@ -19,8 +20,9 @@ class Encoder {
 		$this->text_domain = $settings['text_domain'] ?? 'meta-box-builder';
 		$this->fields      = $settings['fields'] ?? [];
 		$this->object_type = $settings['object_type'] ?? '';
+		$this->object_id = $settings['object_id'] ?? '';
 		$this->field_args  = $settings['args'] ?? '';
-		$this->views_dir   = MBB_DIR . '/views/theme-code';
+		$this->views_dir   = MBB_DIR . 'views/theme-code';
 
 		unset( $settings['text_domain'], $settings['fields'] );
 		$this->settings = $settings;
@@ -76,7 +78,7 @@ class Encoder {
 	}
 
 	private function get_encoded_object_type() : string {
-		return ! empty( $this->object_type ) && $this->object_type !== 'post' ? ', \'' . $this->object_type . '\'' : '';
+		return ! empty( $this->object_type ) && $this->object_type !== 'post' ? ', \'' . $this->object_id . '\'' : '';
 	}
 
 	private function get_encoded_value( string $field_id, $args = [], bool $arg_string = false ) : string {
