@@ -2,7 +2,37 @@
 if ( $is_group === true ) {
 	// Displaying in group
 	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	if ( isset( $field['clone'] ) ) {
+		// Displaying cloneable values:
+		$this->out( "\$videos = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( '?>' );
+		$this->out( '<h3>Uploaded videos</h3>' );
+		$this->out( '<ul>' );
+			$this->out( '<?php foreach ( $videos as $clone ) : ?>', 1 );
+				$this->out( '<li>', 2 );
+					$this->out( '<ul>', 3 );
+						$this->out( '<?php foreach ( $clone as $video ) : ?>', 4 );
+							$this->out( '<li><video src="<?= $video[\'src\']; ?>"></li>', 5 );
+						$this->out( '<?php endforeach ?>', 4 );
+					$this->out( '</ul>', 3 );
+				$this->out( '</li>', 2 );
+			$this->out( '<?php endforeach ?>', 1 );
+		$this->out( '</ul>', 0, 0 );
+		$this->out( '<?php' );		
 
+		return;
+	}	
+	
+	$this->out( '// Displaying videos with HTML5 player:' );
+	$this->out( "\$videos = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( '?>' );
+	$this->out( '<h3>Uploaded videos</h3>' );
+	$this->out( '<ul>' );
+		$this->out( '<?php foreach ( $videos as $video ) : ?>', 1 );
+			$this->out( '<li><video src="<?= $video[\'src\']; ?>"></li>', 2 );
+		$this->out( '<?php endforeach ?>', 1 );
+	$this->out( '</ul>', 0, 3 );
+	$this->out( '<?php' );
 	return;
 }
 
