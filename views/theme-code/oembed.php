@@ -2,6 +2,12 @@
 if ( $is_group === true ) {
 	// Displaying in group
 	$this->break();
+
+	if ( isset( $field['clone'] ) ) {
+		require __DIR__ . '/partials/default/single-clone-group.php';
+		return;
+	}	
+
 	$this->out( '// Get Oembed in group' );
 	$this->out( "\$values = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'foreach ( $values as $value ) :' );
