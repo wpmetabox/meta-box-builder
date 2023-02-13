@@ -1,8 +1,17 @@
 <?php
 if ( $is_group === true ) {
 	// Displaying in group
-	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
-
+	$this->out( '// Displaying list of key-value pairs:' );
+	$this->out( "\$pairs = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( '?>' );
+	$this->out( '<h3>Specification</h3>' );
+	$this->out( '<ul>' );
+		$this->out( '<?php foreach ( $pairs as $pair ) : ?>', 1 );
+			$this->out( '<li><label><?= $pair[0] ?>:</label> <?= $pair[1] ?></li>', 2 );
+		$this->out( '<?php endforeach ?>', 1 );
+	$this->out( '</ul>', 0, 2 );
+	$this->out( '<?php' );
+	
 	return;
 }
 
