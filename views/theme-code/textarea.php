@@ -1,8 +1,17 @@
 <?php
 if ( $is_group === true ) {
 	// Displaying in group
-	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	if ( isset( $field['clone'] ) ) {
+		// Displaying cloneable values:
+		$this->out( "<?php \$values = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( '<?php foreach ( $values as $value ) : ?>' );
+			$this->out( '<p><?= $value ?></p>', 1 );
+		$this->out( '<?php endforeach ?>', 0, 0 );
 
+		return;
+	}
+
+	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 	return;
 }
 
