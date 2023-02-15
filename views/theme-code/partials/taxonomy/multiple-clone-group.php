@@ -1,7 +1,7 @@
 <?php
 // Displaying cloneable values:
-$this->out( "<?php \$clones = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>' );
-
+$this->out( "\$clones = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+$this->out( '?>' );
 $this->out( '<ul>' );
 	$this->out( '<?php foreach ( $clones as $clone ) : ?>', 1 );
 		$this->out( '<li>', 2 );
@@ -12,8 +12,5 @@ $this->out( '<ul>' );
 			$this->out( '</ul>', 3 );
 		$this->out( '</li>', 2 );
 	$this->out( '<?php endforeach ?>', 1 );
-$this->out( '</ul>', 0, 3 );
-
-// or simpler:
-$this->out( '<?php // or simpler: ?>' );
-$this->out( "<?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>', 0, 0 );
+$this->out( '</ul>', 0, 2 );
+$this->out( '<?php' );
