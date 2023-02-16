@@ -12,6 +12,7 @@ class Parser extends Base {
 			'settings_pages' => 'setting',
 			'taxonomies'     => 'term',
 			'comment',
+			'user',
 		];
 		$params       = [
 			'args'      => [],
@@ -23,9 +24,16 @@ class Parser extends Base {
 				continue;
 			}
 
+			$object_id = '';
+			if ( is_int( $key ) && $object_type === 'user' ) {
+				$object_id = get_current_user_id();
+			} elseif ( ! is_int( $key ) ) {
+				$object_id = Arr::get( $this->settings, "$key.0" );
+			}
+
 			$params = [
 				'args'      => [ "'object_type' => '$object_type'" ],
-				'object_id' => is_int( $key ) ? '' : Arr::get( $this->settings, "$key.0" ),
+				'object_id' => $object_id,
 			];
 		}
 
