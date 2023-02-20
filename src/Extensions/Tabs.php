@@ -34,9 +34,11 @@ class Tabs {
 					'label'      => __( 'Icon', 'meta-box-builder' ),
 					'dependency' => 'icon_type:dashicons',
 				] ),
-				Control::Input( 'icon_fa', [
-					'label'      => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank" rel="noopenner noreferrer">' . __( 'Icon CSS class', 'meta-box-builder' ) . '</a>',
-					'dependency' => 'icon_type:fontawesome',
+				Control::Fontawesome( 'icon_fa', [
+					'label'       => __( 'Icon', 'meta-box-builder' ),
+					'tooltip'     => __( 'The icon to be used for the admin menu (FontAwesome)', 'meta-box-builder' ),
+					'description' => __( 'Enter <a href="https://fontawesome.com/search?o=r&m=free">FontAwesome</a> icon class here. Supports FontAwesome free version only.', 'meta-box-builder' ),
+					'dependency'  => 'icon_type:fontawesome',
 				] ),
 				Control::Input( 'icon_url', [
 					'label'      => __( 'Icon URL', 'meta-box-builder' ),
