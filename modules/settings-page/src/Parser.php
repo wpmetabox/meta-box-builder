@@ -29,7 +29,7 @@ class Parser extends Base {
 		$type           = Arr::get( $this->settings, 'icon_type', 'dashicons' );
 		$this->icon_url = Arr::get( $this->settings, "icon_$type" );
 
-		if ( 'dashicons' === $type || 'font_awesome' === $type ) {
+		if ( 'dashicons' === $type ) {
 			$this->icon_url = 'dashicons-' . $this->icon_url;
 		}
 

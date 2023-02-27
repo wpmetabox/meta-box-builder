@@ -11,6 +11,7 @@ class Tabs {
 			return;
 		}
 		add_action( 'mbb_field_types', [ $this, 'add_field_type' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_font_awesome' ] );
 		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_meta_box_settings' ] );
 
 		add_filter( 'mbb_settings_controls', [ $this, 'add_settings_controls' ] );
@@ -21,7 +22,9 @@ class Tabs {
 			'title'    => __( 'Tab', 'meta-box-builder' ),
 			'category' => 'layout',
 			'controls' => [
-				'name', 'id', 'type',
+				'name',
+				'id',
+				'type',
 				Control::Select( 'icon_type', [
 					'label'   => __( 'Icon type', 'meta-box-builder' ),
 					'options' => [
@@ -34,9 +37,11 @@ class Tabs {
 					'label'      => __( 'Icon', 'meta-box-builder' ),
 					'dependency' => 'icon_type:dashicons',
 				] ),
-				Control::Input( 'icon_fa', [
-					'label'      => '<a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank" rel="noopenner noreferrer">' . __( 'Icon CSS class', 'meta-box-builder' ) . '</a>',
-					'dependency' => 'icon_type:fontawesome',
+				Control::Fontawesome( 'icon_fa', [
+					'label'       => __( 'Icon', 'meta-box-builder' ),
+					'tooltip'     => __( 'The icon to be used for the admin menu (FontAwesome)', 'meta-box-builder' ),
+					'description' => __( 'Enter <a href="https://fontawesome.com/search?o=r&m=free">FontAwesome</a> icon class here. Supports FontAwesome free version only.', 'meta-box-builder' ),
+					'dependency'  => 'icon_type:fontawesome',
 				] ),
 				Control::Input( 'icon_url', [
 					'label'      => __( 'Icon URL', 'meta-box-builder' ),
@@ -46,6 +51,12 @@ class Tabs {
 		];
 
 		return $field_types;
+	}
+
+	public function enqueue_font_awesome() {
+		if ( get_current_screen()->id === 'meta-box' ) {
+			wp_enqueue_style( 'font-awesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css', '', ' 6.2.1' );
+		}
 	}
 
 	public function parse_meta_box_settings( $settings ) {

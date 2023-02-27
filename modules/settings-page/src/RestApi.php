@@ -33,9 +33,9 @@ class RestApi extends Base {
 				'label'      => __( 'Icon type', 'meta-box-builder' ),
 				'options'    => [
 					'dashicons'    => __( 'Dashicons', 'meta-box-builder' ),
+					'font_awesome' => __( 'Font Awesome', 'meta-box-builder' ),
 					'svg'          => __( 'SVG', 'meta-box-builder' ),
 					'custom'       => __( 'Custom URL', 'meta-box-builder' ),
-					'font_awesome' => __( 'Font Awesome', 'meta-box-builder' ),
 				],
 				'dependency' => 'menu_type:top',
 			], 'dashicons' ),
