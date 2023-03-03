@@ -51,6 +51,8 @@ class Fields extends Base {
 		$date     = ['std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'required', 'disabled', 'readonly', 'js_options'];
 		$map      = ['std', 'address_field', 'language', 'region', 'required'];
 		$taxonomy = ['taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args'];
+		$post     = [ 'post_type', 'field_type', 'add_new', 'multiple', 'select_all_none', 'parent', 'required', 'placeholder', 'query_args' ];
+		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];		
 		$upload   = ['max_file_uploads', 'max_status', 'force_delete', 'required'];
 		$input    = ['required', 'disabled', 'readonly'];
 		$html5    = ['std', 'placeholder', 'size', 'required', 'disabled', 'readonly'];
@@ -233,7 +235,7 @@ class Fields extends Base {
 			'post'     => [
 				'title'       => __( 'Post', 'meta-box-builder' ),
 				'category'    => 'wordpress',
-				'controls'    => array_merge( $general, ['post_type', 'field_type', 'multiple', 'select_all_none', 'parent', 'required', 'placeholder', 'query_args'], $clone, $advanced ),
+				'controls'    => array_merge( $general, $post, $clone, $advanced ),
 				'description' => __( 'For selecting posts', 'meta-box-builder' ),
 			],
 			'radio'           => [
@@ -323,7 +325,7 @@ class Fields extends Base {
 			'user' => [
 				'title'       => __( 'User', 'meta-box-builder' ),
 				'category'    => 'wordpress',
-				'controls'    => array_merge( $general, ['field_type', 'placeholder', 'multiple', 'select_all_none', 'required', 'query_args'], $clone, $advanced ),
+				'controls'    => array_merge( $general, $user, $clone, $advanced ),
 				'description' => __( 'For selecting users', 'meta-box-builder' ),
 			],
 			'url'     => [
