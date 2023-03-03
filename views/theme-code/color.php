@@ -41,8 +41,8 @@ $this->out( '// Getting the value:' );
 $this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>' );
 $this->out( '?>' );
 $this->out( '<div style="background-color: <?= $value ?>">' );
-	$this->out( '<h2>My section title</h2>' );
-	$this->out( '<p>My section content</p>' );
+	$this->out( '<h2>My section title</h2>', 1 );
+	$this->out( '<p>My section content</p>', 1 );
 $this->out( '</div>', 0, 3 );
 
 // Displaying the selected color:

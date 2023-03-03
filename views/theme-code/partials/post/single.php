@@ -26,7 +26,7 @@ $this->out( '<h3><?= get_the_title( $post_id ); ?></h3>', 0, 3 );
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>' );
-$this->out( "<h3><?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?></h3>', 0, 3 );
+$this->out( "<h3><?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'], [ 'link' => false ] ) . ' ); ?></h3>', 0, 3 );
 
 // Displaying the selected post with link:
 $this->out( '<?php' );
