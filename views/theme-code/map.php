@@ -40,7 +40,7 @@ $args = $this->format_args( [
 $this->out( '<?php' );
 $this->out( '// Displaying the map:' );
 $this->out( '$args = ' . $args . ';' );
-$this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'], '$args', true ) . ' );' );
+$this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'], '$args' ) . ' );' );
 $this->out( '?>', 0, 3 );
 
 

@@ -40,7 +40,7 @@ class Encoder {
 		}
 	}
 
-	private function get_theme_code( $field, bool $is_group = false ) : string {
+	private function get_theme_code( $field, bool $is_group = false ): string {
 		$view_file = $this->get_view_file( $field['type'] );
 
 		ob_start();
@@ -48,7 +48,7 @@ class Encoder {
 		return ob_get_clean();
 	}
 
-	private function get_view_file( string $field_type ) : string {
+	private function get_view_file( string $field_type ): string {
 		if ( in_array( $field_type, [ 'button', 'custom_html', 'divider', 'heading', 'tab' ], true ) ) {
 			return '';
 		}
@@ -58,7 +58,7 @@ class Encoder {
 		return $this->views_dir . '/default.php';
 	}
 
-	private function get_encoded_args( array $args = [] ) : string {
+	private function get_encoded_args( array $args = [] ): string {
 		$return = (array) $this->field_args;
 		foreach ( $args as $key => $value ) {
 			// value is numeric
@@ -77,46 +77,46 @@ class Encoder {
 		return empty( $return ) ? '' : ', [ ' . implode( ', ', $return ) . ' ]';
 	}
 
-	private function get_encoded_object_type() : string {
+	private function get_encoded_object_type(): string {
 		$object_id = is_int( $this->object_id ) ? ', ' . $this->object_id : ', \'' . $this->object_id . '\'';
 		return ! empty( $this->object_type ) && $this->object_type !== 'post' ? $object_id : '';
 	}
 
-	private function get_encoded_value( string $field_id, $args = [], bool $arg_string = false ) : string {
-		$arg_encode = $arg_string === false ? $this->get_encoded_args( $args ) : ', ' . (string) $args;
+	private function get_encoded_value( string $field_id, $args = [] ): string {
+		$arg_encode = is_array( $args ) ? $this->get_encoded_args( $args ) : ", $args";
 		return $field_id . "'" . $arg_encode . $this->get_encoded_object_type();
 	}
 
-	private function indent( int $size = 1, bool $echo = false ) {
+	private function indent( int $size = 1, bool $output = false ) {
 		$output = $size ? str_repeat( "\t", $size ) : '';
-		if ( $echo === false ) {
+		if ( $output === false ) {
 			return esc_html( $output );
 		}
 		echo esc_html( $output );
 	}
 
-	private function break( int $size = 1, bool $echo = true ) {
+	private function break( int $size = 1, bool $output = true ) {
 		$output = $size ? str_repeat( "\n", $size + $this->size_indent ) : '';
-		if ( $echo === false ) {
+		if ( $output === false ) {
 			return esc_html( $output );
 		}
 		echo esc_html( $output );
 	}
 
-	private function out( string $str, int $indent = 0, int $break = 1, bool $echo = true ) {
-		$output = $this->indent( $indent ) . $str . $this->break( $break, false );
-		if ( $echo === false ) {
+	private function out( string $str, int $indent = 0, int $empty_lines = 1, bool $output = true ) {
+		$output = $this->indent( $indent ) . $str . $this->break( $empty_lines, false );
+		if ( $output === false ) {
 			return esc_html( $output );
 		}
 		echo esc_html( $output );
 	}
 
-	private function format_variable( array $vars = [] ) : string {
+	private function format_variable( array $vars = [] ): string {
 		if ( empty( $vars ) ) {
 			return '[]';
 		}
 
-		$encoder = new PHPEncoder;
+		$encoder = new PHPEncoder();
 		return $encoder->encode( $vars, [
 			'array.base'    => 0,
 			'array.align'   => true,
@@ -124,7 +124,7 @@ class Encoder {
 		] );
 	}
 
-	private function format_args( array $args = [] ) : string {
+	private function format_args( array $args = [] ): string {
 		$field_args = ! empty( $this->field_args ) ? eval( 'return [' . implode( ', ', $this->field_args ) . '];' ) : [];
 		$args       = array_merge( $field_args, $args );
 		return $this->format_variable( $args );
