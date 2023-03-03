@@ -77,14 +77,13 @@ class Encoder {
 		return empty( $return ) ? '' : ', [ ' . implode( ', ', $return ) . ' ]';
 	}
 
-	private function get_encoded_object_type(): string {
-		$object_id = is_int( $this->object_id ) ? ', ' . $this->object_id : ', \'' . $this->object_id . '\'';
-		return ! empty( $this->object_type ) && $this->object_type !== 'post' ? $object_id : '';
+	private function get_encoded_object_id(): string {
+		return $this->object_id ? ", {$this->object_id}" : '';
 	}
 
 	private function get_encoded_value( string $field_id, $args = [] ): string {
 		$arg_encode = is_array( $args ) ? $this->get_encoded_args( $args ) : ", $args";
-		return $field_id . "'" . $arg_encode . $this->get_encoded_object_type();
+		return $field_id . "'" . $arg_encode . $this->get_encoded_object_id();
 	}
 
 	private function indent( int $size = 1, bool $output = false ) {
