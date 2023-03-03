@@ -17,19 +17,18 @@ class ThemeCode {
 		] );
 	}
 
-	public function has_permission() {
+	public function has_permission(): bool {
 		return current_user_can( 'manage_options' );
 	}
 
-	public function generate( WP_REST_Request $request ) {
-		$settings = ! empty( $request->get_param( 'settings' ) ) ? json_decode( $request->get_param( 'settings' ), true ) : [];
-
-		$fields = ! empty( $request->get_param( 'fields' ) ) ? json_decode( $request->get_param( 'fields' ), true ) : [];
-		if ( empty( $fields ) || empty( $settings ) ) {
-			return '';
+	public function generate( WP_REST_Request $request ): array {
+		$fields = $request->get_param( 'fields' ) ?: [];
+		if ( empty( $fields ) ) {
+			return [];
 		}
 
-		$parser = new Parser( $settings );
+		$settings = $request->get_param( 'settings' ) ?: [];
+		$parser   = new Parser( $settings );
 		$parser->parse();
 
 		$settings           = $parser->get_settings();

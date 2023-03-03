@@ -1,4 +1,5 @@
-import { useState } from "@wordpress/element";
+import { RawHTML, useState } from "@wordpress/element";
+import { sprintf, __ } from "@wordpress/i18n";
 import { htmlDecode } from "../../functions";
 import useApi from "../../hooks/useApi";
 import useFieldIds from "../../hooks/useFieldIds";
@@ -16,47 +17,46 @@ const Codes = ( props ) => {
 		return '';
 	}
 
-	const listFields = Object.values( fields );
-
 	// Generate Code
 	const themeCode = useApi( [ 'theme-code-generate', {
-		fields: JSON.stringify( listFields ),
-		settings: JSON.stringify( props.settings )
+		fields: Object.values( fields ),
+		settings: props.settings
 	}, 'POST' ] );
 
 	const [ tab, setTab ] = useState( 0 );
 
-	if ( themeCode === undefined || themeCode.length === 0 ) {
-		return '';
-	}
-
 	return (
 		<>
 			<div className="og-theme-code__intro">
-				<p>Below is the auto-generated code to display fields' values. Select a field from the left tab and you'll see the code to display its value on the right.</p>
-				<p>You can copy and paste the code into your theme's files. We also display several ways to output the fields' values (if possible), so choose which one is best for you.</p>
-				<p><strong>Note:</strong> you should use this code as a starting point and modify it to fit your needs. For more details about using code, please refer to the <a href="https://docs.metabox.io/fields">documentation</a>.</p>
+				<RawHTML>{ sprintf( __( 'Below is the auto-generated code to <a href="%s">display fields\' values</a> that you can use in your theme. We display several ways to output the fields\' values if possible, so choose which one is best for you.', 'meta-box-builder' ), 'https://docs.metabox.io/displaying-fields-with-code/' ) }</RawHTML>
+				<RawHTML className="og-theme-code__note">{ sprintf( __( 'Please use this code as a starting point and modify it to fit your needs. For more details about fields, please refer to the <a href="%s">documentation</a>.', 'meta-box-builder' ), 'https://docs.metabox.io/fields/' ) }</RawHTML>
 			</div>
 			<div className="og-theme-code__content">
-				<div className="og-theme-code__header">
-					{
-						themeCode.map( ( field, index ) => (
-							<span
-								key={ `header_${ field._id }` }
-								onClick={ () => setTab( index ) }
-								id={ `og-theme-code__field--${ field._id }` }
-								item_id={ field._id }
-								className={ `og-theme-code__field ${ tab === index ? 'og-theme-code__field--active' : '' }` }
-							>
-								{ field.name }
-							</span>
-						) )
-					}
-				</div>
+				{
+					themeCode === undefined || themeCode.length === 0
+						? <p className="og-theme-code__none">{ __( 'No fields available.', 'meta-box-builder' ) }</p>
+						: <>
+							<div className="og-theme-code__header">
+								{
+									themeCode.map( ( field, index ) => (
+										<span
+											key={ `header_${ field._id }` }
+											onClick={ () => setTab( index ) }
+											id={ `og-theme-code__field--${ field._id }` }
+											item_id={ field._id }
+											className={ `og-theme-code__field ${ tab === index ? 'og-theme-code__field--active' : '' }` }
+										>
+											{ field.name }
+										</span>
+									) )
+								}
+							</div>
 
-				<div className="og-theme-code__body og-result">
-					{ themeCode[ tab ] && <Content codeValue={ htmlDecode( themeCode[ tab ].theme_code ) } /> }
-				</div>
+							<div className="og-theme-code__body og-result">
+								{ themeCode[ tab ] && <Content codeValue={ htmlDecode( themeCode[ tab ].theme_code ) } /> }
+							</div>
+						</>
+				}
 			</div>
 		</>
 	);
