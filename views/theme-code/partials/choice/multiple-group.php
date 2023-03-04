@@ -1,6 +1,4 @@
 <?php
-// Displaying selected values.
-$this->out( '// Displaying selected values:' );
 $this->out( '?>' );
 	$this->out( '<ul>' );
 		$this->out( '<?php foreach ( $group[ \'' . $field['id'] . '\' ] as $value ) : ?>', 1 );
