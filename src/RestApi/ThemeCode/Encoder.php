@@ -87,11 +87,11 @@ class Encoder {
 	}
 
 	private function indent( int $size = 1 ): string {
-		return str_repeat( "\t", $size );
+		return str_repeat( "\t", $size + $this->size_indent );
 	}
 
 	private function break( int $size = 1 ): string {
-		return str_repeat( "\n", $size + $this->size_indent );
+		return str_repeat( "\n", $size );
 	}
 
 	private function out( string $str, int $indent = 0, int $empty_lines = 1 ) {
