@@ -32,7 +32,11 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 		}
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
 		if ( idElement ) {
-			idElement.value = slugify( e.target.value, { lower: true, replacement: '_' } );
+			idElement.value = slugify( e.target.value, {
+				lower: true,
+				replacement: '_',
+				remove: /[*+~.()'"!:@]/g
+			} );
 		}
 	};
 

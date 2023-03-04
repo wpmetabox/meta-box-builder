@@ -1,20 +1,27 @@
 import { lazy } from "@wordpress/element";
 import dotProp from 'dot-prop';
 
+export const htmlDecode = innerHTML => Object.assign( document.createElement( 'textarea' ), { innerHTML } ).value;
+
 const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
-export const fetcher = ( api, params = {} ) => {
+export const fetcher = ( api, params = {}, method = 'GET' ) => {
 	let options = {
 		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
+		method
 	};
 	let url = `${ MbbApp.rest }/mbb/${ api }`;
 
-	const query = ( new URLSearchParams( params ) ).toString();
-	if ( query ) {
-		url += MbbApp.rest.includes( '?' ) ? query : `?${ query }`;
+	if ( method === 'GET' ) {
+		const query = ( new URLSearchParams( params ) ).toString();
+		if ( query ) {
+			url += MbbApp.rest.includes( '?' ) ? query : `?${ query }`;
+		}
+	} else {
+		options.body = JSON.stringify( params );
 	}
 
 	return fetch( url, options ).then( response => response.json() );
@@ -35,7 +42,7 @@ export const getSettings = () => {
 	const settings = MbbApp.settings || {};
 
 	return { ...settings, ...urlParams.settings };
-}
+};
 
 const parseQueryString = queryString => {
 	const params = new URLSearchParams( queryString );

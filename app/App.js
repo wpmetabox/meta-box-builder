@@ -6,6 +6,7 @@ import { Data } from './components/Data';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
+import ThemeCode from "./components/Tabs/ThemeCode";
 import { getSettings } from './functions';
 
 const App = () => {
@@ -49,6 +50,18 @@ const App = () => {
 			</Tabs>
 			<Data />
 			<AdminColumnsData />
+			<br />
+			{
+				MbbApp.fields.length > 0 &&
+				<div className="postbox og-theme-code">
+					<div className="postbox-header">
+						<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
+					</div>
+					<div className="inside">
+						<ThemeCode settings={ settings } fields={ MbbApp.fields } />
+					</div>
+				</div>
+			}
 		</>
 	);
 };
