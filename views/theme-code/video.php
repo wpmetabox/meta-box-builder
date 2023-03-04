@@ -1,10 +1,10 @@
 <?php
 if ( $is_group === true ) {
 	// Displaying in group
-	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "echo \$group[ '" . $field['id'] . "' ] ?? '';" );
 	if ( isset( $field['clone'] ) ) {
 		// Displaying cloneable values:
-		$this->out( "\$videos = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$videos = \$group[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( '?>' );
 		$this->out( '<h3>Uploaded videos</h3>' );
 		$this->out( '<ul>' );
@@ -18,13 +18,13 @@ if ( $is_group === true ) {
 				$this->out( '</li>', 2 );
 			$this->out( '<?php endforeach ?>', 1 );
 		$this->out( '</ul>', 0, 0 );
-		$this->out( '<?php' );		
+		$this->out( '<?php' );
 
 		return;
-	}	
-	
+	}
+
 	$this->out( '// Displaying videos with HTML5 player:' );
-	$this->out( "\$videos = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$videos = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( '<h3>Uploaded videos</h3>' );
 	$this->out( '<ul>' );

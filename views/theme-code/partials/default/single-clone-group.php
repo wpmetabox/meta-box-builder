@@ -1,7 +1,7 @@
 <?php
 $this->out( '' );
 $this->out('// Display value clone');
-$this->out( 'foreach ( $group_value[ \'' . $field['id'] . '\' ] as $value ) :' );
+$this->out( 'foreach ( $group[ \'' . $field['id'] . '\' ] as $value ) :' );
 $this->out('?>');
 	$this->out( '<p><?= $value ?></p>', 1 );
 $this->out('<?php');

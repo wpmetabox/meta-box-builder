@@ -1,5 +1,5 @@
 <?php
-$this->out( "\$images = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+$this->out( "\$images = \$group[ '" . $field['id'] . "' ] ?? '';" );
 $this->out( '?>' );
 $this->out( '<h3>Uploaded images</h3>' );
 $this->out( '<ul>' );

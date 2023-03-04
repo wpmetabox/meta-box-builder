@@ -12,7 +12,7 @@ if ( $is_group === true ) {
 
 	$this->out( '' );
 	$this->out( '// Get Osm in group' );
-	$this->out( "\$maps = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$maps = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '$args = ' . $args . ';' );
 	$this->out( 'foreach ( $maps as $map ) :' );
 	$this->out( 'echo RWMB_OSM_Field::render_map( $map, $args );' );

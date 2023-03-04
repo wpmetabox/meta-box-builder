@@ -4,7 +4,7 @@ $this->out( "\$options = \$field['options'];" );
 $this->out( '?>' );
 
 $this->out( '<ul>' );
-	$this->out( '<?php foreach ( $group_value[ \'' . $field['id'] . '\' ] as $clone ) : ?>', 1 );
+	$this->out( '<?php foreach ( $group[ \'' . $field['id'] . '\' ] as $clone ) : ?>', 1 );
 		$this->out( '<li>', 2 );
 
 			$this->out( '<ul>', 3 );

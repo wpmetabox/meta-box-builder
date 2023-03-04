@@ -2,7 +2,7 @@
 $this->out( '?>' );
 	$this->out( '<h3>Uploaded files</h3>' );
 	$this->out( '<ul>' );
-		$this->out( '<?php foreach ( $group_value[ \'' . $field['id'] . '\' ] as $clone ) : ?>', 1 );
+		$this->out( '<?php foreach ( $group[ \'' . $field['id'] . '\' ] as $clone ) : ?>', 1 );
 			$this->out( '<li>', 2 );
 				$this->out( '<ul>', 3 );
 					$this->out( '<?php foreach ( $clone as $file ) : ?>', 4 );

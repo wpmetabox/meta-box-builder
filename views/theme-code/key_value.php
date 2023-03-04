@@ -2,7 +2,7 @@
 if ( $is_group === true ) {
 	// Displaying in group
 	$this->out( '// Displaying list of key-value pairs:' );
-	$this->out( "\$pairs = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$pairs = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( '<h3>Specification</h3>' );
 	$this->out( '<ul>' );
@@ -11,7 +11,7 @@ if ( $is_group === true ) {
 		$this->out( '<?php endforeach ?>', 1 );
 	$this->out( '</ul>', 0, 2 );
 	$this->out( '<?php' );
-	
+
 	return;
 }
 

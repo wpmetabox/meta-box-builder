@@ -1,10 +1,10 @@
 <?php
 if ( $is_group === true ) {
 	// Displaying in group
-	$this->out( "echo \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "echo \$group[ '" . $field['id'] . "' ] ?? '';" );
 	if ( isset( $field['clone'] ) ) {
 		// Displaying cloneable values:
-		$this->out( "\$sidebar_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$sidebar_ids = \$group[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( 'foreach ( $sidebar_ids as $sidebar_id ) {' );
 			$this->out( 'if ( is_active_sidebar( $sidebar_id ) ) {', 1 );
 				$this->out( 'dynamic_sidebar( $sidebar_id );', 2 );
@@ -15,7 +15,7 @@ if ( $is_group === true ) {
 	}
 
 	$this->out( '// Checking if the selected sidebar has widgets and displaying it:' );
-	$this->out( "\$sidebar_id = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$sidebar_id = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'if ( is_active_sidebar( $sidebar_id ) ) {' );
 		$this->out( 'dynamic_sidebar( $sidebar_id );', 1 );
 	$this->out( '}' );

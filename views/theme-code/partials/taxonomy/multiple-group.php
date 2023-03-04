@@ -1,6 +1,6 @@
 <?php
 // Displaying multiple selected terms:
-$this->out( "\$terms = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+$this->out( "\$terms = \$group[ '" . $field['id'] . "' ] ?? '';" );
 $this->out( '?>' );
 $this->out( '<h3>Project categories</h3>' );
 $this->out( '<ul>' );

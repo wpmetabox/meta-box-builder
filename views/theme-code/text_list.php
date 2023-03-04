@@ -3,7 +3,7 @@ if ( $is_group === true ) {
 	// Displaying in group
 	if ( isset( $field['clone'] ) ) {
 		// Displaying cloneable values:
-		$this->out( "\$values = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( '?>' );
 		$this->out( '<ul>' );
 			$this->out( '<?php foreach ( $values as $value ) : ?>', 1 );
@@ -19,7 +19,7 @@ if ( $is_group === true ) {
 	}
 
 	$this->out( '// Displaying field inputs\' values:' );
-	$this->out( "\$value = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( '<p>Name: <?= $value[0] ?></p>' );
 	$this->out( '<p>Email: <?= $value[1] ?></p>', 0, 3 );

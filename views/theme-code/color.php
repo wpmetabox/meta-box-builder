@@ -1,7 +1,7 @@
 <?php
 if ( $is_group === true ) {
 	if ( ! empty( $field['clone'] ) ) {
-		$this->out( "\$clones = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$clones = \$group[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( '?>' );
 		$this->out( '<ul>' );
 			$this->out( '<?php foreach ( $clones as $clone ) : ?>', 1 );
@@ -12,7 +12,7 @@ if ( $is_group === true ) {
 	}
 	// Displaying in group
 	$this->out( '// Getting the value:' );
-	$this->out( "\$value = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( '<div style="background-color: <?= $value ?>">' );
 		$this->out( '<h2>My section title</h2>' );

@@ -1,6 +1,6 @@
 <?php
 // Displaying multiple selected posts:
-$this->out( "\$post_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+$this->out( "\$post_ids = \$group[ '" . $field['id'] . "' ] ?? '';" );
 $this->out( '?>' );
 $this->out( '<h3>Related posts</h3>' );
 $this->out( '<ul>' );

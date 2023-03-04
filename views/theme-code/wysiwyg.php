@@ -3,7 +3,7 @@ if ( $is_group === true ) {
 	// Displaying in group
 	if ( isset( $field['clone'] ) ) {
 		// Displaying cloneable values:
-		$this->out( "\$values = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( 'foreach ( $values as $value ) :' );
 			$this->out( 'echo do_shortcode( wpautop( $value ) );', 1 );
 		$this->out( 'endforeach;', 0, 0 );
@@ -13,7 +13,7 @@ if ( $is_group === true ) {
 
 	$this->out( '' );
 	$this->out( '// Get Wysiwyg in group' );
-	$this->out( "\$value = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'echo do_shortcode( wpautop( $value ) );' );
 
 	return;

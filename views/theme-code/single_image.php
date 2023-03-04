@@ -4,7 +4,7 @@ if ( $is_group === true ) {
 	if ( isset( $field['clone'] ) ) {
 		$this->out( '' );
 		$this->out( '// Get Image in group' );
-		$this->out( "\$image_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$image_ids = \$group[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( 'foreach ( $image_ids as $image_id ) :' );
 		$this->out( "\$image = RWMB_Image_Field::file_info( \$image_id, ['size' => 'thumbnail'] );" );
 		$this->out( "echo '<img src=\"' . \$image['url'] . '\">';" );
@@ -13,7 +13,7 @@ if ( $is_group === true ) {
 	}
 
 	// Displaying uploaded image:
-	$this->out( "\$image = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$image = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( '<h3>Logo</h3>' );
 	$this->out( '<img src="<?= $image[\'url\']; ?>">', 0, 3 );

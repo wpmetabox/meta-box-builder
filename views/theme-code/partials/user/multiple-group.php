@@ -1,6 +1,6 @@
 <?php
 // Displaying multiple selected users:
-$this->out( "\$user_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';");
+$this->out( "\$user_ids = \$group[ '" . $field['id'] . "' ] ?? '';");
 $this->out( '?>' );
 $this->out( '<h3>Speakers</h3>' );
 $this->out( '<ul>' );

@@ -9,7 +9,7 @@ if ( $is_group === true ) {
 	}
 
 	$this->out( '// Get Oembed in group' );
-	$this->out( "\$values = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'foreach ( $values as $value ) :' );
 	$this->out( '<p><?= $value ?></p>' );
 	$this->out( 'endforeach;' );

@@ -3,9 +3,9 @@ if ( $is_group === true ) {
 	// Displaying in group
 	if ( ! empty( $field['clone'] ) ) {
 		// Displaying cloneable values:
-		$this->out( "\$dates = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$dates = \$group[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( '?>' );
-		$this->out( '<ul>' );		
+		$this->out( '<ul>' );
 			$this->out( '<?php foreach ( $dates as $date ) : ?>', 1 );
 
 				$value = empty( $field ['timestamp'] ) ? '$date' : 'date( \'F j, Y\', $value )';

@@ -1,6 +1,6 @@
 <?php
 // Displaying cloneable values:
-$this->out( "\$clones = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
+$this->out( "\$clones = \$group[ '" . $field['id'] . "' ] ?? '';" );
 $this->out( '?>' );
 
 $this->out( '<ul>' );
