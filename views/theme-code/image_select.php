@@ -12,7 +12,7 @@ if ( $is_group === true ) {
 	return;
 }
 
-if ( isset( $field['clone'] ) ) {
+if ( ! empty( $field['clone'] ) ) {
 	// Displaying cloneable values:
 	$this->out( "<?php \$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>' );
 	$this->out( '<ul>' );
