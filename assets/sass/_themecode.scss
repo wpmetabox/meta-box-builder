@@ -29,6 +29,11 @@
 		border-right: var(--border-lighter);
 	}
 
+	&__fields {
+		position: sticky;
+		top: 48px;
+	}
+
 	&__field {
 		font-weight: 700;
 		color: var(--wp-admin-theme-color);
@@ -44,5 +49,10 @@
 
 	&__body {
 		padding: 12px;
+
+		.og-result__body {
+			position: sticky;
+			top: 48px;
+		}
 	}
 }

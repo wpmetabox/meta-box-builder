@@ -37,19 +37,21 @@ const Codes = ( props ) => {
 						? <p className="og-theme-code__none">{ __( 'No fields available.', 'meta-box-builder' ) }</p>
 						: <>
 							<div className="og-theme-code__header">
-								{
-									themeCode.map( ( field, index ) => (
-										<span
-											key={ `header_${ field._id }` }
-											onClick={ () => setTab( index ) }
-											id={ `og-theme-code__field--${ field._id }` }
-											item_id={ field._id }
-											className={ `og-theme-code__field ${ tab === index ? 'og-theme-code__field--active' : '' }` }
-										>
-											{ field.name }
-										</span>
-									) )
-								}
+								<div className="og-theme-code__fields">
+									{
+										themeCode.map( ( field, index ) => (
+											<span
+												key={ `header_${ field._id }` }
+												onClick={ () => setTab( index ) }
+												id={ `og-theme-code__field--${ field._id }` }
+												item_id={ field._id }
+												className={ `og-theme-code__field ${ tab === index ? 'og-theme-code__field--active' : '' }` }
+											>
+												{ field.name }
+											</span>
+										) )
+									}
+								</div>
 							</div>
 
 							<div className="og-theme-code__body og-result">
