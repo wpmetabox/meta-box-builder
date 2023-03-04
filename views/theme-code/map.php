@@ -8,16 +8,11 @@ if ( $is_group === true ) {
 			'mapTypeId'   => 'HYBRID',
 			'zoomControl' => false,
 		],
-		'api_key'    => 'your-API-key',
+		'api_key'    => $field['api_key'] ?? 'your-google-maps-api-key',
 	]);
-
-	$this->out( '' );
-	$this->out( '// Get Map in group' );
-	$this->out( "\$maps = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '$args = ' . $args . ';' );
-	$this->out( 'foreach ( $maps as $map ) :' );
+	$this->out( "\$map = \$group[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( 'echo RWMB_Map_Field::render_map( $map, $args );' );
-	$this->out( 'endforeach;' );
 
 	return;
 }

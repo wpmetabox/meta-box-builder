@@ -1,6 +1,5 @@
 <?php
 if ( $is_group === true ) {
-	// Displaying in group
 	$args = $this->format_args([
 		'width'      => '100%',
 		'height'     => '480px',
@@ -10,13 +9,9 @@ if ( $is_group === true ) {
 		],
 	]);
 
-	$this->out( '' );
-	$this->out( '// Get Osm in group' );
-	$this->out( "\$maps = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '$args = ' . $args . ';' );
-	$this->out( 'foreach ( $maps as $map ) :' );
+	$this->out( "\$map = \$group[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( 'echo RWMB_OSM_Field::render_map( $map, $args );' );
-	$this->out( 'endforeach;' );
 
 	return;
 }
