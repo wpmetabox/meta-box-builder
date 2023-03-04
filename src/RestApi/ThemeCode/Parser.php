@@ -10,7 +10,7 @@ class Parser extends Base {
 	public function parse() {
 		$object_type      = $this->settings['object_type'];
 		$map              = [
-			'setting' => "'" . $this->get_settings_page_option_name( Arr::get( $this->settings, 'settings_pages.0' ) ) . "'",
+			'setting' => "'" . $this->get_settings_page_option_name( Arr::get( $this->settings, 'settings_pages.0', '' ) ) . "'",
 			'term'    => 'get_queried_object_id()',
 			'comment' => '$comment_id',
 			'user'    => 'get_current_user_id()',
