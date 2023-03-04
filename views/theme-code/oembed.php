@@ -8,6 +8,7 @@ if ( $is_group === true ) {
 				$this->out( '<li><?= RWMB_OEmbed_Field::get_embed( $url ); ?></li>', 2 );
 			$this->out( '<?php endforeach; ?>', 1 );
 		$this->out( '</ul>' );
+		$this->out( '<?php' );
 
 		return;
 	}

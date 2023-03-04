@@ -1,9 +1,7 @@
 <?php
 if ( $is_group === true ) {
-	// Displaying in group
 	if ( isset( $field['clone'] ) ) {
-		// Displaying cloneable values:
-		$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( '?>' );
 		$this->out( '<ul>' );
 			$this->out( '<?php foreach ( $values as $value ) : ?>', 1 );
@@ -12,17 +10,16 @@ if ( $is_group === true ) {
 					$this->out( '<span>Email: <?= $value[1] ?></span>', 3 );
 				$this->out( '</li>', 2 );
 			$this->out( '<?php endforeach ?>', 1 );
-		$this->out( '</ul>', 0, 0 );
+		$this->out( '</ul>' );
 		$this->out( '<?php' );
 
 		return;
 	}
 
-	$this->out( '// Displaying field inputs\' values:' );
-	$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( '?>' );
 	$this->out( '<p>Name: <?= $value[0] ?></p>' );
-	$this->out( '<p>Email: <?= $value[1] ?></p>', 0, 3 );
+	$this->out( '<p>Email: <?= $value[1] ?></p>' );
 	$this->out( '<?php' );
 	return;
 }

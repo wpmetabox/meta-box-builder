@@ -1,12 +1,10 @@
 <?php
 if ( $is_group === true ) {
-	// Displaying in group
 	if ( isset( $field['clone'] ) ) {
-		// Displaying cloneable values:
-		$this->out( "<?php \$values = \$group[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "<?php \$values = \$group[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( '<?php foreach ( $values as $value ) : ?>' );
-			$this->out( '<p><?= $value ?></p>', 1 );
-		$this->out( '<?php endforeach ?>', 0, 0 );
+			$this->out( '<div class="my-content"><?= $value ?></div>', 1 );
+		$this->out( '<?php endforeach ?>' );
 
 		return;
 	}
