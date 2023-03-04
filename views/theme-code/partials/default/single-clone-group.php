@@ -1,4 +1,8 @@
 <?php
-$this->out( 'foreach ( $group[ \'' . $field['id'] . '\' ] as $value ) {' );
-	$this->out( 'echo $value;', 1 );
-$this->out( '}', 0, 1 );
+$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? [];" );
+$this->out( '?>' );
+$this->out( '<ul>' );
+	$this->out( '<?php foreach ( $values as $value ) : ?>', 1 );
+		$this->out( '<li><?= $value; ?></li>', 2 );
+$this->out( '<?php endforeach; ?>', 1 );
+$this->out( '</ul>' );

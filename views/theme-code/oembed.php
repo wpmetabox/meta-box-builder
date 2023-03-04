@@ -1,23 +1,27 @@
 <?php
 if ( $is_group === true ) {
-	// Displaying in group
-	$this->out( '' );
+	if ( ! empty( $field['clone'] ) ) {
+		$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? [];" );
+		$this->out( '?>' );
+		$this->out( '<ul>' );
+			$this->out( '<?php foreach ( $values as $url ) : ?>', 1 );
+				$this->out( '<li><?= RWMB_OEmbed_Field::get_embed( $url ); ?></li>', 2 );
+			$this->out( '<?php endforeach; ?>', 1 );
+		$this->out( '</ul>' );
 
-	if ( isset( $field['clone'] ) ) {
-		require __DIR__ . '/partials/default/single-clone-group.php';
 		return;
 	}
 
-	$this->out( '// Get Oembed in group' );
-	$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? '';" );
-	$this->out( 'foreach ( $values as $value ) :' );
-	$this->out( '<p><?= $value ?></p>' );
-	$this->out( 'endforeach;' );
+	$this->out( "\$url = \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( '?>' );
+	$this->out( '<h3>Youtube video</h3>' );
+	$this->out( '<?= RWMB_OEmbed_Field::get_embed( $url ); ?>' );
+	$this->out( '<?php' );
 
 	return;
 }
 
-if ( isset( $field['clone'] ) ) {
+if ( ! empty( $field['clone'] ) ) {
 	require __DIR__ . '/partials/default/single-clone.php';
 	return;
 }
