@@ -1,7 +1,8 @@
 <?php
 if ( $is_group === true ) {
-	$file = empty( $field['clone'] ) ? 'single-group' : 'single-clone-group';
-	require __DIR__ . "/partials/default/$file.php";
+	$this->out( "\$background = \$group[ '" . $field['id'] . "' ] ?? [];" );
+	$this->out( "echo \$background['color'];" );
+	$this->out( "echo \$background['image'];" );
 	return;
 }
 

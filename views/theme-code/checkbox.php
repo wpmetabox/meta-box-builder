@@ -2,8 +2,8 @@
 if ( $is_group === true ) {
 	// Displaying in group
 	if ( ! empty( $field['clone'] ) ) {
-		$this->out( "\$checkboxs = \$group[ '" . $field['id'] . "' ] ?? '';" );
-		$this->out( 'foreach ( $checkboxs as $checkbox ) {' );
+		$this->out( "\$checkboxes = \$group[ '" . $field['id'] . "' ] ?? [];" );
+		$this->out( 'foreach ( $checkboxes as $checkbox ) {' );
 			$this->out( 'if ( $checkbox ) {', 1 );
 				$this->out( 'echo \'Checked\';', 2 );
 			$this->out( '} else {', 1 );
@@ -14,8 +14,7 @@ if ( $is_group === true ) {
 		return;
 	}
 
-	$this->out( '// Conditional check:' );
-	$this->out( "\$checkbox = \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$checkbox = \$group[ '" . $field['id'] . "' ] ?? 0;" );
 	$this->out( 'if ( $checkbox ) {' );
 		$this->out( 'echo \'Checked\';', 1 );
 	$this->out( '} else {' );
