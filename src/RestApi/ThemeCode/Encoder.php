@@ -86,27 +86,20 @@ class Encoder {
 		return $field_id . "'" . $arg_encode . $this->get_encoded_object_id();
 	}
 
-	private function indent( int $size = 1, bool $output = false ) {
-		$output = $size ? str_repeat( "\t", $size ) : '';
-		if ( $output === false ) {
-			return esc_html( $output );
-		}
-		echo esc_html( $output );
+	private function indent( int $size = 1 ): string {
+		return str_repeat( "\t", $size );
 	}
 
-	private function break( int $size = 1, bool $output = true ) {
-		$output = $size ? str_repeat( "\n", $size + $this->size_indent ) : '';
-		if ( $output === false ) {
-			return esc_html( $output );
+	private function break( int $size = 1, bool $output = true ): string {
+		$html = str_repeat( "\n", $size + $this->size_indent );
+		if ( $output ) {
+			echo esc_html( $html );
 		}
-		echo esc_html( $output );
+		return $html;
 	}
 
-	private function out( string $str, int $indent = 0, int $empty_lines = 1, bool $output = true ) {
+	private function out( string $str, int $indent = 0, int $empty_lines = 1 ) {
 		$output = $this->indent( $indent ) . $str . $this->break( $empty_lines, false );
-		if ( $output === false ) {
-			return esc_html( $output );
-		}
 		echo esc_html( $output );
 	}
 
