@@ -11,7 +11,7 @@ if ( $is_group === true ) {
 		return;
 	}
 
-	$this->break();
+	$this->out( '' );
 	$this->out( '// Get Wysiwyg in group' );
 	$this->out( "\$value = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'echo do_shortcode( wpautop( $value ) );' );

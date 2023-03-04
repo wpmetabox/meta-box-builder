@@ -1,6 +1,6 @@
 <?php
 // Displaying in group
-$this->break();
+$this->out( '' );
 $this->out( '// Get User in group' );
 $this->out( "\$user_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 $this->out( 'foreach ( $user_ids as $user_id ) :' );

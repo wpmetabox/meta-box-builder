@@ -1,5 +1,5 @@
 <?php
-$this->break();
+$this->out( '' );
 $this->out( '// Get Taxonomy in group' );
 $this->out( "\$terms = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 $this->out( 'foreach ( $terms as $term ) :' );

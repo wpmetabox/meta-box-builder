@@ -11,7 +11,7 @@ if ( $is_group === true ) {
 		'api_key'    => 'your-API-key',
 	]);
 
-	$this->break();
+	$this->out( '' );
 	$this->out( '// Get Map in group' );
 	$this->out( "\$maps = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '$args = ' . $args . ';' );

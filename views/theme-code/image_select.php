@@ -1,7 +1,7 @@
 <?php
 if ( $is_group === true ) {
 	// Displaying in group
-	$this->break();
+	$this->out( '' );
 	$this->out('// Get Image in group');
 	$this->out( "\$image_ids = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'foreach ( $image_ids as $image_id ) :' );

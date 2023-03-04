@@ -10,7 +10,7 @@ if ( $is_group === true ) {
 		],
 	]);
 
-	$this->break();
+	$this->out( '' );
 	$this->out( '// Get Osm in group' );
 	$this->out( "\$maps = \$group_value[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '$args = ' . $args . ';' );

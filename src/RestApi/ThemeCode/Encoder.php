@@ -90,16 +90,12 @@ class Encoder {
 		return str_repeat( "\t", $size );
 	}
 
-	private function break( int $size = 1, bool $output = true ): string {
-		$html = str_repeat( "\n", $size + $this->size_indent );
-		if ( $output ) {
-			echo esc_html( $html );
-		}
-		return $html;
+	private function break( int $size = 1 ): string {
+		return str_repeat( "\n", $size + $this->size_indent );
 	}
 
 	private function out( string $str, int $indent = 0, int $empty_lines = 1 ) {
-		$output = $this->indent( $indent ) . $str . $this->break( $empty_lines, false );
+		$output = $this->indent( $indent ) . $str . $this->break( $empty_lines );
 		echo esc_html( $output );
 	}
 
