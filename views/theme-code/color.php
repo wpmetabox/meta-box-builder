@@ -14,7 +14,6 @@ if ( $is_group === true ) {
 	}
 
 	// Displaying in group
-	$this->out( '// Getting the value:' );
 	$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( '<div style="background-color: <?= $value ?>">' );

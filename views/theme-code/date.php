@@ -1,9 +1,7 @@
 <?php
 if ( $is_group === true ) {
-	// Displaying in group
 	if ( ! empty( $field['clone'] ) ) {
-		// Displaying cloneable values:
-		$this->out( "\$dates = \$group[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$dates = \$group[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( '?>' );
 		$this->out( '<ul>' );
 			$this->out( '<?php foreach ( $dates as $date ) : ?>', 1 );
@@ -12,8 +10,17 @@ if ( $is_group === true ) {
 				$this->out( '<li><?= ' . $value . ' ?></li>', 2 );
 
 			$this->out( '<?php endforeach ?>', 1 );
-		$this->out( '</ul>', 0, 1 );
+		$this->out( '</ul>' );
 		$this->out( '<?php' );
+		return;
+	}
+
+	if ( ! empty( $field ['timestamp'] ) ) {
+		$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( '?>' );
+		$this->out( '<p>Event date: <?= date( \'F j, Y\', $value ) ?></p>', 0, 0 );
+		$this->out( '<?php' );
+
 		return;
 	}
 
