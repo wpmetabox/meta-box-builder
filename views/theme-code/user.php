@@ -1,11 +1,6 @@
 <?php
-
-if ( empty( $field['clone'] ) ) {
-	$file = empty( $field['multiple'] ) ? 'single' : 'multiple';
-} else {
-	$file = empty( $field['multiple'] ) ? 'single-clone' : 'multiple-clone';
-}
-
-$file = $is_group === true ? $file . '-group' : $file;
+$file  = empty( $field['multiple'] ) ? 'single' : 'multiple';
+$file .= empty( $field['clone'] ) ? '' : '-clone';
+$file .= $is_group === true ? '-group' : '';
 
 require __DIR__ . "/partials/user/$file.php";
