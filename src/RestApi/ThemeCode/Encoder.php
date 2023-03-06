@@ -40,7 +40,7 @@ class Encoder {
 		}
 	}
 
-	private function get_theme_code( $field, bool $is_group = false ): string {
+	private function get_theme_code( $field, bool $in_group = false ): string {
 		$view_file = $this->get_view_file( $field['type'] );
 
 		ob_start();

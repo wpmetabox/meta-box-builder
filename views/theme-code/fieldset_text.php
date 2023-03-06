@@ -1,5 +1,5 @@
 <?php
-if ( $is_group === true ) {
+if ( $in_group ) {
 	// Displaying in group
 	if ( ! empty( $field['clone'] ) ) {
 		$this->out( '// Displaying field inputs\' values:' );

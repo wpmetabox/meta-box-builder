@@ -1,5 +1,5 @@
 <?php
-if ( $is_group === true ) {
+if ( $in_group ) {
 	if ( isset( $field['clone'] ) ) {
 		$this->out( "<?php \$values = \$group[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( '<?php foreach ( $values as $value ) : ?>' );

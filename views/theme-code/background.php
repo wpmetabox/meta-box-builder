@@ -1,5 +1,5 @@
 <?php
-if ( $is_group === true ) {
+if ( $in_group ) {
 	$this->out( "\$background = \$group[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( "echo \$background['color'];" );
 	$this->out( "echo \$background['image'];" );

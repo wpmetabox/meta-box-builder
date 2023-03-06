@@ -1,5 +1,5 @@
 <?php
-if ( $is_group === true ) {
+if ( $in_group ) {
 	if ( isset( $field['clone'] ) ) {
 		$this->out( "\$sidebar_ids = \$group[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( 'foreach ( $sidebar_ids as $sidebar_id ) {' );

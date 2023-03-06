@@ -1,5 +1,5 @@
 <?php
-if ( $is_group === true ) {
+if ( $in_group ) {
 	// Displaying in group
 	$this->out( "echo \$group[ '" . $field['id'] . "' ] ?? '';" );
 	if ( isset( $field['clone'] ) ) {

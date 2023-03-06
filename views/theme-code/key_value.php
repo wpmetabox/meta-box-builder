@@ -1,5 +1,5 @@
 <?php
-if ( $is_group === true ) {
+if ( $in_group ) {
 	$this->out( "\$pairs = \$group[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( '?>' );
 	$this->out( '<h3>Specification</h3>' );

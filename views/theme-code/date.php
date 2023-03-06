@@ -1,5 +1,5 @@
 <?php
-if ( $is_group === true ) {
+if ( $in_group ) {
 	if ( ! empty( $field['clone'] ) ) {
 		$this->out( "\$dates = \$group[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( '?>' );
