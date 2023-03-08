@@ -40,7 +40,11 @@ class Encoder {
 		}
 	}
 
-	private function get_theme_code( $field, bool $in_group = false ): string {
+	private function get_theme_code( array $field, bool $in_group = false ): string {
+		if ( in_array( $field['type'], [ 'button', 'custom_html', 'divider', 'heading', 'tab' ], true ) ) {
+			return '';
+		}
+
 		$view_file = $this->get_view_file( $field['type'] );
 
 		ob_start();
@@ -49,13 +53,7 @@ class Encoder {
 	}
 
 	private function get_view_file( string $field_type ): string {
-		if ( in_array( $field_type, [ 'button', 'custom_html', 'divider', 'heading', 'tab' ], true ) ) {
-			return '';
-		}
-		if ( file_exists( $this->views_dir . '/' . $field_type . '.php' ) ) {
-			return $this->views_dir . '/' . $field_type . '.php';
-		}
-		return $this->views_dir . '/default.php';
+		return file_exists( "{$this->views_dir}/{$field_type}.php" ) ? "{$this->views_dir}/{$field_type}.php" : "{$this->views_dir}/default.php";
 	}
 
 	private function get_encoded_args( array $args = [] ): string {

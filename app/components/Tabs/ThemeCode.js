@@ -19,7 +19,7 @@ const Codes = ( props ) => {
 
 	// Generate Code
 	const themeCode = useApi( [ 'theme-code-generate', {
-		fields: Object.values( fields ),
+		fields: Object.values( fields ).filter( field => ! [ 'button', 'custom_html', 'divider', 'heading', 'tab' ].includes( field.type ) ),
 		settings: props.settings
 	}, 'POST' ] );
 
