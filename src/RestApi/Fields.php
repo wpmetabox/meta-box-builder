@@ -119,7 +119,7 @@ class Fields extends Base {
 			'divider'           => [
 				'title'       => __( 'Divider', 'meta-box-builder' ),
 				'category'    => 'layout',
-				'controls'    => [ 'name', 'type', 'before', 'after' ],
+				'controls'    => [ 'type', 'before', 'after' ],
 				'description' => __( 'Simple horizontal line', 'meta-box-builder' ),
 			],
 			'email'             => [

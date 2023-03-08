@@ -39,17 +39,22 @@ const Codes = ( props ) => {
 							<div className="og-theme-code__header">
 								<div className="og-theme-code__fields">
 									{
-										themeCode.map( ( field, index ) => (
-											<span
-												key={ `header_${ field._id }` }
-												onClick={ () => setTab( index ) }
-												id={ `og-theme-code__field--${ field._id }` }
-												item_id={ field._id }
-												className={ `og-theme-code__field ${ tab === index ? 'og-theme-code__field--active' : '' }` }
-											>
-												{ field.name }
-											</span>
-										) )
+										themeCode.map( ( field, index ) => {
+											
+											if ( field.theme_code === '' ) return;
+
+											return (
+												<span
+													key={ `header_${ field._id }` }
+													onClick={ () => setTab( index ) }
+													id={ `og-theme-code__field--${ field._id }` }
+													item_id={ field._id }
+													className={ `og-theme-code__field ${ tab === index ? 'og-theme-code__field--active' : '' }` }
+												>
+													{ field.name }
+												</span>
+											);
+										} )
 									}
 								</div>
 							</div>
