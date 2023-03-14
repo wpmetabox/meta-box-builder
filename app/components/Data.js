@@ -2,11 +2,11 @@ import useFieldIds from '../hooks/useFieldIds';
 
 export const Data = ( { id = "field-ids", children } ) => {
 	const ids = useFieldIds( state => state.ids );
-
+	const fields = Array.from( new Set( Object.values( ids ) ) );
 	return (
 		<datalist id={ id }>
 			{ children }
-			{ Object.entries( ids ).map( ( [ id, fieldId ] ) => <option key={ id } value={ fieldId } /> ) }
+			{ fields.map( ( fieldId, id ) => <option key={ id } value={ fieldId } /> ) }
 		</datalist>
 	);
 };
