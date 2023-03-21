@@ -86,7 +86,7 @@ const Block = () => {
 			label={ __( 'Category', 'meta-box-builder' ) }
 			componentId="settings-block-category"
 			options={ MbbApp.blockCategories }
-			defaultValue={ settings.category, 'layout' }
+			defaultValue={ settings.category }
 		/>
 		<Input
 			name="settings[keywords]"
