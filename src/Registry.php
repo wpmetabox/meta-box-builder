@@ -175,7 +175,7 @@ class Registry {
 			], 'select_advanced' ),
 			Control::Checkbox( 'add_new', [
 				'label'   => __( 'Add new', 'meta-box-builder' ),
-				'tooltip' => __( 'Allow users to create a new term when submitting the post', 'meta-box-builder' ),
+				'tooltip' => __( 'Allow users to create a new item', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
 			Control::Checkbox( 'multiple', [
