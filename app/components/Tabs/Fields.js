@@ -14,47 +14,47 @@ const Fields = prop => {
 		duplicate,
 		updateType,
 		setFields,
-	} = useFields(prop.fields, 'fields');
+	} = useFields( prop.fields, 'fields' );
 
 	// Don't render any field if fields data is not available.
-	const types = useApi('field-types', {});
-	const categories = useApi('field-categories', []);
+	const types = useApi( 'field-types', {} );
+	const categories = useApi( 'field-categories', [] );
 
-	if (Object.keys(types).length === 0 || Object.keys(categories).length === 0) {
-		return <p className="og-none">{__('Loading fields, please wait...', 'meta-box-builder')}</p>;
+	if ( Object.keys( types ).length === 0 || Object.keys( categories ).length === 0 ) {
+		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
 	return (
 		<>
 			{
 				fields.length === 0 &&
-				<RawHTML className="og-none">{__('There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder')}</RawHTML>
+				<RawHTML className="og-none">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
 			}
-			<ReactSortable group={{
+			<ReactSortable group={ {
 				name: 'root',
 				pull: true,
 				put: true,
-			}} 
-			animation={200}
-			delayOnTouchStart={true}
-			delay={2}
-			className="og-fields" 
-			list={fields} 
-			setList={setFields} 
-			handle=".og-item__header"
+			} }
+				animation={ 200 }
+				delayOnTouchStart={ true }
+				delay={ 2 }
+				className="og-fields"
+				list={ fields }
+				setList={ setFields }
+				handle=".og-item__header"
 			>
 				{
-					fields.map(field => <Node
-						key={field._id}
-						id={field._id}
-						field={field}
-						removeField={remove}
-						duplicateField={duplicate}
-						updateFieldType={updateType}
-					/>)
+					fields.map( field => <Node
+						key={ field._id }
+						id={ field._id }
+						field={ field }
+						removeField={ remove }
+						duplicateField={ duplicate }
+						updateFieldType={ updateType }
+					/> )
 				}
 			</ReactSortable>
-			<Inserter addField={add} />
+			<Inserter addField={ add } />
 		</>
 	);
 };
