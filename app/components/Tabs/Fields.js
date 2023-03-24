@@ -30,7 +30,19 @@ const Fields = prop => {
 				fields.length === 0 &&
 				<RawHTML className="og-none">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
 			}
-			<ReactSortable className="og-fields" list={ fields } setList={ setFields } handle=".og-item__header">
+			<ReactSortable group={ {
+				name: 'root',
+				pull: true,
+				put: true,
+			} }
+				animation={ 200 }
+				delayOnTouchStart={ true }
+				delay={ 2 }
+				className="og-fields"
+				list={ fields }
+				setList={ setFields }
+				handle=".og-item__header"
+			>
 				{
 					fields.map( field => <Node
 						key={ field._id }

@@ -41,7 +41,18 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 			<div className={ `og-group-fields og-field${ fields.length === 0 ? ' og-group-fields--empty' : '' }` }>
 				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 				<div className="og-input">
-					<ReactSortable list={ fields } setList={ setFields } handle=".og-item__header">
+					<ReactSortable group={ {
+						name: 'nested',
+						pull: true,
+						put: [ 'root', 'nested' ],
+					} }
+						animation={ 200 }
+						delayOnTouchStart={ true }
+						delay={ 2 }
+						list={ fields }
+						setList={ setFields }
+						handle=".og-item__header"
+					>
 						{
 							fields.map( ( field, index ) => <Node
 								key={ field._id }
