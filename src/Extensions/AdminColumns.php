@@ -63,6 +63,17 @@ class AdminColumns {
 			'tooltip' => __( 'Allow to filter posts by custom taxonomy, applied only if the field is a taxonomy field', 'meta-box-builder' ),
 			'dependency' => 'admin_columns_enable:true',
 		] );
+		$controls[] = Control::Select( 'admin_columns_link', [
+			'name'    => 'admin_columns[link]',
+			'label'   => __( 'Item link type', 'meta-box-builder' ),
+			'tooltip' => __( 'The link for the items displayed in the admin column', 'meta-box-builder' ),
+			'options' => [
+				'false' => __( 'No link', 'meta-box-builder' ),
+				'view'  => __( 'View', 'meta-box-builder' ),
+				'edit'  => __( 'Edit', 'meta-box-builder' ),
+			],
+			'dependency' => 'admin_columns_enable:true',
+		], 'false' );
 
 		return $controls;
 	}
