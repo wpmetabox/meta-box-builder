@@ -82,7 +82,7 @@ class MetaBox extends Base {
 		$rules    = &$this->validation['rules'];
 		$messages = &$this->validation['messages'];
 
-		$key              = $field['id'];
+		$key              = str_replace( $this->settings_parser->prefix, '', $field['id'] );
 		$rules[ $key ]    = [];
 		$messages[ $key ] = [];
 
