@@ -137,6 +137,10 @@ class RestApi extends Base {
 				'name'    => 'field[placeholder]',
 				'label' => __( 'Placeholder', 'meta-box-builder' )
 			], '', 'field' ),
+			Control::Checkbox( 'add_new', [
+				'name'    => 'field[add_new]',
+				'label' => __( 'Add new', 'meta-box-builder' )
+			], false, 'field' ),			
 			Control::KeyValue( 'field_query_args', [
 				'name'    => 'field[query_args]',
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
