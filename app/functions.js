@@ -18,7 +18,7 @@ export const fetcher = ( api, params = {}, method = 'GET' ) => {
 	if ( method === 'GET' ) {
 		const query = ( new URLSearchParams( params ) ).toString();
 		if ( query ) {
-			url += MbbApp.rest.includes( '?' ) ? query : `?${ query }`;
+			url += MbbApp.rest.includes( '?' ) ? `&${ query }` : `?${ query }`;
 		}
 	} else {
 		options.body = JSON.stringify( params );
