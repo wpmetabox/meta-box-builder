@@ -41,6 +41,16 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 			<div className={ `og-group-fields og-field${ fields.length === 0 ? ' og-group-fields--empty' : '' }` }>
 				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
 				<div className="og-input">
+					{
+						fields.length > 0 && (
+							<div className="og-header">
+								<span className="og-column--label">{ __( 'Label', 'meta-box-builder' ) }</span>
+								<span className="og-column--id">{ __( 'ID', 'meta-box-builder' ) }</span>
+								<span className="og-column--type">{ __( 'Type', 'meta-box-builder' ) }</span>
+								<span className="og-column--actions">{ __( 'Actions', 'meta-box-builder' ) }</span>
+							</div>
+						)
+					}
 					<ReactSortable group={ {
 						name: 'nested',
 						pull: true,
