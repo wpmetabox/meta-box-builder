@@ -263,6 +263,11 @@
 		border: var(--border-lighter);
 	}
 
+	.og-header,
+	.og-item__header {
+		padding-block: 8px;
+	}
+
 	&--empty>.og-input {
 		border: none;
 
