@@ -30,6 +30,12 @@ const Fields = prop => {
 				fields.length === 0 &&
 				<RawHTML className="og-none">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
 			}
+			<div className="og-header">
+				<span className="og-column--label">{ __( 'Label', 'meta-box-builder' ) }</span>
+				<span className="og-column--id">{ __( 'ID', 'meta-box-builder' ) }</span>
+				<span className="og-column--type">{ __( 'Type', 'meta-box-builder' ) }</span>
+				<span className="og-column--actions">{ __( 'Actions', 'meta-box-builder' ) }</span>
+			</div>
 			<ReactSortable group={ {
 				name: 'root',
 				pull: true,

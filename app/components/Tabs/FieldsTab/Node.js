@@ -34,9 +34,10 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	return <Collapsible
 		header={
 			<>
-				<span className="og-item__title" id={ `og-item__title__${ id }` }>{ label }</span>
-				<span className="og-item__actions">
-					<span className="og-item__type">{ field.type }</span>
+				<span className="og-item__title og-column--label" id={ `og-item__title__${ id }` }>{ label }</span>
+				<span className="og-item__id og-column--id">{ field.id }</span>
+				<span className="og-item__type og-column--type">{ field.type }</span>
+				<span className="og-item__actions og-column--actions">
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Dashicon icon="trash" /></span>
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Dashicon icon="admin-page" /></span>
 					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle settings', 'meta-box-builder' ) }><Dashicon icon="arrow-down" /></span>

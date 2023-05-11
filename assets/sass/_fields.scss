@@ -4,6 +4,30 @@
 	border-bottom: var(--border-lighter);
 }
 
+&-header {
+	display: flex;
+	justify-content: space-between;
+	color: #999;
+	border-bottom: var(--border-lighter);
+	padding: 12px;
+	background: #f6f7f7;
+}
+&-column {
+	&--label {
+		width: calc(50% - 120px);
+	}
+	&--id {
+		width: 25%;
+	}
+	&--type {
+		width: 25%;
+	}
+	&--actions {
+		width: 120px;
+		text-align: right;
+	}
+}
+
 &-field {
 	margin-bottom: 16px;
 	display: flex;
@@ -84,20 +108,20 @@
 
 	&__title {
 		color: var(--wp-admin-theme-color);
-		font-weight: bold;
+		font-weight: 500;
 		line-height: 24px;
-		margin-right: auto;
 	}
 
 	&__actions {
 		font-size: 12px;
 		display: flex;
 		align-items: center;
+		justify-content: flex-end;
+		gap: 8px;
 	}
 
 	&__action {
 		cursor: pointer;
-		margin-left: 8px;
 		color: var(--color-gray);
 		display: flex;
 
