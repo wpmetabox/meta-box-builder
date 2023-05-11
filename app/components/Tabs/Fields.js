@@ -32,6 +32,7 @@ const Fields = prop => {
 		</>
 		: <>
 			<div className="og-header">
+				<span className="og-column--drag">&nbsp;</span>
 				<span className="og-column--label">{ __( 'Label', 'meta-box-builder' ) }</span>
 				<span className="og-column--id">{ __( 'ID', 'meta-box-builder' ) }</span>
 				<span className="og-column--type">{ __( 'Type', 'meta-box-builder' ) }</span>

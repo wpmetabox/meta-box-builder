@@ -1,5 +1,6 @@
 import { render, useEffect } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import { Icon, category, cog } from "@wordpress/icons";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { AdminColumnsData } from './components/AdminColumnsData';
 import { Data } from './components/Data';
@@ -34,8 +35,14 @@ const App = () => {
 		<>
 			<Tabs forceRenderTabPanel={ true }>
 				<TabList className="react-tabs__tab-list og-tabs--main">
-					<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
-					<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
+					<Tab>
+						<Icon icon={ category } />
+						{ __( 'Fields', 'meta-box-builder' ) }
+					</Tab>
+					<Tab>
+						<Icon icon={ cog } />
+						{ __( 'Settings', 'meta-box-builder' ) }
+					</Tab>
 					<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
 				</TabList>
 				<TabPanel>

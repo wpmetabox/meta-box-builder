@@ -1,29 +1,38 @@
 &-none {
 	margin: 0;
-	padding: 16px 12px;
+	padding: 16px 36px;
 	border-bottom: var(--border-lighter);
 }
 
 &-header {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	color: #999;
 	border-bottom: var(--border-lighter);
 	padding: 12px;
 	background: var(--color-lightest);
 }
 &-column {
+	&--drag {
+		cursor: grab;
+		display: flex;
+		padding: 4px;
+		width: 24px;
+		height: 24px;
+		box-sizing: border-box;
+	}
 	&--label {
-		width: calc(50% - 120px);
+		flex: 1;
 	}
 	&--id {
 		width: 25%;
 	}
 	&--type {
-		width: 25%;
+		width: 160px;
 	}
 	&--actions {
-		width: 120px;
+		width: 90px;
 		text-align: right;
 	}
 }
@@ -107,7 +116,6 @@
 
 	&__header {
 		padding: 12px;
-		cursor: move;
 	}
 
 	&__title {
@@ -148,6 +156,11 @@
 		}
 	}
 
+	.og-column--drag {
+		opacity: 0;
+		visibility: hidden;
+	}
+
 	.react-tabs__tab-list {
 		border: none;
 		margin: 0 0 24px;
@@ -177,6 +190,10 @@
 	> .og-item__header {
 		background: var(--color-lightest);
 
+		.og-column--drag {
+			opacity: 1;
+			visibility: visible;
+		}
 		.og-item__action--remove,
 		.og-item__action--duplicate {
 			display: flex;
@@ -234,7 +251,7 @@
 	overflow-y: hidden;
 	max-height: 0;
 	transition: all 0.2s ease;
-	padding: 0 12px;
+	padding-inline: 36px;
 	margin-bottom: 0;
 
 	.og-collapsible--expanded>& {
@@ -244,10 +261,6 @@
 
 	>.og-input {
 		border: var(--border-lighter);
-	}
-
-	.og-item__header {
-		padding: 8px 12px;
 	}
 
 	&--empty>.og-input {
