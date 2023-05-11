@@ -30,14 +30,21 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 		if ( !isFirstEdit.current ) {
 			return;
 		}
+
+		// Update ID field.
 		const idElement = document.getElementById( `fields-${ rest.fieldId }-id` );
-		if ( idElement ) {
-			idElement.value = slugify( e.target.value, {
-				lower: true,
-				replacement: '_',
-				remove: /[*+~.()'"!:@]/g
-			} );
+		if ( !idElement ) {
+			return;
 		}
+		const generatedId = slugify( e.target.value, {
+			lower: true,
+			replacement: '_',
+			remove: /[*+~.()'"!:@]/g
+		} );
+		idElement.value = generatedId;
+
+		// Update item header bar.
+		document.getElementById( `og-item__id__${ rest.fieldId }` ).textContent = generatedId;
 	};
 
 	const updateTitle = value => {

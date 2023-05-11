@@ -17,7 +17,12 @@ const Id = ( { name, componentId, defaultValue, ...rest } ) => {
 		updateFieldId( rest.fieldId, field );
 	}, [ debounceValue ] );
 
-	const onChange = e => setValue( e.target.value );
+	const onChange = e => {
+		setValue( e.target.value );
+
+		// Update item header bar.
+		document.getElementById( `og-item__id__${ rest.fieldId }` ).textContent = e.target.value;
+	};
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
 		<input type="text" id={ componentId } name={ name } defaultValue={ defaultValue } onChange={ onChange } required />

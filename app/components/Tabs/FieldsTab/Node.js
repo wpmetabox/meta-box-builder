@@ -1,6 +1,6 @@
-import { Dashicon } from "@wordpress/components";
 import { memo, useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import { Icon, chevronDown, copy, dragHandle, trash } from "@wordpress/icons";
 import { ucwords } from '../../../functions';
 import Field from './Field';
 import Group from './Group';
@@ -34,12 +34,14 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	return <Collapsible
 		header={
 			<>
-				<span className="og-item__title" id={ `og-item__title__${ id }` }>{ label }</span>
-				<span className="og-item__actions">
-					<span className="og-item__type">{ field.type }</span>
-					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Dashicon icon="trash" /></span>
-					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Dashicon icon="admin-page" /></span>
-					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle settings', 'meta-box-builder' ) }><Dashicon icon="arrow-down" /></span>
+				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
+				<span className="og-item__title og-column--label" id={ `og-item__title__${ id }` }>{ label }</span>
+				<span className="og-column--id" id={ `og-item__id__${ id }` }>{ [ 'custom_html', 'divider', 'heading' ].includes( field.type ) ? __( 'N/A', 'meta-box-builder' ) : field.id }</span>
+				<span className="og-column--type">{ field.type }</span>
+				<span className="og-item__actions og-column--actions">
+					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
+					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
+					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle settings', 'meta-box-builder' ) }><Icon icon={ chevronDown } /></span>
 				</span>
 			</>
 		}
