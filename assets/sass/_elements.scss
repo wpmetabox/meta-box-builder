@@ -159,6 +159,10 @@ svg {
   }
 }
 
+.og-tabs--main .react-tabs__tab {
+  font-weight: 600;
+}
+
 // React codemirror.
 .react-codemirror2 {
   border: var(--border);

@@ -33,7 +33,7 @@ const App = () => {
 	return (
 		<>
 			<Tabs forceRenderTabPanel={ true }>
-				<TabList>
+				<TabList className="react-tabs__tab-list og-tabs--main">
 					<Tab>{ __( 'Fields', 'meta-box-builder' ) }</Tab>
 					<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
 					<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
