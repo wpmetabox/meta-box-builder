@@ -35,7 +35,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 		header={
 			<>
 				<span className="og-item__title og-column--label" id={ `og-item__title__${ id }` }>{ label }</span>
-				<span className="og-item__id og-column--id">{ field.id }</span>
+				<span className="og-item__id og-column--id" id={ `og-item__id__${ id }` }>{ [ 'button', 'custom_html', 'divider', 'heading' ].includes( field.type ) ? __( 'N/A', 'meta-box-builder' ) : field.id }</span>
 				<span className="og-item__type og-column--type">{ field.type }</span>
 				<span className="og-item__actions og-column--actions">
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
