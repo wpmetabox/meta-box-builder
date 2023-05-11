@@ -2,6 +2,7 @@
   --color-gray: #999;
 	--color-light: #ccd0d4;
 	--color-lighter: #f0f0f0;
+	--color-lightest: #f6f7f7;
 	--color-red: #e53e3e;
 	--shadow-md: 0 1px 1px rgba(0, 0, 0, 0.05);
 	--border: 1px solid var(--color-light);
@@ -73,14 +74,6 @@ svg {
     background: #fff;
   }
   &--expanded {
-    > .og-collapsible__header {
-      background: var(--color-lighter);
-
-      .og-item__action--toggle .dashicon {
-        transform: rotate(180deg);
-      }
-    }
-
     > .og-collapsible__body {
       max-height: 999999px;
       padding-top: 12px;
