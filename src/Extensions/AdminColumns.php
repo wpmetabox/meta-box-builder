@@ -50,9 +50,9 @@ class AdminColumns {
 			'label'   => __( 'Sortable', 'meta-box-builder' ),
 			'tooltip' => __( 'Whether to sort the column by field values', 'meta-box-builder' ),
 			'options' => [
-				'true'  => __( 'Yes', 'meta-box-builder' ),
-				'int'   => __( 'Yes (as number)', 'meta-box-builder' ),
-				'false' => __( 'No', 'meta-box-builder' ),
+				'true'    => __( 'Yes', 'meta-box-builder' ),
+				'numeric' => __( 'Yes (as number)', 'meta-box-builder' ),
+				'false'   => __( 'No', 'meta-box-builder' ),
 			],
 			'dependency' => 'admin_columns_enable:true',
 		], 'false' );
