@@ -45,12 +45,17 @@ class AdminColumns {
 			'tooltip' => __( 'Custom HTML outputted after the column content', 'meta-box-builder' ),
 			'dependency' => 'admin_columns_enable:true',
 		] );
-		$controls[] = Control::Checkbox( 'admin_columns_sort', [
-			'name'  => 'admin_columns[sort]',
-			'label' => __( 'Sortable', 'meta-box-builder' ),
+		$controls[] = Control::Select( 'admin_columns_sort', [
+			'name'    => 'admin_columns[sort]',
+			'label'   => __( 'Sortable', 'meta-box-builder' ),
 			'tooltip' => __( 'Whether to sort the column by field values', 'meta-box-builder' ),
+			'options' => [
+				'true'    => __( 'Yes', 'meta-box-builder' ),
+				'numeric' => __( 'Yes (as number)', 'meta-box-builder' ),
+				'false'   => __( 'No', 'meta-box-builder' ),
+			],
 			'dependency' => 'admin_columns_enable:true',
-		] );
+		], 'false' );
 		$controls[] = Control::Checkbox( 'admin_columns_searchable', [
 			'name'  => 'admin_columns[searchable]',
 			'label' => __( 'Searchable', 'meta-box-builder' ),
