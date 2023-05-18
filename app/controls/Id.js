@@ -21,7 +21,7 @@ const Id = ( { name, componentId, defaultValue, ...rest } ) => {
 		setValue( e.target.value );
 
 		// Update item header bar.
-		document.getElementById( `og-item__id__${ rest.fieldId }` ).textContent = e.target.value;
+		e.target.closest( '.og-item' ).querySelector( '.og-column--id' ).textContent = e.target.value;
 	};
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
