@@ -88,6 +88,11 @@ class Registry {
 				'tooltip'    => __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
+			Control::Input( 'min_clone', [
+				'type'       => 'number',
+				'label'      => __( 'Min number of clones', 'meta-box-builder' ),
+				'dependency' => 'clone:true',
+			] ),
 			Control::Input( 'max_clone', [
 				'type'       => 'number',
 				'label'      => __( 'Max number of clones', 'meta-box-builder' ),
