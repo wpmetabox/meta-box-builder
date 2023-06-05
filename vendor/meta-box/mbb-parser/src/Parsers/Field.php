@@ -168,7 +168,7 @@ class Field extends Base {
 		if ( $this->clone ) {
 			return $this;
 		}
-		$keys = [ 'sort_clone', 'clone_default', 'clone_as_multiple', 'max_clone', 'add_button' ];
+		$keys = [ 'sort_clone', 'clone_default', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ];
 		foreach ( $keys as $key ) {
 			unset( $this->$key );
 		}
