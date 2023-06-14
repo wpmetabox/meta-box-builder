@@ -11,6 +11,10 @@ const Field = props => {
 	const ignore = [ 'datetime-local', 'month', 'tel', 'week' ];
 	const type = ignore.includes( props.field.type ) ? 'text' : props.field.type;
 
+	if ( !type || !fieldTypes.hasOwnProperty( type ) ) {
+		return '';
+	}
+
 	const controls = [ ...fieldTypes[ type ].controls ];
 	const general = controls.filter( control => control.tab === 'general' );
 	const advanced = controls.filter( control => control.tab === 'advanced' );

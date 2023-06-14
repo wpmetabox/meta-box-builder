@@ -41,6 +41,10 @@ class Encoder {
 	}
 
 	private function get_theme_code( array $field, bool $in_group = false ): string {
+		if ( empty( $field['type'] ) ) {
+			return '';
+		}
+
 		$view_file = $this->get_view_file( $field['type'] );
 
 		ob_start();

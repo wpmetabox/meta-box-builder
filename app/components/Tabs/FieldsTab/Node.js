@@ -31,7 +31,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 
 	let label = [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : field.name || field.group_title || __( '(No label)', 'meta-box-builder' );
 
-	return <Collapsible
+	return field.type && <Collapsible
 		header={
 			<>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
