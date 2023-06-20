@@ -5,7 +5,10 @@ const Checkbox = ( { name, componentId, label, className, defaultValue, ...rest 
 	const toggle = useToggle( componentId );
 
 	return <DivRow label={ label } className={ className } htmlFor={ componentId } { ...rest }>
-		<input type="checkbox" id={ componentId } name={ name } onChange={ toggle } defaultChecked={ defaultValue } value={ true } />
+		<label className="og-toggle">
+			<input type="checkbox" id={ componentId } name={ name } onChange={ toggle } defaultChecked={ defaultValue } value={ true } />
+			<div className="og-toggle__switch"></div>
+		</label>
 	</DivRow>;
 };
 export default Checkbox;

@@ -7,8 +7,35 @@
 	--shadow-md: 0 1px 1px rgba(0, 0, 0, 0.05);
 	--border: 1px solid var(--color-light);
 	--border-lighter: 1px solid var(--color-lighter);
+  --color-primary: #007cba;
 
 	margin-top: 24px;
+}
+
+// Admin color schemes.
+.admin-color-blue {
+	--color-primary: #e1a948;
+}
+.admin-color-coffee {
+	--color-primary: #c7a589;
+}
+.admin-color-ectoplasm {
+	--color-primary: #a3b745;
+}
+.admin-color-light {
+	--color-primary: #04a4cc;
+}
+.admin-color-midnight {
+	--color-primary: #e14d43;
+}
+.admin-color-modern {
+	--color-primary: #3858e9;
+}
+.admin-color-ocean {
+	--color-primary: #9ebaa0;
+}
+.admin-color-sunrise {
+	--color-primary: #dd823b;
 }
 
 h3 {
