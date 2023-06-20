@@ -19,7 +19,7 @@ export const useToggle = name => {
 	const classList = wrapper ? wrapper.classList : '';
 
 	useEffect( () => {
-		const h = () => el && toggleDependants( el );
+		const h = () => el && toggleDependents( el );
 		setHandle( () => h );
 
 		// Kick-off the first time.
@@ -31,35 +31,32 @@ export const useToggle = name => {
 
 const getElement = nameOrElement => typeof nameOrElement === 'string' ? document.getElementById( nameOrElement ) : nameOrElement;
 
-const toggleDependants = el => {
+const toggleDependents = el => {
 	const inputValue = el.type === 'checkbox' ? el.checked : el.value;
 	const wrapper = el.closest( '.og-field' );
 
-	getDependants( el ).forEach( dependant => {
-		const dep = dependant.className.match( /dep:([^:]+):([^:\s]+)/ );
+	getDependents( el ).forEach( dependent => {
+		const dep = dependent.className.match( /dep:([^:]+):([^:\s]+)/ );
 		const depValue = normalizeBool( dep[ 2 ] );
 
-		// If current element is hidden, always hide the dependant.
+		// If current element is hidden, always hide the dependent.
 		let isHidden = wrapper.classList.contains( 'og-is-hidden' ) || depValue !== inputValue;
 
 		if ( isHidden ) {
-			dependant.classList.add( 'og-is-hidden' );
+			dependent.classList.add( 'og-is-hidden' );
 		} else {
-			dependant.classList.remove( 'og-is-hidden' );
+			dependent.classList.remove( 'og-is-hidden' );
 		}
 
-		// Toggle sub-dependants.
-		dependant.querySelectorAll( '.og-input > input, .og-input > select' ).forEach( toggleDependants );
+		// Toggle sub-dependents.
+		dependent.querySelectorAll( '.og-input > input, .og-input > select' ).forEach( toggleDependents );
 	} );
 };
 
-const getDependants = el => {
-	let scope = el.closest( '.og-item' );
-	scope = scope || el.closest( '.react-tabs__tab-panel' );
-	scope = scope || el.closest( '.og' );
-
+const getDependents = el => {
+	const scope = el.closest( '.og-item' ) || el.closest( '.react-tabs__tab-panel' ) || el.closest( '.og' );
 	const shortName = getShortName( el.id );
-	return [ ...scope.querySelectorAll( `[class*="dep:${ shortName }:"]` ) ];
+	return scope ? [ ...scope.querySelectorAll( `[class*="dep:${ shortName }:"]` ) ] : [];
 };
 
 const getShortName = name => {
