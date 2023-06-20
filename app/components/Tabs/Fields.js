@@ -14,7 +14,7 @@ const Fields = prop => {
 		duplicate,
 		updateType,
 		setFields,
-	} = useFields( prop.fields, 'fields' );
+	} = useFields( prop.fields.filter( field => field.type ), 'fields' );
 
 	// Don't render any field if fields data is not available.
 	const types = useApi( 'field-types', {} );

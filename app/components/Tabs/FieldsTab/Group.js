@@ -17,7 +17,7 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 		updateType,
 		setFields,
 	} = useFields(
-		Object.values( field.fields || {} ),
+		Object.values( field.fields || {} ).filter( field => field.type ),
 		`fields${ parent }[${ id }][fields]`
 	);
 
