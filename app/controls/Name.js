@@ -44,7 +44,7 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 		idElement.value = generatedId;
 
 		// Update item header bar.
-		document.getElementById( `og-item__id__${ rest.fieldId }` ).textContent = generatedId;
+		e.target.closest( '.og-item' ).querySelector( '.og-column--id' ).textContent = generatedId;
 	};
 
 	const updateTitle = value => {
