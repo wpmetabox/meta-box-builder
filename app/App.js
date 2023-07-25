@@ -59,7 +59,7 @@ const App = () => {
 			<AdminColumnsData />
 			<br />
 			{
-				MbbApp.fields.length > 0 &&
+				MbbApp.fields.length > 0 && settings.object_type !== 'block' &&
 				<div className="postbox og-theme-code">
 					<div className="postbox-header">
 						<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
