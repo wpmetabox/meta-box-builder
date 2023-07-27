@@ -259,7 +259,7 @@
 		padding-bottom: 12px;
 	}
 
-	>.og-input {
+	&__inner {
 		border: var(--border-lighter);
 	}
 
@@ -268,7 +268,7 @@
 		padding-block: 8px;
 	}
 
-	&--empty>.og-input {
+	&--empty> &__inner {
 		border: none;
 
 		>.og-inserter {

@@ -1,5 +1,6 @@
 import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import clsx from "clsx";
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
@@ -38,9 +39,8 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 					<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } />
 				</TabPanel>
 			</Tabs>
-			<div className={ `og-group-fields og-field${ fields.length === 0 ? ' og-group-fields--empty' : '' }` }>
-				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
-				<div className="og-input">
+			<div className={ clsx( 'og-group-fields', fields.length === 0 && 'og-group-fields--empty' ) }>
+				<div className="og-group-fields__inner">
 					{
 						fields.length > 0 && (
 							<div className="og-header">
@@ -52,30 +52,35 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 							</div>
 						)
 					}
-					<ReactSortable group={ {
-						name: 'nested',
-						pull: true,
-						put: [ 'root', 'nested' ],
-					} }
-						animation={ 200 }
-						delayOnTouchStart={ true }
-						delay={ 2 }
-						list={ fields }
-						setList={ setFields }
-						handle=".og-item__header"
-					>
-						{
-							fields.map( ( field, index ) => <Node
-								key={ field._id }
-								id={ field._id }
-								field={ field }
-								parent={ `${ parent }[${ id }][fields]` }
-								removeField={ remove }
-								duplicateField={ duplicate }
-								updateFieldType={ updateType }
-							/> )
-						}
-					</ReactSortable>
+					{
+						fields.length > 0 && (
+							<ReactSortable
+								group={ {
+									name: 'nested',
+									pull: true,
+									put: [ 'root', 'nested' ],
+								} }
+								animation={ 200 }
+								delayOnTouchStart={ true }
+								delay={ 2 }
+								list={ fields }
+								setList={ setFields }
+								handle=".og-item__header"
+							>
+								{
+									fields.map( ( field, index ) => <Node
+										key={ field._id }
+										id={ field._id }
+										field={ field }
+										parent={ `${ parent }[${ id }][fields]` }
+										removeField={ remove }
+										duplicateField={ duplicate }
+										updateFieldType={ updateType }
+									/> )
+								}
+							</ReactSortable>
+						)
+					}
 					<Inserter addField={ add } />
 				</div>
 			</div>
