@@ -195,20 +195,18 @@
 	}
 }
 
-.og-item:hover,
-.og-collapsible--expanded {
-	>.og-item__header {
-		background: var(--color-lightest);
+.og-item__header:hover,
+.og-collapsible--expanded>.og-item__header {
+	background: var(--color-lightest);
 
-		.og-column--drag {
-			opacity: 1;
-			visibility: visible;
-		}
+	.og-column--drag {
+		opacity: 1;
+		visibility: visible;
+	}
 
-		.og-item__action--remove,
-		.og-item__action--duplicate {
-			display: flex;
-		}
+	.og-item__action--remove,
+	.og-item__action--duplicate {
+		display: flex;
 	}
 }
 
