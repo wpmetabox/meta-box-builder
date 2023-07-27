@@ -1,14 +1,15 @@
 import { memo, useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, chevronDown, copy, dragHandle, trash } from "@wordpress/icons";
+import clsx from "clsx";
 import { ucwords } from '../../../functions';
 import Field from './Field';
 import Group from './Group';
 
-const Collapsible = ( { header, body } ) => {
+const Collapsible = ( { header, body, type = '' } ) => {
 	const [ expanded, toggle ] = useReducer( expanded => !expanded, false );
 
-	return <div className={ `og-item og-collapsible${ expanded ? ' og-collapsible--expanded' : '' }` }>
+	return <div className={ clsx( 'og-item', type && `og-item--${ type }`, 'og-collapsible', expanded && 'og-collapsible--expanded' ) }>
 		<div className="og-item__header og-collapsible__header" onClick={ toggle } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 			{ header }
 		</div>
@@ -32,6 +33,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	let label = [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : field.name || field.group_title || __( '(No label)', 'meta-box-builder' );
 
 	return field.type && <Collapsible
+		type={ field.type }
 		header={
 			<>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
