@@ -81,7 +81,7 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 							</ReactSortable>
 						)
 					}
-					<Inserter addField={ add } />
+					<Inserter addField={ add } buttonType="secondary" buttonText={ __( '+ Add Subfield', 'meta-box-builder' ) } />
 				</div>
 			</div>
 		</>

@@ -1,9 +1,10 @@
 import { Dropdown } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import clsx from "clsx";
 import useApi from "../../../hooks/useApi";
 
-export const Inserter = ( { addField, type } ) => {
+export const Inserter = ( { addField, buttonType = 'primary', buttonText = __( '+ Add Field', 'meta-box-builder' ) } ) => {
 	const fieldCategories = useApi( 'field-categories', [] );
 	const [ searchParam, setSearchParam ] = useState( '' );
 
@@ -18,8 +19,8 @@ export const Inserter = ( { addField, type } ) => {
 			className="og-inserter"
 			onClose={ () => setSearchParam( '' ) }
 			renderToggle={ ( { onToggle } ) => (
-				<button type="button" id={ `og-inserter${ type }` } className="button button-primary" onClick={ onToggle }>
-					{ __( '+ Add Field', 'meta-box-builder' ) }
+				<button type="button" className={ clsx( 'button', buttonType === 'primary' && 'button-primary' ) } onClick={ onToggle }>
+					{ buttonText }
 				</button>
 			) }
 			renderContent={ ( { onToggle } ) => (
