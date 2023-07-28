@@ -119,13 +119,8 @@
 
 &-item {
 
-	&.og-collapsible--expanded,
-	&--group {
+	&.og-collapsible--expanded {
 		border-bottom: var(--border-lighter);
-	}
-
-	&--group:has(>.og-group-fields--empty) {
-		border-bottom: 0;
 	}
 
 	&__header {
@@ -256,56 +251,6 @@
 	input {
 		min-width: 0; // To make the input not exceed parent's width (see conditional logic in a sub-field of nested groups).
 		flex: 1;
-	}
-}
-
-// Group.
-&-item--group .og-collapsible__body {
-	padding-bottom: 0;
-}
-
-&-group-fields {
-	padding: 18px 0 18px 36px;
-
-	&__inner {
-		border: var(--border-lighter);
-		border-right: 0;
-	}
-
-	&--empty>&__inner {
-		border: none;
-
-		>.og-inserter {
-			margin: 0;
-		}
-	}
-
-	.og-header,
-	.og-item__header {
-		padding-block: 8px;
-	}
-
-	// Collapsed state: hide inserter button and sub-group with no fields.
-	.og-inserter,
-	.og-group-fields--empty {
-		display: none;
-	}
-}
-
-// Expanded state: reduce top space and show inserter button.
-&-collapsible--expanded {
-	>.og-group-fields {
-		padding-top: 0;
-		padding-right: 36px;
-
-		&:not(.og-group-fields--empty)>.og-group-fields__inner {
-			border-right: var(--border-lighter);
-		}
-	}
-
-	>.og-group-fields--empty,
-	>.og-group-fields>.og-group-fields__inner>.og-inserter {
-		display: block;
 	}
 }
 

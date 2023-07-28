@@ -1,0 +1,81 @@
+/************************************
+ * General style
+ ************************************/
+
+&-group-fields {
+
+	.og-header,
+	.og-item__header {
+		padding-block: 8px;
+	}
+
+	// Show only the inserter button with no margin & border when no subfields.
+	&--empty>&__inner {
+		border: none;
+
+		>.og-inserter {
+			margin: 0;
+		}
+	}
+}
+
+&-item--group {
+	border-bottom: var(--border-lighter);
+
+	// Do not show border bottom if no subfields, because it's duplicated with the field header's border.
+	&:has(>.og-group-fields--empty) {
+		border-bottom: 0;
+	}
+}
+
+
+/************************************
+ * Collapsed state
+ ************************************/
+
+// - No subfields: hide the wrapper div.
+&-group-fields--empty,
+// - With subfields: show subfields (maybe) but hide the inserter button.
+&-item--group .og-inserter {
+	display: none;
+}
+
+&-group-fields {
+	// No right space to put the table on the right edge.
+	padding: 18px 0 18px 36px;
+
+	// No right border to put the table on the right edge.
+	&__inner {
+		border: var(--border-lighter);
+		border-right: 0;
+	}
+}
+
+
+/************************************
+ * Expanded state:
+ ************************************/
+
+&-item--group.og-collapsible--expanded {
+	// Always show the border bottom. Force to overwrite the rule that don't show the border bottom for groups with no subfields.
+	border-bottom: var(--border-lighter);
+
+	// Show inserter button, but only for the current group, not sub-groups.
+	>.og-group-fields--empty,
+	>.og-group-fields>.og-group-fields__inner>.og-inserter {
+		display: block;
+	}
+
+	>.og-group-fields {
+		// Reduce top space.
+		padding-top: 0;
+
+		// Add right space to put the table inside the group's content.
+		padding-right: 36px;
+
+		// Re-add the right border.
+		&:not(.og-group-fields--empty)>.og-group-fields__inner {
+			border-right: var(--border-lighter);
+		}
+	}
+}
