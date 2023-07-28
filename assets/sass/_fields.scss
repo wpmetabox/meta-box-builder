@@ -26,14 +26,19 @@
 
 	&--label {
 		flex: 1;
+		padding-right: 20px;
 	}
 
 	&--id {
 		width: 180px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding-right: 20px;
 	}
 
 	&--type {
-		width: 160px;
+		width: 140px;
+		padding-right: 20px;
 	}
 
 	&--actions {
