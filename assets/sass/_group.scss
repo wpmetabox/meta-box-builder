@@ -18,13 +18,9 @@
 		margin-bottom: 6px;
 	}
 
-	// Show only the inserter button with no margin & border when no subfields.
-	&--empty>&__inner {
-		border: none;
-
-		>.og-inserter {
-			margin: 0;
-		}
+	// Reduce the margin for inserter button if no subfields.
+	&--empty .og-inserter {
+		margin-block: 0;
 	}
 }
 
@@ -34,6 +30,10 @@
 	// Do not show border bottom if no subfields, because it's duplicated with the field header's border.
 	&:has(>.og-group-fields--empty) {
 		border-bottom: 0;
+	}
+
+	.og-inserter {
+		margin-inline: 0;
 	}
 }
 
@@ -76,7 +76,7 @@
 
 	// Show inserter button, but only for the current group, not sub-groups.
 	>.og-group-fields--empty,
-	>.og-group-fields>.og-group-fields__inner>.og-inserter {
+	>.og-group-fields>.og-inserter {
 		display: block;
 	}
 
@@ -93,7 +93,7 @@
 		}
 
 		// Display the "Subfields" title.
-		> .og-group-fields__title {
+		>.og-group-fields__title {
 			display: block;
 		}
 	}
