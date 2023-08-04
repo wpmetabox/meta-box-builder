@@ -40,9 +40,10 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 				</TabPanel>
 			</Tabs>
 			<div className={ clsx( 'og-group-fields', fields.length === 0 && 'og-group-fields--empty' ) }>
+				{ fields.length > 0 && <div className="og-group-fields__title">{ __( 'Subfields', 'meta-box-builder' ) }</div> }
 				<div className="og-group-fields__inner">
-					{
-						fields.length > 0 && (
+					{ fields.length > 0 &&
+						<>
 							<div className="og-header">
 								<span className="og-column--drag">&nbsp;</span>
 								<span className="og-column--label">{ __( 'Label', 'meta-box-builder' ) }</span>
@@ -50,10 +51,6 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 								<span className="og-column--type">{ __( 'Type', 'meta-box-builder' ) }</span>
 								<span className="og-column--actions">{ __( 'Actions', 'meta-box-builder' ) }</span>
 							</div>
-						)
-					}
-					{
-						fields.length > 0 && (
 							<ReactSortable
 								group={ {
 									name: 'nested',
@@ -79,7 +76,7 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 									/> )
 								}
 							</ReactSortable>
-						)
+						</>
 					}
 					<Inserter addField={ add } buttonType="secondary" buttonText={ __( '+ Add Subfield', 'meta-box-builder' ) } />
 				</div>

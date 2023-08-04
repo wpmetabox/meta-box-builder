@@ -9,6 +9,15 @@
 		padding-block: 8px;
 	}
 
+	&__title {
+		color: var(--color-gray);
+		font-size: 12px;
+		letter-spacing: .05em;
+		text-transform: uppercase;
+		font-weight: 500;
+		margin-bottom: 6px;
+	}
+
 	// Show only the inserter button with no margin & border when no subfields.
 	&--empty>&__inner {
 		border: none;
@@ -49,6 +58,11 @@
 		border: var(--border-lighter);
 		border-right: 0;
 	}
+
+	// Hide the "Subfields" title.
+	&__title {
+		display: none;
+	}
 }
 
 
@@ -76,6 +90,11 @@
 		// Re-add the right border.
 		&:not(.og-group-fields--empty)>.og-group-fields__inner {
 			border-right: var(--border-lighter);
+		}
+
+		// Display the "Subfields" title.
+		> .og-group-fields__title {
+			display: block;
 		}
 	}
 }
