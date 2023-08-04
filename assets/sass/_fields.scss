@@ -122,14 +122,8 @@
 }
 
 &-item {
-
-	&.og-collapsible--expanded {
-		border-bottom: var(--border-lighter);
-	}
-
 	&__header {
 		padding: 12px;
-		border-bottom: var(--border-lighter);
 	}
 
 	&__title {
@@ -197,6 +191,15 @@
 			color: inherit;
 			color: var(--wp-admin-theme-color);
 		}
+	}
+}
+
+// Border bottom: an item always have border bottom, and when expanded: add a border bottom to its header bar.
+&-item {
+	border-bottom: var(--border-lighter);
+
+	&.og-collapsible--expanded > .og-item__header {
+		border-bottom: var(--border-lighter);
 	}
 }
 

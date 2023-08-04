@@ -18,27 +18,25 @@
 		margin-bottom: 6px;
 	}
 
-	// Reduce the margin for inserter button if no subfields.
-	&--empty .og-inserter {
-		margin-block: 0;
+	// Reduce the padding for inserter button if no subfields.
+	&--empty > .og-inserter {
+		padding-top: 0;
 	}
 }
 
 &-item--group {
-	border-bottom: var(--border-lighter);
-
-	// Do not show border bottom if no subfields, because it's duplicated with the field header's border.
-	&:has(>.og-group-fields--empty) {
-		border-bottom: 0;
+	// Show border bottom for header bar if has subfields.
+	&--has-fields > .og-item__header {
+		border-bottom: var(--border-lighter);
 	}
 
 	.og-inserter {
-		margin-inline: 0;
+		padding-inline: 0;
 	}
 }
 
 .og-column--actions .og-inserter {
-	margin: 0;
+	padding: 0;
 
 	button {
 		display: grid;
@@ -65,14 +63,18 @@
  * Collapsed state
  ************************************/
 
-&-group-fields {
-	// No right space to put the table on the right edge.
-	padding: 18px 0 18px 36px;
+// Remove border bottom for the last subfield.
+&-item--group > .og-group-fields > .og-group-fields__inner > div > .og-item:last-child {
+	border-bottom: 0;
+}
 
-	// No right border to put the table on the right edge.
+&-group-fields {
+	// Left indent the subfields.
+	padding-left: 36px;
+
+	// Add left border for the subfields wrapper.
 	&__inner {
-		border: var(--border-lighter);
-		border-right: 0;
+		border-left: var(--border-lighter);
 	}
 
 	// - No subfields: hide the wrapper div.
@@ -97,11 +99,13 @@
 	border-bottom: var(--border-lighter);
 
 	>.og-group-fields {
-		// Reduce top space.
-		padding-top: 0;
-
 		// Add right space to put the table inside the group's content.
 		padding-right: 36px;
+
+		// Readd border bottom for the last subfield.
+		> .og-group-fields__inner > div > .og-item:last-child {
+			border-bottom: var(--border-lighter);
+		}
 
 		// Re-add the right border.
 		&:not(.og-group-fields--empty)>.og-group-fields__inner {

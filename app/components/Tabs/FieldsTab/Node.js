@@ -8,7 +8,7 @@ import Field from './Field';
 import Group from './Group';
 import { Inserter } from "./Inserter";
 
-const Collapsible = ( { header, body, type = '' } ) => {
+const Collapsible = ( { header, body, type = '', className } ) => {
 	const [ expanded, toggle ] = useReducer( expanded => !expanded, false );
 
 	const clickHandle = e => {
@@ -17,7 +17,7 @@ const Collapsible = ( { header, body, type = '' } ) => {
 		}
 	};
 
-	return <div className={ clsx( 'og-item', type && `og-item--${ type }`, 'og-collapsible', expanded && 'og-collapsible--expanded' ) }>
+	return <div className={ clsx( 'og-item', type && `og-item--${ type }`, className, 'og-collapsible', expanded && 'og-collapsible--expanded' ) }>
 		<div className="og-item__header og-collapsible__header" onClick={ clickHandle } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 			{ header }
 		</div>
@@ -41,9 +41,11 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 		Object.values( field.fields || {} ).filter( field => field.type ),
 		`fields${ parent }[${ id }][fields]`
 	);
+	const className = field.type === 'group' && useFieldsData.fields.length > 0 ? 'og-item--group--has-fields' : '';
 
 	return field.type && <Collapsible
 		type={ field.type }
+		className={ className }
 		header={
 			<>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
