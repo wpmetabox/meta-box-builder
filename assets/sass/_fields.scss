@@ -42,14 +42,13 @@
 	}
 
 	&--actions {
-		width: 90px;
-		text-align: right;
+		width: 120px;
 	}
 }
 
+// Align the "Action" text in the item header bar.
 &-header .og-column--actions {
-	padding-right: 36px;
-	box-sizing: border-box;
+	text-align: right;
 }
 
 &-field {
@@ -143,7 +142,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
-		gap: 8px;
+		gap: 4px;
 	}
 
 	&__action {

@@ -37,17 +37,33 @@
 	}
 }
 
+.og-column--actions .og-inserter {
+	margin: 0;
+
+	button {
+		display: grid;
+		place-items: center;
+		padding: 4px;
+		font-size: 14px;
+		line-height: 1;
+		width: 1em;
+		min-height: 0;
+		box-sizing: content-box;
+		transition: all ease-out .2s;
+		border-color: currentColor;
+		color: var(--color-gray);
+		background: none;
+
+		&:hover {
+			color: inherit;
+		}
+	}
+}
+
 
 /************************************
  * Collapsed state
  ************************************/
-
-// - No subfields: hide the wrapper div.
-&-group-fields--empty,
-// - With subfields: show subfields (maybe) but hide the inserter button.
-&-item--group .og-inserter {
-	display: none;
-}
 
 &-group-fields {
 	// No right space to put the table on the right edge.
@@ -59,8 +75,12 @@
 		border-right: 0;
 	}
 
+	// - No subfields: hide the wrapper div.
+	&--empty,
+	// - With subfields: show subfields (maybe) but hide the inserter button.
+	>.og-inserter,
 	// Hide the "Subfields" title.
-	&__title {
+	>.og-group-fields__title {
 		display: none;
 	}
 }

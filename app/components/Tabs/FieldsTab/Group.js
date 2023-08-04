@@ -1,15 +1,13 @@
-import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import clsx from "clsx";
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
-import useFields from "../../../hooks/useFields";
 import Content from './Content';
 import { Inserter } from './Inserter';
 import Node from './Node';
 
-const Group = ( { id, field, parent = '', updateFieldType } ) => {
+const Group = ( { id, field, parent = '', updateFieldType, useFieldsData } ) => {
 	const {
 		fields,
 		add,
@@ -17,10 +15,7 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 		duplicate,
 		updateType,
 		setFields,
-	} = useFields(
-		Object.values( field.fields || {} ).filter( field => field.type ),
-		`fields${ parent }[${ id }][fields]`
-	);
+	} = useFieldsData;
 
 	const fieldTypes = useApi( 'field-types', {} );
 	const controls = [ ...fieldTypes[ field.type ].controls ];
@@ -88,4 +83,4 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 	);
 };
 
-export default memo( ( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.field.fields === nextProps.field.fields );
+export default Group;
