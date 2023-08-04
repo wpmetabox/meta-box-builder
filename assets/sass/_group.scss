@@ -80,7 +80,9 @@
 	// - With subfields: show subfields (maybe) but hide the inserter button.
 	>.og-inserter,
 	// Hide the "Subfields" title.
-	>.og-group-fields__title {
+	>.og-group-fields__title,
+	// Hide the header bar.
+	>.og-group-fields__inner>.og-header {
 		display: none;
 	}
 }
@@ -94,12 +96,6 @@
 	// Always show the border bottom. Force to overwrite the rule that don't show the border bottom for groups with no subfields.
 	border-bottom: var(--border-lighter);
 
-	// Show inserter button, but only for the current group, not sub-groups.
-	>.og-group-fields--empty,
-	>.og-group-fields>.og-inserter {
-		display: block;
-	}
-
 	>.og-group-fields {
 		// Reduce top space.
 		padding-top: 0;
@@ -112,9 +108,17 @@
 			border-right: var(--border-lighter);
 		}
 
-		// Display the "Subfields" title.
+		// Show inserter button, but only for the current group, not sub-groups.
+		&--empty,
+		>.og-inserter,
+		// Show the "Subfields" title.
 		>.og-group-fields__title {
 			display: block;
+		}
+
+		// Show the header bar.
+		>.og-group-fields__inner>.og-header {
+			display: flex;
 		}
 	}
 }
