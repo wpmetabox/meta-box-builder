@@ -46,6 +46,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			groupHasFields && 'og-item--group--has-fields',
 			'og-collapsible',
 			expanded && 'og-collapsible--expanded',
+			!expanded && 'og-collapsible--collapsed',
 			!showSubfields && 'og-item--hide-fields',
 		) }>
 			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />

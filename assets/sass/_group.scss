@@ -3,6 +3,14 @@
  ************************************/
 
 &-group-fields {
+	// Left indent the subfields.
+	padding-left: 36px;
+
+	// Add left border for the subfields wrapper.
+	&__inner {
+		border-left: var(--border-lighter);
+	}
+
 	&__title {
 		color: var(--color-gray);
 		font-size: 12px;
@@ -13,14 +21,15 @@
 	}
 
 	// Reduce the padding for inserter button if no subfields.
-	&--empty > .og-inserter {
+	&--empty>.og-inserter {
 		padding-top: 0;
 	}
 }
 
 &-item--group {
+
 	// Show border bottom for header bar if has subfields.
-	&--has-fields > .og-item__header {
+	&--has-fields>.og-item__header {
 		border-bottom: var(--border-lighter);
 	}
 
@@ -67,72 +76,61 @@
 		color: inherit;
 	}
 }
-&-item--hide-fields > .og-group-fields {
-	display: none;
-}
 
 
 /************************************
  * Collapsed state
  ************************************/
 
-// Remove border bottom for the last subfield.
-&-item--group > .og-group-fields > .og-group-fields__inner > div > .og-item:last-child {
-	border-bottom: 0;
-}
+&-collapsible--collapsed {
+	>.og-group-fields {
 
-&-group-fields {
-	// Left indent the subfields.
-	padding-left: 36px;
+		// Show subfields (maybe) but hide the inserter button.
+		>.og-inserter,
+		// Hide the "Subfields" title.
+		>.og-group-fields__title,
+		// Hide the header bar.
+		>.og-group-fields__inner>.og-header {
+			display: none;
+		}
 
-	// Add left border for the subfields wrapper.
-	&__inner {
-		border-left: var(--border-lighter);
+		// Remove border bottom for the last subfield.
+		>.og-group-fields__inner>div>.og-item:last-child {
+			border-bottom: 0;
+		}
 	}
 
-	// Show subfields (maybe) but hide the inserter button.
-	>.og-inserter,
-	// Hide the "Subfields" title.
-	>.og-group-fields__title,
-	// Hide the header bar.
-	>.og-group-fields__inner>.og-header {
-		display: none;
+	// Hide subfields.
+	&.og-item--hide-fields {
+		>.og-group-fields {
+			display: none;
+		}
+
+		// Remove border bottom for item header.
+		>.og-item__header {
+			border-bottom: 0;
+		}
 	}
 }
-
 
 /************************************
  * Expanded state:
  ************************************/
 
-&-item--group.og-collapsible--expanded {
-	// Always show the border bottom. Force to overwrite the rule that don't show the border bottom for groups with no subfields.
-	border-bottom: var(--border-lighter);
+&-collapsible--expanded {
+
+	// Hide toggle subfields button.
+	>.og-item__header .og-item__toggle {
+		display: none;
+	}
 
 	>.og-group-fields {
 		// Add right space to put the table inside the group's content.
 		padding-right: 36px;
 
-		// Readd border bottom for the last subfield.
-		> .og-group-fields__inner > div > .og-item:last-child {
-			border-bottom: var(--border-lighter);
-		}
-
 		// Re-add the right border.
 		&:not(.og-group-fields--empty)>.og-group-fields__inner {
 			border-right: var(--border-lighter);
-		}
-
-		// Show inserter button, but only for the current group, not sub-groups.
-		>.og-inserter,
-		// Show the "Subfields" title.
-		>.og-group-fields__title {
-			display: block;
-		}
-
-		// Show the header bar.
-		>.og-group-fields__inner>.og-header {
-			display: flex;
 		}
 	}
 }
