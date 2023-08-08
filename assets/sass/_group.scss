@@ -55,6 +55,22 @@
 	}
 }
 
+// Toggle subfields.
+&-item__toggle {
+	margin-left: 4px;
+	color: var(--color-gray);
+	display: inline-block;
+	padding: 4px;
+	cursor: pointer;
+
+	&:hover {
+		color: inherit;
+	}
+}
+&-item--hide-fields > .og-group-fields {
+	display: none;
+}
+
 
 /************************************
  * Collapsed state

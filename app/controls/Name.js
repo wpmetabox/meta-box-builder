@@ -24,7 +24,7 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 		setValue( e.target.value );
 
 		// Update field header bar.
-		updateTitle( e.target.value );
+		updateTitle( e.target );
 
 		// Auto generate ID only when edit the label first time. E.g. don't generate when it's blur or after save.
 		if ( !isFirstEdit.current ) {
@@ -47,15 +47,13 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 		e.target.closest( '.og-item' ).querySelector( '.og-column--id' ).textContent = generatedId;
 	};
 
-	const updateTitle = value => {
-		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
+	const updateTitle = el => {
+		const titleElement = el.closest( '.og-item' ).querySelector( '.og-item__title' );
 		if ( !titleElement ) {
 			return;
 		}
-		if ( value ) {
-			titleElement.textContent = value;
-			return;
-		}
+
+		titleElement.textContent = el.value || __( '(No label)', 'meta-box-builder' );
 
 		// Use group title if needed.
 		const groupTitleElement = document.getElementById( `fields-${ rest.fieldId }-group_title` );

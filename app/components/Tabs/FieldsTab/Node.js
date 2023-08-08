@@ -8,35 +8,16 @@ import Field from './Field';
 import Group from './Group';
 import { Inserter } from "./Inserter";
 
-const Collapsible = ( { header, body, type = '', className } ) => {
-	const [ expanded, toggle ] = useReducer( expanded => !expanded, false );
+const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
+	const [ expanded, toggle ] = useReducer( state => !state, false );
+	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 
-	const clickHandle = e => {
-		if ( !elementIn( e.target, [ 'og-item__action--remove', 'og-item__action--duplicate', 'og-inserter' ] ) ) {
+	const toggleFieldSettings = e => {
+		if ( !elementIn( e.target, [ 'og-item__action--remove', 'og-item__action--duplicate', 'og-inserter', 'og-item__toggle' ] ) ) {
 			toggle();
 		}
 	};
 
-	return <>
-		<div className={ clsx(
-			className,
-			'og-item', type && `og-item--${ type }`,
-			'og-collapsible',
-			expanded && 'og-collapsible--expanded',
-		) }>
-			<div
-				className="og-item__header og-collapsible__header"
-				title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
-				onClick={ clickHandle }
-			>
-				{ header }
-			</div>
-			{ body }
-		</div>
-	</>;
-};
-
-const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
 	const remove = () => {
 		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
 			removeField( id );
@@ -52,18 +33,35 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 		Object.values( field.fields || {} ).filter( field => field.type ),
 		`fields${ parent }[${ id }][fields]`
 	);
-	const className = field.type === 'group' && useFieldsData.fields.length > 0 ? 'og-item--group--has-fields' : '';
+	const groupHasFields = field.type === 'group' && useFieldsData.fields.length > 0;
 
-	return field.type && <Collapsible
-		type={ field.type }
-		className={ className }
-		header={
-			<>
+	if ( !field.type ) {
+		return;
+	}
+
+	return (
+		<div className={ clsx(
+			'og-item',
+			`og-item--${ field.type }`,
+			groupHasFields && 'og-item--group--has-fields',
+			'og-collapsible',
+			expanded && 'og-collapsible--expanded',
+			!showSubfields && 'og-item--hide-fields',
+		) }>
+			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
+			<div
+				className="og-item__header og-collapsible__header"
+				title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
+				onClick={ toggleFieldSettings }
+			>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
-				<span className="og-item__title og-column--label" id={ `og-item__title__${ id }` }>{ label }</span>
+				<span className="og-column--label">
+					<span className="og-item__title">{ label }</span>
+					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+'}]</span> }
+				</span>
 				<span className="og-column--id" title={ fieldId }>{ fieldId }</span>
 				<span className="og-column--type">{ field.type }</span>
-				<span className="og-item__actions og-column--actions">
+				<span className="og-column--actions og-item__actions">
 					{
 						field.type === 'group' && <Inserter
 							addField={ useFieldsData.add }
@@ -75,19 +73,14 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 				</span>
-			</>
-		}
-		body={
-			<>
-				<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
-				{
-					field.type === 'group'
-						? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } useFieldsData={ useFieldsData } />
-						: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
-				}
-			</>
-		}
-	/>;
+			</div>
+			{
+				field.type === 'group'
+					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } useFieldsData={ useFieldsData } />
+					: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
+			}
+		</div>
+	);
 };
 
 export default memo( Node, ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.field.type === nextProps.field.type );

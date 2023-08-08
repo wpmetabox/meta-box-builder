@@ -1,5 +1,5 @@
-import DivRow from './DivRow';
 import { __ } from "@wordpress/i18n";
+import DivRow from './DivRow';
 
 const GroupTitle = ( { name, componentId, defaultValue, ...rest } ) => {
 	const onChange = e => {
@@ -10,7 +10,7 @@ const GroupTitle = ( { name, componentId, defaultValue, ...rest } ) => {
 		}
 
 		// Update field header bar.
-		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
+		const titleElement = e.target.closest( '.og-item' ).querySelector( '.og-item__title' );
 		if ( titleElement ) {
 			titleElement.textContent = e.target.value || __( '(No label)', 'meta-box-builder' );
 		}
