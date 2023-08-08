@@ -1,6 +1,6 @@
 import { memo, useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { Icon, chevronDown, copy, dragHandle, trash } from "@wordpress/icons";
+import { Icon, copy, dragHandle, plus, trash } from "@wordpress/icons";
 import clsx from "clsx";
 import { elementIn, ucwords } from '../../../functions';
 import useFields from "../../../hooks/useFields";
@@ -17,12 +17,23 @@ const Collapsible = ( { header, body, type = '', className } ) => {
 		}
 	};
 
-	return <div className={ clsx( 'og-item', type && `og-item--${ type }`, className, 'og-collapsible', expanded && 'og-collapsible--expanded' ) }>
-		<div className="og-item__header og-collapsible__header" onClick={ clickHandle } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
-			{ header }
+	return <>
+		<div className={ clsx(
+			className,
+			'og-item', type && `og-item--${ type }`,
+			'og-collapsible',
+			expanded && 'og-collapsible--expanded',
+		) }>
+			<div
+				className="og-item__header og-collapsible__header"
+				title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
+				onClick={ clickHandle }
+			>
+				{ header }
+			</div>
+			{ body }
 		</div>
-		{ body }
-	</div>;
+	</>;
 };
 
 const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
@@ -53,13 +64,16 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 				<span className="og-column--id" title={ fieldId }>{ fieldId }</span>
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-item__actions og-column--actions">
+					{
+						field.type === 'group' && <Inserter
+							addField={ useFieldsData.add }
+							buttonType="secondary"
+							buttonText={ <Icon icon={ plus } /> }
+							title={ __( 'Add a new subfield', 'meta-box-builder' ) }
+						/>
+					}
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
-					{
-						field.type === 'group' &&
-						<Inserter addField={ useFieldsData.add } buttonType="secondary" buttonText="+" />
-					}
-					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle settings', 'meta-box-builder' ) }><Icon icon={ chevronDown } /></span>
 				</span>
 			</>
 		}

@@ -10,7 +10,7 @@
 	align-items: center;
 	color: #999;
 	border-bottom: var(--border-lighter);
-	padding: 12px;
+	padding: 10px;
 	background: var(--color-lighter);
 }
 
@@ -123,7 +123,7 @@
 
 &-item {
 	&__header {
-		padding: 12px;
+		padding: 10px;
 	}
 
 	&__title {
@@ -137,26 +137,21 @@
 		align-items: center;
 		justify-content: flex-end;
 		gap: 4px;
-	}
-
-	&__action {
-		cursor: pointer;
-		color: var(--color-gray);
-		display: flex;
-		padding: 4px;
-		transition: all ease-out .2s;
 
 		svg {
 			fill: currentColor;
 		}
+	}
+
+	&__action {
+		display: flex;
+		cursor: pointer;
+		color: var(--color-gray);
+		padding: 4px;
+		transition: all ease-out .2s;
 
 		&:hover {
 			color: inherit;
-		}
-
-		&--remove,
-		&--duplicate {
-			display: none;
 		}
 
 		&--remove:hover {
@@ -198,23 +193,20 @@
 &-item {
 	border-bottom: var(--border-lighter);
 
-	&.og-collapsible--expanded > .og-item__header {
+	&.og-collapsible--expanded>.og-item__header {
 		border-bottom: var(--border-lighter);
 	}
 }
 
+// On hover and expand.
 .og-item__header:hover,
 .og-collapsible--expanded>.og-item__header {
 	background: var(--color-lightest);
 
+	// Show drag icon.
 	.og-column--drag {
 		opacity: 1;
 		visibility: visible;
-	}
-
-	.og-item__action--remove,
-	.og-item__action--duplicate {
-		display: flex;
 	}
 }
 

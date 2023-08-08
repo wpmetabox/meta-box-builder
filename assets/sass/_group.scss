@@ -3,12 +3,6 @@
  ************************************/
 
 &-group-fields {
-
-	.og-header,
-	.og-item__header {
-		padding-block: 8px;
-	}
-
 	&__title {
 		color: var(--color-gray);
 		font-size: 12px;
@@ -39,21 +33,24 @@
 	padding: 0;
 
 	button {
-		display: grid;
-		place-items: center;
-		padding: 4px;
-		font-size: 14px;
-		line-height: 1;
-		width: 1em;
-		min-height: 0;
-		box-sizing: content-box;
-		transition: all ease-out .2s;
+		display: flex;
+		align-items: center;
+		padding: 0;
+		width: 22px;
+		height: 22px;
+		min-height: 22px;
 		border-color: currentColor;
 		color: var(--color-gray);
 		background: none;
+		transition: all ease-out .2s;
 
 		&:hover {
 			color: inherit;
+		}
+
+		svg {
+			width: 20px;
+			height: 20px;
 		}
 	}
 }
@@ -77,9 +74,7 @@
 		border-left: var(--border-lighter);
 	}
 
-	// - No subfields: hide the wrapper div.
-	&--empty,
-	// - With subfields: show subfields (maybe) but hide the inserter button.
+	// Show subfields (maybe) but hide the inserter button.
 	>.og-inserter,
 	// Hide the "Subfields" title.
 	>.og-group-fields__title,
@@ -113,7 +108,6 @@
 		}
 
 		// Show inserter button, but only for the current group, not sub-groups.
-		&--empty,
 		>.og-inserter,
 		// Show the "Subfields" title.
 		>.og-group-fields__title {

@@ -4,7 +4,12 @@ import { __ } from "@wordpress/i18n";
 import clsx from "clsx";
 import useApi from "../../../hooks/useApi";
 
-export const Inserter = ( { addField, buttonType = 'primary', buttonText = __( '+ Add Field', 'meta-box-builder' ) } ) => {
+export const Inserter = ( {
+	addField,
+	buttonType = 'primary',
+	buttonText = __( '+ Add Field', 'meta-box-builder' ),
+	title = __( 'Add a new field', 'meta-box-builder' ),
+} ) => {
 	const fieldCategories = useApi( 'field-categories', [] );
 	const [ searchParam, setSearchParam ] = useState( '' );
 
@@ -19,7 +24,7 @@ export const Inserter = ( { addField, buttonType = 'primary', buttonText = __( '
 			className="og-inserter"
 			onClose={ () => setSearchParam( '' ) }
 			renderToggle={ ( { onToggle } ) => (
-				<button type="button" className={ clsx( 'button', buttonType === 'primary' && 'button-primary' ) } onClick={ onToggle }>
+				<button type="button" className={ clsx( 'button', buttonType === 'primary' && 'button-primary' ) } onClick={ onToggle } title={ title }>
 					{ buttonText }
 				</button>
 			) }
