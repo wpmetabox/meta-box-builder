@@ -71,8 +71,8 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 							title={ __( 'Add a new subfield', 'meta-box-builder' ) }
 						/>
 					}
-					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
+					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
 				</span>
 			</div>
 			{
