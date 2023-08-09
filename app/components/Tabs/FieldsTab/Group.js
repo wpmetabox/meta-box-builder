@@ -7,7 +7,7 @@ import Content from './Content';
 import { Inserter } from './Inserter';
 import Node from './Node';
 
-const Group = ( { id, field, parent = '', updateFieldType, groupData } ) => {
+const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData } ) => {
 	const {
 		fields,
 		add,
@@ -28,10 +28,10 @@ const Group = ( { id, field, parent = '', updateFieldType, groupData } ) => {
 					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 				</TabList>
 				<TabPanel>
-					<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
+					<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } />
 				</TabPanel>
 				<TabPanel>
-					<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } />
+					<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } nameIdData={ nameIdData } />
 				</TabPanel>
 			</Tabs>
 

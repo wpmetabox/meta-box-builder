@@ -1,7 +1,7 @@
-import { memo, Suspense } from "@wordpress/element";
+import { Suspense } from "@wordpress/element";
 import { getControlParams } from '/functions';
 
-const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
+const Content = ( { id, controls, field, parent = '', updateFieldType, nameIdData } ) => {
 	const getControlComponent = control => {
 		let [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
 
@@ -23,6 +23,8 @@ const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
 
 			// For Type: allow to change field type.
 			updateFieldType={ updateFieldType }
+
+			nameIdData={ nameIdData }
 		/>;
 	};
 
@@ -33,4 +35,4 @@ const Content = ( { id, controls, field, parent = '', updateFieldType } ) => {
 	);
 };
 
-export default memo( Content, ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.field.type === nextProps.field.type );
+export default Content;
