@@ -53,7 +53,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			>
 				<span className="og-column--drag og-item__move"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
-					<HeaderLabel field={ field } nameIdData={ nameIdData } />
+					<HeaderLabel nameIdData={ nameIdData } />
 					<span className="dashicons dashicons-edit"></span>
 					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+' }]</span> }
 				</span>

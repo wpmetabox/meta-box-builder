@@ -2,9 +2,9 @@ import { useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 
 // Output field label on the header bar.
-const HeaderLabel = ( { field, nameIdData } ) => {
+const HeaderLabel = ( { nameIdData } ) => {
 	const hiddenRef = useRef();
-	const [ label, setLabel ] = useState( [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : nameIdData.name || field.group_title || __( '(No label)', 'meta-box-builder' ) );
+	const [ label, setLabel ] = useState( nameIdData.label );
 
 	// Release when pressing "Enter" or "Escape".
 	const maybeFinishEditing = e => {
@@ -36,7 +36,7 @@ const HeaderLabel = ( { field, nameIdData } ) => {
 				value={ label }
 				onKeyDown={ maybeFinishEditing }
 				onChange={ handleChange }
-				onBlur={ () => nameIdData.noAutoGenerateId() }
+				onBlur={ nameIdData.noAutoGenerateId }
 				style={ {
 					// When toggling subfields, the hidden span has 0 width, so we have to fallback to a width based on string length.
 					width: `${ hiddenRef.current?.offsetWidth || label.length * 7 }px`

@@ -25,10 +25,14 @@
 	}
 
 	&--label {
-		flex: 1;
 		padding-right: 20px;
 		display: flex;
 		align-items: center;
+	}
+
+	&--space {
+		flex: 1;
+		height: 24px;
 	}
 
 	&--id {
