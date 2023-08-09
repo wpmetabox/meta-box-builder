@@ -126,14 +126,28 @@
 &-item {
 	&__header {
 		padding: 10px;
-
-
 	}
 
-	&__title {
+	&__hidden-label {
+		position: absolute;
+		height: 0;
+		overflow: hidden;
+		white-space: pre;
+		font-weight: 500;
+	}
+
+	&__title.og-item__title.og-item__title {
 		color: var(--wp-admin-theme-color);
 		font-weight: 500;
 		line-height: 24px;
+
+		// Reset WP style for the input.
+		border: 0;
+		border-radius: 0;
+		background: none;
+		padding: 0 0 4px;
+		min-height: 24px;
+		font-size: 13px;
 
 		// Fix layout shifting when focus.
 		height: 24px;

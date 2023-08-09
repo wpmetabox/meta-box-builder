@@ -1,8 +1,8 @@
-import { useReducer } from "@wordpress/element";
+import { useReducer, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, copy, dragHandle, plus, trash } from "@wordpress/icons";
 import clsx from "clsx";
-import { elementIn, ucwords } from '../../../functions';
+import { elementIn } from '../../../functions';
 import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFields from "../../../hooks/useFields";
 import Field from './Field';
@@ -13,6 +13,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	const [ expanded, toggle ] = useReducer( state => !state, false );
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
+	const hiddenLabelRef = useRef();
 
 	const toggleFieldSettings = e => {
 		if ( !elementIn( e.target, [ 'og-item__action--remove', 'og-item__action--duplicate', 'og-inserter', 'og-item__toggle', 'og-item__title', 'dashicons' ] ) ) {
@@ -30,20 +31,12 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 
 	// Release when pressing "Enter" or "Escape".
 	const maybeFinishEditing = e => {
-		if ( [ 'Enter', 'Escape' ].includes( e.key ) ) {
-			e.preventDefault();
-			e.target.blur();
+		if ( ![ 'Enter', 'Escape' ].includes( e.key ) ) {
 			return;
 		}
-	}
-
-	// Update name input.
-	const updateNameInput = e => {
-		const nameElement = document.getElementById( `fields-${ id }-name` );
-		if ( !nameElement ) {
-			return;
-		}
-		nameElement.value = e.target.textContent;
+		e.preventDefault();
+		e.target.blur();
+		nameIdData.noAutoGenerateId();
 	};
 
 	const label = [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : nameIdData.name || field.group_title || __( '(No label)', 'meta-box-builder' );
@@ -72,18 +65,21 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
-					<span
+					<span className="og-item__hidden-label" ref={ hiddenLabelRef }>{ label }</span>
+					<input
+						type="text"
 						className="og-item__title"
 						title={ __( 'Click to edit', 'meta-box-builder' ) }
-						contentEditable
-						suppressContentEditableWarning={ true }
+						value={ label }
 						onKeyDown={ maybeFinishEditing }
-						onKeyUp={ updateNameInput }
-					>
-						{ label }
-					</span>
+						onChange={ e => nameIdData.updateName( e.target.value ) }
+						onBlur={ () => nameIdData.noAutoGenerateId() }
+						style={ {
+							width: `${ hiddenLabelRef.current?.offsetWidth + 2}px`
+						} }
+					/>
 					<span className="dashicons dashicons-edit"></span>
-					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+'}]</span> }
+					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+' }]</span> }
 				</span>
 				<span className="og-column--id">{ nameIdData.id }</span>
 				<span className="og-column--type">{ field.type }</span>
