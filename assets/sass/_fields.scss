@@ -27,6 +27,8 @@
 	&--label {
 		flex: 1;
 		padding-right: 20px;
+		display: flex;
+		align-items: center;
 	}
 
 	&--id {
@@ -124,12 +126,46 @@
 &-item {
 	&__header {
 		padding: 10px;
+
+
 	}
 
 	&__title {
 		color: var(--wp-admin-theme-color);
 		font-weight: 500;
 		line-height: 24px;
+
+		// Fix layout shifting when focus.
+		height: 24px;
+		box-sizing: border-box;
+
+		+.dashicons {
+			font-size: 16px;
+			width: 16px;
+			height: 16px;
+			color: var(--color-gray);
+
+			// Hide edit icon by keep its space, so when hovering, it appears without layout shift.
+			opacity: 0;
+		}
+
+		// Show edit title icon when hover.
+		&:hover+.dashicons {
+			opacity: 1;
+		}
+
+		// Add border bottom when focus, mimic edit effect.
+		&:focus {
+			padding-bottom: 4px;
+			outline: none;
+			color: inherit;
+			box-shadow: 0 1px var(--color-light);
+
+			// Hide edit icon when focus.
+			+.dashicons {
+				opacity: 0;
+			}
+		}
 	}
 
 	&__actions {

@@ -13,7 +13,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 
 	const toggleFieldSettings = e => {
-		if ( !elementIn( e.target, [ 'og-item__action--remove', 'og-item__action--duplicate', 'og-inserter', 'og-item__toggle' ] ) ) {
+		if ( !elementIn( e.target, [ 'og-item__action--remove', 'og-item__action--duplicate', 'og-inserter', 'og-item__toggle', 'og-item__title', 'dashicons' ] ) ) {
 			toggle();
 		}
 	};
@@ -26,20 +26,34 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 
 	const duplicate = () => duplicateField( id );
 
+	// Release when pressing "Enter" or "Escape".
+	const maybeFinishEditing = e => {
+		if ( [ 'Enter', 'Escape' ].includes( e.key ) ) {
+			e.preventDefault();
+			e.target.blur();
+			return;
+		}
+	}
+
+	// Update name input.
+	const updateNameInput = e => {
+		const nameElement = document.getElementById( `fields-${ id }-name` );
+		if ( !nameElement ) {
+			return;
+		}
+		nameElement.value = e.target.textContent;
+	};
+
 	const label = [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : field.name || field.group_title || __( '(No label)', 'meta-box-builder' );
 	const fieldId = [ 'custom_html', 'divider', 'heading' ].includes( field.type ) ? __( 'N/A', 'meta-box-builder' ) : field.id;
 
-	const useFieldsData = field.type !== 'group' ? {} : useFields(
+	const groupData = field.type !== 'group' ? {} : useFields(
 		Object.values( field.fields || {} ).filter( field => field.type ),
 		`fields${ parent }[${ id }][fields]`
 	);
-	const groupHasFields = field.type === 'group' && useFieldsData.fields.length > 0;
+	const groupHasFields = field.type === 'group' && groupData.fields.length > 0;
 
-	if ( !field.type ) {
-		return;
-	}
-
-	return (
+	return field.type && (
 		<div className={ clsx(
 			'og-item',
 			`og-item--${ field.type }`,
@@ -57,7 +71,17 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
-					<span className="og-item__title">{ label }</span>
+					<span
+						className="og-item__title"
+						title={ __( 'Click to edit', 'meta-box-builder' ) }
+						contentEditable
+						suppressContentEditableWarning={ true }
+						onKeyDown={ maybeFinishEditing }
+						onKeyUp={ updateNameInput }
+					>
+						{ label }
+					</span>
+					<span className="dashicons dashicons-edit"></span>
 					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+'}]</span> }
 				</span>
 				<span className="og-column--id" title={ fieldId }>{ fieldId }</span>
@@ -65,7 +89,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 				<span className="og-column--actions og-item__actions">
 					{
 						field.type === 'group' && <Inserter
-							addField={ useFieldsData.add }
+							addField={ groupData.add }
 							buttonType="secondary"
 							buttonText={ <Icon icon={ plus } /> }
 							title={ __( 'Add a new subfield', 'meta-box-builder' ) }
@@ -77,7 +101,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			</div>
 			{
 				field.type === 'group'
-					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } useFieldsData={ useFieldsData } />
+					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } groupData={ groupData } />
 					: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
 			}
 		</div>
