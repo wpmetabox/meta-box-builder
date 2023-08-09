@@ -1,5 +1,5 @@
 & {
-  --color-gray: #999;
+	--color-gray: #999;
 	--color-light: #ccd0d4;
 	--color-lighter: #f0f0f0;
 	--color-lightest: #f6f7f7;
@@ -7,7 +7,7 @@
 	--shadow-md: 0 1px 1px rgba(0, 0, 0, 0.05);
 	--border: 1px solid var(--color-light);
 	--border-lighter: 1px solid var(--color-lighter);
-  --color-primary: #007cba;
+	--color-primary: #007cba;
 
 	margin-top: 24px;
 }
@@ -16,182 +16,196 @@
 .admin-color-blue {
 	--color-primary: #e1a948;
 }
+
 .admin-color-coffee {
 	--color-primary: #c7a589;
 }
+
 .admin-color-ectoplasm {
 	--color-primary: #a3b745;
 }
+
 .admin-color-light {
 	--color-primary: #04a4cc;
 }
+
 .admin-color-midnight {
 	--color-primary: #e14d43;
 }
+
 .admin-color-modern {
 	--color-primary: #3858e9;
 }
+
 .admin-color-ocean {
 	--color-primary: #9ebaa0;
 }
+
 .admin-color-sunrise {
 	--color-primary: #dd823b;
 }
 
 h3 {
-  margin-top: 32px;
+	margin-top: 32px;
 }
 
 input[type="text"],
 input[type="number"],
 textarea,
 select {
-  width: 100%;
+	width: 100%;
 	max-width: none;
 }
+
 svg {
-  width: 16px;
-  height: 16px;
-  fill: var(--color-gray);
+	width: 16px;
+	height: 16px;
+	fill: var(--color-gray);
 }
+
 .dashicon {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  color: var(--color-gray);
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	color: var(--color-gray);
 }
 
 // Visibility.
 &-is-hidden.og-is-hidden {
-  display: none;
+	display: none;
 }
 
 // Color picker
 .wp-picker-container {
-  position: relative;
+	position: relative;
 
-  input {
-    width: auto;
-  }
+	input {
+		width: auto;
+	}
 }
+
 .wp-picker-input-wrap:not(.hidden) {
-  display: inline-flex;
-  align-items: stretch;
+	display: inline-flex;
+	align-items: stretch;
 }
+
 .wp-picker-holder {
-  position: absolute;
-  z-index: 99;
+	position: absolute;
+	z-index: 99;
 	min-width: 255px;
 }
 
 // Collapsible panel
 &-collapsible {
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-  }
+	&__header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background: #fff;
+	}
 
-  &__body {
-    overflow-y: hidden;
-    max-height: 0;
-    transition: all 0.2s ease;
-    padding-inline: 36px;
-    background: #fff;
-  }
-  &--expanded {
-    > .og-collapsible__body {
-      max-height: 999999px;
-      padding-block: 18px;
-    }
-  }
+	&__body {
+		overflow-y: hidden;
+		max-height: 0;
+		transition: all 0.2s ease;
+		padding-inline: 36px;
+		background: #fff;
+	}
+
+	&--expanded {
+		>.og-collapsible__body {
+			max-height: 999999px;
+			padding-block: 18px;
+		}
+	}
 }
 
 // Tooltip
 &-tooltip-icon {
-  // WordPress < 5.6
-  svg {
-    width: 14px;
-    height: 14px;
-    fill: var(--color-light);
-    margin-left: 6px;
-    top: 2px;
-    position: relative;
-  }
-  // WordPress 5.6+
-  .dashicon {
-    color: var(--color-light);
-    font-size: 14px;
-    position: relative;
-    top: 2px;
-  }
+
+	// WordPress < 5.6
+	svg {
+		width: 14px;
+		height: 14px;
+		fill: var(--color-light);
+		margin-left: 6px;
+		top: 2px;
+		position: relative;
+	}
+
+	// WordPress 5.6+
+	.dashicon {
+		color: var(--color-light);
+		font-size: 14px;
+		position: relative;
+		top: 2px;
+	}
 }
 
 // React tabs.
 .react-tabs {
-  background: #fff;
-  border: var(--border);
-  position: relative;
+	background: #fff;
+	border: var(--border);
+	position: relative;
 
-  &__tab-list {
-    border-bottom: var(--border);
-    margin: 0;
-    display: flex;
-    align-items: center;
+	&__tab-list {
+		border-bottom: var(--border);
+		margin: 0;
+		display: flex;
+		align-items: center;
 
-    .button {
-      margin-left: auto;
-      margin-right: 12px;
-      box-shadow: none;
-    }
-  }
+		.button {
+			margin-left: auto;
+			margin-right: 12px;
+			box-shadow: none;
+		}
+	}
 
-  &__tab {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    height: 48px;
-    line-height: 42px;
-    padding: 4px 12px;
-    margin-bottom: 0;
-    transition: box-shadow 0.1s linear;
+	&__tab {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		box-sizing: border-box;
+		height: 48px;
+		line-height: 42px;
+		padding: 4px 12px;
+		margin-bottom: 0;
+		transition: box-shadow 0.1s linear;
 
-    &--selected {
-      box-shadow: inset 0 0 0 1.5px transparent,
-        inset 0 -4px 0 0 var(--wp-admin-theme-color);
-      color: var(--wp-admin-theme-color);
-    }
+		&--selected {
+			box-shadow: inset 0 0 0 1.5px transparent,
+				inset 0 -4px 0 0 var(--color-primary);
+			color: var(--color-primary);
+		}
 
-    &:hover {
-      color: var(--wp-admin-theme-color);
-    }
-  }
+		&:hover {
+			color: var(--color-primary);
+		}
+	}
 
-  &__tab-panel {
-    display: none;
-    max-width: none;
+	&__tab-panel {
+		display: none;
+		max-width: none;
 
-    &--selected {
-      display: block;
-    }
-  }
+		&--selected {
+			display: block;
+		}
+	}
 }
 
 .og-tabs--main .react-tabs__tab {
-  font-weight: 600;
+	font-weight: 600;
 
-  svg {
-    padding: 4px;
-  }
+	svg {
+		padding: 4px;
+	}
 }
 
 // React codemirror.
 .react-codemirror2 {
-  border: var(--border);
-  margin-bottom: 12px;
-  font-size: 12px;
+	border: var(--border);
+	margin-bottom: 12px;
+	font-size: 12px;
 }
 
 // Settings tab.
