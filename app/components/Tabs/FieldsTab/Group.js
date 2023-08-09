@@ -7,7 +7,7 @@ import Content from './Content';
 import { Inserter } from './Inserter';
 import Node from './Node';
 
-const Group = ( { id, field, parent = '', updateFieldType, useFieldsData } ) => {
+const Group = ( { id, field, parent = '', updateFieldType, groupData } ) => {
 	const {
 		fields,
 		add,
@@ -15,7 +15,7 @@ const Group = ( { id, field, parent = '', updateFieldType, useFieldsData } ) => 
 		duplicate,
 		updateType,
 		setFields,
-	} = useFieldsData;
+	} = groupData;
 
 	const fieldTypes = useApi( 'field-types', {} );
 	const controls = [ ...fieldTypes[ field.type ].controls ];

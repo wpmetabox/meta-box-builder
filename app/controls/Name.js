@@ -53,7 +53,10 @@ const Name = ( { name, componentId, defaultValue, _new, ...rest } ) => {
 			return;
 		}
 
-		titleElement.textContent = el.value || __( '(No label)', 'meta-box-builder' );
+		if ( el.value ) {
+			titleElement.textContent = el.value;
+			return;
+		}
 
 		// Use group title if needed.
 		const groupTitleElement = document.getElementById( `fields-${ rest.fieldId }-group_title` );
