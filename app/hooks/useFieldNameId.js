@@ -1,46 +1,40 @@
 import { useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import slugify from "slugify";
+import { ucwords } from "../functions";
 
 const noIds = [ 'custom_html', 'divider', 'heading' ];
 
 const useFieldNameId = field => {
-	const noId = [ 'custom_html', 'divider', 'heading' ].includes( field.type );
+	const hasId = ![ 'custom_html', 'divider', 'heading' ].includes( field.type );
+	const hasLabel = ![ 'hidden', 'divider' ].includes( field.type );
 
 	const [ name, setName ] = useState( field.name || '' );
-	const [ id, updateId ] = useState( noId ? '' : ( field.id || '' ) );
-	const [ group_title, setGroupTitle ] = useState( field.group_title || '' );
-	const [ label, setLabel ] = useState( [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : field.name || field.group_title || __( '(No label)', 'meta-box-builder' ) );
+	const [ id, updateId ] = useState( hasId ? field.id || '' : '' );
+	const [ group_title, updateGroupTitle ] = useState( field.group_title || '' );
 
 	const isFirstEdit = useRef( !!field._new );
 
 	const updateName = value => {
 		setName( value );
 
-		setLabel( [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : value || group_title || __( '(No label)', 'meta-box-builder' ) );
-
-		if ( noId || !isFirstEdit.current ) {
-			return;
+		if ( hasId && isFirstEdit.current ) {
+			updateId( slugify( value, {
+				lower: true,
+				replacement: '_',
+				remove: /[*+~.()'"!:@]/g
+			} ) );
 		}
-
-		updateId( slugify( value, {
-			lower: true,
-			replacement: '_',
-			remove: /[*+~.()'"!:@]/g
-		} ) );
 	};
-
-	const updateGroupTitle = value => {
-		setGroupTitle( value );
-		setLabel( [ 'hidden', 'divider' ].includes( field.type ) ? ucwords( field.type ) : name || value || __( '(No label)', 'meta-box-builder' ) );
-	}
 
 	const noAutoGenerateId = () => isFirstEdit.current = false;
 
+	const label = hasLabel ? name || group_title || __( '(No label)', 'meta-box-builder' ) : ucwords( field.type );
+
 	return {
-		...field,
 		name,
 		id,
+		group_title,
 		label,
 		updateName,
 		updateId,
