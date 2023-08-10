@@ -4,6 +4,7 @@ import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
 import Content from './Content';
+import Header from "./Header";
 import { Inserter } from './Inserter';
 import Node from './Node';
 
@@ -41,14 +42,7 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 					<>
 						<div className="og-group-fields__title">{ __( 'Subfields', 'meta-box-builder' ) }</div>
 						<div className="og-group-fields__inner">
-							<div className="og-header">
-								<span className="og-column--drag">&nbsp;</span>
-								<span className="og-column--label">{ __( 'Label', 'meta-box-builder' ) }</span>
-								<span className="og-column--space"></span>
-								<span className="og-column--id">{ __( 'ID', 'meta-box-builder' ) }</span>
-								<span className="og-column--type">{ __( 'Type', 'meta-box-builder' ) }</span>
-								<span className="og-column--actions">{ __( 'Actions', 'meta-box-builder' ) }</span>
-							</div>
+							<Header />
 							<ReactSortable
 								group={ {
 									name: 'nested',
