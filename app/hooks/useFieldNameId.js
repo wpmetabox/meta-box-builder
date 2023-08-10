@@ -1,7 +1,8 @@
-import { useRef, useState } from "@wordpress/element";
+import { useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import slugify from "slugify";
 import { ucwords } from "../functions";
+import useFieldIds from "./useFieldIds";
 
 const noIds = [ 'custom_html', 'divider', 'heading' ];
 
@@ -26,6 +27,12 @@ const useFieldNameId = field => {
 			} ) );
 		}
 	};
+
+	// Update list ids for conditional logic.
+	const updateFieldId = useFieldIds( state => state.update );
+	useEffect( () => {
+		updateFieldId( field._id, { ...field, name, id, group_title } );
+	}, [ id ] );
 
 	const noAutoGenerateId = () => isFirstEdit.current = false;
 
