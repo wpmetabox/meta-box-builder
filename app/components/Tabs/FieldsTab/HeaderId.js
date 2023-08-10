@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 
-// Output field label on the header bar.
-const HeaderLabel = ( { nameIdData } ) => {
+// Output field id on the header bar with live input.
+const HeaderId = ( { nameIdData } ) => {
 	const hiddenRef = useRef();
 	const inputRef = useRef();
 
@@ -13,30 +13,28 @@ const HeaderLabel = ( { nameIdData } ) => {
 		}
 		e.preventDefault();
 		e.target.blur();
-		nameIdData.noAutoGenerateId();
 	};
 
 	// Update the width of the input to match the width of the text.
 	useEffect( () => {
-		inputRef.current.style.width = `${ hiddenRef.current.offsetWidth || nameIdData.label.length * 7 }px`;
-	}, [ nameIdData.label ] );
+		inputRef.current.style.width = `${ hiddenRef.current.offsetWidth || nameIdData.id.length * 7 }px`;
+	}, [ nameIdData.id ] );
 
 	return (
-		<>
-			<span className="og-item__hidden-text og-item__hidden-text--label" ref={ hiddenRef }>{ nameIdData.label }</span>
+		<span className="og-column--id">
+			<span className="og-item__hidden-text" ref={ hiddenRef }>{ nameIdData.id }</span>
 			<input
 				type="text"
-				className="og-item__editable og-item__editable--label"
+				className="og-item__editable"
 				title={ __( 'Click to edit', 'meta-box-builder' ) }
-				value={ nameIdData.label }
+				value={ nameIdData.id }
 				onKeyDown={ maybeFinishEditing }
-				onChange={ e => nameIdData.updateName( e.target.value ) }
-				onBlur={ nameIdData.noAutoGenerateId }
+				onChange={ e => nameIdData.updateId( e.target.value ) }
 				ref={ inputRef }
 			/>
 			<span className="dashicons dashicons-edit"></span>
-		</>
+		</span>
 	);
 };
 
-export default HeaderLabel;
+export default HeaderId;

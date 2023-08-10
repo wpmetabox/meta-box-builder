@@ -2,11 +2,11 @@ import { useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, copy, dragHandle, plus, trash } from "@wordpress/icons";
 import clsx from "clsx";
-import { elementIn } from '../../../functions';
 import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFields from "../../../hooks/useFields";
 import Field from './Field';
 import Group from './Group';
+import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
@@ -16,7 +16,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	const nameIdData = useFieldNameId( field );
 
 	const toggleFieldSettings = e => {
-		if ( !elementIn( e.target, [ 'og-column--drag', 'og-item__action--remove', 'og-item__action--duplicate', 'og-inserter', 'og-item__toggle', 'og-item__title', 'dashicons' ] ) ) {
+		if ( e.target.classList.contains( 'og-item__reveal' ) ) {
 			toggle();
 		}
 	};
@@ -54,12 +54,11 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 				<span className="og-column--drag og-item__move"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
 					<HeaderLabel nameIdData={ nameIdData } />
-					<span className="dashicons dashicons-edit"></span>
 					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+' }]</span> }
 				</span>
-				<span className="og-column--space og-item__move"></span>
-				<span className="og-column--id og-item__move">{ nameIdData.id }</span>
-				<span className="og-column--type og-item__move">{ field.type }</span>
+				<span className="og-column--space og-item__move og-item__reveal"></span>
+				<HeaderId nameIdData={ nameIdData } />
+				<span className="og-column--type og-item__move og-item__reveal">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
 						field.type === 'group' && <Inserter

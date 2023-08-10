@@ -8,9 +8,6 @@ export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( 
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
-export const elementIs = ( el, className ) => el.classList.contains( className ) || el.closest( `.${ className }` );
-export const elementIn = ( el, classNames ) => classNames.some( cl => elementIs( el, cl ) );
-
 export const fetcher = ( api, params = {}, method = 'GET' ) => {
 	let options = {
 		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
