@@ -15,12 +15,6 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
 
-	const toggleFieldSettings = e => {
-		if ( e.target.classList.contains( 'og-item__reveal' ) ) {
-			toggle();
-		}
-	};
-
 	const remove = () => {
 		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
 			removeField( id );
@@ -46,19 +40,15 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			!showSubfields && 'og-item--hide-fields',
 		) }>
 			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
-			<div
-				className="og-item__header og-collapsible__header"
-				title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
-				onClick={ toggleFieldSettings }
-			>
+			<div className="og-item__header og-collapsible__header">
 				<span className="og-column--drag og-item__move"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
 					<HeaderLabel nameIdData={ nameIdData } />
 					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+' }]</span> }
 				</span>
-				<span className="og-column--space og-item__move og-item__reveal"></span>
+				<span className="og-column--space og-item__move" onClick={ toggle } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }></span>
 				<HeaderId nameIdData={ nameIdData } />
-				<span className="og-column--type og-item__move og-item__reveal">{ field.type }</span>
+				<span className="og-column--type og-item__move" onClick={ toggle } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
 						field.type === 'group' && <Inserter
