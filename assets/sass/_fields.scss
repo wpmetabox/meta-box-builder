@@ -10,9 +10,10 @@
 	align-items: center;
 	color: #999;
 	border-bottom: var(--border-lighter);
-	padding: 12px;
-	background: var(--color-lightest);
+	padding: 10px;
+	background: var(--color-lighter);
 }
+
 &-column {
 	&--drag {
 		cursor: grab;
@@ -22,23 +23,39 @@
 		height: 24px;
 		box-sizing: border-box;
 	}
+
 	&--label {
+		padding-right: 20px;
+		display: flex;
+		align-items: center;
+	}
+
+	&--space {
 		flex: 1;
+		height: 24px;
 	}
+
 	&--id {
-		width: 25%;
+		width: 180px;
+		text-overflow: ellipsis;
+		padding-right: 20px;
+		display: flex;
+		align-items: center;
 	}
+
 	&--type {
-		width: 160px;
+		width: 140px;
+		padding-right: 20px;
 	}
+
 	&--actions {
-		width: 90px;
-		text-align: right;
+		width: 24px * 3 + 4px * 2; // 3 icons + 2 gaps.
 	}
 }
+
+// Align the "Action" text in the item header bar.
 &-header .og-column--actions {
-	padding-right: 36px;
-	box-sizing: border-box;
+	text-align: right;
 }
 
 &-field {
@@ -112,46 +129,92 @@
 }
 
 &-item {
-	border-bottom: var(--border-lighter);
-
 	&__header {
-		padding: 12px;
+		padding: 10px;
 	}
 
-	&__title {
-		color: var(--wp-admin-theme-color);
-		font-weight: 500;
+	&__hidden-text {
+		position: absolute;
+		height: 0;
+		overflow: hidden;
+		white-space: pre;
+
+		&--label {
+			font-weight: 500;
+		}
+	}
+
+	&__editable.og-item__editable.og-item__editable {
 		line-height: 24px;
+
+		// Reset WP style for the input.
+		border: 0;
+		border-radius: 0;
+		background: none;
+		padding: 0;
+		min-height: 24px;
+		font-size: 13px;
+
+		// Fix layout shifting when focus.
+		height: 24px;
+		box-sizing: border-box;
+
+		+.dashicons {
+			font-size: 16px;
+			width: 16px;
+			height: 16px;
+			color: var(--color-gray);
+
+			// Hide edit icon by keep its space, so when hovering, it appears without layout shift.
+			opacity: 0;
+		}
+
+		// Show edit title icon when hover.
+		&:hover+.dashicons {
+			opacity: 1;
+		}
+
+		// Add border bottom when focus, mimic edit effect.
+		&:focus {
+			outline: none;
+			color: inherit;
+			box-shadow: 0 1px var(--color-light);
+
+			// Hide edit icon when focus.
+			+.dashicons {
+				opacity: 0;
+			}
+		}
+
+		&--label {
+			color: var(--color-primary);
+			font-weight: 500;
+		}
 	}
 
 	&__actions {
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
-		gap: 8px;
-	}
-
-	&__action {
-		cursor: pointer;
-		color: var(--color-gray);
-		display: flex;
-		padding: 4px;
-		transition: all ease-out .2s;
+		gap: 4px;
 
 		svg {
 			fill: currentColor;
 		}
+	}
+
+	&__action {
+		display: flex;
+		cursor: pointer;
+		color: var(--color-gray);
+		padding: 4px;
+		transition: all ease-out .2s;
 
 		&:hover {
 			color: inherit;
 		}
 
-		&--remove,
-		&--duplicate {
-			display: none;
-		}
-
-		&--remove:hover {
+		&--remove {
 			color: var(--color-red);
 		}
 	}
@@ -181,26 +244,34 @@
 		&:hover {
 			box-shadow: none;
 			color: inherit;
-			color: var(--wp-admin-theme-color);
+			color: var(--color-primary);
 		}
 	}
 }
-.og-item:hover,
-.og-collapsible--expanded {
-	> .og-item__header {
-		background: var(--color-lightest);
 
-		.og-column--drag {
-			opacity: 1;
-			visibility: visible;
-		}
-		.og-item__action--remove,
-		.og-item__action--duplicate {
-			display: flex;
-		}
+// Border bottom: an item always have border bottom, and when expanded: add a border bottom to its header bar.
+&-item {
+	border-bottom: var(--border-lighter);
+
+	&.og-collapsible--expanded>.og-item__header {
+		border-bottom: var(--border-lighter);
 	}
 }
-.og-collapsible--expanded > .og-item__header .og-item__action--toggle svg {
+
+// On hover and expand.
+.og-item__header:hover,
+.og-collapsible--expanded>.og-item__header {
+	background: var(--color-lightest);
+
+	// Show drag icon.
+	.og-column--drag {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+// Rotate the dropdown icon when expanding.
+.og-collapsible--expanded>.og-item__header .og-item__action--toggle svg {
 	transform: rotate(180deg);
 }
 
@@ -239,41 +310,6 @@
 	input {
 		min-width: 0; // To make the input not exceed parent's width (see conditional logic in a sub-field of nested groups).
 		flex: 1;
-	}
-}
-
-// Group.
-&-item--group .og-collapsible__body {
-	padding-bottom: 0;
-}
-
-&-group-fields {
-	overflow-y: hidden;
-	max-height: 0;
-	transition: all 0.2s ease;
-	padding-inline: 36px;
-	margin-bottom: 0;
-
-	.og-collapsible--expanded>& {
-		max-height: 999999px;
-		padding-bottom: 12px;
-	}
-
-	>.og-input {
-		border: var(--border-lighter);
-	}
-
-	.og-header,
-	.og-item__header {
-		padding-block: 8px;
-	}
-
-	&--empty>.og-input {
-		border: none;
-
-		>.og-inserter {
-			margin: 0;
-		}
 	}
 }
 
@@ -351,6 +387,7 @@
 			opacity: 1;
 			position: relative;
 		}
+
 		.icon-fontawesome::before {
 			font-size: 18px;
 		}
@@ -380,6 +417,7 @@
 				box-shadow: 0 0 0 1px rgba(0, 0, 0, .3);
 			}
 		}
+
 		.og-icon__select {
 			border-radius: 4px;
 			margin: 0;
@@ -400,8 +438,8 @@
 		// WordPress 5.6+
 		&:checked~.og-dashicon {
 			color: #fff;
-			background-color: var(--wp-admin-theme-color);
-			border-color: var(--wp-admin-theme-color);
+			background-color: var(--color-primary);
+			border-color: var(--color-primary);
 		}
 	}
 }

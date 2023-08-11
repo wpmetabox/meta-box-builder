@@ -3,6 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useApi from "../../hooks/useApi";
 import useFields from "../../hooks/useFields";
+import Header from "./FieldsTab/Header";
 import { Inserter } from './FieldsTab/Inserter';
 import Node from './FieldsTab/Node';
 
@@ -28,16 +29,9 @@ const Fields = prop => {
 		<>
 			<RawHTML className="og-none">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
 			<Inserter addField={ add } />
-
 		</>
 		: <>
-			<div className="og-header">
-				<span className="og-column--drag">&nbsp;</span>
-				<span className="og-column--label">{ __( 'Label', 'meta-box-builder' ) }</span>
-				<span className="og-column--id">{ __( 'ID', 'meta-box-builder' ) }</span>
-				<span className="og-column--type">{ __( 'Type', 'meta-box-builder' ) }</span>
-				<span className="og-column--actions">{ __( 'Actions', 'meta-box-builder' ) }</span>
-			</div>
+			<Header />
 			<ReactSortable group={ {
 				name: 'root',
 				pull: true,
@@ -49,7 +43,7 @@ const Fields = prop => {
 				className="og-fields"
 				list={ fields }
 				setList={ setFields }
-				handle=".og-item__header"
+				handle=".og-item__move"
 			>
 				{
 					fields.map( field => <Node

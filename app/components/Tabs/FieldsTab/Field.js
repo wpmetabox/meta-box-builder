@@ -1,4 +1,3 @@
-import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
@@ -12,7 +11,7 @@ const Field = props => {
 	const type = ignore.includes( props.field.type ) ? 'text' : props.field.type;
 
 	if ( !type || !fieldTypes.hasOwnProperty( type ) ) {
-		return '';
+		return;
 	}
 
 	const controls = [ ...fieldTypes[ type ].controls ];
@@ -39,4 +38,4 @@ const Field = props => {
 	</Tabs>;
 };
 
-export default memo( ( Field ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.field.type === nextProps.field.type );
+export default Field;

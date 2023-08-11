@@ -1,14 +1,14 @@
-import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import clsx from "clsx";
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
-import useFields from "../../../hooks/useFields";
 import Content from './Content';
+import Header from "./Header";
 import { Inserter } from './Inserter';
 import Node from './Node';
 
-const Group = ( { id, field, parent = '', updateFieldType } ) => {
+const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData } ) => {
 	const {
 		fields,
 		add,
@@ -16,12 +16,14 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 		duplicate,
 		updateType,
 		setFields,
-	} = useFields(
-		Object.values( field.fields || {} ).filter( field => field.type ),
-		`fields${ parent }[${ id }][fields]`
-	);
+	} = groupData;
 
 	const fieldTypes = useApi( 'field-types', {} );
+
+	if ( !fieldTypes.hasOwnProperty( field.type ) ) {
+		return;
+	}
+
 	const controls = [ ...fieldTypes[ field.type ].controls ];
 
 	return (
@@ -32,55 +34,53 @@ const Group = ( { id, field, parent = '', updateFieldType } ) => {
 					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
 				</TabList>
 				<TabPanel>
-					<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } updateFieldType={ updateFieldType } />
+					<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } />
 				</TabPanel>
 				<TabPanel>
-					<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } />
+					<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } nameIdData={ nameIdData } />
 				</TabPanel>
 			</Tabs>
-			<div className={ `og-group-fields og-field${ fields.length === 0 ? ' og-group-fields--empty' : '' }` }>
-				<div className="og-label">{ __( 'Sub fields', 'meta-box-builder' ) }</div>
-				<div className="og-input">
-					{
-						fields.length > 0 && (
-							<div className="og-header">
-								<span className="og-column--drag">&nbsp;</span>
-								<span className="og-column--label">{ __( 'Label', 'meta-box-builder' ) }</span>
-								<span className="og-column--id">{ __( 'ID', 'meta-box-builder' ) }</span>
-								<span className="og-column--type">{ __( 'Type', 'meta-box-builder' ) }</span>
-								<span className="og-column--actions">{ __( 'Actions', 'meta-box-builder' ) }</span>
-							</div>
-						)
-					}
-					<ReactSortable group={ {
-						name: 'nested',
-						pull: true,
-						put: [ 'root', 'nested' ],
-					} }
-						animation={ 200 }
-						delayOnTouchStart={ true }
-						delay={ 2 }
-						list={ fields }
-						setList={ setFields }
-						handle=".og-item__header"
-					>
-						{
-							fields.map( ( field, index ) => <Node
-								key={ field._id }
-								id={ field._id }
-								field={ field }
-								parent={ `${ parent }[${ id }][fields]` }
-								removeField={ remove }
-								duplicateField={ duplicate }
-								updateFieldType={ updateType }
-							/> )
-						}
-					</ReactSortable>
-					<Inserter addField={ add } />
-				</div>
+
+			<div className={ clsx( 'og-group-fields', fields.length === 0 && 'og-group-fields--empty' ) }>
+				{
+					fields.length > 0 &&
+					<>
+						<div className="og-group-fields__title">{ __( 'Subfields', 'meta-box-builder' ) }</div>
+						<div className="og-group-fields__inner">
+							<Header />
+							<ReactSortable
+								group={ {
+									name: 'nested',
+									pull: true,
+									put: [ 'root', 'nested' ],
+								} }
+								animation={ 200 }
+								delayOnTouchStart={ true }
+								delay={ 2 }
+								list={ fields }
+								setList={ setFields }
+								handle=".og-item__move"
+							>
+								{
+									fields.map( ( field, index ) => <Node
+										key={ field._id }
+										id={ field._id }
+										field={ field }
+										parent={ `${ parent }[${ id }][fields]` }
+										removeField={ remove }
+										duplicateField={ duplicate }
+										updateFieldType={ updateType }
+									/> )
+								}
+							</ReactSortable>
+						</div>
+					</>
+				}
+
+				<Inserter addField={ add } buttonType="secondary" buttonText={ __( '+ Add Subfield', 'meta-box-builder' ) } />
 			</div>
 		</>
 	);
 };
 
-export default memo( ( Group ), ( prevProps, nextProps ) => prevProps.id === nextProps.id && prevProps.field.fields === nextProps.field.fields );
+export default Group;

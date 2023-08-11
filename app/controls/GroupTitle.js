@@ -1,25 +1,37 @@
+import { useLayoutEffect, useRef, useState } from '@wordpress/element';
 import DivRow from './DivRow';
-import { __ } from "@wordpress/i18n";
 
-const GroupTitle = ( { name, componentId, defaultValue, ...rest } ) => {
-	const onChange = e => {
-		// Don't update field header bar if it has name.
-		const nameElement = document.getElementById( `fields-${ rest.fieldId }-name` );
-		if ( nameElement.value ) {
-			return;
-		}
+/**
+ * Fix cursor jumping to the end of the `<input>` after typing.
+ * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
+ */
+const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
+	const ref = useRef();
+	const [ selection, setSelection ] = useState();
 
-		// Update field header bar.
-		const titleElement = document.getElementById( `og-item__title__${ rest.fieldId }` );
-		if ( titleElement ) {
-			titleElement.textContent = e.target.value || __( '(No label)', 'meta-box-builder' );
-		}
+	const handleChange = e => {
+		nameIdData.updateGroupTitle( e.target.value );
+		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	};
+
+	useLayoutEffect( () => {
+		if ( selection && ref.current ) {
+			[ ref.current.selectionStart, ref.current.selectionEnd ] = selection;
+		}
+	}, [ selection ] );
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<input type="text" id={ componentId } defaultValue={ defaultValue } name={ name } onChange={ onChange } />
+			<input
+				ref={ ref }
+				type="text"
+				id={ componentId }
+				name={ name }
+				value={ nameIdData.group_title }
+				onChange={ handleChange }
+			/>
 		</DivRow>
 	);
-};
+}
+
 export default GroupTitle;

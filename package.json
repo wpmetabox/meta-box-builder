@@ -6,7 +6,6 @@
     "css:settings": "sass --no-source-map --load-path=assets/sass --style=compressed modules/settings-page/assets/settings-page.scss modules/settings-page/assets/settings-page.css",
     "css:relationships": "sass --no-source-map --load-path=assets/sass --style=compressed modules/relationships/assets/relationships.scss modules/relationships/assets/relationships.css",
     "build": "webpack --mode production",
-    "start": "webpack --mode development",
     "watch": "webpack --mode development --watch"
   },
   "devDependencies": {
@@ -17,10 +16,12 @@
     "@wordpress/element": "^4.1.0",
     "@wordpress/i18n": "^4.3.0",
     "babel-loader": "^8.1.0",
+    "sass": "^1.64.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "clsx": "^2.0.0",
     "dot-prop": "^6.0.1",
     "react-codemirror2": "^7.2.1",
     "react-select": "^3.1.0",

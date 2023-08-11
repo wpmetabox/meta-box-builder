@@ -1,32 +1,37 @@
-import { useEffect, useState } from "@wordpress/element";
-import useFieldIds from "../hooks/useFieldIds";
+import { useLayoutEffect, useRef, useState } from '@wordpress/element';
 import DivRow from './DivRow';
-import { getFieldValue } from '/functions';
-import useDebounce from '/hooks/useDebounce';
 
-const Id = ( { name, componentId, defaultValue, ...rest } ) => {
-	const updateFieldId = useFieldIds( state => state.update );
-	const [ value, setValue ] = useState( '' );
-	const debounceValue = useDebounce( value );
+/**
+ * Fix cursor jumping to the end of the `<input>` after typing.
+ * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
+ */
+const Id = ( { name, componentId, nameIdData, ...rest } ) => {
+	const ref = useRef();
+	const [ selection, setSelection ] = useState();
 
-	// Update conditional logic
-	useEffect( () => {
-		const key = name.replace( /\[[^\]]+?\]$/, '' );
-		let field = getFieldValue( key );
-
-		updateFieldId( rest.fieldId, field );
-	}, [ debounceValue ] );
-
-	const onChange = e => {
-		setValue( e.target.value );
-
-		// Update item header bar.
-		e.target.closest( '.og-item' ).querySelector( '.og-column--id' ).textContent = e.target.value;
+	const handleChange = e => {
+		nameIdData.updateId( e.target.value );
+		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	};
 
-	return <DivRow htmlFor={ componentId } { ...rest }>
-		<input type="text" id={ componentId } name={ name } defaultValue={ defaultValue } onChange={ onChange } required />
-	</DivRow>;
+	useLayoutEffect( () => {
+		if ( selection && ref.current ) {
+			[ ref.current.selectionStart, ref.current.selectionEnd ] = selection;
+		}
+	}, [ selection ] );
+
+	return (
+		<DivRow htmlFor={ componentId } { ...rest }>
+			<input
+				ref={ ref }
+				type="text"
+				id={ componentId }
+				name={ name }
+				value={ nameIdData.id }
+				onChange={ handleChange }
+			/>
+		</DivRow>
+	);
 };
 
 export default Id;
