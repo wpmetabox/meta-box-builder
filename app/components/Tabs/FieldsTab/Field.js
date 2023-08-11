@@ -11,7 +11,7 @@ const Field = props => {
 	const type = ignore.includes( props.field.type ) ? 'text' : props.field.type;
 
 	if ( !type || !fieldTypes.hasOwnProperty( type ) ) {
-		return '';
+		return;
 	}
 
 	const controls = [ ...fieldTypes[ type ].controls ];

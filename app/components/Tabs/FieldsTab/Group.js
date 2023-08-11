@@ -19,6 +19,11 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 	} = groupData;
 
 	const fieldTypes = useApi( 'field-types', {} );
+
+	if ( !fieldTypes.hasOwnProperty( field.type ) ) {
+		return;
+	}
+
 	const controls = [ ...fieldTypes[ field.type ].controls ];
 
 	return (
