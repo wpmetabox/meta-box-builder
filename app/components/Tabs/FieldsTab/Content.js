@@ -18,9 +18,6 @@ const Content = ( { id, controls, field, parent = '', updateFieldType, nameIdDat
 			name={ `fields${ parent }[${ id }]${ input }` }
 			defaultValue={ defaultValue }
 
-			// For Name: indicate if field is just added, for auto generating ID.
-			_new={ !!field._new }
-
 			// For Type: allow to change field type.
 			updateFieldType={ updateFieldType }
 
