@@ -40,28 +40,6 @@
 
 .og-column--actions .og-inserter {
 	padding: 0;
-
-	button {
-		display: flex;
-		align-items: center;
-		padding: 0;
-		width: 22px;
-		height: 22px;
-		min-height: 22px;
-		border-color: currentColor;
-		color: var(--color-gray);
-		background: none;
-		transition: all ease-out .2s;
-
-		&:hover {
-			color: inherit;
-		}
-
-		svg {
-			width: 20px;
-			height: 20px;
-		}
-	}
 }
 
 // Toggle subfields.
@@ -70,6 +48,10 @@
 	display: inline-block;
 	padding: 4px;
 	cursor: pointer;
+	height: 16px;
+	width: 16px;
+	line-height: 16px;
+	font-size: 12px;
 
 	&:hover {
 		color: inherit;

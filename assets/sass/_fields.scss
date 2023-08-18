@@ -270,11 +270,6 @@
 	}
 }
 
-// Rotate the dropdown icon when expanding.
-.og-collapsible--expanded>.og-item__header .og-item__action--toggle svg {
-	transform: rotate(180deg);
-}
-
 &-attribute {
 	display: flex;
 	align-items: center;

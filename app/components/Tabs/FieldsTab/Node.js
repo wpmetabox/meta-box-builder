@@ -1,6 +1,6 @@
 import { useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { Icon, copy, dragHandle, plus, trash } from "@wordpress/icons";
+import { Icon, copy, dragHandle, plus, reset, trash } from "@wordpress/icons";
 import clsx from "clsx";
 import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFields from "../../../hooks/useFields";
@@ -53,9 +53,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 					{
 						field.type === 'group' && <Inserter
 							addField={ groupData.add }
-							buttonType="secondary"
-							buttonText={ <Icon icon={ plus } /> }
-							title={ __( 'Add a new subfield', 'meta-box-builder' ) }
+							type="group"
 						/>
 					}
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
