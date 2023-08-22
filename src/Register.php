@@ -7,7 +7,7 @@ class Register {
 	private $meta_box_post_ids = [];
 
 	public function __construct() {
-		add_filter( 'rwmb_meta_boxes', array( $this, 'register_meta_box' ) );
+		add_filter( 'rwmb_meta_boxes', [ $this, 'register_meta_box' ] );
 	}
 
 	public function register_meta_box( $meta_boxes ) {
@@ -70,7 +70,7 @@ class Register {
 			$twig   = new \eLightUp\Twig\Environment( $loader );
 
 			// Proxy for all PHP/WordPress functions.
-			$data['mb'] = new TwigProxy;
+			$data['mb'] = new TwigProxy();
 
 			echo $twig->render( 'block', $data );
 		};
@@ -95,7 +95,7 @@ class Register {
 	}
 
 	public function enqueue_assets() {
-		wp_enqueue_style( 'mbb-post', MBB_URL . 'assets/css/post.css' );
+		wp_enqueue_style( 'mbb-post', MBB_URL . 'assets/css/post.css', [], MBB_VER );
 		wp_enqueue_script( 'mbb-post', MBB_URL . 'assets/js/post.js', [], MBB_VER, true );
 		\RWMB_Helpers_Field::localize_script_once( 'mbb-post', 'MBB', [
 			'meta_box_post_ids' => $this->meta_box_post_ids,

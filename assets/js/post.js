@@ -1,18 +1,15 @@
-( function ( document, { meta_box_post_ids, base_url, title } ) {
-	const addIcon = ( metaBoxId ) => {
-		let a = document.createElement( 'a' );
-		a.setAttribute( 'href', `${ base_url }${ meta_box_post_ids[ metaBoxId ] }` );
-		a.setAttribute( 'class', 'dashicons dashicons-admin-generic mbb-settings' );
-		a.setAttribute( 'title', title );
-		let metabox = document.getElementById( metaBoxId );
-		if ( !metabox ) {
-			return;
-		}
-		let actions = metabox.querySelector( '.handle-actions' );
-		if ( actions ) {
-			actions.prepend( a );
-		}
-	};
-
-	Object.keys( meta_box_post_ids ).forEach( addIcon );
-} )( document, MBB );
+Object.keys( MBB.meta_box_post_ids ).forEach( id => {
+	let metabox = document.getElementById( id );
+	if ( !metabox ) {
+		return;
+	}
+	let a = document.createElement( 'a' );
+	a.setAttribute( 'href', `${ MBB.base_url }${ MBB.meta_box_post_ids[ id ] }` );
+	a.setAttribute( 'class', 'dashicons dashicons-admin-generic mbb-settings' );
+	a.setAttribute( 'title', MBB.title );
+	a.setAttribute( 'target', '_blank' );
+	let actions = metabox.querySelector( '.handle-actions' );
+	if ( actions ) {
+		actions.prepend( a );
+	}
+} );
