@@ -16,18 +16,21 @@ const HeaderLabel = ( { nameIdData } ) => {
 		nameIdData.noAutoGenerateId();
 	};
 
+	const displayedLabel = nameIdData.label || __( '(No label)', 'meta-box-builder' );
+
 	// Update the width of the input to match the width of the text.
 	useEffect( () => {
 		inputRef.current.style.width = `${ hiddenRef.current.offsetWidth || nameIdData.label.length * 7 }px`;
-	}, [ nameIdData.label ] );
+	}, [ displayedLabel ] );
 
 	return (
 		<>
-			<span className="og-item__hidden-text og-item__hidden-text--label" ref={ hiddenRef }>{ nameIdData.label }</span>
+			<span className="og-item__hidden-text og-item__hidden-text--label" ref={ hiddenRef }>{ displayedLabel }</span>
 			<input
 				type="text"
 				className="og-item__editable og-item__editable--label"
 				title={ __( 'Click to edit', 'meta-box-builder' ) }
+				placeholder={ displayedLabel }
 				value={ nameIdData.label }
 				onKeyDown={ maybeFinishEditing }
 				onChange={ e => nameIdData.updateName( e.target.value ) }

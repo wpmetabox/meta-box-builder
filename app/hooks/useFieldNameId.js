@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "@wordpress/element";
-import { __ } from "@wordpress/i18n";
 import slugify from "slugify";
 import { ucwords } from "../functions";
 import useFieldIds from "./useFieldIds";
@@ -36,7 +35,7 @@ const useFieldNameId = field => {
 
 	const noAutoGenerateId = () => isFirstEdit.current = false;
 
-	const label = hasLabel ? name || group_title || __( '(No label)', 'meta-box-builder' ) : ucwords( field.type );
+	const label = hasLabel ? name || group_title : ucwords( field.type );
 
 	return {
 		name,
