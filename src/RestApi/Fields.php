@@ -50,7 +50,7 @@ class Fields extends Base {
 		$clone    = ['clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button'];
 		$date     = ['std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'required', 'disabled', 'readonly', 'js_options'];
 		$map      = ['std', 'address_field', 'language', 'region', 'required'];
-		$taxonomy = ['taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args'];
+		$taxonomy = ['taxonomy', 'field_type', 'placeholder', 'add_new', 'hide_terms_right_block', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args'];
 		$post     = [ 'post_type', 'field_type', 'add_new', 'multiple', 'select_all_none', 'parent', 'required', 'placeholder', 'query_args' ];
 		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];		
 		$upload   = ['max_file_uploads', 'max_status', 'force_delete', 'required'];

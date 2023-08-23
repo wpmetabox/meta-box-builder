@@ -182,6 +182,11 @@ class Registry {
 				'label'   => __( 'Add new', 'meta-box-builder' ),
 				'tooltip' => __( 'Allow users to create a new item', 'meta-box-builder' ),
 			] ),
+			Control::Checkbox( 'hide_terms_right_block', [
+				'label'      => __( 'Hide term UI right block', 'meta-box-builder' ),
+				'tooltip'    => __( 'Hide the right block when creating new term to avoid mistakenly deleting them', 'meta-box-builder' ),
+				'dependency' => 'add_new:true',
+			] ),
 			Control::Checkbox( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
 			Control::Checkbox( 'multiple', [
 				'label'   => __( 'Multiple', 'meta-box-builder' ),
