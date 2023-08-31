@@ -77,7 +77,11 @@ class Import {
 		}
 
 		foreach ( $posts as $post ) {
+			if ( isset( $post['settings']['id'] ) && ! isset( $post['post_name'] ) ) {
+				$post['post_name'] = $post['settings']['id'];
+			}
 			$post_id = wp_insert_post( $post );
+
 			if ( ! $post_id ) {
 				wp_die( wp_kses_post( sprintf(
 					// Translators: %1$s - post type, %2$s - post title, %3$s - go back URL.
@@ -124,6 +128,9 @@ class Import {
 
 			$post_arr                 = (array) $post;
 			$post_arr['post_excerpt'] = $excerpt;
+			if ( isset( $post_arr['settings']['id'] ) && ! isset( $post_arr['post_name'] ) ) {
+				$post_arr['post_name'] = $post_arr['settings']['id'];
+			}
 			unset( $post_arr['ID'] );
 
 			$post->ID = wp_insert_post( $post_arr );
