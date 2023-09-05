@@ -19,6 +19,7 @@ class Parser extends Base {
 			'args'        => $object_type === 'post' ? [] : [ "'object_type' => '$object_type'" ],
 			'object_type' => $object_type,
 			'object_id'   => $map[ $object_type ] ?? '',
+			'prefix'	  => $this->settings['prefix']
 		];
 
 		return $this;
