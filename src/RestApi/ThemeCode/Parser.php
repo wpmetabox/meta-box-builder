@@ -19,6 +19,7 @@ class Parser extends Base {
 			'args'        => $object_type === 'post' ? [] : [ "'object_type' => '$object_type'" ],
 			'object_type' => $object_type,
 			'object_id'   => $map[ $object_type ] ?? '',
+			'prefix'      => $this->settings['prefix'],
 		];
 
 		return $this;
@@ -26,7 +27,7 @@ class Parser extends Base {
 
 	private function get_settings_page_option_name( string $id ): string {
 		$settings_pages = apply_filters( 'mb_settings_pages', [] );
-		$settings_pages = array_filter( $settings_pages, function( $args ) use ( $id ) {
+		$settings_pages = array_filter( $settings_pages, function ( $args ) use ( $id ) {
 			return $args['id'] === $id;
 		} );
 		if ( empty( $settings_pages ) ) {

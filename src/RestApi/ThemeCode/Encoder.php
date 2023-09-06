@@ -34,6 +34,7 @@ class Encoder {
 
 	public function encode() {
 		foreach ( $this->fields as $key => $field ) {
+			$field['id']    = ! empty( $this->settings['prefix'] ) ? $this->settings['prefix'] . $field['id'] : $field['id'];
 			$encoded_string = $this->get_theme_code( $field );
 			// Set theme code for view
 			$this->fields[ $key ]['theme_code'] = $encoded_string;
