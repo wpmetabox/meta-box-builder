@@ -357,9 +357,10 @@
 		width: 36px;
 		height: 36px;
 		padding: 4px;
-		font-size: 24px;
 		box-sizing: border-box;
 		color: currentColor;
+		display: grid;
+		place-items: center;
 	}
 
 	&-selected {
@@ -370,7 +371,6 @@
 			height: 36px;
 			padding: 4px;
 			box-sizing: border-box;
-			font-size: 24px;
 			border: 1px solid #8c8f94;
 			border-radius: 4px;
 			margin-right: 10px;
@@ -453,4 +453,30 @@
 
 &-admin-columns-position .og-input input {
 	flex: 1;
+}
+
+// Tabs.
+&-item--tab {
+
+	.og-item__header,
+	.og-item__hidden-text--label,
+	.og-item__editable.og-item__editable.og-item__editable--label {
+		font-weight: 700;
+	}
+
+	.og-item__icon {
+		color: var(--color-gray);
+		margin-right: 6px;
+
+		&.dashicons {
+			font-size: 16px;
+			height: 16px;
+			width: 16px;
+		}
+	}
+
+	img.og-item__icon {
+		max-width: 24px;
+		height: auto;
+	}
 }
