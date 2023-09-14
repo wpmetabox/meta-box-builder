@@ -1,7 +1,7 @@
 import { Suspense } from "@wordpress/element";
 import { getControlParams } from '/functions';
 
-const Content = ( { id, controls, field, parent = '', updateFieldType, nameIdData, iconData } ) => {
+const Content = ( { id, controls, field, parent = '', updateFieldType, nameIdData, updateFieldData } ) => {
 	const getControlComponent = control => {
 		let [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
 
@@ -22,7 +22,7 @@ const Content = ( { id, controls, field, parent = '', updateFieldType, nameIdDat
 			updateFieldType={ updateFieldType }
 
 			nameIdData={ nameIdData }
-			iconData={ iconData }
+			updateFieldData={ updateFieldData }
 		/>;
 	};
 

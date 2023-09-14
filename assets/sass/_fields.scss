@@ -464,11 +464,6 @@
 		font-weight: 700;
 	}
 
-	// .og-column--label {
-	// 	background: url(../images/tab.svg) left center/14px no-repeat;
-	// 	padding-left: 20px;
-	// }
-
 	.og-item__icon {
 		color: var(--color-gray);
 		margin-right: 6px;
@@ -478,5 +473,10 @@
 			height: 16px;
 			width: 16px;
 		}
+	}
+
+	img.og-item__icon {
+		max-width: 24px;
+		height: auto;
 	}
 }

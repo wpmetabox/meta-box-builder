@@ -2,7 +2,7 @@ import { useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
-import useFieldIcon from "../../../hooks/useFieldIcon";
+import useFieldData from "../../../hooks/useFieldData";
 import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFields from "../../../hooks/useFields";
 import Field from './Field';
@@ -16,7 +16,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	const [ expanded, toggle ] = useReducer( state => !state, false );
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
-	const iconData = useFieldIcon( field );
+	const { data, updateFieldData } = useFieldData( field );
 
 	const remove = () => {
 		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
@@ -46,7 +46,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			<div className="og-item__header og-collapsible__header">
 				<span className="og-column--drag og-item__move"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
-					<HeaderIcon field={ field } iconData={ iconData } />
+					<HeaderIcon data={ data } />
 					<HeaderLabel nameIdData={ nameIdData } />
 					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+' }]</span> }
 				</span>
@@ -67,7 +67,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			{
 				field.type === 'group'
 					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } />
-					: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } iconData={ iconData } />
+					: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
 			}
 		</div>
 	);

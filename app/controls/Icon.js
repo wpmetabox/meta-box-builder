@@ -38,15 +38,15 @@ const getIconLabel = icon => {
 	return label.trim().toLowerCase();
 };
 
-const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, iconData, ...rest } ) => {
+const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, updateFieldData, ...rest } ) => {
 	const [ query, setQuery ] = useState( "" );
 	const [ value, setValue ] = useState( defaultValue );
-	let data = icons.map( icon => [ icon, getIconLabel( icon ) ] )
+	let filteredIcons = icons.map( icon => [ icon, getIconLabel( icon ) ] )
 		.filter( item => query === '' || item[ 1 ].includes( query.toLowerCase() ) );
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		iconData.updateIcon( e.target.value );
+		updateFieldData( name, e.target.value );
 	}
 
 	return (
@@ -57,7 +57,7 @@ const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, iconData
 			</div>
 			<div className="og-icon-items">
 				{
-					data.map( ( [ icon, label ] ) => (
+					filteredIcons.map( ( [ icon, label ] ) => (
 						<div key={ icon } className='og-icon-item'>
 							<label key={ icon } className="og-icon__select">
 								<input
