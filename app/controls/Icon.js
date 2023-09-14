@@ -38,11 +38,17 @@ const getIconLabel = icon => {
 	return label.trim().toLowerCase();
 };
 
-const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, ...rest } ) => {
+const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, iconData, ...rest } ) => {
 	const [ query, setQuery ] = useState( "" );
 	const [ value, setValue ] = useState( defaultValue );
 	let data = icons.map( icon => [ icon, getIconLabel( icon ) ] )
 		.filter( item => query === '' || item[ 1 ].includes( query.toLowerCase() ) );
+
+	const handleChange = e => {
+		setValue( e.target.value );
+		iconData.updateIcon( e.target.value );
+	}
+
 	return (
 		<DivRow htmlFor={ componentId } className="og-icon" { ...rest }>
 			<div className='og-icon-selected'>
@@ -54,7 +60,13 @@ const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, ...rest 
 					data.map( ( [ icon, label ] ) => (
 						<div key={ icon } className='og-icon-item'>
 							<label key={ icon } className="og-icon__select">
-								<input type="radio" name={ name } value={ icon } defaultChecked={ icon === defaultValue } onChange={ event => setValue( event.target.value ) } />
+								<input
+									type="radio"
+									name={ name }
+									value={ icon }
+									defaultChecked={ icon === defaultValue }
+									onChange={ handleChange }
+								/>
 								<span className={ `og-dashicon dashicons dashicons-${ icon }` }></span>
 							</label>
 							<span className='og-icon-item__text'>{ label }</span>
