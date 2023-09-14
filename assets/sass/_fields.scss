@@ -454,3 +454,11 @@
 &-admin-columns-position .og-input input {
 	flex: 1;
 }
+
+// Tabs.
+&-item--tab {
+	.og-column--label {
+		background: url(../images/tab.svg) left center/14px no-repeat;
+		padding-left: 20px;
+	}
+}
