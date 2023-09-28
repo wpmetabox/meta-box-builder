@@ -21,7 +21,7 @@ class Encoder {
 		$this->fields      = $settings['fields'] ?? [];
 		$this->object_type = $settings['object_type'] ?? '';
 		$this->object_id   = $settings['object_id'] ?? '';
-		$this->field_args  = $settings['args'] ?? '';
+		$this->field_args  = $settings['args'] ?? [];
 		$this->views_dir   = MBB_DIR . 'views/theme-code';
 
 		unset( $settings['text_domain'], $settings['fields'] );
@@ -58,7 +58,8 @@ class Encoder {
 	}
 
 	private function get_encoded_args( array $args = [] ): string {
-		$return = (array) $this->field_args;
+		$return = [];
+		$args   = array_merge( $this->field_args, $args );
 		foreach ( $args as $key => $value ) {
 			// value is numeric
 			if ( is_numeric( $value ) ) {
@@ -112,8 +113,7 @@ class Encoder {
 	}
 
 	private function format_args( array $args = [] ): string {
-		$field_args = ! empty( $this->field_args ) ? eval( 'return [' . implode( ', ', $this->field_args ) . '];' ) : [];
-		$args       = array_merge( $field_args, $args );
+		$args = array_merge( $this->field_args, $args );
 		return $this->format_variable( $args );
 	}
 }
