@@ -27,6 +27,7 @@ class Registry {
 				'label'    => __( 'ID', 'meta-box-builder' ),
 				'required' => true,
 				'tooltip'  => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
+				'description' => __( 'Use only lowercase letters, numbers, underscores (and be careful dashes).', 'meta-box-builder' ),
 			] ),
 			Control::Input( 'label_description', [
 				'label'   => __( 'Label description', 'meta-box-builder' ),
