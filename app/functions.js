@@ -1,5 +1,6 @@
 import { lazy } from "@wordpress/element";
 import dotProp from 'dot-prop';
+import slugify from "slugify";
 
 export const htmlDecode = innerHTML => Object.assign( document.createElement( 'textarea' ), { innerHTML } ).value;
 
@@ -116,3 +117,11 @@ const getDefaultControlValue = name => {
 	};
 	return defaultValues.hasOwnProperty( name ) ? defaultValues[ name ] : '';
 };
+
+export const sanitizeId = text => slugify( text, { lower: true } )
+	.replace( /[^a-z0-9_]/g, '_' )           // Only accepts alphanumeric and underscores.
+	.replace( /[ _]{2,}/g, '_' )             // Remove duplicated `_`.
+	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_`.
+	.replace( /^\d+/, '' )                   // Don't start with numbers.
+	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_` again.
+	;
