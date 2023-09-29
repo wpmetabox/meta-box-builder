@@ -29,6 +29,7 @@ const Id = ( { name, componentId, nameIdData, ...rest } ) => {
 				name={ name }
 				value={ nameIdData.id }
 				onChange={ handleChange }
+				pattern="[A-Za-z0-9\-_]+"
 			/>
 		</DivRow>
 	);

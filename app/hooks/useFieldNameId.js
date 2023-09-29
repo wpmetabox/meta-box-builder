@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "@wordpress/element";
-import slugify from "slugify";
-import { ucwords } from "../functions";
+import { sanitizeId, ucwords } from "../functions";
 import useFieldIds from "./useFieldIds";
 
 const noIds = [ 'custom_html', 'divider', 'heading' ];
@@ -19,11 +18,7 @@ const useFieldNameId = field => {
 		setName( value );
 
 		if ( hasId && isFirstEdit.current ) {
-			updateId( slugify( value, {
-				lower: true,
-				replacement: '_',
-				remove: /[*+~.()'"!:@]/g
-			} ) );
+			updateId( sanitizeId( value ) );
 		}
 	};
 
