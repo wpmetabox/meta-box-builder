@@ -59,7 +59,7 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 								delay={ 2 }
 								list={ fields }
 								setList={ setFields }
-								handle=".og-item__move"
+								handle=".og-item__header"
 							>
 								{
 									fields.map( ( field, index ) => <Node

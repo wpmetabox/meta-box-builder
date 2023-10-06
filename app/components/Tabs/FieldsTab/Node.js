@@ -43,16 +43,16 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			!showSubfields && 'og-item--hide-fields',
 		) }>
 			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
-			<div className="og-item__header og-collapsible__header">
-				<span className="og-column--drag og-item__move"><Icon icon={ dragHandle } /></span>
+			<div className="og-item__header og-collapsible__header" title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
+				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
 					<HeaderIcon data={ data } />
 					<HeaderLabel nameIdData={ nameIdData } />
 					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+' }]</span> }
 				</span>
-				<span className="og-column--space og-item__move" onClick={ toggle } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }></span>
+				<span className="og-column--space" onClick={ toggle }></span>
 				<HeaderId nameIdData={ nameIdData } />
-				<span className="og-column--type og-item__move" onClick={ toggle } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>{ field.type }</span>
+				<span className="og-column--type" onClick={ toggle }>{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
 						field.type === 'group' && <Inserter

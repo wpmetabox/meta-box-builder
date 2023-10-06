@@ -43,7 +43,7 @@ const Fields = prop => {
 				className="og-fields"
 				list={ fields }
 				setList={ setFields }
-				handle=".og-item__move"
+				handle=".og-item__header"
 			>
 				{
 					fields.map( field => <Node
