@@ -1,7 +1,31 @@
 /************************************
  * General style
  ************************************/
-
+&-group-title {
+	.og-input {
+		position: relative;
+		.og-sub-field {
+			position: absolute;
+			top: 0;
+			right: 0;
+			height: 30px;
+			button {
+				box-shadow: none;
+			}
+			.og-dropdown__item {
+				cursor: pointer;
+				margin: 0;
+				padding: 4px 8px;
+				border-radius: 4px;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				&:hover {
+					background: var(--color-lighter);
+				}
+			}
+		}
+	}
+}
 &-group-fields {
 	// Left indent the subfields.
 	padding-left: 36px;
