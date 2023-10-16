@@ -1,6 +1,7 @@
 import { Button, Dropdown } from "@wordpress/components";
-import { useLayoutEffect, useRef, useState, useEffect, RawHTML } from '@wordpress/element';
+import { useLayoutEffect, useRef, useState, useEffect } from '@wordpress/element';
 import DivRow from './DivRow';
+import FieldInserter from './FieldInserter';
 import useFieldIds from '../hooks/useFieldIds';
 import { getSettings } from "../functions";
 
@@ -12,6 +13,9 @@ const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
 	const settings = getSettings();
+
+	const ids = useFieldIds( state => state.ids );
+	const fields = Array.from( new Set( Object.values( ids ) ) );
 
 	const handleChange = e => {
 		nameIdData.updateGroupTitle( e.target.value );
@@ -29,7 +33,7 @@ const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
 		}
 	}, [ selection ] );
 
-	return ( <>
+	return (
 		<DivRow className="og-group-title" htmlFor={ componentId } { ...rest }>
 			<input
 				ref={ ref }
@@ -43,26 +47,10 @@ const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
 				className="og-dropdown og-sub-field"
 				position="bottom left"
 				renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
-				renderContent={ ( { onToggle } ) => <SubFieldInserter onSelect={ e => handleSelectItem( e, onToggle ) } /> }
+				renderContent={ ( { onToggle } ) => <FieldInserter  items={ fields } hasSearch={ true } onSelect={ e => handleSelectItem( e, onToggle ) } /> }
 			/>
 		</DivRow>
-	</>);
-}
-
-const SubFieldInserter = ( { onSelect } ) => {
-	const ids = useFieldIds( state => state.ids );
-	const fields = Array.from( new Set( Object.values( ids ) ) );
-	const handleClick = e => e.target.matches( '.og-dropdown__item' ) && onSelect( e );
-
-	return (
-		<div onClick={ handleClick }>
-			{ fields.length > 0 &&
-				fields.map( field => <RawHTML key={ field } className="og-dropdown__item" data-value={ field }>
-					{ field }
-				</RawHTML> )
-			}
-		</div>
 	);
-};
+}
 
 export default GroupTitle;
