@@ -178,6 +178,12 @@ class Fields extends Base {
 				'controls'    => array_merge( ['id', 'type', 'std'], $advanced ),
 				'description' => __( 'For storing a default hidden value', 'meta-box-builder' ),
 			],
+            'icon' => [
+				'title'       => __( 'Icon', 'meta-box-builder' ),
+				'category'    => 'advanced',
+				'controls'    => array_merge( $general, ['options', 'std', 'placeholder', 'multiple', 'select_all_none'], $input, ['js_options'], $clone, $advanced ),
+				'description' => __( 'Icon with fontawesome set', 'meta-box-builder' ),
+			],
 			'image'          => [
 				'title'       => __( 'Image', 'meta-box-builder' ),
 				'category'    => 'upload',
