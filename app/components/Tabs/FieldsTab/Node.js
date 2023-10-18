@@ -1,6 +1,6 @@
 import { useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
+import { Icon, chevronDown, chevronUp, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
 import { inside } from "../../../functions";
 import useFieldData from "../../../hooks/useFieldData";
@@ -20,7 +20,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	const { data, updateFieldData } = useFieldData( field );
 
 	const toggleSettings = e => {
-		if ( ! inside( e.target, '.og-item__editable,.og-item__actions' ) ) {
+		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions' ) ) {
 			toggle();
 		}
 	};
@@ -69,6 +69,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 					}
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
+					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle field settings', 'meta-box-builder' ) }><Icon icon={ expanded ? chevronUp : chevronDown } /></span>
 				</span>
 			</div>
 			{
