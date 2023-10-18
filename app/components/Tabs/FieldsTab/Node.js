@@ -2,6 +2,7 @@ import { useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
+import { inside } from "../../../functions";
 import useFieldData from "../../../hooks/useFieldData";
 import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFields from "../../../hooks/useFields";
@@ -17,6 +18,12 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
+
+	const toggleSettings = e => {
+		if ( ! inside( e.target, '.og-item__editable,.og-item__actions' ) ) {
+			toggle();
+		}
+	};
 
 	const remove = () => {
 		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
@@ -42,17 +49,17 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			!expanded && 'og-collapsible--collapsed',
 			!showSubfields && 'og-item--hide-fields',
 		) }>
-			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
-			<div className="og-item__header og-collapsible__header" title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
+			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id }/>
+			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
 					<HeaderIcon data={ data } />
 					<HeaderLabel nameIdData={ nameIdData } />
 					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+' }]</span> }
 				</span>
-				<span className="og-column--space" onClick={ toggle }></span>
+				<span className="og-column--space"></span>
 				<HeaderId nameIdData={ nameIdData } />
-				<span className="og-column--type" onClick={ toggle }>{ field.type }</span>
+				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
 						field.type === 'group' && <Inserter
