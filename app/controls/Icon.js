@@ -38,7 +38,7 @@ const getIconLabel = icon => {
 	return label.trim().toLowerCase();
 };
 
-const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, updateFieldData, ...rest } ) => {
+const Icon = ( { fieldId, name, componentId, defaultValue, icons = MbbApp.icons, updateFieldData, ...rest } ) => {
 	const [ query, setQuery ] = useState( "" );
 	const [ value, setValue ] = useState( defaultValue );
 	let filteredIcons = icons.map( icon => [ icon, getIconLabel( icon ) ] )
@@ -46,7 +46,9 @@ const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, updateFi
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		updateFieldData( name, e.target.value );
+		if ( fieldId && fieldId.includes( 'tab_' ) ) {
+			updateFieldData( name, e.target.value );
+		}
 	}
 
 	return (

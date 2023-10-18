@@ -1,7 +1,12 @@
 import DivRow from './DivRow';
 
-const Input = ( { name, componentId, placeholder, defaultValue, type = 'text', updateFieldData, ...rest } ) => {
-	const handleChange = e => updateFieldData( name, e.target.value );
+const Input = ( { fieldId, name, componentId, placeholder, defaultValue, type = 'text', updateFieldData, ...rest } ) => {
+	const handleChange = e => {
+		if ( ! fieldId || ! fieldId.includes( 'tab_' ) ) {
+			return;
+		}
+		updateFieldData( name, e.target.value );
+	};
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>

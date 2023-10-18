@@ -5,14 +5,16 @@ import DivRow from './DivRow';
  * Fix cursor jumping to the end of the `<input>` after typing.
  * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
  */
-const FontAwesome = ( { name, componentId, defaultValue, updateFieldData, ...rest } ) => {
+const FontAwesome = ( { fieldId, name, componentId, defaultValue, updateFieldData, ...rest } ) => {
 	const [ value, setValue ] = useState( defaultValue );
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		updateFieldData( name, e.target.value );
+		if ( fieldId && fieldId.includes( 'tab_' ) ) {
+			updateFieldData( name, e.target.value );
+		}
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	}
 
