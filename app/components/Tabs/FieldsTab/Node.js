@@ -13,8 +13,9 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
-	const [ expanded, toggle ] = useReducer( state => !state, false );
+const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType, expandAll } ) => {
+	const [ expanded, toggle ] = useReducer( state => !state, expandAll );
+	const [ changedExpand, setChangedExpand ] = useReducer( state => !state, expandAll );
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
@@ -39,14 +40,20 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	);
 	const groupHasFields = field.type === 'group' && groupData.fields.length > 0;
 
+	if ( id === 'text_3cbrwdpxv6f' ) {
+		console.debug( expanded );
+	}
+
+	const isExpanded = expanded || expandAll;
+
 	return field.type && (
 		<div className={ clsx(
 			'og-item',
 			`og-item--${ field.type }`,
 			groupHasFields && 'og-item--group--has-fields',
 			'og-collapsible',
-			expanded && 'og-collapsible--expanded',
-			!expanded && 'og-collapsible--collapsed',
+			isExpanded && 'og-collapsible--expanded',
+			!isExpanded && 'og-collapsible--collapsed',
 			!showSubfields && 'og-item--hide-fields',
 		) }>
 			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id }/>
@@ -69,7 +76,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 					}
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
-					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle field settings', 'meta-box-builder' ) }><Icon icon={ expanded ? chevronUp : chevronDown } /></span>
+					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle field settings', 'meta-box-builder' ) }><Icon icon={ isExpanded ? chevronUp : chevronDown } /></span>
 				</span>
 			</div>
 			{

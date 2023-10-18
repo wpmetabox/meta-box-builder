@@ -2,6 +2,7 @@ import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useApi from "../../hooks/useApi";
+import useExpand from "../../hooks/useExpand";
 import useFields from "../../hooks/useFields";
 import Header from "./FieldsTab/Header";
 import { Inserter } from './FieldsTab/Inserter';
@@ -17,6 +18,8 @@ const Fields = prop => {
 		setFields,
 	} = useFields( prop.fields.filter( field => field.type ), 'fields' );
 
+	const { state: expandState, dispatch: expandDispatch } = useExpand( fields );
+
 	// Don't render any field if fields data is not available.
 	const types = useApi( 'field-types', {} );
 	const categories = useApi( 'field-categories', [] );
@@ -31,7 +34,7 @@ const Fields = prop => {
 			<Inserter addField={ add } />
 		</>
 		: <>
-			<Header />
+			<Header expandState={ expandState } expandDispatch={ expandDispatch } />
 			<ReactSortable group={ {
 				name: 'root',
 				pull: true,
@@ -53,6 +56,8 @@ const Fields = prop => {
 						removeField={ remove }
 						duplicateField={ duplicate }
 						updateFieldType={ updateType }
+						expandState={ expandState }
+						expandDispatch={ expandDispatch }
 					/> )
 				}
 			</ReactSortable>
