@@ -481,6 +481,14 @@ class Registry {
 				'values'  => [ 'true', 'false' ],
 			] ),
 
+			// Icon.
+			'js_options_icon'   => Control::KeyValue( 'js_options', [
+				'label'   => '<a href="https://select2.org/configuration/options-api" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>',
+				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
+				'keys'    => [ 'ajax', 'allowClear', 'closeOnSelect', 'dir', 'disabled', 'dropdownAutoWidth', 'dropdownCssClass', 'language', 'maximumInputLength', 'maximumSelectionLength', 'minimumInputLength', 'minimumResultsForSearch', 'selectionCssClass', 'selectOnClose', 'width', 'scrollAfterSelect' ],
+				'values'  => [ 'true', 'false' ],
+			] ),
+
 			// Slider.
 			Control::Input( 'prefix', [
 				'label'   => __( 'Prefix', 'meta-box-builder' ),

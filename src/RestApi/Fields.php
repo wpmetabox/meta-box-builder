@@ -52,7 +52,7 @@ class Fields extends Base {
 		$map      = ['std', 'address_field', 'language', 'region', 'required'];
 		$taxonomy = ['taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args'];
 		$post     = [ 'post_type', 'field_type', 'add_new', 'multiple', 'select_all_none', 'parent', 'required', 'placeholder', 'query_args' ];
-		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];		
+		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];
 		$upload   = ['max_file_uploads', 'max_status', 'force_delete', 'required'];
 		$input    = ['required', 'disabled', 'readonly'];
 		$html5    = ['std', 'placeholder', 'size', 'required', 'disabled', 'readonly'];
@@ -177,6 +177,12 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge( ['id', 'type', 'std'], $advanced ),
 				'description' => __( 'For storing a default hidden value', 'meta-box-builder' ),
+			],
+            'icon' => [
+				'title'       => __( 'Icon', 'meta-box-builder' ),
+				'category'    => 'advanced',
+				'controls'    => array_merge( $general, ['std', 'placeholder'], $input, ['js_options'], $clone, $advanced ),
+				'description' => __( 'Icon with FontAwesome set', 'meta-box-builder' ),
 			],
 			'image'          => [
 				'title'       => __( 'Image', 'meta-box-builder' ),
