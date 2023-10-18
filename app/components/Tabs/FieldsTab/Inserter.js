@@ -27,7 +27,7 @@ export const Inserter = ( {
 			renderToggle={ ( { onToggle } ) => type === 'group'
 				? <span className="og-item__action og-item__action--add" onClick={ onToggle } title={ title }>
 					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-						<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm6 7h6m-3-3v6" />
+						<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm6 7h6m-3-3v6" />
 					</svg>
 				</span>
 				: <button type="button" className={ clsx( 'button', buttonType === 'primary' && 'button-primary' ) } onClick={ onToggle } title={ title }>
