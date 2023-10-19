@@ -5,7 +5,13 @@ const Header = ( { expandState, expandDispatch } ) => (
 		<span className="og-column--drag">&nbsp;</span>
 		<span className="og-column--label">
 			{ __( 'Label', 'meta-box-builder' ) }
-			<span className="og-item__toggle" onClick={ () => expandDispatch( { type: 'toggle-all' } ) } title={ __( 'Expand/Collapse all fields', 'meta-box-builder' ) }>[{ expandAll ? '-' : '+' }]</span>
+			<span
+				className="og-item__toggle"
+				onClick={ () => expandDispatch( { type: 'toggle-all' } ) }
+				title={ __( 'Expand/Collapse all fields', 'meta-box-builder' ) }
+			>
+				[{ expandState.expandAll ? '-' : '+' }]
+			</span>
 		</span>
 		<span className="og-column--space"></span>
 		<span className="og-column--id">{ __( 'ID', 'meta-box-builder' ) }</span>

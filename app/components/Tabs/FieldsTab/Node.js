@@ -13,16 +13,14 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType, expandAll } ) => {
-	const [ expanded, toggle ] = useReducer( state => !state, expandAll );
-	const [ changedExpand, setChangedExpand ] = useReducer( state => !state, expandAll );
+const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType, expandState, expandDispatch } ) => {
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
 
 	const toggleSettings = e => {
 		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions' ) ) {
-			toggle();
+			expandDispatch( { type: 'toggle-field', _id: id } );
 		}
 	};
 
@@ -40,11 +38,8 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	);
 	const groupHasFields = field.type === 'group' && groupData.fields.length > 0;
 
-	if ( id === 'text_3cbrwdpxv6f' ) {
-		console.debug( expanded );
-	}
-
-	const isExpanded = expanded || expandAll;
+	const f = expandState.fields.find( field => field._id === id );
+	const isExpanded = f.expand;
 
 	return field.type && (
 		<div className={ clsx(
@@ -56,7 +51,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			!isExpanded && 'og-collapsible--collapsed',
 			!showSubfields && 'og-item--hide-fields',
 		) }>
-			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id }/>
+			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
 			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">

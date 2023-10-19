@@ -1,28 +1,35 @@
 import { useReducer } from "@wordpress/element";
 
-function reducer( state, { type, _id } ) {
-	switch ( type ) {
-		case 'expand-all':
-			return state.map( field => ( { ...field, expand: true } ) );
-		case 'collapse-all':
-			return state.map( field => ( { ...field, expand: false } ) );
-		case 'toggle-all':
-			return state.map( field => ( { ...field, expand: false } ) );
-		case 'toggle':
-			const index = state.findIndex( field => field._id === _id );
-			let newState = [ ...state ];
-			newState[ index ].expand = !newState[ index ].expand;
-			return newState;
+const reducer = ( state, { type, _id } ) => {
+	if ( type === 'toggle-all' ) {
+		const current = !state.expandAll;
+		return {
+			expandAll: current,
+			fields: state.fields.map( field => ( { ...field, expand: current } ) ),
+		};
 	}
-}
 
-const useExpand = fields => {
-	const initialState = fields.map( field => ( {
+	// Toggle field.
+	let fields = [ ...state.fields ];
+	const index = fields.findIndex( field => field._id === _id );
+	fields[ index ].expand = !fields[ index ].expand;
+
+	return {
+		expandAll: state.expandAll,
+		fields,
+	};
+};
+
+const createInitialState = fields => ( {
+	expandAll: false,
+	fields: fields.map( field => ( {
 		_id: field._id,
 		expand: false,
-	} ) );
+	} ) ),
+} );
 
-	const [ state, dispatch ] = useReducer( reducer, initialState );
+const useExpand = fields => {
+	const [ state, dispatch ] = useReducer( reducer, fields, createInitialState );
 
 	return {
 		state,
