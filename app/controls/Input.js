@@ -1,7 +1,7 @@
 import DivRow from './DivRow';
 
 const Input = ( { name, componentId, placeholder, defaultValue, type = 'text', updateFieldData, ...rest } ) => {
-	const handleChange = e => updateFieldData( name, e.target.value );
+	const handleChange = e => updateFieldData && updateFieldData( name, e.target.value );
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>

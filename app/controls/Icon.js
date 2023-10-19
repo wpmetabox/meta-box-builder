@@ -46,7 +46,7 @@ const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, updateFi
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		updateFieldData( name, e.target.value );
+		updateFieldData && updateFieldData( name, e.target.value );
 	}
 
 	return (

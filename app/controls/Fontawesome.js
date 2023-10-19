@@ -12,7 +12,7 @@ const FontAwesome = ( { name, componentId, defaultValue, updateFieldData, ...res
 
 	const handleChange = e => {
 		setValue( e.target.value );
-		updateFieldData( name, e.target.value );
+		updateFieldData && updateFieldData( name, e.target.value );
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	}
 
