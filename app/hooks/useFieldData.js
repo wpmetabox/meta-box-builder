@@ -4,7 +4,8 @@ import { useState } from "@wordpress/element";
 const getKey = name => name.replace( /\]/g, '' ).split( '[' ).pop();
 
 const useFieldData = field => {
-	const [ data, updateData ] = useState( field );
+	const defaults = field.type === 'tab' ? { icon_type: 'dashicons' } : {};
+	const [ data, updateData ] = useState( { ...defaults, ...field } );
 
 	const updateFieldData = ( key, value ) => {
 		updateData( prev => ( { ...prev, [ getKey( key ) ]: value } ) );
