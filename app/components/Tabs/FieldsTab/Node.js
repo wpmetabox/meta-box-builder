@@ -13,15 +13,14 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
-	const [ expanded, toggle ] = useReducer( state => !state, false );
+const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType, expandState, expandDispatch } ) => {
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
 
 	const toggleSettings = e => {
 		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions' ) ) {
-			toggle();
+			expandDispatch( { type: 'toggle-field', _id: id } );
 		}
 	};
 
@@ -39,17 +38,20 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	);
 	const groupHasFields = field.type === 'group' && groupData.fields.length > 0;
 
+	const f = expandState.fields.find( field => field._id === id );
+	const isExpanded = f.expand;
+
 	return field.type && (
 		<div className={ clsx(
 			'og-item',
 			`og-item--${ field.type }`,
 			groupHasFields && 'og-item--group--has-fields',
 			'og-collapsible',
-			expanded && 'og-collapsible--expanded',
-			!expanded && 'og-collapsible--collapsed',
+			isExpanded && 'og-collapsible--expanded',
+			!isExpanded && 'og-collapsible--collapsed',
 			!showSubfields && 'og-item--hide-fields',
 		) }>
-			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id }/>
+			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
 			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
@@ -69,7 +71,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 					}
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
-					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle field settings', 'meta-box-builder' ) }><Icon icon={ expanded ? chevronUp : chevronDown } /></span>
+					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle field settings', 'meta-box-builder' ) }><Icon icon={ isExpanded ? chevronUp : chevronDown } /></span>
 				</span>
 			</div>
 			{

@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
+import useExpand from "../../../hooks/useExpand";
 import Content from './Content';
 import Header from "./Header";
 import { Inserter } from './Inserter';
@@ -23,6 +24,8 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 	if ( !fieldTypes.hasOwnProperty( field.type ) ) {
 		return;
 	}
+
+	const { state: expandState, dispatch: expandDispatch } = useExpand( fields );
 
 	const controls = [ ...fieldTypes[ field.type ].controls ];
 
@@ -47,7 +50,7 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 					<>
 						<div className="og-group-fields__title">{ __( 'Subfields', 'meta-box-builder' ) }</div>
 						<div className="og-group-fields__inner">
-							<Header />
+							<Header expandState={ expandState } expandDispatch={ expandDispatch } />
 							<ReactSortable
 								group={ {
 									name: 'nested',
@@ -70,6 +73,8 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 										removeField={ remove }
 										duplicateField={ duplicate }
 										updateFieldType={ updateType }
+										expandState={ expandState }
+										expandDispatch={ expandDispatch }
 									/> )
 								}
 							</ReactSortable>
