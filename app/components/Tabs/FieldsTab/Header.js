@@ -1,16 +1,16 @@
 import { __ } from "@wordpress/i18n";
 
-const Header = ( { expandState, expandDispatch } ) => (
+const Header = ( { expandAll, toggleAll } ) => (
 	<div className="og-header">
 		<span className="og-column--drag">&nbsp;</span>
 		<span className="og-column--label">
 			{ __( 'Label', 'meta-box-builder' ) }
 			<span
 				className="og-item__toggle"
-				onClick={ () => expandDispatch( { type: 'toggle-all' } ) }
+				onClick={ toggleAll }
 				title={ __( 'Expand/Collapse all fields', 'meta-box-builder' ) }
 			>
-				[{ expandState.expandAll ? '-' : '+' }]
+				[{ expandAll ? '-' : '+' }]
 			</span>
 		</span>
 		<span className="og-column--space"></span>

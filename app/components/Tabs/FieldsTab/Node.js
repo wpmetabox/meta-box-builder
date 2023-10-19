@@ -13,14 +13,14 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType, expandState, expandDispatch } ) => {
+const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType, toggle } ) => {
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
 
 	const toggleSettings = e => {
 		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions' ) ) {
-			expandDispatch( { type: 'toggle-field', _id: id } );
+			toggle( id );
 		}
 	};
 
@@ -38,8 +38,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	);
 	const groupHasFields = field.type === 'group' && groupData.fields.length > 0;
 
-	const f = expandState.fields.find( field => field._id === id );
-	const isExpanded = f.expand;
+	const isExpanded = field._expand;
 
 	return field.type && (
 		<div className={ clsx(
