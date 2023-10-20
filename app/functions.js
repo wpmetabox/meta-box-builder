@@ -125,3 +125,5 @@ export const sanitizeId = text => slugify( text, { lower: true } )
 	.replace( /^\d+/, '' )                   // Don't start with numbers.
 	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_` again.
 	;
+
+export const inside = ( el, selectors ) => el.matches( selectors ) || el.closest( selectors ) !== null;

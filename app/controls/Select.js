@@ -7,7 +7,7 @@ const Select = ( { componentId, name, options, defaultValue, onChange, placehold
 	const handleChange = e => {
 		toggle();
 		onChange && onChange( e );
-		updateFieldData( name, e.target.value );
+		updateFieldData && updateFieldData( name, e.target.value );
 	};
 
 	return <DivRow htmlFor={ componentId } { ...rest }>

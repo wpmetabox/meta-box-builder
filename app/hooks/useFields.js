@@ -7,10 +7,18 @@ const useFields = ( initialFields, baseId ) => {
 	const updateId = useFieldIds( state => state.update );
 	const removeId = useFieldIds( state => state.remove );
 	const [ fields, setFields ] = useState( initialFields );
+	const [ expandAll, setExpandAll ] = useState( false );
 
 	const add = type => {
 		const id = `${ type }_${ uniqid() }`;
-		const newField = { _id: id, _new: true, id, type, name: ucwords( type, '_' ) };
+		const newField = {
+			_id: id,
+			_new: true,
+			_expand: false,
+			id,
+			type,
+			name: ucwords( type, '_' ),
+		};
 
 		updateId( id, newField );
 		setFields( prev => [ ...prev, newField ] );
@@ -28,6 +36,7 @@ const useFields = ( initialFields, baseId ) => {
 		newField.id = newId;
 		newField._id = newId;
 		newField._new = true;
+		newField._expand = false;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
 		updateId( newId, newField );
@@ -50,6 +59,22 @@ const useFields = ( initialFields, baseId ) => {
 		return newFields;
 	} );
 
+	const toggle = id => setFields( prev => {
+		const index = prev.findIndex( field => field._id === id );
+		let newFields = [ ...prev ];
+
+		newFields[ index ]._expand = !newFields[ index ]._expand;
+
+		return newFields;
+	} );
+
+	const toggleAll = () => {
+		const current = !expandAll;
+
+		setExpandAll( prev => !prev );
+		setFields( prev => [ ...prev ].map( field => ( { ...field, _expand: current } ) ) );
+	};
+
 	return {
 		fields,
 		add,
@@ -57,6 +82,9 @@ const useFields = ( initialFields, baseId ) => {
 		duplicate,
 		updateType,
 		setFields,
+		toggle,
+		toggleAll,
+		expandAll,
 	};
 };
 
