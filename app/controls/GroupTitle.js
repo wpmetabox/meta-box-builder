@@ -15,7 +15,7 @@ const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
 	const settings = getSettings();
 
 	const ids = useFieldIds( state => state.ids );
-	const fields = Array.from( new Set( Object.values( ids ) ) );
+	let fields = [ '{#}', ...Array.from( new Set( Object.values( ids ) ) ) ];
 
 	const handleChange = e => {
 		nameIdData.updateGroupTitle( e.target.value );
@@ -24,7 +24,8 @@ const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
 
 	const handleSelectItem = ( e, onToggle ) => {
 		onToggle();
-		nameIdData.updateGroupTitle( nameIdData.group_title + `{${settings.prefix} ${ e.target.dataset.value }}` );
+		const updateTitle = e.target.dataset.value == '{#}'?  `${ e.target.dataset.value }` :`{${settings.prefix} ${ e.target.dataset.value }}`
+		nameIdData.updateGroupTitle( nameIdData.group_title + updateTitle );
 	};
 
 	useLayoutEffect( () => {
