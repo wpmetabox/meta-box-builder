@@ -1,7 +1,7 @@
 import { Suspense } from "@wordpress/element";
 import { getControlParams } from '/functions';
 
-const Content = ( { id, controls, field, parent = '', updateFieldId, updateFieldType, nameIdData, updateFieldData } ) => {
+const Content = ( { id, controls, field, parent = '', updateFieldType, nameIdData, updateFieldData } ) => {
 	const getControlComponent = control => {
 		let [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
 
@@ -17,7 +17,6 @@ const Content = ( { id, controls, field, parent = '', updateFieldId, updateField
 			{ ...control.props }
 			name={ `fields${ parent }[${ id }]${ input }` }
 			defaultValue={ defaultValue }
-			updateFieldId={ updateFieldId } 
 
 			// For Type: allow to change field type.
 			updateFieldType={ updateFieldType }

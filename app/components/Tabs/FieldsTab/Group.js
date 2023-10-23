@@ -14,7 +14,6 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 		add,
 		remove,
 		duplicate,
-		updateIdData,
 		updateType,
 		setFields,
 		toggle,
@@ -29,7 +28,7 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 	}
 
 	const controls = [ ...fieldTypes[ field.type ].controls ];
-console.log( 'group groupData ', groupData );
+
 	return (
 		<>
 			<Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
@@ -73,7 +72,6 @@ console.log( 'group groupData ', groupData );
 										parent={ `${ parent }[${ id }][fields]` }
 										removeField={ remove }
 										duplicateField={ duplicate }
-										updateFieldId={ updateIdData } 
 										updateFieldType={ updateType }
 										toggle={ toggle }
 									/> )

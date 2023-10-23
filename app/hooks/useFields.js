@@ -59,15 +59,6 @@ const useFields = ( initialFields, baseId ) => {
 		return newFields;
 	} );
 
-	const updateIdData = ( id, newId ) => setFields( prev => {
-		const index = prev.findIndex( field => field._id === id );
-		let newFields = [ ...prev ];
-
-		newFields[ index ] = { ...id, newId };
-
-		return newFields;
-	} );
-
 	const toggle = id => setFields( prev => {
 		const index = prev.findIndex( field => field._id === id );
 		let newFields = [ ...prev ];
@@ -89,7 +80,6 @@ const useFields = ( initialFields, baseId ) => {
 		add,
 		remove,
 		duplicate,
-		updateIdData,
 		updateType,
 		setFields,
 		toggle,

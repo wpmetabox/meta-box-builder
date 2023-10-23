@@ -13,7 +13,6 @@ const Fields = prop => {
 		add,
 		remove,
 		duplicate,
-		updateIdData,
 		updateType,
 		setFields,
 		toggle,
@@ -56,7 +55,6 @@ const Fields = prop => {
 						field={ field }
 						removeField={ remove }
 						duplicateField={ duplicate }
-						updateFieldId={ updateIdData }
 						updateFieldType={ updateType }
 						toggle={ toggle }
 					/> )
