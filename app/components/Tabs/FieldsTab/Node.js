@@ -13,7 +13,7 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType, toggle } ) => {
+const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldId, updateFieldType, toggle } ) => {
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
@@ -75,8 +75,8 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			</div>
 			{
 				field.type === 'group'
-					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } />
-					: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
+					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } updateFieldId={ updateFieldId } />
+					: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } updateFieldData={ updateFieldData } updateFieldId={ updateFieldId } />
 			}
 		</div>
 	);
