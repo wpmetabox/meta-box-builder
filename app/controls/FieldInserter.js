@@ -18,7 +18,7 @@ const Items = ( { items, searchTerm } ) => {
 	) );
 };
 
-const FieldInserter = ( { items = [], hasSearch = false, onSelect } ) => {
+const FieldInserter = ( { items = [], onSelect } ) => {
 	const [ searchTerm, setSearchTerm ] = useState( '' );
 
 	const handleClick = e => e.target.matches( '.og-dropdown__item' ) && onSelect( e );
@@ -26,8 +26,8 @@ const FieldInserter = ( { items = [], hasSearch = false, onSelect } ) => {
 
 	return (
 		<div onClick={ handleClick }>
-			{ hasSearch && <Search handleSearch={ handleSearch } /> }
-			{ items.length > 0 && <Items items={ items } searchTerm={ searchTerm } /> }
+			<Search handleSearch={ handleSearch } />
+			<Items items={ items } searchTerm={ searchTerm } />
 		</div>
 	);
 };
