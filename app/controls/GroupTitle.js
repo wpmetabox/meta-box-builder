@@ -1,9 +1,9 @@
 import { Button, Dropdown } from "@wordpress/components";
-import { useLayoutEffect, useRef, useState, useEffect } from '@wordpress/element';
+import { useContext, useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { SettingsContext } from "../contexts/SettingsContext";
+import useFieldIds from '../hooks/useFieldIds';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
-import useFieldIds from '../hooks/useFieldIds';
-import { getSettings } from "../functions";
 
 /**
  * Fix cursor jumping to the end of the `<input>` after typing.
@@ -12,7 +12,7 @@ import { getSettings } from "../functions";
 const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
-	const settings = getSettings();
+	const { settings } = useContext( SettingsContext );
 
 	const ids = useFieldIds( state => state.ids );
 	const fields = [ '{#}', ...Array.from( new Set( Object.values( ids ) ) ) ];
