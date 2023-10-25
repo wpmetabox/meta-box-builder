@@ -5,3 +5,8 @@
 	@import "fields";
 	@import "result";
 }
+
+// Hide WordPress elements.
+.misc-pub-visibility {
+	display: none;
+}
