@@ -104,13 +104,13 @@ abstract class BaseEditPage {
 		$status   = $this->get_updater()->get_license_status();
 		$messages = [
 			// Translators: %1$s - URL to the settings page, %2$s - URL to the pricing page.
-			'no_key'  => __( 'You have not set your Meta Box license key yet. Please <a href="%1$s">enter your license key</a> to continue.', 'meta-box' ),
+			'no_key'  => __( 'You have not set your Meta Box license key yet. Please <a href="%1$s">enter your license key</a> to continue.', 'meta-box-builder' ),
 			// Translators: %1$s - URL to the settings page, %2$s - URL to the pricing page.
-			'invalid' => __( 'Your license key for Meta Box is <b>invalid</b>. Please <a href="%1$s">update your license key</a> to continue.', 'meta-box' ),
+			'invalid' => __( 'Your license key for Meta Box is <b>invalid</b>. Please <a href="%1$s">update your license key</a> to continue.', 'meta-box-builder' ),
 			// Translators: %1$s - URL to the settings page, %2$s - URL to the pricing page.
-			'error'   => __( 'Your license key for Meta Box is <b>invalid</b>. Please <a href="%1$s">update your license key</a> to continue.', 'meta-box' ),
+			'error'   => __( 'Your license key for Meta Box is <b>invalid</b>. Please <a href="%1$s">update your license key</a> to continue.', 'meta-box-builder' ),
 			// Translators: %3$s - URL to the My Account page.
-			'expired' => __( 'Your license key for Meta Box is <b>expired</b>. Please <a href="%3$s" target="_blank">renew your license</a> to continue.', 'meta-box' ),
+			'expired' => __( 'Your license key for Meta Box is <b>expired</b>. Please <a href="%3$s" target="_blank">renew your license</a> to continue.', 'meta-box-builder' ),
 		];
 
 		return '<h2><span class="dashicons dashicons-warning"></span>' . __( 'License Warning', 'meta-box-builder' ) . '</h2>' . wp_kses_post( sprintf( $messages[ $status ], $settings_page, 'https://metabox.io/pricing/', 'https://metabox.io/my-account/' ) );
