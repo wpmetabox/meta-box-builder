@@ -1,4 +1,4 @@
-import { render, useEffect } from "@wordpress/element";
+import { render, useContext, useEffect } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, category, cog } from "@wordpress/icons";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
@@ -8,11 +8,11 @@ import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
 import ThemeCode from "./components/Tabs/ThemeCode";
-import { getSettings } from './functions';
+import { SettingsContext, SettingsProvider } from "./contexts/SettingsContext";
 
-const App = () => {
-	const settings = getSettings();
+const Root = () => {
 	const forceValidate = () => document.querySelector( '#post' ).removeAttribute( 'novalidate' );
+
 	useEffect( () => {
 		const publishButton = document.querySelector( '#publish' );
 		const saveButton = document.querySelector( '#save-post' );
@@ -24,12 +24,22 @@ const App = () => {
 		}
 
 		// Don't submit form when press Enter.
-		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function( e ) {
+		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function ( e ) {
 			if ( e.keyCode == 13 ) {
 				e.preventDefault();
 			}
 		} );
 	}, [] );
+
+	return (
+		<SettingsProvider>
+			<App />
+		</SettingsProvider>
+	);
+};
+
+const App = () => {
+	const { settings } = useContext( SettingsContext );
 
 	return (
 		<>
@@ -65,7 +75,7 @@ const App = () => {
 						<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
 					</div>
 					<div className="inside">
-						<ThemeCode settings={ settings } fields={ MbbApp.fields } />
+						<ThemeCode settings={ settings.data } fields={ MbbApp.fields } />
 					</div>
 				</div>
 			}
@@ -73,4 +83,4 @@ const App = () => {
 	);
 };
 
-render( <App />, document.getElementById( 'root' ) );
+render( <Root />, document.getElementById( 'root' ) );

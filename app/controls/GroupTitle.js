@@ -1,5 +1,9 @@
-import { useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { Button, Dropdown } from "@wordpress/components";
+import { useContext, useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { SettingsContext } from "../contexts/SettingsContext";
+import useFieldIds from '../hooks/useFieldIds';
 import DivRow from './DivRow';
+import FieldInserter from './FieldInserter';
 
 /**
  * Fix cursor jumping to the end of the `<input>` after typing.
@@ -8,10 +12,20 @@ import DivRow from './DivRow';
 const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
+	const { settings } = useContext( SettingsContext );
+
+	const ids = useFieldIds( state => state.ids );
+	const fields = [ '{#}', ...Array.from( new Set( Object.values( ids ) ) ) ];
 
 	const handleChange = e => {
 		nameIdData.updateGroupTitle( e.target.value );
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
+	};
+
+	const handleSelectItem = ( e, onToggle ) => {
+		onToggle();
+		const title = e.target.dataset.value === '{#}' ? e.target.dataset.value : `{${settings.prefix}${ e.target.dataset.value }}`
+		nameIdData.updateGroupTitle( nameIdData.group_title + title );
 	};
 
 	useLayoutEffect( () => {
@@ -21,7 +35,7 @@ const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
 	}, [ selection ] );
 
 	return (
-		<DivRow htmlFor={ componentId } { ...rest }>
+		<DivRow className="og-group-title" htmlFor={ componentId } { ...rest }>
 			<input
 				ref={ ref }
 				type="text"
@@ -29,6 +43,12 @@ const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
 				name={ name }
 				value={ nameIdData.group_title }
 				onChange={ handleChange }
+			/>
+			<Dropdown
+				className="og-dropdown og-sub-field"
+				position="bottom left"
+				renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
+				renderContent={ ( { onToggle } ) => <FieldInserter  items={ fields } hasSearch={ true } onSelect={ e => handleSelectItem( e, onToggle ) } /> }
 			/>
 		</DivRow>
 	);
