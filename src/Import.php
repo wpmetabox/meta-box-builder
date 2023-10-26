@@ -81,6 +81,10 @@ class Import {
 				$post['post_name'] = $post['settings']['id'];
 			}
 
+			if ( isset( $post['relationship']['id'] ) && ! isset( $post['post_name'] ) ) {
+				$post['post_name'] = $post['relationship']['id'];
+			}
+
 			if ( isset( $post['meta_box']['id'] ) && ! isset( $post['post_name'] ) ) {
 				$post['post_name'] = $post['meta_box']['id'];
 			}
@@ -135,6 +139,10 @@ class Import {
 
 			if ( isset( $post_arr['settings']['id'] ) && ! isset( $post_arr['post_name'] ) ) {
 				$post_arr['post_name'] = $post_arr['settings']['id'];
+			}
+
+			if ( isset( $post_arr['relationship']['id'] ) && ! isset( $post_arr['post_name'] ) ) {
+				$post_arr['post_name'] = $post_arr['relationship']['id'];
 			}
 
 			if ( isset( $post_arr['meta_box']['id'] ) && ! isset( $post_arr['post_name'] ) ) {
