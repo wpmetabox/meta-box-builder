@@ -49,6 +49,7 @@ class Export {
 		foreach ( $query->posts as $post ) {
 			$post_data = [
 				'post_type'    => $post->post_type,
+				'post_name'    => $post->post_name,
 				'post_title'   => $post->post_title,
 				'post_date'    => $post->post_date,
 				'post_status'  => $post->post_status,
