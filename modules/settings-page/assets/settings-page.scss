@@ -1,5 +1,12 @@
+@import "license-warning";
+
 .og {
 	@import "elements";
 	@import "fields";
 	@import "result";
+}
+
+// Hide WordPress elements.
+.misc-pub-visibility {
+	display: none;
 }

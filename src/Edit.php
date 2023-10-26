@@ -7,13 +7,9 @@ use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
 class Edit extends BaseEditPage {
-	public function __construct( $post_type, $slug_meta_box_title ) {
-		parent::__construct( $post_type, $slug_meta_box_title );
+	public function add_meta_boxes( $meta_boxes ) {
+		$meta_boxes = parent::add_meta_boxes( $meta_boxes );
 
-		add_filter( 'rwmb_meta_boxes', [ $this, 'add_help_meta_box' ] );
-	}
-
-	public function add_help_meta_box( $meta_boxes ) {
 		$meta_boxes[] = [
 			'title'      => esc_html__( 'Documentation', 'meta-box' ),
 			'id'         => 'mbb-documentation',

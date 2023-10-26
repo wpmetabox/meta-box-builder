@@ -6,6 +6,23 @@ use MetaBox\Support\Data;
 
 class Edit extends BaseEditPage {
 	public function add_meta_boxes( $meta_boxes ) {
+		if ( ! $this->is_license_active() ) {
+			$meta_boxes[] = [
+				'title'      => '<span class="dashicons dashicons-warning"></span>' . __( 'License Warning', 'meta-box-builder' ),
+				'id'         => 'mbb-license-warning',
+				'post_types' => [ $this->post_type ],
+				'context'    => 'side',
+				'priority'   => 'high',
+				'style'      => 'seamless',
+				'fields'     => [
+					[
+						'type'     => 'custom_html',
+						'callback' => [ $this, 'output_license_warning' ],
+					],
+				],
+			];
+		}
+
 		$request  = rwmb_request();
 		$settings = get_post_meta( $request->get( 'post' ), 'settings', true );
 
