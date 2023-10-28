@@ -1,7 +1,9 @@
-import { Dashicon } from "@wordpress/components";
+import { Dashicon, Button, Dropdown } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import useFieldIds from '../hooks/useFieldIds';
 import DivRow from './DivRow';
+import FieldInserter from './FieldInserter';
 import { uniqid } from '/functions';
 
 const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
@@ -10,6 +12,9 @@ const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
 	const addRule = () => setRules( prev => [ ...prev, { name: '', operator: '=', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
+	const ids = useFieldIds( state => state.ids );
+	const fields = [ ...Array.from( new Set( Object.values( ids ) ) ) ];
+
 	return (
 		<DivRow className="og-include-exclude" { ...rest }>
 			{ rules.length > 0 && <Intro name={ name } defaultValue={ defaultValue } /> }
@@ -17,6 +22,7 @@ const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
 				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
+					fields={ fields }
 					name={ `${ name }[when][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
@@ -41,33 +47,50 @@ const Intro = ( { name, defaultValue } ) => (
 	</div>
 );
 
-const Rule = ( { rule, name, removeRule } ) => (
-	<div className="og-include-exclude__rule og-attribute">
-		<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
-		<input type="text" name={ `${ name }[name]` } className="og-include-exclude__name" defaultValue={ rule.name } list="field-ids" placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } />
-		<select name={ `${ name }[operator]` } className="og-include-exclude__operator" defaultValue={ rule.operator }>
-			<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
-			<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
-			<option value="<">{ __( '<', 'meta-box-builder' ) }</option>
-			<option value=">=">{ __( '>=', 'meta-box-builder' ) }</option>
-			<option value="<=">{ __( '<=', 'meta-box-builder' ) }</option>
-			<option value="!=">{ __( '!=', 'meta-box-builder' ) }</option>
-			<option value="contains">{ __( 'contains', 'meta-box-builder' ) }</option>
-			<option value="not contains">{ __( 'not contains', 'meta-box-builder' ) }</option>
-			<option value="starts with">{ __( 'starts with', 'meta-box-builder' ) }</option>
-			<option value="not starts with">{ __( 'not starts with', 'meta-box-builder' ) }</option>
-			<option value="ends with">{ __( 'ends with', 'meta-box-builder' ) }</option>
-			<option value="not ends with">{ __( 'not ends with', 'meta-box-builder' ) }</option>
-			<option value="between">{ __( 'between', 'meta-box-builder' ) }</option>
-			<option value="not between">{ __( 'not between', 'meta-box-builder' ) }</option>
-			<option value="in">{ __( 'in', 'meta-box-builder' ) }</option>
-			<option value="not in">{ __( 'not in', 'meta-box-builder' ) }</option>
-			<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
-			<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
-		</select>
-		<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ name }[value]` } />
-		<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
-	</div>
-);
+const Rule = ( { rule, fields, name, removeRule } ) => {
+	const handleSelectItem = ( e, onToggle ) => {
+		onToggle();
+		document.getElementsByName( `${ name }[name]` )[0].value = e.target.dataset.value;
+	};
+
+	return (
+		<div className="og-include-exclude__rule og-attribute">
+			<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
+
+			<DivRow>
+				<input type="text" name={ `${ name }[name]` } className="og-include-exclude__name" defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } />
+				<Dropdown
+					className="og-dropdown"
+					position="bottom left"
+					renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
+					renderContent={ ( { onToggle } ) => <FieldInserter  items={ fields } hasSearch={ true } onSelect={ e => handleSelectItem( e, onToggle ) } /> }
+				/>
+			</DivRow>
+
+			<select name={ `${ name }[operator]` } className="og-include-exclude__operator" defaultValue={ rule.operator }>
+				<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
+				<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
+				<option value="<">{ __( '<', 'meta-box-builder' ) }</option>
+				<option value=">=">{ __( '>=', 'meta-box-builder' ) }</option>
+				<option value="<=">{ __( '<=', 'meta-box-builder' ) }</option>
+				<option value="!=">{ __( '!=', 'meta-box-builder' ) }</option>
+				<option value="contains">{ __( 'contains', 'meta-box-builder' ) }</option>
+				<option value="not contains">{ __( 'not contains', 'meta-box-builder' ) }</option>
+				<option value="starts with">{ __( 'starts with', 'meta-box-builder' ) }</option>
+				<option value="not starts with">{ __( 'not starts with', 'meta-box-builder' ) }</option>
+				<option value="ends with">{ __( 'ends with', 'meta-box-builder' ) }</option>
+				<option value="not ends with">{ __( 'not ends with', 'meta-box-builder' ) }</option>
+				<option value="between">{ __( 'between', 'meta-box-builder' ) }</option>
+				<option value="not between">{ __( 'not between', 'meta-box-builder' ) }</option>
+				<option value="in">{ __( 'in', 'meta-box-builder' ) }</option>
+				<option value="not in">{ __( 'not in', 'meta-box-builder' ) }</option>
+				<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
+				<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
+			</select>
+			<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ name }[value]` } />
+			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
+		</div>
+	);
+};
 
 export default ConditionalLogic;

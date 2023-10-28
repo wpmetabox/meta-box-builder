@@ -11,6 +11,7 @@ const useFieldNameId = field => {
 	const [ name, setName ] = useState( field.name || '' );
 	const [ id, updateId ] = useState( hasId ? field.id || '' : '' );
 	const [ group_title, updateGroupTitle ] = useState( field.group_title || '' );
+	const [ address_field, updateAddressField ] = useState( field.address_field || '' );
 
 	const isFirstEdit = useRef( !!field._new );
 
@@ -37,9 +38,11 @@ const useFieldNameId = field => {
 		id,
 		group_title,
 		label,
+		address_field,
 		updateName,
 		updateId,
 		updateGroupTitle,
+		updateAddressField,
 		noAutoGenerateId,
 	};
 };
