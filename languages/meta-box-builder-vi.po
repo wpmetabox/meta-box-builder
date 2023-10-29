@@ -223,7 +223,7 @@ msgid "Maximum number of files (leave empty for unlimited files)"
 msgstr ""
 
 #: src/Attribute.php:31
-msgid "Set the selected post as the parent for the current being edited post"
+msgid "Set the selected post as the parent of current post being edited"
 msgstr ""
 
 #: src/Attribute.php:32
