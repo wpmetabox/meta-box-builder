@@ -351,7 +351,7 @@ class Registry {
 			], [ 'post' ] ),
 			Control::Checkbox( 'parent', [
 				'label'   => __( 'Set as parent', 'meta-box-builder' ),
-				'tooltip' => __( 'Set the selected post as the parent for the current being edited post.', 'meta-box-builder' ),
+				'tooltip' => __( 'Set the selected post as the parent of current post being edited.', 'meta-box-builder' ),
 			] ),
 			'query_args_post'              => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
