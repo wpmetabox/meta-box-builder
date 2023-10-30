@@ -53,20 +53,13 @@ const Item = ( { name, keys, keysList, values, valuesList, item, remove, keyPlac
 );
 
 const DropdownItem = ( { name, placeholder, defaultValue, items } ) => {
-	const handleSelectItem = ( name, e, onToggle ) => {
-		onToggle();
-		document.getElementsByName( name )[0].value = e.target.dataset.value;
+	const handleSelectItem = ( inputRef, value ) => {
+		inputRef.current.value = value;
 	};
 
 	return (
 		<DivRow className="og-keyvalue-field">
-			<input type="text" placeholder={ placeholder } name={ name } defaultValue={ defaultValue } />
-			<Dropdown
-				className="og-dropdown"
-				position="bottom left"
-				renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
-				renderContent={ ( { onToggle } ) => <FieldInserter  items={ items } onSelect={ e => handleSelectItem( name, e, onToggle ) } /> }
-			/>
+			<FieldInserter name={ name }  defaultValue={ defaultValue } placeholder={ placeholder } items={ items } onSelect={ handleSelectItem } />
 		</DivRow>
 	);
 }

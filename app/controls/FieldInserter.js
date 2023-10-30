@@ -1,4 +1,5 @@
-import { RawHTML, useState } from "@wordpress/element";
+import { RawHTML, useState, useLayoutEffect, useRef } from "@wordpress/element";
+import { Button, Dropdown } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 
 const Search = ( { handleSearch } ) => (
@@ -18,7 +19,7 @@ const Items = ( { items, searchTerm } ) => {
 	) );
 };
 
-const FieldInserter = ( { items = [], onSelect } ) => {
+const DropdownInserter = ( { items = [], onSelect } ) => {
 	const [ searchTerm, setSearchTerm ] = useState( '' );
 
 	const handleClick = e => e.target.matches( '.og-dropdown__item' ) && onSelect( e );
@@ -29,6 +30,33 @@ const FieldInserter = ( { items = [], onSelect } ) => {
 			<Search handleSearch={ handleSearch } />
 			<Items items={ items } searchTerm={ searchTerm } />
 		</div>
+	);
+};
+
+const FieldInserter = ( { items = [], required = false, onSelect, ...rest } ) => {
+	const [ selection, setSelection ] = useState();
+	const ref = useRef();
+	useLayoutEffect( () => {
+		if ( selection && ref.current ) {
+			[ ref.current.selectionStart, ref.current.selectionEnd ] = selection;
+		}
+	}, [ selection ] );
+
+	const handleSelect = ( e, onToggle ) => {
+		onToggle();
+		onSelect( ref, e.target.dataset.value );
+	}
+
+	return (
+		<>
+			<input ref={ ref } type="text" required={ required } { ...rest } />
+			<Dropdown
+				className="og-dropdown"
+				position="bottom left"
+				renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
+				renderContent={ ( { onToggle } ) => <DropdownInserter  items={ items } onSelect={ e => handleSelect( e, onToggle ) } /> }
+			/>
+		</>
 	);
 };
 

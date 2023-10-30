@@ -7,21 +7,14 @@ const AddressField = ( { name, componentId, nameIdData, placeholder, defaultValu
 	const ids = useFieldIds( state => state.ids );
 	const fields = Array.from( new Set( Object.values( ids ) ) );
 
-	const handleSelectItem = ( e, onToggle ) => {
-		onToggle();
-		const address = ! nameIdData.address_field ? '' : nameIdData.address_field + ',';
-		nameIdData.updateAddressField( address + e.target.dataset.value );
+	const handleSelectItem = ( inputRef, value ) => {
+		const address = ! inputRef.current.value ? '' : inputRef.current.value + ',';
+		inputRef.current.value = address + value;
 	};
 
 	return (
-		<DivRow className="AddressField abcd1234" htmlFor={ componentId } { ...rest }>
-			<input type="text" id={ componentId } name={ name } value={ nameIdData.address_field } placeholder={ placeholder } required />
-			<Dropdown
-				className="og-dropdown"
-				position="bottom left"
-				renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
-				renderContent={ ( { onToggle } ) => <FieldInserter  items={ fields } hasSearch={ true } onSelect={ e => handleSelectItem( e, onToggle ) } /> }
-			/>
+		<DivRow htmlFor={ componentId } { ...rest }>
+			<FieldInserter id={ componentId } name={ name } value={ nameIdData.address_field } placeholder={ placeholder } required={ true } items={ fields } onSelect={ handleSelectItem }  />
 		</DivRow>
 	)
 };
