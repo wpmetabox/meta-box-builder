@@ -54,7 +54,7 @@ const FieldInserter = ( { items = [], required = false, className = '', onChange
 	}, [ selection ] );
 
 	return (
-		<div className={ className }>
+		<div className={ `og-field-insert ${className }` } >
 			<input ref={ ref } type="text" required={ required } onChange={ handleChange } { ...rest } />
 			<Dropdown
 				className="og-dropdown"
