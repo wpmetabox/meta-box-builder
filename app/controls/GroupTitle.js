@@ -18,6 +18,7 @@ const GroupTitle = ( { name, componentId, placeholder, defaultValue, nameIdData,
 	const handleSelectItem = ( inputRef, value ) => {
 		const title = value === '{#}' ? value : `{${settings.prefix}${ value }}`;
 		inputRef.current.value = inputRef.current.value + title;
+		nameIdData.updateGroupTitle( inputRef.current.value + title );
 	};
 
 	return (
