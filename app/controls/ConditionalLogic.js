@@ -1,4 +1,4 @@
-import { Dashicon, Button, Dropdown } from "@wordpress/components";
+import { Dashicon } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import useFieldIds from '../hooks/useFieldIds';
@@ -13,7 +13,7 @@ const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
 	const ids = useFieldIds( state => state.ids );
-	const fields = [ ...Array.from( new Set( Object.values( ids ) ) ) ];
+	const fields = Array.from( new Set( Object.values( ids ) ) );
 
 	return (
 		<DivRow className="og-include-exclude" { ...rest }>

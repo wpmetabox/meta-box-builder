@@ -1,4 +1,4 @@
-import { Dashicon, Button, Dropdown } from "@wordpress/components";
+import { Dashicon } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DataList from "./DataList";
@@ -43,23 +43,17 @@ const KeyValue = ( {
 	);
 };
 
-const Item = ( { name, keys, keysList, values, valuesList, item, remove, keyPlaceholder, valuePlaceholder } ) => (
-	<div className="og-attribute">
-		<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
-		<DropdownItem placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } items={ keysList } />
-		<DropdownItem placeholder={ keyPlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } items={ valuesList } />
-		<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => remove( item.id ) }><Dashicon icon="dismiss" /></button>
-	</div>
-);
-
-const DropdownItem = ( { name, placeholder, defaultValue, items } ) => {
+const Item = ( { name, keys, keysList, values, valuesList, item, remove, keyPlaceholder, valuePlaceholder } ) => {
 	const handleSelectItem = ( inputRef, value ) => inputRef.current.value = value;
 
 	return (
-		<DivRow className="og-keyvalue-field">
-			<FieldInserter name={ name }  defaultValue={ defaultValue } placeholder={ placeholder } items={ items } onSelect={ handleSelectItem } />
-		</DivRow>
+		<div className="og-attribute">
+			<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
+			<FieldInserter className="og-keyvalue-field" placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } items={ keysList } onSelect={ handleSelectItem } />
+			<FieldInserter className="og-keyvalue-field" placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } items={ valuesList } onSelect={ handleSelectItem } />
+			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => remove( item.id ) }><Dashicon icon="dismiss" /></button>
+		</div>
 	);
-}
+};
 
 export default KeyValue;

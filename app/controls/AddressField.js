@@ -1,4 +1,3 @@
-import { Button, Dropdown } from "@wordpress/components";
 import useFieldIds from '../hooks/useFieldIds';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';

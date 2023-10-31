@@ -33,7 +33,7 @@ const DropdownInserter = ( { items = [], onSelect } ) => {
 	);
 };
 
-const FieldInserter = ( { items = [], required = false, onSelect, ...rest } ) => {
+const FieldInserter = ( { items = [], required = false, className = '', onSelect, ...rest } ) => {
 	const ref = useRef();
 
 	const handleSelect = ( e, onToggle ) => {
@@ -42,15 +42,15 @@ const FieldInserter = ( { items = [], required = false, onSelect, ...rest } ) =>
 	}
 
 	return (
-		<>
+		<div className={ className }>
 			<input ref={ ref } type="text" required={ required } { ...rest } />
 			<Dropdown
 				className="og-dropdown"
 				position="bottom left"
 				renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
-				renderContent={ ( { onToggle } ) => <DropdownInserter  items={ items } onSelect={ e => handleSelect( e, onToggle ) } /> }
+				renderContent={ ( { onToggle } ) => <DropdownInserter items={ items } onSelect={ e => handleSelect( e, onToggle ) } /> }
 			/>
-		</>
+		</div>
 	);
 };
 
