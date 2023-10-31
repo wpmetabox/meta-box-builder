@@ -10,8 +10,6 @@ const useFieldNameId = field => {
 
 	const [ name, setName ] = useState( field.name || '' );
 	const [ id, updateId ] = useState( hasId ? field.id || '' : '' );
-	const [ group_title, updateGroupTitle ] = useState( field.group_title || '' );
-	const [ address_field, updateAddressField ] = useState( field.address_field || '' );
 
 	const isFirstEdit = useRef( !!field._new );
 
@@ -26,23 +24,19 @@ const useFieldNameId = field => {
 	// Update list ids for conditional logic.
 	const updateFieldId = useFieldIds( state => state.update );
 	useEffect( () => {
-		updateFieldId( field._id, { ...field, name, id, group_title } );
+		updateFieldId( field._id, { ...field, name, id } );
 	}, [ id ] );
 
 	const noAutoGenerateId = () => isFirstEdit.current = false;
 
-	const label = hasLabel ? name || group_title : ucwords( field.type );
+	const label = hasLabel ? name : ucwords( field.type );
 
 	return {
 		name,
 		id,
-		group_title,
 		label,
-		address_field,
 		updateName,
 		updateId,
-		updateGroupTitle,
-		updateAddressField,
 		noAutoGenerateId,
 	};
 };

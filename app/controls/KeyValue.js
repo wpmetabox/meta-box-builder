@@ -53,9 +53,7 @@ const Item = ( { name, keys, keysList, values, valuesList, item, remove, keyPlac
 );
 
 const DropdownItem = ( { name, placeholder, defaultValue, items } ) => {
-	const handleSelectItem = ( inputRef, value ) => {
-		inputRef.current.value = value;
-	};
+	const handleSelectItem = ( inputRef, value ) => inputRef.current.value = value;
 
 	return (
 		<DivRow className="og-keyvalue-field">

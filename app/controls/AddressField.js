@@ -14,7 +14,7 @@ const AddressField = ( { name, componentId, nameIdData, placeholder, defaultValu
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<FieldInserter id={ componentId } name={ name } value={ nameIdData.address_field } placeholder={ placeholder } required={ true } items={ fields } onSelect={ handleSelectItem }  />
+			<FieldInserter id={ componentId } name={ name } defaultValue={ defaultValue } placeholder={ placeholder } required={ true } items={ fields } onSelect={ handleSelectItem }  />
 		</DivRow>
 	)
 };

@@ -48,24 +48,15 @@ const Intro = ( { name, defaultValue } ) => (
 );
 
 const Rule = ( { rule, fields, name, removeRule } ) => {
-	const handleSelectItem = ( e, onToggle ) => {
-		onToggle();
-		document.getElementsByName( `${ name }[name]` )[0].value = e.target.dataset.value;
-	};
+	const handleSelectItem = ( inputRef, value ) => inputRef.current.value = value;
 
 	return (
 		<div className="og-include-exclude__rule og-attribute">
 			<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
 
-			<DivRow>
-				<input type="text" name={ `${ name }[name]` } className="og-include-exclude__name" defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } />
-				<Dropdown
-					className="og-dropdown"
-					position="bottom left"
-					renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
-					renderContent={ ( { onToggle } ) => <FieldInserter  items={ fields } hasSearch={ true } onSelect={ e => handleSelectItem( e, onToggle ) } /> }
-				/>
-			</DivRow>
+			<div className="og-include-exclude__rule__dropdown-item">
+				<FieldInserter name={ `${ name }[name]` } className="og-include-exclude__name" defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } items={ fields } onSelect={ handleSelectItem } />
+			</div>
 
 			<select name={ `${ name }[operator]` } className="og-include-exclude__operator" defaultValue={ rule.operator }>
 				<option value="=">{ __( '=', 'meta-box-builder' ) }</option>

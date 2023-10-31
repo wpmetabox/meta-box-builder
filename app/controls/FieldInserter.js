@@ -34,13 +34,7 @@ const DropdownInserter = ( { items = [], onSelect } ) => {
 };
 
 const FieldInserter = ( { items = [], required = false, onSelect, ...rest } ) => {
-	const [ selection, setSelection ] = useState();
 	const ref = useRef();
-	useLayoutEffect( () => {
-		if ( selection && ref.current ) {
-			[ ref.current.selectionStart, ref.current.selectionEnd ] = selection;
-		}
-	}, [ selection ] );
 
 	const handleSelect = ( e, onToggle ) => {
 		onToggle();
