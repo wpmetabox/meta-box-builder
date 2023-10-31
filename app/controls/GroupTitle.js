@@ -14,6 +14,11 @@ const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) 
 	const ids = useFieldIds( state => state.ids );
 	const fields = [ '{#}', ...Array.from( new Set( Object.values( ids ) ) ) ];
 
+	const handleChange = ( inputRef, value ) => {
+		inputRef.current.value = value;
+		nameIdData.updateGroupTitle( value );
+	};
+
 	const handleSelectItem = ( inputRef, value ) => {
 		const title = value   === '{#}' ? value : `{${settings.prefix}${ value }}`;
 		inputRef.current.value += title;
@@ -22,7 +27,7 @@ const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) 
 
 	return (
 		<DivRow className="og-group-title" htmlFor={ componentId } { ...rest }>
-			<FieldInserter id={ componentId } name={ name } defaultValue={ defaultValue } items={ fields } onSelect={ handleSelectItem } />
+			<FieldInserter id={ componentId } name={ name } defaultValue={ defaultValue } items={ fields } onChange={ handleChange } onSelect={ handleSelectItem } />
 		</DivRow>
 	);
 }

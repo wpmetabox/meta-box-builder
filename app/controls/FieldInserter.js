@@ -33,17 +33,29 @@ const DropdownInserter = ( { items = [], onSelect } ) => {
 	);
 };
 
-const FieldInserter = ( { items = [], required = false, className = '', onSelect, ...rest } ) => {
+const FieldInserter = ( { items = [], required = false, className = '', onChange, onSelect, ...rest } ) => {
+	const [ selection, setSelection ] = useState();
 	const ref = useRef();
+
+	const handleChange = e => {
+		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
+		onChange && onChange( ref, e.target.value );
+	};
 
 	const handleSelect = ( e, onToggle ) => {
 		onToggle();
 		onSelect( ref, e.target.dataset.value );
 	}
 
+	useLayoutEffect( () => {
+		if ( selection && ref.current ) {
+			[ ref.current.selectionStart, ref.current.selectionEnd ] = selection;
+		}
+	}, [ selection ] );
+
 	return (
 		<div className={ className }>
-			<input ref={ ref } type="text" required={ required } { ...rest } />
+			<input ref={ ref } type="text" required={ required } onChange={ handleChange } { ...rest } />
 			<Dropdown
 				className="og-dropdown"
 				position="bottom left"
