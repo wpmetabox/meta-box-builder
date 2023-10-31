@@ -53,11 +53,7 @@ const Rule = ( { rule, fields, name, removeRule } ) => {
 	return (
 		<div className="og-include-exclude__rule og-attribute">
 			<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
-
-			<div className="og-include-exclude__rule__dropdown-item">
-				<FieldInserter name={ `${ name }[name]` } className="og-include-exclude__name" defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } items={ fields } onSelect={ handleSelectItem } />
-			</div>
-
+			<FieldInserter className="og-include-exclude__rule__dropdown-item" name={ `${ name }[name]` } defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } items={ fields } onSelect={ handleSelectItem } />
 			<select name={ `${ name }[operator]` } className="og-include-exclude__operator" defaultValue={ rule.operator }>
 				<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
 				<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
