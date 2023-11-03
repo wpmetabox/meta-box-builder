@@ -1,5 +1,6 @@
 &-field-insert {
 	position: relative;
+	flex: 1;
 
 	.og-dropdown {
 		position: absolute;
@@ -40,10 +41,5 @@
 				background: var(--color-lighter);
 			}
 		}
-	}
-
-	// For key-values.
-	&--key-value {
-		flex: 1;
 	}
 }
