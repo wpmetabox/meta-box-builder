@@ -1,14 +1,19 @@
 import { __ } from "@wordpress/i18n";
 import useObjectType from "../hooks/useObjectType";
 import DivRow from './DivRow';
+import useFieldIds from '../hooks/useFieldIds';
+import FieldInserter from './FieldInserter';
 
-const AdminColumnsPosition = ( { name, defaultValue, ...rest } ) => {
+const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) => {
 	const objectType = useObjectType( state => state.type );
 	const defaultColumns = {
 		term: 'name',
 		user: 'username'
 	}
 	const defaultColumn = defaultColumns[ objectType ] || 'title';
+
+	const ids = useFieldIds( state => state.ids );
+	const fields = [ ...objectTypeFields( objectType ) , ...Array.from( new Set( Object.values( ids ) ) ) ];
 
 	return (
 		<DivRow { ...rest }>
@@ -17,9 +22,21 @@ const AdminColumnsPosition = ( { name, defaultValue, ...rest } ) => {
 				<option value="before">{ __( 'Before', 'meta-box-builder' ) }</option>
 				<option value="replace">{ __( 'Replace', 'meta-box-builder' ) }</option>
 			</select>
-			<input type="text" name={ `${ name }[column]` } defaultValue={ defaultValue.column || defaultColumn } list="admin-columns" />
+			<FieldInserter id={ componentId } name={ `${ name }[column]` } defaultValue={ defaultValue.column || defaultColumn } items={ fields } />
 		</DivRow>
 	);
+};
+
+const objectTypeFields = ( { objectType }) => {
+	if ( objectType === 'term' ) {
+		return [ 'cb, name, description, slug, count' ];
+	}
+
+	if ( objectType === 'user' ) {
+		return [ 'cb, username, name, email, role, posts' ];
+	}
+
+	return [ 'cb', 'title', 'author', 'categories', 'tags', 'comments', 'date' ];
 };
 
 export default AdminColumnsPosition;

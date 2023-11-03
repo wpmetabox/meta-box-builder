@@ -2,8 +2,6 @@ import { render, useContext, useEffect } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, category, cog } from "@wordpress/icons";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { AdminColumnsData } from './components/AdminColumnsData';
-import { Data } from './components/Data';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
@@ -65,8 +63,6 @@ const App = () => {
 					<Result endPoint="generate" />
 				</TabPanel>
 			</Tabs>
-			<Data />
-			<AdminColumnsData />
 			<br />
 			{
 				MbbApp.fields.length > 0 && settings.object_type !== 'block' &&
