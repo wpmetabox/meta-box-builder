@@ -2,7 +2,7 @@ import useFieldIds from '../hooks/useFieldIds';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
-const AddressField = ( { name, componentId, nameIdData, placeholder, defaultValue, ...rest } ) => {
+const AddressField = ( { name, componentId, placeholder, defaultValue, ...rest } ) => {
 	const ids = useFieldIds( state => state.ids );
 	const fields = Array.from( new Set( Object.values( ids ) ) );
 

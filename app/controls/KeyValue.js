@@ -49,8 +49,8 @@ const Item = ( { name, keys, keysList, values, valuesList, item, remove, keyPlac
 	return (
 		<div className="og-attribute">
 			<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
-			<FieldInserter className="og-keyvalue-field" placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } items={ keysList } onSelect={ handleSelectItem } />
-			<FieldInserter className="og-keyvalue-field" placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } items={ valuesList } onSelect={ handleSelectItem } />
+			<FieldInserter className="og-field-insert--key-value" placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } items={ keysList } onSelect={ handleSelectItem } />
+			<FieldInserter className="og-field-insert--key-value" placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } items={ valuesList } onSelect={ handleSelectItem } />
 			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => remove( item.id ) }><Dashicon icon="dismiss" /></button>
 		</div>
 	);
