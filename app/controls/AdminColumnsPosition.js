@@ -27,7 +27,7 @@ const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) =>
 	);
 };
 
-const objectTypeFields = ( { objectType }) => {
+const objectTypeFields = ( { objectType } ) => {
 	if ( objectType === 'term' ) {
 		return [ 'cb, name, description, slug, count' ];
 	}
