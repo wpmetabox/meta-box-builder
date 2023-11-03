@@ -1,5 +1,5 @@
-import { RawHTML, useState, useLayoutEffect, useRef } from "@wordpress/element";
 import { Button, Dropdown } from "@wordpress/components";
+import { RawHTML, useLayoutEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 
 const Search = ( { handleSearch } ) => (
@@ -44,8 +44,12 @@ const FieldInserter = ( { items = [], required = false, className = '', onChange
 
 	const handleSelect = ( e, onToggle ) => {
 		onToggle();
-		onSelect( ref, e.target.dataset.value );
-	}
+		if ( onSelect ) {
+			onSelect( ref, e.target.dataset.value );
+		} else {
+			ref.current.value = e.target.dataset.value;
+		}
+	};
 
 	useLayoutEffect( () => {
 		if ( selection && ref.current ) {
@@ -54,14 +58,16 @@ const FieldInserter = ( { items = [], required = false, className = '', onChange
 	}, [ selection ] );
 
 	return (
-		<div className={ `og-field-insert ${className }` } >
+		<div className={ `og-field-insert ${ className }` } >
 			<input ref={ ref } type="text" required={ required } onChange={ handleChange } { ...rest } />
-			<Dropdown
-				className="og-dropdown"
-				position="bottom left"
-				renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
-				renderContent={ ( { onToggle } ) => <DropdownInserter items={ items } onSelect={ e => handleSelect( e, onToggle ) } /> }
-			/>
+			{
+				items.length > 0 && <Dropdown
+					className="og-dropdown"
+					position="bottom left"
+					renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
+					renderContent={ ( { onToggle } ) => <DropdownInserter items={ items } onSelect={ e => handleSelect( e, onToggle ) } /> }
+				/>
+			}
 		</div>
 	);
 };

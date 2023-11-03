@@ -47,37 +47,33 @@ const Intro = ( { name, defaultValue } ) => (
 	</div>
 );
 
-const Rule = ( { rule, fields, name, removeRule } ) => {
-	const handleSelectItem = ( inputRef, value ) => inputRef.current.value = value;
-
-	return (
-		<div className="og-include-exclude__rule og-attribute">
-			<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
-			<FieldInserter name={ `${ name }[name]` } defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } items={ fields } onSelect={ handleSelectItem } />
-			<select name={ `${ name }[operator]` } className="og-include-exclude__operator" defaultValue={ rule.operator }>
-				<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
-				<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
-				<option value="<">{ __( '<', 'meta-box-builder' ) }</option>
-				<option value=">=">{ __( '>=', 'meta-box-builder' ) }</option>
-				<option value="<=">{ __( '<=', 'meta-box-builder' ) }</option>
-				<option value="!=">{ __( '!=', 'meta-box-builder' ) }</option>
-				<option value="contains">{ __( 'contains', 'meta-box-builder' ) }</option>
-				<option value="not contains">{ __( 'not contains', 'meta-box-builder' ) }</option>
-				<option value="starts with">{ __( 'starts with', 'meta-box-builder' ) }</option>
-				<option value="not starts with">{ __( 'not starts with', 'meta-box-builder' ) }</option>
-				<option value="ends with">{ __( 'ends with', 'meta-box-builder' ) }</option>
-				<option value="not ends with">{ __( 'not ends with', 'meta-box-builder' ) }</option>
-				<option value="between">{ __( 'between', 'meta-box-builder' ) }</option>
-				<option value="not between">{ __( 'not between', 'meta-box-builder' ) }</option>
-				<option value="in">{ __( 'in', 'meta-box-builder' ) }</option>
-				<option value="not in">{ __( 'not in', 'meta-box-builder' ) }</option>
-				<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
-				<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
-			</select>
-			<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ name }[value]` } />
-			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
-		</div>
-	);
-};
+const Rule = ( { rule, fields, name, removeRule } ) => (
+	<div className="og-include-exclude__rule og-attribute">
+		<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
+		<FieldInserter name={ `${ name }[name]` } defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } items={ fields } />
+		<select name={ `${ name }[operator]` } className="og-include-exclude__operator" defaultValue={ rule.operator }>
+			<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
+			<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
+			<option value="<">{ __( '<', 'meta-box-builder' ) }</option>
+			<option value=">=">{ __( '>=', 'meta-box-builder' ) }</option>
+			<option value="<=">{ __( '<=', 'meta-box-builder' ) }</option>
+			<option value="!=">{ __( '!=', 'meta-box-builder' ) }</option>
+			<option value="contains">{ __( 'contains', 'meta-box-builder' ) }</option>
+			<option value="not contains">{ __( 'not contains', 'meta-box-builder' ) }</option>
+			<option value="starts with">{ __( 'starts with', 'meta-box-builder' ) }</option>
+			<option value="not starts with">{ __( 'not starts with', 'meta-box-builder' ) }</option>
+			<option value="ends with">{ __( 'ends with', 'meta-box-builder' ) }</option>
+			<option value="not ends with">{ __( 'not ends with', 'meta-box-builder' ) }</option>
+			<option value="between">{ __( 'between', 'meta-box-builder' ) }</option>
+			<option value="not between">{ __( 'not between', 'meta-box-builder' ) }</option>
+			<option value="in">{ __( 'in', 'meta-box-builder' ) }</option>
+			<option value="not in">{ __( 'not in', 'meta-box-builder' ) }</option>
+			<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
+			<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
+		</select>
+		<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ name }[value]` } />
+		<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
+	</div>
+);
 
 export default ConditionalLogic;

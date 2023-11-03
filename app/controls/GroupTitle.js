@@ -14,13 +14,10 @@ const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) 
 	const ids = useFieldIds( state => state.ids );
 	const fields = [ '{#}', ...Array.from( new Set( Object.values( ids ) ) ) ];
 
-	const handleChange = ( inputRef, value ) => {
-		inputRef.current.value = value;
-		nameIdData.updateGroupTitle( value );
-	};
+	const handleChange = ( inputRef, value ) => nameIdData.updateGroupTitle( value );
 
 	const handleSelectItem = ( inputRef, value ) => {
-		const title = value   === '{#}' ? value : `{${settings.prefix}${ value }}`;
+		const title = value === '{#}' ? value : `{${ settings.prefix }${ value }}`;
 		inputRef.current.value += title;
 		nameIdData.updateGroupTitle( inputRef.current.value );
 	};
@@ -30,6 +27,6 @@ const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) 
 			<FieldInserter id={ componentId } name={ name } defaultValue={ defaultValue } items={ fields } onChange={ handleChange } onSelect={ handleSelectItem } />
 		</DivRow>
 	);
-}
+};
 
 export default GroupTitle;
