@@ -1,0 +1,45 @@
+&-field-insert {
+	position: relative;
+	flex: 1;
+
+	.og-dropdown {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+
+		button {
+			height: 100%;
+
+			&:focus {
+				box-shadow: none;
+			}
+		}
+
+		.components-popover__content {
+			min-width: 300px;
+			max-width: 100%;
+		}
+
+		&__search {
+			margin-bottom: 8px;
+
+			input {
+				width: 100%;
+			}
+		}
+
+		&__item {
+			cursor: pointer;
+			margin: 0;
+			padding: 4px 8px;
+			border-radius: 4px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+
+			&:hover {
+				background: var(--color-lighter);
+			}
+		}
+	}
+}

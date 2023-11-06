@@ -1,5 +1,4 @@
-import { Button, Dropdown } from "@wordpress/components";
-import { useContext, useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { useContext } from '@wordpress/element';
 import { SettingsContext } from "../contexts/SettingsContext";
 import useFieldIds from '../hooks/useFieldIds';
 import DivRow from './DivRow';
@@ -9,49 +8,25 @@ import FieldInserter from './FieldInserter';
  * Fix cursor jumping to the end of the `<input>` after typing.
  * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
  */
-const GroupTitle = ( { name, componentId, nameIdData, ...rest } ) => {
-	const ref = useRef();
-	const [ selection, setSelection ] = useState();
+const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) => {
 	const { settings } = useContext( SettingsContext );
 
 	const ids = useFieldIds( state => state.ids );
 	const fields = [ '{#}', ...Array.from( new Set( Object.values( ids ) ) ) ];
 
-	const handleChange = e => {
-		nameIdData.updateGroupTitle( e.target.value );
-		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
-	};
+	const handleChange = ( inputRef, value ) => nameIdData.updateGroupTitle( value );
 
-	const handleSelectItem = ( e, onToggle ) => {
-		onToggle();
-		const title = e.target.dataset.value === '{#}' ? e.target.dataset.value : `{${settings.prefix}${ e.target.dataset.value }}`
-		nameIdData.updateGroupTitle( nameIdData.group_title + title );
+	const handleSelectItem = ( inputRef, value ) => {
+		const title = value === '{#}' ? value : `{${ settings.prefix }${ value }}`;
+		inputRef.current.value += title;
+		nameIdData.updateGroupTitle( inputRef.current.value );
 	};
-
-	useLayoutEffect( () => {
-		if ( selection && ref.current ) {
-			[ ref.current.selectionStart, ref.current.selectionEnd ] = selection;
-		}
-	}, [ selection ] );
 
 	return (
 		<DivRow className="og-group-title" htmlFor={ componentId } { ...rest }>
-			<input
-				ref={ ref }
-				type="text"
-				id={ componentId }
-				name={ name }
-				value={ nameIdData.group_title }
-				onChange={ handleChange }
-			/>
-			<Dropdown
-				className="og-dropdown og-sub-field"
-				position="bottom left"
-				renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
-				renderContent={ ( { onToggle } ) => <FieldInserter  items={ fields } hasSearch={ true } onSelect={ e => handleSelectItem( e, onToggle ) } /> }
-			/>
+			<FieldInserter id={ componentId } name={ name } defaultValue={ defaultValue } items={ fields } onChange={ handleChange } onSelect={ handleSelectItem } />
 		</DivRow>
 	);
-}
+};
 
 export default GroupTitle;

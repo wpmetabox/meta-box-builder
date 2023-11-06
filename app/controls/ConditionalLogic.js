@@ -1,7 +1,9 @@
 import { Dashicon } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import useFieldIds from '../hooks/useFieldIds';
 import DivRow from './DivRow';
+import FieldInserter from './FieldInserter';
 import { uniqid } from '/functions';
 
 const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
@@ -10,6 +12,9 @@ const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
 	const addRule = () => setRules( prev => [ ...prev, { name: '', operator: '=', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
+	const ids = useFieldIds( state => state.ids );
+	const fields = Array.from( new Set( Object.values( ids ) ) );
+
 	return (
 		<DivRow className="og-include-exclude" { ...rest }>
 			{ rules.length > 0 && <Intro name={ name } defaultValue={ defaultValue } /> }
@@ -17,6 +22,7 @@ const ConditionalLogic = ( { defaultValue, name, ...rest } ) => {
 				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
+					fields={ fields }
 					name={ `${ name }[when][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
@@ -41,10 +47,10 @@ const Intro = ( { name, defaultValue } ) => (
 	</div>
 );
 
-const Rule = ( { rule, name, removeRule } ) => (
+const Rule = ( { rule, fields, name, removeRule } ) => (
 	<div className="og-include-exclude__rule og-attribute">
 		<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
-		<input type="text" name={ `${ name }[name]` } className="og-include-exclude__name" defaultValue={ rule.name } list="field-ids" placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } />
+		<FieldInserter name={ `${ name }[name]` } defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } items={ fields } />
 		<select name={ `${ name }[operator]` } className="og-include-exclude__operator" defaultValue={ rule.operator }>
 			<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
 			<option value=">">{ __( '>', 'meta-box-builder' ) }</option>

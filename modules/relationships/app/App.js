@@ -1,7 +1,6 @@
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from '../../../app/hooks/useApi';
 import Side from './Side';
-import { AdminColumnsData } from '/components/AdminColumnsData';
 import Result from '/components/Tabs/Result';
 import Checkbox from '/controls/Checkbox';
 const { render, useEffect, useState } = wp.element;
@@ -40,7 +39,6 @@ const App = () => {
 					<Result endPoint="relationships-generate" />
 				</TabPanel>
 			</Tabs>
-			<AdminColumnsData />
 		</>
 	);
 };
