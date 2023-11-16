@@ -488,6 +488,31 @@ class Registry {
 				'keys'    => [ 'ajax', 'allowClear', 'closeOnSelect', 'dir', 'disabled', 'dropdownAutoWidth', 'dropdownCssClass', 'language', 'maximumInputLength', 'maximumSelectionLength', 'minimumInputLength', 'minimumResultsForSearch', 'selectionCssClass', 'selectOnClose', 'width', 'scrollAfterSelect' ],
 				'values'  => [ 'true', 'false' ],
 			] ),
+            Control::Select( 'icon_set', [
+				'label'   => __( 'Icon set', 'meta-box-builder' ),
+				'tooltip' => __( 'Choose icon set' ),
+				'options' => [
+					'font-awesome-free' => __( 'Font Awesome Free', 'meta-box-builder' ),
+					'font-awesome-pro'  => __( 'Font Awesome Pro', 'meta-box-builder' ),
+					'custom-icons'  	=> __( 'Custom icon set', 'meta-box-builder' ),
+				],
+			], 'font-awesome-free' ),
+			Control::Input( 'icon_file', [
+				'type'	  => 'text',
+				'label'	  => __( 'Icon file', 'meta-box-builder' ),
+				'tooltip' => __( 'Path to your icon json file.', 'meta-box-builder' ),
+			] ),
+			Control::Input( 'icon_dir', [
+				'type'	  => 'text',
+				'label'	  => __( 'Icon dir', 'meta-box-builder' ),
+				'tooltip' => __( 'Path to your icon svg directory.', 'meta-box-builder' ),
+				'dependency' => 'icon_set:custom-icons',
+			] ),
+			Control::Textarea( 'icon_style', [
+				'label'	  => __( 'Icon style', 'meta-box-builder' ),
+				'tooltip' => __( 'Icon css file, accecpt your file location or function.', 'meta-box-builder' ),
+				'dependency' => 'icon_set:custom-icons',
+			] ),
 
 			// Slider.
 			Control::Input( 'prefix', [
