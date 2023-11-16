@@ -56,6 +56,7 @@ class Fields extends Base {
 		$upload   = ['max_file_uploads', 'max_status', 'force_delete', 'required'];
 		$input    = ['required', 'disabled', 'readonly'];
 		$html5    = ['std', 'placeholder', 'size', 'required', 'disabled', 'readonly'];
+		$icon	  = ['icon_set', 'styles', 'icon_file', 'svg_dir', 'icon_dir', 'icon_css', 'icon_style'];
 
 		$field_types = [
 			'autocomplete' => [
@@ -181,7 +182,7 @@ class Fields extends Base {
             'icon' => [
 				'title'       => __( 'Icon', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, ['std', 'placeholder'], $input, ['js_options'], $clone, $advanced ),
+				'controls'    => array_merge( $general, ['std', 'placeholder'], $input, $clone, $advanced, $icon ),
 				'description' => __( 'Icon with FontAwesome set', 'meta-box-builder' ),
 			],
 			'image'          => [
