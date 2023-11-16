@@ -56,7 +56,7 @@ class Fields extends Base {
 		$upload   = ['max_file_uploads', 'max_status', 'force_delete', 'required'];
 		$input    = ['required', 'disabled', 'readonly'];
 		$html5    = ['std', 'placeholder', 'size', 'required', 'disabled', 'readonly'];
-		$icon	  = ['icon_set', 'styles', 'icon_file', 'svg_dir', 'icon_dir', 'icon_css', 'icon_style'];
+		$icon	  = ['icon_set', 'icon_file', 'icon_dir',  'icon_style'];
 
 		$field_types = [
 			'autocomplete' => [
