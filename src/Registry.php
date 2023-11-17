@@ -24,9 +24,9 @@ class Registry {
 				'tooltip' => __( 'Leave empty to make the input 100% width.', 'meta-box-builder' ),
 			] ),
 			Control::Id( 'id', [
-				'label'    => __( 'ID', 'meta-box-builder' ),
-				'required' => true,
-				'tooltip'  => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
+				'label'       => __( 'ID', 'meta-box-builder' ),
+				'required'    => true,
+				'tooltip'     => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
 				'description' => __( 'Use only lowercase letters, numbers, underscores (and be careful dashes).', 'meta-box-builder' ),
 			] ),
 			Control::Input( 'label_description', [
@@ -482,35 +482,35 @@ class Registry {
 			] ),
 
 			// Icon.
-			'js_options_icon'   => Control::KeyValue( 'js_options', [
+			'js_options_icon'              => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://select2.org/configuration/options-api" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
 				'keys'    => [ 'ajax', 'allowClear', 'closeOnSelect', 'dir', 'disabled', 'dropdownAutoWidth', 'dropdownCssClass', 'language', 'maximumInputLength', 'maximumSelectionLength', 'minimumInputLength', 'minimumResultsForSearch', 'selectionCssClass', 'selectOnClose', 'width', 'scrollAfterSelect' ],
 				'values'  => [ 'true', 'false' ],
 			] ),
-            Control::Select( 'icon_set', [
+			Control::Select( 'icon_set', [
 				'label'   => __( 'Icon set', 'meta-box-builder' ),
 				'tooltip' => __( 'Choose icon set' ),
 				'options' => [
 					'font-awesome-free' => __( 'Font Awesome Free', 'meta-box-builder' ),
 					'font-awesome-pro'  => __( 'Font Awesome Pro', 'meta-box-builder' ),
-					'custom-icons'  	=> __( 'Custom icon set', 'meta-box-builder' ),
+					'custom-icons'      => __( 'Custom icon set', 'meta-box-builder' ),
 				],
 			], 'font-awesome-free' ),
 			Control::Input( 'icon_file', [
-				'type'	  => 'text',
-				'label'	  => __( 'Icon file', 'meta-box-builder' ),
+				'type'    => 'text',
+				'label'   => __( 'Icon file', 'meta-box-builder' ),
 				'tooltip' => __( 'Path to your icon json file.', 'meta-box-builder' ),
 			] ),
 			Control::Input( 'icon_dir', [
-				'type'	  => 'text',
-				'label'	  => __( 'Icon dir', 'meta-box-builder' ),
-				'tooltip' => __( 'Path to your icon svg directory.', 'meta-box-builder' ),
+				'type'       => 'text',
+				'label'      => __( 'Icon dir', 'meta-box-builder' ),
+				'tooltip'    => __( 'Path to your icon svg directory.', 'meta-box-builder' ),
 				'dependency' => 'icon_set:custom-icons',
 			] ),
 			Control::Textarea( 'icon_style', [
-				'label'	  => __( 'Icon style', 'meta-box-builder' ),
-				'tooltip' => __( 'Icon css file, accecpt your file location or function.', 'meta-box-builder' ),
+				'label'      => __( 'Icon style', 'meta-box-builder' ),
+				'tooltip'    => __( 'Icon css file, accecpt your file location or function.', 'meta-box-builder' ),
 				'dependency' => 'icon_set:custom-icons',
 			] ),
 
