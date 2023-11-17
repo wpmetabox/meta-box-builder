@@ -490,27 +490,26 @@ class Registry {
 			] ),
 			Control::Select( 'icon_set', [
 				'label'   => __( 'Icon set', 'meta-box-builder' ),
-				'tooltip' => __( 'Choose icon set' ),
 				'options' => [
 					'font-awesome-free' => __( 'Font Awesome Free', 'meta-box-builder' ),
 					'font-awesome-pro'  => __( 'Font Awesome Pro', 'meta-box-builder' ),
-					'custom'      => __( 'Custom', 'meta-box-builder' ),
+					'custom'            => __( 'Custom', 'meta-box-builder' ),
 				],
 			], 'font-awesome-free' ),
 			Control::Input( 'icon_file', [
 				'type'    => 'text',
 				'label'   => __( 'Icon file', 'meta-box-builder' ),
-				'tooltip' => __( 'Path to your icon json file.', 'meta-box-builder' ),
+				'tooltip' => __( 'The full path to the icon file definition, which can be a text or JSON file.', 'meta-box-builder' ),
 			] ),
 			Control::Input( 'icon_dir', [
 				'type'       => 'text',
 				'label'      => __( 'Icon dir', 'meta-box-builder' ),
-				'tooltip'    => __( 'Path to your icon svg directory.', 'meta-box-builder' ),
+				'tooltip'    => __( 'Full path to the folder that contains all SVGs of icons.', 'meta-box-builder' ),
 				'dependency' => 'icon_set:custom',
 			] ),
-			Control::Textarea( 'icon_style', [
-				'label'      => __( 'Icon style', 'meta-box-builder' ),
-				'tooltip'    => __( 'Icon css file, accecpt your file location or function.', 'meta-box-builder' ),
+			Control::Input( 'icon_css', [
+				'label'      => __( 'Icon css', 'meta-box-builder' ),
+				'tooltip'    => __( 'URL to the icon CSS file. It\'s required only when you use icons as an icon font (e.g. no SVG).', 'meta-box-builder' ),
 				'dependency' => 'icon_set:custom',
 			] ),
 
