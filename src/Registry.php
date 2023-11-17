@@ -494,7 +494,7 @@ class Registry {
 				'options' => [
 					'font-awesome-free' => __( 'Font Awesome Free', 'meta-box-builder' ),
 					'font-awesome-pro'  => __( 'Font Awesome Pro', 'meta-box-builder' ),
-					'custom-icons'      => __( 'Custom icon set', 'meta-box-builder' ),
+					'custom'      => __( 'Custom', 'meta-box-builder' ),
 				],
 			], 'font-awesome-free' ),
 			Control::Input( 'icon_file', [
@@ -506,12 +506,12 @@ class Registry {
 				'type'       => 'text',
 				'label'      => __( 'Icon dir', 'meta-box-builder' ),
 				'tooltip'    => __( 'Path to your icon svg directory.', 'meta-box-builder' ),
-				'dependency' => 'icon_set:custom-icons',
+				'dependency' => 'icon_set:custom',
 			] ),
 			Control::Textarea( 'icon_style', [
 				'label'      => __( 'Icon style', 'meta-box-builder' ),
 				'tooltip'    => __( 'Icon css file, accecpt your file location or function.', 'meta-box-builder' ),
-				'dependency' => 'icon_set:custom-icons',
+				'dependency' => 'icon_set:custom',
 			] ),
 
 			// Slider.
