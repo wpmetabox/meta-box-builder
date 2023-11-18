@@ -497,9 +497,10 @@ class Registry {
 				],
 			], 'font-awesome-free' ),
 			Control::Input( 'icon_file', [
-				'type'    => 'text',
-				'label'   => __( 'Icon file', 'meta-box-builder' ),
-				'tooltip' => __( 'The full path to the icon file definition, which can be a text or JSON file.', 'meta-box-builder' ),
+				'type'       => 'text',
+				'label'      => __( 'Icon file', 'meta-box-builder' ),
+				'tooltip'    => __( 'The full path to the icon file definition, which can be a text or JSON file.', 'meta-box-builder' ),
+				'dependency' => 'icon_set:[font-awesome-pro,custom]',
 			] ),
 			Control::Input( 'icon_dir', [
 				'type'       => 'text',
