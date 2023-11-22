@@ -509,7 +509,7 @@ class Registry {
 				'dependency' => 'icon_set:custom',
 			] ),
 			Control::Input( 'icon_css', [
-				'label'      => __( 'Icon css', 'meta-box-builder' ),
+				'label'      => __( 'Icon CSS', 'meta-box-builder' ),
 				'tooltip'    => __( 'URL to the icon CSS file. It\'s required only when you use icons as an icon font (e.g. no SVG).', 'meta-box-builder' ),
 				'dependency' => 'icon_set:custom',
 			] ),
