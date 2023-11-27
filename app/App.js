@@ -71,7 +71,7 @@ const App = () => {
 						<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
 					</div>
 					<div className="inside">
-						<ThemeCode settings={ settings.data } fields={ MbbApp.fields } />
+						<ThemeCode settings={ settings } fields={ MbbApp.fields } />
 					</div>
 				</div>
 			}
