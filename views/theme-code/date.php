@@ -18,7 +18,7 @@ if ( $in_group ) {
 	if ( ! empty( $field ['timestamp'] ) ) {
 		$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( '?>' );
-		$this->out( '<p>Event date: <?= date( \'F j, Y\', $value ) ?></p>', 0, 0 );
+		$this->out( '<p>Date: <?= date( \'F j, Y\', $value ) ?></p>' );
 		$this->out( '<?php' );
 
 		return;
@@ -38,7 +38,7 @@ if ( ! empty( $field['clone'] ) ) {
 			$this->out( '<li><?= ' . $value . ' ?></li>', 2 );
 
 		$this->out( '<?php endforeach ?>', 1 );
-	$this->out( '</ul>', 0, 0 );
+	$this->out( '</ul>' );
 	return;
 }
 
@@ -46,14 +46,14 @@ if ( ! empty( $field['clone'] ) ) {
 if ( ! empty( $field ['timestamp'] ) ) {
 	// Displaying the value:
 	$this->out( '<?php // Displaying the value: ?>' );
-	$this->out( "<p>Event date: <?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'], [ 'format' => 'F j, Y' ] ) . ' ); ?></p>', 0, 3 );
+	$this->out( "<p>Date: <?php rwmb_the_value( '" . $this->get_encoded_value( $field['id'], [ 'format' => 'F j, Y' ] ) . ' ); ?></p>', 0, 3 );
 
 	// Getting the value:
 	$this->out( '<?php' );
 	$this->out( '// Getting the value:' );
 	$this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 	$this->out( '?>' );
-	$this->out( '<p>Event date: <?= date( \'F j, Y\', $value ) ?></p>', 0, 0 );
+	$this->out( '<p>Date: <?= date( \'F j, Y\', $value ) ?></p>', 0, 0 );
 
 	return;
 }
