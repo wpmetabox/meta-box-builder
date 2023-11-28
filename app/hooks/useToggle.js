@@ -12,7 +12,7 @@ const normalizeBool = value => {
 
 
 export const useToggle = name => {
-	const [ handle, setHandle ] = useState( () => () => {} );
+	const [ handle, setHandle ] = useState( () => () => { } );
 
 	const el = getElement( name );
 	const wrapper = el ? el.closest( '.og-field' ) : null;
@@ -40,7 +40,13 @@ const toggleDependents = el => {
 		const depValue = normalizeBool( dep[ 2 ] );
 
 		// If current element is hidden, always hide the dependent.
-		let isHidden = wrapper.classList.contains( 'og-is-hidden' ) || depValue !== inputValue;
+
+		let isHidden = wrapper.classList.contains( 'og-is-hidden' ) ||
+			(
+				typeof ( depValue ) === 'string' && depValue.includes( '[' ) && depValue.includes( ']' ) ?
+					!depValue.match( /[^[\],]+/g ).includes( inputValue ) :
+					depValue !== inputValue
+			);
 
 		if ( isHidden ) {
 			dependent.classList.add( 'og-is-hidden' );

@@ -24,9 +24,9 @@ class Registry {
 				'tooltip' => __( 'Leave empty to make the input 100% width.', 'meta-box-builder' ),
 			] ),
 			Control::Id( 'id', [
-				'label'    => __( 'ID', 'meta-box-builder' ),
-				'required' => true,
-				'tooltip'  => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
+				'label'       => __( 'ID', 'meta-box-builder' ),
+				'required'    => true,
+				'tooltip'     => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
 				'description' => __( 'Use only lowercase letters, numbers, underscores (and be careful dashes).', 'meta-box-builder' ),
 			] ),
 			Control::Input( 'label_description', [
@@ -482,11 +482,36 @@ class Registry {
 			] ),
 
 			// Icon.
-			'js_options_icon'   => Control::KeyValue( 'js_options', [
+			'js_options_icon'              => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://select2.org/configuration/options-api" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
 				'keys'    => [ 'ajax', 'allowClear', 'closeOnSelect', 'dir', 'disabled', 'dropdownAutoWidth', 'dropdownCssClass', 'language', 'maximumInputLength', 'maximumSelectionLength', 'minimumInputLength', 'minimumResultsForSearch', 'selectionCssClass', 'selectOnClose', 'width', 'scrollAfterSelect' ],
 				'values'  => [ 'true', 'false' ],
+			] ),
+			Control::Select( 'icon_set', [
+				'label'   => __( 'Icon set', 'meta-box-builder' ),
+				'options' => [
+					'font-awesome-free' => __( 'Font Awesome Free', 'meta-box-builder' ),
+					'font-awesome-pro'  => __( 'Font Awesome Pro', 'meta-box-builder' ),
+					'custom'            => __( 'Custom', 'meta-box-builder' ),
+				],
+			], 'font-awesome-free' ),
+			Control::Input( 'icon_file', [
+				'type'       => 'text',
+				'label'      => __( 'Icon file', 'meta-box-builder' ),
+				'tooltip'    => __( 'The full path to the icon file definition, which can be a text or JSON file.', 'meta-box-builder' ),
+				'dependency' => 'icon_set:[font-awesome-pro,custom]',
+			] ),
+			Control::Input( 'icon_dir', [
+				'type'       => 'text',
+				'label'      => __( 'Icon dir', 'meta-box-builder' ),
+				'tooltip'    => __( 'Full path to the folder that contains all SVGs of icons.', 'meta-box-builder' ),
+				'dependency' => 'icon_set:custom',
+			] ),
+			Control::Input( 'icon_css', [
+				'label'      => __( 'Icon CSS', 'meta-box-builder' ),
+				'tooltip'    => __( 'URL to the icon CSS file. It\'s required only when you use icons as an icon font (e.g. no SVG).', 'meta-box-builder' ),
+				'dependency' => 'icon_set:custom',
 			] ),
 
 			// Slider.
