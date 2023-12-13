@@ -1,4 +1,6 @@
 import { Button, Dropdown } from "@wordpress/components";
+import { useContext } from '@wordpress/element';
+import { SettingsContext } from "../contexts/SettingsContext";
 import { RawHTML, useLayoutEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 
@@ -35,6 +37,7 @@ const DropdownInserter = ( { items = [], onSelect } ) => {
 
 const FieldInserter = ( { items = [], required = false, className = '', onChange, onSelect, ...rest } ) => {
 	const [ selection, setSelection ] = useState();
+	const { settings } = useContext( SettingsContext );
 	const ref = useRef();
 
 	const handleChange = e => {
@@ -47,7 +50,7 @@ const FieldInserter = ( { items = [], required = false, className = '', onChange
 		if ( onSelect ) {
 			onSelect( ref, e.target.dataset.value );
 		} else {
-			ref.current.value = e.target.dataset.value;
+			ref.current.value = `${ settings.prefix }${ e.target.dataset.value }`;
 		}
 	};
 
