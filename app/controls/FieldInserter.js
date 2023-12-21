@@ -35,7 +35,7 @@ const DropdownInserter = ( { items = [], onSelect } ) => {
 	);
 };
 
-const FieldInserter = ( { items = [], required = false, className = '', isID = false, onChange, onSelect, ...rest } ) => {
+const FieldInserter = ( { items = [], required = false, className = '', isID = false, exclude = [], onChange, onSelect, ...rest } ) => {
 	const [ selection, setSelection ] = useState();
 	const { settings } = useContext( SettingsContext );
 	const ref = useRef();
@@ -50,7 +50,7 @@ const FieldInserter = ( { items = [], required = false, className = '', isID = f
 		if ( onSelect ) {
 			onSelect( ref, e.target.dataset.value );
 		} else {
-			ref.current.value = !isID ? e.target.dataset.value : `${ settings.prefix }${ e.target.dataset.value }`;
+			ref.current.value = ! isID || exclude.includes( e.target.dataset.value ) ? e.target.dataset.value : `${ settings.prefix }${ e.target.dataset.value }`;
 		}
 	};
 
