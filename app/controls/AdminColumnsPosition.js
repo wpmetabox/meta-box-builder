@@ -22,7 +22,7 @@ const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) =>
 				<option value="before">{ __( 'Before', 'meta-box-builder' ) }</option>
 				<option value="replace">{ __( 'Replace', 'meta-box-builder' ) }</option>
 			</select>
-			<FieldInserter id={ componentId } name={ `${ name }[column]` } defaultValue={ defaultValue.column || defaultColumn } items={ fields } />
+			<FieldInserter id={ componentId } name={ `${ name }[column]` } defaultValue={ defaultValue.column || defaultColumn } items={ fields } isID = { true } exclude={ objectTypeFields( objectType ) } />
 		</DivRow>
 	);
 };
