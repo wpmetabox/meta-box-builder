@@ -137,6 +137,11 @@ class RestApi extends Base {
 				'name'    => 'field[placeholder]',
 				'label' => __( 'Placeholder', 'meta-box-builder' )
 			], '', 'field' ),
+            Control::Input( 'field_display_meta_field', [
+				'name'    => 'field[display_meta_field]',
+				'label'   => __( 'Display meta field', 'meta-box-builder' ),
+				'tooltip' => __( 'Custom meta field for the label of object.', 'meta-box-builder' ),
+			], '', 'field' ),
 			Control::Checkbox( 'add_new', [
 				'name'    => 'field[add_new]',
 				'label' => __( 'Add new', 'meta-box-builder' )
