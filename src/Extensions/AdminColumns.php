@@ -73,7 +73,7 @@ class AdminColumns {
 			'label'   => __( 'Item link type', 'meta-box-builder' ),
 			'tooltip' => __( 'The link for the items displayed in the admin column', 'meta-box-builder' ),
 			'options' => [
-				'false' => __( 'No link', 'meta-box-builder' ),
+				'none' => __( 'No link', 'meta-box-builder' ),
 				'view'  => __( 'View', 'meta-box-builder' ),
 				'edit'  => __( 'Edit', 'meta-box-builder' ),
 			],
