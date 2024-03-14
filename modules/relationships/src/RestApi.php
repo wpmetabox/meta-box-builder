@@ -48,7 +48,12 @@ class RestApi extends Base {
 				'label'   => __( 'Empty message', 'meta-box-builder' ),
 				'tooltip' => __( 'The message displayed when there’s no connections', 'meta-box-builder' ),
 			] ),
-
+			// Admin filter.
+			Control::Checkbox( 'admin_filter', [
+				'name'    => 'admin_filter',
+				'label'   => __( 'Show admin filter', 'meta-box-builder' ),
+				'tooltip' => __( 'Show a dropdown filter by this relationship in the admin table list.', 'meta-box-builder' ),
+			] ),
 			// Admin columns.
 			Control::Checkbox( 'admin_column_enable', [
 				'name'    => 'admin_column[enable]',
@@ -63,16 +68,16 @@ class RestApi extends Base {
 				'dependency' => 'admin_column_enable:true',
 			] ),
 			Control::Input( 'admin_column_title', [
-				'name'    => 'admin_column[title]',
-				'label'   => __( 'Column title', 'meta-box-builder' ),
-				'tooltip' => __( 'Leave empty to use the meta box title', 'meta-box-builder' ),
+				'name'       => 'admin_column[title]',
+				'label'      => __( 'Column title', 'meta-box-builder' ),
+				'tooltip'    => __( 'Leave empty to use the meta box title', 'meta-box-builder' ),
 				'dependency' => 'admin_column_enable:true',
 			] ),
 			Control::Select( 'admin_column_link', [
-				'name'    => 'admin_column[link]',
-				'label'   => __( 'Item link type', 'meta-box-builder' ),
-				'tooltip' => __( 'The link for the items displayed in the admin column', 'meta-box-builder' ),
-				'options' => [
+				'name'       => 'admin_column[link]',
+				'label'      => __( 'Item link type', 'meta-box-builder' ),
+				'tooltip'    => __( 'The link for the items displayed in the admin column', 'meta-box-builder' ),
+				'options'    => [
 					'view'  => __( 'View', 'meta-box-builder' ),
 					'edit'  => __( 'Edit', 'meta-box-builder' ),
 					'false' => __( 'No link', 'meta-box-builder' ),
@@ -110,8 +115,8 @@ class RestApi extends Base {
 				],
 			], 'default', 'meta_box' ),
 			Control::Checkbox( 'meta_box_closed', [
-				'name'    => 'meta_box[closed]',
-				'label'   => __( 'Collapsed by default', 'meta-box-builder' ),
+				'name'  => 'meta_box[closed]',
+				'label' => __( 'Collapsed by default', 'meta-box-builder' ),
 			], false, 'meta_box' ),
 			Control::Input( 'meta_box_class', [
 				'name'  => 'meta_box[class]',
@@ -134,13 +139,13 @@ class RestApi extends Base {
 				'tooltip' => __( 'Display below the field input', 'meta-box-builder' ),
 			], '', 'field' ),
 			Control::Input( 'field_placeholder', [
-				'name'    => 'field[placeholder]',
-				'label' => __( 'Placeholder', 'meta-box-builder' )
+				'name'  => 'field[placeholder]',
+				'label' => __( 'Placeholder', 'meta-box-builder' ),
 			], '', 'field' ),
 			Control::Checkbox( 'add_new', [
-				'name'    => 'field[add_new]',
-				'label' => __( 'Add new', 'meta-box-builder' )
-			], false, 'field' ),			
+				'name'  => 'field[add_new]',
+				'label' => __( 'Add new', 'meta-box-builder' ),
+			], false, 'field' ),
 			Control::KeyValue( 'field_query_args', [
 				'name'    => 'field[query_args]',
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
@@ -168,7 +173,7 @@ class RestApi extends Base {
 				'tooltip' => __( 'Custom HTML displayed after the field output', 'meta-box-builder' ),
 			], '', 'field' ),
 			Control::Input( 'field_class', [
-				'name' => 'field[class]',
+				'name'  => 'field[class]',
 				'label' => __( 'Custom CSS class', 'meta-box-builder' ),
 			], '', 'field' ),
 		];
@@ -178,7 +183,7 @@ class RestApi extends Base {
 
 	private function get_post_types() {
 		$post_types = Data::get_post_types();
-		$options = [];
+		$options    = [];
 		foreach ( $post_types as $post_type ) {
 			$options[ $post_type['slug'] ] = sprintf( '%s (%s)', $post_type['name'], $post_type['slug'] );
 		}
@@ -187,7 +192,7 @@ class RestApi extends Base {
 
 	private function get_taxonomies() {
 		$taxonomies = Data::get_taxonomies();
-		$options = [];
+		$options    = [];
 		foreach ( $taxonomies as $taxonomy ) {
 			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
 		}
