@@ -120,6 +120,7 @@ class Data {
 			'meta-box-show-hide'       => 'MB_Show_Hide',
 			'meta-box-tabs'            => 'MB_Tabs',
 			'meta-box-tooltip'         => 'MB_Tooltip',
+			'meta-box-text-limiter'    => 'MB_Text_Limiter',
 		];
 
 		if ( isset( $functions[ $extension ] ) ) {

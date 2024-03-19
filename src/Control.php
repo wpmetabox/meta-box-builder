@@ -40,6 +40,7 @@ class Control {
 			'ShowHide'         => [],
 			'ConditionalLogic' => [],
 			'CustomTable'      => [],
+			'TextLimiter'      => [],
 		];
 		return isset( $defaults[ $name ] ) ? $defaults[ $name ] : '';
 	}
