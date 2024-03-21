@@ -19,7 +19,7 @@ class TextLimiter {
 		}
 
 		$controls[] = Control::TextLimiter( 'text_limiter', [
-			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-text-limiter/" target="_blank" rel="noreferrer noopenner">' . __( 'Text limiter', 'meta-box-builder' ) . '</a>',
+			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-text-limiter/" target="_blank" rel="noreferrer noopenner">' . __( 'Text limit', 'meta-box-builder' ) . '</a>',
 			'tooltip' => __( 'Limit the number of characters or words', 'meta-box-builder' ),
 		], [], 'advanced' );
 
