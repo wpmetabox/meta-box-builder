@@ -11,7 +11,6 @@ class TextLimiter {
 		}
 
 		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ], 10, 2 );
-		add_filter( 'mbb_settings_controls', [ $this, 'add_settings_controls' ] );
 	}
 
 	public function add_field_controls( $controls, $type ) {
@@ -20,18 +19,9 @@ class TextLimiter {
 		}
 
 		$controls[] = Control::TextLimiter( 'text_limiter', [
-			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-text-limiter/" target="_blank" rel="noreferrer noopenner">' . __( 'Text limiter111', 'meta-box-builder' ) . '</a>',
+			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-text-limiter/" target="_blank" rel="noreferrer noopenner">' . __( 'Text limiter', 'meta-box-builder' ) . '</a>',
 			'tooltip' => __( 'Limit the number of characters or words', 'meta-box-builder' ),
 		], [], 'advanced' );
-
-		return $controls;
-	}
-
-	public function add_settings_controls( $controls ) {
-		$controls[7] = Control::TextLimiter( 'text_limiter', [
-			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-text-limiter/" target="_blank" rel="noreferrer noopenner">' . __( 'Text limiter222', 'meta-box-builder' ) . '</a>',
-			'tooltip' => __( 'Limit the number of characters or words ', 'meta-box-builder' ),
-		] );
 
 		return $controls;
 	}
