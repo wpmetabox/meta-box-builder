@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
 
-const TextLimiter = ( { fieldId, defaultValue, componentId, nameIdData, name, ...rest } ) => {
+const TextLimiter = ( { defaultValue, componentId, nameIdData, name, ...rest } ) => {
 	return [ 'text', 'textarea', 'wysiwyg' ].includes( nameIdData.type ) && 
 		<>
 			<DivRow { ...rest }>
