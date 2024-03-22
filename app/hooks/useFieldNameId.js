@@ -14,8 +14,6 @@ const useFieldNameId = field => {
 
 	const isFirstEdit = useRef( !!field._new );
 
-	const type = field.type;
-
 	const updateName = value => {
 		setName( value );
 
@@ -37,7 +35,6 @@ const useFieldNameId = field => {
 	return {
 		name,
 		id,
-		type,
 		group_title,
 		label,
 		updateName,
