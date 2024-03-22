@@ -44,4 +44,18 @@ class Control {
 		];
 		return isset( $defaults[ $name ] ) ? $defaults[ $name ] : '';
 	}
+
+	/**
+	 * A public helper to insert a new control after a specific position.
+	 */
+	public static function insert( array $controls, string $setting, array $control ): array {
+		$new = [];
+		foreach ( $controls as $c ) {
+			$new[] = $c;
+			if ( $c === $setting || ( is_array( $c ) && $c['setting'] === $setting ) ) {
+				$new[] = $control;
+			}
+		}
+		return array_values( $new );
+	}
 }

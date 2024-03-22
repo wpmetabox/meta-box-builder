@@ -18,11 +18,11 @@ class TextLimiter {
 			return $controls;
 		}
 
-		$controls[] = Control::TextLimiter( 'text_limiter', [
+		$control = Control::TextLimiter( 'text_limiter', [
 			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-text-limiter/" target="_blank" rel="noreferrer noopenner">' . __( 'Text limit', 'meta-box-builder' ) . '</a>',
 			'tooltip' => __( 'Limit the number of characters or words', 'meta-box-builder' ),
-		], [], 'advanced' );
+		], [], 'general' );
 
-		return $controls;
+		return Control::insert( $controls, 'std', $control );
 	}
 }
