@@ -1,0 +1,22 @@
+&-text-limit {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	margin-bottom: 12px;
+
+	input[type='text'],
+	select {
+		flex: 1;
+		max-width: 7em;
+	}
+
+	input[type='text'] {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	select {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+}
