@@ -9,7 +9,7 @@
 	right: 0;
 	bottom: 0;
 
-	button {
+	.components-button {
 		height: 100%;
 
 		&:focus {
@@ -17,13 +17,13 @@
 		}
 	}
 
-	input {
-		width: 100%;
-		margin: 0;
-	}
-
 	&__search {
 		margin-bottom: 8px;
+
+		input {
+			width: 100%;
+			margin: 0;
+		}
 	}
 
 	&__item {
