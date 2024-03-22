@@ -19,8 +19,9 @@ class TextLimiter {
 		}
 
 		$control = Control::TextLimiter( 'text_limiter', [
-			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-text-limiter/" target="_blank" rel="noreferrer noopenner">' . __( 'Text limit', 'meta-box-builder' ) . '</a>',
-			'tooltip' => __( 'Limit the number of characters or words', 'meta-box-builder' ),
+			'label'       => __( 'Text limit', 'meta-box-builder' ),
+			// Translators: %s - Link to docs.
+			'description' => sprintf( __( 'Limit the content by characters or words. Leave empty or enter 0 for no limit. <a href="%s" target="_blank">Learn more</a>.', 'meta-box-builder' ), 'https://docs.metabox.io/extensions/meta-box-text-limiter/"' ),
 		], [], 'general' );
 
 		return Control::insert( $controls, 'std', $control );
