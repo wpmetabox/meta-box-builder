@@ -1,22 +1,20 @@
 &-text-limit {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
+	display: inline-flex;
 
-	input[type='text'],
-	select {
-		flex: 1;
-		max-width: 7em;
-	}
-
-	input[type='text'] {
+	input[type="text"] {
+		margin-inline: 0;
+		width: 6em;
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
+
+		&:focus {
+			z-index: 2;
+		}
 	}
 
 	select {
 		border-top-left-radius: 0;
 		border-bottom-left-radius: 0;
-		margin-left: -2px;
+		margin-left: -1px;
 	}
 }
