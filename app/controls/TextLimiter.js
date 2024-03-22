@@ -1,12 +1,13 @@
 import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
 
-const TextLimiter = ( { defaultValue, componentId, type, name, ...rest } ) => {
-	return [ 'text', 'textarea', 'wysiwyg' ].includes( type ) &&
+const TextLimiter = ( { defaultValue, componentId, fieldType, name, ...rest } ) => {
+	return [ 'text', 'textarea', 'wysiwyg' ].includes( fieldType ) &&
 		<DivRow { ...rest }>
 			<div className="og-text-limit">
 				<input
-					type="text"
+					type="number"
+					min="0"
 					id={ componentId }
 					name={ `${ name }[limit]` }
 					defaultValue={ defaultValue.limit }
