@@ -14,8 +14,8 @@ const TextLimiter = ( { defaultValue, componentId, nameIdData, name, ...rest } )
 					/>
 					<div className="og-input">
 						<select name={ `${ name }[limit_type]` } defaultValue={ defaultValue.limit_type || '' }>
-							<option value="characters">{ __( 'Characters', 'meta-box-builder' ) }</option>
-							<option value="words">{ __( 'Words', 'meta-box-builder' ) }</option>
+							<option value="character">{ __( 'Characters', 'meta-box-builder' ) }</option>
+							<option value="word">{ __( 'Words', 'meta-box-builder' ) }</option>
 						</select>
 					</div>
 				</div>

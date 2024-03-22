@@ -68,7 +68,6 @@ class Edit extends BaseEditPage {
 				'tabs'               => Data::is_extension_active( 'meta-box-tabs' ),
 				'termMeta'           => Data::is_extension_active( 'mb-term-meta' ),
 				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
-				'textLimiter'        => Data::is_extension_active( 'meta-box-text-limiter' ),
 			],
 		];
 
