@@ -99,6 +99,10 @@ class Edit extends BaseEditPage {
 
 		$parser = new Parser( $submitted_data );
 		$parser->parse();
+		
 		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
+
+		// Allow developers to add actions after saving the meta box.
+		do_action( 'mbb_after_save', $parser, $post_id, $submitted_data );
 	}
 }

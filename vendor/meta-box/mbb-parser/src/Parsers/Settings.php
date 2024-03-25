@@ -149,6 +149,7 @@ class Settings extends Base {
 		}
 		$this->enqueue_style  = $this->replace_variables( $this->enqueue_style );
 		$this->enqueue_script = $this->replace_variables( $this->enqueue_script );
+		$this->block_path     = $this->replace_variables( $this->block_path );
 
 		unset( $this->render_with );
 
@@ -160,6 +161,10 @@ class Settings extends Base {
 	}
 
 	private function replace_variables( $string ) {
+		if ( empty( $string ) ) {
+			return $string;
+		}
+		
 		return strtr( $string, [
 			'{{ site.path }}'  => wp_normalize_path( ABSPATH ),
 			'{{ site.url }}'   => untrailingslashit( home_url( '/' ) ),

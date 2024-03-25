@@ -118,12 +118,7 @@ const Block = () => {
 			} }
 			defaultValue={ ensureArray( settings.supports?.align || [] ) }
 		/>
-		<Checkbox
-			name="settings[supports][anchor]"
-			label={ __( 'Anchor', 'meta-box-builder' ) }
-			componentId="settings-block-supports-anchor"
-			defaultValue={ !!settings.supports?.anchor }
-		/>
+
 		<Checkbox
 			name="settings[supports][customClassName]"
 			label={ __( 'Custom CSS class name', 'meta-box-builder' ) }
@@ -137,6 +132,7 @@ const Block = () => {
 			label={ __( 'Render with', 'meta-box-builder' ) }
 			componentId="settings-block-render_with"
 			options={ {
+				json: __( 'block.json package', 'meta-box-builder' ),
 				callback: __( 'PHP callback function', 'meta-box-builder' ),
 				template: __( 'Template file', 'meta-box-builder' ),
 				code: __( 'Code', 'meta-box-builder' ),
@@ -200,27 +196,46 @@ const Block = () => {
 				</table>
 			</DivRow>
 		}
-		<Input
-			name="settings[enqueue_style]"
-			label={ __( 'Custom CSS', 'meta-box-builder' ) }
-			componentId="settings-block-enqueue_style"
-			placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
-			defaultValue={ settings.enqueue_style }
-		/>
-		<Input
-			name="settings[enqueue_script]"
-			label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
-			componentId="settings-block-enqueue_script"
-			placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
-			defaultValue={ settings.enqueue_script }
-		/>
-		<Input
-			name="settings[enqueue_assets]"
-			label={ __( 'Custom assets callback', 'meta-box-builder' ) }
-			componentId="settings-block-enqueue_assets"
-			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
-			defaultValue={ settings.enqueue_assets }
-		/>
+		{
+			renderWith === 'json' && (
+				<>
+					<Input
+						name="settings[block_path]"
+						label={ __( 'Block Path', 'meta-box-builder' ) }
+						componentId="settings-block-path"
+						placeholder={ __( 'Enter absolute path to the block', 'meta-box-builder' ) }
+						defaultValue={ settings.block_path }
+						tooltip={ __( 'Path to generate block.json file', 'meta-box-builder' ) }
+						error={ MbbApp.data?.block_path_error }
+					/>
+				</>
+			)
+		}
+		{ renderWith !== 'json' && (
+			<>
+				<Input
+					name="settings[enqueue_style]"
+					label={ __( 'Custom CSS', 'meta-box-builder' ) }
+					componentId="settings-block-enqueue_style"
+					placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
+					defaultValue={ settings.enqueue_style }
+				/>
+				<Input
+					name="settings[enqueue_script]"
+					label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
+					componentId="settings-block-enqueue_script"
+					placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
+					defaultValue={ settings.enqueue_script }
+				/>
+				<Input
+					name="settings[enqueue_assets]"
+					label={ __( 'Custom assets callback', 'meta-box-builder' ) }
+					componentId="settings-block-enqueue_assets"
+					placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
+					defaultValue={ settings.enqueue_assets }
+				/>
+			</>
+		) }
 		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
 			<table className="og-block-description">
 				<tbody>
