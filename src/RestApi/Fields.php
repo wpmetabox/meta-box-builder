@@ -326,7 +326,7 @@ class Fields extends Base {
 			'time'              => [
 				'title'       => __( 'Time Picker', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, $html5, [ 'inline', 'js_options' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, $html5, [ 'save_format', 'inline', 'js_options' ], $clone, $advanced ),
 				'description' => __( 'Time picker', 'meta-box-builder' ),
 			],
 			'user'              => [
