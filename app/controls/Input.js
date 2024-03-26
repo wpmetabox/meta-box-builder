@@ -6,8 +6,8 @@ const Input = ( { name, componentId, placeholder, defaultValue, fieldType, type 
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			{ [ 'datetime', 'time' ].includes( fieldType )
-				? <FieldInserter name={ name } defaultValue={ defaultValue } required={ rest.required } placeholder={ placeholder }  items={ fieldType === 'time' ? rest.time : rest.datetime } />
+			{ [ 'date', 'time', 'datetime' ].includes( fieldType )
+				? <FieldInserter name={ name } defaultValue={ defaultValue } required={ rest.required } placeholder={ placeholder } items={ fieldType === 'date' ? rest.date : fieldType === 'time' ? rest.time : rest.datetime } />
 				: <input type={ type } id={ componentId } name={ name } defaultValue={ defaultValue } onChange={ handleChange } placeholder={ placeholder } required={ rest.required } />
 			}
 		</DivRow>

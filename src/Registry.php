@@ -116,8 +116,9 @@ class Registry {
 			Control::Input( 'save_format', [
 				'label'    => __( 'Save format', 'meta-box-builder' ),
 				'tooltip'  => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
+				'date'     => [ 'd-m-Y', 'm/d/Y', 'd M Y', 'd F Y', 'Y-m-d', 'M j, Y', 'F j, Y' ],
+				'time'     => [ 'H:i', 'h:i A' ],
 				'datetime' => [ 'd-m-Y', 'm/d/Y', 'd M Y', 'd F Y', 'Y-m-d', 'M j, Y', 'F j, Y', 'Y-m-d H:i', 'M j, Y h:i A' ],
-				'time'     => [ 'H:i', 'h:i A' ]
 			] ),
 			Control::Checkbox( 'timestamp', __( 'Save value as timestamp', 'meta-box-builder' ) ),
 			'inline_date'                  => Control::Checkbox( 'inline', [
