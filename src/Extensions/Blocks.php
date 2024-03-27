@@ -30,17 +30,21 @@ class Blocks {
 		foreach ( $query->posts as $post_id ) {
 			$meta_box = get_post_meta( $post_id, 'meta_box', true );
 
-			if ( empty ( $meta_box ) ) {
+			if ( empty( $meta_box ) ) {
 				continue;
 			}
 
 			// Bail if this is not a block.
-			if ( empty ( $meta_box['type'] ) || 'block' !== $meta_box['type'] ) {
+			if ( empty( $meta_box['type'] ) || 'block' !== $meta_box['type'] ) {
 				continue;
 			}
 
 			// Bail if block path is empty.
-			if ( empty ( $meta_box['block_path'] ) ) {
+			if ( empty( $meta_box['block_path'] ) ) {
+				continue;
+			}
+
+			if ( ! file_exists( $meta_box['block_path'] ) ) {
 				continue;
 			}
 
@@ -54,10 +58,16 @@ class Blocks {
 		return $controls;
 	}
 
-	public function add_app_data( $data ) {
-		$data['blockCategories']        = wp_list_pluck( get_block_categories( get_post() ), 'title', 'slug' );
-		$data['settings']               = is_array( $data['settings'] ) ? $data['settings'] : [];
-		$data['settings']['block_path'] = '{{ theme.path }}/blocks';
+	public function add_app_data( array $data ) {
+		$data['blockCategories'] = wp_list_pluck( get_block_categories( get_post() ), 'title', 'slug' );
+		$data['settings']        = is_array( $data['settings'] ) ? $data['settings'] : [];
+
+		$block_json_settings = $data['settings']['block_json'] ?? [ 
+			'enable' => true,
+			'path' => '{{ theme.path }}/blocks',
+		];
+
+		$data['settings']['block_json'] = $block_json_settings;
 
 		return $data;
 	}
@@ -66,12 +76,12 @@ class Blocks {
 		$settings = $parser->get_settings();
 
 		// Bail if this is not a block.
-		if ( ! isset ( $settings['type'] ) || $settings['type'] !== 'block' ) {
+		if ( ! isset( $settings['type'] ) || $settings['type'] !== 'block' ) {
 			return;
 		}
 
 		// Bail if block path is empty.
-		if ( empty ( $settings['block_path'] ) ) {
+		if ( empty( $settings['block_json'] ) || ! $settings['block_json']['enable'] ) {
 			return;
 		}
 
@@ -79,12 +89,12 @@ class Blocks {
 	}
 
 	private function generate_block_metadata( array $settings, array $raw_data ): string {
-
 		$block_id = sanitize_title( $settings['title'] );
 
 		$metadata = [ 
 			'$schema' => "https://schemas.wp.org/trunk/block.json",
 			'apiVersion' => 3,
+			'version' => 'v' . time(),
 			'name' => "meta-box/{$block_id}",
 			'title' => $settings['title'] ?? '',
 			'description' => $settings['description'] ?? '',
@@ -123,65 +133,80 @@ class Blocks {
 		$attributes = [];
 
 		foreach ( $fields as $id => $field ) {
-			$type = 'string';
-			$std  = '';
-
-			// These fields returns array
-			$array_fields = [ 
-				'group',
-				'checkbox_list',
-				'file_advanced',
-				'autocomplete',
-				'file_upload',
-				'file',
-				'image',
-				'image_advanced',
-				'image_upload',
-				'key_value',
-			];
-
-			$is_multiple = ( isset ( $field['multiple'] ) && $field['multiple'] )
-				|| ( isset ( $field['type'] ) && in_array( $field['type'], $array_fields ) )
-				|| ( isset ( $field['field_type'] ) && in_array( $field['field_type'], [ 'select_tree', 'checkbox_tree', 'checkbox_list', 'checkbox_tree' ] ) );
-
-			$is_cloneable = $field['clone'];
-
-			if ( $is_multiple || $is_cloneable ) {
-				$type = 'array';
-				$std  = is_array( $field['std'] ) ? $field['std'] : [];
-			}
-
-			if ( in_array( $field['type'], [ 'number', 'slider', 'range' ] ) ) {
-				$type = 'number';
-				$std  = is_numeric( $field['std'] ) ? $field['std'] : 0;
-			}
-
-			if ( in_array( $field['type'], [ 'checkbox', 'switch' ] ) ) {
-				$type = 'boolean';
-				$std  = (bool) $field['std'];
-			}
-
-			if ( in_array( $field['type'], [ 'single_image', 'file_input' ] ) ) {
-				$type = 'object';
-				$std  = new \stdClass();
-			}
+			[ $type, $std ] = $this->get_field_type_and_default_value( $field );
 
 			$attributes[ $id ] = [ 
 				'type' => $type,
-				'default' => $std,
 			];
+
+			if ( $std ) {
+				$attributes[ $id ]['default'] = $std;
+			}
 		}
 
 		return $attributes;
 	}
 
+	private function get_field_type_and_default_value( $field ) {
+		$type = 'string';
+		$std  = $field['std'] ?? null;
+
+		// These fields returns array
+		$array_fields = [ 
+			'group',
+			'checkbox_list',
+			'file_advanced',
+			'autocomplete',
+			'file_upload',
+			'file',
+			'image',
+			'image_advanced',
+			'image_upload',
+			'key_value',
+		];
+
+		$is_multiple = ( isset( $field['multiple'] ) && $field['multiple'] )
+			|| ( isset( $field['type'] ) && in_array( $field['type'], $array_fields ) )
+			|| ( isset( $field['field_type'] ) && in_array( $field['field_type'], [ 'select_tree', 'checkbox_tree', 'checkbox_list', 'checkbox_tree' ] ) );
+
+		$is_cloneable = $field['clone'];
+
+		if ( $is_multiple || $is_cloneable ) {
+			$type = 'array';
+			$std  = is_array( $field['std'] ) ? $field['std'] : [];
+		}
+
+		if ( in_array( $field['type'], [ 'number', 'slider', 'range' ] ) ) {
+			$type = 'number';
+			$std  = is_numeric( $field['std'] ) ? $field['std'] : 0;
+		}
+
+		if ( in_array( $field['type'], [ 'checkbox', 'switch' ] ) ) {
+			$type = 'boolean';
+			$std  = (bool) $field['std'];
+		}
+
+		if ( in_array( $field['type'], [ 'single_image', 'file_input' ] ) ) {
+			$type = 'object';
+			$std  = new \stdClass();
+		}
+
+		return [ $type, $std ];
+	}
+
 	private function generate_block_package( array $settings, $post_id, $raw_data ): void {
-		$block_path = $settings['block_path'];
-		$block_id   = sanitize_title( $settings['title'] );
-		// Get the parent block path to check if it's writable.
+		$block_id   = $settings['id'];
+		$block_path = $settings['block_json']['path'];
+
 		$parent_block_path = dirname( $block_path );
 
-		if ( ! is_writable( $parent_block_path ) ) {
+		// If the block path contains the block ID, we assume that people want to create a block manually.
+		// otherwise, we create a folder with the block ID.
+		if ( ! str_contains( $block_path, $block_id ) ) {
+			$block_path .= '/' . $block_id;
+		}
+
+		if ( ! self::is_future_path_writable( $parent_block_path ) ) {
 			// Return an error message.
 			$data = get_post_meta( $post_id, 'data', true );
 
@@ -199,7 +224,6 @@ class Blocks {
 		if ( ! file_exists( $block_path ) ) {
 			mkdir( $block_path, 0775, true );
 		}
-
 
 		$block_metadata = $this->generate_block_metadata( $settings, $raw_data );
 
@@ -225,14 +249,27 @@ class Blocks {
 
 			// We handle the render file separately.
 			if ( $stub === 'block.php.stub' ) {
-				$stub_content  = file_get_contents( $stub_file );
-				$fields_output = '';
+				$stub_content      = file_get_contents( $stub_file );
+				$fields_output     = '';
+				$attributes_output = '';
 
 				foreach ( $settings['fields'] as $field ) {
 					$fields_output .= "<div><?php mb_the_block_field( '{$field['id']}' ); ?></div>\n\t";
+					[ $type ]      = $this->get_field_type_and_default_value( $field );
+
+					// Because type=object is converted to array
+					$type = $type === 'object' ? 'array' : $type;
+
+					$attributes_output .= "\n *\t{$field['id']}: {$type},";
 				}
 
-				$stub_content = str_replace( '{{ fields }}', $fields_output, $stub_content );
+				$attributes_output = rtrim( $attributes_output, ',' );
+				$attributes_output .= "\n *";
+
+				$stub_content = strtr( $stub_content, [ 
+					'{{ fields }}' => $fields_output,
+					'{{ types }}' => $attributes_output,
+				] );
 
 				file_put_contents( "$block_path/$file_name", $stub_content );
 			}
@@ -247,5 +284,44 @@ class Blocks {
 
 		// Save the block metadata to the block folder.
 		file_put_contents( "$block_path/block.json", $block_metadata );
+	}
+
+	/**
+	 * Check if the intended path is writable.
+	 * 
+	 * Because is_writable() only checks the existing path, and returns false if the path doesn't exist,
+	 * this method checks if we can create the path, also do the additional security check to make sure the path is inside 
+	 * the WordPress installation.
+	 */
+	public static function is_future_path_writable( string $path ): bool {
+		$path = trailingslashit( $path );
+
+		// For security, we only allow the path inside the current WordPress installation.
+		if ( ! str_contains( $path, ABSPATH ) ) {
+			return false;
+		}
+
+		$relative_path = str_replace( ABSPATH, '', $path );
+
+		$relative_path = explode( '/', $relative_path );
+
+		// Traverse the path and check if the directories are writable
+		for ( $i = 0; $i < count( $relative_path ); $i++ ) {
+			$dir = ABSPATH . implode( '/', array_slice( $relative_path, 0, $i + 1 ) );
+
+			if ( file_exists( $dir ) && is_dir( $dir ) ) {
+				if ( ! is_writable( $dir ) ) {
+					return false;
+				}
+
+				continue;
+			}
+
+			if ( ! is_writable( dirname( $dir ) ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

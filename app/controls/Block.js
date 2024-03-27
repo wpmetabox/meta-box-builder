@@ -1,7 +1,7 @@
 import { RawHTML, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import { getSettings } from "../functions";
+import { fetcher, getSettings } from "../functions";
 import useObjectType from "../hooks/useObjectType";
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
@@ -26,6 +26,19 @@ const Block = () => {
 
 	const updateIconType = e => setIconType( e.target.value );
 	const updateRenderWith = e => setRenderWith( e.target.value );
+
+	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
+
+	const checkFuturePathPermission = async ( _, path ) => {
+		const res = await fetcher( 'is-future-path-writable', { path } );
+
+		if ( !res ) {
+			setBlockPathError( __( 'The path is not writable.', 'meta-box-builder' ) );
+		} else {
+			setBlockPathError( '' );
+		}
+	};
+
 
 	useEffect( () => {
 		if ( codeEditor ) {
@@ -126,13 +139,32 @@ const Block = () => {
 			defaultValue={ !!settings.supports?.customClassName }
 		/>
 
+		<h3>{ __( 'Block JSON Settings', 'meta-box-builder' ) }</h3>
+		<Checkbox
+			name="settings[block_json][enable]"
+			label={ __( 'Use block.json package', 'meta-box-builder' ) }
+			componentId="settings-block_json_enable"
+			defaultValue={ !!settings.block_json?.enable }
+		/>
+
+		<Input
+			name="settings[block_json][path]"
+			label={ __( 'Block Path', 'meta-box-builder' ) }
+			componentId="settings-block-path"
+			description={ __( 'Enter absolute path to the block', 'meta-box-builder' ) }
+			defaultValue={ settings.block_json?.path }
+			tooltip={ __( 'Path to generate block.json file', 'meta-box-builder' ) }
+			error={ blockPathError }
+			updateFieldData={ checkFuturePathPermission }
+			dependency="block_json_enable:true"
+		/>
+
 		<h3>{ __( 'Block Render Settings', 'meta-box-builder' ) }</h3>
 		<Select
 			name="settings[render_with]"
 			label={ __( 'Render with', 'meta-box-builder' ) }
 			componentId="settings-block-render_with"
 			options={ {
-				json: __( 'block.json package', 'meta-box-builder' ),
 				callback: __( 'PHP callback function', 'meta-box-builder' ),
 				template: __( 'Template file', 'meta-box-builder' ),
 				code: __( 'Code', 'meta-box-builder' ),
@@ -196,46 +228,29 @@ const Block = () => {
 				</table>
 			</DivRow>
 		}
-		{
-			renderWith === 'json' && (
-				<>
-					<Input
-						name="settings[block_path]"
-						label={ __( 'Block Path', 'meta-box-builder' ) }
-						componentId="settings-block-path"
-						placeholder={ __( 'Enter absolute path to the block', 'meta-box-builder' ) }
-						defaultValue={ settings.block_path }
-						tooltip={ __( 'Path to generate block.json file', 'meta-box-builder' ) }
-						error={ MbbApp.data?.block_path_error }
-					/>
-				</>
-			)
-		}
-		{ renderWith !== 'json' && (
-			<>
-				<Input
-					name="settings[enqueue_style]"
-					label={ __( 'Custom CSS', 'meta-box-builder' ) }
-					componentId="settings-block-enqueue_style"
-					placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
-					defaultValue={ settings.enqueue_style }
-				/>
-				<Input
-					name="settings[enqueue_script]"
-					label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
-					componentId="settings-block-enqueue_script"
-					placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
-					defaultValue={ settings.enqueue_script }
-				/>
-				<Input
-					name="settings[enqueue_assets]"
-					label={ __( 'Custom assets callback', 'meta-box-builder' ) }
-					componentId="settings-block-enqueue_assets"
-					placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
-					defaultValue={ settings.enqueue_assets }
-				/>
-			</>
-		) }
+
+		<Input
+			name="settings[enqueue_style]"
+			label={ __( 'Custom CSS', 'meta-box-builder' ) }
+			componentId="settings-block-enqueue_style"
+			placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
+			defaultValue={ settings.enqueue_style }
+		/>
+		<Input
+			name="settings[enqueue_script]"
+			label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
+			componentId="settings-block-enqueue_script"
+			placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
+			defaultValue={ settings.enqueue_script }
+		/>
+		<Input
+			name="settings[enqueue_assets]"
+			label={ __( 'Custom assets callback', 'meta-box-builder' ) }
+			componentId="settings-block-enqueue_assets"
+			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
+			defaultValue={ settings.enqueue_assets }
+		/>
+
 		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
 			<table className="og-block-description">
 				<tbody>

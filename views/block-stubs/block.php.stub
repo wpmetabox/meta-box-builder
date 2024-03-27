@@ -1,6 +1,6 @@
 <?php
 /**
- * @var array<string, mixed>[] $attributes The block attributes.
+ * @var array{ {{ types }} } $attributes The block attributes.
  * @var \WP_Block $block The block instance.
  */
 ?>

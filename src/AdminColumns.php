@@ -77,7 +77,7 @@ class AdminColumns {
 
 	private function show_location( $data ) {
 		$object_type = Arr::get( $data, 'object_type', 'post' );
-		switch ( $object_type ) {
+		switch ( $object_type ) {	
 			case 'user':
 				esc_html_e( 'All Users', 'meta-box-builder' );
 				break;
@@ -102,6 +102,12 @@ class AdminColumns {
 					$taxonomy_object = get_taxonomy( $taxonomy );
 					return $taxonomy_object ? $taxonomy_object->labels->singular_name : '';
 				}, Arr::get( $data, 'taxonomies', [] ) ) ) ) );
+				break;
+			case 'block': 
+				if (isset($data['block_json']) && isset($data['block_json']['path'])) {
+					esc_html_e( $data['block_json']['path']);
+				}
+				break;
 		}
 	}
 
