@@ -11,9 +11,7 @@ class Blocks {
 		}
 		add_filter( 'mbb_settings_controls', [ $this, 'add_settings_controls' ] );
 		add_filter( 'mbb_app_data', [ $this, 'add_app_data' ] );
-
 		add_action( 'mbb_after_save', [ $this, 'generate_block_json' ], 10, 3 );
-
 		add_action( 'init', [ $this, 'register_blocks' ] );
 	}
 
@@ -64,7 +62,7 @@ class Blocks {
 
 		$block_json_settings = $data['settings']['block_json'] ?? [ 
 			'enable' => true,
-			'path' => '{{ theme.path }}/blocks',
+			'path'   => '{{ theme.path }}/blocks',
 		];
 
 		$data['settings']['block_json'] = $block_json_settings;
@@ -92,22 +90,22 @@ class Blocks {
 		$block_id = sanitize_title( $settings['title'] );
 
 		$metadata = [ 
-			'$schema' => "https://schemas.wp.org/trunk/block.json",
-			'apiVersion' => 3,
-			'version' => 'v' . time(),
-			'name' => "meta-box/{$block_id}",
-			'title' => $settings['title'] ?? '',
+			'$schema'     => "https://schemas.wp.org/trunk/block.json",
+			'apiVersion'  => 3,
+			'version'     => 'v' . time(),
+			'name'        => "meta-box/{$block_id}",
+			'title'       => $settings['title'] ?? '',
 			'description' => $settings['description'] ?? '',
-			'category' => $settings['category'] ?? 'common',
-			'icon' => $settings['icon'] ?? 'admin-generic',
-			'keywords' => $settings['keywords'] ?? [],
-			'render' => "file:./{$block_id}.php",
-			'supports' => [ 
-				'html' => false,
+			'category'    => $settings['category'] ?? 'common',
+			'icon'        => $settings['icon'] ?? 'admin-generic',
+			'keywords'    => $settings['keywords'] ?? [],
+			'render'      => "file:./{$block_id}.php",
+			'supports'    => [ 
+				'html'   => false,
 				'anchor' => false,
-				'align' => true,
+				'align'  => true,
 			],
-			'style' => "file:./{$block_id}.css",
+			'style'      => "file:./{$block_id}.css",
 			'viewScript' => "file:./{$block_id}.js",
 		];
 
@@ -302,7 +300,6 @@ class Blocks {
 		}
 
 		$relative_path = str_replace( ABSPATH, '', $path );
-
 		$relative_path = explode( '/', $relative_path );
 
 		// Traverse the path and check if the directories are writable

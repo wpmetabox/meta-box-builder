@@ -31,12 +31,9 @@ const Block = () => {
 
 	const checkFuturePathPermission = async ( _, path ) => {
 		const res = await fetcher( 'is-future-path-writable', { path } );
+		const errorMessage = res ? '' : __( 'The path is not writable.', 'meta-box-builder' );
 
-		if ( !res ) {
-			setBlockPathError( __( 'The path is not writable.', 'meta-box-builder' ) );
-		} else {
-			setBlockPathError( '' );
-		}
+		setBlockPathError( errorMessage );
 	};
 
 
