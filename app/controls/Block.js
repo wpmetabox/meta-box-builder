@@ -148,9 +148,8 @@ const Block = () => {
 			name="settings[block_json][path]"
 			label={ __( 'Block Path', 'meta-box-builder' ) }
 			componentId="settings-block-path"
-			description={ __( 'Enter absolute path to the block', 'meta-box-builder' ) }
+			description={ __( 'Enter absolute path to the folder containing the block.json and block asset files. Do not include the block name (e.g. field group ID). The full path for the block files will be like path/to/folder/block-name/block.json.', 'meta-box-builder' ) }
 			defaultValue={ settings.block_json?.path }
-			tooltip={ __( 'Path to generate block.json file', 'meta-box-builder' ) }
 			error={ blockPathError }
 			updateFieldData={ checkFuturePathPermission }
 			dependency="block_json_enable:true"
