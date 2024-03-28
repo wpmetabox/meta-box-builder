@@ -116,9 +116,25 @@ class Registry {
 			Control::DateTime( 'save_format', [
 				'label'    => __( 'Save format', 'meta-box-builder' ),
 				'tooltip'  => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
-				'date'     => [ 'd-m-Y', 'm/d/Y', 'd M Y', 'd F Y', 'Y-m-d', 'M j, Y', 'F j, Y' ],
-				'time'     => [ 'H:i', 'h:i A' ],
-				'datetime' => [ 'd-m-Y H:i', 'm/d/Y H:i', 'Y-m-d H:i', 'M j, Y h:i A' ],
+				'date'     => [
+					'd-m-Y'  => '28-03-2024 (d-m-Y)',
+					'd M Y'  => '28 03 2024 (d M Y)',
+					'm/d/Y'  => '03/28/2024 (m/d/Y)',
+					'd F Y'  => '28 March 2024 (d F Y)',
+					'Y-m-d'  => '2024-03-28 (Y-m-d)',
+					'M j, Y' => 'Mar 03, 2024 (M j, Y)',
+					'F j, Y' => 'March 28, 2024 (F j, Y)',
+				],
+				'time'     => [
+					'H:i'   => '09:20 (H:i)',
+					'h:i A' => '04:20 AM (h:i A)',
+				],
+				'datetime' => [
+					'd-m-Y H:i'    => '28-03-2024 09:20 (d-m-Y H:i)',
+					'm/d/Y H:i'    => '03/28/2024 09:20 (m/d/Y H:i)',
+					'Y-m-d H:i'    => '2024-03-28 09:20 (Y-m-d H:i)',
+					'M j, Y h:i A' => 'Mar 28, 2024 09:20 AM (M j, Y h:i A)',
+				],
 			] ),
 			Control::Checkbox( 'timestamp', __( 'Save value as timestamp', 'meta-box-builder' ) ),
 			'inline_date'                  => Control::Checkbox( 'inline', [
