@@ -167,7 +167,7 @@ class Blocks {
 			|| ( isset( $field['type'] ) && in_array( $field['type'], $array_fields ) )
 			|| ( isset( $field['field_type'] ) && in_array( $field['field_type'], [ 'select_tree', 'checkbox_tree', 'checkbox_list', 'checkbox_tree' ] ) );
 
-		$is_cloneable = $field['clone'];
+		$is_cloneable = $field['clone'] ?? false;
 
 		if ( $is_multiple || $is_cloneable ) {
 			$type = 'array';
@@ -193,16 +193,11 @@ class Blocks {
 	}
 
 	private function generate_block_package( array $settings, $post_id, $raw_data ): void {
-		$block_id   = $settings['id'];
-		$block_path = $settings['block_json']['path'];
-
+		$block_id          = $settings['id'];
+		$block_path        = $settings['block_json']['path'];
+		$block_path .= '/' . $block_id;
 		$parent_block_path = dirname( $block_path );
 
-		// If the block path contains the block ID, we assume that people want to create a block manually.
-		// otherwise, we create a folder with the block ID.
-		if ( ! str_contains( $block_path, $block_id ) ) {
-			$block_path .= '/' . $block_id;
-		}
 
 		if ( ! self::is_future_path_writable( $parent_block_path ) ) {
 			// Return an error message.
@@ -220,13 +215,16 @@ class Blocks {
 		}
 
 		if ( ! file_exists( $block_path ) ) {
+			$old_umask = umask( 0 );
 			mkdir( $block_path, 0775, true );
+			umask( $old_umask );
 		}
+
 
 		$block_metadata = $this->generate_block_metadata( $settings, $raw_data );
 
 		// Get all files in views/block-stubs folder.   
-		$stubs_dir = MBB_DIR . '/views/block-stubs';
+		$stubs_dir = MBB_DIR . 'views/block-stubs';
 		$stubs     = scandir( $stubs_dir );
 
 		foreach ( $stubs as $stub ) {
@@ -234,7 +232,7 @@ class Blocks {
 				continue;
 			}
 
-			$stub_file = "$stubs_dir/$stub";
+			$stub_file = "{$stubs_dir}/{$stub}";
 
 			// Remove the .stub extension.
 			if ( ! file_exists( $stub_file ) ) {
@@ -242,8 +240,10 @@ class Blocks {
 			}
 
 			// Copy the stub file to the block folder.
-			$file_name = str_replace( '.stub', '', $stub );
-			$file_name = str_replace( 'block', $block_id, $file_name );
+			$file_name = strtr( $stub, [ 
+				'.stub' => '',
+				'block' => $block_id,
+			] );
 
 			// We handle the render file separately.
 			if ( $stub === 'block.php.stub' ) {
@@ -282,6 +282,7 @@ class Blocks {
 
 		// Save the block metadata to the block folder.
 		file_put_contents( "$block_path/block.json", $block_metadata );
+		chmod( $block_path . '/block.json', 0664 );
 	}
 
 	/**
@@ -295,16 +296,16 @@ class Blocks {
 		$path = trailingslashit( $path );
 
 		// For security, we only allow the path inside the current WordPress installation.
-		if ( ! str_starts_with( $path, ABSPATH ) ) {
+		if ( ! str_starts_with( $path, WP_CONTENT_DIR ) ) {
 			return false;
 		}
 
-		$relative_path = str_replace( ABSPATH, '', $path );
+		$relative_path = str_replace( WP_CONTENT_DIR, '', $path );
 		$relative_path = explode( '/', $relative_path );
 
 		// Traverse the path and check if the directories are writable
 		for ( $i = 0; $i < count( $relative_path ); $i++ ) {
-			$dir = ABSPATH . implode( '/', array_slice( $relative_path, 0, $i + 1 ) );
+			$dir = WP_CONTENT_DIR . implode( '/', array_slice( $relative_path, 0, $i + 1 ) );
 
 			if ( file_exists( $dir ) && is_dir( $dir ) ) {
 				if ( ! is_writable( $dir ) ) {
@@ -312,10 +313,6 @@ class Blocks {
 				}
 
 				continue;
-			}
-
-			if ( ! is_writable( dirname( $dir ) ) ) {
-				return false;
 			}
 		}
 
