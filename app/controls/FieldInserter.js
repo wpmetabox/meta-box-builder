@@ -18,7 +18,7 @@ const Items = ( { items, searchTerm } ) => {
 		const label = Array.isArray( item ) ? item[1] : item;
 		const value = Array.isArray( item ) ? item[0] : item;
 		return (
-			<RawHTML key={ value  } className="og-dropdown__item" data-value={ value  }>
+			<RawHTML key={ value } className="og-dropdown__item" data-value={ value }>
 				{ label }
 			</RawHTML>
 		);
