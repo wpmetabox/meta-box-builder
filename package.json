@@ -24,6 +24,7 @@
   "dependencies": {
     "clsx": "^2.0.0",
     "dot-prop": "^6.0.1",
+    "moment": "^2.30.1",
     "react-codemirror2": "^7.2.1",
     "react-select": "^3.1.0",
     "react-sortablejs": "^6.1.4",
