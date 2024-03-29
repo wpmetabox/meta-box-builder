@@ -194,8 +194,7 @@ class Blocks {
 
 	private function generate_block_package( array $settings, $post_id, $raw_data ): void {
 		$block_id          = $settings['id'];
-		$block_path        = $settings['block_json']['path'];
-		$block_path .= '/' . $block_id;
+		$block_path        = trailingslashit( $settings['block_json']['path'] ) . $block_id;
 		$parent_block_path = dirname( $block_path );
 
 
@@ -215,9 +214,7 @@ class Blocks {
 		}
 
 		if ( ! file_exists( $block_path ) ) {
-			$old_umask = umask( 0 );
-			mkdir( $block_path, 0775, true );
-			umask( $old_umask );
+			wp_mkdir_p( $block_path );
 		}
 
 
@@ -296,26 +293,23 @@ class Blocks {
 		$path = trailingslashit( $path );
 
 		// For security, we only allow the path inside the current WordPress installation.
-		if ( ! str_starts_with( $path, WP_CONTENT_DIR ) ) {
+		if ( ! str_starts_with( $path, ABSPATH ) ) {
 			return false;
 		}
 
-		$relative_path = str_replace( WP_CONTENT_DIR, '', $path );
-		$relative_path = explode( '/', $relative_path );
+		$paths = explode( '/', $path );
 
-		// Traverse the path and check if the directories are writable
-		for ( $i = 0; $i < count( $relative_path ); $i++ ) {
-			$dir = WP_CONTENT_DIR . implode( '/', array_slice( $relative_path, 0, $i + 1 ) );
+		// Traverse from the leaf to the root to get the first existing directory
+		// and check if it's writable
+		while ( count( $paths ) > 1 ) {
+			array_pop( $paths );
+			$path_str = implode( '/', $paths );
 
-			if ( file_exists( $dir ) && is_dir( $dir ) ) {
-				if ( ! is_writable( $dir ) ) {
-					return false;
-				}
-
-				continue;
+			if ( file_exists( $path_str ) ) {
+				break;
 			}
 		}
 
-		return true;
+		return is_dir( $path_str ) && is_writable( $path_str );
 	}
 }
