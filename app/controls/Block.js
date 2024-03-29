@@ -1,7 +1,7 @@
 import { RawHTML, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import { getSettings } from "../functions";
+import { fetcher, getSettings } from "../functions";
 import useObjectType from "../hooks/useObjectType";
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
@@ -26,6 +26,16 @@ const Block = () => {
 
 	const updateIconType = e => setIconType( e.target.value );
 	const updateRenderWith = e => setRenderWith( e.target.value );
+
+	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
+
+	const checkFuturePathPermission = async ( _, path ) => {
+		const res = await fetcher( 'is-future-path-writable', { path } );
+		const errorMessage = res ? '' : __( 'The path is not writable.', 'meta-box-builder' );
+
+		setBlockPathError( errorMessage );
+	};
+
 
 	useEffect( () => {
 		if ( codeEditor ) {
@@ -118,12 +128,7 @@ const Block = () => {
 			} }
 			defaultValue={ ensureArray( settings.supports?.align || [] ) }
 		/>
-		<Checkbox
-			name="settings[supports][anchor]"
-			label={ __( 'Anchor', 'meta-box-builder' ) }
-			componentId="settings-block-supports-anchor"
-			defaultValue={ !!settings.supports?.anchor }
-		/>
+
 		<Checkbox
 			name="settings[supports][customClassName]"
 			label={ __( 'Custom CSS class name', 'meta-box-builder' ) }
@@ -200,6 +205,7 @@ const Block = () => {
 				</table>
 			</DivRow>
 		}
+
 		<Input
 			name="settings[enqueue_style]"
 			label={ __( 'Custom CSS', 'meta-box-builder' ) }
@@ -221,6 +227,26 @@ const Block = () => {
 			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
 			defaultValue={ settings.enqueue_assets }
 		/>
+
+<h3>{ __( 'Block JSON Settings', 'meta-box-builder' ) }</h3>
+		<Checkbox
+			name="settings[block_json][enable]"
+			label={ __( 'Generate block.json', 'meta-box-builder' ) }
+			componentId="settings-block_json_enable"
+			defaultValue={ !!settings.block_json?.enable }
+		/>
+
+		<Input
+			name="settings[block_json][path]"
+			label={ __( 'Block folder', 'meta-box-builder' ) }
+			componentId="settings-block-path"
+			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
+			defaultValue={ settings.block_json?.path }
+			error={ blockPathError }
+			updateFieldData={ checkFuturePathPermission }
+			dependency="block_json_enable:true"
+		/>
+
 		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
 			<table className="og-block-description">
 				<tbody>

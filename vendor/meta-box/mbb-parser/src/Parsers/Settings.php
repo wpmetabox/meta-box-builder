@@ -65,7 +65,7 @@ class Settings extends Base {
 		}
 		$type = $data['type'];
 
-		$this->$type = array_merge( [
+		$this->$type = array_merge( [ 
 			'relation' => $data['relation'],
 		], $rules );
 
@@ -90,7 +90,7 @@ class Settings extends Base {
 	private function parse_block() {
 		// Remove block settings.
 		if ( 'block' !== $this->object_type ) {
-			$params = [
+			$params = [ 
 				'description',
 				'category',
 				'keywords',
@@ -120,10 +120,10 @@ class Settings extends Base {
 		// Icon.
 		if ( 'dashicons' === $this->icon_type ) {
 			if ( $this->icon_background || $this->icon_foreground ) {
-				$this->icon = [
+				$this->icon = [ 
 					'background' => $this->icon_background,
 					'foreground' => $this->icon_foreground,
-					'src'        => $this->icon,
+					'src' => $this->icon,
 				];
 			}
 		}
@@ -147,9 +147,13 @@ class Settings extends Base {
 			unset( $this->render_template );
 			unset( $this->render_callback );
 		}
+
 		$this->enqueue_style  = $this->replace_variables( $this->enqueue_style );
 		$this->enqueue_script = $this->replace_variables( $this->enqueue_script );
-
+		if ( isset( $this->settings['block_json'] ) && ! empty( $this->settings['block_json']['path'] ) ) {
+			$this->settings['block_json']['path'] = $this->replace_variables( $this->settings['block_json']['path'] );
+		}
+		
 		unset( $this->render_with );
 
 		// Context.
@@ -159,12 +163,16 @@ class Settings extends Base {
 		return $this;
 	}
 
-	private function replace_variables( $string ) {
-		return strtr( $string, [
-			'{{ site.path }}'  => wp_normalize_path( ABSPATH ),
-			'{{ site.url }}'   => untrailingslashit( home_url( '/' ) ),
+	public function replace_variables( $string ) {
+		if ( empty( $string ) ) {
+			return $string;
+		}
+
+		return strtr( $string, [ 
+			'{{ site.path }}' => wp_normalize_path( ABSPATH ),
+			'{{ site.url }}' => untrailingslashit( home_url( '/' ) ),
 			'{{ theme.path }}' => wp_normalize_path( get_stylesheet_directory() ),
-			'{{ theme.url }}'  => get_stylesheet_directory_uri(),
+			'{{ theme.url }}' => get_stylesheet_directory_uri(),
 		] );
 	}
 }

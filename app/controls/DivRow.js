@@ -10,7 +10,8 @@ const DivRow = ( {
 	htmlFor = '',
 	keyValue = '',
 	required = false,
-	dependency
+	dependency,
+	error,
 } ) => {
 	return (
 		<div className={ `og-field ${ className } ${ dependency ? `dep:${ dependency }` : '' }` } key={ keyValue }>
@@ -25,6 +26,7 @@ const DivRow = ( {
 			<div className="og-input">
 				{ children }
 				{ description && <RawHTML className="og-description">{ description }</RawHTML> }
+				{ error && <p className="og-error">{ error }</p> }
 			</div>
 		</div>
 	);

@@ -1,0 +1,9 @@
+<?php
+/**
+ * @var array{ {{ types }} } $attributes The block attributes.
+ * @var \WP_Block $block The block instance.
+ */
+?>
+<div <?= get_block_wrapper_attributes(); ?>>
+	{{ fields }}
+</div>
