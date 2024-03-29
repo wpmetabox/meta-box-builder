@@ -14,11 +14,15 @@ const Items = ( { items, searchTerm } ) => {
 	const s = searchTerm.toLowerCase();
 	items = items.filter( item => !s || item.toLowerCase().includes( s ) );
 
-	return items.map( item => (
-		<RawHTML key={ item } className="og-dropdown__item" data-value={ item }>
-			{ item }
-		</RawHTML>
-	) );
+	return items.map( ( item ) => {
+		const label = Array.isArray( item ) ? item[1] : item;
+		const value = Array.isArray( item ) ? item[0] : item;
+		return (
+			<RawHTML key={ value } className="og-dropdown__item" data-value={ value }>
+				{ label }
+			</RawHTML>
+		);
+	} );
 };
 
 const DropdownInserter = ( { items = [], onSelect } ) => {

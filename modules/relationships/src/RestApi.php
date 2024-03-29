@@ -50,9 +50,10 @@ class RestApi extends Base {
 			] ),
 			// Admin filter.
 			Control::Checkbox( 'admin_filter', [
-				'name'    => 'admin_filter',
-				'label'   => __( 'Show admin filter', 'meta-box-builder' ),
-				'tooltip' => __( 'Show a dropdown filter by this relationship in the admin table list.', 'meta-box-builder' ),
+				'name'       => 'admin_filter',
+				'label'      => __( 'Show admin filter', 'meta-box-builder' ),
+				'tooltip'    => __( 'Show a dropdown filter by this relationship in the admin table list.', 'meta-box-builder' ),
+				'dependency' => 'object_type:post',
 			] ),
 			// Admin columns.
 			Control::Checkbox( 'admin_column_enable', [

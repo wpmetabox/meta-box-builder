@@ -39,6 +39,7 @@ new Extensions\Tabs;
 new Extensions\Tooltip;
 new Extensions\RestApi;
 new Extensions\FrontendSubmission;
+new Extensions\TextLimiter;
 
 if ( is_admin() ) {
 	new About;

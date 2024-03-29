@@ -114,6 +114,7 @@ const getDefaultControlValue = name => {
 		ShowHide: [],
 		ConditionalLogic: [],
 		CustomTable: [],
+		TextLimiter: [],
 	};
 	return defaultValues.hasOwnProperty( name ) ? defaultValues[ name ] : '';
 };

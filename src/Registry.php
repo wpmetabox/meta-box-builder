@@ -9,7 +9,7 @@ use MetaBox\Support\Arr;
 
 class Registry {
 	private $field_types = [];
-	private $controls    = [];
+	private $controls = [];
 
 	/**
 	 * Register all default controls, so we can refer to them by id later.
@@ -113,9 +113,27 @@ class Registry {
 				'type'  => 'number',
 				'label' => __( 'Size of the input box', 'meta-box-builder' ),
 			] ),
-			Control::Input( 'save_format', [
-				'label'   => __( 'Save format', 'meta-box-builder' ),
-				'tooltip' => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
+			Control::DateTime( 'save_format', [
+				'label'       => __( 'Save format', 'meta-box-builder' ),
+				'description' => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
+				'date'        => [
+					'Y-m-d'  => '2024-03-28 (Y-m-d)',
+					'd-m-Y'  => '28-03-2024 (d-m-Y)',
+					'm/d/Y'  => '03/28/2024 (m/d/Y)',
+					'd F Y'  => '28 March 2024 (d F Y)',
+					'M j, Y' => 'Mar 03, 2024 (M j, Y)',
+					'F j, Y' => 'March 28, 2024 (F j, Y)',
+				],
+				'time'        => [
+					'H:i'   => '09:20 (H:i)',
+					'h:i A' => '04:20 AM (h:i A)',
+				],
+				'datetime'    => [
+					'd-m-Y H:i'    => '28-03-2024 09:20 (d-m-Y H:i)',
+					'm/d/Y H:i'    => '03/28/2024 09:20 (m/d/Y H:i)',
+					'Y-m-d H:i'    => '2024-03-28 09:20 (Y-m-d H:i)',
+					'M j, Y h:i A' => 'Mar 28, 2024 09:20 AM (M j, Y h:i A)',
+				],
 			] ),
 			Control::Checkbox( 'timestamp', __( 'Save value as timestamp', 'meta-box-builder' ) ),
 			'inline_date'                  => Control::Checkbox( 'inline', [
@@ -223,8 +241,8 @@ class Registry {
 			Control::Textarea( 'options', [
 				'label'       => __( 'Choices', 'meta-box-builder' ),
 				'description' => __( 'Enter each choice per line. You can also set both value and label like <code>red: Red</code>.', 'meta-box-builder' ) .
-					 '<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ) .
-					 '<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
+					'<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ) .
+					'<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
 			] ),
 
 			// Button.
@@ -234,8 +252,8 @@ class Registry {
 			'options_button_group'         => Control::Textarea( 'options', [
 				'label'       => __( 'Buttons', 'meta-box-builder' ),
 				'description' => __( 'Enter each button text per line. You can also set both value and label like <code>red: Red</code>.', 'meta-box-builder' ) .
-					 '<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ) .
-					 '<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
+					'<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ) .
+					'<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
 			] ),
 			'inline_button_group'          => Control::Checkbox( 'inline', __( 'Display buttons horizontally', 'meta-box-builder' ), true ),
 
@@ -651,7 +669,7 @@ class Registry {
 		];
 
 		foreach ( $controls as $id => $control ) {
-			$id = is_string( $id ) ? $id : $control['setting'];
+			$id = is_string( $id ) ? $id : $control[ 'setting' ];
 			$this->add_control( $id, $control );
 		}
 	}
@@ -686,7 +704,7 @@ class Registry {
 	 */
 	public function transform_controls() {
 		foreach ( $this->field_types as $type => &$field_type ) {
-			foreach ( $field_type['controls'] as &$control ) {
+			foreach ( $field_type[ 'controls' ] as &$control ) {
 				$control = $this->get_control( $control, $type );
 			}
 		}
@@ -758,7 +776,7 @@ class Registry {
 		$post_types = Helpers\Data::get_post_types();
 		$options    = [];
 		foreach ( $post_types as $post_type ) {
-			$options[ $post_type['slug'] ] = sprintf( '%s (%s)', $post_type['name'], $post_type['slug'] );
+			$options[ $post_type[ 'slug' ] ] = sprintf( '%s (%s)', $post_type[ 'name' ], $post_type[ 'slug' ] );
 		}
 		return $options;
 	}
@@ -767,7 +785,7 @@ class Registry {
 		$taxonomies = Helpers\Data::get_taxonomies();
 		$options    = [];
 		foreach ( $taxonomies as $taxonomy ) {
-			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
+			$options[ $taxonomy[ 'slug' ] ] = sprintf( '%s (%s)', $taxonomy[ 'name' ], $taxonomy[ 'slug' ] );
 		}
 		return $options;
 	}
