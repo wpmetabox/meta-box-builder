@@ -117,11 +117,10 @@ class Registry {
 				'label'    => __( 'Save format', 'meta-box-builder' ),
 				'tooltip'  => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
 				'date'     => [
+					'Y-m-d'  => '2024-03-28 (Y-m-d)',
 					'd-m-Y'  => '28-03-2024 (d-m-Y)',
-					'd M Y'  => '28 03 2024 (d M Y)',
 					'm/d/Y'  => '03/28/2024 (m/d/Y)',
 					'd F Y'  => '28 March 2024 (d F Y)',
-					'Y-m-d'  => '2024-03-28 (Y-m-d)',
 					'M j, Y' => 'Mar 03, 2024 (M j, Y)',
 					'F j, Y' => 'March 28, 2024 (F j, Y)',
 				],
