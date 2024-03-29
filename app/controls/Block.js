@@ -136,25 +136,6 @@ const Block = () => {
 			defaultValue={ !!settings.supports?.customClassName }
 		/>
 
-		<h3>{ __( 'Block JSON Settings', 'meta-box-builder' ) }</h3>
-		<Checkbox
-			name="settings[block_json][enable]"
-			label={ __( 'Use block.json package', 'meta-box-builder' ) }
-			componentId="settings-block_json_enable"
-			defaultValue={ !!settings.block_json?.enable }
-		/>
-
-		<Input
-			name="settings[block_json][path]"
-			label={ __( 'Block Path', 'meta-box-builder' ) }
-			componentId="settings-block-path"
-			description={ __( 'Enter absolute path to the folder containing the block.json and block asset files. Do not include the block name (e.g. field group ID). The full path for the block files will be like path/to/folder/block-name/block.json.', 'meta-box-builder' ) }
-			defaultValue={ settings.block_json?.path }
-			error={ blockPathError }
-			updateFieldData={ checkFuturePathPermission }
-			dependency="block_json_enable:true"
-		/>
-
 		<h3>{ __( 'Block Render Settings', 'meta-box-builder' ) }</h3>
 		<Select
 			name="settings[render_with]"
@@ -245,6 +226,25 @@ const Block = () => {
 			componentId="settings-block-enqueue_assets"
 			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
 			defaultValue={ settings.enqueue_assets }
+		/>
+
+<h3>{ __( 'Block JSON Settings', 'meta-box-builder' ) }</h3>
+		<Checkbox
+			name="settings[block_json][enable]"
+			label={ __( 'Generate block.json', 'meta-box-builder' ) }
+			componentId="settings-block_json_enable"
+			defaultValue={ !!settings.block_json?.enable }
+		/>
+
+		<Input
+			name="settings[block_json][path]"
+			label={ __( 'Block folder', 'meta-box-builder' ) }
+			componentId="settings-block-path"
+			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
+			defaultValue={ settings.block_json?.path }
+			error={ blockPathError }
+			updateFieldData={ checkFuturePathPermission }
+			dependency="block_json_enable:true"
 		/>
 
 		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
