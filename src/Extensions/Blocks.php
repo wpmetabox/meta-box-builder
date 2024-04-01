@@ -38,16 +38,16 @@ class Blocks {
 			}
 
 			// Bail if block path is empty.
-			if ( empty( $meta_box['block_path'] ) ) {
+			if ( empty( $meta_box['block_json'] ) || empty( $meta_box['block_json']['path'] ) ) {
 				continue;
 			}
 
-			if ( ! file_exists( $meta_box['block_path'] ) ) {
+			if ( ! $meta_box['block_json']['enable'] || ! file_exists( $meta_box['block_json']['path'] ) ) {
 				continue;
 			}
 
 			// Now we register the block with the provided path
-			register_block_type( $meta_box['block_path'] );
+			register_block_type( trailingslashit( $meta_box['block_json']['path'] ) . $meta_box['id']  );
 		}
 	}
 
