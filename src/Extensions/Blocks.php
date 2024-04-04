@@ -42,7 +42,10 @@ class Blocks {
 				continue;
 			}
 
-			if ( ! $meta_box['block_json']['enable'] || ! file_exists( $meta_box['block_json']['path'] ) ) {
+			if ( ! isset( $meta_box['block_json']['enable'] ) 
+				|| ! $meta_box['block_json']['enable'] 
+				|| ! file_exists( $meta_box['block_json']['path'] 
+			) ) {
 				continue;
 			}
 
@@ -99,14 +102,11 @@ class Blocks {
 			'category'    => $settings['category'] ?? 'common',
 			'icon'        => $settings['icon'] ?? 'admin-generic',
 			'keywords'    => $settings['keywords'] ?? [],
-			'render'      => "file:./{$block_id}.php",
 			'supports'    => [ 
 				'html'   => false,
 				'anchor' => false,
 				'align'  => true,
 			],
-			'style'      => "file:./{$block_id}.css",
-			'viewScript' => "file:./{$block_id}.js",
 		];
 
 		// Add fields to block metadata attributes.
@@ -130,7 +130,8 @@ class Blocks {
 	private function generate_block_attributes( array $fields ) {
 		$attributes = [];
 
-		foreach ( $fields as $id => $field ) {
+		foreach ( $fields as $field ) {
+			$id = $field['id'];
 			[ $type, $std ] = $this->get_field_type_and_default_value( $field );
 
 			$attributes[ $id ] = [ 
@@ -217,65 +218,7 @@ class Blocks {
 			wp_mkdir_p( $block_path );
 		}
 
-
 		$block_metadata = $this->generate_block_metadata( $settings, $raw_data );
-
-		// Get all files in views/block-stubs folder.   
-		$stubs_dir = MBB_DIR . 'views/block-stubs';
-		$stubs     = scandir( $stubs_dir );
-
-		foreach ( $stubs as $stub ) {
-			if ( in_array( $stub, [ '.', '..' ] ) ) {
-				continue;
-			}
-
-			$stub_file = "{$stubs_dir}/{$stub}";
-
-			// Remove the .stub extension.
-			if ( ! file_exists( $stub_file ) ) {
-				continue;
-			}
-
-			// Copy the stub file to the block folder.
-			$file_name = strtr( $stub, [ 
-				'.stub' => '',
-				'block' => $block_id,
-			] );
-
-			// We handle the render file separately.
-			if ( $stub === 'block.php.stub' ) {
-				$stub_content      = file_get_contents( $stub_file );
-				$fields_output     = '';
-				$attributes_output = '';
-
-				foreach ( $settings['fields'] as $field ) {
-					$fields_output .= "<div><?php mb_the_block_field( '{$field['id']}' ); ?></div>\n\t";
-					[ $type ]      = $this->get_field_type_and_default_value( $field );
-
-					// Because type=object is converted to array
-					$type = $type === 'object' ? 'array' : $type;
-
-					$attributes_output .= "\n *\t{$field['id']}: {$type},";
-				}
-
-				$attributes_output = rtrim( $attributes_output, ',' );
-				$attributes_output .= "\n *";
-
-				$stub_content = strtr( $stub_content, [ 
-					'{{ fields }}' => $fields_output,
-					'{{ types }}' => $attributes_output,
-				] );
-
-				file_put_contents( "$block_path/$file_name", $stub_content );
-			}
-
-			if ( $stub !== 'block.php.stub' ) {
-				copy( $stub_file, "$block_path/$file_name" );
-			}
-
-			// Allows developers to modify the file directly.
-			chmod( $block_path . '/' . $file_name, 0664 );
-		}
 
 		// Save the block metadata to the block folder.
 		file_put_contents( "$block_path/block.json", $block_metadata );
