@@ -32,7 +32,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 
 	const duplicate = () => duplicateField( id );
 
-	const groupData = field.type !== 'group' ? {} : useFields(
+	const groupData = useFields(
 		Object.values( field.fields || {} ).filter( field => field.type ),
 		`fields${ parent }[${ id }][fields]`
 	);
