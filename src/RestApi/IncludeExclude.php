@@ -8,9 +8,12 @@ class IncludeExclude extends Base {
 		$name       = $request->get_param( 'name' );
 		$s          = strtolower( $request->get_param( 's' ) );
 		$post_types = strtolower( $request->get_param( 'post_types' ) );
+		$taxonomy   = strtolower( $request->get_param( 'taxonomy_types' ) );
 
-		$method = $this->get_method( $name );
-		$name = 'get_terms' === $method ? str_replace( 'parent_', '', $name ) : $name;
+		$method     = $this->get_method( $name );
+		$term_name  = $taxonomy ?: str_replace( 'parent_', '', $name );
+		$name       = 'get_terms' === $method ? $term_name : $name;
+
 		return $this->$method( $s, $name, $post_types );
 	}
 

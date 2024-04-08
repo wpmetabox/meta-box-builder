@@ -3,6 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { getSettings } from "../functions";
 import useObjectType from "../hooks/useObjectType";
 import usePostTypes from "../hooks/usePostTypes";
+import useTaxonomyTypes from "../hooks/useTaxonomyTypes";
 import Checkbox from './Checkbox';
 import DivRow from './DivRow';
 import ReactSelect from './ReactSelect';
@@ -20,6 +21,7 @@ const Location = () => {
 	const setObjectType = useObjectType( state => state.update );
 	const postTypes = usePostTypes( state => state.types );
 	const setPostTypes = usePostTypes( state => state.update );
+	const setTaxonomies = useTaxonomyTypes( state => state.update );
 
 	return (
 		<>
@@ -49,6 +51,7 @@ const Location = () => {
 						name="settings[taxonomies][]"
 						options={ MbbApp.taxonomies.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
 						defaultValue={ ensureArray( settings.taxonomies || [] ) }
+						onChange={ items => setTaxonomies( items ? items.map( item => item.value ) : [] ) }
 					/>
 				}
 				{

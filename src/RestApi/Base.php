@@ -57,12 +57,13 @@ class Base {
 				'order'          => 'ASC',
 			],
 		];
-
 		$data = RWMB_Post_Field::query( null, $field );
 		return array_values( $data );
 	}
 
 	protected function get_terms( $s, $taxonomy ) {
+		$taxonomy = Arr::from_csv( $taxonomy );
+
 		$field = [
 			'id'         => 'mbb_api_term',
 			'type'       => 'taxonomy',
@@ -74,7 +75,6 @@ class Base {
 				'number'     => 10,
 			],
 		];
-
 		$data = RWMB_Taxonomy_Field::query( null, $field );
 		return array_values( $data );
 	}

@@ -4,6 +4,7 @@ import { __ } from "@wordpress/i18n";
 import { fetcher, uniqid } from "../functions";
 import useObjectType from "../hooks/useObjectType";
 import usePostTypes from "../hooks/usePostTypes";
+import useTaxonomyTypes from "../hooks/useTaxonomyTypes";
 import DivRow from './DivRow';
 import ReactAsyncSelect from './ReactAsyncSelect';
 
@@ -53,20 +54,25 @@ const Intro = ( { defaultValue } ) => (
 const Rule = ( { rule, baseName, removeRule } ) => {
 	const objectType = useObjectType( state => state.type );
 	const postTypes = usePostTypes( state => state.types );
+	const taxonomyTypes = useTaxonomyTypes( state => state.types );
+
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 
 	// Validate rule name.
 	useEffect( () => {
-		if ( ['term', 'comment', 'setting'].includes( objectType ) && ![ 'user_role', 'user_id', 'custom' ].includes( name ) ) {
+		if ( ['comment', 'setting'].includes( objectType ) && ![ 'user_role', 'user_id', 'custom' ].includes( name ) ) {
 			setName( 'user_role' );
 		}
 		if ( objectType === 'user' && ![ 'user_role', 'user_id', 'edited_user_role', 'edited_user_id', 'custom' ].includes( name ) ) {
 			setName( 'user_role' );
 		}
+		if ( ( objectType === 'term' ) && [ 'ID', 'parent', 'template', 'is_child' ].includes( name ) ) {
+			setName( 'category' );
+		}
 	}, [ objectType ] );
 
-	const loadOptions = s => fetcher( 'include-exclude', { name, s, post_types: postTypes } );
+	const loadOptions = s => fetcher( 'include-exclude', { name, s, post_types: postTypes, taxonomy_types: taxonomyTypes } );
 
 	return (
 		<div className="og-include-exclude__rule og-attribute">
@@ -76,10 +82,10 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 				{ objectType === 'post' && <option value="parent">{ __( 'Parent post', 'meta-box-builder' ) }</option> }
 				{ objectType === 'post' && <option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option> }
 				{
-					objectType === 'post' && MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ taxonomy.slug }>{ taxonomy.name } ({ taxonomy.slug })</option> )
+					['term', 'post'].includes( objectType ) && MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ taxonomy.slug }>{ taxonomy.name } ({ taxonomy.slug })</option> )
 				}
 				{
-					objectType === 'post' && MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ `parent_${ taxonomy.slug }` }>{ __( 'Parent', 'meta-box-builder' ) } { taxonomy.name } ({ taxonomy.slug })</option> )
+					['term', 'post'].includes( objectType ) && MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ `parent_${ taxonomy.slug }` }>{ __( 'Parent', 'meta-box-builder' ) } { taxonomy.name } ({ taxonomy.slug })</option> )
 				}
 				<option value="user_role">{ __( 'User role', 'meta-box-builder' ) }</option>
 				<option value="user_id">{ __( 'User', 'meta-box-builder' ) }</option>
@@ -92,7 +98,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 				// Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
 				<ReactAsyncSelect
-					key={ name + objectType + postTypes }
+					key={ name + objectType + postTypes + taxonomyTypes }
 					baseName={ baseName }
 					className="og-include-exclude__value"
 					defaultValue={ rule }
