@@ -4,7 +4,6 @@ import { __ } from "@wordpress/i18n";
 import { fetcher, uniqid } from "../functions";
 import useObjectType from "../hooks/useObjectType";
 import usePostTypes from "../hooks/usePostTypes";
-import useTaxonomyTypes from "../hooks/useTaxonomyTypes";
 import DivRow from './DivRow';
 import ReactAsyncSelect from './ReactAsyncSelect';
 
@@ -54,7 +53,6 @@ const Intro = ( { defaultValue } ) => (
 const Rule = ( { rule, baseName, removeRule } ) => {
 	const objectType = useObjectType( state => state.type );
 	const postTypes = usePostTypes( state => state.types );
-	const taxonomyTypes = useTaxonomyTypes( state => state.types );
 
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
@@ -72,7 +70,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 		}
 	}, [ objectType ] );
 
-	const loadOptions = s => fetcher( 'include-exclude', { name, s, post_types: postTypes, taxonomy_types: taxonomyTypes } );
+	const loadOptions = s => fetcher( 'include-exclude', { name, s, post_types: postTypes } );
 
 	return (
 		<div className="og-include-exclude__rule og-attribute">
@@ -98,7 +96,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 				// Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
 				<ReactAsyncSelect
-					key={ name + objectType + postTypes + taxonomyTypes }
+					key={ name + objectType + postTypes }
 					baseName={ baseName }
 					className="og-include-exclude__value"
 					defaultValue={ rule }
