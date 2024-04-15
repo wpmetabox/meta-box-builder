@@ -236,7 +236,7 @@ class Blocks {
 		$path = trailingslashit( $path );
 
 		// For security, we only allow the path inside the current WordPress installation.
-		if ( ! str_starts_with( $path, ABSPATH ) ) {
+		if ( ! str_starts_with( $path, wp_normalize_path( ABSPATH ) ) ) {
 			return false;
 		}
 
