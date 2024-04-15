@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { getSettings } from '../functions';
 
 const sanitize = types => {
