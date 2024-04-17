@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 const ignoreTypes = [ 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
 

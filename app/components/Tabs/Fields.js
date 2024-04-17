@@ -46,7 +46,7 @@ const Fields = prop => {
 				className="og-fields"
 				list={ fields }
 				setList={ setFields }
-				handle=".og-item__header"
+				handle=".og-column--drag"
 			>
 				{
 					fields.map( field => <Node

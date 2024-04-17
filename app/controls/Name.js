@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { useEffect, useLayoutEffect, useRef, useState } from '@wordpress/element';
 import DivRow from './DivRow';
 
 /**
@@ -9,10 +9,16 @@ const Name = ( { name, componentId, nameIdData, ...rest } ) => {
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
 
-	const handleChange = e => {
+	const handleChange = e => {		
 		nameIdData.updateName( e.target.value );
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	};
+
+	useEffect( () => {
+		if ( nameIdData.name ) {
+			ref.current.value = nameIdData.name;
+		}
+	}, [ nameIdData.name ] );
 
 	useLayoutEffect( () => {
 		if ( selection && ref.current ) {
@@ -27,9 +33,9 @@ const Name = ( { name, componentId, nameIdData, ...rest } ) => {
 				type="text"
 				id={ componentId }
 				name={ name }
-				value={ nameIdData.name }
-				onChange={ handleChange }
+				defaultValue={ nameIdData.name }
 				onBlur={ nameIdData.noAutoGenerateId }
+				onInput={ handleChange }
 			/>
 		</DivRow>
 	);
