@@ -55,10 +55,12 @@
 	&--type {
 		width: 140px;
 		padding-right: 20px;
+		z-index: 10;
 	}
 
 	&--actions {
 		width: 24px * 3 + 4px * 2; // 3 icons + 2 gaps.
+		z-index: 10;
 	}
 }
 
