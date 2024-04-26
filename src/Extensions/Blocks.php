@@ -42,15 +42,17 @@ class Blocks {
 				continue;
 			}
 
-			if ( ! isset( $meta_box['block_json']['enable'] ) 
-				|| ! $meta_box['block_json']['enable'] 
-				|| ! file_exists( $meta_box['block_json']['path'] 
-			) ) {
+			if ( ! isset( $meta_box['block_json']['enable'] )
+				|| ! $meta_box['block_json']['enable']
+				|| ! file_exists( $meta_box['block_json']['path']
+				|| isset( $meta_box['function_name'] )
+				|| isset( $meta_box['render_template'] )
+				) ) {
 				continue;
 			}
 
 			// Now we register the block with the provided path
-			register_block_type( trailingslashit( $meta_box['block_json']['path'] ) . $meta_box['id']  );
+			register_block_type( trailingslashit( $meta_box['block_json']['path'] ) . $meta_box['id'] );
 		}
 	}
 
@@ -65,7 +67,7 @@ class Blocks {
 
 		$block_json_settings = $data['settings']['block_json'] ?? [ 
 			'enable' => true,
-			'path'   => '{{ theme.path }}/blocks',
+			'path' => '{{ theme.path }}/blocks',
 		];
 
 		$data['settings']['block_json'] = $block_json_settings;
@@ -93,19 +95,19 @@ class Blocks {
 		$block_id = sanitize_title( $settings['title'] );
 
 		$metadata = [ 
-			'$schema'     => "https://schemas.wp.org/trunk/block.json",
-			'apiVersion'  => 3,
-			'version'     => 'v' . time(),
-			'name'        => "meta-box/{$block_id}",
-			'title'       => $settings['title'] ?? '',
+			'$schema' => "https://schemas.wp.org/trunk/block.json",
+			'apiVersion' => 3,
+			'version' => 'v' . time(),
+			'name' => "meta-box/{$block_id}",
+			'title' => $settings['title'] ?? '',
 			'description' => $settings['description'] ?? '',
-			'category'    => $settings['category'] ?? 'common',
-			'icon'        => $settings['icon'] ?? 'admin-generic',
-			'keywords'    => $settings['keywords'] ?? [],
-			'supports'    => [ 
-				'html'   => false,
+			'category' => $settings['category'] ?? 'common',
+			'icon' => $settings['icon'] ?? 'admin-generic',
+			'keywords' => $settings['keywords'] ?? [],
+			'supports' => [ 
+				'html' => false,
 				'anchor' => false,
-				'align'  => true,
+				'align' => true,
 			],
 		];
 
@@ -131,8 +133,14 @@ class Blocks {
 		$attributes = [];
 
 		foreach ( $fields as $field ) {
-			$id = $field['id'];
-			[ $type, $std ] = $this->get_field_type_and_default_value( $field );
+			$id       = $field['id'];
+			$type_std = $this->get_field_type_and_default_value( $field );
+
+			if ( is_null( $type_std ) ) {
+				continue;
+			}
+
+			[ $type, $std ] = $type_std;
 
 			$attributes[ $id ] = [ 
 				'type' => $type,
@@ -163,6 +171,10 @@ class Blocks {
 			'image_upload',
 			'key_value',
 		];
+
+		if ( ! isset( $field['type'] ) || ! isset( $field['std'] ) || ! isset( $field['id'] ) ) {
+			return;
+		}
 
 		$is_multiple = ( isset( $field['multiple'] ) && $field['multiple'] )
 			|| ( isset( $field['type'] ) && in_array( $field['type'], $array_fields ) )
