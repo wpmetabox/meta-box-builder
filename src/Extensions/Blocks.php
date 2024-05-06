@@ -95,19 +95,19 @@ class Blocks {
 		$block_id = sanitize_title( $settings['title'] );
 
 		$metadata = [ 
-			'$schema' => "https://schemas.wp.org/trunk/block.json",
-			'apiVersion' => 3,
-			'version' => 'v' . time(),
-			'name' => "meta-box/{$block_id}",
-			'title' => $settings['title'] ?? '',
+			'$schema'     => "https://schemas.wp.org/trunk/block.json",
+			'apiVersion'  => 3,
+			'version'     => 'v' . time(),
+			'name'        => "meta-box/{$block_id}",
+			'title'       => $settings['title'] ?? '',
 			'description' => $settings['description'] ?? '',
-			'category' => $settings['category'] ?? 'common',
-			'icon' => $settings['icon'] ?? 'admin-generic',
-			'keywords' => $settings['keywords'] ?? [],
+			'category'    => $settings['category'] ?? 'common',
+			'icon'        => $settings['icon'] ?? 'admin-generic',
+			'keywords'    => $settings['keywords'] ?? [],
 			'supports' => [ 
-				'html' => false,
+				'html'   => false,
 				'anchor' => false,
-				'align' => true,
+				'align'  => true,
 			],
 		];
 
