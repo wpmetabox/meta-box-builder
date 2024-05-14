@@ -110,10 +110,10 @@ const Block = () => {
 			label={ __( 'Block Settings Position', 'meta-box-builder' ) }
 			componentId="settings-block-block_context"
 			options={ {
-				content: __( 'In the content area', 'meta-box-builder' ),
+				normal: __( 'In the content area', 'meta-box-builder' ),
 				side: __( 'On the right sidebar', 'meta-box-builder' ),
 			} }
-			defaultValue={ settings.block_context || 'content' }
+			defaultValue={ settings.block_context || 'normal' }
 		/>
 		<ReactSelect
 			name="settings[supports][align][]"
