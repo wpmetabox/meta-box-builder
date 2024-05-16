@@ -85,6 +85,11 @@
 			font-size: inherit;
 		}
 	}
+
+	&--checkbox .og-description {
+		display: inline-block;
+		margin-left: 6px;
+	}
 }
 
 &-field--check &-input {
