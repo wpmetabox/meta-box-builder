@@ -32,6 +32,7 @@ const App = () => {
 						label={ __( 'Reciprocal relationship' ) }
 						defaultValue={ !!MbbApp.settings.reciprocal }
 						className="relationships-plain"
+						description={ __( 'Enable only if two sides of the relationship are the same.', 'meta-box-builder' ) }
 					/>
 					{ sides.map( side => <Side key={ side.id } { ...side } /> ) }
 				</TabPanel>
