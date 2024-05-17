@@ -68,6 +68,7 @@ class Edit extends BaseEditPage {
 				'tabs'               => Data::is_extension_active( 'meta-box-tabs' ),
 				'termMeta'           => Data::is_extension_active( 'mb-term-meta' ),
 				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
+				'revision'           => Data::is_extension_active( 'mb-revision' ),
 			],
 		];
 
@@ -99,7 +100,7 @@ class Edit extends BaseEditPage {
 
 		$parser = new Parser( $submitted_data );
 		$parser->parse();
-		
+
 		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
 
 		// Allow developers to add actions after saving the meta box.

@@ -112,6 +112,7 @@ class Data {
 			'mb-user-meta'               => 'mb_user_meta_load',
 			'meta-box-columns'           => 'mb_columns_add_markup',
 			'meta-box-conditional-logic' => 'mb_conditional_logic_load',
+			'mb-revision'                => 'mb_revision_init',
 		];
 		$classes   = [
 			'mb-relationships'         => 'MBR_Loader',
