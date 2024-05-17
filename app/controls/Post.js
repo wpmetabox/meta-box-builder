@@ -68,6 +68,16 @@ const Post = () => {
 				componentId="settings-autosave"
 			/>
 		}
+		{
+			isClassic &&
+			<Checkbox
+				name="settings[revision]"
+				label={ __( 'Revision', 'meta-box-builder' ) }
+				defaultValue={ !!settings.revision }
+				componentId="settings-revision"
+			/>
+		}
+
 	</>;
 };
 
