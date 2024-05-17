@@ -68,6 +68,17 @@ const Post = () => {
 				componentId="settings-autosave"
 			/>
 		}
+		{
+			MbbApp.extensions.revision &&
+			<Checkbox
+				name="settings[revision]"
+				label={ __( 'Enable revision', 'meta-box-builder' ) }
+				tooltip={ __( 'Track changes of custom fields with revisions', 'meta-box-builder' ) }
+				defaultValue={ !!settings.revision }
+				componentId="settings-revision"
+			/>
+		}
+
 	</>;
 };
 
