@@ -12,25 +12,13 @@ const KeyValue = ( {
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
 	keys = [],
 	values = [],
+	dependencyValues = [],
 	...rest
 } ) => {
 	const [ items, setItems ] = useState( Object.values( defaultValue || {} ) );
-	const [ dependencyValues, setDependencyValues ] = useState( Object.values( {} ) );
 
 	const add = () => setItems( prev => [ ...prev, { key: '', value: '', id: uniqid() } ] );
 	const remove = id => setItems( prev => prev.filter( item => item.id !== id ) );
-
-	if ( keys.length > 0 ) {
-		keys.map( ( item, index ) => {
-			if ( !item.includes( ':[' ) ) {
-				return;
-			}
-			let temp = item.split( ':[' );
-			keys[ index ] = temp[0];
-
-			setDependencyValues( prev => ( { ...prev, [ temp[0] ]: temp[1].slice( 0, -1 ) } ) );
-		} );
-	}
 
 	return (
 		<DivRow { ...rest }>
@@ -63,24 +51,7 @@ const Item = ( { name, keys, keysList, dependencyValues, valuesList, item, remov
 		setValues( valuesList );
 		inputRef.current.value = value;
 
-		if ( Object.keys( dependencyValues ).length == 0 ) {
-			return;
-		}
-
-		Object.keys( dependencyValues ).map( item => {
-			if ( value !== item ) {
-				return;
-			}
-
-			const tempVal = dependencyValues[ value ].split( ',' );
-			tempVal.map( ( temp, index ) => {
-				// Check if dependency values not in valuesList
-				if ( !valuesList.includes( temp ) ) {
-					tempVal.splice( index, 1 );
-				}
-			} );
-			setValues( tempVal );
-		} );
+		dependencyValues[ value ] && setValues( dependencyValues[ value ] )
 	};
 
 	return (
