@@ -31,6 +31,7 @@ const Block = () => {
 	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
 	const [ isNewer, setIsNewer ] = useState( false );
 	const [ localBlockData, setLocalBlockData ] = useState( {} );
+	const [ overrideText, setOverrideText ] = useState( __( 'Yes, override settings', 'meta-box-builder' ) );
 
 	/**
 	 * Get local path data, including whether the path is writable, block.json version.
@@ -58,10 +59,8 @@ const Block = () => {
 		if ( !settings.block_json?.path ) {
 			return;
 		}
-
-		( async () => {
-			updateLocalPathData( null, settings.block_json?.path );
-		} )();
+		
+		updateLocalPathData( null, settings.block_json?.path );
 	}, [] );
 
 	const handleOverride = () => {
@@ -79,6 +78,11 @@ const Block = () => {
 			category: localBlockData?.category,
 			keywords: localBlockData?.keywords,
 		} );
+
+		setOverrideText( __( 'Updated!' ) );
+		setTimeout( () => {
+			setOverrideText( __( 'Yes, override settings' ) );
+		}, 1000 );
 	};
 
 	useEffect( () => {
@@ -304,7 +308,9 @@ const Block = () => {
 					<div>We detected a newer version of <code>block.json</code> from the current folder, do you want to override settings from this path?</div>
 
 					<div>
-						<Button onClick={ handleOverride } isSecondary>Yes, override settings</Button>
+						<Button onClick={ handleOverride } variant="secondary" size="small">
+							{ overrideText }
+						</Button>
 					</div>
 				</Flex>
 			</DivRow>
