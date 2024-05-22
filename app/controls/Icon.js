@@ -38,22 +38,16 @@ const getIconLabel = icon => {
 	return label.trim().toLowerCase();
 };
 
-const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, updateFieldData, ...rest } ) => {
+const Icon = ( { name, componentId, value, setValue, icons = MbbApp.icons, ...rest } ) => {
 	const [ query, setQuery ] = useState( "" );
-	const [ value, setValue ] = useState( defaultValue );
-	let filteredIcons = icons.map( icon => [ icon, getIconLabel( icon ) ] )
+	const filteredIcons = icons.map( icon => [ icon, getIconLabel( icon ) ] )
 		.filter( item => query === '' || item[ 1 ].includes( query.toLowerCase() ) );
-
-	const handleChange = e => {
-		setValue( e.target.value );
-		updateFieldData && updateFieldData( name, e.target.value );
-	}
 
 	return (
 		<DivRow htmlFor={ componentId } className="og-icon" { ...rest }>
 			<div className='og-icon-selected'>
 				<span className={ `dashicons dashicons-${ value }` }></span>
-				<input type="text" className="og-icon-search" placeholder="Search..." value={ query } onChange={ event => setQuery( event.target.value ) } />
+				<input type="search" className="og-icon-search" placeholder="Search..." value={ query } onChange={ event => setQuery( event.target.value ) } />
 			</div>
 			<div className="og-icon-items">
 				{
@@ -64,8 +58,8 @@ const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, updateFi
 									type="radio"
 									name={ name }
 									value={ icon }
-									defaultChecked={ icon === defaultValue }
-									onChange={ handleChange }
+									checked={ icon === value }
+									onChange={ e => setValue( e.target.value ) }
 								/>
 								<span className={ `og-dashicon dashicons dashicons-${ icon }` }></span>
 							</label>

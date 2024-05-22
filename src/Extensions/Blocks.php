@@ -66,8 +66,9 @@ class Blocks {
 		$data['settings']        = is_array( $data['settings'] ) ? $data['settings'] : [];
 
 		$block_json_settings = $data['settings']['block_json'] ?? [ 
-			'enable' => true,
-			'path' => '{{ theme.path }}/blocks',
+			'enable' 	=> true,
+			'version' 	=> 'v' . time(),
+			'path' 		=> '{{ theme.path }}/blocks',
 		];
 
 		$data['settings']['block_json'] = $block_json_settings;

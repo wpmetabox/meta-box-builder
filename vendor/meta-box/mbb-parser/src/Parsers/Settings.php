@@ -150,8 +150,11 @@ class Settings extends Base {
 
 		$this->enqueue_style  = $this->replace_variables( $this->enqueue_style );
 		$this->enqueue_script = $this->replace_variables( $this->enqueue_script );
-		if ( isset( $this->settings['block_json'] ) && ! empty( $this->settings['block_json']['path'] ) ) {
-			$this->settings['block_json']['path'] = $this->replace_variables( $this->settings['block_json']['path'] );
+
+		if ( isset( $this->settings['block_json'] ) && $this->settings['block_json']['enable'] ) {
+			if ( ! empty( $this->settings['block_json']['path'] ) ) {
+				$this->settings['block_json']['path'] = $this->replace_variables( $this->settings['block_json']['path'] );
+			}
 		}
 		
 		unset( $this->render_with );

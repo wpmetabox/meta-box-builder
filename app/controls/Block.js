@@ -11,9 +11,10 @@ import ReactSelect from './ReactSelect';
 import Select from './Select';
 import Textarea from './Textarea';
 import { ensureArray } from '/functions';
+import { Button, Flex } from "@wordpress/components";
 
 const Block = () => {
-	const settings = getSettings();
+	const [ settings, setSettings ] = useState( getSettings() );
 	const [ iconType, setIconType ] = useState( settings.icon_type || 'dashicons' );
 	const [ renderWith, setRenderWith ] = useState( settings.render_with || 'callback' );
 	const [ codeEditor, setCodeEditor ] = useState();
@@ -28,14 +29,57 @@ const Block = () => {
 	const updateRenderWith = e => setRenderWith( e.target.value );
 
 	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
+	const [ isNewer, setIsNewer ] = useState( false );
+	const [ localBlockData, setLocalBlockData ] = useState( {} );
 
-	const checkFuturePathPermission = async ( _, path ) => {
-		const res = await fetcher( 'is-future-path-writable', { path } );
-		const errorMessage = res ? '' : __( 'The path is not writable.', 'meta-box-builder' );
+	/**
+	 * Get local path data, including whether the path is writable, block.json version.
+	 * 
+	 * @param any _ 
+	 * @param string path 
+	 */
+	const updateLocalPathData = async ( _, path ) => {
+		const postName = document.getElementById( 'post_name' ).value;
 
+		const { is_writable, is_newer, block_settings } = await fetcher( 'local-path-data', {
+			path,
+			version: settings.block_json?.version || 0,
+			postName
+		} );
+
+		const errorMessage = is_writable ? '' : __( 'The path is not writable.', 'meta-box-builder' );
+
+		setIsNewer( is_newer );
 		setBlockPathError( errorMessage );
+		setLocalBlockData( block_settings );
 	};
 
+	useEffect( () => {
+		if ( !settings.block_json?.path ) {
+			return;
+		}
+
+		( async () => {
+			updateLocalPathData( null, settings.block_json?.path );
+		} )();
+	}, [] );
+
+	const handleOverride = () => {
+		// block.json always use dashicons
+		setIconType( 'dashicons' );
+
+		if ( localBlockData.title ) {
+			document.getElementById( 'title' ).value = localBlockData.title;
+		}
+
+		setSettings( {
+			...settings,
+			description: localBlockData?.description,
+			icon: localBlockData?.icon,
+			category: localBlockData?.category,
+			keywords: localBlockData?.keywords,
+		} );
+	};
 
 	useEffect( () => {
 		if ( codeEditor ) {
@@ -48,7 +92,8 @@ const Block = () => {
 			name="settings[description]"
 			label={ __( 'Description', 'meta-box-builder' ) }
 			componentId="settings-block-description"
-			defaultValue={ settings.description }
+			value={ settings.description }
+			onChange={ e => setSettings( { ...settings, description: e.target.value } ) }
 		/>
 		<Select
 			name="settings[icon_type]"
@@ -68,7 +113,9 @@ const Block = () => {
 				defaultValue={ settings.icon_svg }
 			/>
 		}
-		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" defaultValue={ settings.icon } /> }
+		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" value={ settings.icon } setValue={ ( value ) => {
+			setSettings( { ...settings, icon: value } );
+		} } /> }
 		{
 			iconType === 'dashicons' &&
 			<Input
@@ -96,14 +143,16 @@ const Block = () => {
 			label={ __( 'Category', 'meta-box-builder' ) }
 			componentId="settings-block-category"
 			options={ MbbApp.blockCategories }
-			defaultValue={ settings.category }
+			value={ settings.category }
+			onChange={ e => setSettings( { ...settings, category: e.target.value } ) }
 		/>
 		<Input
 			name="settings[keywords]"
 			label={ __( 'Keywords', 'meta-box-builder' ) }
 			componentId="settings-block-keywords"
 			tooltip={ __( 'Separate by commas', 'meta-box-builder' ) }
-			defaultValue={ settings.keywords }
+			value={ settings.keywords }
+			onChange={ e => setSettings( { ...settings, keywords: e.target.value } ) }
 		/>
 		<Select
 			name="settings[block_context]"
@@ -228,7 +277,7 @@ const Block = () => {
 			defaultValue={ settings.enqueue_assets }
 		/>
 
-<h3>{ __( 'Block JSON Settings', 'meta-box-builder' ) }</h3>
+		<h3>{ __( 'Block JSON Settings', 'meta-box-builder' ) }</h3>
 		<Checkbox
 			name="settings[block_json][enable]"
 			label={ __( 'Generate block.json', 'meta-box-builder' ) }
@@ -243,9 +292,23 @@ const Block = () => {
 			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
 			defaultValue={ settings.block_json?.path }
 			error={ blockPathError }
-			updateFieldData={ checkFuturePathPermission }
+			updateFieldData={ updateLocalPathData }
 			dependency="block_json_enable:true"
 		/>
+
+		<input type="hidden" name="settings[block_json][version]" value={ 'v' + ( Math.floor( Date.now() / 1000 ) ) } />
+
+		{ isNewer &&
+			<DivRow label={ __( 'Synchronize block.json', 'meta-box-builder' ) }>
+				<Flex direction="column">
+					<div>We detected a newer version of <code>block.json</code> from the current folder, do you want to override settings from this path?</div>
+
+					<div>
+						<Button onClick={ handleOverride } isSecondary>Yes, override settings</Button>
+					</div>
+				</Flex>
+			</DivRow>
+		}
 
 		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
 			<table className="og-block-description">
