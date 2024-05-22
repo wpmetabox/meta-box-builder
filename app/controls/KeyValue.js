@@ -51,7 +51,7 @@ const Item = ( { name, keys, keysList, dependencyValues, valuesList, item, remov
 		setValues( valuesList );
 		inputRef.current.value = value;
 
-		dependencyValues[ value ] && setValues( dependencyValues[ value ] )
+		dependencyValues[ value ] && setValues( dependencyValues[ value ] );
 	};
 
 	return (
