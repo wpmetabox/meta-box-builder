@@ -12,7 +12,6 @@ const KeyValue = ( {
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
 	keys = [],
 	values = [],
-	dependencyValues = [],
 	...rest
 } ) => {
 	const [ items, setItems ] = useState( Object.values( defaultValue || {} ) );
@@ -30,7 +29,6 @@ const KeyValue = ( {
 						remove={ remove }
 						name={ `${ name }[${ item.id }]` }
 						keysList={ keys }
-						dependencyValues={dependencyValues}
 						values={ `${ name }-values` }
 						valuesList={ values }
 						keyPlaceholder={ keyPlaceholder }
@@ -43,7 +41,7 @@ const KeyValue = ( {
 	);
 };
 
-const Item = ( { name, keysList, dependencyValues, valuesList, item, remove, keyPlaceholder, valuePlaceholder } ) => {
+const Item = ( { name, keysList, valuesList, item, remove, keyPlaceholder, valuePlaceholder } ) => {
 	const [ values, setValues ] = useState( valuesList );
 
 	const handleSelect = ( inputRef, value ) => {
