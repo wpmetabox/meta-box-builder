@@ -151,13 +151,19 @@ class Registry {
 				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'jQueryUI date picker options', 'meta-box-builder' ),
 				'keys'    => [ 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'currentText', 'dateFormat', 'dayNames', 'dayNamesShort', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'nextText', 'numberOfMonths', 'prevText', 'showButtonPanel', 'stepMonths', 'yearRange' ],
-				'values'  => [ 'true', 'false', 'yy-mm-dd', 'mm/dd/yy', 'dd-mm-yy' ],
+				'values'  => [
+					'dateFormat'      => [ 'yy-mm-dd','mm/dd/yy','dd-mm-yy' ],
+					'showButtonPanel' => [ 'true','false' ],
+				]
 			] ),
 			'js_options_datetime'          => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'jQueryUI date and time picker options', 'meta-box-builder' ),
 				'keys'    => [ 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'controlType', 'currentText', 'dateFormat', 'dayNames', 'dayNamesShort', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'nextText', 'numberOfMonths', 'prevText', 'showButtonPanel', 'stepMonths', 'timeFormat', 'yearRange' ],
-				'values'  => [ 'true', 'false', 'yy-mm-dd HH:mm', 'mm/dd/yy HH:mm', 'dd-mm-yy HH:mm' ],
+				'values'  => [
+					'dateFormat'      => [ 'yy-mm-dd HH:mm','mm/dd/yy HH:mm','dd-mm-yy HH:mm' ],
+					'showButtonPanel' => [ 'true','false' ],
+				]
 			] ),
 
 			// Map.
@@ -595,7 +601,10 @@ class Registry {
 				'label'   => '<a href="http://trentrichardson.com/examples/timepicker" target="_blank" rel="nofollow noopenner">' . __( 'Time picker options', 'meta-box-builder' ) . '<a/>',
 				'tooltip' => __( 'jQueryUI time picker options', 'meta-box-builder' ),
 				'keys'    => [ 'controlType', 'timeFormat' ],
-				'values'  => [ 'select', 'slider', 'HH:mm', 'HH:mm T' ],
+				'values'  => [
+					'controlType' => [ 'select', 'slider' ],
+					'timeFormat'  => [ 'HH:mm', 'HH:mm T' ],
+				]
 			] ),
 
 			// User.

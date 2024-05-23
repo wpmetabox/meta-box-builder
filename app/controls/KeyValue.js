@@ -28,7 +28,6 @@ const KeyValue = ( {
 						item={ item }
 						remove={ remove }
 						name={ `${ name }[${ item.id }]` }
-						keys={ `${ name }-keys` }
 						keysList={ keys }
 						values={ `${ name }-values` }
 						valuesList={ values }
@@ -42,13 +41,26 @@ const KeyValue = ( {
 	);
 };
 
-const Item = ( { name, keys, keysList, values, valuesList, item, remove, keyPlaceholder, valuePlaceholder } ) => (
-	<div className="og-attribute">
-		<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
-		<FieldInserter placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } items={ keysList } />
-		<FieldInserter placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } items={ valuesList } />
-		<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => remove( item.id ) }><Dashicon icon="dismiss" /></button>
-	</div>
-);
+const Item = ( { name, keysList, valuesList, item, remove, keyPlaceholder, valuePlaceholder } ) => {
+	const [ values, setValues ] = useState( valuesList );
+
+	const handleSelect = ( inputRef, value ) => {
+		inputRef.current.value = value;
+
+		const newValuesList = objectDepth( valuesList ) == 1 ? valuesList : valuesList[ value ] ? valuesList[ value ] : valuesList['default'];
+		newValuesList && setValues( newValuesList );
+	};
+
+	return (
+		<div className="og-attribute">
+			<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
+			<FieldInserter placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } items={ keysList }  onSelect={ handleSelect } onChange={ handleSelect } />
+			<FieldInserter placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } items={ values } />
+			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => remove( item.id ) }><Dashicon icon="dismiss" /></button>
+		</div>
+	);
+};
+
+const objectDepth = object => Object( object ) === object ? 1 + Math.max( -1, ...Object.values( object ).map( objectDepth ) ) : 0;
 
 export default KeyValue;
