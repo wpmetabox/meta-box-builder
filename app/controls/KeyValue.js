@@ -29,7 +29,6 @@ const KeyValue = ( {
 						item={ item }
 						remove={ remove }
 						name={ `${ name }[${ item.id }]` }
-						keys={ `${ name }-keys` }
 						keysList={ keys }
 						dependencyValues={dependencyValues}
 						values={ `${ name }-values` }
@@ -44,14 +43,14 @@ const KeyValue = ( {
 	);
 };
 
-const Item = ( { name, keys, keysList, dependencyValues, valuesList, item, remove, keyPlaceholder, valuePlaceholder } ) => {
+const Item = ( { name, keysList, dependencyValues, valuesList, item, remove, keyPlaceholder, valuePlaceholder } ) => {
 	const [ values, setValues ] = useState( valuesList );
 
 	const handleSelect = ( inputRef, value ) => {
-		setValues( valuesList );
 		inputRef.current.value = value;
 
-		dependencyValues[ value ] && setValues( dependencyValues[ value ] );
+		const newValuesList = objectDepth( valuesList ) == 1 ? valuesList : valuesList[ value ] ? valuesList[ value ] : valuesList['default'];
+		newValuesList && setValues( newValuesList );
 	};
 
 	return (
@@ -63,5 +62,7 @@ const Item = ( { name, keys, keysList, dependencyValues, valuesList, item, remov
 		</div>
 	);
 };
+
+const objectDepth = object => Object( object ) === object ? 1 + Math.max( -1, ...Object.values( object ).map( objectDepth ) ) : 0;
 
 export default KeyValue;
