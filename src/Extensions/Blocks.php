@@ -50,8 +50,10 @@ class Blocks {
 
 		$block_json = self::get_block_metadata( $request );
 		$settings['description']           = $block_json['description'];
-		$settings['icon_type']             = 'dashicons';
-		$settings['icon']                  = $block_json['icon'];
+		$icon_type 						   = str_contains( $block_json['icon'], '<svg' ) ? 'svg' : 'dashicons';
+		$settings['icon_type']             = $icon_type;
+		$settings['icon']                  = $icon_type === 'dashicons' ? $block_json['icon'] : '';
+		$settings['icon_svg']              = $icon_type === 'svg' ? $block_json['icon'] : '';
 		$settings['category']              = $block_json['category'];
 		$settings['keywords']              = $block_json['keywords'];
 		$settings['block_json']['version'] = $block_json['version'];
@@ -192,7 +194,7 @@ class Blocks {
 			'title'       => $settings['title'] ?? '',
 			'description' => $settings['description'] ?? '',
 			'category'    => $settings['category'] ?? 'common',
-			'icon'        => $settings['icon'] ?? 'admin-generic',
+			'icon'        => $settings['icon'] ?? $settings['icon_svg'] ?? 'admin-generic',
 			'keywords'    => $settings['keywords'] ?? [],
 			'supports' => [ 
 				'html'   => false,
