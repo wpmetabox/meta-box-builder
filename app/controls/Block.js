@@ -11,7 +11,7 @@ import ReactSelect from './ReactSelect';
 import Select from './Select';
 import Textarea from './Textarea';
 import { ensureArray } from '/functions';
-import { Button, Flex } from "@wordpress/components";
+import { Flex } from "@wordpress/components";
 
 const Block = () => {
 	const [ settings, setSettings ] = useState( getSettings() );
@@ -30,8 +30,6 @@ const Block = () => {
 
 	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
 	const [ isNewer, setIsNewer ] = useState( false );
-	const [ localBlockData, setLocalBlockData ] = useState( {} );
-	const [ overrideText, setOverrideText ] = useState( __( 'Yes, override settings', 'meta-box-builder' ) );
 
 	/**
 	 * Get local path data, including whether the path is writable, block.json version.
@@ -39,10 +37,14 @@ const Block = () => {
 	 * @param any _ 
 	 * @param string path 
 	 */
-	const updateLocalPathData = async ( _, path ) => {
+	const getLocalPathData = async ( _, path ) => {
 		const postName = document.getElementById( 'post_name' ).value;
 
-		const { is_writable, is_newer, block_settings } = await fetcher( 'local-path-data', {
+		if ( !postName ) {
+			return;
+		}
+
+		const { is_writable, is_newer } = await fetcher( 'local-path-data', {
 			path,
 			version: settings.block_json?.version || 0,
 			postName
@@ -52,38 +54,15 @@ const Block = () => {
 
 		setIsNewer( is_newer );
 		setBlockPathError( errorMessage );
-		setLocalBlockData( block_settings );
 	};
 
 	useEffect( () => {
 		if ( !settings.block_json?.path ) {
 			return;
 		}
-		
-		updateLocalPathData( null, settings.block_json?.path );
+
+		getLocalPathData( null, settings.block_json?.path );
 	}, [] );
-
-	const handleOverride = () => {
-		// block.json always use dashicons
-		setIconType( 'dashicons' );
-
-		if ( localBlockData.title ) {
-			document.getElementById( 'title' ).value = localBlockData.title;
-		}
-
-		setSettings( {
-			...settings,
-			description: localBlockData?.description,
-			icon: localBlockData?.icon,
-			category: localBlockData?.category,
-			keywords: localBlockData?.keywords,
-		} );
-
-		setOverrideText( __( 'Updated!' ) );
-		setTimeout( () => {
-			setOverrideText( __( 'Yes, override settings' ) );
-		}, 1000 );
-	};
 
 	useEffect( () => {
 		if ( codeEditor ) {
@@ -296,7 +275,7 @@ const Block = () => {
 			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
 			defaultValue={ settings.block_json?.path }
 			error={ blockPathError }
-			updateFieldData={ updateLocalPathData }
+			updateFieldData={ getLocalPathData }
 			dependency="block_json_enable:true"
 		/>
 
@@ -305,12 +284,12 @@ const Block = () => {
 		{ isNewer &&
 			<DivRow label={ __( 'Synchronize block.json', 'meta-box-builder' ) }>
 				<Flex direction="column">
-					<div>We detected a newer version of <code>block.json</code> from the current folder, do you want to override settings from this path?</div>
+					<div dangerouslySetInnerHTML={{
+						__html: __( 'We detected a newer version of <code>block.json</code> from the current folder, do you want to override settings from this path?', 'meta-box-builder' )
+					}}></div>
 
 					<div>
-						<Button onClick={ handleOverride } variant="secondary" size="small">
-							{ overrideText }
-						</Button>
+						<input name="override_block_json" value={ __( 'Override Block JSON', 'meta-box-builder' ) } type="submit" class="button secondary" />
 					</div>
 				</Flex>
 			</DivRow>

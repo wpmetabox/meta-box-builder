@@ -1,5 +1,6 @@
 import { useState } from "@wordpress/element";
 import DivRow from './DivRow';
+import { __ } from "@wordpress/i18n";
 
 const getIconLabel = icon => {
 	let label = icon.replace( /-/g, ' ' ).trim();
@@ -47,7 +48,7 @@ const Icon = ( { name, componentId, value, setValue, icons = MbbApp.icons, ...re
 		<DivRow htmlFor={ componentId } className="og-icon" { ...rest }>
 			<div className='og-icon-selected'>
 				<span className={ `dashicons dashicons-${ value }` }></span>
-				<input type="search" className="og-icon-search" placeholder="Search..." value={ query } onChange={ event => setQuery( event.target.value ) } />
+				<input type="search" className="og-icon-search" placeholder={ __( 'Search...', 'meta-box-builder' ) } value={ query } onChange={ event => setQuery( event.target.value ) } />
 			</div>
 			<div className="og-icon-items">
 				{

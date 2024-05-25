@@ -48,6 +48,11 @@ select {
 	max-width: none;
 }
 
+input[type=search] {
+	-webkit-appearance: none;
+	outline-offset: -2px;
+}
+
 svg {
 	width: 16px;
 	height: 16px;
