@@ -81,9 +81,9 @@ class Edit extends BaseEditPage {
 		// Save data for JavaScript (serialized arrays).
 		$request     = rwmb_request();
 		$base_parser = new BaseParser;
-		$settings = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
-		$fields   = apply_filters('mbb_save_fields', $request->post('fields'), $request );
-		$data     = apply_filters('mbb_save_data', $request->post('data'), $request );
+		$settings    = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
+		$fields      = apply_filters( 'mbb_save_fields', $request->post( 'fields' ), $request );
+		$data        = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
 
 		$base_parser->set_settings( $settings )->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'settings', $base_parser->get_settings() );

@@ -16,24 +16,23 @@ class Blocks {
 		add_action( 'init', [ $this, 'register_blocks' ] );
 
 		// Add filters to alter the block metadata.
-		add_filter( 'mbb_save_settings', [ $this,'alter_settings'], 10, 2 );
-		add_filter( 'mbb_save_fields', [ $this,'alter_fields'], 10, 2 );
+		add_filter( 'mbb_save_settings', [ $this, 'alter_settings' ], 10, 2 );
+		add_filter( 'mbb_save_fields', [ $this, 'alter_fields' ], 10, 2 );
 		add_filter( 'mbb_save_submitted_data', [ $this, 'alter_submitted_data' ], 10, 2 );
 	}
 
-	public static function get_block_metadata( $request )
-	{
-		$meta_box_settings = $request->post('settings');
-	
+	public static function get_block_metadata( $request ) {
+		$meta_box_settings = $request->post( 'settings' );
+
 		if ( ! isset( $meta_box_settings['block_json'] ) || ! isset( $meta_box_settings['block_json']['path'] ) ) {
 			return;
 		}
 
-		$path = $meta_box_settings['block_json']['path'];
+		$path   = $meta_box_settings['block_json']['path'];
 		$parser = new Settings();
 		$path   = $parser->replace_variables( $path );
 
-		$block_id = $request->post('post_name');
+		$block_id           = $request->post( 'post_name' );
 		$path_to_block_json = $path . '/' . $block_id . '/block.json';
 
 		if ( ! file_exists( $path_to_block_json ) || ! is_readable( $path_to_block_json ) ) {
@@ -48,9 +47,9 @@ class Blocks {
 			return $settings;
 		}
 
-		$block_json = self::get_block_metadata( $request );
+		$block_json                        = self::get_block_metadata( $request );
 		$settings['description']           = $block_json['description'];
-		$icon_type 						   = str_contains( $block_json['icon'], '<svg' ) ? 'svg' : 'dashicons';
+		$icon_type                         = str_contains( $block_json['icon'], '<svg' ) ? 'svg' : 'dashicons';
 		$settings['icon_type']             = $icon_type;
 		$settings['icon']                  = $icon_type === 'dashicons' ? $block_json['icon'] : '';
 		$settings['icon_svg']              = $icon_type === 'svg' ? $block_json['icon'] : '';
@@ -73,11 +72,11 @@ class Blocks {
 
 		foreach ( $attributes as $name => $value ) {
 			if ( is_array( $value ) && isset( $value['meta-box-field'] ) ) {
-				$field = $value['meta-box-field'];
-				$fields[$field['_id']] = $field;
+				$field                 = $value['meta-box-field'];
+				$fields[ $field['_id'] ] = $field;
 			}
 		}
-		
+
 		return $fields;
 	}
 
@@ -87,7 +86,7 @@ class Blocks {
 		}
 
 		$block_json = self::get_block_metadata( $request );
-		
+
 		$post['post_title'] = $block_json['title'];
 		$post['fields']     = $this->alter_fields( $post['fields'], $request );
 		$post['settings']   = $this->alter_settings( $post['settings'], $request );
@@ -131,8 +130,8 @@ class Blocks {
 			if ( ! isset( $meta_box['block_json']['enable'] )
 				|| ! $meta_box['block_json']['enable']
 				|| ! file_exists( $meta_box['block_json']['path']
-				|| isset( $meta_box['function_name'] )
-				|| isset( $meta_box['render_template'] )
+					|| isset( $meta_box['function_name'] )
+					|| isset( $meta_box['render_template'] )
 				) ) {
 				continue;
 			}
@@ -152,9 +151,9 @@ class Blocks {
 		$data['settings']        = is_array( $data['settings'] ) ? $data['settings'] : [];
 
 		$block_json_settings = $data['settings']['block_json'] ?? [ 
-			'enable' 	=> true,
-			'version' 	=> 'v' . time(),
-			'path' 		=> '{{ theme.path }}/blocks',
+			'enable' => true,
+			'version' => 'v' . time(),
+			'path' => '{{ theme.path }}/blocks',
 		];
 
 		$data['settings']['block_json'] = $block_json_settings;
@@ -197,9 +196,9 @@ class Blocks {
 			'icon'        => $settings['icon'] ?? $settings['icon_svg'] ?? 'admin-generic',
 			'keywords'    => $settings['keywords'] ?? [],
 			'supports' => [ 
-				'html'   => false,
-				'anchor' => false,
-				'align'  => true,
+					'html'   => false,
+					'anchor' => false,
+					'align'  => true,
 			],
 		];
 
