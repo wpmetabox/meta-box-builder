@@ -151,9 +151,9 @@ class Blocks {
 		$data['settings']        = is_array( $data['settings'] ) ? $data['settings'] : [];
 
 		$block_json_settings = $data['settings']['block_json'] ?? [ 
-			'enable' => true,
+			'enable'  => true,
 			'version' => 'v' . time(),
-			'path' => '{{ theme.path }}/blocks',
+			'path'    => '{{ theme.path }}/blocks',
 		];
 
 		$data['settings']['block_json'] = $block_json_settings;
@@ -182,7 +182,7 @@ class Blocks {
 		$this->generate_block_package( $settings, $post_id, $raw_data );
 	}
 
-	private function generate_block_metadata( array $settings, array $raw_data ): string {
+	private function generate_block_metadata( array $settings, array $raw_data ): array {
 		$block_id = sanitize_title( $settings['title'] );
 
 		$metadata = [ 
@@ -206,9 +206,7 @@ class Blocks {
 		$attributes             = $this->generate_block_attributes( $raw_data['fields'] );
 		$metadata['attributes'] = $attributes;
 
-		$metadata_json = json_encode( $metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
-
-		return $metadata_json;
+		return $metadata;
 	}
 
 	/**
@@ -302,7 +300,6 @@ class Blocks {
 		$block_path        = trailingslashit( $settings['block_json']['path'] ) . $block_id;
 		$parent_block_path = dirname( $block_path );
 
-
 		if ( ! self::is_future_path_writable( $parent_block_path ) ) {
 			// Return an error message.
 			$data = get_post_meta( $post_id, 'data', true );
@@ -322,11 +319,35 @@ class Blocks {
 			wp_mkdir_p( $block_path );
 		}
 
-		$block_metadata = $this->generate_block_metadata( $settings, $raw_data );
+		$new_metadata = $this->generate_block_metadata( $settings, $raw_data );
 
-		// Save the block metadata to the block folder.
-		file_put_contents( "$block_path/block.json", $block_metadata );
-		chmod( $block_path . '/block.json', 0664 );
+		// Compare old and new block metadata, and save the new one if it's newer.
+		$block_json_path = $block_path . '/block.json';
+		$current_metadata = json_decode( file_get_contents( $block_json_path ), true );
+
+		$is_newer = false;
+
+		foreach ( $current_metadata as $key => $value ) {
+			if ( $key === 'version' ) continue;
+
+			if ( ! isset( $new_metadata[$key] ) || $new_metadata[$key] !== $value ) {
+				$is_newer = true;
+				break;
+			}
+		}
+
+		if ( ! $is_newer ) {
+			return;
+		}
+
+		// Save the new version back to the post meta.
+		$settings = get_post_meta( $post_id, 'settings', true );
+		$settings['block_json']['version'] = $new_metadata['version'];
+		update_post_meta( $post_id, 'settings', $settings );
+
+		$new_metadata = json_encode( $new_metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+		file_put_contents( $block_json_path, $new_metadata );
+		chmod( $block_json_path, 0664 );
 	}
 
 	/**

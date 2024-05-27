@@ -279,7 +279,7 @@ const Block = () => {
 			dependency="block_json_enable:true"
 		/>
 
-		<input type="hidden" name="settings[block_json][version]" value={ 'v' + ( Math.floor( Date.now() / 1000 ) ) } />
+		<input type="hidden" name="settings[block_json][version]" value={ settings.block_json?.version } />
 
 		{ isNewer &&
 			<DivRow label={ __( 'Synchronize block.json', 'meta-box-builder' ) }>
