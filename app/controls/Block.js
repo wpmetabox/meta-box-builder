@@ -289,7 +289,17 @@ const Block = () => {
 					}}></div>
 
 					<div>
-						<input name="override_block_json" value={ __( 'Override Block JSON', 'meta-box-builder' ) } type="submit" class="button secondary" />
+						<input 
+                            name="override_block_json" 
+                            value={ __( 'Override Block JSON', 'meta-box-builder' ) } 
+                            type="submit" 
+                            class="button secondary" 
+                            onClick={(e) => {
+                                if ( ! confirm( __( 'Are you sure you want to override the block.json settings?', 'meta-box-builder' ) ) ) {
+                                    e.preventDefault();
+                                }
+                            }}
+                        />
 					</div>
 				</Flex>
 			</DivRow>

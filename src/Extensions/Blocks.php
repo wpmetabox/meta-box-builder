@@ -323,18 +323,23 @@ class Blocks {
 
 		// Compare old and new block metadata, and save the new one if it's newer.
 		$block_json_path = $block_path . '/block.json';
-		$current_metadata = json_decode( file_get_contents( $block_json_path ), true );
 
-		$is_newer = false;
+        $is_newer = false;
 
-		foreach ( $current_metadata as $key => $value ) {
-			if ( $key === 'version' ) continue;
+        if ( ! file_exists( $block_json_path ) ) {
+            $is_newer = true;    
+        } else {
+            $current_metadata = json_decode( file_get_contents( $block_json_path ), true );
 
-			if ( ! isset( $new_metadata[$key] ) || $new_metadata[$key] !== $value ) {
-				$is_newer = true;
-				break;
-			}
-		}
+            foreach ( $current_metadata as $key => $value ) {
+                if ( $key === 'version' ) continue;
+
+                if ( ! isset( $new_metadata[$key] ) || $new_metadata[$key] !== $value ) {
+                    $is_newer = true;
+                    break;
+                }
+            }
+        }
 
 		if ( ! $is_newer ) {
 			return;
