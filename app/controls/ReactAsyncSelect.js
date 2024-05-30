@@ -2,7 +2,7 @@ import { useState } from "@wordpress/element";
 import AsyncSelect from 'react-select/async';
 import { ensureArray } from '/functions';
 
-const ReactAsyncSelect = ( { baseName, className, defaultValue, ...rest } ) => {
+const ReactAsyncSelect = ( { baseName, isMulti = false, className, defaultValue, ...rest } ) => {
 	const [ labels, setLabels ] = useState( ensureArray( defaultValue.label || [] ) );
 
 	let values = defaultValue.value || [];
@@ -14,23 +14,23 @@ const ReactAsyncSelect = ( { baseName, className, defaultValue, ...rest } ) => {
 	}
 
 	const onChange = items => {
-		const newLabels = Array.isArray( items ) ? items.map( item => item.label ) : [];
+		const newLabels = Array.isArray( items ) ? items.map( item => item.label ) : [items.label];
 		setLabels( newLabels );
 	};
 
 	return <>
 		<AsyncSelect
-			name={ `${ baseName }[value][]` }
+			name={ isMulti ? `${ baseName }[value][]` : `${ baseName }[value]` }
 			className={ `react-select ${ className }` }
 			classNamePrefix="react-select"
-			isMulti
+			isMulti={ isMulti }
 			defaultOptions
-			defaultValue={ transformedDefaultValue }
+			defaultValue={ isMulti ? transformedDefaultValue : defaultValue }
 			onChange={ onChange }
 			{ ...rest }
 		/>
 		{
-			labels.map( label => <input key={ label } type="hidden" name={ `${ baseName }[label][]` } defaultValue={ label } /> )
+			labels.map( label => <input key={ label } type="hidden" name={ isMulti ? `${ baseName }[label][]` : `${ baseName }[label]` } defaultValue={ label } /> )
 		}
 	</>;
 };

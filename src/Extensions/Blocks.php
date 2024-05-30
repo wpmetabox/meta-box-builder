@@ -202,6 +202,10 @@ class Blocks {
 			],
 		];
 
+        if ( ! empty ( $settings['render_callback'] ) && str_starts_with( $settings['render_callback'], 'view:' ) ) {
+            $metadata['render'] = $settings['render_callback'];
+        }
+
 		// Add fields to block metadata attributes.
 		$attributes             = $this->generate_block_attributes( $raw_data['fields'] );
 		$metadata['attributes'] = $attributes;
@@ -331,10 +335,10 @@ class Blocks {
         } else {
             $current_metadata = json_decode( file_get_contents( $block_json_path ), true );
 
-            foreach ( $current_metadata as $key => $value ) {
+            foreach ( $new_metadata as $key => $value ) {
                 if ( $key === 'version' ) continue;
 
-                if ( ! isset( $new_metadata[$key] ) || $new_metadata[$key] !== $value ) {
+                if ( ! isset( $current_metadata[$key] ) || $current_metadata[$key] !== $value ) {
                     $is_newer = true;
                     break;
                 }
