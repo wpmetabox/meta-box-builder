@@ -3,6 +3,7 @@ namespace MBB\Extensions;
 
 use MBB\Control;
 use MBB\Helpers\Data;
+use MBBParser\Parsers\Settings;
 
 class Blocks {
 	public function __construct() {
@@ -13,6 +14,90 @@ class Blocks {
 		add_filter( 'mbb_app_data', [ $this, 'add_app_data' ] );
 		add_action( 'mbb_after_save', [ $this, 'generate_block_json' ], 10, 3 );
 		add_action( 'init', [ $this, 'register_blocks' ] );
+
+		// Add filters to alter the block metadata.
+		add_filter( 'mbb_save_settings', [ $this, 'alter_settings' ], 10, 2 );
+		add_filter( 'mbb_save_fields', [ $this, 'alter_fields' ], 10, 2 );
+		add_filter( 'mbb_save_submitted_data', [ $this, 'alter_submitted_data' ], 10, 2 );
+	}
+
+	public static function get_block_metadata( $request ) {
+		$meta_box_settings = $request->post( 'settings' );
+
+		if ( ! isset( $meta_box_settings['block_json'] ) || ! isset( $meta_box_settings['block_json']['path'] ) ) {
+			return;
+		}
+
+		$path   = $meta_box_settings['block_json']['path'];
+		$parser = new Settings();
+		$path   = $parser->replace_variables( $path );
+
+		$block_id           = $request->post( 'post_name' );
+		$path_to_block_json = $path . '/' . $block_id . '/block.json';
+
+		if ( ! file_exists( $path_to_block_json ) || ! is_readable( $path_to_block_json ) ) {
+			return;
+		}
+
+		return json_decode( file_get_contents( $path_to_block_json ), true );
+	}
+
+	public function alter_settings( array $settings, $request ) {
+		if ( ! $this->has_override_block_json( $request ) ) {
+			return $settings;
+		}
+
+		$block_json                        = self::get_block_metadata( $request );
+		$settings['description']           = $block_json['description'];
+		$icon_type                         = str_contains( $block_json['icon'], '<svg' ) ? 'svg' : 'dashicons';
+		$settings['icon_type']             = $icon_type;
+		$settings['icon']                  = $icon_type === 'dashicons' ? $block_json['icon'] : '';
+		$settings['icon_svg']              = $icon_type === 'svg' ? $block_json['icon'] : '';
+		$settings['category']              = $block_json['category'];
+		$settings['keywords']              = $block_json['keywords'];
+		$settings['block_json']['version'] = $block_json['version'];
+
+		return $settings;
+	}
+
+	public function alter_fields( array $fields, $request ) {
+		if ( ! $this->has_override_block_json( $request ) ) {
+			return $fields;
+		}
+
+		$block_json = self::get_block_metadata( $request );
+
+		// Loop through the attributes and get array of fields
+		$attributes = $block_json['attributes'];
+
+		foreach ( $attributes as $name => $value ) {
+			if ( is_array( $value ) && isset( $value['meta-box-field'] ) ) {
+				$field                 = $value['meta-box-field'];
+				$fields[ $field['_id'] ] = $field;
+			}
+		}
+
+		return $fields;
+	}
+
+	public function alter_submitted_data( array $post, $request ) {
+		if ( ! $this->has_override_block_json( $request ) ) {
+			return $post;
+		}
+
+		$block_json = self::get_block_metadata( $request );
+
+		$post['post_title'] = $block_json['title'];
+		$post['fields']     = $this->alter_fields( $post['fields'], $request );
+		$post['settings']   = $this->alter_settings( $post['settings'], $request );
+
+		return $post;
+	}
+
+	private function has_override_block_json( $request ) {
+		$override_block_json = $request->post( 'override_block_json' );
+
+		return ! empty( $override_block_json );
 	}
 
 	public function register_blocks() {
@@ -45,8 +130,8 @@ class Blocks {
 			if ( ! isset( $meta_box['block_json']['enable'] )
 				|| ! $meta_box['block_json']['enable']
 				|| ! file_exists( $meta_box['block_json']['path']
-				|| isset( $meta_box['function_name'] )
-				|| isset( $meta_box['render_template'] )
+					|| isset( $meta_box['function_name'] )
+					|| isset( $meta_box['render_template'] )
 				) ) {
 				continue;
 			}
@@ -66,8 +151,9 @@ class Blocks {
 		$data['settings']        = is_array( $data['settings'] ) ? $data['settings'] : [];
 
 		$block_json_settings = $data['settings']['block_json'] ?? [ 
-			'enable' => true,
-			'path' => '{{ theme.path }}/blocks',
+			'enable'  => true,
+			'version' => 'v' . time(),
+			'path'    => '{{ theme.path }}/blocks',
 		];
 
 		$data['settings']['block_json'] = $block_json_settings;
@@ -76,6 +162,11 @@ class Blocks {
 	}
 
 	public function generate_block_json( $parser, $post_id, $raw_data ) {
+		// Don't generate block JSON if we are syncing from block.json
+		if ( isset( $raw_data['override_block_json'] ) && $raw_data['override_block_json'] ) {
+			return;
+		}
+
 		$settings = $parser->get_settings();
 
 		// Bail if this is not a block.
@@ -91,7 +182,7 @@ class Blocks {
 		$this->generate_block_package( $settings, $post_id, $raw_data );
 	}
 
-	private function generate_block_metadata( array $settings, array $raw_data ): string {
+	private function generate_block_metadata( array $settings, array $raw_data ): array {
 		$block_id = sanitize_title( $settings['title'] );
 
 		$metadata = [ 
@@ -102,12 +193,12 @@ class Blocks {
 			'title'       => $settings['title'] ?? '',
 			'description' => $settings['description'] ?? '',
 			'category'    => $settings['category'] ?? 'common',
-			'icon'        => $settings['icon'] ?? 'admin-generic',
+			'icon'        => $settings['icon'] ?? $settings['icon_svg'] ?? 'admin-generic',
 			'keywords'    => $settings['keywords'] ?? [],
 			'supports' => [ 
-				'html'   => false,
-				'anchor' => false,
-				'align'  => true,
+					'html'   => false,
+					'anchor' => false,
+					'align'  => true,
 			],
 		];
 
@@ -115,9 +206,7 @@ class Blocks {
 		$attributes             = $this->generate_block_attributes( $raw_data['fields'] );
 		$metadata['attributes'] = $attributes;
 
-		$metadata_json = json_encode( $metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
-
-		return $metadata_json;
+		return $metadata;
 	}
 
 	/**
@@ -144,6 +233,7 @@ class Blocks {
 
 			$attributes[ $id ] = [ 
 				'type' => $type,
+				'meta-box-field' => $field,
 			];
 
 			if ( $std ) {
@@ -210,7 +300,6 @@ class Blocks {
 		$block_path        = trailingslashit( $settings['block_json']['path'] ) . $block_id;
 		$parent_block_path = dirname( $block_path );
 
-
 		if ( ! self::is_future_path_writable( $parent_block_path ) ) {
 			// Return an error message.
 			$data = get_post_meta( $post_id, 'data', true );
@@ -230,11 +319,40 @@ class Blocks {
 			wp_mkdir_p( $block_path );
 		}
 
-		$block_metadata = $this->generate_block_metadata( $settings, $raw_data );
+		$new_metadata = $this->generate_block_metadata( $settings, $raw_data );
 
-		// Save the block metadata to the block folder.
-		file_put_contents( "$block_path/block.json", $block_metadata );
-		chmod( $block_path . '/block.json', 0664 );
+		// Compare old and new block metadata, and save the new one if it's newer.
+		$block_json_path = $block_path . '/block.json';
+
+        $is_newer = false;
+
+        if ( ! file_exists( $block_json_path ) ) {
+            $is_newer = true;    
+        } else {
+            $current_metadata = json_decode( file_get_contents( $block_json_path ), true );
+
+            foreach ( $current_metadata as $key => $value ) {
+                if ( $key === 'version' ) continue;
+
+                if ( ! isset( $new_metadata[$key] ) || $new_metadata[$key] !== $value ) {
+                    $is_newer = true;
+                    break;
+                }
+            }
+        }
+
+		if ( ! $is_newer ) {
+			return;
+		}
+
+		// Save the new version back to the post meta.
+		$settings = get_post_meta( $post_id, 'settings', true );
+		$settings['block_json']['version'] = $new_metadata['version'];
+		update_post_meta( $post_id, 'settings', $settings );
+
+		$new_metadata = json_encode( $new_metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+		file_put_contents( $block_json_path, $new_metadata );
+		chmod( $block_json_path, 0664 );
 	}
 
 	/**

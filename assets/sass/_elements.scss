@@ -40,11 +40,17 @@ h3 {
 }
 
 input[type="text"],
+input[type="search"],
 input[type="number"],
 textarea,
 select {
 	width: 100%;
 	max-width: none;
+}
+
+input[type=search] {
+	-webkit-appearance: none;
+	outline-offset: -2px;
 }
 
 svg {
