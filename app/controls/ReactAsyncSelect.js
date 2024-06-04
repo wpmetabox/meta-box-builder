@@ -2,7 +2,7 @@ import { useState } from "@wordpress/element";
 import AsyncSelect from 'react-select/async';
 import { ensureArray } from '/functions';
 
-const ReactAsyncSelect = ( { baseName, isMulti = false, className, defaultValue, ...rest } ) => {
+const ReactAsyncSelect = ( { baseName, isMulti = true, className, defaultValue, ...rest } ) => {
 	const [ labels, setLabels ] = useState( ensureArray( defaultValue.label || [] ) );
 
 	let values = defaultValue.value || [];
