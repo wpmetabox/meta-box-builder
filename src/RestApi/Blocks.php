@@ -22,24 +22,6 @@ class Blocks extends Base {
 		return new \WP_REST_Response( compact( 'is_writable', 'block_settings', 'is_newer' ) );
 	}
 
-    public function views( $request ) {
-        $s = $request->get_param( 's' );
-        
-        $views = get_posts( [
-            'post_type' => 'mb-views',
-            's'         => $s,
-        ] );
-
-        $views = array_map( function( $view ) {
-            return [
-                'value' => $view->post_name,
-                'label' => $view->post_title,
-            ];
-        }, $views );
-
-        return new \WP_REST_Response( $views );
-    }
-
 	/**
 	 * Check if the local file is newer than the working version
 	 */

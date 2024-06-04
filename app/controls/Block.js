@@ -20,11 +20,10 @@ const Block = () => {
     const [ renderWith, setRenderWith ] = useState( settings.render_with || 'callback' );
     const [ codeEditor, setCodeEditor ] = useState();
     
-    const [ renderView, setRenderView ] = useState( settings.render_view || {
-        value: '',
-        label: ''
-    } );
-    
+    const [ views, setViews ] = useState( MbbApp.views );
+    const [ renderView, setRenderView ] = useState( settings.render_view );
+
+    const buttonRef = useRef();
     const codeRef = useRef();
     const objectType = useObjectType( state => state.type );
 
@@ -63,7 +62,28 @@ const Block = () => {
         setBlockPathError( errorMessage );
     };
 
-    const loadOptions = s => fetcher( 'views', { s } );
+    const showAddViewModal = e => {
+        const $this = jQuery( e );
+        
+        $this.rwmbModal( {
+			removeElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
+            isBlockEditor: false,
+            callback: function ($modal, $modalContent) {
+                // Set the default type to block when adding a new view
+                $modalContent.find( '#type' ).val( 'block' );
+            },
+			closeModalCallback: function ( $modal, $input ) {
+                const postName = $modal.find( '#post_name' ).val();
+                const postTitle = $modal.find( '#title' ).val();
+
+                setViews({...views, 
+                    [postName]: postTitle
+                });
+
+				setRenderView( postName );
+			}
+		} );
+    }
 
     useEffect( () => {
         if ( !settings.block_json?.path ) {
@@ -78,6 +98,10 @@ const Block = () => {
             setTimeout( () => codeEditor.refresh(), 3000 );
         }
     }, [ codeEditor ] );
+
+    useEffect( () => {
+        showAddViewModal(buttonRef?.current);
+    }, [ buttonRef.current ] );
 
     return objectType === 'block' && <>
         <Input
@@ -251,14 +275,20 @@ const Block = () => {
         {
             renderWith === 'view' &&
             <DivRow label={ __( 'Render view', 'meta-box-builder' ) }>
-                <ReactAsyncSelect
-                    key={'render_view' + renderWith}
-                    label={ 'value' }
-                    isMulti={ false }
-                    baseName={ 'settings[render_view]' }
-                    defaultValue={ renderView }
-                    loadOptions={ loadOptions }
+                <Select
+                    name="settings[render_view]"
+                    componentId="settings-block-render_view"
+                    options={ views }
+                    value={ renderView }
+                    onChange={ e => setRenderView( e.target.value ) }
                 />
+
+                <button
+                    ref={ buttonRef }
+                    type="button"
+                    class="button secondary rwmb-view-add-button rwmb-modal-add-button" 
+                    data-url={ MbbApp.viewAddUrl }
+                >{__('+ Add View', 'meta-box-builder')}</button>
             </DivRow>
         }
 

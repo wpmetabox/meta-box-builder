@@ -21,7 +21,7 @@ const Select = ( { componentId, name, options, defaultValue, onChange, value, pl
 		>
 			<option value=""></option>
 			{
-				Object.entries( options ).map( ( [ value, label ] ) => <option key={ value } value={ value }>{ label }</option> )
+				Object.entries( options ).map( ( [ optionValue, label ] ) => <option key={ optionValue } value={ optionValue } selected={optionValue === value || optionValue === defaultValue}>{ label }</option> )
 			}
 		</select>
 	</DivRow>;

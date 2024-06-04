@@ -150,8 +150,8 @@ class Settings extends Base {
 		}
         
         if ( 'view' === $this->render_with  ) {
-            if ( ! empty( $this->render_view['value'] ) ) {
-                $this->render_callback = 'view:' . $this->render_view['value'];
+            if ( ! empty( $this->render_view ) ) {
+                $this->render_callback = 'view:' . $this->render_view;
             }
             
             unset( $this->render_template );

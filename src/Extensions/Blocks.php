@@ -157,6 +157,8 @@ class Blocks {
 		];
 
 		$data['settings']['block_json'] = $block_json_settings;
+        $data['views'] = Data::get_views();
+        $data['viewAddUrl'] = admin_url('post-new.php?post_type=mb-views');
 
 		return $data;
 	}
