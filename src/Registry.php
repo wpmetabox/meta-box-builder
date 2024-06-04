@@ -221,6 +221,8 @@ class Registry {
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 				'keys'    => [ 'object_ids', 'orderby', 'order', 'hide_empty', 'include', 'exclude', 'exclude_tree', 'number', 'offset', 'name', 'slug', 'hierarchical', 'search', 'name__like', 'description__like', 'child_of', 'parent', 'childless', 'meta_key', 'meta_value', 'meta_compare' ],
 				'values'  => [
+					'order'        => [ 'ASC', 'DESC' ],
+					'exclude_tree' => [ '[]' ],
 					'hide_empty'   => [ 'true', 'false' ],
 					'hierarchical' => [ 'true', 'false' ],
 					'childless'    => [ 'true', 'false' ],
@@ -231,6 +233,8 @@ class Registry {
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
 				'keys'    => [ 'object_ids', 'orderby', 'order', 'hide_empty', 'include', 'exclude', 'exclude_tree', 'number', 'offset', 'name', 'slug', 'hierarchical', 'search', 'name__like', 'description__like', 'child_of', 'parent', 'childless', 'meta_key', 'meta_value', 'meta_compare' ],
 				'values'  => [
+					'order'        => [ 'ASC', 'DESC' ],
+					'exclude_tree' => [ '[]' ],
 					'hide_empty'   => [ 'true', 'false' ],
 					'hierarchical' => [ 'true', 'false' ],
 					'childless'    => [ 'true', 'false' ],
@@ -295,7 +299,6 @@ class Registry {
 				'keys'    => [ 'mode', 'width', 'palettes' ],
 				'values'  => [
 					'mode'     => [ 'hsl', 'hsv' ],
-					'palettes' => [ 'true', 'false' ]
 				],
 			] ),
 
@@ -452,13 +455,14 @@ class Registry {
 					'meta_query.0.type',
 				],
 				'values'  => [
-					'author_name'   => [ 'user_nicename' ],
-					'category_name' => [ 'slug' ],
-					'tag'           => [ 'slug' ],
-					'has_password'  => [ 'true', 'false' ],
-					'nopaging'      => [ 'true', 'false' ],
-					'order'         => [ 'ASC', 'DESC' ],
-					'default'       => [
+					'author_name'          => [ 'user_nicename' ],
+					'has_password'         => [ 'true', 'false' ],
+					'nopaging'             => [ 'true', 'false' ],
+					'order'                => [ 'ASC', 'DESC' ],
+					'meta_compare'         => [  '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'meta_query.0.compare' => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS' ],
+					'meta_query.0.type'    => [ 'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ],
+					'default'              => [
 						'true',
 						'false',
 						'AND',
@@ -525,7 +529,6 @@ class Registry {
 				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
 				'keys'    => [ 'ajax', 'allowClear', 'closeOnSelect', 'dir', 'disabled', 'dropdownAutoWidth', 'dropdownCssClass', 'language', 'maximumInputLength', 'maximumSelectionLength', 'minimumInputLength', 'minimumResultsForSearch', 'selectionCssClass', 'selectOnClose', 'width', 'scrollAfterSelect' ],
 				'values'  => [
-					'ajax'              => [ 'null' ],
 					'allowClear'        => [ 'true', 'false' ],
 					'closeOnSelect'     => [ 'true', 'false' ],
 					'disabled'          => [ 'true', 'false' ],
@@ -539,7 +542,6 @@ class Registry {
 				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
 				'keys'    => [ 'ajax', 'allowClear', 'closeOnSelect', 'dir', 'disabled', 'dropdownAutoWidth', 'dropdownCssClass', 'language', 'maximumInputLength', 'maximumSelectionLength', 'minimumInputLength', 'minimumResultsForSearch', 'selectionCssClass', 'selectOnClose', 'width', 'scrollAfterSelect' ],
 				'values'  => [
-					'ajax'              => [ 'null' ],
 					'allowClear'        => [ 'true', 'false' ],
 					'closeOnSelect'     => [ 'true', 'false' ],
 					'disabled'          => [ 'true', 'false' ],
