@@ -11,7 +11,7 @@ const AddressField = ( { name, componentId, placeholder, defaultValue, ...rest }
 
 	const handleSelectItem = ( inputRef, value ) => {
 		const address = !inputRef.current.value ? '' : inputRef.current.value + ',';
-		inputRef.current.value = address + `${ settings.prefix }${ value }`;
+		inputRef.current.value = address + `${ settings.prefix || '' }${ value }`;
 	};
 
 	return (
