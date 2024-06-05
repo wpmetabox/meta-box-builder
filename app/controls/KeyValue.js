@@ -48,7 +48,7 @@ const Item = ( { name, keysList, valuesList, item, remove, keyPlaceholder, value
 		inputRef.current.value = value;
 
 		const newValuesList = objectDepth( valuesList ) == 1 ? valuesList : valuesList[ value ] ? valuesList[ value ] : valuesList['default'];
-		newValuesList && setValues( newValuesList );
+		setValues( newValuesList || [] );
 	};
 
 	return (
