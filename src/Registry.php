@@ -9,7 +9,7 @@ use MetaBox\Support\Arr;
 
 class Registry {
 	private $field_types = [];
-	private $controls = [];
+	private $controls    = [];
 
 	/**
 	 * Register all default controls, so we can refer to them by id later.
@@ -157,7 +157,7 @@ class Registry {
 				'values'  => [
 					'dateFormat'      => [ 'yy-mm-dd', 'mm/dd/yy', 'dd-mm-yy' ],
 					'showButtonPanel' => [ 'true', 'false' ],
-				]
+				],
 			] ),
 			'js_options_datetime'          => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
@@ -166,7 +166,7 @@ class Registry {
 				'values'  => [
 					'dateFormat'      => [ 'yy-mm-dd HH:mm', 'mm/dd/yy HH:mm', 'dd-mm-yy HH:mm' ],
 					'showButtonPanel' => [ 'true', 'false' ],
-				]
+				],
 			] ),
 
 			// Map.
@@ -219,24 +219,75 @@ class Registry {
 			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
-				'keys'    => [ 'object_ids', 'orderby', 'order', 'hide_empty', 'include', 'exclude', 'exclude_tree', 'number', 'offset', 'name', 'slug', 'hierarchical', 'search', 'name__like', 'description__like', 'child_of', 'parent', 'childless', 'meta_key', 'meta_value', 'meta_compare' ],
+				'keys'    => [
+					'object_ids',
+					'orderby',
+					'order',
+					'hide_empty',
+					'include',
+					'exclude',
+					'exclude_tree',
+					'number',
+					'offset',
+					'name',
+					'slug',
+					'hierarchical',
+					'search',
+					'name__like',
+					'description__like',
+					'child_of',
+					'parent',
+					'childless',
+					'meta_key',
+					'meta_value',
+					'meta_compare',
+				],
 				'values'  => [
-					'order'        => [ 'ASC', 'DESC' ],
-					'hide_empty'   => [ 'true', 'false' ],
-					'hierarchical' => [ 'true', 'false' ],
-					'childless'    => [ 'true', 'false' ],
+					'order'                => [ 'ASC', 'DESC' ],
+					'hide_empty'           => [ 'true', 'false' ],
+					'hierarchical'         => [ 'true', 'false' ],
+					'childless'            => [ 'true', 'false' ],
+					'meta_compare'         => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'meta_query.relation'  => [ 'AND', 'OR' ],
+					'meta_query.0.compare' => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS' ],
+					'meta_query.0.type'    => [ 'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ],
 				],
 			] ),
 			'query_args_taxonomy_advanced' => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
-				'keys'    => [ 'object_ids', 'orderby', 'order', 'hide_empty', 'include', 'exclude', 'exclude_tree', 'number', 'offset', 'name', 'slug', 'hierarchical', 'search', 'name__like', 'description__like', 'child_of', 'parent', 'childless', 'meta_key', 'meta_value', 'meta_compare' ],
+				'keys'    => [
+					'object_ids',
+					'orderby',
+					'order',
+					'hide_empty',
+					'include',
+					'exclude',
+					'exclude_tree',
+					'number',
+					'offset',
+					'name',
+					'slug',
+					'hierarchical',
+					'search',
+					'name__like',
+					'description__like',
+					'child_of',
+					'parent',
+					'childless',
+					'meta_key',
+					'meta_value',
+					'meta_compare',
+				],
 				'values'  => [
-					'order'        => [ 'ASC', 'DESC' ],
-					'exclude_tree' => [ '[]' ],
-					'hide_empty'   => [ 'true', 'false' ],
-					'hierarchical' => [ 'true', 'false' ],
-					'childless'    => [ 'true', 'false' ],
+					'order'                => [ 'ASC', 'DESC' ],
+					'hide_empty'           => [ 'true', 'false' ],
+					'hierarchical'         => [ 'true', 'false' ],
+					'childless'            => [ 'true', 'false' ],
+					'meta_compare'         => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'meta_query.relation'  => [ 'AND', 'OR' ],
+					'meta_query.0.compare' => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS' ],
+					'meta_query.0.type'    => [ 'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ],
 				],
 			] ),
 
@@ -297,7 +348,7 @@ class Registry {
 				'tooltip' => __( 'Color picker options', 'meta-box-builder' ),
 				'keys'    => [ 'mode', 'width', 'palettes' ],
 				'values'  => [
-					'mode'     => [ 'hsl', 'hsv' ],
+					'mode' => [ 'hsl', 'hsv' ],
 				],
 			] ),
 
@@ -457,8 +508,11 @@ class Registry {
 					'author_name'          => [ 'user_nicename' ],
 					'has_password'         => [ 'true', 'false' ],
 					'nopaging'             => [ 'true', 'false' ],
+					'ignore_sticky_posts'  => [ 'true', 'false' ],
 					'order'                => [ 'ASC', 'DESC' ],
-					'meta_compare'         => [  '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'tax_query.relation'   => [ 'AND', 'OR' ],
+					'meta_compare'         => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'meta_query.relation'  => [ 'AND', 'OR' ],
 					'meta_query.0.compare' => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS' ],
 					'meta_query.0.type'    => [ 'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ],
 					'default'              => [
@@ -612,7 +666,7 @@ class Registry {
 				'values'  => [
 					'controlType' => [ 'select', 'slider' ],
 					'timeFormat'  => [ 'HH:mm', 'HH:mm T' ],
-				]
+				],
 			] ),
 
 			// User.
@@ -657,9 +711,13 @@ class Registry {
 					'login__not_in',
 				],
 				'values'  => [
-					'order'    => [ 'ASC', 'DESC' ],
-					'nicename' => 'user_nicename',
-					'default'  => [
+					'order'                => [ 'ASC', 'DESC' ],
+					'nicename'             => 'user_nicename',
+					'meta_compare'         => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'meta_query.relation'  => [ 'AND', 'OR' ],
+					'meta_query.0.compare' => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS' ],
+					'meta_query.0.type'    => [ 'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ],
+					'default'              => [
 						'ID',
 						'display_name',
 						'include',
@@ -687,7 +745,7 @@ class Registry {
 		];
 
 		foreach ( $controls as $id => $control ) {
-			$id = is_string( $id ) ? $id : $control[ 'setting' ];
+			$id = is_string( $id ) ? $id : $control['setting'];
 			$this->add_control( $id, $control );
 		}
 	}
@@ -722,7 +780,7 @@ class Registry {
 	 */
 	public function transform_controls() {
 		foreach ( $this->field_types as $type => &$field_type ) {
-			foreach ( $field_type[ 'controls' ] as &$control ) {
+			foreach ( $field_type['controls'] as &$control ) {
 				$control = $this->get_control( $control, $type );
 			}
 		}
@@ -794,7 +852,7 @@ class Registry {
 		$post_types = Helpers\Data::get_post_types();
 		$options    = [];
 		foreach ( $post_types as $post_type ) {
-			$options[ $post_type[ 'slug' ] ] = sprintf( '%s (%s)', $post_type[ 'name' ], $post_type[ 'slug' ] );
+			$options[ $post_type['slug'] ] = sprintf( '%s (%s)', $post_type['name'], $post_type['slug'] );
 		}
 		return $options;
 	}
@@ -803,7 +861,7 @@ class Registry {
 		$taxonomies = Helpers\Data::get_taxonomies();
 		$options    = [];
 		foreach ( $taxonomies as $taxonomy ) {
-			$options[ $taxonomy[ 'slug' ] ] = sprintf( '%s (%s)', $taxonomy[ 'name' ], $taxonomy[ 'slug' ] );
+			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
 		}
 		return $options;
 	}
