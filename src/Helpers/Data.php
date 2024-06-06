@@ -56,32 +56,32 @@ class Data {
 		return $templates;
 	}
 
-    public static function get_views(): array {
-        $query = new \WP_Query( [
-            'post_type'              => 'mb-views',
-            'posts_per_page'         => -1,
-            'orderby'                => 'title',
-            'order'                  => 'ASC',
-            'no_found_rows'          => true,
-            'update_post_meta_cache' => false,
-            'update_post_term_cache' => false,
-            'meta_query' => [
-                [
-                    'key'       => 'type',
-                    'value'     => 'block',
-                ],
-            ],
+	public static function get_views(): array {
+		$query = new \WP_Query( [
+			'post_type'              => 'mb-views',
+			'posts_per_page'         => -1,
+			'orderby'                => 'title',
+			'order'                  => 'ASC',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+			'meta_query' => [
+				[
+					'key'       => 'type',
+					'value'     => 'block',
+				],
+			],
 
-        ] );
+		] );
 
-        $views = [];
+		$views = [];
 
-        foreach ( $query->posts as $post ) {
-            $views[ $post->post_name ] = $post->post_title;
-        }
+		foreach ( $query->posts as $post ) {
+			$views[ $post->post_name ] = $post->post_title;
+		}
 
-        return $views;
-    }
+		return $views;
+	}
 
 	public static function get_post_formats() {
 		if ( ! current_theme_supports( 'post-formats' ) ) {
