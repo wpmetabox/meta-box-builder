@@ -101,7 +101,7 @@ const Block = () => {
 
     useEffect( () => {
         showAddViewModal(buttonRef?.current);
-    }, [ buttonRef.current ] );
+    }, [ buttonRef.current, renderWith ] );
 
     return objectType === 'block' && <>
         <Input
@@ -283,12 +283,13 @@ const Block = () => {
                     onChange={ e => setRenderView( e.target.value ) }
                 />
 
-                <button
+                <a
+                    href="#"
                     ref={ buttonRef }
-                    type="button"
-                    class="button secondary rwmb-view-add-button rwmb-modal-add-button" 
+                    role="button"
+                    class="rwmb-view-add-button rwmb-modal-add-button" 
                     data-url={ MbbApp.viewAddUrl }
-                >{__('+ Add View', 'meta-box-builder')}</button>
+                >{__('+ Add View', 'meta-box-builder')}</a>
             </DivRow>
         }
 
