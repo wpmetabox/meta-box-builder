@@ -1,3 +1,4 @@
+import { Flex } from "@wordpress/components";
 import { RawHTML, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
@@ -11,15 +12,13 @@ import ReactSelect from './ReactSelect';
 import Select from './Select';
 import Textarea from './Textarea';
 import { ensureArray } from '/functions';
-import { Flex } from "@wordpress/components";
-import ReactAsyncSelect from './ReactAsyncSelect';
 
 const Block = () => {
     const [ settings, setSettings ] = useState( getSettings() );
     const [ iconType, setIconType ] = useState( settings.icon_type || 'dashicons' );
     const [ renderWith, setRenderWith ] = useState( settings.render_with || 'callback' );
     const [ codeEditor, setCodeEditor ] = useState();
-    
+
     const [ views, setViews ] = useState( MbbApp.views );
     const [ renderView, setRenderView ] = useState( settings.render_view );
 
@@ -39,9 +38,9 @@ const Block = () => {
 
     /**
      * Get local path data, including whether the path is writable, block.json version.
-     * 
-     * @param any _ 
-     * @param string path 
+     *
+     * @param any _
+     * @param string path
      */
     const getLocalPathData = async ( _, path ) => {
         const postName = document.getElementById( 'post_name' ).value;
@@ -64,26 +63,27 @@ const Block = () => {
 
     const showAddViewModal = e => {
         const $this = jQuery( e );
-        
+
         $this.rwmbModal( {
-			removeElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
+            removeElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
             isBlockEditor: false,
-            callback: function ($modal, $modalContent) {
+            callback: function ( $modal, $modalContent ) {
                 // Set the default type to block when adding a new view
                 $modalContent.find( '#type' ).val( 'block' );
             },
-			closeModalCallback: function ( $modal, $input ) {
+            closeModalCallback: function ( $modal, $input ) {
                 const postName = $modal.find( '#post_name' ).val();
                 const postTitle = $modal.find( '#title' ).val();
 
-                setViews({...views, 
-                    [postName]: postTitle
-                });
+                setViews( {
+                    ...views,
+                    [ postName ]: postTitle
+                } );
 
-				setRenderView( postName );
-			}
-		} );
-    }
+                setRenderView( postName );
+            }
+        } );
+    };
 
     useEffect( () => {
         if ( !settings.block_json?.path ) {
@@ -100,7 +100,7 @@ const Block = () => {
     }, [ codeEditor ] );
 
     useEffect( () => {
-        showAddViewModal(buttonRef?.current);
+        showAddViewModal( buttonRef?.current );
     }, [ buttonRef.current, renderWith ] );
 
     return objectType === 'block' && <>
@@ -274,7 +274,7 @@ const Block = () => {
 
         {
             renderWith === 'view' &&
-            <DivRow label={ __( 'Render view', 'meta-box-builder' ) }>
+            <DivRow label={ __( 'Select a view', 'meta-box-builder' ) } className="og-field--block-view">
                 <Select
                     name="settings[render_view]"
                     componentId="settings-block-render_view"
@@ -287,9 +287,9 @@ const Block = () => {
                     href="#"
                     ref={ buttonRef }
                     role="button"
-                    class="rwmb-view-add-button rwmb-modal-add-button" 
+                    class="rwmb-view-add-button rwmb-modal-add-button"
                     data-url={ MbbApp.viewAddUrl }
-                >{__('+ Add View', 'meta-box-builder')}</a>
+                >{ __( '+ Add View', 'meta-box-builder' ) }</a>
             </DivRow>
         }
 
