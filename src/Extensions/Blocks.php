@@ -157,6 +157,8 @@ class Blocks {
 		];
 
 		$data['settings']['block_json'] = $block_json_settings;
+		$data['views'] = Data::get_views();
+		$data['viewAddUrl'] = admin_url('post-new.php?post_type=mb-views');
 
 		return $data;
 	}
@@ -201,6 +203,10 @@ class Blocks {
 					'align'  => true,
 			],
 		];
+
+		if ( ! empty ( $settings['render_callback'] ) && str_starts_with( $settings['render_callback'], 'view:' ) ) {
+			$metadata['render'] = $settings['render_callback'];
+		}
 
 		// Add fields to block metadata attributes.
 		$attributes             = $this->generate_block_attributes( $raw_data['fields'] );
@@ -324,22 +330,22 @@ class Blocks {
 		// Compare old and new block metadata, and save the new one if it's newer.
 		$block_json_path = $block_path . '/block.json';
 
-        $is_newer = false;
+		$is_newer = false;
 
-        if ( ! file_exists( $block_json_path ) ) {
-            $is_newer = true;    
-        } else {
-            $current_metadata = json_decode( file_get_contents( $block_json_path ), true );
+		if ( ! file_exists( $block_json_path ) ) {
+			$is_newer = true;    
+		} else {
+			$current_metadata = json_decode( file_get_contents( $block_json_path ), true );
 
-            foreach ( $current_metadata as $key => $value ) {
-                if ( $key === 'version' ) continue;
+			foreach ( $new_metadata as $key => $value ) {
+				if ( $key === 'version' ) continue;
 
-                if ( ! isset( $new_metadata[$key] ) || $new_metadata[$key] !== $value ) {
-                    $is_newer = true;
-                    break;
-                }
-            }
-        }
+				if ( ! isset( $current_metadata[$key] ) || $current_metadata[$key] !== $value ) {
+					$is_newer = true;
+					break;
+				}
+			}
+		}
 
 		if ( ! $is_newer ) {
 			return;

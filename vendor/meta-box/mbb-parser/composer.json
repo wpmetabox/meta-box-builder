@@ -1,0 +1,21 @@
+{
+    "name": "meta-box/mbb-parser",
+    "description": "Parse meta box settings from JSON",
+    "type": "library",
+    "repositories": [
+		{
+			"type": "git",
+			"url": "https://github.com/wpmetabox/support.git"
+		}
+	],
+	"config": {
+		"prepend-autoloader": false
+	},
+    "autoload": {
+        "psr-4": {"MBBParser\\": "src/"}
+    },
+    "require": {
+    	"meta-box/support": "dev-master",
+        "riimu/kit-phpencoder": "^2.4"
+    }
+}
