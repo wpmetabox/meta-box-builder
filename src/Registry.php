@@ -9,7 +9,7 @@ use MetaBox\Support\Arr;
 
 class Registry {
 	private $field_types = [];
-	private $controls = [];
+	private $controls    = [];
 
 	/**
 	 * Register all default controls, so we can refer to them by id later.
@@ -63,7 +63,12 @@ class Registry {
 			Control::KeyValue( 'attributes', [
 				'label'   => '<a href="https://docs.metabox.io/custom-attributes/" target="_blank" rel="noreferrer noopener">' . __( 'Custom HTML5 attributes', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
-				'keys'    => [ 'max', 'maxlength', 'min', 'minlength', 'pattern', 'required', 'step', 'type' ],
+				'keys'    => [ 'disabled', 'max', 'maxlength', 'min', 'minlength', 'pattern', 'readonly', 'required', 'step', 'type' ],
+				'values'  => [
+					'disabled' => [ 'true', 'false' ],
+					'readonly' => [ 'true', 'false' ],
+					'required' => [ 'true', 'false' ],
+				],
 			], [], 'advanced' ),
 			Control::KeyValue( 'custom_settings', [
 				'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes">' . __( 'Custom settings', 'meta-box-builder' ) . '</a>',
@@ -150,20 +155,64 @@ class Registry {
 			'js_options_date'              => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'jQueryUI date picker options', 'meta-box-builder' ),
-				'keys'    => [ 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'currentText', 'dateFormat', 'dayNames', 'dayNamesShort', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'nextText', 'numberOfMonths', 'prevText', 'showButtonPanel', 'stepMonths', 'yearRange' ],
+				'keys'    => [
+					'buttonText',
+					'changeMonth',
+					'changeYear',
+					'closeText',
+					'currentText',
+					'dateFormat',
+					'dayNames',
+					'dayNamesShort',
+					'maxDate',
+					'minDate',
+					'monthNames',
+					'monthNamesShort',
+					'nextText',
+					'numberOfMonths',
+					'prevText',
+					'showButtonPanel',
+					'stepMonths',
+					'yearRange',
+				],
 				'values'  => [
-					'dateFormat'      => [ 'yy-mm-dd','mm/dd/yy','dd-mm-yy' ],
-					'showButtonPanel' => [ 'true','false' ],
-				]
+					'changeMonth'     => [ 'true', 'false' ],
+					'changeYear'      => [ 'true', 'false' ],
+					'dateFormat'      => [ 'yy-mm-dd', 'mm/dd/yy', 'dd-mm-yy' ],
+					'showButtonPanel' => [ 'true', 'false' ],
+				],
 			] ),
 			'js_options_datetime'          => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'jQueryUI date and time picker options', 'meta-box-builder' ),
-				'keys'    => [ 'buttonText', 'changeMonth', 'changeYear', 'closeText', 'controlType', 'currentText', 'dateFormat', 'dayNames', 'dayNamesShort', 'maxDate', 'minDate', 'monthNames', 'monthNamesShort', 'nextText', 'numberOfMonths', 'prevText', 'showButtonPanel', 'stepMonths', 'timeFormat', 'yearRange' ],
+				'keys'    => [
+					'buttonText',
+					'changeMonth',
+					'changeYear',
+					'closeText',
+					'controlType',
+					'currentText',
+					'dateFormat',
+					'dayNames',
+					'dayNamesShort',
+					'maxDate',
+					'minDate',
+					'monthNames',
+					'monthNamesShort',
+					'nextText',
+					'numberOfMonths',
+					'prevText',
+					'showButtonPanel',
+					'stepMonths',
+					'timeFormat',
+					'yearRange',
+				],
 				'values'  => [
-					'dateFormat'      => [ 'yy-mm-dd HH:mm','mm/dd/yy HH:mm','dd-mm-yy HH:mm' ],
-					'showButtonPanel' => [ 'true','false' ],
-				]
+					'changeMonth'     => [ 'true', 'false' ],
+					'changeYear'      => [ 'true', 'false' ],
+					'dateFormat'      => [ 'yy-mm-dd HH:mm', 'mm/dd/yy HH:mm', 'dd-mm-yy HH:mm' ],
+					'showButtonPanel' => [ 'true', 'false' ],
+				],
 			] ),
 
 			// Map.
@@ -216,14 +265,76 @@ class Registry {
 			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
-				'keys'    => [ 'object_ids', 'orderby', 'order', 'hide_empty', 'include', 'exclude', 'exclude_tree', 'number', 'offset', 'name', 'slug', 'hierarchical', 'search', 'name__like', 'description__like', 'child_of', 'parent', 'childless', 'meta_key', 'meta_value', 'meta_compare' ],
-				'values'  => [ 'true', 'false' ],
+				'keys'    => [
+					'object_ids',
+					'orderby',
+					'order',
+					'hide_empty',
+					'include',
+					'exclude',
+					'exclude_tree',
+					'number',
+					'offset',
+					'name',
+					'slug',
+					'hierarchical',
+					'search',
+					'name__like',
+					'description__like',
+					'child_of',
+					'parent',
+					'childless',
+					'meta_key',
+					'meta_value',
+					'meta_compare',
+				],
+				'values'  => [
+					'order'                => [ 'ASC', 'DESC' ],
+					'hide_empty'           => [ 'true', 'false' ],
+					'hierarchical'         => [ 'true', 'false' ],
+					'childless'            => [ 'true', 'false' ],
+					'meta_compare'         => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'meta_query.relation'  => [ 'AND', 'OR' ],
+					'meta_query.0.compare' => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS' ],
+					'meta_query.0.type'    => [ 'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ],
+				],
 			] ),
 			'query_args_taxonomy_advanced' => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
-				'keys'    => [ 'object_ids', 'orderby', 'order', 'hide_empty', 'include', 'exclude', 'exclude_tree', 'number', 'offset', 'name', 'slug', 'hierarchical', 'search', 'name__like', 'description__like', 'child_of', 'parent', 'childless', 'meta_key', 'meta_value', 'meta_compare' ],
-				'values'  => [ 'true', 'false' ],
+				'keys'    => [
+					'object_ids',
+					'orderby',
+					'order',
+					'hide_empty',
+					'include',
+					'exclude',
+					'exclude_tree',
+					'number',
+					'offset',
+					'name',
+					'slug',
+					'hierarchical',
+					'search',
+					'name__like',
+					'description__like',
+					'child_of',
+					'parent',
+					'childless',
+					'meta_key',
+					'meta_value',
+					'meta_compare',
+				],
+				'values'  => [
+					'order'                => [ 'ASC', 'DESC' ],
+					'hide_empty'           => [ 'true', 'false' ],
+					'hierarchical'         => [ 'true', 'false' ],
+					'childless'            => [ 'true', 'false' ],
+					'meta_compare'         => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'meta_query.relation'  => [ 'AND', 'OR' ],
+					'meta_query.0.compare' => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS' ],
+					'meta_query.0.type'    => [ 'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ],
+				],
 			] ),
 
 			// Upload.
@@ -282,7 +393,9 @@ class Registry {
 				'label'   => '<a href="https://automattic.github.io/Iris/" target="_blank" rel="nofollow noopenner">' . __( 'Color picker options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Color picker options', 'meta-box-builder' ),
 				'keys'    => [ 'mode', 'width', 'palettes' ],
-				'values'  => [],
+				'values'  => [
+					'mode' => [ 'hsl', 'hsv' ],
+				],
 			] ),
 
 			// Custom HTML.
@@ -438,62 +551,44 @@ class Registry {
 					'meta_query.0.type',
 				],
 				'values'  => [
-					'true',
-					'false',
-					'AND',
-					'OR',
-					'term_id',
-					'name',
-					'slug',
-					'term_taxonomy_id',
-					'publish',
-					'pending',
-					'draft',
-					'future',
-					'private',
-					'any',
-					'ASC',
-					'DESC',
-					'author',
-					'title',
-					'type',
-					'date',
-					'modified',
-					'parent',
-					'comment_count',
-					'relevance',
-					'menu_order',
-					'meta_value',
-					'meta_value_num',
-					'post__in',
-					'post_name__in',
-					'post_parent__in',
-					'=',
-					'!=',
-					'>',
-					'>=',
-					'<',
-					'<=',
-					'LIKE',
-					'NOT LIKE',
-					'IN',
-					'NOT IN',
-					'BETWEEN',
-					'NOT BETWEEN',
-					'EXISTS',
-					'NOT EXISTS',
-					'REGEXP',
-					'NOT REGEXP',
-					'RLIKE',
-					'NUMERIC',
-					'BINARY',
-					'CHAR',
-					'DATE',
-					'DATETIME',
-					'DECIMAL',
-					'SIGNED',
-					'TIME',
-					'UNSIGNED',
+					'author_name'          => [ 'user_nicename' ],
+					'has_password'         => [ 'true', 'false' ],
+					'nopaging'             => [ 'true', 'false' ],
+					'ignore_sticky_posts'  => [ 'true', 'false' ],
+					'order'                => [ 'ASC', 'DESC' ],
+					'tax_query.relation'   => [ 'AND', 'OR' ],
+					'meta_compare'         => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'meta_query.relation'  => [ 'AND', 'OR' ],
+					'meta_query.0.compare' => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS' ],
+					'meta_query.0.type'    => [ 'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ],
+					'default'              => [
+						'AND',
+						'OR',
+						'term_id',
+						'name',
+						'slug',
+						'term_taxonomy_id',
+						'publish',
+						'pending',
+						'draft',
+						'future',
+						'private',
+						'any',
+						'author',
+						'title',
+						'type',
+						'date',
+						'modified',
+						'parent',
+						'comment_count',
+						'relevance',
+						'menu_order',
+						'meta_value',
+						'meta_value_num',
+						'post__in',
+						'post_name__in',
+						'post_parent__in',
+					],
 				],
 			] ),
 
@@ -501,16 +596,60 @@ class Registry {
 			'js_options_select_advanced'   => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://select2.org/configuration/options-api" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
-				'keys'    => [ 'ajax', 'allowClear', 'closeOnSelect', 'dir', 'disabled', 'dropdownAutoWidth', 'dropdownCssClass', 'language', 'maximumInputLength', 'maximumSelectionLength', 'minimumInputLength', 'minimumResultsForSearch', 'selectionCssClass', 'selectOnClose', 'width', 'scrollAfterSelect' ],
-				'values'  => [ 'true', 'false' ],
+				'keys'    => [
+					'ajax',
+					'allowClear',
+					'closeOnSelect',
+					'dir',
+					'disabled',
+					'dropdownAutoWidth',
+					'dropdownCssClass',
+					'language',
+					'maximumInputLength',
+					'maximumSelectionLength',
+					'minimumInputLength',
+					'minimumResultsForSearch',
+					'scrollAfterSelect',
+					'selectionCssClass',
+					'selectOnClose',
+					'width',
+				],
+				'values'  => [
+					'allowClear'        => [ 'true', 'false' ],
+					'closeOnSelect'     => [ 'true', 'false' ],
+					'disabled'          => [ 'true', 'false' ],
+					'scrollAfterSelect' => [ 'true', 'false' ],
+				],
 			] ),
 
 			// Icon.
 			'js_options_icon'              => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://select2.org/configuration/options-api" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
-				'keys'    => [ 'ajax', 'allowClear', 'closeOnSelect', 'dir', 'disabled', 'dropdownAutoWidth', 'dropdownCssClass', 'language', 'maximumInputLength', 'maximumSelectionLength', 'minimumInputLength', 'minimumResultsForSearch', 'selectionCssClass', 'selectOnClose', 'width', 'scrollAfterSelect' ],
-				'values'  => [ 'true', 'false' ],
+				'keys'    => [
+					'ajax',
+					'allowClear',
+					'closeOnSelect',
+					'dir',
+					'disabled',
+					'dropdownAutoWidth',
+					'dropdownCssClass',
+					'language',
+					'maximumInputLength',
+					'maximumSelectionLength',
+					'minimumInputLength',
+					'minimumResultsForSearch',
+					'scrollAfterSelect',
+					'selectionCssClass',
+					'selectOnClose',
+					'width',
+				],
+				'values'  => [
+					'allowClear'        => [ 'true', 'false' ],
+					'closeOnSelect'     => [ 'true', 'false' ],
+					'disabled'          => [ 'true', 'false' ],
+					'scrollAfterSelect' => [ 'true', 'false' ],
+				],
 			] ),
 			Control::Select( 'icon_set', [
 				'label'   => __( 'Icon set', 'meta-box-builder' ),
@@ -551,7 +690,10 @@ class Registry {
 				'label'   => '<a href="https://api.jqueryui.com/slider" target="_blank" rel="nofollow noopenner">' . __( 'Slider options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'jQueryUI slider options', 'meta-box-builder' ),
 				'keys'    => [ 'animate', 'max', 'min', 'orientation', 'step' ],
-				'values'  => [ 'true', 'false' ],
+				'values'  => [
+					'orientation' => [ 'horizontal', 'vertical' ],
+					'animate'     => [ 'true', 'false', 'fast', 'slow' ],
+				],
 			] ),
 
 			// Switch.
@@ -604,7 +746,7 @@ class Registry {
 				'values'  => [
 					'controlType' => [ 'select', 'slider' ],
 					'timeFormat'  => [ 'HH:mm', 'HH:mm T' ],
-				]
+				],
 			] ),
 
 			// User.
@@ -649,21 +791,26 @@ class Registry {
 					'login__not_in',
 				],
 				'values'  => [
-					'ASC',
-					'DESC',
-					'ID',
-					'display_name',
-					'include',
-					'user_login',
-					'login__in',
-					'user_nicename',
-					'nicename__in',
-					'user_email',
-					'user_url',
-					'user_registered',
-					'post_count',
-					'meta_value',
-					'meta_value_num',
+					'order'                => [ 'ASC', 'DESC' ],
+					'nicename'             => 'user_nicename',
+					'meta_compare'         => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'NOT EXISTS', 'REGEXP', 'NOT REGEXP', 'RLIKE' ],
+					'meta_query.relation'  => [ 'AND', 'OR' ],
+					'meta_query.0.compare' => [ '=', '!=', '>', '>=', '<', '<=', 'LIKE', 'NOT LIKE', 'IN', 'NOT IN', 'BETWEEN', 'NOT BETWEEN', 'EXISTS', 'NOT EXISTS' ],
+					'meta_query.0.type'    => [ 'NUMERIC', 'BINARY', 'CHAR', 'DATE', 'DATETIME', 'DECIMAL', 'SIGNED', 'TIME', 'UNSIGNED' ],
+					'default'              => [
+						'ID',
+						'display_name',
+						'include',
+						'user_login',
+						'login__in',
+						'nicename__in',
+						'user_email',
+						'user_url',
+						'user_registered',
+						'post_count',
+						'meta_value',
+						'meta_value_num',
+					],
 				],
 			] ),
 
@@ -672,13 +819,18 @@ class Registry {
 			'options_wysiwyg'              => Control::KeyValue( 'options', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/functions/wp_editor/" target="_blank" rel="nofollow noopenner">' . __( 'Editor options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'The editor options, the same as settings for wp_editor() function', 'meta-box-builder' ),
-				'keys'    => [ 'media_buttons', 'default_editor', 'textarea_rows', 'teeny', 'quicktags' ],
-				'values'  => [ 'true', 'false', 'tinymce', 'html' ],
+				'keys'    => [ 'media_buttons', 'default_editor', 'drag_drop_upload', 'quicktags', 'textarea_rows', 'teeny' ],
+				'values'  => [
+					'media_buttons'    => [ 'true', 'false' ],
+					'drag_drop_upload' => [ 'true', 'false' ],
+					'teeny'            => [ 'true', 'false' ],
+					'default'          => [ 'true', 'false', 'tinymce', 'html' ],
+				],
 			] ),
 		];
 
 		foreach ( $controls as $id => $control ) {
-			$id = is_string( $id ) ? $id : $control[ 'setting' ];
+			$id = is_string( $id ) ? $id : $control['setting'];
 			$this->add_control( $id, $control );
 		}
 	}
@@ -713,7 +865,7 @@ class Registry {
 	 */
 	public function transform_controls() {
 		foreach ( $this->field_types as $type => &$field_type ) {
-			foreach ( $field_type[ 'controls' ] as &$control ) {
+			foreach ( $field_type['controls'] as &$control ) {
 				$control = $this->get_control( $control, $type );
 			}
 		}
@@ -785,7 +937,7 @@ class Registry {
 		$post_types = Helpers\Data::get_post_types();
 		$options    = [];
 		foreach ( $post_types as $post_type ) {
-			$options[ $post_type[ 'slug' ] ] = sprintf( '%s (%s)', $post_type[ 'name' ], $post_type[ 'slug' ] );
+			$options[ $post_type['slug'] ] = sprintf( '%s (%s)', $post_type['name'], $post_type['slug'] );
 		}
 		return $options;
 	}
@@ -794,7 +946,7 @@ class Registry {
 		$taxonomies = Helpers\Data::get_taxonomies();
 		$options    = [];
 		foreach ( $taxonomies as $taxonomy ) {
-			$options[ $taxonomy[ 'slug' ] ] = sprintf( '%s (%s)', $taxonomy[ 'name' ], $taxonomy[ 'slug' ] );
+			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
 		}
 		return $options;
 	}

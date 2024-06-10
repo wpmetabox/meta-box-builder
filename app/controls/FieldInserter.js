@@ -54,7 +54,7 @@ const FieldInserter = ( { items = [], required = false, className = '', isID = f
 		if ( onSelect ) {
 			onSelect( ref, e.target.dataset.value );
 		} else {
-			ref.current.value = ! isID || exclude.includes( e.target.dataset.value ) ? e.target.dataset.value : `${ settings.prefix }${ e.target.dataset.value }`;
+			ref.current.value = ! isID || exclude.includes( e.target.dataset.value ) ? e.target.dataset.value : `${ settings.prefix || '' }${ e.target.dataset.value }`;
 		}
 	};
 

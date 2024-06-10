@@ -17,7 +17,7 @@ const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) 
 	const handleChange = ( inputRef, value ) => nameIdData.updateGroupTitle( value );
 
 	const handleSelectItem = ( inputRef, value ) => {
-		const title = value === '{#}' ? value : `{${ settings.prefix }${ value }}`;
+		const title = value === '{#}' ? value : `{${ settings.prefix || '' }${ value }}`;
 		inputRef.current.value += title;
 		nameIdData.updateGroupTitle( inputRef.current.value );
 	};
