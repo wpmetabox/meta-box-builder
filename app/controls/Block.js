@@ -13,6 +13,16 @@ import Select from './Select';
 import Textarea from './Textarea';
 import { ensureArray } from '/functions';
 
+const renderWithOptions = {
+    callback: __( 'PHP callback function', 'meta-box-builder' ),
+    template: __( 'Template file', 'meta-box-builder' ),
+    code    : __( 'Code', 'meta-box-builder' ),
+};
+
+if ( MbbApp.extensions.views ) {
+    renderWithOptions[ 'view' ] = __( 'View', 'meta-box-builder' );
+}
+
 const Block = () => {
     const [ settings, setSettings ] = useState( getSettings() );
     const [ iconType, setIconType ] = useState( settings.icon_type || 'dashicons' );
@@ -22,7 +32,7 @@ const Block = () => {
     const [ views, setViews ] = useState( MbbApp.views );
     const [ renderView, setRenderView ] = useState( settings.render_view );
 
-    const buttonRef = useRef();
+    const addViewButtonRef = useRef();
     const codeRef = useRef();
     const objectType = useObjectType( state => state.type );
 
@@ -100,8 +110,8 @@ const Block = () => {
     }, [ codeEditor ] );
 
     useEffect( () => {
-        showAddViewModal( buttonRef?.current );
-    }, [ buttonRef.current, renderWith ] );
+        showAddViewModal( addViewButtonRef?.current );
+    }, [ addViewButtonRef.current, renderWith ] );
 
     return objectType === 'block' && <>
         <Input
@@ -206,12 +216,7 @@ const Block = () => {
             name="settings[render_with]"
             label={ __( 'Render with', 'meta-box-builder' ) }
             componentId="settings-block-render_with"
-            options={ {
-                callback: __( 'PHP callback function', 'meta-box-builder' ),
-                template: __( 'Template file', 'meta-box-builder' ),
-                code: __( 'Code', 'meta-box-builder' ),
-                view: __( 'View', 'meta-box-builder' ),
-            } }
+            options={ renderWithOptions }
             defaultValue={ renderWith }
             onChange={ updateRenderWith }
         />
@@ -273,7 +278,7 @@ const Block = () => {
         }
 
         {
-            renderWith === 'view' &&
+            renderWith === 'view' && MbbApp.extensions.views &&
             <DivRow label={ __( 'Select a view', 'meta-box-builder' ) } className="og-field--block-view">
                 <Select
                     name="settings[render_view]"
@@ -285,7 +290,7 @@ const Block = () => {
 
                 <a
                     href="#"
-                    ref={ buttonRef }
+                    ref={ addViewButtonRef }
                     role="button"
                     class="rwmb-view-add-button rwmb-modal-add-button"
                     data-url={ MbbApp.viewAddUrl }

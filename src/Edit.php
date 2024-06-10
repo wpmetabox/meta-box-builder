@@ -74,6 +74,7 @@ class Edit extends BaseEditPage {
 				'termMeta'           => Data::is_extension_active( 'mb-term-meta' ),
 				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
+                'views'              => Data::is_extension_active( 'mb-views' ),
 			],
 		];
 
