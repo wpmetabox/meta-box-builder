@@ -28,11 +28,7 @@ class RestApi extends Base {
 			// General.
 			Control::Select( 'object_type', [
 				'label'   => __( 'Object type', 'meta-box-builder' ),
-				'options' => [
-					'post' => __( 'Post', 'meta-box-builder' ),
-					'term' => __( 'Term', 'meta-box-builder' ),
-					'user' => __( 'User', 'meta-box-builder' ),
-				],
+				'options' => $this->get_object_type_options(),
 			], 'post' ),
 			Control::Select( 'post_type', [
 				'label'      => __( 'Post type', 'meta-box-builder' ),
@@ -196,6 +192,18 @@ class RestApi extends Base {
 		$options    = [];
 		foreach ( $taxonomies as $taxonomy ) {
 			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
+		}
+		return $options;
+	}
+
+	private function get_object_type_options(): array {
+		$options         = [];
+		$options['post'] = __( 'Post', 'meta-box-builder' );
+		if ( Data::is_extension_active( 'mb-term-meta' ) ) {
+			$options['term'] = __( 'Term', 'meta-box-builder' );
+		}
+		if ( Data::is_extension_active( 'mb-user-meta' ) ) {
+			$options['user'] = __( 'User', 'meta-box-builder' );
 		}
 		return $options;
 	}
