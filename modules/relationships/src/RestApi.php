@@ -28,7 +28,7 @@ class RestApi extends Base {
 			// General.
 			Control::Select( 'object_type', [
 				'label'   => __( 'Object type', 'meta-box-builder' ),
-				'options' => $this->check_extensions(),
+				'options' => $this->get_option_oject_type(),
 			], 'post' ),
 			Control::Select( 'post_type', [
 				'label'      => __( 'Post type', 'meta-box-builder' ),
@@ -196,7 +196,7 @@ class RestApi extends Base {
 		return $options;
 	}
 
-	private function check_extensions() {
+	private function get_option_oject_type() : array {
 		$options           = [];
 		$options[ 'post' ] = __( 'Post', 'meta-box-builder' );
 		if ( Data::is_extension_active( 'mb-term-meta' ) ) {
