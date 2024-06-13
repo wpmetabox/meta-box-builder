@@ -19,20 +19,20 @@ class Blocks {
 		add_filter( 'mbb_save_settings', [ $this, 'alter_settings' ], 10, 2 );
 		add_filter( 'mbb_save_fields', [ $this, 'alter_fields' ], 10, 2 );
 		add_filter( 'mbb_save_submitted_data', [ $this, 'alter_submitted_data' ], 10, 2 );
-        add_filter( 'wp_insert_post_data', [ $this, 'alter_post_data' ], 10, 2 );
+		add_filter( 'wp_insert_post_data', [ $this, 'alter_post_data' ], 10, 2 );
 	}
 
-    public function alter_post_data( $post_data, $post_id ) {
-        if ( ! isset( $_POST['override_block_json'] ) || ! $_POST['override_block_json'] ) {
-            return $post_data;
-        }
-        $request     = rwmb_request();
-        $block_json  = self::get_block_metadata( $request );
+	public function alter_post_data( $post_data, $post_id ) {
+		if ( ! isset( $_POST['override_block_json'] ) || ! $_POST['override_block_json'] ) {
+			return $post_data;
+		}
+		$request     = rwmb_request();
+		$block_json  = self::get_block_metadata( $request );
 
-        $post_data['post_title'] = $block_json['title'];
+		$post_data['post_title'] = $block_json['title'];
 
-        return $post_data;
-    }
+		return $post_data;
+	}
 
 	public static function get_block_metadata( $request ) {
 		$meta_box_settings = $request->post( 'settings' );
@@ -58,7 +58,7 @@ class Blocks {
 		$block_json['version'] = str_replace( 'v', '', $block_json['version'] );
 		$block_json['version'] = version_compare( $block_json['version'], filemtime( $path_to_block_json ), '>' ) ? $block_json['version'] : filemtime( $path_to_block_json );
 
-        return $block_json;
+		return $block_json;
 	}
 
 	public function alter_settings( array $settings, $request ) {
