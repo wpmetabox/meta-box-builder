@@ -75,7 +75,7 @@ const Block = () => {
         const $this = jQuery( e );
 
         $this.rwmbModal( {
-            removeElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
+            hideElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
             isBlockEditor: false,
             callback: function ( $modal, $modalContent ) {
                 // Set the default type to block when adding a new view
