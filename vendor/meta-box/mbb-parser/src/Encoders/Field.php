@@ -14,11 +14,13 @@ class Field {
 	}
 
 	public function encode() {
-		$translatable_fields = [ 'name', 'desc', 'label_description', 'add_button', 'placeholder', 'prefix', 'suffix', 'before', 'after' ];
+		$translatable_fields = [ 'name', 'desc', 'label_description', 'add_button', 'placeholder', 'prefix', 'suffix', 'before', 'after', 'std', 'group_title', 'prepend', 'append' ];
 		array_walk( $translatable_fields, [ $this, 'make_translatable' ] );
 
 		$this->transform_id_prefix();
 		$this->make_options_translatable();
+		$this->make_admin_columns_translatable();
+		$this->make_tooltip_translatable();
 	}
 
 	private function transform_id_prefix() {
@@ -49,6 +51,32 @@ class Field {
 			$label = sprintf( '{translate}%s{/translate}', $label );
 		}
 		$this->options = $options;
+	}
+
+	private function make_admin_columns_translatable() {
+		if ( empty( $this->admin_columns ) || ! is_array( $this->admin_columns ) ) {
+			return;
+		}
+		$admin_columns = $this->admin_columns;
+		foreach ( $admin_columns as $key => &$label ) {
+			if ( in_array( $key, [ 'title', 'before', 'after' ], true ) ) {
+				$label = sprintf( '{translate}%s{/translate}', $label );
+			}
+		}
+		$this->admin_columns = $admin_columns;
+	}
+
+	private function make_tooltip_translatable() {
+		if ( empty( $this->tooltip ) || ! is_array( $this->tooltip ) ) {
+			return;
+		}
+		$tooltips = $this->tooltip;
+		foreach ( $tooltips as $key => &$label ) {
+			if ( $key === 'content' ) {
+				$label = sprintf( '{translate}%s{/translate}', $label );
+			}
+		}
+		$this->tooltip = $tooltips;
 	}
 
 	private function make_translatable( $name ) {

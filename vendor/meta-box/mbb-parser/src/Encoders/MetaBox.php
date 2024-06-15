@@ -66,7 +66,11 @@ class MetaBox {
 			$validation['rules'][ $new_key ] = $value;
 
 			if ( isset( $this->validation['messages'] ) && isset( $this->validation['messages'][ $key ] ) ) {
-				$validation['messages'][ $new_key ] = $this->validation['messages'][ $key ];
+				$messages = $this->validation['messages'][ $key ];
+				foreach ( $messages as $key => $value ) {
+					$messages[ $key ] = sprintf( '{translate}%s{/translate}', $value );
+				}
+				$validation[ 'messages' ][ $new_key ] = $messages;
 			}
 		}
 		$this->validation = $validation;
