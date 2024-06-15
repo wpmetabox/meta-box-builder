@@ -19,6 +19,19 @@ class Blocks {
 		add_filter( 'mbb_save_settings', [ $this, 'alter_settings' ], 10, 2 );
 		add_filter( 'mbb_save_fields', [ $this, 'alter_fields' ], 10, 2 );
 		add_filter( 'mbb_save_submitted_data', [ $this, 'alter_submitted_data' ], 10, 2 );
+		add_filter( 'wp_insert_post_data', [ $this, 'alter_post_data' ], 10, 2 );
+	}
+
+	public function alter_post_data( $post_data, $post_id ) {
+		if ( ! isset( $_POST['override_block_json'] ) || ! $_POST['override_block_json'] ) {
+			return $post_data;
+		}
+		$request     = rwmb_request();
+		$block_json  = self::get_block_metadata( $request );
+
+		$post_data['post_title'] = $block_json['title'];
+
+		return $post_data;
 	}
 
 	public static function get_block_metadata( $request ) {
@@ -39,7 +52,13 @@ class Blocks {
 			return;
 		}
 
-		return json_decode( file_get_contents( $path_to_block_json ), true );
+		$block_json = json_decode( file_get_contents( $path_to_block_json ), true );
+
+		$block_json['version'] = $block_json['version'] ?? 'v0';
+		$block_json['version'] = str_replace( 'v', '', $block_json['version'] );
+		$block_json['version'] = version_compare( $block_json['version'], filemtime( $path_to_block_json ), '>' ) ? $block_json['version'] : filemtime( $path_to_block_json );
+
+		return $block_json;
 	}
 
 	public function alter_settings( array $settings, $request ) {
@@ -55,7 +74,7 @@ class Blocks {
 		$settings['icon_svg']              = $icon_type === 'svg' ? $block_json['icon'] : '';
 		$settings['category']              = $block_json['category'];
 		$settings['keywords']              = $block_json['keywords'];
-		$settings['block_json']['version'] = $block_json['version'];
+		$settings['block_json']['version'] = $block_json['version'] ;
 
 		return $settings;
 	}
@@ -87,7 +106,6 @@ class Blocks {
 
 		$block_json = self::get_block_metadata( $request );
 
-		$post['post_title'] = $block_json['title'];
 		$post['fields']     = $this->alter_fields( $post['fields'], $request );
 		$post['settings']   = $this->alter_settings( $post['settings'], $request );
 
@@ -268,7 +286,7 @@ class Blocks {
 			'key_value',
 		];
 
-		if ( ! isset( $field['type'] ) || ! isset( $field['std'] ) || ! isset( $field['id'] ) ) {
+		if ( ! isset( $field['type'] ) || ! isset( $field['id'] ) ) {
 			return;
 		}
 
