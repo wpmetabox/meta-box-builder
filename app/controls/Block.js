@@ -16,12 +16,18 @@ import { ensureArray } from '/functions';
 const renderWithOptions = {
     callback: __( 'PHP callback function', 'meta-box-builder' ),
     template: __( 'Template file', 'meta-box-builder' ),
-    code    : __( 'Code', 'meta-box-builder' ),
+    code: __( 'Code', 'meta-box-builder' ),
 };
 
 if ( MbbApp.extensions.views ) {
     renderWithOptions[ 'view' ] = __( 'View', 'meta-box-builder' );
 }
+
+const getRenderViewId = ( renderView ) => {
+    const view = Object.values( MbbApp.views )?.find( view => view.post_name === renderView );
+
+    return view ? view.ID : null;
+};
 
 const Block = () => {
     const [ settings, setSettings ] = useState( getSettings() );
@@ -33,6 +39,8 @@ const Block = () => {
     const [ renderView, setRenderView ] = useState( settings.render_view );
 
     const addViewButtonRef = useRef();
+    const editViewButtonRef = useRef();
+
     const codeRef = useRef();
     const objectType = useObjectType( state => state.type );
 
@@ -46,6 +54,25 @@ const Block = () => {
     const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
     const [ isNewer, setIsNewer ] = useState( false );
 
+    const modalConfig = {
+        hideElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
+        isBlockEditor: false,
+        callback: ( $modal, $modalContent ) => {
+            // Set the default type to block when adding a new view
+            $modalContent.find( '#type' ).val( 'block' );
+        },
+        closeModalCallback: ( $modal, $input ) => {
+            const postId = $modal.find( '#post_ID' ).val();
+            const postName = $modal.find( '#post_name' ).val();
+            const postTitle = $modal.find( '#title' ).val();
+
+            setViews( {
+                ...views,
+                [ postId ]: { ID: postId, post_name: postName, post_title: postTitle }
+            } );
+            setRenderView( postName );
+        },
+    };
     /**
      * Get local path data, including whether the path is writable, block.json version.
      *
@@ -71,28 +98,23 @@ const Block = () => {
         setBlockPathError( errorMessage );
     };
 
+    const showEditViewModal = e => {
+        const $this = jQuery( e );
+
+        console.log( getRenderViewId( renderView ) );
+        $this.attr( 'data-url', MbbApp.viewEditUrl + getRenderViewId( renderView ) + '&action=edit' );
+
+        $this.rwmbModal( { ...modalConfig, isEdit: true } );
+    };
+
     const showAddViewModal = e => {
         const $this = jQuery( e );
 
-        $this.rwmbModal( {
-            hideElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
-            isBlockEditor: false,
-            callback: function ( $modal, $modalContent ) {
-                // Set the default type to block when adding a new view
-                $modalContent.find( '#type' ).val( 'block' );
-            },
-            closeModalCallback: function ( $modal, $input ) {
-                const postName = $modal.find( '#post_name' ).val();
-                const postTitle = $modal.find( '#title' ).val();
+        $this.rwmbModal( { ...modalConfig, isEdit: true } );
+    };
 
-                setViews( {
-                    ...views,
-                    [ postName ]: postTitle
-                } );
-
-                setRenderView( postName );
-            }
-        } );
+    const handleSelectView = e => {
+        setRenderView( e.target.value );
     };
 
     useEffect( () => {
@@ -112,6 +134,10 @@ const Block = () => {
     useEffect( () => {
         showAddViewModal( addViewButtonRef?.current );
     }, [ addViewButtonRef.current, renderWith ] );
+
+    useEffect( () => {
+        showEditViewModal( editViewButtonRef?.current );
+    }, [ editViewButtonRef.current, renderWith, renderView ] );
 
     return objectType === 'block' && <>
         <Input
@@ -280,21 +306,34 @@ const Block = () => {
         {
             renderWith === 'view' && MbbApp.extensions.views &&
             <DivRow label={ __( 'Select a view', 'meta-box-builder' ) } className="og-field--block-view">
-                <Select
+                <select
                     name="settings[render_view]"
                     componentId="settings-block-render_view"
-                    options={ views }
                     value={ renderView }
-                    onChange={ e => setRenderView( e.target.value ) }
-                />
+                    onChange={ handleSelectView }
+                >
+                    <option value="">{ __( 'Select a view', 'meta-box-builder' ) }</option>
+                    { Object.entries( views ).map( ( [ id, view ] ) => (
+                        <option data-id={ id } value={ view.post_name }>{ view.post_title }</option>
+                    ) ) }
+                </select>
 
-                <a
-                    href="#"
-                    ref={ addViewButtonRef }
-                    role="button"
-                    class="rwmb-view-add-button rwmb-modal-add-button"
-                    data-url={ MbbApp.viewAddUrl }
-                >{ __( '+ Add View', 'meta-box-builder' ) }</a>
+                <Flex justify="left">
+                    <a
+                        href="#"
+                        ref={ addViewButtonRef }
+                        role="button"
+                        data-url={ MbbApp.viewAddUrl }
+                    >{ __( '+ Add View', 'meta-box-builder' ) }</a>
+
+                    { renderView &&
+                        <a
+                            href="#"
+                            ref={ editViewButtonRef }
+                            role="button"
+                        >{ __( 'Edit View', 'meta-box-builder' ) }</a>
+                    }
+                </Flex>
             </DivRow>
         }
 

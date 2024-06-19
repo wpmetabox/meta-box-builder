@@ -77,7 +77,11 @@ class Data {
 		$views = [];
 
 		foreach ( $query->posts as $post ) {
-			$views[ $post->post_name ] = $post->post_title;
+			$views[ $post->ID ] = [
+                'ID'         => $post->ID,
+                'post_title' => $post->post_title,
+                'post_name'  => $post->post_name,
+            ];
 		}
 
 		return $views;

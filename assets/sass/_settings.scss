@@ -60,6 +60,10 @@
 }
 
 // Block.
-&-field--block-view .og-field {
-	margin-bottom: 0;
+&-field--block-view select {
+	margin-bottom: 4px;
+}
+&-field--block-view a:focus {
+	outline: none;
+	box-shadow: none;
 }
