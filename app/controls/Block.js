@@ -165,9 +165,7 @@ const Block = () => {
                 defaultValue={ settings.icon_svg }
             />
         }
-        { iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" value={ settings.icon } setValue={ ( value ) => {
-            setSettings( { ...settings, icon: value } );
-        } } /> }
+        { iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" defaultValue={ settings.icon } /> }
         {
             iconType === 'dashicons' &&
             <Input
