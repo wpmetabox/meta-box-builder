@@ -104,7 +104,7 @@ class Fields extends Base {
 			'custom_html'       => [
 				'title'       => __( 'Custom HTML', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'std', 'callback' ], $advanced ),
+				'controls'    => array_merge( array_diff( $general, ['id'] ), [ 'std', 'callback' ], $advanced ),
 				'description' => __( 'Output custom HTML content', 'meta-box-builder' ),
 			],
 			'date'              => [
