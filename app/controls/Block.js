@@ -165,9 +165,7 @@ const Block = () => {
                 defaultValue={ settings.icon_svg }
             />
         }
-        { iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" value={ settings.icon } setValue={ ( value ) => {
-            setSettings( { ...settings, icon: value } );
-        } } /> }
+        { iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" defaultValue={ settings.icon } /> }
         {
             iconType === 'dashicons' &&
             <Input
@@ -195,16 +193,14 @@ const Block = () => {
             label={ __( 'Category', 'meta-box-builder' ) }
             componentId="settings-block-category"
             options={ MbbApp.blockCategories }
-            value={ settings.category }
-            onChange={ e => setSettings( { ...settings, category: e.target.value } ) }
+            defaultValue={ settings.category }
         />
         <Input
             name="settings[keywords]"
             label={ __( 'Keywords', 'meta-box-builder' ) }
             componentId="settings-block-keywords"
             tooltip={ __( 'Separate by commas', 'meta-box-builder' ) }
-            value={ settings.keywords }
-            onChange={ e => setSettings( { ...settings, keywords: e.target.value } ) }
+            defaultValue={ settings.keywords }
         />
         <Select
             name="settings[block_context]"
