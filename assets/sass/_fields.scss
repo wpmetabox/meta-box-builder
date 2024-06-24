@@ -431,12 +431,12 @@
 		align-items: center;
 		text-align: center;
 
-		&:hover {
-			cursor: pointer;
+		&:hover .og-icon__select {
+			box-shadow: 0 0 0 1px rgba(0, 0, 0, .3);
+		}
 
-			.og-icon__select {
-				box-shadow: 0 0 0 1px rgba(0, 0, 0, .3);
-			}
+		&:has(input:checked):hover .og-icon__select {
+			box-shadow: none;
 		}
 
 		.og-icon__select {

@@ -2,6 +2,10 @@
 	margin-top: 24px;
 }
 
+label {
+	cursor: pointer;
+}
+
 // Admin color schemes.
 .admin-color-blue {
 	--color-primary: #e1a948;
