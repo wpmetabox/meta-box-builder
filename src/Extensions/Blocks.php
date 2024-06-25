@@ -223,6 +223,11 @@ class Blocks {
 			],
 		];
 
+		// Alignments
+		if ( ! empty( $settings['supports']['align'] ) ) {
+			$metadata['supports']['align'] = $settings['supports']['align'];
+		}
+
 		if ( ! empty ( $settings['render_callback'] ) && str_starts_with( $settings['render_callback'], 'view:' ) ) {
 			$metadata['render'] = $settings['render_callback'];
 		}
@@ -247,7 +252,7 @@ class Blocks {
 		$attributes = [];
 
 		foreach ( $fields as $field ) {
-			$id       = $field['id'];
+			$id       = $field['id'] ?? $field['_id'] ?? null;
 			$type_std = $this->get_field_type_and_default_value( $field );
 
 			if ( is_null( $type_std ) ) {
@@ -287,8 +292,25 @@ class Blocks {
 			'key_value',
 		];
 
+		$field['id'] = $field['id'] ?? $field['_id'] ?? null;
+
 		if ( ! isset( $field['type'] ) || ! isset( $field['id'] ) ) {
 			return;
+		}
+
+		if ( in_array( $field['type'], [ 'number', 'slider', 'range' ] ) ) {
+			$type = 'number';
+			$std  = is_numeric( $field['std'] ) ? $field['std'] : 0;
+		}
+
+		if ( in_array( $field['type'], [ 'checkbox', 'switch' ] ) ) {
+			$type = 'boolean';
+			$std  = isset( $field['std'] ) ?? (bool) $field['std'] ?? null;
+		}
+
+		if ( in_array( $field['type'], [ 'single_image', 'file_input', 'user', 'post' ] ) ) {
+			$type = 'object';
+			$std  = new \stdClass();
 		}
 
 		$is_multiple = ( isset( $field['multiple'] ) && $field['multiple'] )
@@ -299,22 +321,7 @@ class Blocks {
 
 		if ( $is_multiple || $is_cloneable ) {
 			$type = 'array';
-			$std  = is_array( $field['std'] ) ? $field['std'] : [];
-		}
-
-		if ( in_array( $field['type'], [ 'number', 'slider', 'range' ] ) ) {
-			$type = 'number';
-			$std  = is_numeric( $field['std'] ) ? $field['std'] : 0;
-		}
-
-		if ( in_array( $field['type'], [ 'checkbox', 'switch' ] ) ) {
-			$type = 'boolean';
-			$std  = (bool) $field['std'];
-		}
-
-		if ( in_array( $field['type'], [ 'single_image', 'file_input' ] ) ) {
-			$type = 'object';
-			$std  = new \stdClass();
+			$std  = ! empty( $field['std'] ) && is_array( $field['std'] ) ? $field['std'] : [];
 		}
 
 		return [ $type, $std ];
