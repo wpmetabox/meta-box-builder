@@ -223,17 +223,21 @@ class Blocks {
 			],
 		];
 
-		// Alignments
-		if ( ! empty( $settings['supports']['align'] ) ) {
-			$metadata['supports']['align'] = $settings['supports']['align'];
-		}
-
 		if ( ! empty ( $settings['render_callback'] ) && str_starts_with( $settings['render_callback'], 'view:' ) ) {
 			$metadata['render'] = $settings['render_callback'];
 		}
 
 		// Add fields to block metadata attributes.
 		$attributes             = $this->generate_block_attributes( $raw_data['fields'] );
+
+		// Alignments
+		if ( ! empty( $settings['supports']['align'] ) ) {
+			$metadata['supports']['align'] = $settings['supports']['align'];
+			$attributes['align'] = [ 
+				'type' => 'string',
+			];
+		}
+
 		$metadata['attributes'] = $attributes;
 
 		return $metadata;
