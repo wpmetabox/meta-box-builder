@@ -26,7 +26,7 @@ if ( MbbApp.extensions.views ) {
 const getRenderViewId = ( renderView ) => {
     const view = Object.values( MbbApp.views )?.find( view => view.post_name === renderView );
 
-    return view ? view.ID : null;
+    return view?.ID;
 };
 
 const Block = () => {
@@ -101,9 +101,8 @@ const Block = () => {
     const showEditViewModal = e => {
         const $this = jQuery( e );
 
-        console.log( getRenderViewId( renderView ) );
         $this.attr( 'data-url', MbbApp.viewEditUrl + getRenderViewId( renderView ) + '&action=edit' );
-
+        
         $this.rwmbModal( { ...modalConfig, isEdit: true } );
     };
 
