@@ -91,8 +91,9 @@ class Blocks {
 
 		foreach ( $attributes as $name => $value ) {
 			if ( is_array( $value ) && isset( $value['meta-box-field'] ) ) {
-				$field                 = $value['meta-box-field'];
-				$fields[ $field['_id'] ] = $field;
+				$field                 		= $value['meta-box-field'];
+				$field['id'] 		 		= $name;
+				$fields[ $field['_id'] ] 	= $field;
 			}
 		}
 
