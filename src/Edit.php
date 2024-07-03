@@ -44,6 +44,13 @@ class Edit extends BaseEditPage {
 		$fields = get_post_meta( get_the_ID(), 'fields', true ) ?: [];
 		$fields = array_values( $fields );
 
+		// All other fields are false by default, but save_field need to be true by default.
+		$fields = array_map( function ( $field ) {
+			$field['save_field'] = $field['save_field'] ?? true;
+			
+			return $field;
+		}, $fields );
+
 		$data = [
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),

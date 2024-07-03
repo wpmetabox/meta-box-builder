@@ -25,7 +25,7 @@ class Field extends Base {
 		unset( $this->_id );
 
 		// Remove default fields.
-		$this->set_save_field()
+		$this
 			->remove_default( 'save_field', true )
 			->remove_default( 'add_to', 'end' ) // image_advanced.
 			->remove_default( 'image_size', 'thumbnail' ) // image_advanced.
@@ -55,13 +55,6 @@ class Field extends Base {
 
 		$this->settings = apply_filters( 'mbb_field_settings', $this->settings );
 		$this->settings = apply_filters( "mbb_field_settings_{$this->type}", $this->settings );
-	}
-
-	private function set_save_field() {
-		if ( ! isset( $this->settings['save_field'] ) ) {
-			$this->settings['save_field'] = false;
-		}
-		return $this;
 	}
 
 	private function parse_datalist() {
