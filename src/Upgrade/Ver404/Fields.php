@@ -23,9 +23,9 @@ class Fields extends Base {
 		foreach ( $fields as &$field ) {
 			$this->update_field( $field );
 			$id = uniqid();
-			$field['_id'] = $id;
-
-			$new_fields[ $id ] = $field;
+			$field['_id']        = $id;
+			$field['save_field'] = $field['save_field'] ?? true;
+			$new_fields[ $id ]   = $field;
 		}
 		$fields = $new_fields;
 	}

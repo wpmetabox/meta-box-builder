@@ -15,7 +15,7 @@ class Ver404 {
 	private $fields;
 
 	public function __construct() {
-		$this->settings = new Ver404\Settings;
+		$this->settings  = new Ver404\Settings;
 		$this->fields    = new Ver404\Fields;
 	}
 
@@ -40,11 +40,10 @@ class Ver404 {
 		$data = [];
 
 		// Update "settings" and "fields" for JavaScript.
-		$data['settings'] = $this->settings->update( $post );
-		$data['fields'] = $this->fields->update( $post );
-
+		$data['settings']   = $this->settings->update( $post );
+		$data['fields']     = $this->fields->update( $post );
 		$data['post_title'] = $post->post_title;
-		$data['post_name'] = $post->post_name;
+		$data['post_name']  = $post->post_name;
 
 		// Save parsed data for PHP.
 		$parser = new Parser( $data );
