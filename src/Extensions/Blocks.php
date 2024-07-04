@@ -61,7 +61,11 @@ class Blocks {
 		return $block_json;
 	}
 
-	public function alter_settings( array $settings, $request ) {
+	public function alter_settings( ?array $settings, $request ) {
+		if ( ! is_array( $settings ) ) {
+			return $settings;
+		}
+
 		if ( ! $this->has_override_block_json( $request ) ) {
 			return $settings;
 		}
@@ -79,8 +83,8 @@ class Blocks {
 		return $settings;
 	}
 
-	public function alter_fields( array $fields, $request ) {
-		if ( ! $this->has_override_block_json( $request ) ) {
+	public function alter_fields( ?array $fields, $request ) {
+		if ( ! is_array( $fields ) || ! $this->has_override_block_json( $request ) ) {
 			return $fields;
 		}
 
@@ -229,17 +233,21 @@ class Blocks {
 		}
 
 		// Add fields to block metadata attributes.
-		$attributes             = $this->generate_block_attributes( $raw_data['fields'] );
-
+		$attributes = [];
+		if ( isset( $raw_data['fields'] ) && is_array( $raw_data['fields'] ) ) {
+			$attributes             = $this->generate_block_attributes( $raw_data['fields'] );
+		}
+		
+		$align = array_filter( $settings['supports']['align'] );
 		// Alignments
-		if ( ! empty( $settings['supports']['align'] ) ) {
-			$metadata['supports']['align'] = $settings['supports']['align'];
+		if ( ! empty( $align ) ) {
+			$metadata['supports']['align'] = $align;
 			$attributes['align'] = [ 
 				'type' => 'string',
 			];
 		}
 
-		$metadata['attributes'] = $attributes;
+		$metadata['attributes'] = ! empty( $attributes ) ? $attributes : new \stdClass;
 
 		return $metadata;
 	}
@@ -253,7 +261,11 @@ class Blocks {
 	 * 
 	 * @todo: Add support for other field types. For example, enum.
 	 */
-	private function generate_block_attributes( array $fields ) {
+	private function generate_block_attributes( ?array $fields ) {
+		if ( ! is_array( $fields ) ) {
+			return [];
+		}
+
 		$attributes = [];
 
 		foreach ( $fields as $field ) {
