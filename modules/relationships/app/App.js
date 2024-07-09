@@ -9,7 +9,7 @@ const { __ } = wp.i18n;
 const App = () => {
 	useEffect( () => {
 		// Don't submit form when press Enter.
-		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function( e ) {
+		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function ( e ) {
 			if ( e.keyCode == 13 ) {
 				e.preventDefault();
 			}
@@ -26,6 +26,14 @@ const App = () => {
 					<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
 				</TabList>
 				<TabPanel>
+					<Checkbox
+						name="settings[delete_data]"
+						componentId="settings-delete-data"
+						label={ __( 'Delete data in database?' ) }
+						defaultValue={ !!MbbApp.settings.delete_data }
+						className="relationships-plain"
+						description={ __( 'Delete data in database if the relationship is deleted.', 'meta-box-builder' ) }
+					/>
 					<Checkbox
 						name="settings[reciprocal]"
 						componentId="settings-reciprocal"

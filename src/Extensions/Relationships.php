@@ -15,6 +15,7 @@ class Relationships {
 
 		if ( is_admin() ) {
 			new \MBB\Relationships\Edit( 'mb-relationship', __( 'Relationship ID', 'meta-box-builder' ) );
+			new \MBB\Relationships\Delete;
 		}
 	}
 }
