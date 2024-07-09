@@ -27,20 +27,20 @@ const App = () => {
 				</TabList>
 				<TabPanel>
 					<Checkbox
-						name="settings[reciprocal]"
-						componentId="settings-reciprocal"
-						label={ __( 'Reciprocal relationship' ) }
-						defaultValue={ !!MbbApp.settings.reciprocal }
-						className="relationships-plain"
-						description={ __( 'Enable only if two sides of the relationship are the same.', 'meta-box-builder' ) }
-					/>
-					<Checkbox
 						name="settings[delete_data]"
 						componentId="settings-delete-data"
 						label={ __( 'Delete data in database?' ) }
 						defaultValue={ !!MbbApp.settings.delete_data }
 						className="relationships-plain"
 						description={ __( 'Delete data in database if the relationship is deleted.', 'meta-box-builder' ) }
+					/>
+					<Checkbox
+						name="settings[reciprocal]"
+						componentId="settings-reciprocal"
+						label={ __( 'Reciprocal relationship' ) }
+						defaultValue={ !!MbbApp.settings.reciprocal }
+						className="relationships-plain"
+						description={ __( 'Enable only if two sides of the relationship are the same.', 'meta-box-builder' ) }
 					/>
 					{ sides.map( side => <Side key={ side.id } { ...side } /> ) }
 				</TabPanel>
