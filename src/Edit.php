@@ -47,7 +47,7 @@ class Edit extends BaseEditPage {
 		// All other fields are false by default, but save_field need to be true by default.
 		$fields = array_map( function ( $field ) {
 			$field['save_field'] = $field['save_field'] ?? true;
-			
+
 			return $field;
 		}, $fields );
 
@@ -64,6 +64,7 @@ class Edit extends BaseEditPage {
 			'settingsPages' => Data::get_setting_pages(),
 			'templates'     => Data::get_templates(),
 			'icons'         => DataHelper::get_dashicons(),
+			'postType'      => $this->check_screen() ? $_GET['mb-post-type'] : 'post',
 
 			// Extensions check.
 			'extensions'    => [
@@ -81,13 +82,18 @@ class Edit extends BaseEditPage {
 				'termMeta'           => Data::is_extension_active( 'mb-term-meta' ),
 				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
-                'views'              => Data::is_extension_active( 'mb-views' ),
+				'views'              => Data::is_extension_active( 'mb-views' ),
 			],
 		];
 
 		$data = apply_filters( 'mbb_app_data', $data );
 
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
+	}
+
+	public function check_screen() {
+		global $pagenow;
+		return $pagenow == 'post-new.php' && ! empty( $_GET['post_type'] ) && 'meta-box' == $_GET['post_type'] && ! empty( $_GET['mb-post-type'] );
 	}
 
 	public function save( $post_id, $post ) {
