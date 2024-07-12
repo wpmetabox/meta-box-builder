@@ -64,7 +64,7 @@ class Edit extends BaseEditPage {
 			'settingsPages' => Data::get_setting_pages(),
 			'templates'     => Data::get_templates(),
 			'icons'         => DataHelper::get_dashicons(),
-			'postType'      => $this->check_screen() ? $_GET['mb-post-type'] : 'post',
+			'postType'      => $this->getDefaultPostType(),
 
 			// Extensions check.
 			'extensions'    => [
@@ -91,9 +91,12 @@ class Edit extends BaseEditPage {
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}
 
-	public function check_screen() {
-		global $pagenow;
-		return $pagenow == 'post-new.php' && ! empty( $_GET['post_type'] ) && 'meta-box' == $_GET['post_type'] && ! empty( $_GET['mb-post-type'] );
+	public function getDefaultPostType() {
+		if ( get_current_screen()->id == 'meta-box' && get_current_screen()->action == 'add' && ! empty( $_GET['mb-post-type'] ) ) {
+			return $_GET['mb-post-type'];
+		}
+
+		return 'post';
 	}
 
 	public function save( $post_id, $post ) {
