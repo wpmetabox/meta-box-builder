@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import { getSettings } from '../functions';
+import { ensureArray, getSettings } from '../functions';
 
 const sanitize = types => {
-	let t = types && Array.isArray( types ) ? types : [ MbbApp.postType ];
+	let t = types && Array.isArray( types ) ? types : [ 'post' ];
 	// Remove empty value.
 	return t.filter( type => /\S/.test( type ) );
 };
@@ -10,7 +10,7 @@ const sanitize = types => {
 const settings = getSettings();
 
 const usePostTypes = create( set => ( {
-	types: sanitize( settings.post_types ),
+	types: sanitize( ensureArray( settings.post_types || [] ) ),
 	update: types => set( state => ( { types: sanitize( types ) } ) ),
 } ) );
 
