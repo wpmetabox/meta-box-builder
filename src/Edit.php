@@ -47,7 +47,6 @@ class Edit extends BaseEditPage {
 		// All other fields are false by default, but save_field need to be true by default.
 		$fields = array_map( function ( $field ) {
 			$field['save_field'] = $field['save_field'] ?? true;
-			
 			return $field;
 		}, $fields );
 
@@ -81,7 +80,7 @@ class Edit extends BaseEditPage {
 				'termMeta'           => Data::is_extension_active( 'mb-term-meta' ),
 				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
-                'views'              => Data::is_extension_active( 'mb-views' ),
+				'views'              => Data::is_extension_active( 'mb-views' ),
 			],
 		];
 
