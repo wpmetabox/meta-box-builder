@@ -1,4 +1,7 @@
-import { useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { useLayoutEffect, useRef, useState, RawHTML } from '@wordpress/element';
+import { __, sprintf } from "@wordpress/i18n";
+import { fetcher } from "../functions";
+import useApi from "../hooks/useApi";
 import DivRow from './DivRow';
 
 /**
@@ -8,11 +11,27 @@ import DivRow from './DivRow';
 const Id = ( { name, componentId, nameIdData, ...rest } ) => {
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
+	const ids = useApi( 'fields-ids', [] );
+	const [ link, setLink ] = useState();
+	const [ duplicate, setDuplicate ] = useState( false );
 
 	const handleChange = e => {
+		setTimeout( () => checkDuplicateId( e.target.value ), 200 );
 		nameIdData.updateId( e.target.value );
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	};
+
+	const checkDuplicateId = async value => {
+		if( ids[ value ] === undefined ) {
+			return;
+		}
+		setDuplicate( true );
+
+		const editLink = await fetcher( 'post-edit-link', {
+			id: ids[ value ]
+		} );
+		setLink( editLink );
+	}
 
 	useLayoutEffect( () => {
 		if ( selection && ref.current ) {
@@ -31,6 +50,7 @@ const Id = ( { name, componentId, nameIdData, ...rest } ) => {
 				onChange={ handleChange }
 				pattern="[A-Za-z0-9\-_]+"
 			/>
+			{ duplicate && <RawHTML className="og-description og-error">{ sprintf( __( 'This ID value already exists, you should change the value or edit exists Fields Group <a href="%s">here</a>.', 'slim-seo' ), link ) }</RawHTML> }
 		</DivRow>
 	);
 };

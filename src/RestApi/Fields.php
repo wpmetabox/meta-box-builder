@@ -9,6 +9,34 @@ class Fields extends Base {
 		$this->registry = $registry;
 	}
 
+	public function get_fields_ids(): array {
+		$args = array(
+			'post_type' => 'meta-box',
+			'posts_per_page' => -1 // Retrieve all posts
+		);
+		$posts = get_posts( $args );
+		if ( empty( $posts ) ) {
+			return [];
+		}
+
+		$fields = [];
+		foreach ( $posts as $post ) {
+			$post_fields = get_post_meta( $post->ID, 'fields', true ) ?: [];
+			$post_fields = array_values( $post_fields );
+
+			foreach ( $post_fields as $field ) {
+				$fields[ $field['id'] ] = $post->ID;
+			}
+		}
+
+		return $fields;
+	}
+
+	public function post_edit_link( $request ) {
+		$id = $request->get_param( 'id' );
+		return get_edit_post_link( $id );
+	}
+
 	public function get_field_categories() {
 		$categories = [
 			[
