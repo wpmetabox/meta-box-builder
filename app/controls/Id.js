@@ -1,6 +1,5 @@
 import { useLayoutEffect, useRef, useState, RawHTML } from '@wordpress/element';
 import { __, sprintf } from "@wordpress/i18n";
-import { fetcher } from "../functions";
 import useApi from "../hooks/useApi";
 import DivRow from './DivRow';
 
@@ -21,16 +20,12 @@ const Id = ( { name, componentId, nameIdData, ...rest } ) => {
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	};
 
-	const checkDuplicateId = async value => {
+	const checkDuplicateId = value => {
 		if( ids[ value ] === undefined ) {
 			return;
 		}
+		setLink( ids[ value ] );
 		setDuplicate( true );
-
-		const editLink = await fetcher( 'post-edit-link', {
-			id: ids[ value ]
-		} );
-		setLink( editLink );
 	}
 
 	useLayoutEffect( () => {

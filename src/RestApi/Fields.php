@@ -25,16 +25,11 @@ class Fields extends Base {
 			$post_fields = array_values( $post_fields );
 
 			foreach ( $post_fields as $field ) {
-				$fields[ $field['id'] ] = $post->ID;
+				$fields[ $field['id'] ] = get_edit_post_link( $post->ID );
 			}
 		}
 
 		return $fields;
-	}
-
-	public function post_edit_link( $request ) {
-		$id = $request->get_param( 'id' );
-		return get_edit_post_link( $id );
 	}
 
 	public function get_field_categories() {
