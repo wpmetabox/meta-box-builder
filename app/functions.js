@@ -70,6 +70,7 @@ const convert = params => {
 		if ( oldValue !== undefined ) {
 			value = Array.isArray( oldValue ) ? [ ...oldValue, value ] : [ oldValue, value ];
 		}
+		value = value === 'false' ? false : value;
 		dotProp.set( data, key, value );
 	}
 
