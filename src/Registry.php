@@ -94,6 +94,11 @@ class Registry {
 				'tooltip'    => __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
+			Control::Checkbox( 'clone_empty_start', [
+				'label'      => __( 'Clone empty start', 'meta-box-builder' ),
+				'tooltip'    => __( 'Start from no items except the "+ Add more" button', 'meta-box-builder' ),
+				'dependency' => 'clone:true',
+			] ),
 			Control::Input( 'min_clone', [
 				'type'       => 'number',
 				'label'      => __( 'Min number of clones', 'meta-box-builder' ),
