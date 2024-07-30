@@ -9,6 +9,33 @@ class Fields extends Base {
 		$this->registry = $registry;
 	}
 
+	public function get_fields_ids(): array {
+		$args  = [
+			'post_type'              => 'meta-box',
+			'posts_per_page'         => -1, // Retrieve all posts
+			'update_post_term_cache' => false,
+			'no_found_rows'          => true,
+		];
+		$posts = get_posts( $args );
+
+		$fields = [];
+		foreach ( $posts as $post ) {
+			$value       = [
+				'link'  => get_edit_post_link( $post ),
+				'title' => $post->post_title,
+			];
+			$post_fields = get_post_meta( $post->ID, 'fields', true ) ?: [];
+
+			foreach ( $post_fields as $field ) {
+				if ( ! empty( $field['id'] ) ) {
+					$fields[ $field['id'] ] = $value;
+				}
+			}
+		}
+
+		return $fields;
+	}
+
 	public function get_field_categories() {
 		$categories = [
 			[
@@ -104,7 +131,7 @@ class Fields extends Base {
 			'custom_html'       => [
 				'title'       => __( 'Custom HTML', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( array_diff( $general, ['id'] ), [ 'std', 'callback' ], $advanced ),
+				'controls'    => array_merge( array_diff( $general, [ 'id' ] ), [ 'std', 'callback' ], $advanced ),
 				'description' => __( 'Output custom HTML content', 'meta-box-builder' ),
 			],
 			'date'              => [
@@ -326,7 +353,7 @@ class Fields extends Base {
 			'time'              => [
 				'title'       => __( 'Time Picker', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, array_diff( $date, ['timestamp'] ), $clone, $advanced ),
+				'controls'    => array_merge( $general, array_diff( $date, [ 'timestamp' ] ), $clone, $advanced ),
 				'description' => __( 'Time picker', 'meta-box-builder' ),
 			],
 			'user'              => [

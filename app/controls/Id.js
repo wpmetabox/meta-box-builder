@@ -1,4 +1,6 @@
-import { useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { RawHTML, useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { __, sprintf } from "@wordpress/i18n";
+import useApi from "../hooks/useApi";
 import DivRow from './DivRow';
 
 /**
@@ -8,10 +10,22 @@ import DivRow from './DivRow';
 const Id = ( { name, componentId, nameIdData, ...rest } ) => {
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
+	const ids = useApi( 'fields-ids', [] );
+	const [ existingFieldGroup, setExistingFieldGroup ] = useState( {} );
+	const [ duplicate, setDuplicate ] = useState( false );
 
 	const handleChange = e => {
+		setTimeout( () => checkDuplicateId( e.target.value ), 200 );
 		nameIdData.updateId( e.target.value );
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
+	};
+
+	const checkDuplicateId = value => {
+		if ( ids[ value ] === undefined ) {
+			return;
+		}
+		setExistingFieldGroup( ids[ value ] );
+		setDuplicate( true );
 	};
 
 	useLayoutEffect( () => {
@@ -31,6 +45,18 @@ const Id = ( { name, componentId, nameIdData, ...rest } ) => {
 				onChange={ handleChange }
 				pattern="[A-Za-z0-9\-_]+"
 			/>
+			{
+				duplicate &&
+				<RawHTML className="og-description og-error">
+					{
+						sprintf(
+							__( 'This ID already exists in the field group <a href="%s">%s</a>, please change it or edit that field group to avoid duplication.', 'slim-seo' ),
+							existingFieldGroup.link,
+							existingFieldGroup.title
+						)
+					}
+				</RawHTML>
+			}
 		</DivRow>
 	);
 };
