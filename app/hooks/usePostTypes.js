@@ -10,7 +10,7 @@ const sanitize = types => {
 const settings = getSettings();
 
 const usePostTypes = create( set => ( {
-	types: sanitize( ensureArray( settings.post_types || [] ) ),
+	types: sanitize( ensureArray( settings.post_types || [ 'post' ] ) ),
 	update: types => set( state => ( { types: sanitize( types ) } ) ),
 } ) );
 
