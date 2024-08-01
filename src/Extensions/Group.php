@@ -36,7 +36,7 @@ class Group {
 					'tooltip'    => __( 'Use {field_id} for a sub-field value and {#} for the clone index (if the group is cloneable)', 'meta-box-builder' ),
 					'dependency' => 'collapsible:true',
 				] ),
-				'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button',
+				'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'clone_empty_start', 'min_clone', 'max_clone', 'add_button',
 				'before', 'after', 'class', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings',
 			],
 		];
