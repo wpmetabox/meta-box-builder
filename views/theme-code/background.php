@@ -1,6 +1,10 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
-	$this->out( "\$background = \$group[ '" . $field['id'] . "' ] ?? [];" );
+	$this->out( "\$background = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( "echo \$background['color'];" );
 	$this->out( "echo \$background['image'];" );
 	return;

@@ -1,7 +1,11 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	if ( isset( $field['clone'] ) ) {
-		$this->out( "<?php \$values = \$group[ '" . $field['id'] . "' ] ?? [];" );
+		$this->out( "<?php \$values = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( '<?php foreach ( $values as $value ) : ?>' );
 			$this->out( '<div class="my-content"><?= $value ?></div>', 1 );
 		$this->out( '<?php endforeach ?>' );
@@ -9,7 +13,7 @@ if ( $in_group ) {
 		return;
 	}
 
-	$this->out( "echo \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "echo {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 	return;
 }
 

@@ -1,6 +1,10 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
-	$this->out( "\$pairs = \$group[ '" . $field['id'] . "' ] ?? [];" );
+	$this->out( "\$pairs = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( '?>' );
 	$this->out( '<h3>Specification</h3>' );
 	$this->out( '<ul>' );

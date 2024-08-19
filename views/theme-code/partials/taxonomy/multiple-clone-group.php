@@ -1,5 +1,9 @@
 <?php
-$this->out( "\$clones = \$group[ '" . $field['id'] . "' ] ?? [];" );
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
+$this->out( "\$clones = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 $this->out( '?>' );
 $this->out( '<ul>' );
 	$this->out( '<?php foreach ( $clones as $clone ) : ?>', 1 );

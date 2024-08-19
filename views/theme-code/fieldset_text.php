@@ -1,9 +1,13 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	// Displaying in group
 	if ( ! empty( $field['clone'] ) ) {
 		$this->out( '// Displaying field inputs\' values:' );
-		$this->out( "\$clones = \$group[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$clones = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( '?>' );
 
 		$this->out( '<?php foreach ( $clones as $clone ) : ?>' );
@@ -16,7 +20,7 @@ if ( $in_group ) {
 	}
 
 	$this->out( '// Displaying field inputs\' values:' );
-	$this->out( "\$clone = \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$clone = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( "<p>Name: <?= \$clone['name'] ?></p>" );
 	$this->out( "<p>Address: <?= \$clone['address'] ?></p>" );

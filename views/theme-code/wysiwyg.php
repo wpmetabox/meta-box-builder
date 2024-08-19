@@ -1,9 +1,13 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	// Displaying in group
 	if ( isset( $field['clone'] ) ) {
 		// Displaying cloneable values:
-		$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$values = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( 'foreach ( $values as $value ) :' );
 			$this->out( 'echo do_shortcode( wpautop( $value ) );', 1 );
 		$this->out( 'endforeach;', 0, 0 );
@@ -13,7 +17,7 @@ if ( $in_group ) {
 
 	$this->out( '' );
 	$this->out( '// Get Wysiwyg in group' );
-	$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$value = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'echo do_shortcode( wpautop( $value ) );' );
 
 	return;

@@ -1,8 +1,12 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	// Displaying in group
 	if ( ! empty( $field['clone'] ) ) {
-		$this->out( "\$checkboxes = \$group[ '" . $field['id'] . "' ] ?? [];" );
+		$this->out( "\$checkboxes = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( 'foreach ( $checkboxes as $checkbox ) {' );
 			$this->out( 'if ( $checkbox ) {', 1 );
 				$this->out( 'echo \'Checked\';', 2 );
@@ -14,7 +18,7 @@ if ( $in_group ) {
 		return;
 	}
 
-	$this->out( "\$checkbox = \$group[ '" . $field['id'] . "' ] ?? 0;" );
+	$this->out( "\$checkbox = {$group_var}[ '" . $field['id'] . "' ] ?? 0;" );
 	$this->out( 'if ( $checkbox ) {' );
 		$this->out( 'echo \'Checked\';', 1 );
 	$this->out( '} else {' );

@@ -1,5 +1,9 @@
 <?php
-$this->out( "\$post_ids = \$group[ '" . $field['id'] . "' ] ?? [];" );
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
+$this->out( "\$post_ids = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 $this->out( '?>' );
 $this->out( '<h3>Related posts</h3>' );
 $this->out( '<ul>' );

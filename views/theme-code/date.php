@@ -1,7 +1,11 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	if ( ! empty( $field['clone'] ) ) {
-		$this->out( "\$dates = \$group[ '" . $field['id'] . "' ] ?? [];" );
+		$this->out( "\$dates = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( '?>' );
 		$this->out( '<ul>' );
 			$this->out( '<?php foreach ( $dates as $date ) : ?>', 1 );
@@ -16,7 +20,7 @@ if ( $in_group ) {
 	}
 
 	if ( ! empty( $field ['timestamp'] ) ) {
-		$this->out( "\$value = \$group[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$value = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( '?>' );
 		$this->out( '<p>Date: <?= date( \'F j, Y\', $value ) ?></p>' );
 		$this->out( '<?php' );

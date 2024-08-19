@@ -1,7 +1,11 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	if ( ! empty( $field['clone'] ) ) {
-		$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? [];" );
+		$this->out( "\$values = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( '?>' );
 		$this->out( '<ul>' );
 			$this->out( '<?php foreach ( $values as $url ) : ?>', 1 );
@@ -13,7 +17,7 @@ if ( $in_group ) {
 		return;
 	}
 
-	$this->out( "\$url = \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$url = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( '<h3>Youtube video</h3>' );
 	$this->out( '<?= RWMB_OEmbed_Field::get_embed( $url ); ?>' );

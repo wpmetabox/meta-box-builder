@@ -1,7 +1,11 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	if ( isset( $field['clone'] ) ) {
-		$this->out( "\$sidebar_ids = \$group[ '" . $field['id'] . "' ] ?? [];" );
+		$this->out( "\$sidebar_ids = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( 'foreach ( $sidebar_ids as $sidebar_id ) {' );
 			$this->out( 'if ( is_active_sidebar( $sidebar_id ) ) {', 1 );
 				$this->out( 'dynamic_sidebar( $sidebar_id );', 2 );
@@ -11,7 +15,7 @@ if ( $in_group ) {
 		return;
 	}
 
-	$this->out( "\$sidebar_id = \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$sidebar_id = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( 'if ( is_active_sidebar( $sidebar_id ) ) {' );
 		$this->out( 'dynamic_sidebar( $sidebar_id );', 1 );
 	$this->out( '}' );

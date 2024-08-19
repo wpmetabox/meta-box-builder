@@ -1,5 +1,9 @@
 <?php
-$this->out( "\$values = \$group[ '" . $field['id'] . "' ] ?? [];" );
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
+$this->out( "\$values = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 $this->out( '?>' );
 $this->out( '<ul>' );
 	$this->out( '<?php foreach ( $values as $value ) : ?>', 1 );

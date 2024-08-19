@@ -1,12 +1,22 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
 $subfields = $field['fields'] ?? [];
-if ( isset( $field['clone'] ) ) {
-	// Displaying cloneable group:
+
+$clone = ! empty( $field['clone'] );
+[ $var_names, $var_name, $parent_name ] = GroupVars::get_current_group_vars( $clone );
+
+// Cloneable group
+if ( $clone ) {
 	if ( ! $in_group ) {
 		$this->out( '<?php' );
 	}
-	$this->out( "\$groups = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
-	$this->out( 'foreach ( $groups as $group ) {' );
+	if ( $in_group ) {
+		$this->out( "$var_names = {$parent_name}[ '" . $field['id'] . "' ] ?? '';" );
+	} else {
+		$this->out( "$var_names = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
+	}
+	$this->out( "foreach ( $var_names as $var_name ) {" );
 	++$this->size_indent;
 	foreach ( $subfields as $sub_field ) {
 		$this->out( '' );
@@ -19,14 +29,22 @@ if ( isset( $field['clone'] ) ) {
 	if ( ! $in_group ) {
 		$this->out( '?>', 0, 0 );
 	}
+
+	// Done outputing this group? Remove it from the stack.
+	GroupVars::pop();
+
 	return;
 }
 
-// Displaying the value:
+// Non-cloneable group
 if ( ! $in_group ) {
 	$this->out( '<?php' );
 }
-$this->out( "\$group = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
+if ( $in_group ) {
+	$this->out( "$var_names = {$parent_name}[ '" . $field['id'] . "' ] ?? '';" );
+} else {
+	$this->out( "$var_names = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
+}
 foreach ( $subfields as $sub_field ) {
 	$this->out( '' );
 	$this->out( "// Field {$sub_field['id']}:" );
@@ -35,3 +53,6 @@ foreach ( $subfields as $sub_field ) {
 if ( ! $in_group ) {
 	$this->out( '?>', 0, 0 );
 }
+
+// Done outputing this group? Remove it from the stack.
+GroupVars::pop();

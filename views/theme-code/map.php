@@ -1,4 +1,8 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	// Displaying in group
 	$args = $this->format_args([
@@ -11,7 +15,7 @@ if ( $in_group ) {
 		'api_key'    => $field['api_key'] ?? 'your-google-maps-api-key',
 	]);
 	$this->out( '$args = ' . $args . ';' );
-	$this->out( "\$map = \$group[ '" . $field['id'] . "' ] ?? [];" );
+	$this->out( "\$map = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( 'echo RWMB_Map_Field::render_map( $map, $args );' );
 
 	return;

@@ -1,10 +1,14 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	// Displaying in group
-	$this->out( "echo \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "echo {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 	if ( isset( $field['clone'] ) ) {
 		// Displaying cloneable values:
-		$this->out( "\$videos = \$group[ '" . $field['id'] . "' ] ?? '';" );
+		$this->out( "\$videos = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( '?>' );
 		$this->out( '<h3>Uploaded videos</h3>' );
 		$this->out( '<ul>' );
@@ -24,7 +28,7 @@ if ( $in_group ) {
 	}
 
 	$this->out( '// Displaying videos with HTML5 player:' );
-	$this->out( "\$videos = \$group[ '" . $field['id'] . "' ] ?? '';" );
+	$this->out( "\$videos = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( '<h3>Uploaded videos</h3>' );
 	$this->out( '<ul>' );

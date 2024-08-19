@@ -1,4 +1,8 @@
 <?php
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
 if ( $in_group ) {
 	$args = $this->format_args([
 		'width'      => '100%',
@@ -10,7 +14,7 @@ if ( $in_group ) {
 	]);
 
 	$this->out( '$args = ' . $args . ';' );
-	$this->out( "\$map = \$group[ '" . $field['id'] . "' ] ?? [];" );
+	$this->out( "\$map = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( 'echo RWMB_OSM_Field::render_map( $map, $args );' );
 
 	return;

@@ -1,5 +1,9 @@
 <?php
-$this->out( "\$term_ids = \$group[ '" . $field['id'] . "' ] ?? [];" );
+use MBB\RestApi\ThemeCode\GroupVars;
+
+$group_var = GroupVars::get_current_group_item_var();
+
+$this->out( "\$term_ids = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 $this->out( '?>' );
 $this->out( '<h3>Project categories</h3>' );
 $this->out( '<ul>' );
