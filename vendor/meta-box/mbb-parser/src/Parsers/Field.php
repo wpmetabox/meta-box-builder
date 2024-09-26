@@ -143,6 +143,10 @@ class Field extends Base {
 	}
 
 	private function parse_choice_std() {
+		if ( ! in_array( $this->type, $this->choice_types ) ) {
+			return $this;
+		}
+
 		$is_multiple = $this->multiple
 			|| in_array( $this->type, [ 'checkbox_list', 'autocomplete' ] )
 			|| in_array( $this->field_type, [ 'select_tree', 'checkbox_tree', 'checkbox_list', 'checkbox_tree' ] );
