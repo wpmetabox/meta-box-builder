@@ -53,7 +53,7 @@ class Registry {
 			], '', 'advanced' ),
 			Control::Input( 'class', __( 'Custom CSS class', 'meta-box-builder' ), '', 'advanced' ),
 			Control::Checkbox( 'save_field', [
-				'label'   => __( 'Save field value' ),
+				'label'   => __( 'Save field value', 'meta-box-builder' ),
 				'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' ),
 			], true, 'advanced' ),
 			Control::Input( 'sanitize_callback', [
@@ -384,7 +384,7 @@ class Registry {
 
 			// Checkbox list.
 			'std_checkbox_list'            => Control::Textarea( 'std', [
-				'label'   => __( 'Default value' ),
+				'label'   => __( 'Default value', 'meta-box-builder' ),
 				'tooltip' => __( 'Enter each value on a line', 'meta-box-builder' ),
 			] ),
 			Control::Checkbox( 'inline', [
@@ -404,7 +404,7 @@ class Registry {
 			] ),
 
 			// Custom HTML.
-			'std_custom_html'              => Control::Textarea( 'std', __( 'Content (HTML allowed)' ) ),
+			'std_custom_html'              => Control::Textarea( 'std', __( 'Content (HTML allowed)', 'meta-box-builder' ) ),
 			Control::Input( 'callback', [
 				'label'   => __( 'PHP Callback', 'meta-box-builder' ),
 				'tooltip' => __( 'PHP function that is called to show custom HTML content. Will overwrite the content setting above.', 'meta-box-builder' ),
@@ -729,7 +729,7 @@ class Registry {
 			] ),
 
 			// Textarea.
-			'std_textarea'                 => Control::Textarea( 'std', __( 'Default value' ) ),
+			'std_textarea'                 => Control::Textarea( 'std', __( 'Default value', 'meta-box-builder' ) ),
 			Control::Input( 'rows', [
 				'type'  => 'number',
 				'label' => __( 'Rows', 'meta-box-builder' ),
