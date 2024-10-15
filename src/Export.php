@@ -19,6 +19,7 @@ class Export {
 			'post_type' => $post->post_type,
 			'post[]'    => $post->ID,
 		] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
+		// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 		$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'mb-custom-post-type' ) . '</a>';
 
 		return $actions;

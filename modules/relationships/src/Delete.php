@@ -16,7 +16,6 @@ class Delete {
 			return;
 		}
 		global $wpdb;
-		$sql = "DELETE FROM $wpdb->mb_relationships WHERE `type`=%s";
-		$wpdb->query( $wpdb->prepare( $sql, $relationship['id'] ) );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->mb_relationships WHERE `type`=%s", $relationship['id'] ) );
 	}
 }

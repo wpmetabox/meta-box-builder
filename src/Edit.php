@@ -11,7 +11,7 @@ class Edit extends BaseEditPage {
 		$meta_boxes = parent::add_meta_boxes( $meta_boxes );
 
 		$meta_boxes[] = [
-			'title'      => esc_html__( 'Documentation', 'meta-box' ),
+			'title'      => esc_html__( 'Documentation', 'meta-box' ), //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 			'id'         => 'mbb-documentation',
 			'post_types' => [ $this->post_type ],
 			'context'    => 'side',
@@ -20,9 +20,9 @@ class Edit extends BaseEditPage {
 				[
 					'type' => 'custom_html',
 					'std'  => '<ul>
-						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box' ) . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box' ) . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box' ) . '</a></li>
+						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
+						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
+						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
 					</ul>',
 				],
 			],
@@ -107,7 +107,7 @@ class Edit extends BaseEditPage {
 		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
 
 		// Save parsed data for PHP (serialized array).
-		$submitted_data = $_POST;
+		$submitted_data = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$submitted_data = apply_filters( 'mbb_save_submitted_data', $submitted_data, $request );
 
 		// Set post title and slug in case they're auto-generated.
