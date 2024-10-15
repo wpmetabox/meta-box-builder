@@ -70,7 +70,7 @@ class PostType {
 			3 => __( 'Custom field deleted.', 'meta-box-builder' ),
 			4 => __( 'Field group updated.', 'meta-box-builder' ),
 			/* translators: %s: date and time of the revision */
-			5 => isset( $_GET['revision'] ) ? sprintf( __( 'Field group restored to revision from %s', 'meta-box-builder' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+			5 => isset( $_GET['revision'] ) ? sprintf( __( 'Field group restored to revision from %s', 'meta-box-builder' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false, // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			6 => __( 'Field group updated.', 'meta-box-builder' ),
 			7 => __( 'Field group updated.', 'meta-box-builder' ),
 			8 => __( 'Field group submitted.', 'meta-box-builder' ),

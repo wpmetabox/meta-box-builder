@@ -80,7 +80,7 @@ class Export {
 		header( 'Cache-Control: must-revalidate' );
 		header( 'Pragma: public' );
 		header( 'Content-Length: ' . strlen( $data ) );
-		echo $data;
+		echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		die;
 	}
 

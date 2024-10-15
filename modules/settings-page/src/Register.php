@@ -8,6 +8,7 @@ class Register {
 		add_filter( 'mb_settings_pages', [ $this, 'register_settings_pages' ] );
 	}
 
+	// phpcs:disable WordPress.WP.I18n.TextDomainMismatch
 	private function register_post_type() {
 		// Register main post type 'mb-settings-page'.
 		$labels = [
@@ -62,6 +63,7 @@ class Register {
 
 		register_post_type( 'mb-settings-page', $args );
 	}
+	// phpcs:enable
 
 	public function register_settings_pages( $settings_pages ) {
 		$query = new \WP_Query( [

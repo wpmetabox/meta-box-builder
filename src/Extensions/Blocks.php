@@ -23,6 +23,7 @@ class Blocks {
 	}
 
 	public function alter_post_data( $post_data, $post_id ) {
+		//phpcs:ignore
 		if ( ! isset( $_POST['override_block_json'] ) || ! $_POST['override_block_json'] ) {
 			return $post_data;
 		}
@@ -52,7 +53,7 @@ class Blocks {
 			return;
 		}
 
-		$block_json = json_decode( file_get_contents( $path_to_block_json ), true );
+		$block_json = json_decode( file_get_contents( $path_to_block_json ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
 		$block_json['version'] = $block_json['version'] ?? 'v0';
 		$block_json['version'] = str_replace( 'v', '', $block_json['version'] );
@@ -378,7 +379,7 @@ class Blocks {
 		if ( ! file_exists( $block_json_path ) ) {
 			$is_newer = true;    
 		} else {
-			$current_metadata = json_decode( file_get_contents( $block_json_path ), true );
+			$current_metadata = json_decode( file_get_contents( $block_json_path ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
 			foreach ( $new_metadata as $key => $value ) {
 				if ( $key === 'version' ) continue;
@@ -399,9 +400,11 @@ class Blocks {
 		$settings['block_json']['version'] = $new_metadata['version'];
 		update_post_meta( $post_id, 'settings', $settings );
 
+		// phpcs:disable
 		$new_metadata = json_encode( $new_metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 		file_put_contents( $block_json_path, $new_metadata );
 		chmod( $block_json_path, 0664 );
+		// phpcs:enable
 	}
 
 	/**
@@ -432,6 +435,7 @@ class Blocks {
 			}
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable
 		return is_dir( $path_str ) && is_writable( $path_str );
 	}
 }

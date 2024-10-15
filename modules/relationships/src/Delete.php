@@ -16,6 +16,7 @@ class Delete {
 			return;
 		}
 		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->mb_relationships WHERE `type`=%s", $relationship['id'] ) );
 	}
 }

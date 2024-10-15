@@ -31,7 +31,7 @@ class Blocks extends Base {
 			return [ [], false ];
 		}
 
-		$file_content     = file_get_contents( $local_path );
+		$file_content     = file_get_contents( $local_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$block            = json_decode( $file_content, true );
 		$local_version    = $block['version'] ?? '0';
 		$local_version    = str_replace( 'v', '', $local_version );

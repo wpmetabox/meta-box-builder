@@ -18,7 +18,7 @@ class Import {
 			return;
 		}
 		?>
-		<?php if ( isset( $_GET['imported'] ) ) : ?>
+		<?php if ( isset( $_GET['imported'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
 			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Field groups have been imported successfully!', 'meta-box-builder' ); ?></p></div>
 		<?php endif; ?>
 
@@ -28,7 +28,7 @@ class Import {
 				<form enctype="multipart/form-data" method="post" action="">
 					<?php wp_nonce_field( 'import' ); ?>
 					<input type="file" name="mbb_file">
-					<input type="hidden" name="mbb_post_type" value="<?= esc_attr( get_current_screen()->post_type ) ?>">
+					<input type="hidden" name="mbb_post_type" value="<?php echo esc_attr( get_current_screen()->post_type ) ?>">
 					<?php submit_button( esc_attr__( 'Import', 'meta-box-builder' ), 'secondary', 'submit', false, [ 'disabled' => true ] ); ?>
 				</form>
 			</div>
@@ -45,7 +45,7 @@ class Import {
 		check_ajax_referer( 'import' );
 
 		$url    = admin_url( 'edit.php?post_type=' . sanitize_text_field( wp_unslash( $_POST['mbb_post_type'] ) ) );
-		$data   = file_get_contents( sanitize_text_field( $_FILES['mbb_file']['tmp_name'] ) );
+		$data   = file_get_contents( sanitize_text_field( $_FILES['mbb_file']['tmp_name'] ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$result = $this->import_json( $data );
 
 		if ( ! $result ) {
