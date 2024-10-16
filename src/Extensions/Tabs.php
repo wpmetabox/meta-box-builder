@@ -55,7 +55,7 @@ class Tabs {
 
 	public function enqueue_font_awesome() {
 		if ( get_current_screen()->id === 'meta-box' ) {
-			wp_enqueue_style( 'font-awesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css', '', ' 6.2.1' );
+			wp_enqueue_style( 'font-awesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css', '', ' 6.2.1' ); // phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
 		}
 	}
 

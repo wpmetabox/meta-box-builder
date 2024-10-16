@@ -33,7 +33,7 @@ class Ver301 {
 			$content['context'] = $new_context[ $content['context'] ];
 		}
 
-		$post->post_excerpt = json_encode( $excerpt );
+		$post->post_excerpt = wp_json_encode( $excerpt );
 		$post->post_content = serialize( $content );
 	}
 
@@ -62,7 +62,7 @@ class Ver301 {
 			}, $content['post_types'] );
 		}
 
-		$post->post_excerpt = json_encode( $excerpt );
+		$post->post_excerpt = wp_json_encode( $excerpt );
 		$post->post_content = serialize( $content );
 	}
 

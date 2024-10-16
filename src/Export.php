@@ -19,7 +19,7 @@ class Export {
 			'post_type' => $post->post_type,
 			'post[]'    => $post->ID,
 		] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
-		$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'mb-custom-post-type' ) . '</a>';
+		$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'meta-box-builder' ) . '</a>';
 
 		return $actions;
 
@@ -79,7 +79,7 @@ class Export {
 		header( 'Cache-Control: must-revalidate' );
 		header( 'Pragma: public' );
 		header( 'Content-Length: ' . strlen( $data ) );
-		echo $data;
+		echo $data; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		die;
 	}
 

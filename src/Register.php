@@ -72,7 +72,7 @@ class Register {
 			// Proxy for all PHP/WordPress functions.
 			$data['mb'] = new TwigProxy();
 
-			echo $twig->render( 'block', $data );
+			echo $twig->render( 'block', $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		};
 	}
 

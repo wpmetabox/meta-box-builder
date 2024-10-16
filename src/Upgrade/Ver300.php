@@ -59,7 +59,7 @@ class Ver300 {
 			}, $content['settings_pages'] );
 		}
 
-		$post->post_excerpt = json_encode( $excerpt );
+		$post->post_excerpt = wp_json_encode( $excerpt );
 		$post->post_content = serialize( $content );
 	}
 
@@ -70,7 +70,7 @@ class Ver300 {
 		}
 		array_walk( $excerpt['fields'], [$this, 'update_field_datalist'] );
 		array_walk( $excerpt['fields'], [$this, 'update_field_options'] );
-		$post->post_excerpt = json_encode( $excerpt );
+		$post->post_excerpt = wp_json_encode( $excerpt );
 	}
 
 	private function update_field_datalist( &$field ) {

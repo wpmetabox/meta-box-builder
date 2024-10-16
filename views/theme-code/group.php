@@ -21,7 +21,7 @@ if ( $clone ) {
 	foreach ( $subfields as $sub_field ) {
 		$this->out( '' );
 		$this->out( "// Field {$sub_field['id']}:" );
-		echo $this->get_theme_code( $sub_field, true );
+		echo $this->get_theme_code( $sub_field, true ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	--$this->size_indent;
 	$this->out( '' );
@@ -48,7 +48,7 @@ if ( $in_group ) {
 foreach ( $subfields as $sub_field ) {
 	$this->out( '' );
 	$this->out( "// Field {$sub_field['id']}:" );
-	echo $this->get_theme_code( $sub_field, true );
+	echo $this->get_theme_code( $sub_field, true ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 if ( ! $in_group ) {
 	$this->out( '?>', 0, 0 );
