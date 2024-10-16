@@ -8,25 +8,24 @@ class Register {
 		add_filter( 'mb_settings_pages', [ $this, 'register_settings_pages' ] );
 	}
 
-	// phpcs:disable WordPress.WP.I18n.TextDomainMismatch
 	private function register_post_type() {
 		// Register main post type 'mb-settings-page'.
 		$labels = [
-			'name'               => _x( 'Settings Pages', 'Post Type General Name', 'mb-settings-page' ),
-			'singular_name'      => _x( 'Settings Page', 'Post Type Singular Name', 'mb-settings-page' ),
-			'menu_name'          => __( 'Settings Page', 'mb-settings-page' ),
-			'name_admin_bar'     => __( 'Settings Page', 'mb-settings-page' ),
-			'parent_item_colon'  => __( 'Parent Settings Page:', 'mb-settings-page' ),
-			'all_items'          => __( 'Settings Pages', 'mb-settings-page' ),
-			'add_new_item'       => __( 'Add New Settings Page', 'mb-settings-page' ),
-			'add_new'            => __( 'New Settings Page', 'mb-settings-page' ),
-			'new_item'           => __( 'New Settings Page', 'mb-settings-page' ),
-			'edit_item'          => __( 'Edit Settings Page', 'mb-settings-page' ),
-			'update_item'        => __( 'Update Settings Page', 'mb-settings-page' ),
-			'view_item'          => __( 'View Settings Page', 'mb-settings-page' ),
-			'search_items'       => __( 'Search Settings Page', 'mb-settings-page' ),
-			'not_found'          => __( 'Not found', 'mb-settings-page' ),
-			'not_found_in_trash' => __( 'Not found in Trash', 'mb-settings-page' ),
+			'name'               => _x( 'Settings Pages', 'Post Type General Name', 'meta-box-builder' ),
+			'singular_name'      => _x( 'Settings Page', 'Post Type Singular Name', 'meta-box-builder' ),
+			'menu_name'          => __( 'Settings Page', 'meta-box-builder' ),
+			'name_admin_bar'     => __( 'Settings Page', 'meta-box-builder' ),
+			'parent_item_colon'  => __( 'Parent Settings Page:', 'meta-box-builder' ),
+			'all_items'          => __( 'Settings Pages', 'meta-box-builder' ),
+			'add_new_item'       => __( 'Add New Settings Page', 'meta-box-builder' ),
+			'add_new'            => __( 'New Settings Page', 'meta-box-builder' ),
+			'new_item'           => __( 'New Settings Page', 'meta-box-builder' ),
+			'edit_item'          => __( 'Edit Settings Page', 'meta-box-builder' ),
+			'update_item'        => __( 'Update Settings Page', 'meta-box-builder' ),
+			'view_item'          => __( 'View Settings Page', 'meta-box-builder' ),
+			'search_items'       => __( 'Search Settings Page', 'meta-box-builder' ),
+			'not_found'          => __( 'Not found', 'meta-box-builder' ),
+			'not_found_in_trash' => __( 'Not found in Trash', 'meta-box-builder' ),
 		];
 
 		$args = [

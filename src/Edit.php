@@ -11,7 +11,7 @@ class Edit extends BaseEditPage {
 		$meta_boxes = parent::add_meta_boxes( $meta_boxes );
 
 		$meta_boxes[] = [
-			'title'      => esc_html__( 'Documentation', 'meta-box' ), //phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+			'title'      => esc_html__( 'Documentation', 'meta-box-builder' ),
 			'id'         => 'mbb-documentation',
 			'post_types' => [ $this->post_type ],
 			'context'    => 'side',
@@ -20,9 +20,9 @@ class Edit extends BaseEditPage {
 				[
 					'type' => 'custom_html',
 					'std'  => '<ul>
-						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
+						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
+						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
+						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
 					</ul>',
 				],
 			],
