@@ -10,8 +10,8 @@ if ( $in_group ) {
 		$this->out( '<ul>' );
 			$this->out( '<?php foreach ( $values as $value ) : ?>', 1 );
 				$this->out( '<li>', 2 );
-					$this->out( '<span>Name: <?= $value[0] ?></span>', 3 );
-					$this->out( '<span>Email: <?= $value[1] ?></span>', 3 );
+					$this->out( '<span>Name: <?php echo $value[0] ?></span>', 3 );
+					$this->out( '<span>Email: <?php echo $value[1] ?></span>', 3 );
 				$this->out( '</li>', 2 );
 			$this->out( '<?php endforeach ?>', 1 );
 		$this->out( '</ul>' );
@@ -22,8 +22,8 @@ if ( $in_group ) {
 
 	$this->out( "\$value = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 	$this->out( '?>' );
-	$this->out( '<p>Name: <?= $value[0] ?></p>' );
-	$this->out( '<p>Email: <?= $value[1] ?></p>' );
+	$this->out( '<p>Name: <?php echo $value[0] ?></p>' );
+	$this->out( '<p>Email: <?php echo $value[1] ?></p>' );
 	$this->out( '<?php' );
 	return;
 }
@@ -34,8 +34,8 @@ if ( isset( $field['clone'] ) ) {
 	$this->out( '<ul>' );
 		$this->out( '<?php foreach ( $values as $value ) : ?>', 1 );
 			$this->out( '<li>', 2 );
-				$this->out( '<span>Name: <?= $value[0] ?></span>', 3 );
-				$this->out( '<span>Email: <?= $value[1] ?></span>', 3 );
+				$this->out( '<span>Name: <?php echo $value[0] ?></span>', 3 );
+				$this->out( '<span>Email: <?php echo $value[1] ?></span>', 3 );
 			$this->out( '</li>', 2 );
 		$this->out( '<?php endforeach ?>', 1 );
 	$this->out( '</ul>', 0, 0 );
@@ -46,8 +46,8 @@ if ( isset( $field['clone'] ) ) {
 // Displaying field inputs' values:
 $this->out( '<?php // Displaying field inputs\' values: ?>' );
 $this->out( "<?php \$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>' );
-$this->out( '<p>Name: <?= $value[0] ?></p>' );
-$this->out( '<p>Email: <?= $value[1] ?></p>', 0, 3 );
+$this->out( '<p>Name: <?php echo $value[0] ?></p>' );
+$this->out( '<p>Email: <?php echo $value[1] ?></p>', 0, 3 );
 
 // Displaying field values in a table:
 $this->out( '<?php // Displaying field values in a table: ?>' );

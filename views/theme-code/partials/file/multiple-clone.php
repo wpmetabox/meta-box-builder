@@ -6,7 +6,7 @@ $this->out( '<ul>' );
 		$this->out( '<li>', 2 );
 			$this->out( '<ul>', 3 );
 				$this->out( '<?php foreach ( $clone as $file ) : ?>', 4 );
-					$this->out( '<li><a href="<?= $file[\'url\']; ?>"><?= $file[\'name\']; ?></a></li>', 5 );
+					$this->out( '<li><a href="<?php echo $file[\'url\']; ?>"><?php echo $file[\'name\']; ?></a></li>', 5 );
 				$this->out( '<?php endforeach ?>', 4 );
 			$this->out( '</ul>', 3 );
 		$this->out( '</li>', 2 );

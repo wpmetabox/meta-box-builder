@@ -7,7 +7,7 @@ if ( $in_group ) {
 	if ( isset( $field['clone'] ) ) {
 		$this->out( "<?php \$values = {$group_var}[ '" . $field['id'] . "' ] ?? [];" );
 		$this->out( '<?php foreach ( $values as $value ) : ?>' );
-			$this->out( '<div class="my-content"><?= $value ?></div>', 1 );
+			$this->out( '<div class="my-content"><?php echo $value ?></div>', 1 );
 		$this->out( '<?php endforeach ?>' );
 
 		return;
@@ -21,7 +21,7 @@ if ( isset( $field['clone'] ) ) {
 	// Displaying cloneable values:
 	$this->out( "<?php \$values = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ) ?>' );
 	$this->out( '<?php foreach ( $values as $value ) : ?>' );
-		$this->out( '<p><?= $value ?></p>', 1 );
+		$this->out( '<p><?php echo $value ?></p>', 1 );
 	$this->out( '<?php endforeach ?>', 0, 0 );
 
 	return;

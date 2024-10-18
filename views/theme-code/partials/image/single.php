@@ -2,7 +2,7 @@
 $this->out( '<?php // Displaying uploaded image: ?>' );
 $this->out( "<?php \$image = rwmb_meta( '" . $this->get_encoded_value( $field['id'], [ 'size' => 'thumbnail' ] ) . ' ); ?>' );
 $this->out( '<h3>Logo</h3>' );
-$this->out( '<img src="<?= $image[\'url\']; ?>">', 0, 3 );
+$this->out( '<img src="<?php echo $image[\'url\']; ?>">', 0, 3 );
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>' );

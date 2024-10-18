@@ -9,7 +9,7 @@ if ( $in_group ) {
 		$this->out( '?>' );
 		$this->out( '<ul>' );
 			$this->out( '<?php foreach ( $values as $url ) : ?>', 1 );
-				$this->out( '<li><?= RWMB_OEmbed_Field::get_embed( $url ); ?></li>', 2 );
+				$this->out( '<li><?php echo RWMB_OEmbed_Field::get_embed( $url ); ?></li>', 2 );
 			$this->out( '<?php endforeach; ?>', 1 );
 		$this->out( '</ul>' );
 		$this->out( '<?php' );
@@ -20,7 +20,7 @@ if ( $in_group ) {
 	$this->out( "\$url = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 	$this->out( '?>' );
 	$this->out( '<h3>Youtube video</h3>' );
-	$this->out( '<?= RWMB_OEmbed_Field::get_embed( $url ); ?>' );
+	$this->out( '<?php echo RWMB_OEmbed_Field::get_embed( $url ); ?>' );
 	$this->out( '<?php' );
 
 	return;

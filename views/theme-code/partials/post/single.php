@@ -4,7 +4,7 @@ $this->out( '<?php' );
 $this->out( '// Getting selected post ID:' );
 $this->out( "\$post_id = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>' );
-$this->out( '<p>Selected post ID: <?= $post_id ?></p>', 0, 3 );
+$this->out( '<p>Selected post ID: <?php echo $post_id ?></p>', 0, 3 );
 
 // Getting selected post object:
 $this->out( '<?php' );
@@ -22,7 +22,7 @@ $this->out( '<?php' );
 $this->out( '// Displaying selected post title:' );
 $this->out( "\$post_id = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>' );
-$this->out( '<h3><?= get_the_title( $post_id ); ?></h3>', 0, 3 );
+$this->out( '<h3><?php echo get_the_title( $post_id ); ?></h3>', 0, 3 );
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>' );
@@ -33,7 +33,7 @@ $this->out( '<?php' );
 $this->out( '// Displaying the selected post with link:' );
 $this->out( "\$post_id = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>' );
-$this->out( '<h3><a href="<?= get_permalink( $post_id ) ?>"><?= get_the_title( $post_id ); ?></a></h3>', 0, 3 );
+$this->out( '<h3><a href="<?php echo get_permalink( $post_id ) ?>"><?php echo get_the_title( $post_id ); ?></a></h3>', 0, 3 );
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>' );

@@ -19,5 +19,5 @@ $this->out( "\$field   = rwmb_get_field_settings( '" . $this->get_encoded_value(
 $this->out( "\$options = \$field['options'];" );
 $this->out( "\$value   = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>' );
-$this->out( 'Value: <?= $value ?><br>' );
-$this->out( 'Label: <?= $options[ $value ] ?>', 0, 0 );
+$this->out( 'Value: <?php echo $value ?><br>' );
+$this->out( 'Label: <?php echo $options[ $value ] ?>', 0, 0 );

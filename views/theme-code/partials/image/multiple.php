@@ -7,7 +7,7 @@ $this->out( '?>' );
 $this->out( '<h3>Uploaded images</h3>' );
 $this->out( '<ul>' );
 	$this->out( '<?php foreach ( $images as $image ) : ?>', 1 );
-		$this->out( '<li><img src="<?= $image[\'url\']; ?>"></li>', 2 );
+		$this->out( '<li><img src="<?php echo $image[\'url\']; ?>"></li>', 2 );
 	$this->out( '<?php endforeach ?>', 1 );
 $this->out( '</ul>', 0, 3 );
 
@@ -24,7 +24,7 @@ $this->out( '?>' );
 $this->out( '<h3>Uploaded images</h3>' );
 $this->out( '<ul>' );
 	$this->out( '<?php foreach ( $images as $image ) : ?>', 1 );
-	$this->out( '<li><a href="<?= $image[\'full_url\'] ?>"><img src="<?= $image[\'url\']; ?>"></a></li>', 2 );
+	$this->out( '<li><a href="<?php echo $image[\'full_url\'] ?>"><img src="<?php echo $image[\'url\']; ?>"></a></li>', 2 );
 	$this->out( '<?php endforeach ?>', 1 );
 $this->out( '</ul>', 0, 3 );
 
@@ -42,4 +42,4 @@ $this->out( '// Displaying only one image:' );
 $this->out( "\$images = rwmb_meta( '" . $this->get_encoded_value( $field['id'], [ 'limit' => 1 ] ) . ' );' );
 $this->out( '$image = reset( $images );' );
 $this->out( '?>' );
-$this->out( '<img src="<?= $image[\'url\']; ?>">', 0, 0 );
+$this->out( '<img src="<?php echo $image[\'url\']; ?>">', 0, 0 );

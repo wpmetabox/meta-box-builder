@@ -11,7 +11,7 @@ $this->out( '<ul>' );
 		$this->out( '<li>', 2 );
 			$this->out( '<ul>', 3 );
 				$this->out( '<?php foreach ( $clone as $post_id ) : ?>', 4 );
-					$this->out( '<li><a href="<?= get_permalink( $post_id ) ?>"><?= get_the_title( $post_id ); ?></a></li>', 5 );
+					$this->out( '<li><a href="<?php echo get_permalink( $post_id ) ?>"><?php echo get_the_title( $post_id ); ?></a></li>', 5 );
 				$this->out( '<?php endforeach ?>', 4 );
 			$this->out( '</ul>', 3 );
 		$this->out( '</li>', 2 );

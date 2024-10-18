@@ -9,7 +9,7 @@ if ( $in_group ) {
 	$this->out( '<h3>Specification</h3>' );
 	$this->out( '<ul>' );
 		$this->out( '<?php foreach ( $pairs as $pair ) : ?>', 1 );
-			$this->out( '<li><label><?= $pair[0] ?>:</label> <?= $pair[1] ?></li>', 2 );
+			$this->out( '<li><label><?php echo $pair[0] ?>:</label> <?php echo $pair[1] ?></li>', 2 );
 		$this->out( '<?php endforeach ?>', 1 );
 	$this->out( '</ul>' );
 	$this->out( '<?php' );
@@ -25,7 +25,7 @@ $this->out( '?>' );
 $this->out( '<h3>Specification</h3>' );
 $this->out( '<ul>' );
 	$this->out( '<?php foreach ( $pairs as $pair ) : ?>', 1 );
-		$this->out( '<li><label><?= $pair[0] ?>:</label> <?= $pair[1] ?></li>', 2 );
+		$this->out( '<li><label><?php echo $pair[0] ?>:</label> <?php echo $pair[1] ?></li>', 2 );
 	$this->out( '<?php endforeach ?>', 1 );
 $this->out( '</ul>', 0, 3 );
 

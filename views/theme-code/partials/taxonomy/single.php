@@ -14,7 +14,7 @@ $this->out( '<?php' );
 $this->out( '// Displaying selected term name:' );
 $this->out( "\$term = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>' );
-$this->out( '<p><?= $term->name; ?></p>', 0, 3 );
+$this->out( '<p><?php echo $term->name; ?></p>', 0, 3 );
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>' );
@@ -26,7 +26,7 @@ $this->out( '<?php' );
 $this->out( '// Displaying the selected term with link:' );
 $this->out( "\$term = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>' );
-$this->out( '<p><a href="<?= get_term_link( $term ) ?>"><?= $term->name ?></a></p>', 0, 3 );
+$this->out( '<p><a href="<?php echo get_term_link( $term ) ?>"><?php echo $term->name ?></a></p>', 0, 3 );
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>' );

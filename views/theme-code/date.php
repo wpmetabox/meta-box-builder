@@ -11,7 +11,7 @@ if ( $in_group ) {
 			$this->out( '<?php foreach ( $dates as $date ) : ?>', 1 );
 
 				$value = empty( $field ['timestamp'] ) ? '$date' : 'date( \'F j, Y\', $value )';
-				$this->out( '<li><?= ' . $value . ' ?></li>', 2 );
+				$this->out( '<li><?php echo ' . $value . ' ?></li>', 2 );
 
 			$this->out( '<?php endforeach ?>', 1 );
 		$this->out( '</ul>' );
@@ -22,7 +22,7 @@ if ( $in_group ) {
 	if ( ! empty( $field ['timestamp'] ) ) {
 		$this->out( "\$value = {$group_var}[ '" . $field['id'] . "' ] ?? '';" );
 		$this->out( '?>' );
-		$this->out( '<p>Date: <?= date( \'F j, Y\', $value ) ?></p>' );
+		$this->out( '<p>Date: <?php echo date( \'F j, Y\', $value ) ?></p>' );
 		$this->out( '<?php' );
 
 		return;
@@ -39,7 +39,7 @@ if ( ! empty( $field['clone'] ) ) {
 		$this->out( '<?php foreach ( $values as $value ) : ?>', 1 );
 
 			$value = empty( $field ['timestamp'] ) ? '$value' : 'date( \'F j, Y\', $value )';
-			$this->out( '<li><?= ' . $value . ' ?></li>', 2 );
+			$this->out( '<li><?php echo ' . $value . ' ?></li>', 2 );
 
 		$this->out( '<?php endforeach ?>', 1 );
 	$this->out( '</ul>' );
@@ -57,7 +57,7 @@ if ( ! empty( $field ['timestamp'] ) ) {
 	$this->out( '// Getting the value:' );
 	$this->out( "\$value = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 	$this->out( '?>' );
-	$this->out( '<p>Date: <?= date( \'F j, Y\', $value ) ?></p>', 0, 0 );
+	$this->out( '<p>Date: <?php echo date( \'F j, Y\', $value ) ?></p>', 0, 0 );
 
 	return;
 }

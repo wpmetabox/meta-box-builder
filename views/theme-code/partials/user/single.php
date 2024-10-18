@@ -4,7 +4,7 @@ $this->out( '<?php' );
 $this->out( '// Getting selected user ID:' );
 $this->out( "\$user_id = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>' );
-$this->out( '<p>Selected user ID: <?= $user_id ?></p>', 0, 3 );
+$this->out( '<p>Selected user ID: <?php echo $user_id ?></p>', 0, 3 );
 
 // Getting selected user object:
 $this->out( '<?php' );
@@ -23,8 +23,8 @@ $this->out( '// Displaying selected user info:' );
 $this->out( "\$user_id = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '$user = get_userdata( $user_id );' );
 $this->out( '?>' );
-$this->out( '<p>Display name: <?= $user->display_name ?></p>' );
-$this->out( '<p>Email: <?= $user->user_email ?></p>', 0, 3 );
+$this->out( '<p>Display name: <?php echo $user->display_name ?></p>' );
+$this->out( '<p>Email: <?php echo $user->user_email ?></p>', 0, 3 );
 
 // or simpler:
 $this->out( '<?php // or simpler: ?>' );
