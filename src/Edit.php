@@ -92,7 +92,7 @@ class Edit extends BaseEditPage {
 	public function save( $post_id, $post ) {
 		// Save data for JavaScript (serialized arrays).
 		$request     = rwmb_request();
-		$base_parser = new BaseParser;
+		$base_parser = new BaseParser();
 		$settings    = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
 		$fields      = apply_filters( 'mbb_save_fields', $request->post( 'fields' ), $request );
 		$data        = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );

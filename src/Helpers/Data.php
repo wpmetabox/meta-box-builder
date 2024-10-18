@@ -6,7 +6,7 @@ use MetaBox\Support\Data as DataHelper;
 class Data {
 	public static function get_post_types() {
 		$post_types = DataHelper::get_post_types();
-		$post_types = array_map( function( $post_type ) {
+		$post_types = array_map( function ( $post_type ) {
 			return [
 				'slug'         => $post_type->name,
 				'name'         => $post_type->labels->singular_name,
@@ -20,7 +20,7 @@ class Data {
 
 	public static function get_taxonomies() {
 		$taxonomies = DataHelper::get_taxonomies();
-		$taxonomies = array_map( function( $taxonomy ) {
+		$taxonomies = array_map( function ( $taxonomy ) {
 			return [
 				'slug'         => $taxonomy->name,
 				'name'         => $taxonomy->labels->singular_name,
@@ -66,10 +66,10 @@ class Data {
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-			'meta_query' => [
+			'meta_query'             => [
 				[
-					'key'       => 'type',
-					'value'     => 'block',
+					'key'   => 'type',
+					'value' => 'block',
 				],
 			],
 
@@ -79,10 +79,10 @@ class Data {
 
 		foreach ( $query->posts as $post ) {
 			$views[ $post->ID ] = [
-                'ID'         => $post->ID,
-                'post_title' => $post->post_title,
-                'post_name'  => $post->post_name,
-            ];
+				'ID'         => $post->ID,
+				'post_title' => $post->post_title,
+				'post_name'  => $post->post_name,
+			];
 		}
 
 		return $views;
@@ -145,7 +145,7 @@ class Data {
 			'meta-box-columns'           => 'mb_columns_add_markup',
 			'meta-box-conditional-logic' => 'mb_conditional_logic_load',
 			'mb-revision'                => 'mb_revision_init',
-            'mb-views'                   => 'mb_views_load',
+			'mb-views'                   => 'mb_views_load',
 		];
 		$classes   = [
 			'mb-relationships'         => 'MBR_Loader',

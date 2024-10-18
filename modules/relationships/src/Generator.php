@@ -26,7 +26,7 @@ class Generator {
 		$parser->parse();
 
 		$settings = $parser->get_settings();
-		$encoder = new Encoders\Relationship( $settings );
+		$encoder  = new Encoders\Relationship( $settings );
 		$encoder->encode();
 
 		return $encoder->get_encoded_string();

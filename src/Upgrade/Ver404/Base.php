@@ -9,14 +9,14 @@ class Base {
 		if ( empty( $old ) ) {
 			return;
 		}
-		$new = [];
+		$new         = [];
 		$new['type'] = Arr::get( $old, 'visibility' );
 		$this->copy_data( $old, $new, 'relation' );
 
 		$rules = [];
-		$when = Arr::get( $old, 'when', [] );
+		$when  = Arr::get( $old, 'when', [] );
 		foreach ( $when as $rule ) {
-			$id = uniqid();
+			$id           = uniqid();
 			$rules[ $id ] = [
 				'id'       => $id,
 				'name'     => $rule[0],
@@ -25,7 +25,7 @@ class Base {
 			];
 		}
 
-		$new['when'] = $rules;
+		$new['when']                   = $rules;
 		$new_data['conditional_logic'] = $new;
 		unset( $new_data['logic'] );
 	}
@@ -37,8 +37,8 @@ class Base {
 		}
 		$new = [];
 		foreach ( $old as $item ) {
-			$id = uniqid();
-			$new[ $id ] = array_merge( ['id' => $id], $item );
+			$id         = uniqid();
+			$new[ $id ] = array_merge( [ 'id' => $id ], $item );
 		}
 		$new_data['custom_settings'] = $new;
 	}
@@ -51,7 +51,7 @@ class Base {
 			}
 			return;
 		}
-		foreach( $name as $n ) {
+		foreach ( $name as $n ) {
 			$value = Arr::get( $source, $n );
 			if ( null !== $value ) {
 				$destination[ $n ] = $value;

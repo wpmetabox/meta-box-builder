@@ -7,7 +7,7 @@ class Import {
 	private $upgrader_v4;
 
 	public function __construct() {
-		$this->upgrader_v4 = new Ver404;
+		$this->upgrader_v4 = new Ver404();
 
 		add_action( 'admin_footer-edit.php', [ $this, 'output_js_templates' ] );
 		add_action( 'admin_init', [ $this, 'import' ] );
@@ -93,7 +93,7 @@ class Import {
 			if ( ! $post_id ) {
 				wp_die( wp_kses_post( sprintf(
 					// Translators: %1$s - post type, %2$s - post title, %3$s - go back URL.
-					__( 'Cannot import the %1$s <strong>%2$s</strong>. <a href="%3$s">Go back</a>.', 'mb-custom-post-type' ),// phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
+					__( 'Cannot import the %1$s <strong>%2$s</strong>. <a href="%3$s">Go back</a>.', 'mb-custom-post-type' ), // phpcs:ignore WordPress.WP.I18n.TextDomainMismatch
 					str_replace( 'mb-', '', $post['post_type'] ),
 					$post['post_title'],
 					admin_url( "edit.php?post_type={$post['post_type']}" )

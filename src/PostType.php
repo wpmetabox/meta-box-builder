@@ -32,7 +32,7 @@ class PostType {
 			'show_in_menu'    => 'meta-box',
 			'rewrite'         => false,
 			'capability_type' => 'post',
-			'supports'        => ['title'],
+			'supports'        => [ 'title' ],
 
 			'map_meta_cap'    => true,
 			'capabilities'    => [

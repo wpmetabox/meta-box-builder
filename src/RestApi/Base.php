@@ -21,7 +21,7 @@ class Base {
 	}
 
 	private function register_route( $method ) {
-		$route = str_replace( ['get_', '_'], ['', '-'], $method );
+		$route = str_replace( [ 'get_', '_' ], [ '', '-' ], $method );
 		register_rest_route( 'mbb', $route, [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, $method ],
@@ -35,7 +35,7 @@ class Base {
 
 	private function get_public_methods() {
 		$methods = get_class_methods( $this );
-		return array_filter( $methods, function( $method ) {
+		return array_filter( $methods, function ( $method ) {
 			$reflect = new ReflectionMethod( $this, $method );
 			return $reflect->isPublic();
 		} );
@@ -136,7 +136,7 @@ class Base {
 
 	protected function get_formats( $s ) {
 		$items = Data::get_post_formats();
-		$data = [];
+		$data  = [];
 		foreach ( $items as $name ) {
 			if ( empty( $s ) || false !== strpos( $name, $s ) ) {
 				$data[] = [

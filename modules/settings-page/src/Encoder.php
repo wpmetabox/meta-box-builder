@@ -28,7 +28,7 @@ class Encoder {
 		$this->make_translatable( 'submit_button' );
 		$this->make_translatable( 'message' );
 
-		$encoder = new PHPEncoder;
+		$encoder              = new PHPEncoder();
 		$this->encoded_string = $encoder->encode( $this->settings, [
 			'array.base'    => 4,
 			'array.align'   => true,

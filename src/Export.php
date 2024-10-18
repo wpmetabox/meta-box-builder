@@ -22,7 +22,6 @@ class Export {
 		$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'meta-box-builder' ) . '</a>';
 
 		return $actions;
-
 	}
 
 	public function export() {

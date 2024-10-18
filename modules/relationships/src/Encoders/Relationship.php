@@ -33,7 +33,7 @@ class Relationship {
 			$this->encode_field( $this->settings['field'] );
 		}
 
-		$encoder = new PHPEncoder;
+		$encoder              = new PHPEncoder();
 		$this->encoded_string = $encoder->encode( $this->settings, [
 			'array.base'    => 4,
 			'array.align'   => true,

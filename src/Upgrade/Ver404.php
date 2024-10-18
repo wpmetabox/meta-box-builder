@@ -15,8 +15,8 @@ class Ver404 {
 	private $fields;
 
 	public function __construct() {
-		$this->settings  = new Ver404\Settings;
-		$this->fields    = new Ver404\Fields;
+		$this->settings = new Ver404\Settings();
+		$this->fields   = new Ver404\Fields();
 	}
 
 	public function migrate() {

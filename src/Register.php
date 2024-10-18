@@ -53,7 +53,7 @@ class Register {
 			return;
 		}
 
-		$meta_box['render_callback'] = function( $attributes, $is_preview = false, $post_id = null ) use ( $meta_box ) {
+		$meta_box['render_callback'] = function ( $attributes, $is_preview = false, $post_id = null ) use ( $meta_box ) {
 			$data               = $attributes;
 			$data['is_preview'] = $is_preview;
 			$data['post_id']    = $post_id;

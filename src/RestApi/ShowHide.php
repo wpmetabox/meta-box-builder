@@ -17,7 +17,7 @@ class ShowHide extends Base {
 			'template' => 'get_templates',
 			'format'   => 'get_formats',
 		];
-		$method = isset( $methods[ $name ] ) ? $methods[ $name ] : 'get_terms';
+		$method  = isset( $methods[ $name ] ) ? $methods[ $name ] : 'get_terms';
 		return $method;
 	}
 }

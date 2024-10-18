@@ -9,13 +9,13 @@ class Relationships {
 			return;
 		}
 
-		new \MBB\Relationships\Register;
-		new \MBB\Relationships\RestApi;
-		new \MBB\Relationships\Generator;
+		new \MBB\Relationships\Register();
+		new \MBB\Relationships\RestApi();
+		new \MBB\Relationships\Generator();
 
 		if ( is_admin() ) {
 			new \MBB\Relationships\Edit( 'mb-relationship', __( 'Relationship ID', 'meta-box-builder' ) );
-			new \MBB\Relationships\Delete;
+			new \MBB\Relationships\Delete();
 		}
 	}
 }

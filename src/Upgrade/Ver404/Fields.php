@@ -8,7 +8,7 @@ use MetaBox\Support\Arr;
  */
 class Fields extends Base {
 	public function update( $post ) {
-		$data = json_decode( $post->post_excerpt, true );
+		$data   = json_decode( $post->post_excerpt, true );
 		$fields = Arr::get( $data, 'fields', [] );
 
 		$this->update_fields( $fields );
@@ -22,7 +22,7 @@ class Fields extends Base {
 		$new_fields = [];
 		foreach ( $fields as &$field ) {
 			$this->update_field( $field );
-			$id = uniqid();
+			$id                  = uniqid();
 			$field['_id']        = $id;
 			$field['save_field'] = $field['save_field'] ?? true;
 			$new_fields[ $id ]   = $field;
@@ -31,7 +31,7 @@ class Fields extends Base {
 	}
 
 	private function update_field( &$field ) {
-		$updater = new Field;
+		$updater = new Field();
 		$updater->update( $field );
 
 		if ( isset( $field['fields'] ) ) {

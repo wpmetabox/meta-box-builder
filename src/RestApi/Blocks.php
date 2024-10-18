@@ -16,7 +16,7 @@ class Blocks extends Base {
 
 		$is_writable = BlockExtension::is_future_path_writable( $path );
 
-		$path_to_block_json          = $path . '/' . $name . '/block.json';
+		$path_to_block_json            = $path . '/' . $name . '/block.json';
 		[ $block_settings, $is_newer ] = $this->get_local_block_settings( $path_to_block_json, $version );
 
 		return new \WP_REST_Response( compact( 'is_writable', 'block_settings', 'is_newer' ) );
@@ -36,7 +36,7 @@ class Blocks extends Base {
 		$local_version    = $block['version'] ?? '0';
 		$local_version    = str_replace( 'v', '', $local_version );
 		$local_version_ts = filemtime( $local_path );
-        $local_version    = version_compare( $local_version, $local_version_ts, '>' ) ? $local_version : $local_version_ts;
+		$local_version    = version_compare( $local_version, $local_version_ts, '>' ) ? $local_version : $local_version_ts;
 		$version          = str_replace( 'v', '', $version );
 
 		return [ $block, version_compare( $local_version, $version, '>' ) ];

@@ -3,7 +3,7 @@ use MBB\RestApi\ThemeCode\GroupVars;
 
 $subfields = $field['fields'] ?? [];
 
-$clone = ! empty( $field['clone'] );
+$clone                                  = ! empty( $field['clone'] );
 [ $var_names, $var_name, $parent_name ] = GroupVars::get_current_group_vars( $clone );
 
 // Cloneable group

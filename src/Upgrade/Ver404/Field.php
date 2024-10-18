@@ -10,7 +10,7 @@ class Field extends Base {
 	public function update( &$field ) {
 		$new_field = [];
 
-		$names = ['attrs', 'js_options', 'query_args', 'options'];
+		$names = [ 'attrs', 'js_options', 'query_args', 'options' ];
 		foreach ( $field as $key => $value ) {
 			if ( in_array( $key, $names ) ) {
 				$value = $this->update_key_value( $value );
@@ -28,7 +28,7 @@ class Field extends Base {
 			$this->$func( $new_field, $field );
 		}
 
-		$field = $new_field;
+		$field           = $new_field;
 		$field['_state'] = 'collapsed';
 	}
 
@@ -39,8 +39,8 @@ class Field extends Base {
 
 		$new_value = [];
 		foreach ( $value as $option ) {
-			$id = uniqid();
-			$new_value[ $id ] = array_merge( ['id' => $id], $option );
+			$id               = uniqid();
+			$new_value[ $id ] = array_merge( [ 'id' => $id ], $option );
 		}
 
 		return $new_value;
@@ -51,7 +51,7 @@ class Field extends Base {
 			return;
 		}
 
-		$new_field['placeholder_key'] = Arr::get( $field, 'placeholder.key' );
+		$new_field['placeholder_key']   = Arr::get( $field, 'placeholder.key' );
 		$new_field['placeholder_value'] = Arr::get( $field, 'placeholder.value' );
 		unset( $new_field['placeholder'] );
 	}
@@ -59,6 +59,6 @@ class Field extends Base {
 	private function update_field_tab( &$new_field, $field ) {
 		Arr::change_key( $new_field, 'label', 'name' );
 		$new_field['icon_type'] = 'dashicons';
-		$new_field['icon'] = str_replace( 'dashicons-', '', $new_field['icon'] );
+		$new_field['icon']      = str_replace( 'dashicons-', '', $new_field['icon'] );
 	}
 }

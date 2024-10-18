@@ -77,7 +77,7 @@ class AdminColumns {
 
 	private function show_location( $data ) {
 		$object_type = Arr::get( $data, 'object_type', 'post' );
-		switch ( $object_type ) {	
+		switch ( $object_type ) {
 			case 'user':
 				esc_html_e( 'All Users', 'meta-box-builder' );
 				break;
@@ -92,20 +92,20 @@ class AdminColumns {
 				echo wp_kses_post( implode( '<br>', $saved ) );
 				break;
 			case 'post':
-				echo wp_kses_post( implode( '<br>', array_filter( array_map( function( $post_type ) {
+				echo wp_kses_post( implode( '<br>', array_filter( array_map( function ( $post_type ) {
 					$post_type_object = get_post_type_object( $post_type );
 					return $post_type_object ? $post_type_object->labels->singular_name : '';
 				}, Arr::get( $data, 'post_types', [ 'post' ] ) ) ) ) );
 				break;
 			case 'term':
-				echo wp_kses_post( implode( '<br>', array_filter( array_map( function( $taxonomy ) {
+				echo wp_kses_post( implode( '<br>', array_filter( array_map( function ( $taxonomy ) {
 					$taxonomy_object = get_taxonomy( $taxonomy );
 					return $taxonomy_object ? $taxonomy_object->labels->singular_name : '';
 				}, Arr::get( $data, 'taxonomies', [] ) ) ) ) );
 				break;
-			case 'block': 
-				if (isset($data['block_json']) && isset($data['block_json']['path'])) {
-					esc_html_e( $data['block_json']['path']); // phpcs:ignore WordPress.WP.I18n.MissingArgDomain,  WordPress.WP.I18n.NonSingularStringLiteralText
+			case 'block':
+				if ( isset( $data['block_json'] ) && isset( $data['block_json']['path'] ) ) {
+					esc_html_e( $data['block_json']['path'] ); // phpcs:ignore WordPress.WP.I18n.MissingArgDomain,  WordPress.WP.I18n.NonSingularStringLiteralText
 				}
 				break;
 		}

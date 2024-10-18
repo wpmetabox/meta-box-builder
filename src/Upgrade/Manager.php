@@ -17,13 +17,13 @@ class Manager {
 			$current_version = MBB_VER;
 		}
 
-		$vesions = ['3.0.0', '3.0.1', '4.0.4'];
+		$vesions = [ '3.0.0', '3.0.1', '4.0.4' ];
 		foreach ( $vesions as $version ) {
 			if ( version_compare( $current_version, $version, '>=' ) ) {
 				continue;
 			}
 			$class = __NAMESPACE__ . '\Ver' . str_replace( '.', '', $version );
-			$ver = new $class;
+			$ver   = new $class();
 			$ver->migrate();
 		}
 

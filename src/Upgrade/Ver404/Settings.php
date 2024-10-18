@@ -9,7 +9,7 @@ use MBB\Helpers\Data;
  */
 class Settings extends Base {
 	public function update( $post ) {
-		$data = json_decode( $post->post_excerpt, true );
+		$data     = json_decode( $post->post_excerpt, true );
 		$settings = [];
 
 		$this->update_location( $settings, $data );
@@ -20,7 +20,7 @@ class Settings extends Base {
 		$this->update_custom_settings( $settings, $data );
 		$this->update_custom_table( $settings, $data );
 
-		$this->copy_data( $data, $settings, ['prefix', 'text_domain', 'tab_style', 'tab_wrapper'] );
+		$this->copy_data( $data, $settings, [ 'prefix', 'text_domain', 'tab_style', 'tab_wrapper' ] );
 
 		update_post_meta( $post->ID, 'settings', $settings );
 
@@ -29,8 +29,8 @@ class Settings extends Base {
 
 	private function update_location( &$settings, $data ) {
 		// Object type.
-		$for = Arr::get( $data, 'for', 'post_types' );
-		$object_types = [
+		$for                     = Arr::get( $data, 'for', 'post_types' );
+		$object_types            = [
 			'post_types'     => 'post',
 			'taxonomies'     => 'term',
 			'settings_pages' => 'setting',
@@ -38,11 +38,11 @@ class Settings extends Base {
 		$settings['object_type'] = isset( $object_types[ $for ] ) ? $object_types[ $for ] : $for;
 
 		if ( 'post' === $settings['object_type'] ) {
-			$names = ['post_types', 'context', 'priority', 'style', 'default_hidden', 'autosave'];
+			$names = [ 'post_types', 'context', 'priority', 'style', 'default_hidden', 'autosave' ];
 			$this->copy_data( $data, $settings, $names );
 
 			// Show in media modal for attachments.
-			$post_types = Arr::get( $settings, 'post_types', ['post'] );
+			$post_types = Arr::get( $settings, 'post_types', [ 'post' ] );
 			if ( in_array( 'attachment', $post_types ) ) {
 				$this->copy_data( $data, $settings, 'media_modal' );
 			}
@@ -65,59 +65,59 @@ class Settings extends Base {
 			return;
 		}
 		$new = [];
-		$this->copy_data( $old, $new, ['type', 'relation'] );
+		$this->copy_data( $old, $new, [ 'type', 'relation' ] );
 		unset( $old['type'], $old['relation'] );
 
 		$rules = [];
 
 		// is_child, custom.
-		$names = ['is_child', 'custom'];
+		$names = [ 'is_child', 'custom' ];
 		foreach ( $names as $name ) {
 			$value = Arr::get( $old, $name );
 			unset( $old[ $name ] );
 			if ( empty( $value ) ) {
 				continue;
 			}
-			$id = uniqid();
+			$id           = uniqid();
 			$rules[ $id ] = compact( 'id', 'name', 'value' );
 		}
 
 		// ID, parent.
-		$names = ['ID', 'parent'];
+		$names = [ 'ID', 'parent' ];
 		foreach ( $names as $name ) {
 			$value = Arr::get( $old, $name );
 			unset( $old[ $name ] );
 			if ( empty( $value ) ) {
 				continue;
 			}
-			$label = array_map( [ $this, 'get_post_title' ], $value );
-			$id = uniqid();
+			$label        = array_map( [ $this, 'get_post_title' ], $value );
+			$id           = uniqid();
 			$rules[ $id ] = compact( 'id', 'name', 'value', 'label' );
 		}
 
 		// user_id, edited_user_id.
-		$names = ['user_id', 'edited_user_id'];
+		$names = [ 'user_id', 'edited_user_id' ];
 		foreach ( $names as $name ) {
 			$value = Arr::get( $old, $name );
 			unset( $old[ $name ] );
 			if ( empty( $value ) ) {
 				continue;
 			}
-			$label = array_map( [ $this, 'get_user_display_name' ], $value );
-			$id = uniqid();
+			$label        = array_map( [ $this, 'get_user_display_name' ], $value );
+			$id           = uniqid();
 			$rules[ $id ] = compact( 'id', 'name', 'value', 'label' );
 		}
 
 		// user_role, edited_user_role.
-		$names = ['user_role', 'edited_user_role'];
+		$names = [ 'user_role', 'edited_user_role' ];
 		foreach ( $names as $name ) {
 			$value = Arr::get( $old, $name );
 			unset( $old[ $name ] );
 			if ( empty( $value ) ) {
 				continue;
 			}
-			$label = array_map( [ $this, 'get_user_role' ], $value );
-			$id = uniqid();
+			$label        = array_map( [ $this, 'get_user_role' ], $value );
+			$id           = uniqid();
 			$rules[ $id ] = compact( 'id', 'name', 'value', 'label' );
 		}
 
@@ -125,19 +125,19 @@ class Settings extends Base {
 		$value = Arr::get( $old, 'template' );
 		unset( $old['template'] );
 		if ( $value ) {
-			$label = array_map( [ $this, 'get_template' ], $value );
-			$id = uniqid();
+			$label        = array_map( [ $this, 'get_template' ], $value );
+			$id           = uniqid();
 			$rules[ $id ] = compact( 'id', 'name', 'value', 'label' );
 		}
 
 		// Terms & parent terms.
 		foreach ( $old as $name => $value ) {
-			$label = array_map( [ $this, 'get_term_name' ], $value );
-			$id = uniqid();
+			$label        = array_map( [ $this, 'get_term_name' ], $value );
+			$id           = uniqid();
 			$rules[ $id ] = compact( 'id', 'name', 'value', 'label' );
 		}
 
-		$new['rules'] = $rules;
+		$new['rules']                = $rules;
 		$settings['include_exclude'] = $new;
 	}
 
@@ -147,7 +147,7 @@ class Settings extends Base {
 			return;
 		}
 		$new = [];
-		$this->copy_data( $old, $new, ['type', 'relation'] );
+		$this->copy_data( $old, $new, [ 'type', 'relation' ] );
 		unset( $old['type'], $old['relation'] );
 
 		$rules = [];
@@ -156,8 +156,8 @@ class Settings extends Base {
 		$value = Arr::get( $old, 'template' );
 		unset( $old['template'] );
 		if ( $value ) {
-			$label = array_map( [ $this, 'get_template' ], $value );
-			$id = uniqid();
+			$label        = array_map( [ $this, 'get_template' ], $value );
+			$id           = uniqid();
 			$rules[ $id ] = compact( 'id', 'name', 'value', 'label' );
 		}
 
@@ -165,28 +165,41 @@ class Settings extends Base {
 		$value = Arr::get( $old, 'post_format' );
 		unset( $old['post_format'] );
 		if ( $value ) {
-			$label = array_map( [ $this, 'get_post_format' ], $value );
-			$id = uniqid();
+			$label        = array_map( [ $this, 'get_post_format' ], $value );
+			$id           = uniqid();
 			$rules[ $id ] = compact( 'id', 'name', 'value', 'label' );
 		}
 
 		// Terms & parent terms.
 		foreach ( $old as $name => $value ) {
-			$label = array_map( [ $this, 'get_term_name' ], $value );
-			$id = uniqid();
+			$label        = array_map( [ $this, 'get_term_name' ], $value );
+			$id           = uniqid();
 			$rules[ $id ] = compact( 'id', 'name', 'value', 'label' );
 		}
 
-		$new['rules'] = $rules;
+		$new['rules']          = $rules;
 		$settings['show_hide'] = $new;
 	}
 
 	private function update_block( &$settings, $data ) {
 		$names = [
-			'description', 'icon_type', 'icon', 'icon_svg', 'icon_background', 'icon_foreground',
-			'category', 'keywords', 'block_context', 'supports',
-			'render_with', 'render_callback', 'render_template', 'render_code',
-			'enqueue_style', 'enqueue_script', 'enqueue_assets'
+			'description',
+			'icon_type',
+			'icon',
+			'icon_svg',
+			'icon_background',
+			'icon_foreground',
+			'category',
+			'keywords',
+			'block_context',
+			'supports',
+			'render_with',
+			'render_callback',
+			'render_template',
+			'render_code',
+			'enqueue_style',
+			'enqueue_script',
+			'enqueue_assets',
 		];
 		$this->copy_data( $data, $settings, $names );
 	}
@@ -196,9 +209,9 @@ class Settings extends Base {
 		if ( empty( $old ) ) {
 			return;
 		}
-		$new = [
+		$new                      = [
 			'enable' => true,
-			'name' => $old,
+			'name'   => $old,
 		];
 		$settings['custom_table'] = $new;
 	}

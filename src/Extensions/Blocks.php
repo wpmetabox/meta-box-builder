@@ -27,8 +27,8 @@ class Blocks {
 		if ( ! isset( $_POST['override_block_json'] ) || ! $_POST['override_block_json'] ) {
 			return $post_data;
 		}
-		$request     = rwmb_request();
-		$block_json  = self::get_block_metadata( $request );
+		$request    = rwmb_request();
+		$block_json = self::get_block_metadata( $request );
 
 		$post_data['post_title'] = $block_json['title'];
 
@@ -79,7 +79,7 @@ class Blocks {
 		$settings['icon_svg']              = $icon_type === 'svg' ? $block_json['icon'] : '';
 		$settings['category']              = $block_json['category'];
 		$settings['keywords']              = $block_json['keywords'];
-		$settings['block_json']['version'] = $block_json['version'] ;
+		$settings['block_json']['version'] = $block_json['version'];
 
 		return $settings;
 	}
@@ -96,9 +96,9 @@ class Blocks {
 
 		foreach ( $attributes as $name => $value ) {
 			if ( is_array( $value ) && isset( $value['meta-box-field'] ) ) {
-				$field                 		= $value['meta-box-field'];
-				$field['id'] 		 		= $name;
-				$fields[ $field['_id'] ] 	= $field;
+				$field                   = $value['meta-box-field'];
+				$field['id']             = $name;
+				$fields[ $field['_id'] ] = $field;
 			}
 		}
 
@@ -112,8 +112,8 @@ class Blocks {
 
 		$block_json = self::get_block_metadata( $request );
 
-		$post['fields']     = $this->alter_fields( $post['fields'], $request );
-		$post['settings']   = $this->alter_settings( $post['settings'], $request );
+		$post['fields']   = $this->alter_fields( $post['fields'], $request );
+		$post['settings'] = $this->alter_settings( $post['settings'], $request );
 
 		return $post;
 	}
@@ -125,12 +125,12 @@ class Blocks {
 	}
 
 	public function register_blocks() {
-		$query = new \WP_Query( [ 
-			'post_type' => 'meta-box',
-			'post_status' => 'publish',
-			'posts_per_page' => -1,
-			'no_found_rows' => true,
-			'fields' => 'ids',
+		$query = new \WP_Query( [
+			'post_type'              => 'meta-box',
+			'post_status'            => 'publish',
+			'posts_per_page'         => -1,
+			'no_found_rows'          => true,
+			'fields'                 => 'ids',
 			'update_post_term_cache' => false,
 		] );
 
@@ -174,16 +174,16 @@ class Blocks {
 		$data['blockCategories'] = wp_list_pluck( get_block_categories( get_post() ), 'title', 'slug' );
 		$data['settings']        = is_array( $data['settings'] ) ? $data['settings'] : [];
 
-		$block_json_settings = $data['settings']['block_json'] ?? [ 
+		$block_json_settings = $data['settings']['block_json'] ?? [
 			'enable'  => true,
 			'version' => 'v' . time(),
 			'path'    => '{{ theme.path }}/blocks',
 		];
 
 		$data['settings']['block_json'] = $block_json_settings;
-		$data['views'] = Data::get_views();
-		$data['viewAddUrl'] = admin_url('post-new.php?post_type=mb-views');
-        $data['viewEditUrl'] = admin_url('post.php?post=');
+		$data['views']                  = Data::get_views();
+		$data['viewAddUrl']             = admin_url( 'post-new.php?post_type=mb-views' );
+		$data['viewEditUrl']            = admin_url( 'post.php?post=' );
 
 		return $data;
 	}
@@ -212,8 +212,8 @@ class Blocks {
 	private function generate_block_metadata( array $settings, array $raw_data ): array {
 		$block_id = sanitize_title( $settings['title'] );
 
-		$metadata = [ 
-			'$schema'     => "https://schemas.wp.org/trunk/block.json",
+		$metadata = [
+			'$schema'     => 'https://schemas.wp.org/trunk/block.json',
 			'apiVersion'  => 3,
 			'version'     => 'v' . time(),
 			'name'        => "meta-box/{$block_id}",
@@ -222,44 +222,44 @@ class Blocks {
 			'category'    => $settings['category'] ?? 'common',
 			'icon'        => $settings['icon'] ?? $settings['icon_svg'] ?? 'admin-generic',
 			'keywords'    => $settings['keywords'] ?? [],
-			'supports' => [ 
-					'html'   => false,
-					'anchor' => false,
-					'align'  => true,
+			'supports'    => [
+				'html'   => false,
+				'anchor' => false,
+				'align'  => true,
 			],
 		];
 
-		if ( ! empty ( $settings['render_callback'] ) && str_starts_with( $settings['render_callback'], 'view:' ) ) {
+		if ( ! empty( $settings['render_callback'] ) && str_starts_with( $settings['render_callback'], 'view:' ) ) {
 			$metadata['render'] = $settings['render_callback'];
 		}
 
 		// Add fields to block metadata attributes.
 		$attributes = [];
 		if ( isset( $raw_data['fields'] ) && is_array( $raw_data['fields'] ) ) {
-			$attributes             = $this->generate_block_attributes( $raw_data['fields'] );
+			$attributes = $this->generate_block_attributes( $raw_data['fields'] );
 		}
-		
+
 		$align = array_filter( $settings['supports']['align'] );
 		// Alignments
 		if ( ! empty( $align ) ) {
 			$metadata['supports']['align'] = $align;
-			$attributes['align'] = [ 
+			$attributes['align']           = [
 				'type' => 'string',
 			];
 		}
 
-		$metadata['attributes'] = ! empty( $attributes ) ? $attributes : new \stdClass;
+		$metadata['attributes'] = ! empty( $attributes ) ? $attributes : new \stdClass();
 
 		return $metadata;
 	}
 
 	/**
 	 * Generate block metadata attribute
-	 * 
+	 *
 	 * If field is multiple or clone, then field type is array.
 	 * If field type is number, then field type is number.
 	 * Otherwise, field type is string.
-	 * 
+	 *
 	 * @todo: Add support for other field types. For example, enum.
 	 */
 	private function generate_block_attributes( ?array $fields ) {
@@ -279,8 +279,8 @@ class Blocks {
 
 			[ $type, $std ] = $type_std;
 
-			$attributes[ $id ] = [ 
-				'type' => $type,
+			$attributes[ $id ] = [
+				'type'           => $type,
 				'meta-box-field' => $field,
 			];
 
@@ -297,7 +297,7 @@ class Blocks {
 		$std  = $field['std'] ?? null;
 
 		// These fields returns array
-		$array_fields = [ 
+		$array_fields = [
 			'group',
 			'checkbox_list',
 			'file_advanced',
@@ -377,14 +377,16 @@ class Blocks {
 		$is_newer = false;
 
 		if ( ! file_exists( $block_json_path ) ) {
-			$is_newer = true;    
+			$is_newer = true;
 		} else {
 			$current_metadata = json_decode( file_get_contents( $block_json_path ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
 			foreach ( $new_metadata as $key => $value ) {
-				if ( $key === 'version' ) continue;
+				if ( $key === 'version' ) {
+					continue;
+				}
 
-				if ( ! isset( $current_metadata[$key] ) || $current_metadata[$key] !== $value ) {
+				if ( ! isset( $current_metadata[ $key ] ) || $current_metadata[ $key ] !== $value ) {
 					$is_newer = true;
 					break;
 				}
@@ -396,7 +398,7 @@ class Blocks {
 		}
 
 		// Save the new version back to the post meta.
-		$settings = get_post_meta( $post_id, 'settings', true );
+		$settings                          = get_post_meta( $post_id, 'settings', true );
 		$settings['block_json']['version'] = $new_metadata['version'];
 		update_post_meta( $post_id, 'settings', $settings );
 
@@ -409,9 +411,9 @@ class Blocks {
 
 	/**
 	 * Check if the intended path is writable.
-	 * 
+	 *
 	 * Because is_writable() only checks the existing path, and returns false if the path doesn't exist,
-	 * this method checks if we can create the path, also do the additional security check to make sure the path is inside 
+	 * this method checks if we can create the path, also do the additional security check to make sure the path is inside
 	 * the WordPress installation.
 	 */
 	public static function is_future_path_writable( string $path ): bool {

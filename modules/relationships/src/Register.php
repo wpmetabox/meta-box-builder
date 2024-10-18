@@ -28,14 +28,14 @@ class Register {
 		];
 
 		$args = [
-			'labels'        => $labels,
-			'public'        => false,
-			'show_ui'       => true,
-			'show_in_menu'  => 'meta-box',
-			'rewrite'       => false,
-			'supports'      => ['title'],
-			'map_meta_cap'  => true,
-			'capabilities'  => [
+			'labels'       => $labels,
+			'public'       => false,
+			'show_ui'      => true,
+			'show_in_menu' => 'meta-box',
+			'rewrite'      => false,
+			'supports'     => [ 'title' ],
+			'map_meta_cap' => true,
+			'capabilities' => [
 				// Meta capabilities.
 				'edit_post'              => 'edit_mb_relationship',
 				'read_post'              => 'read_mb_relationship',

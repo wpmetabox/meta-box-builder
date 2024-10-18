@@ -34,10 +34,10 @@ class GroupVars {
 		$non_clone_default = [
 			'$subgroup' . $nested_level,
 			'$subgroup' . $nested_level,
-			'$subgroup' . ( $nested_level - 1 )
+			'$subgroup' . ( $nested_level - 1 ),
 		];
 
-		if ( $clone) {
+		if ( $clone ) {
 			$vars = $clone_map[ $nested_level ] ?? $clone_default;
 		} else {
 			$vars = $non_clone_map[ $nested_level ] ?? $non_clone_default;

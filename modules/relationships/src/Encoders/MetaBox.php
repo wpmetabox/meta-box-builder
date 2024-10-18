@@ -11,7 +11,7 @@ class MetaBox {
 	}
 
 	public function encode() {
-		$translatable_fields = ['title'];
+		$translatable_fields = [ 'title' ];
 		array_walk( $translatable_fields, [ $this, 'make_translatable' ] );
 	}
 

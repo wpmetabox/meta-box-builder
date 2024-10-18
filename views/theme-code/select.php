@@ -4,4 +4,3 @@ $file .= empty( $field['clone'] ) ? '' : '-clone';
 $file .= $in_group ? '-group' : '';
 
 require __DIR__ . "/partials/choice/$file.php";
-

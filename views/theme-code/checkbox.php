@@ -59,4 +59,3 @@ $this->out( '<?php' );
 $this->out( '// Displaying "Yes/No":' );
 $this->out( "rwmb_the_value( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 $this->out( '?>', 0, 0 );
-
