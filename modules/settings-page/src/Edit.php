@@ -6,23 +6,6 @@ use MetaBox\Support\Data;
 
 class Edit extends BaseEditPage {
 	public function add_meta_boxes( $meta_boxes ) {
-		if ( ! $this->is_license_active() ) {
-			$meta_boxes[] = [
-				'title'      => '<span class="dashicons dashicons-warning"></span>' . __( 'License Warning', 'meta-box-builder' ),
-				'id'         => 'mbb-license-warning',
-				'post_types' => [ $this->post_type ],
-				'context'    => 'side',
-				'priority'   => 'high',
-				'style'      => 'seamless',
-				'fields'     => [
-					[
-						'type'     => 'custom_html',
-						'callback' => [ $this, 'output_license_warning' ],
-					],
-				],
-			];
-		}
-
 		$request  = rwmb_request();
 		$settings = get_post_meta( $request->get( 'post' ), 'settings', true );
 
@@ -57,8 +40,7 @@ class Edit extends BaseEditPage {
 		$url = MBB_URL . 'modules/settings-page/assets';
 
 		wp_enqueue_style( 'mb-settings-page-ui', "$url/settings-page.css", [ 'wp-components' ], MBB_VER );
-		// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
-		wp_enqueue_style( 'font-awesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css', '', '6.2.1' );
+		wp_enqueue_style( 'font-awesome', MBB_URL . 'assets/fontawesome/css/all.min.css', [], '6.6.0' );
 
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
 		wp_enqueue_script( 'mb-settings-page-ui', "$url/settings-page.js", [ 'jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard' ], MBB_VER, true );

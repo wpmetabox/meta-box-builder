@@ -60,6 +60,9 @@
 		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine" />
 		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments" />
 		<exclude name="WordPress.PHP.YodaConditions.NotYoda" />
+
+		<!-- MB Builder: for views -->
+		<exclude name="Squiz.Commenting.FileComment.WrongStyle" />
 	</rule>
 
 	<rule ref="Generic.Arrays.DisallowLongArraySyntax" />
@@ -74,6 +77,6 @@
 	USE THE PHPCompatibility RULESET
 	#############################################################################
 	-->
-	<config name="testVersion" value="7.0-"/>
+	<config name="testVersion" value="7.2-"/>
 	<rule ref="PHPCompatibilityWP"/>
 </ruleset>
