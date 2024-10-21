@@ -105,7 +105,7 @@ class AdminColumns {
 				break;
 			case 'block':
 				if ( isset( $data['block_json'] ) && isset( $data['block_json']['path'] ) ) {
-					esc_html_e( $data['block_json']['path'] ); // phpcs:ignore WordPress.WP.I18n.MissingArgDomain,  WordPress.WP.I18n.NonSingularStringLiteralText
+					echo esc_html( $data['block_json']['path'] );
 				}
 				break;
 		}
