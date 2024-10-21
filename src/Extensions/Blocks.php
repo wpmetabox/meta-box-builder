@@ -47,6 +47,7 @@ class Blocks {
 		$path   = $parser->replace_variables( $path );
 
 		$block_id           = $request->post( 'post_name' );
+		// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
 		$path_to_block_json = $path . '/' . $block_id . '/block.json';
 
 		if ( ! file_exists( $path_to_block_json ) || ! is_readable( $path_to_block_json ) ) {
