@@ -107,7 +107,7 @@ class Edit extends BaseEditPage {
 		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
 
 		// Save parsed data for PHP (serialized array).
-		$submitted_data = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$submitted_data = compact( 'fields', 'settings' );
 		$submitted_data = apply_filters( 'mbb_save_submitted_data', $submitted_data, $request );
 
 		// Set post title and slug in case they're auto-generated.
