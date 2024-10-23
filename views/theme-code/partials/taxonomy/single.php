@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 // Getting selected term object:
 $this->out( '<?php' );
 $this->out( '// Getting selected term object:' );

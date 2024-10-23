@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 // Displaying uploaded files with links:
 $this->out( '<?php' );
 $this->out( '// Displaying uploaded files with links:' );

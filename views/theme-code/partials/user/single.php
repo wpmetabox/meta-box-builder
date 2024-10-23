@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 // Getting selected user ID:
 $this->out( '<?php' );
 $this->out( '// Getting selected user ID:' );

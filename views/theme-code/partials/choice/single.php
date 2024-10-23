@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 // Displaying selected value.
 $this->out( '<?php' );
 $this->out( '// Displaying selected value:' );

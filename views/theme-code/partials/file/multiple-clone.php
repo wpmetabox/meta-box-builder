@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 $this->out( "<?php \$files = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>' );
 $this->out( '<h3>Uploaded files</h3>' );
 $this->out( '<ul>' );
