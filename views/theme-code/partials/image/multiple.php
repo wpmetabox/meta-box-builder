@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 // Displaying uploaded images:
 $this->out( '<?php' );
 $this->out( '// Displaying uploaded images:' );

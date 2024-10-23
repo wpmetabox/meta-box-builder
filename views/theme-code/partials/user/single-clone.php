@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 // Displaying cloneable values:
 $this->out( "<?php \$user_ids = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>' );
 $this->out( '<h3>Speakers</h3>' );

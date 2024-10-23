@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 $this->out( "<?php \$images = rwmb_meta( '" . $this->get_encoded_value( $field['id'], [ 'size' => 'thumbnail' ] ) . ' ); ?>' );
 $this->out( '<h3>Uploaded images</h3>' );
 $this->out( '<ul>' );

@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 use MBB\RestApi\ThemeCode\GroupVars;
 
 $subfields = $field['fields'] ?? [];

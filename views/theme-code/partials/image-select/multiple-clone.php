@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 $this->out( "<?php \$clones = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' ); ?>' );
 $this->out( '<ul>' );
 	$this->out( '<?php foreach ( $clones as $clone ) : ?>', 1 );
