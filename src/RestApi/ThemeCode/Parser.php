@@ -37,7 +37,7 @@ class Parser extends Base {
 		return $settings_page['option_name'] ?? $id;
 	}
 
-	public function get_settings() {
+	public function get_settings(): array {
 		return $this->theme_code ?: [];
 	}
 }
