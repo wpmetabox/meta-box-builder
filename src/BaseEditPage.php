@@ -51,12 +51,12 @@ abstract class BaseEditPage {
 
 	abstract public function save( $post_id, $post );
 
-	private function is_screen() {
+	private function is_screen(): bool {
 		return $this->post_type === get_current_screen()->id;
 	}
 
-	public function remove_meta_boxes() {
-		remove_meta_box( 'slugdiv', null, 'normal' );
+	public function remove_meta_boxes(): void {
+		remove_meta_box( 'slugdiv', '', 'normal' );
 	}
 
 	public function add_meta_boxes( $meta_boxes ) {
