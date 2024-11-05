@@ -57,8 +57,8 @@ class Blocks {
 		$block_json = json_decode( file_get_contents( $path_to_block_json ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
 		$block_json['version'] = $block_json['version'] ?? 'v0';
-		$block_json['version'] = str_replace( 'v', '', $block_json['version'] );
-		$block_json['version'] = version_compare( $block_json['version'], filemtime( $path_to_block_json ), '>' ) ? $block_json['version'] : filemtime( $path_to_block_json );
+		$block_json['version'] = (int) str_replace( 'v', '', $block_json['version'] );
+		$block_json['version'] = max( $block_json['version'], filemtime( $path_to_block_json ) );
 
 		return $block_json;
 	}
@@ -154,10 +154,10 @@ class Blocks {
 
 			if ( ! isset( $meta_box['block_json']['enable'] )
 				|| ! $meta_box['block_json']['enable']
-				|| ! file_exists( $meta_box['block_json']['path']
-					|| isset( $meta_box['function_name'] )
-					|| isset( $meta_box['render_template'] )
-				) ) {
+				|| ! file_exists( $meta_box['block_json']['path'] )
+				|| isset( $meta_box['function_name'] )
+				|| isset( $meta_box['render_template'] )
+			) {
 				continue;
 			}
 
@@ -324,7 +324,7 @@ class Blocks {
 
 		if ( in_array( $field['type'], [ 'checkbox', 'switch' ] ) ) {
 			$type = 'boolean';
-			$std  = isset( $field['std'] ) ?? (bool) $field['std'] ?? null;
+			$std  = isset( $field['std'] ) ? (bool) $field['std'] : false;
 		}
 
 		if ( in_array( $field['type'], [ 'single_image', 'file_input', 'user', 'post' ] ) ) {

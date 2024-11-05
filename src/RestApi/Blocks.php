@@ -34,11 +34,11 @@ class Blocks extends Base {
 		$file_content     = file_get_contents( $local_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$block            = json_decode( $file_content, true );
 		$local_version    = $block['version'] ?? '0';
-		$local_version    = str_replace( 'v', '', $local_version );
+		$local_version    = (int) str_replace( 'v', '', $local_version );
 		$local_version_ts = filemtime( $local_path );
-		$local_version    = version_compare( $local_version, $local_version_ts, '>' ) ? $local_version : $local_version_ts;
-		$version          = str_replace( 'v', '', $version );
+		$local_version    = max( $local_version, $local_version_ts );
+		$version          = (int) str_replace( 'v', '', $version );
 
-		return [ $block, version_compare( $local_version, $version, '>' ) ];
+		return [ $block, $local_version > $version ];
 	}
 }
