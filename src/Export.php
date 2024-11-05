@@ -24,7 +24,7 @@ class Export {
 		return $actions;
 	}
 
-	public function export() {
+	public function export(): void {
 		$action  = isset( $_REQUEST['action'] ) && 'mbb-export' === $_REQUEST['action'];
 		$action2 = isset( $_REQUEST['action2'] ) && 'mbb-export' === $_REQUEST['action2'];
 
@@ -34,10 +34,11 @@ class Export {
 
 		check_ajax_referer( 'bulk-posts' );
 
-		$post_ids = wp_parse_id_list( wp_unslash( $_REQUEST['post'] ) );
+		$post_ids  = wp_parse_id_list( wp_unslash( $_REQUEST['post'] ) );
+		$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
 
 		$query = new WP_Query( [
-			'post_type'              => sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) ),
+			'post_type'              => $post_type,
 			'post__in'               => $post_ids,
 			'posts_per_page'         => count( $post_ids ),
 			'no_found_rows'          => true,
@@ -63,19 +64,21 @@ class Export {
 			$data[] = $post_data;
 		}
 
-		$file_name = str_replace( 'mb-', '', $post->post_type ) . '-exported';
+		$file_name = str_replace( 'mb-', '', $post_type ) . '-export';
 		if ( count( $post_ids ) === 1 ) {
 			$data      = reset( $data );
 			$post      = $query->posts[0];
 			$file_name = $post->post_name ?: sanitize_key( $post->post_title );
 		}
 
+		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
+
 		header( 'Content-Type: application/octet-stream' );
 		header( "Content-Disposition: attachment; filename=$file_name.json" );
 		header( 'Expires: 0' );
 		header( 'Cache-Control: must-revalidate' );
 		header( 'Pragma: public' );
-		header( 'Content-Length: ' . strlen( $data ) );
+		header( 'Content-Length: ' . strlen( $output ) );
 
 		echo wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 		die;
