@@ -76,7 +76,7 @@ class Register {
 		};
 	}
 
-	private function create_custom_table( $meta_box, $post_id ) {
+	private function create_custom_table( $meta_box, $post_id ): void {
 		if ( ! Helpers\Data::is_extension_active( 'mb-custom-table' ) || empty( $meta_box['table'] ) ) {
 			return;
 		}
@@ -91,7 +91,18 @@ class Register {
 		foreach ( $fields as $field ) {
 			$columns[ $field['id'] ] = 'TEXT';
 		}
+
+		$data      = [
+			'table'   => $meta_box['table'],
+			'columns' => $columns,
+		];
+		$cache_key = 'mb_create_table_' . md5( wp_json_encode( $data ) );
+		if ( get_transient( $cache_key ) !== false ) {
+			return;
+		}
+
 		\MB_Custom_Table_API::create( $meta_box['table'], $columns );
+		set_transient( $cache_key, 1, MONTH_IN_SECONDS );
 	}
 
 	public function enqueue_assets() {
