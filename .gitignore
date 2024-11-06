@@ -1,7 +1,5 @@
 .DS_Store
 
 node_modules
-*.lock
 *.zip
 *.LICENSE.txt
-phpcs.txt

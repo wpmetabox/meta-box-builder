@@ -1,0 +1,155 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "5695f64cf37ef6dfd9b3776315013e73",
+    "packages": [
+        {
+            "name": "elightup/twig",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elightup/twig.git",
+                "reference": "878f6cfa57ac080192f53922f93e5bdbeda314dd"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "mozart": {
+                    "dep_namespace": "eLightUp\\",
+                    "dep_directory": "/",
+                    "classmap_directory": "/",
+                    "classmap_prefix": "eLightUp_",
+                    "packages": [
+                        "twig/twig"
+                    ],
+                    "delete_vendor_directories": true
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "eLightUp\\": "./"
+                }
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "mozart compose",
+                    "composer dump-autoload"
+                ],
+                "post-update-cmd": [
+                    "mozart compose",
+                    "composer dump-autoload"
+                ]
+            },
+            "time": "2022-12-03T14:54:46+00:00"
+        },
+        {
+            "name": "meta-box/mbb-parser",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:wpmetabox/mbb-parser.git",
+                "reference": "8fd84824fb6f678b0b2527e8aae226c093b635d1"
+            },
+            "require": {
+                "meta-box/support": "dev-master",
+                "riimu/kit-phpencoder": "^2.4"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MBBParser\\": "src/"
+                }
+            },
+            "description": "Parse meta box settings from JSON",
+            "time": "2024-10-23T09:11:04+00:00"
+        },
+        {
+            "name": "meta-box/support",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wpmetabox/support.git",
+                "reference": "99607eb4d8c8c96a7c882fc5a7c69cf3534d95bd"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MetaBox\\Support\\": ""
+                }
+            },
+            "license": [
+                "GNU GPL-2.0"
+            ],
+            "description": "Helpers for Meta Box plugins",
+            "homepage": "https://metabox.io",
+            "time": "2024-10-07T00:27:46+00:00"
+        },
+        {
+            "name": "riimu/kit-phpencoder",
+            "version": "v2.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Riimu/Kit-PHPEncoder.git",
+                "reference": "72ff7825de193b272e17b228394819dbfc638e72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Riimu/Kit-PHPEncoder/zipball/72ff7825de193b272e17b228394819dbfc638e72",
+                "reference": "72ff7825de193b272e17b228394819dbfc638e72",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Riimu\\Kit\\PHPEncoder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Riikka Kalliomäki",
+                    "email": "riikka.kalliomaki@gmail.com",
+                    "homepage": "http://riimu.net"
+                }
+            ],
+            "description": "Highly customizable alternative to var_export for PHP code generation",
+            "homepage": "http://kit.riimu.net",
+            "keywords": [
+                "code",
+                "encoder",
+                "export",
+                "generator",
+                "variable"
+            ],
+            "support": {
+                "issues": "https://github.com/Riimu/Kit-PHPEncoder/issues",
+                "source": "https://github.com/Riimu/Kit-PHPEncoder/tree/v2.4.2"
+            },
+            "time": "2022-12-10T18:12:25+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "meta-box/support": 20,
+        "meta-box/mbb-parser": 20,
+        "elightup/twig": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}
