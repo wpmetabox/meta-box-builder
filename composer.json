@@ -31,6 +31,19 @@
 		"meta-box/mbb-parser": "dev-master",
 		"elightup/twig": "dev-master"
 	},
+	"scripts": {
+		"post-update-cmd": [
+			"echo Deleting .git dirs...",
+			"rm -rf vendor/**/**/.git"
+		],
+		"post-install-cmd": [
+			"echo Deleting .git dirs...",
+			"rm -rf vendor/**/**/.git"
+		],
+		"phpcs": [
+			"phpcs > phpcs.txt"
+		]
+	},
 	"extra": {
 		"dev-files": {
 			"/": [
@@ -38,69 +51,40 @@
 				".github/",
 				".gitattributes",
 				".gitignore",
-
+				".distignore",
+				"*.yaml",
+				"*.yml",
+				"*.txt",
+				"*.less",
+				"*.scss",
+				"*.po",
+				"composer.json",
+				"composer.lock",
+				"package.json",
+				"package-lock.json",
+				"phpcs.xml",
+				"pnpm-lock.yaml",
+				"phpstan.neon",
+				"phpunit.xml",
+				".babelrc",
+				"webpack.config.js",
 				".editoconfig",
-
+				".vscode",
+				"esbuild.js",
 				"LICENSE",
 				"*.md",
-
 				"test/",
 				"tests/",
-
-				"phpcs.xml"
-			],
-			"meta-box/*": [
-				".git",
-
-				".distignore",
-				".babelrc",
-				"webpack.config.js",
-
-				"*.lock",
-				"*.json",
-				"*.yml",
-
-				"*.txt",
-				"*.less",
-				"*.scss",
-				"*.po",
-				"*.pot",
-
-				"demo.php",
-				"demo/",
-				"sass/",
-				"vendor/"
-			],
-			"wpmetabox/*": [
-				".git",
-
-				".distignore",
-				".babelrc",
-				"webpack.config.js",
-
-				"*.lock",
-				"*.json",
-				"*.yml",
-
-				"*.txt",
-				"*.less",
-				"*.scss",
-				"*.po",
-				"*.pot",
-
 				"demo.php",
 				"demo/",
 				"sass/",
 				"vendor/"
 			],
 			"riimu/kit-phpencoder": [
-				"examples",
-				"*.md",
-				"*.json",
-				"LICENSE"
+				"examples/",
+				"*.json"
 			],
 			"elightup/twig": [
-				".git",
 				"*.json",
 				"twig.php"
 			]

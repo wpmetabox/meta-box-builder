@@ -46,7 +46,7 @@ class Blocks {
 		$parser = new Settings();
 		$path   = $parser->replace_variables( $path );
 
-		$block_id           = $request->post( 'post_name' );
+		$block_id = $request->post( 'post_name' );
 		// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
 		$path_to_block_json = $path . '/' . $block_id . '/block.json';
 
