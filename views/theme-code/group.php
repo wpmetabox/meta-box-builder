@@ -23,6 +23,9 @@ if ( $clone ) {
 	$this->out( "foreach ( $var_names as $var_name ) {" );
 	++$this->size_indent;
 	foreach ( $subfields as $sub_field ) {
+		if ( empty( $sub_field['id'] ) ) {
+			continue;
+		}
 		$this->out( '' );
 		$this->out( "// Field {$sub_field['id']}:" );
 		echo $this->get_theme_code( $sub_field, true ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -50,6 +53,9 @@ if ( $in_group ) {
 	$this->out( "$var_names = rwmb_meta( '" . $this->get_encoded_value( $field['id'] ) . ' );' );
 }
 foreach ( $subfields as $sub_field ) {
+	if ( empty( $sub_field['id'] ) ) {
+		continue;
+	}
 	$this->out( '' );
 	$this->out( "// Field {$sub_field['id']}:" );
 	echo $this->get_theme_code( $sub_field, true ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
