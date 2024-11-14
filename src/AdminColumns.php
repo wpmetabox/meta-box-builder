@@ -45,116 +45,13 @@ class AdminColumns {
 			</footer>
 		</dialog>
 
-		<style>
-			#mbb-diff-dialog {
-				width: 80%;
-				max-width: 800px;
-				border: 1px solid #ccd0d4;
-				border-radius: 4px;
-				box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-				padding: 20px;
-				background: #fff;
-			}
-
-			#mbb-diff-dialog header {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				border-bottom: 1px solid #ccd0d4;
-				padding-bottom: 10px;
-				margin-bottom: 20px;
-			}
-
-			#mbb-diff-dialog header h2 {
-				margin: 0;
-				font-size: 1.5em;
-			}
-
-			#mbb-diff-dialog header button {
-				background: none;
-				border: none;
-				color: #0073aa;
-				cursor: pointer;
-			}
-
-			#mbb-diff-dialog header button:hover {
-				color: #005177;
-			}
-
-			.mbb-diff-dialog-content {
-				display: flex;
-				justify-content: space-between;
-			}
-
-			.mbb-diff-dialog-content>div {
-				width: 48%;
-			}
-
-			.mbb-diff-dialog-content h3 {
-				margin-top: 0;
-				font-size: 1.2em;
-			}
-
-			.mbb-diff-dialog-content pre {
-				background: #f6f7f7;
-				border: 1px solid #ccd0d4;
-				border-radius: 4px;
-				padding: 10px;
-				overflow-x: auto;
-				max-height: 300px;
-			}
-
-			#mbb-diff-dialog footer {
-				display: flex;
-				justify-content: flex-end;
-				border-top: 1px solid #ccd0d4;
-				padding-top: 10px;
-				margin-top: 20px;
-			}
-
-			#mbb-diff-dialog footer button {
-				margin-left: 10px;
-			}
-
-			#mbb-diff-dialog-close {
-				font-size: 2em;
-				text-decoration: none;
-			}
-		</style>
-
 		<script>
 			const syncData = <?php echo json_encode( JsonService::get_json() ) ?>;
-			const showDialog = ( mbbId ) => {
+			const showDialog = (mbbId) => {
 				const dialog = document.getElementById( 'mbb-diff-dialog' );
 				dialog.querySelector( '.mbb-diff-dialog-content' ).innerHTML = syncData[ mbbId ].diff;
 				dialog.showModal();
 			};
-
-			document.getElementById( 'mbb-diff-dialog-close' ).addEventListener( 'click', () => {
-				document.getElementById( 'mbb-diff-dialog' ).close();
-			} );
-
-			document.getElementById( 'mbb-diff-dialog-sync-btn' ).addEventListener( 'click', () => {
-				document.getElementById( 'mbb-diff-dialog' ).close();
-			} );
-
-			document.getElementById( 'mbb-diff-dialog-close-btn' ).addEventListener( 'click', () => {
-				document.getElementById( 'mbb-diff-dialog' ).close();
-			} );
-
-			// Escape key to close dialog
-			document.addEventListener( 'keydown', ( e ) => {
-				if ( e.key === 'Escape' ) {
-					document.getElementById( 'mbb-diff-dialog' ).close();
-				}
-			} );
-
-			// Click outside to close dialog
-			document.getElementById( 'mbb-diff-dialog' ).addEventListener( 'click', ( e ) => {
-				if ( e.target === document.getElementById( 'mbb-diff-dialog' ) ) {
-					document.getElementById( 'mbb-diff-dialog' ).close();
-				}
-			} );
 		</script>
 		<?php
 	}
@@ -314,7 +211,7 @@ class AdminColumns {
 				'<a %s href="%s">%s <span class="count">(%s)</span></a>',
 				$this->is_status( 'sync' ) ? 'class="current"' : '',
 				$url,
-				esc_html( __( 'Sync available', 'acf' ) ),
+				esc_html( __( 'Local json files', 'acf' ) ),
 				$count
 			);
 		}
@@ -404,7 +301,7 @@ class AdminColumns {
 			return;
 		}
 		?>
-		<strong><?php echo esc_html__( 'Sync available', 'meta-box-builder' ) ?></strong>
+		<strong><?php echo esc_html__( 'Local json files', 'meta-box-builder' ) ?></strong>
 		<div class="row-actions">
 			<?php if ( $this->is_status( 'sync' ) ) :
 				if ( empty( $sync_data['post_id'] ) ) : ?>
