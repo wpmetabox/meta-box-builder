@@ -56,7 +56,7 @@ class Export {
 				'post_content' => $post->post_content,
 			];
 
-			$meta_keys = $this->get_meta_keys( $post->post_type );
+			$meta_keys = self::get_meta_keys( $post->post_type );
 			foreach ( $meta_keys as $meta_key ) {
 				$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
 			}
@@ -84,16 +84,13 @@ class Export {
 		die;
 	}
 
-	private function get_meta_keys( $post_type ) {
-		switch ( $post_type ) {
-			case 'meta-box':
-				return [ 'settings', 'fields', 'data', 'meta_box' ];
-			case 'mb-relationship':
-				return [ 'settings', 'relationship' ];
-			case 'mb-settings-page':
-				return [ 'settings', 'settings_page' ];
-			default:
-				return [];
-		}
+	public static function get_meta_keys( $post_type ) {
+		$meta_keys = [
+			'meta-box' 			=> [ 'settings', 'fields', 'data', 'meta_box' ],
+			'mb-relationship' 	=> [ 'settings', 'relationship' ],
+			'mb-settings-page' 	=> [ 'settings', 'settings_page' ],
+		];
+
+		return $meta_keys[$post_type] ?? [];
 	}
 }
