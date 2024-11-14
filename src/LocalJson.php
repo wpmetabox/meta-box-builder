@@ -6,24 +6,6 @@ class LocalJson {
 		add_action( 'mbb_after_save', [ $this, 'generate_local_json' ], 10, 3 );
 	}
 
-    public static function get_json_paths() {
-		$theme_path    = get_template_directory();
-		$mb_json_paths = [];
-
-        if ( file_exists( "$theme_path/mb-json" ) ) {
-            $mb_json_paths[] = "$theme_path/mb-json";
-        }
-        
-		$mb_json_paths = apply_filters( 'mb_json_paths', $mb_json_paths );
-
-		// @todo: Should we create the directory if it doesn't exist?
-		// if ( ! is_dir( $mb_json_path ) ) {
-		// 	mkdir( $mb_json_path );
-		// }
-
-		return $mb_json_paths;
-	}
-
 	public function generate_local_json( $parser, $post_id, $raw_data ) {
 		$post         = get_post( $post_id );
 		$file_name    = $post->post_name ?: sanitize_key( $post->post_title );

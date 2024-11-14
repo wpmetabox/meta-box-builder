@@ -12,7 +12,7 @@ class Register {
 
 	private function get_meta_boxes_from_json(): array {
 		// Register meta boxes from JSON files.
-		$paths = LocalJson::get_json_paths();
+		$paths = JsonService::get_paths();
 
 		$json = [];
 		foreach ( $paths as $path ) {

@@ -10,7 +10,29 @@ class Import {
 		$this->upgrader_v4 = new Ver404();
 
 		add_action( 'admin_footer-edit.php', [ $this, 'output_js_templates' ] );
+
+		// Import from the Import selector.
 		add_action( 'admin_init', [ $this, 'import' ] );
+
+		// Import from the bulk action, we import from mb-json folder
+		add_action( 'admin_init', [ $this, 'bulk_action_import' ] );
+	}
+
+	public function bulk_action_import() {
+	 	$action = $_GET['action'] ?? $_GET['action2'] ?? ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if (''=== $action ) {
+			return;
+		}
+
+		$ids = $_GET['post'] ?? []; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ( empty( $ids ) ) {
+			return;
+		}
+
+	
+
 	}
 
 	public function output_js_templates() {

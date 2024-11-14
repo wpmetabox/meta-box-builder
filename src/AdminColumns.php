@@ -12,16 +12,11 @@ class AdminColumns {
 	 */
 	protected $view;
 
-	protected $json;
-
-	protected $data = [];
-
 	public function __construct() {
 		add_action( 'admin_print_styles-edit.php', [ $this, 'enqueue' ] );
 		add_filter( 'manage_meta-box_posts_columns', [ $this, 'add_columns' ] );
 		add_action( 'manage_meta-box_posts_custom_column', [ $this, 'show_column' ], 10, 2 );
 		add_filter( "views_edit-meta-box", [ $this, 'admin_table_views' ], 10, 1 );
-		add_filter( 'post_row_actions', [ $this, 'add_sync_action' ], 10, 2 );
 		add_filter( "bulk_actions-edit-meta-box", [ $this, 'admin_table_bulk_actions' ], 10, 1 );
 		add_action( 'current_screen', [ $this, 'current_screen' ] );
 		add_action( 'admin_footer', [ $this, 'render_diff_dialog' ] );
@@ -128,7 +123,7 @@ class AdminColumns {
 		</style>
 
 		<script>
-			const syncData = <?php echo json_encode( $this->json ) ?>;
+			const syncData = <?php echo json_encode( JsonService::get_json() ) ?>;
 			const showDialog = ( mbbId ) => {
 				const dialog = document.getElementById( 'mbb-diff-dialog' );
 				dialog.querySelector( '.mbb-diff-dialog-content' ).innerHTML = syncData[ mbbId ].diff;
@@ -173,11 +168,9 @@ class AdminColumns {
 
 		$this->view = $_GET['post_status'] ?? ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
 
-		$this->init_data()
-			->init_sync()
-			->check_sync();
+		$this->check_sync();
 
-		if ( $this->view === 'sync' ) {
+		if ( $this->is_status( 'sync' ) ) {
 			add_action( 'admin_footer', [ $this, 'render_sync_template' ], 1 );
 		}
 	}
@@ -199,7 +192,8 @@ class AdminColumns {
 			wp_die( __( 'Not found', 'meta-box-builder' ) );
 		}
 
-		$data      = $this->json[ $mb_id ];
+		$json = JsonService::get_json();
+		$data      = $json[ $mb_id ];
 		$file_path = $data['file'];
 
 		// No post found, import the json file.
@@ -231,10 +225,11 @@ class AdminColumns {
 		// Get table columns.
 		$columns = $wp_list_table->get_columns();
 		$hidden  = get_hidden_columns( $wp_list_table->screen );
+		$json = JsonService::get_json();
 		?>
 		<template id="mb-sync-list">
 			<tbody>
-				<?php foreach ( $this->json as $id => $data ) : ?>
+				<?php foreach ( $json as $id => $data ) : ?>
 					<tr>
 						<?php foreach ( $columns as $name => $label ) :
 							$tag     = $name === 'cb' ? 'th' : 'td';
@@ -291,135 +286,14 @@ class AdminColumns {
 		<?php
 	}
 
-	public function init_sync(): self {
-		// Get a list of json files in the theme directory.
-		$paths = LocalJson::get_json_paths();
-
-		$json = [];
-		foreach ( $paths as $path ) {
-			if ( ! file_exists( $path ) ) {
-				continue;
-			}
-			// List files under $path
-			$files = glob( $path . '/*.json' );
-
-			$json = [];
-			foreach ( $files as $file ) {
-				$mb_id          = rtrim( basename( $file ), '.json' );
-				$json[ $mb_id ] = $this->get_sync_status( $file );
-			}
-		}
-
-		$this->json = $json;
-
-		return $this;
-	}
-
-	private function init_data(): self {
-		$query = new \WP_Query( [ 
-			'post_type' => 'meta-box',
-			'posts_per_page' => -1,
-			'no_found_rows' => true,
-			'update_post_term_cache' => false,
-		] );
-
-		$meta_boxes = [];
-		foreach ( $query->posts as $post ) {
-			$meta_keys = Export::get_meta_keys( $post->post_type );
-
-			$post_data = [ 
-				'post_type' => $post->post_type,
-				'post_name' => $post->post_name,
-				'post_title' => $post->post_title,
-				'post_date' => $post->post_date,
-				'post_status' => $post->post_status,
-				'post_content' => $post->post_content,
-			];
-
-			foreach ( $meta_keys as $meta_key ) {
-				$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
-			}
-
-
-			if ( ! is_array( $post_data ) ) {
-				continue;
-			}
-
-			$post_data['settings']['version'] = $post_data['settings']['version'] ?? 'v0';
-			$meta_boxes[ $post->ID ]          = $post_data;
-		}
-
-		$this->data = $meta_boxes;
-
-		return $this;
-	}
-
-	private function get_meta_box_by_id( $id ): array {
-		$meta_boxes = $this->data;
-
-		// Filter by meta box id
-		$meta_box = array_filter( $meta_boxes, function ($meta_box) use ($id) {
-			return $meta_box['meta_box']['id'] === $id;
-		} );
-
-		// Get the first key of array
-		$keys = array_keys( $meta_box );
-
-		// No posts found, return empty array
-		if ( empty( $keys ) ) {
-			return [ 
-				null,
-				[ 
-					'settings' => [ 'version' => 'v0' ],
-				],
-			];
-		}
-
-		// [post_id, meta_box]
-		return [ $keys[0], $meta_box[ $keys[0] ] ];
-	}
-
-	private function get_sync_status( $file ) {
-		$local = json_decode( file_get_contents( $file ), true );
-		$mb_id = $local['meta_box']['id'] ?? $local['post_name'];
-
-		[ $post_id, $remote ] = $this->get_meta_box_by_id( $mb_id );
-
-		$is_newer = version_compare( $local['settings']['version'], $remote['settings']['version'] );
-
-		$diff = wp_text_diff( wp_json_encode( $local, JSON_PRETTY_PRINT ), wp_json_encode( $remote, JSON_PRETTY_PRINT ), [ 
-			'title_left' => esc_html__( 'Local', 'meta-box-builder' ),
-			'title_right' => esc_html__( 'Remote', 'meta-box-builder' ),
-		] );
-
-		return compact( 'is_newer', 'local', 'remote', 'diff', 'post_id', 'file', 'mb_id' );
-	}
-
-	/**
-	 * Add sync to quick actions
-	 */
-	public function add_sync_action( array $actions, object $post ): array {
-		if ( ! in_array( $post->post_type, [ 'meta-box' ], true ) ) {
-			return $actions;
-		}
-
-		$url = wp_nonce_url( add_query_arg( [ 
-			'action' => 'mbb-sync',
-			'post_type' => $post->post_type,
-			'post[]' => $post->ID,
-		] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
-
-		$actions['sync'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Sync changes', 'meta-box-builder' ) . '</a>';
-
-		return $actions;
-	}
-
 	private function is_status( string $status ): bool {
 		return isset( $_GET['post_status'] ) && $_GET['post_status'] === $status; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
 	}
 
 	public function admin_table_bulk_actions( $actions ) {
-		$actions['sync'] = __( 'Sync changes', 'meta-box-builder' );
+		if ( $this->is_status( 'sync' ) ) {
+			$actions['sync'] = __( 'Import', 'meta-box-builder' );
+		}
 
 		return $actions;
 	}
@@ -427,7 +301,7 @@ class AdminColumns {
 	public function admin_table_views( $views ) {
 		global $wp_list_table, $wp_query;
 
-		$count = count( array_filter( $this->json, function ($json) {
+		$count = count( array_filter( JsonService::get_json(), function ($json) {
 			return $json['is_newer'] > 0;
 		} ) );
 
@@ -522,7 +396,8 @@ class AdminColumns {
 			'id' => $mb_id,
 		] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
 
-		$sync_data = $this->json[ $mb_id ];
+		$json = JsonService::get_json();
+		$sync_data = $json[$mb_id];
 
 		// Empty sync data means no related json file.
 		if ( empty( $sync_data ) || $sync_data['is_newer'] === 0 ) {
@@ -592,7 +467,11 @@ class AdminColumns {
 	}
 
 	private function show_location_sync( $post_id ) {
-		echo $this->get_human_readable_file_location( $this->json[ $post_id ]['file'] );
+		$json = JsonService::get_json();
+
+		if (is_array($json) && isset($json['file'])) {
+			echo $this->get_human_readable_file_location( $json['file'] );
+		}
 	}
 
 	private function show_location( $data ) {
