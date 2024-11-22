@@ -48,7 +48,7 @@ const App = () => {
 		<>
 			<Flex className="mb-header">
 				<Flex gap={ 2 } expanded={ false }>
-					<Tooltip text={ __( 'Back to all field groups', 'meta-box-builder' ) } position={ 'bottom right' }>
+					<Tooltip delay={ 0 } text={ __( 'Back to all field groups', 'meta-box-builder' ) } placement='bottom'>
 						<a className="mb-header__logo" href={ MbbApp.url }><Logo /></a>
 					</Tooltip>
 					<h1>{ ( MbbApp.action == 'add' ) ? __( 'Add Field Group', 'meta-box-builder' ) : __( 'Edit Field Group', 'meta-box-builder' ) }</h1>

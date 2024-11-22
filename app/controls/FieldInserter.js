@@ -70,7 +70,7 @@ const FieldInserter = ( { items = [], required = false, className = '', isID = f
 			{
 				items.length > 0 && <Dropdown
 					className="og-dropdown"
-					position="bottom left"
+					placement="bottom left"
 					renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
 					renderContent={ ( { onToggle } ) => <DropdownInserter items={ items } onSelect={ e => handleSelect( e, onToggle ) } /> }
 				/>
