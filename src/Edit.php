@@ -9,6 +9,7 @@ use MBB\Helpers\Data;
 class Edit extends BaseEditPage {
 	public function enqueue() {
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
+		wp_enqueue_style( 'wp-edit-post' );
 
 		wp_enqueue_style( 'rwmb-modal', RWMB_CSS_URL . 'modal.css', [], RWMB_VER );
 		wp_style_add_data( 'rwmb-modal', 'path', RWMB_CSS_DIR . 'modal.css' );
