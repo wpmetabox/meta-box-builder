@@ -39,7 +39,9 @@ class Edit extends BaseEditPage {
 		wp_enqueue_script( 'rwmb-modal', RWMB_JS_URL . 'modal.js', [ 'jquery' ], RWMB_VER, true );
 
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], MBB_VER );
-		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', [ 'jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard', 'wp-color-picker', 'code-editor' ], MBB_VER, true );
+
+		$asset = require MBB_DIR . "/assets/js/build/app.asset.php";
+		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/build/app.js', $asset['dependencies'], $asset['version'], true );
 
 		$fields = get_post_meta( get_the_ID(), 'fields', true ) ?: [];
 		$fields = array_values( $fields );
@@ -50,7 +52,18 @@ class Edit extends BaseEditPage {
 			return $field;
 		}, $fields );
 
+		$post = get_post();
+
 		$data = [
+			'action'        => get_current_screen()->action,
+			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
+			'add'           => admin_url( 'post-new.php?post_type=' . get_current_screen()->id ),
+			'status'        => $post->post_status,
+			'author'        => get_the_author_meta( 'display_name', (int) $post->post_author ),
+			'trash'         => get_delete_post_link(),
+			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
+			'modifiedtime'  => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
+
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
 			'data'          => get_post_meta( get_the_ID(), 'data', true ),
