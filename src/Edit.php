@@ -7,30 +7,6 @@ use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
 class Edit extends BaseEditPage {
-	public function add_meta_boxes( $meta_boxes ) {
-		$meta_boxes = parent::add_meta_boxes( $meta_boxes );
-
-		$meta_boxes[] = [
-			'title'      => esc_html__( 'Documentation', 'meta-box-builder' ),
-			'id'         => 'mbb-documentation',
-			'post_types' => [ $this->post_type ],
-			'context'    => 'side',
-			'priority'   => 'low',
-			'fields'     => [
-				[
-					'type' => 'custom_html',
-					'std'  => '<ul>
-						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-					</ul>',
-				],
-			],
-		];
-
-		return $meta_boxes;
-	}
-
 	public function enqueue() {
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
 
@@ -63,6 +39,7 @@ class Edit extends BaseEditPage {
 			'trash'         => get_delete_post_link(),
 			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
 			'modifiedtime'  => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
+			'saving'        => __( 'Saving...', 'meta-box-builder' ),
 
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
