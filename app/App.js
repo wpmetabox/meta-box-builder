@@ -91,11 +91,9 @@ const App = () => {
 							<br />
 							{
 								MbbApp.fields.length > 0 && settings.object_type !== 'block' &&
-								<div className="postbox og-theme-code">
-									<div className="postbox-header">
-										<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
-									</div>
-									<div className="inside">
+								<div className="mb-box">
+									<div className="mb-box__header">{ __( "Theme code", "meta-box-builder" ) }</div>
+									<div className="mb-box__body">
 										<ThemeCode settings={ settings } fields={ MbbApp.fields } />
 									</div>
 								</div>
@@ -106,15 +104,36 @@ const App = () => {
 					{ toggle && <Sidebar /> }
 				</Flex>
 			</ErrorBoundary>
+			<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
+			<input type="hidden" name="messages" value="" />
 		</>
 	);
+};
+
+const submit = e => {
+	const submitButton = e.submitter;
+	const status = submitButton.getAttribute( 'name' );
+	const originalStatus = document.querySelector( '#original_post_status' ).value;
+	if ( originalStatus !== status ) {
+		document.querySelector( '[name="messages"]' ).setAttribute( 'name', MbbApp.status !== 'publish' ? 'publish' : 'save' );
+	}
+	if ( originalStatus === 'auto-draft' && status === 'draft' ) {
+		document.querySelector( '[name="messages"]' ).setAttribute( 'name', 'save' );
+	}
+
+	submitButton.disabled = true;
+	submitButton.setAttribute( 'value', MbbApp.saving );
+	document.querySelector( '[name="post_status"]' ).setAttribute( 'value', status );
 };
 
 document.querySelector( '.wp-header-end' ).remove();
 
 const container = document.getElementById( 'poststuff' );
 container.classList.add( 'mb' );
+container.classList.add( 'og' );
 container.id = 'mb-app';
 
 const root = createRoot( container );
 root.render( <Root /> );
+
+document.querySelector( '#post' ).addEventListener( 'submit', submit );

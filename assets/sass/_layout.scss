@@ -113,3 +113,18 @@
 		text-transform: capitalize;
 	}
 }
+
+// Box
+.mb-box {
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+
+	&__header {
+		font-size: 16px;
+		font-weight: 600;
+		line-height: 1;
+		padding: 16px 12px;
+		border-bottom: var(--border);
+	}
+}
