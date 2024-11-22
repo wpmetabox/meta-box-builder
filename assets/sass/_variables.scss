@@ -7,38 +7,38 @@
 	--shadow-md: 0 1px 1px rgba(0, 0, 0, 0.05);
 	--border: 1px solid var(--color-light);
 	--border-lighter: 1px solid var(--color-lighter);
-	--color: var(--wp-admin-theme-color, #007cba);
+	--color-primary: var(--wp-admin-theme-color, #007cba);
 }
 
 // Admin color schemes.
 .admin-color-blue {
-	--color: var(--wp-admin-theme-color, #e1a948);
+	--color-primary: var(--wp-admin-theme-color, #e1a948);
 }
 
 .admin-color-coffee {
-	--color: var(--wp-admin-theme-color, #c7a589);
+	--color-primary: var(--wp-admin-theme-color, #c7a589);
 }
 
 .admin-color-ectoplasm {
-	--color: var(--wp-admin-theme-color, #a3b745);
+	--color-primary: var(--wp-admin-theme-color, #a3b745);
 }
 
 .admin-color-light {
-	--color: var(--wp-admin-theme-color, #04a4cc);
+	--color-primary: var(--wp-admin-theme-color, #04a4cc);
 }
 
 .admin-color-midnight {
-	--color: var(--wp-admin-theme-color, #e14d43);
+	--color-primary: var(--wp-admin-theme-color, #e14d43);
 }
 
 .admin-color-modern {
-	--color: var(--wp-admin-theme-color, #3858e9);
+	--color-primary: var(--wp-admin-theme-color, #3858e9);
 }
 
 .admin-color-ocean {
-	--color: var(--wp-admin-theme-color, #9ebaa0);
+	--color-primary: var(--wp-admin-theme-color, #9ebaa0);
 }
 
 .admin-color-sunrise {
-	--color: var(--wp-admin-theme-color, #dd823b);
+	--color-primary: var(--wp-admin-theme-color, #dd823b);
 }
