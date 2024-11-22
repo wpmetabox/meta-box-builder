@@ -1,10 +1,11 @@
 import { Button, Flex, Tooltip } from '@wordpress/components';
-import { render, useContext, useEffect, useState } from "@wordpress/element";
+import { createRoot, useContext, useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, category, cog, drawerRight } from "@wordpress/icons";
 import { ErrorBoundary } from "react-error-boundary";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { ReactComponent as Logo } from './components/logo.svg';
+import Sidebar from './components/Sidebar';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
@@ -48,7 +49,7 @@ const App = () => {
 			<Flex className="mb-header">
 				<Flex gap={ 2 } expanded={ false }>
 					<Tooltip text={ __( 'Back to all field groups', 'meta-box-builder' ) } position={ 'bottom right' }>
-						<a className="logo" href={ MbbApp.url }><Logo /></a>
+						<a className="mb-header__logo" href={ MbbApp.url }><Logo /></a>
 					</Tooltip>
 					<h1>{ ( MbbApp.action == 'add' ) ? __( 'Add Field Group', 'meta-box-builder' ) : __( 'Edit Field Group', 'meta-box-builder' ) }</h1>
 					{ !( MbbApp.action == 'add' ) && <a className="page-title-action" href={ MbbApp.add }>{ __( 'Add New', 'meta-box-builder' ) }</a> }
@@ -60,43 +61,60 @@ const App = () => {
 				</Flex>
 			</Flex>
 			<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
-				<Tabs forceRenderTabPanel={ true }>
-					<TabList className="react-tabs__tab-list og-tabs--main">
-						<Tab>
-							<Icon icon={ category } />
-							{ __( 'Fields', 'meta-box-builder' ) }
-						</Tab>
-						<Tab>
-							<Icon icon={ cog } />
-							{ __( 'Settings', 'meta-box-builder' ) }
-						</Tab>
-						<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
-					</TabList>
-					<TabPanel>
-						<Fields fields={ MbbApp.fields } />
-					</TabPanel>
-					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-						<Settings />
-					</TabPanel>
-					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-						<Result endPoint="generate" />
-					</TabPanel>
-				</Tabs>
-				<br />
-				{
-					MbbApp.fields.length > 0 && settings.object_type !== 'block' &&
-					<div className="postbox og-theme-code">
-						<div className="postbox-header">
-							<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
-						</div>
-						<div className="inside">
-							<ThemeCode settings={ settings } fields={ MbbApp.fields } />
+				<Flex gap={ 0 } align="flex-start" className="mb-body">
+					<div className="mb-body__inner">
+						<div className="mb-body__main">
+							<div className="wp-header-end" />
+
+							<Tabs forceRenderTabPanel={ true } className="react-tabs mb-tabs">
+								<TabList className="react-tabs__tab-list og-tabs--main">
+									<Tab>
+										<Icon icon={ category } />
+										{ __( 'Fields', 'meta-box-builder' ) }
+									</Tab>
+									<Tab>
+										<Icon icon={ cog } />
+										{ __( 'Settings', 'meta-box-builder' ) }
+									</Tab>
+									<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
+								</TabList>
+								<TabPanel>
+									<Fields fields={ MbbApp.fields } />
+								</TabPanel>
+								<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
+									<Settings />
+								</TabPanel>
+								<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
+									<Result endPoint="generate" />
+								</TabPanel>
+							</Tabs>
+							<br />
+							{
+								MbbApp.fields.length > 0 && settings.object_type !== 'block' &&
+								<div className="postbox og-theme-code">
+									<div className="postbox-header">
+										<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
+									</div>
+									<div className="inside">
+										<ThemeCode settings={ settings } fields={ MbbApp.fields } />
+									</div>
+								</div>
+							}
 						</div>
 					</div>
-				}
+
+					{ toggle && <Sidebar /> }
+				</Flex>
 			</ErrorBoundary>
 		</>
 	);
 };
 
-render( <Root />, document.getElementById( 'root' ) );
+document.querySelector( '.wp-header-end' ).remove();
+
+const container = document.getElementById( 'poststuff' );
+container.classList.add( 'mb' );
+container.id = 'mb-app';
+
+const root = createRoot( container );
+root.render( <Root /> );
