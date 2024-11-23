@@ -55,8 +55,8 @@ const App = () => {
 					{ !( MbbApp.action == 'add' ) && <a className="page-title-action" href={ MbbApp.add }>{ __( 'Add New', 'meta-box-builder' ) }</a> }
 				</Flex>
 				<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
-					<input type="submit" name="draft" className="components-button is-compact is-tertiary mb-header__action--draft" value={ ( MbbApp.status == 'publish' ) ? __( 'Switch to draft', 'meta-box-builder' ) : __( 'Save draft', 'meta-box-builder' ) } />
-					<input type="submit" name="publish" className="mb-header__action--publish components-button is-primary" value={ ( MbbApp.status == 'publish' ) ? __( 'Update', 'meta-box-builder' ) : __( 'Publish', 'meta-box-builder' ) } />
+					<input type="submit" data-status="draft" className="components-button is-compact is-tertiary" value={ MbbApp.status == 'publish' ? __( 'Switch to draft', 'meta-box-builder' ) : __( 'Save draft', 'meta-box-builder' ) } />
+					<input type="submit" data-status="publish" className="components-button is-primary" value={ MbbApp.status == 'publish' ? __( 'Update', 'meta-box-builder' ) : __( 'Publish', 'meta-box-builder' ) } />
 					<Button onClick={ toggleSidebar } className="is-compact" icon={ drawerRight } size="compact" label={ __( 'Toggle sidebar', 'meta-box-builder' ) } showTooltip={ true } isPressed={ showSidebar } />
 				</Flex>
 			</Flex>
@@ -112,7 +112,7 @@ const App = () => {
 
 const submit = e => {
 	const submitButton = e.submitter;
-	const status = submitButton.getAttribute( 'name' );
+	const status = submitButton.dataset.status;
 	const originalStatus = document.querySelector( '#original_post_status' ).value;
 	if ( originalStatus !== status ) {
 		document.querySelector( '[name="messages"]' ).setAttribute( 'name', MbbApp.status !== 'publish' ? 'publish' : 'save' );
