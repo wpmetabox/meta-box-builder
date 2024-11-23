@@ -1,2 +1,5 @@
-- Check edit slug/id của field group
-- Fix toggle field settings lag. Check if we need to store field._expand and use toggle from useFields.
+[x] Check edit slug/id của field group
+[x] Fix toggle field settings lag.
+[ ] Check if we need to store field._expand and use toggle from useFields.
+[ ] Update UI for creating settings pages
+[ ] Update UI for creating relationships
