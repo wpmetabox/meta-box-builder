@@ -1,5 +1,5 @@
 import { Button, Flex, Tooltip } from '@wordpress/components';
-import { render, useContext, useEffect, useReducer } from "@wordpress/element";
+import { render, useContext, useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, category, cog, drawerRight } from "@wordpress/icons";
 import { ErrorBoundary } from "react-error-boundary";
@@ -12,33 +12,11 @@ import Settings from './components/Tabs/Settings';
 import ThemeCode from "./components/Tabs/ThemeCode";
 import { SettingsContext, SettingsProvider } from "./contexts/SettingsContext";
 
-const Root = () => {
-	const forceValidate = () => document.querySelector( '#post' ).removeAttribute( 'novalidate' );
-
-	useEffect( () => {
-		const publishButton = document.querySelector( '#publish' );
-		const saveButton = document.querySelector( '#save-post' );
-		if ( publishButton ) {
-			publishButton.addEventListener( 'click', forceValidate );
-		}
-		if ( saveButton ) {
-			saveButton.addEventListener( 'click', forceValidate );
-		}
-
-		// Don't submit form when press Enter.
-		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function ( e ) {
-			if ( e.keyCode == 13 ) {
-				e.preventDefault();
-			}
-		} );
-	}, [] );
-
-	return (
-		<SettingsProvider>
-			<App />
-		</SettingsProvider>
-	);
-};
+const Root = () => (
+	<SettingsProvider>
+		<App />
+	</SettingsProvider>
+);
 
 const App = () => {
 	const { settings } = useContext( SettingsContext );
@@ -88,7 +66,6 @@ const App = () => {
 									<Result endPoint="generate" />
 								</TabPanel>
 							</Tabs>
-							<br />
 							{
 								MbbApp.fields.length > 0 && settings.object_type !== 'block' &&
 								<div className="mb-box">
@@ -110,7 +87,39 @@ const App = () => {
 	);
 };
 
-const submit = e => {
+const container = document.getElementById( 'poststuff' );
+container.classList.add( 'mb' );
+container.classList.add( 'og' );
+container.id = 'mb-app';
+
+// Use React 17 to avoid flashing issues when click to expand field settings.
+render( <Root />, container );
+// const root = createRoot( container );
+// root.render( <Root /> );
+
+// Remove .wp-header-end element to properly show notices.
+document.querySelector( '.wp-header-end' ).remove();
+
+const form = document.querySelector( '#post' );
+
+// Force form to validate to force users to enter required fields.
+// Use setTimeout because this attribute is dynamically added.
+setTimeout( () => {
+	form.removeAttribute( 'novalidate' );
+}, 100 );
+
+// Prevent submit when press Enter.
+const preventSubmitWhenPressEnter = e => {
+	if ( e.target.tagName === 'INPUT' && e.keyCode == 13 ) {
+		e.preventDefault();
+	}
+};
+form.addEventListener( 'keypress', preventSubmitWhenPressEnter );
+form.addEventListener( 'keydown', preventSubmitWhenPressEnter );
+form.addEventListener( 'keyup', preventSubmitWhenPressEnter );
+
+// Set post status when clicking submit buttons.
+form.addEventListener( 'submit', e => {
 	const submitButton = e.submitter;
 	const status = submitButton.dataset.status;
 	const originalStatus = document.querySelector( '#original_post_status' ).value;
@@ -124,19 +133,4 @@ const submit = e => {
 	submitButton.disabled = true;
 	submitButton.setAttribute( 'value', MbbApp.saving );
 	document.querySelector( '[name="post_status"]' ).setAttribute( 'value', status );
-};
-
-document.querySelector( '.wp-header-end' ).remove();
-
-const container = document.getElementById( 'poststuff' );
-container.classList.add( 'mb' );
-container.classList.add( 'og' );
-container.id = 'mb-app';
-
-// const root = createRoot( container );
-// root.render( <Root /> );
-
-// Use React 17 to avoid flashing issues when click to expand field settings.
-render( <Root />, container );
-
-document.querySelector( '#post' ).addEventListener( 'submit', submit );
+} );
