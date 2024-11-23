@@ -1,5 +1,5 @@
 import { Button, Flex, Tooltip } from '@wordpress/components';
-import { createRoot, useContext, useEffect, useState } from "@wordpress/element";
+import { render, useContext, useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, category, cog, drawerRight } from "@wordpress/icons";
 import { ErrorBoundary } from "react-error-boundary";
@@ -133,7 +133,10 @@ container.classList.add( 'mb' );
 container.classList.add( 'og' );
 container.id = 'mb-app';
 
-const root = createRoot( container );
-root.render( <Root /> );
+// const root = createRoot( container );
+// root.render( <Root /> );
+
+// Use React 17 to avoid flashing issues when click to expand field settings.
+render( <Root />, container );
 
 document.querySelector( '#post' ).addEventListener( 'submit', submit );

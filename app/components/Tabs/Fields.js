@@ -42,8 +42,7 @@ const Fields = prop => {
 			} }
 				animation={ 200 }
 				delayOnTouchStart={ true }
-				delay={ 50 }
-				delayOnTouchOnly={ true }
+				delay={ 2 }
 				className="og-fields"
 				list={ fields }
 				setList={ setFields }
