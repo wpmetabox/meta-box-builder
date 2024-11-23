@@ -1,8 +1,9 @@
 import { Button, Flex, Tooltip } from '@wordpress/components';
-import { render, useContext, useReducer } from "@wordpress/element";
+import { render, useContext, useReducer, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, category, cog, drawerRight } from "@wordpress/icons";
 import { ErrorBoundary } from "react-error-boundary";
+import AutosizeInput from 'react-input-autosize';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { ReactComponent as Logo } from './components/logo.svg';
 import Sidebar from './components/Sidebar';
@@ -21,16 +22,39 @@ const Root = () => (
 const App = () => {
 	const { settings } = useContext( SettingsContext );
 	const [ showSidebar, toggleSidebar ] = useReducer( show => !show, true );
+	const [ title, setTitle ] = useState( MbbApp.title );
+	const [ slug, setSlug ] = useState( MbbApp.slug );
 
 	return (
 		<>
 			<Flex className="mb-header">
-				<Flex gap={ 2 } expanded={ false }>
+				<Flex expanded={ false }>
 					<Tooltip delay={ 0 } text={ __( 'Back to all field groups', 'meta-box-builder' ) } placement='bottom'>
 						<a className="mb-header__logo" href={ MbbApp.url }><Logo /></a>
 					</Tooltip>
-					<h1>{ ( MbbApp.action == 'add' ) ? __( 'Add Field Group', 'meta-box-builder' ) : __( 'Edit Field Group', 'meta-box-builder' ) }</h1>
-					{ !( MbbApp.action == 'add' ) && <a className="page-title-action" href={ MbbApp.add }>{ __( 'Add New', 'meta-box-builder' ) }</a> }
+
+					<Flex gap={ 3 } align="baseline">
+						<div title={ __( 'Field group title', 'meta-box-builder' ) }>
+							<AutosizeInput
+								name="post_title"
+								inputClassName="mb-header__title"
+								inputStyle={ { fontSize: 20 } }
+								value={ title }
+								onChange={ e => setTitle( e.target.value ) }
+								placeholder={ __( 'Field group title', 'meta-box-builder' ) }
+							/>
+						</div>
+						<div title={ __( 'Field group ID (slug)', 'meta-box-builder' ) }>
+							<AutosizeInput
+								name="post_name"
+								inputClassName="mb-header__slug"
+								inputStyle={ { fontSize: 13 } }
+								value={ slug }
+								onChange={ e => setSlug( e.target.value ) }
+								placeholder={ __( 'Field group ID', 'meta-box-builder' ) }
+							/>
+						</div>
+					</Flex>
 				</Flex>
 				<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
 					<input type="submit" data-status="draft" className="components-button is-compact is-tertiary" value={ MbbApp.status == 'publish' ? __( 'Switch to draft', 'meta-box-builder' ) : __( 'Save draft', 'meta-box-builder' ) } />

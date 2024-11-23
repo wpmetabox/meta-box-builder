@@ -32,15 +32,39 @@
 		padding: 0;
 	}
 
+	& &__logo {
+		padding: 6px;
+		min-width: fit-content;
+	}
+
 	&__logo svg {
 		width: 48px;
 		height: 48px;
-		padding: 6px;
 		display: block;
 	}
 
-	.page-title-action {
-		top: unset;
+	&__title {
+		border-width: 0 0 1px 0;
+		border-color: var(--color-light);
+		border-radius: 0;
+		padding-inline: 0;
+
+		&:focus {
+			outline: none;
+			border-color: var(--color-gray);
+		}
+	}
+
+	&__slug {
+		border: 0;
+		background: var(--color-lighter);
+		border-radius: 4px;
+		padding: 2px 6px;
+
+		&:focus {
+			outline: none;
+			background: var(--color-light);
+		}
 	}
 
 	&__actions {
