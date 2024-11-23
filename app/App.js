@@ -34,26 +34,29 @@ const App = () => {
 					</Tooltip>
 
 					<Flex gap={ 3 } align="baseline">
-						<div title={ __( 'Field group title', 'meta-box-builder' ) }>
+						<div className="mb-header__title" title={ __( 'Field group title', 'meta-box-builder' ) }>
 							<AutosizeInput
 								name="post_title"
-								inputClassName="mb-header__title"
 								inputStyle={ { fontSize: 20 } }
 								value={ title }
 								onChange={ e => setTitle( e.target.value ) }
 								placeholder={ __( 'Field group title', 'meta-box-builder' ) }
 							/>
 						</div>
-						<div title={ __( 'Field group ID (slug)', 'meta-box-builder' ) }>
-							<AutosizeInput
-								name="post_name"
-								inputClassName="mb-header__slug"
-								inputStyle={ { fontSize: 13 } }
-								value={ slug }
-								onChange={ e => setSlug( e.target.value ) }
-								placeholder={ __( 'Field group ID', 'meta-box-builder' ) }
-							/>
-						</div>
+						<Flex gap={ 0 } align="stretch" expanded={ false } className="mb-header__badge" title={ __( 'Field group ID (slug)', 'meta-box-builder' ) }>
+							<Flex align="center" expanded={ false } className="mb-header__badge__name">
+								{ __( 'ID', 'meta-box-builder' ) }
+							</Flex>
+							<Flex align="center" expanded={ false } className="mb-header__badge__content">
+								<AutosizeInput
+									name="post_name"
+									inputStyle={ { fontSize: 13 } }
+									value={ slug }
+									onChange={ e => setSlug( e.target.value ) }
+									placeholder={ __( 'Field group ID', 'meta-box-builder' ) }
+								/>
+							</Flex>
+						</Flex>
 					</Flex>
 				</Flex>
 				<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
