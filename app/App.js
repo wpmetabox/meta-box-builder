@@ -1,5 +1,5 @@
 import { Button, Flex, Tooltip } from '@wordpress/components';
-import { render, useContext, useEffect, useState } from "@wordpress/element";
+import { render, useContext, useEffect, useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, category, cog, drawerRight } from "@wordpress/icons";
 import { ErrorBoundary } from "react-error-boundary";
@@ -42,7 +42,7 @@ const Root = () => {
 
 const App = () => {
 	const { settings } = useContext( SettingsContext );
-	const [ toggle, setToggle ] = useState( true );
+	const [ showSidebar, toggleSidebar ] = useReducer( show => !show, true );
 
 	return (
 		<>
@@ -57,7 +57,7 @@ const App = () => {
 				<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
 					<input type="submit" name="draft" className="components-button is-compact is-tertiary mb-header__action--draft" value={ ( MbbApp.status == 'publish' ) ? __( 'Switch to draft', 'meta-box-builder' ) : __( 'Save draft', 'meta-box-builder' ) } />
 					<input type="submit" name="publish" className="mb-header__action--publish components-button is-primary" value={ ( MbbApp.status == 'publish' ) ? __( 'Update', 'meta-box-builder' ) : __( 'Publish', 'meta-box-builder' ) } />
-					<Button onClick={ () => setToggle( !toggle ) } className="is-compact" icon={ drawerRight } size="compact" label={ __( 'Toggle sidebar', 'meta-box-builder' ) } showTooltip={ true } isPressed={ toggle } />
+					<Button onClick={ toggleSidebar } className="is-compact" icon={ drawerRight } size="compact" label={ __( 'Toggle sidebar', 'meta-box-builder' ) } showTooltip={ true } isPressed={ showSidebar } />
 				</Flex>
 			</Flex>
 			<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
@@ -101,7 +101,7 @@ const App = () => {
 						</div>
 					</div>
 
-					{ toggle && <Sidebar /> }
+					{ showSidebar && <Sidebar /> }
 				</Flex>
 			</ErrorBoundary>
 			<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
