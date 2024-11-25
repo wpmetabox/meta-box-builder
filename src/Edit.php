@@ -18,6 +18,10 @@ class Edit extends BaseEditPage {
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], MBB_VER );
 
 		$asset = require MBB_DIR . "/assets/js/build/app.asset.php";
+
+		// Add extra JS libs for copy code to clipboard & block color picker.
+		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'wp-color-picker', 'code-editor' ] );
+
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/build/app.js', $asset['dependencies'], $asset['version'], true );
 
 		$fields = get_post_meta( get_the_ID(), 'fields', true ) ?: [];
