@@ -9,7 +9,7 @@ import Sidebar from './components/Sidebar';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
-import ThemeCode from "./components/ThemeCode";
+import ThemeCodeBox from "./components/ThemeCode/Box";
 import { SettingsContext, SettingsProvider } from "./contexts/SettingsContext";
 
 const Root = () => (
@@ -54,7 +54,7 @@ const App = () => {
 								</TabPanel>
 							</Tabs>
 
-							<ThemeCode />
+							<ThemeCodeBox />
 						</div>
 					</div>
 

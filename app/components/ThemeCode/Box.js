@@ -1,14 +1,14 @@
 import { RawHTML, useContext, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { SettingsContext } from "../contexts/SettingsContext";
-import { htmlDecode } from "../functions";
-import useApi from "../hooks/useApi";
-import useFieldIds from "../hooks/useFieldIds";
-import Content from "./Tabs/ThemeCodeTab/Content";
+import { SettingsContext } from "../../contexts/SettingsContext";
+import { htmlDecode } from "../../functions";
+import useApi from "../../hooks/useApi";
+import useFieldIds from "../../hooks/useFieldIds";
+import Content from "./Content";
 
 const $ = jQuery;
 
-const ThemeCode = () => {
+const Box = () => {
 	const fieldIds = useFieldIds( state => state.ids );
 	const { settings } = useContext( SettingsContext );
 
@@ -67,4 +67,4 @@ const ThemeCode = () => {
 	);
 };
 
-export default ThemeCode;
+export default Box;
