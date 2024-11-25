@@ -1,4 +1,4 @@
-import { Panel, PanelBody, PanelRow } from '@wordpress/components';
+import { Button, Panel, PanelBody, PanelRow } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 
 const Sidebar = () => (
@@ -9,7 +9,7 @@ const Sidebar = () => (
 				<p><label>{ __( 'Published', 'meta-box-builder' ) }</label> { MbbApp.published }</p>
 				{ MbbApp.modifiedtime && <p><label>{ __( 'Last modified', 'meta-box-builder' ) }</label> { MbbApp.modifiedtime }</p> }
 				<p><label>{ __( 'Author', 'meta-box-builder' ) }</label> { MbbApp.author }</p>
-				<p><a href={ MbbApp.trash }><button type="button" className="components-button is-secondary is-destructive">{ __( 'Move to trash', 'meta-box-builder' ) }</button></a></p>
+				<p><Button href={ MbbApp.trash } isDestructive={ true } variant="secondary">{ __( 'Move to trash', 'meta-box-builder' ) }</Button></p>
 			</PanelRow>
 		</PanelBody>
 		<PanelBody title={ __( 'Write a review', 'meta-box-builder' ) } initialOpen={ true }>
