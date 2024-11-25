@@ -11,6 +11,10 @@ import { SettingsContext, SettingsProvider } from "./contexts/SettingsContext";
 const Root = () => (
 	<SettingsProvider>
 		<App />
+
+		<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
+		<input type="hidden" name="messages" value="" />
+		<input type="hidden" name="mbb_nonce" value={ MbbApp.nonce_save } />
 	</SettingsProvider>
 );
 
@@ -35,10 +39,6 @@ const AppWrapper = ( { children } ) => {
 
 				{ showSidebar && <Sidebar /> }
 			</Flex >
-
-			<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
-			<input type="hidden" name="messages" value="" />
-			<input type="hidden" name="mbb_nonce" value={ MbbApp.nonce_save } />
 		</>
 	);
 };
