@@ -9,7 +9,7 @@ import Sidebar from './components/Sidebar';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
 import Settings from './components/Tabs/Settings';
-import ThemeCode from "./components/Tabs/ThemeCode";
+import ThemeCode from "./components/ThemeCode";
 import { SettingsContext, SettingsProvider } from "./contexts/SettingsContext";
 
 const Root = () => (
@@ -53,15 +53,8 @@ const App = () => {
 									<Result endPoint="generate" />
 								</TabPanel>
 							</Tabs>
-							{
-								MbbApp.fields.length > 0 && settings.object_type !== 'block' &&
-								<div className="mb-box">
-									<div className="mb-box__header">{ __( "Theme code", "meta-box-builder" ) }</div>
-									<div className="mb-box__body">
-										<ThemeCode settings={ settings } fields={ MbbApp.fields } />
-									</div>
-								</div>
-							}
+
+							<ThemeCode />
 						</div>
 					</div>
 
