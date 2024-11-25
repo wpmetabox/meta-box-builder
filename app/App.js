@@ -1,14 +1,10 @@
 import { Flex } from '@wordpress/components';
 import { render, useContext, useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { Icon, category, cog } from "@wordpress/icons";
 import { ErrorBoundary } from "react-error-boundary";
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Header from './components/Header';
+import Main from './components/Main';
 import Sidebar from './components/Sidebar';
-import Fields from './components/Tabs/Fields';
-import Result from './components/Tabs/Result';
-import Settings from './components/Tabs/Settings';
 import ThemeCodeBox from "./components/ThemeCode/Box";
 import { SettingsContext, SettingsProvider } from "./contexts/SettingsContext";
 
@@ -25,42 +21,22 @@ const App = () => {
 	return (
 		<>
 			<Header showSidebar={ showSidebar } toggleSidebar={ toggleSidebar } />
-			<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
-				<Flex gap={ 0 } align="flex-start" className="mb-body">
-					<div className="mb-body__inner">
-						<div className="mb-body__main">
-							<div className="wp-header-end" />
 
-							<Tabs forceRenderTabPanel={ true } className="react-tabs mb-tabs">
-								<TabList className="react-tabs__tab-list og-tabs--main">
-									<Tab>
-										<Icon icon={ category } />
-										{ __( 'Fields', 'meta-box-builder' ) }
-									</Tab>
-									<Tab>
-										<Icon icon={ cog } />
-										{ __( 'Settings', 'meta-box-builder' ) }
-									</Tab>
-									<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
-								</TabList>
-								<TabPanel>
-									<Fields fields={ MbbApp.fields } />
-								</TabPanel>
-								<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-									<Settings />
-								</TabPanel>
-								<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-									<Result endPoint="generate" />
-								</TabPanel>
-							</Tabs>
+			<Flex gap={ 0 } align="flex-start" className="mb-body">
+				<div className="mb-body__inner">
+					<div className="mb-body__main">
+						<div className="wp-header-end" />
 
+						<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
+							<Main />
 							<ThemeCodeBox />
-						</div>
+						</ErrorBoundary>
 					</div>
+				</div>
 
-					{ showSidebar && <Sidebar /> }
-				</Flex>
-			</ErrorBoundary>
+				{ showSidebar && <Sidebar /> }
+			</Flex >
+
 			<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
 			<input type="hidden" name="messages" value="" />
 			<input type="hidden" name="mbb_nonce" value={ MbbApp.nonce_save } />
