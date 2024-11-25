@@ -1,11 +1,10 @@
-import { Button, Flex, Tooltip } from '@wordpress/components';
-import { render, useContext, useReducer, useState } from "@wordpress/element";
+import { Flex } from '@wordpress/components';
+import { render, useContext, useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { Icon, category, cog, drawerRight } from "@wordpress/icons";
+import { Icon, category, cog } from "@wordpress/icons";
 import { ErrorBoundary } from "react-error-boundary";
-import AutosizeInput from 'react-input-autosize';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { ReactComponent as Logo } from './components/logo.svg';
+import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import Fields from './components/Tabs/Fields';
 import Result from './components/Tabs/Result';
@@ -22,51 +21,10 @@ const Root = () => (
 const App = () => {
 	const { settings } = useContext( SettingsContext );
 	const [ showSidebar, toggleSidebar ] = useReducer( show => !show, true );
-	const [ title, setTitle ] = useState( MbbApp.title );
-	const [ slug, setSlug ] = useState( MbbApp.slug );
 
 	return (
 		<>
-			<Flex className="mb-header">
-				<Flex expanded={ false }>
-					<Tooltip delay={ 0 } text={ __( 'Back to all field groups', 'meta-box-builder' ) } placement='bottom'>
-						<a className="mb-header__logo" href={ MbbApp.url }><Logo /></a>
-					</Tooltip>
-
-					<Flex gap={ 3 } align="baseline">
-						<div className="mb-header__title" title={ __( 'Field group title', 'meta-box-builder' ) }>
-							<AutosizeInput
-								name="post_title"
-								id="post_title"
-								inputStyle={ { fontSize: 20 } }
-								value={ title }
-								onChange={ e => setTitle( e.target.value ) }
-								placeholder={ __( 'Field group title', 'meta-box-builder' ) }
-							/>
-						</div>
-						<Flex gap={ 0 } align="stretch" expanded={ false } className="mb-header__badge" title={ __( 'Field group ID (slug)', 'meta-box-builder' ) }>
-							<Flex align="center" expanded={ false } className="mb-header__badge__name" as="label" htmlFor="post_name">
-								{ __( 'ID', 'meta-box-builder' ) }
-							</Flex>
-							<Flex align="center" expanded={ false } className="mb-header__badge__content">
-								<AutosizeInput
-									name="post_name"
-									id="post_name"
-									inputStyle={ { fontSize: 13 } }
-									value={ slug }
-									onChange={ e => setSlug( e.target.value ) }
-									placeholder={ __( 'Field group ID', 'meta-box-builder' ) }
-								/>
-							</Flex>
-						</Flex>
-					</Flex>
-				</Flex>
-				<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
-					<input type="submit" data-status="draft" className="components-button is-compact is-tertiary" value={ MbbApp.status == 'publish' ? __( 'Switch to draft', 'meta-box-builder' ) : __( 'Save draft', 'meta-box-builder' ) } />
-					<input type="submit" data-status="publish" className="components-button is-primary" value={ MbbApp.status == 'publish' ? __( 'Update', 'meta-box-builder' ) : __( 'Publish', 'meta-box-builder' ) } />
-					<Button onClick={ toggleSidebar } className="is-compact" icon={ drawerRight } size="compact" label={ __( 'Toggle sidebar', 'meta-box-builder' ) } showTooltip={ true } isPressed={ showSidebar } />
-				</Flex>
-			</Flex>
+			<Header showSidebar={ showSidebar } toggleSidebar={ toggleSidebar } />
 			<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
 				<Flex gap={ 0 } align="flex-start" className="mb-body">
 					<div className="mb-body__inner">
