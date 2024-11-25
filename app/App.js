@@ -37,6 +37,7 @@ const App = () => {
 						<div className="mb-header__title" title={ __( 'Field group title', 'meta-box-builder' ) }>
 							<AutosizeInput
 								name="post_title"
+								id="post_title"
 								inputStyle={ { fontSize: 20 } }
 								value={ title }
 								onChange={ e => setTitle( e.target.value ) }
@@ -44,12 +45,13 @@ const App = () => {
 							/>
 						</div>
 						<Flex gap={ 0 } align="stretch" expanded={ false } className="mb-header__badge" title={ __( 'Field group ID (slug)', 'meta-box-builder' ) }>
-							<Flex align="center" expanded={ false } className="mb-header__badge__name">
+							<Flex align="center" expanded={ false } className="mb-header__badge__name" as="label" htmlFor="post_name">
 								{ __( 'ID', 'meta-box-builder' ) }
 							</Flex>
 							<Flex align="center" expanded={ false } className="mb-header__badge__content">
 								<AutosizeInput
 									name="post_name"
+									id="post_name"
 									inputStyle={ { fontSize: 13 } }
 									value={ slug }
 									onChange={ e => setSlug( e.target.value ) }
