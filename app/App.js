@@ -14,7 +14,7 @@ const Root = () => (
 	</SettingsProvider>
 );
 
-const App = () => {
+const AppWrapper = ( { children } ) => {
 	const { settings } = useContext( SettingsContext );
 	const [ showSidebar, toggleSidebar ] = useReducer( show => !show, true );
 
@@ -28,8 +28,7 @@ const App = () => {
 						<div className="wp-header-end" />
 
 						<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
-							<Main />
-							<ThemeCodeBox />
+							{ children }
 						</ErrorBoundary>
 					</div>
 				</div>
@@ -43,6 +42,13 @@ const App = () => {
 		</>
 	);
 };
+
+const App = () => (
+	<AppWrapper>
+		<Main />
+		<ThemeCodeBox />
+	</AppWrapper>
+);
 
 const container = document.getElementById( 'poststuff' );
 container.classList.add( 'mb' );
