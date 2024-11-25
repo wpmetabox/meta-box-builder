@@ -22,4 +22,30 @@ jQuery( function ( $ ) {
 	$input.on( 'change', function() {
 		$submit.prop( 'disabled', ! $input.val() );
 	} );
+
+	document.getElementById( 'mbb-diff-dialog-close' ).addEventListener( 'click', () => {
+		document.getElementById( 'mbb-diff-dialog' ).close();
+	} );
+
+	document.getElementById( 'mbb-diff-dialog-sync-btn' ).addEventListener( 'click', () => {
+		document.getElementById( 'mbb-diff-dialog' ).close();
+	} );
+
+	document.getElementById( 'mbb-diff-dialog-close-btn' ).addEventListener( 'click', () => {
+		document.getElementById( 'mbb-diff-dialog' ).close();
+	} );
+
+	// Escape key to close dialog
+	document.addEventListener( 'keydown', ( e ) => {
+		if ( e.key === 'Escape' ) {
+			document.getElementById( 'mbb-diff-dialog' ).close();
+		}
+	} );
+
+	// Click outside to close dialog
+	document.getElementById( 'mbb-diff-dialog' ).addEventListener( 'click', ( e ) => {
+		if ( e.target === document.getElementById( 'mbb-diff-dialog' ) ) {
+			document.getElementById( 'mbb-diff-dialog' ).close();
+		}
+	} );
 } );

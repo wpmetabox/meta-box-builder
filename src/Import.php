@@ -10,7 +10,29 @@ class Import {
 		$this->upgrader_v4 = new Ver404();
 
 		add_action( 'admin_footer-edit.php', [ $this, 'output_js_templates' ] );
+
+		// Import from the Import selector.
 		add_action( 'admin_init', [ $this, 'import' ] );
+
+		// Import from the bulk action, we import from mb-json folder
+		add_action( 'admin_init', [ $this, 'bulk_action_import' ] );
+	}
+
+	public function bulk_action_import() {
+	 	$action = $_GET['action'] ?? $_GET['action2'] ?? ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if (''=== $action ) {
+			return;
+		}
+
+		$ids = $_GET['post'] ?? []; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ( empty( $ids ) ) {
+			return;
+		}
+
+	
+
 	}
 
 	public function output_js_templates() {
@@ -46,7 +68,7 @@ class Import {
 
 		$url    = admin_url( 'edit.php?post_type=' . sanitize_text_field( wp_unslash( $_POST['mbb_post_type'] ) ) );
 		$data   = file_get_contents( sanitize_text_field( $_FILES['mbb_file']['tmp_name'] ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$result = $this->import_json( $data );
+		$result = self::import_json( $data );
 
 		if ( ! $result ) {
 			$result = $this->import_dat( $data );
@@ -65,7 +87,7 @@ class Import {
 	/**
 	 * Import .json from v4.
 	 */
-	private function import_json( $data ) {
+	public static function import_json( $data ) {
 		$posts = json_decode( $data, true );
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
 			return false;
@@ -103,7 +125,7 @@ class Import {
 				wp_die( wp_kses_post( implode( '<br>', $post_id->get_error_messages() ) ) );
 			}
 
-			$meta_keys = $this->get_meta_keys( $post['post_type'] );
+			$meta_keys = Export::get_meta_keys( $post['post_type'] );
 			foreach ( $meta_keys as $meta_key ) {
 				update_post_meta( $post_id, $meta_key, $post[ $meta_key ] );
 			}
@@ -157,18 +179,5 @@ class Import {
 		}
 
 		return true;
-	}
-
-	private function get_meta_keys( $post_type ) {
-		switch ( $post_type ) {
-			case 'meta-box':
-				return [ 'settings', 'fields', 'data', 'meta_box' ];
-			case 'mb-relationship':
-				return [ 'settings', 'relationship' ];
-			case 'mb-settings-page':
-				return [ 'settings', 'settings_page' ];
-			default:
-				return [];
-		}
 	}
 }
