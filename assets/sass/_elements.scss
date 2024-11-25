@@ -1,3 +1,11 @@
+& {
+	margin-top: 24px;
+
+	&.mb {
+		margin-top: 0;
+	}
+}
+
 label {
 	cursor: pointer;
 }
