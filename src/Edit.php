@@ -52,6 +52,7 @@ class Edit extends BaseEditPage {
 
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'nonce_save'    => wp_create_nonce( 'mbb-save' ),
 
 			'postTypes'     => Data::get_post_types(),
 			'taxonomies'    => Data::get_taxonomies(),
