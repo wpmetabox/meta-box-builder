@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
 
-const InputAttributes = ( { defaultValue, componentId, fieldType, name, ...rest } ) => (
+const InputAttributes = ( { defaultValue, name, ...rest } ) => (
 	<DivRow { ...rest }>
 		<div className="og-multiple-choices">
 			<label>

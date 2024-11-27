@@ -105,28 +105,12 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 
 	// Special case for CloneQuantity.
 	if ( control.name === 'CloneQuantity' ) {
-		defaultFallbackValue = '';
-
-		key = bracketsToDots( name.replace( 'clone_quantity', 'min_clone' ) );
-		const min = dotProp.get( objectValue, key, defaultFallbackValue );
-
-		key = bracketsToDots( name.replace( 'clone_quantity', 'max_clone' ) );
-		const max = dotProp.get( objectValue, key, defaultFallbackValue );
-
-		defaultValue = { min, max };
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_quantity', [ 'min_clone', 'max_clone' ], '' );
 	}
 
 	// Special case for PrependAppend.
 	if ( control.name === 'PrependAppend' ) {
-		defaultFallbackValue = '';
-
-		key = bracketsToDots( name.replace( 'prepend_append', 'prepend' ) );
-		const prepend = dotProp.get( objectValue, key, defaultFallbackValue );
-
-		key = bracketsToDots( name.replace( 'prepend_append', 'append' ) );
-		const append = dotProp.get( objectValue, key, defaultFallbackValue );
-
-		defaultValue = { prepend, append };
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'prepend_append', [ 'prepend', 'append' ], '' );
 	}
 
 	// Special case for InputAttributes.
