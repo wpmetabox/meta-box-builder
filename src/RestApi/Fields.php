@@ -75,14 +75,14 @@ class Fields extends Base {
 		$general  = [ 'name', 'id', 'type', 'label_description', 'desc' ];
 		$advanced = [ 'before', 'after', 'class', 'sanitize_callback', 'save_field', 'attributes', 'validation', 'custom_settings' ];
 		$clone    = [ 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'clone_empty_start', 'clone_quantity', 'add_button' ];
-		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'required', 'disabled', 'readonly', 'js_options' ];
+		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'input_attributes', 'js_options' ];
 		$map      = [ 'std', 'address_field', 'language', 'region', 'required' ];
 		$taxonomy = [ 'taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args' ];
 		$post     = [ 'post_type', 'field_type', 'add_new', 'multiple', 'select_all_none', 'parent', 'required', 'placeholder', 'query_args' ];
 		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];
 		$upload   = [ 'max_file_uploads', 'max_status', 'force_delete', 'required' ];
-		$input    = [ 'required', 'disabled', 'readonly' ];
-		$html5    = [ 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ];
+		$input    = [ 'input_attributes' ];
+		$html5    = [ 'std', 'placeholder', 'size', 'input_attributes' ];
 		$icon     = [ 'icon_set', 'icon_file', 'icon_dir', 'icon_css' ];
 
 		$field_types = [

@@ -129,7 +129,22 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 		defaultValue = { prepend, append };
 	}
 
+	// Special case for InputAttributes.
+	if ( control.name === 'InputAttributes' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'required', 'disabled', 'readonly' ], false );
+	}
+
 	return [ Control, input, defaultValue ];
+};
+
+const getFieldValueForCombinedControl = ( objectValue, name, inputName, params, defaultFallbackValue ) => {
+	let defaultValue = {};
+	params.forEach( param => {
+		const key = bracketsToDots( name.replace( inputName, param ) );
+		defaultValue[ param ] = dotProp.get( objectValue, key, defaultFallbackValue );
+	} );
+
+	return defaultValue;
 };
 
 const getDefaultControlValue = name => {

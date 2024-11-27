@@ -1,0 +1,23 @@
+&-multiple-choices {
+	display: inline-flex;
+	align-items: center;
+	gap: 16px;
+
+	label {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		padding: 4px 8px 4px 6px;
+  		border-radius: 4px;
+		border: 1px solid transparent;
+		border-color: #8c8f94;
+
+		&:hover {
+			background: var(--color-lightest);
+		}
+	}
+
+	input[type="checkbox"] {
+		margin: 0;
+	}
+}

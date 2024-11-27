@@ -150,6 +150,7 @@ class Registry {
 			Control::Checkbox( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
 			Control::Checkbox( 'required', __( 'Required', 'meta-box-builder' ) ),
 			Control::Checkbox( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
+			Control::InputAttributes( 'input_attributes', __( 'Attributes', 'meta-box-builder' ) ),
 			'js_options_date'              => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'jQueryUI date picker options', 'meta-box-builder' ),
