@@ -3,7 +3,7 @@ import DivRow from './DivRow';
 
 const InputAttributes = ( { defaultValue, name, ...rest } ) => (
 	<DivRow { ...rest }>
-		<div className="og-multiple-choices">
+		<div className="og-toggle-group">
 			<label>
 				<input type="hidden" name={ `${ name.replace( 'input_attributes', 'required' ) }` } value={ false } />
 				<input
@@ -12,6 +12,7 @@ const InputAttributes = ( { defaultValue, name, ...rest } ) => (
 					defaultChecked={ defaultValue.required }
 					value={ true }
 				/>
+				<span className="dashicons dashicons-yes-alt"></span>
 				<span>{ __( 'Required', 'meta-box-builder' ) }</span>
 			</label>
 			<label>
@@ -22,6 +23,7 @@ const InputAttributes = ( { defaultValue, name, ...rest } ) => (
 					defaultChecked={ defaultValue.disabled }
 					value={ true }
 				/>
+				<span className="dashicons dashicons-yes-alt"></span>
 				<span>{ __( 'Disabled', 'meta-box-builder' ) }</span>
 			</label>
 			<label>
@@ -32,6 +34,7 @@ const InputAttributes = ( { defaultValue, name, ...rest } ) => (
 					defaultChecked={ defaultValue.readonly }
 					value={ true }
 				/>
+				<span className="dashicons dashicons-yes-alt"></span>
 				<span>{ __( 'Readonly', 'meta-box-builder' ) }</span>
 			</label>
 		</div>

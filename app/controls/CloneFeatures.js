@@ -4,7 +4,7 @@ import DivRow from './DivRow';
 
 const CloneFeatures = ( { defaultValue, name, ...rest } ) => (
 	<DivRow { ...rest }>
-		<div className="og-multiple-choices">
+		<div className="og-toggle-group">
 			<label>
 				<input type="hidden" name={ `${ name.replace( 'clone_features', 'sortable' ) }` } value={ false } />
 				<input
@@ -13,6 +13,7 @@ const CloneFeatures = ( { defaultValue, name, ...rest } ) => (
 					defaultChecked={ defaultValue.sortable }
 					value={ true }
 				/>
+				<span className="dashicons dashicons-yes-alt"></span>
 				<Tooltip text={ __( 'Allow to drag-and-drop reorder clones', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
 					<span>{ __( 'Sortable', 'meta-box-builder' ) }</span>
 				</Tooltip>
@@ -25,6 +26,7 @@ const CloneFeatures = ( { defaultValue, name, ...rest } ) => (
 					defaultChecked={ defaultValue.clone_default }
 					value={ true }
 				/>
+				<span className="dashicons dashicons-yes-alt"></span>
 				<Tooltip text={ __( 'Set default values for new clones', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
 					<span>{ __( 'Set default value', 'meta-box-builder' ) }</span>
 				</Tooltip>
@@ -37,6 +39,7 @@ const CloneFeatures = ( { defaultValue, name, ...rest } ) => (
 					defaultChecked={ defaultValue.clone_empty_start }
 					value={ true }
 				/>
+				<span className="dashicons dashicons-yes-alt"></span>
 				<Tooltip text={ __( 'Start from no inputs except the "+ Add more" button', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
 					<span>{ __( 'Start from no inputs', 'meta-box-builder' ) }</span>
 				</Tooltip>
@@ -49,6 +52,7 @@ const CloneFeatures = ( { defaultValue, name, ...rest } ) => (
 					defaultChecked={ defaultValue.clone_as_multiple }
 					value={ true }
 				/>
+				<span className="dashicons dashicons-yes-alt"></span>
 				<Tooltip text={ __( 'Save each clone in a single row instead of saving all clones in one serialized row in the database', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
 					<span>{ __( 'Save in multiple rows', 'meta-box-builder' ) }</span>
 				</Tooltip>
