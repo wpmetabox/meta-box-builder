@@ -25,7 +25,7 @@ class Tooltip {
 			'tooltip'    => __( 'Can be "info" (default), "help", Dashicons or URL of the custom icon image', 'meta-box-builder' ),
 			'dependency' => 'tooltip_enable:true',
 		] );
-		$controls[] = Control::Select( 'tooltip_position', [
+		$controls[] = Control::ToggleGroup( 'tooltip_position', [
 			'name'       => 'tooltip[position]',
 			'label'      => __( 'Position', 'meta-box-builder' ),
 			'dependency' => 'tooltip_enable:true',

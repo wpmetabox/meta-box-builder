@@ -4,6 +4,7 @@ import useObjectType from "../hooks/useObjectType";
 import usePostTypes from "../hooks/usePostTypes";
 import Checkbox from './Checkbox';
 import Select from './Select';
+import ToggleGroup from "./ToggleGroup";
 
 const Post = () => {
 	const settings = getSettings();
@@ -21,26 +22,23 @@ const Post = () => {
 	}
 
 	return objectType === 'post' && postTypes.length > 0 && <>
-		<Select
+		<ToggleGroup
 			name="settings[context]"
 			label={ __( 'Position', 'meta-box-builder' ) }
 			options={ contextOptions }
 			defaultValue={ settings.context || 'normal' }
-			componentId="settings-context"
 		/>
-		<Select
+		<ToggleGroup
 			name="settings[priority]"
 			label={ __( 'Priority', 'meta-box-builder' ) }
 			options={ { high: __( 'High', 'meta-box-builder' ), low: __( 'Low', 'meta-box-builder' ) } }
 			defaultValue={ settings.priority || 'high' }
-			componentId="settings-priority"
 		/>
-		<Select
+		<ToggleGroup
 			name="settings[style]"
 			label={ __( 'Style', 'meta-box-builder' ) }
-			options={ { default: __( 'Standard (WordPress meta box)', 'meta-box-builder' ), seamless: __( 'Seamless (no meta box)', 'meta-box-builder' ) } }
+			options={ { default: __( 'Standard', 'meta-box-builder' ), seamless: __( 'Seamless', 'meta-box-builder' ) } }
 			defaultValue={ settings.style || 'default' }
-			componentId="settings-style"
 		/>
 		<Checkbox
 			name="settings[closed]"
