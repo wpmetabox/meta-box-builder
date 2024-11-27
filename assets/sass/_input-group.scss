@@ -1,5 +1,5 @@
 &-input-group {
-	display: flex;
+	display: inline-flex;
 	align-items: stretch;
 
 	label {
@@ -11,7 +11,8 @@
 		background: var(--color-lighter);
 	}
 
-	input {
+	input,
+	select {
 		margin-inline: 0;
 
 		&:focus {
@@ -19,12 +20,8 @@
 		}
 	}
 
-	input[type="number"] {
+	input[type] {
 		width: 6em;
-	}
-
-	input[type="text"] {
-		width: 12em;
 	}
 
 	:first-child {
@@ -33,13 +30,10 @@
 
 	:not(:first-child) {
 		border-radius: 0;
+		margin-left: -1px;
 	}
 
 	:last-child {
 		border-radius: 0 4px 4px 0;
-	}
-
-	label:not(:first-child) {
-		border-left: 0;
 	}
 }
