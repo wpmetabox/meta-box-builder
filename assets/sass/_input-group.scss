@@ -5,10 +5,17 @@
 	label {
 		display: flex;
 		align-items: center;
+		gap: 4px;
 		padding-inline: 8px;
 		border: 1px solid #8c8f94;
-		border-right: 0;
 		background: var(--color-lightest);
+		white-space: nowrap;
+
+		&:has(input:checked) {
+			.dashicons {
+				color: var(--color-primary);
+			}
+		}
 	}
 
 	input,
@@ -20,7 +27,7 @@
 		}
 	}
 
-	input[type] {
+	input:not([size]) {
 		width: 6em;
 	}
 
@@ -35,5 +42,17 @@
 
 	:last-child {
 		border-radius: 0 4px 4px 0;
+	}
+
+	input[type="checkbox"] {
+		display: none;
+	}
+
+	.dashicons {
+		width: 12px;
+		height: 12px;
+		font-size: 12px;
+		color: var(--color-light);
+		line-height: 1;
 	}
 }

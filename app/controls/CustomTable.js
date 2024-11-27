@@ -1,7 +1,8 @@
+import { Tooltip } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import useObjectType from "../hooks/useObjectType";
 import Checkbox from './Checkbox';
-import Input from './Input';
+import DivRow from "./DivRow";
 
 const CustomTable = ( { defaultValue } ) => {
 	const objectType = useObjectType( state => state.type );
@@ -12,28 +13,41 @@ const CustomTable = ( { defaultValue } ) => {
 			componentId="settings-table_enable"
 			defaultValue={ !!defaultValue.enable }
 		/>
-		<Input
-			name="settings[custom_table][name]"
-			label={ __( 'Table name', 'meta-box-builder' ) }
-			componentId="settings-table_name"
-			defaultValue={ defaultValue.name }
-			dependency="table_enable:true"
-		/>
-		<Checkbox
-			name="settings[custom_table][prefix]"
-			label={ __( 'Include table prefix', 'meta-box-builder' ) }
-			componentId="settings-table_prefix"
-			defaultValue={ !!defaultValue.prefix }
-			dependency="table_enable:true"
-		/>
-		<Checkbox
-			name="settings[custom_table][create]"
-			label={ __( 'Create table automatically', 'meta-box-builder' ) }
-			tooltip={ __( 'Enable this option will automatically create the table with all columns as TEXT. Create the table manually to set proper column types for a better performance.', 'meta-box-builder' ) }
-			componentId="settings-table_create"
-			defaultValue={ !!defaultValue.create }
-			dependency="table_enable:true"
-		/>
+		<DivRow htmlFor="settings-table_name" dependency="table_enable:true" label={ __( 'Table name', 'meta-box-builder' ) }>
+			<div className="og-input-group">
+				<input
+					type="text"
+					size={ 16 }
+					id="settings-table_name"
+					name="settings[custom_table][name]"
+					defaultValue={ defaultValue.name }
+				/>
+				<label>
+					<input type="hidden" name="settings[custom_table][prefix]" value={ false } />
+					<input
+						type="checkbox"
+						name="settings[custom_table][prefix]"
+						defaultChecked={ !!defaultValue.prefix }
+						value={ true }
+					/>
+					<span className="dashicons dashicons-yes-alt"></span>
+					<span>{ __( 'Include table prefix', 'meta-box-builder' ) }</span>
+				</label>
+				<label>
+					<input type="hidden" name="settings[custom_table][create]" value={ false } />
+					<input
+						type="checkbox"
+						name="settings[custom_table][create]"
+						defaultChecked={ !!defaultValue.create }
+						value={ true }
+					/>
+					<span className="dashicons dashicons-yes-alt"></span>
+					<Tooltip text={ __( 'Auto create the table with all columns as TEXT. Create the table manually to set proper column types for a better performance.', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
+						<span>{ __( 'Auto create', 'meta-box-builder' ) }</span>
+					</Tooltip>
+				</label>
+			</div>
+		</DivRow>
 	</>;
 };
 

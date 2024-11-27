@@ -7,8 +7,11 @@
 		display: inline-flex;
 		align-items: center;
 		gap: 4px;
-		padding: 4px 8px 4px 6px;
+		padding: 4px 8px;
 		border: 1px solid #8c8f94;
+		height: 30px;
+		box-sizing: border-box;
+		white-space: nowrap;
 
 		&:first-child {
 			border-radius: 4px 0 0 4px;
@@ -46,9 +49,5 @@
 
 	input {
 		display: none;
-	}
-
-	span {
-		line-height: 20px;
 	}
 }
