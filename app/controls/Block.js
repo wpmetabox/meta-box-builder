@@ -11,6 +11,7 @@ import Input from './Input';
 import ReactSelect from './ReactSelect';
 import Select from './Select';
 import Textarea from './Textarea';
+import ToggleGroup from "./ToggleGroup";
 import { ensureArray } from '/functions';
 
 const renderWithOptions = {
@@ -102,7 +103,7 @@ const Block = () => {
         const $this = jQuery( e );
 
         $this.attr( 'data-url', MbbApp.viewEditUrl + getRenderViewId( renderView ) + '&action=edit' );
-        
+
         $this.rwmbModal( { ...modalConfig, isEdit: true } );
     };
 
@@ -201,10 +202,9 @@ const Block = () => {
             tooltip={ __( 'Separate by commas', 'meta-box-builder' ) }
             defaultValue={ settings.keywords }
         />
-        <Select
+        <ToggleGroup
             name="settings[block_context]"
             label={ __( 'Block settings position', 'meta-box-builder' ) }
-            componentId="settings-block-block_context"
             options={ {
                 normal: __( 'In the content area', 'meta-box-builder' ),
                 side: __( 'On the right sidebar', 'meta-box-builder' ),
