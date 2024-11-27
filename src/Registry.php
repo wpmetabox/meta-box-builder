@@ -80,23 +80,8 @@ class Registry {
 				'label'   => __( 'Cloneable', 'meta-box-builder' ),
 				'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
 			] ),
-			Control::Checkbox( 'sort_clone', [
-				'label'      => __( 'Sortable', 'meta-box-builder' ),
-				'tooltip'    => __( 'Allows to drag-and-drop reorder clones', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::Checkbox( 'clone_default', [
-				'label'      => __( 'Clone default value', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::Checkbox( 'clone_as_multiple', [
-				'label'      => __( 'Clone as multiple', 'meta-box-builder' ),
-				'tooltip'    => __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::Checkbox( 'clone_empty_start', [
-				'label'      => __( 'Clone empty start', 'meta-box-builder' ),
-				'tooltip'    => __( 'Start from no items except the "+ Add more" button', 'meta-box-builder' ),
+			Control::CloneFeatures( 'clone_features', [
+				'label'      => __( 'Clone features', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
 			Control::CloneQuantity( 'clone_quantity', [

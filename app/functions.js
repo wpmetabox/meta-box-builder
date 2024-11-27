@@ -118,6 +118,11 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'required', 'disabled', 'readonly' ], false );
 	}
 
+	// Special case for InputAttributes.
+	if ( control.name === 'CloneFeatures' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_features', [ 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple' ], false );
+	}
+
 	return [ Control, input, defaultValue ];
 };
 
