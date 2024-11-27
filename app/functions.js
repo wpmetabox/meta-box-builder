@@ -100,8 +100,21 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 		defaultFallbackValue = getDefaultControlValue( control.name );
 	}
 
-	const key = bracketsToDots( name );
-	const defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
+	let key = bracketsToDots( name );
+	let defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
+
+	// Special case for clone_quantity.
+	if ( control.name === 'CloneQuantity' ) {
+		defaultFallbackValue = '';
+
+		key = bracketsToDots( name.replace( 'clone_quantity', 'min_clone' ) );
+		const min = dotProp.get( objectValue, key, defaultFallbackValue );
+
+		key = bracketsToDots( name.replace( 'clone_quantity', 'max_clone' ) );
+		const max = dotProp.get( objectValue, key, defaultFallbackValue );
+
+		defaultValue = { min, max };
+	}
 
 	return [ Control, input, defaultValue ];
 };

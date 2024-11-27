@@ -99,15 +99,8 @@ class Registry {
 				'tooltip'    => __( 'Start from no items except the "+ Add more" button', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
-			Control::Input( 'min_clone', [
-				'type'       => 'number',
-				'label'      => __( 'Min number of clones', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::Input( 'max_clone', [
-				'type'       => 'number',
-				'label'      => __( 'Max number of clones', 'meta-box-builder' ),
-				'tooltip'    => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
+			Control::CloneQuantity( 'clone_quantity', [
+				'label'      => __( 'Number of clones', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
 			Control::Input( 'add_button', [
