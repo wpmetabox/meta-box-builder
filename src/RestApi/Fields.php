@@ -155,7 +155,7 @@ class Fields extends Base {
 			'email'             => [
 				'title'       => __( 'Email', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, [ 'prepend', 'append' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, $html5, [ 'prepend_append' ], $clone, $advanced ),
 				'description' => __( 'For entering an email address with browser validation', 'meta-box-builder' ),
 			],
 			'fieldset_text'     => [
@@ -245,7 +245,7 @@ class Fields extends Base {
 			'number'            => [
 				'title'       => __( 'Number', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, [ 'min', 'max', 'step' ], $html5, [ 'prepend', 'append' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, [ 'min', 'max', 'step' ], $html5, [ 'prepend_append' ], $clone, $advanced ),
 				'description' => __( 'For entering a number with browser validation', 'meta-box-builder' ),
 			],
 			'oembed'            => [
@@ -335,7 +335,7 @@ class Fields extends Base {
 			'text'              => [
 				'title'       => __( 'Text', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, $html5, [ 'prepend', 'append', 'datalist_choices' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, $html5, [ 'prepend_append', 'datalist_choices' ], $clone, $advanced ),
 				'description' => __( 'A single-line text input', 'meta-box-builder' ),
 			],
 			'text_list'         => [
@@ -365,7 +365,7 @@ class Fields extends Base {
 			'url'               => [
 				'title'       => __( 'URL', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, [ 'prepend', 'append' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, $html5, [ 'prepend_append' ], $clone, $advanced ),
 				'description' => __( 'An input for URL with browser validation', 'meta-box-builder' ),
 			],
 			'video'             => [

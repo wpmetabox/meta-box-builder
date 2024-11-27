@@ -103,7 +103,7 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	let key = bracketsToDots( name );
 	let defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
 
-	// Special case for clone_quantity.
+	// Special case for CloneQuantity.
 	if ( control.name === 'CloneQuantity' ) {
 		defaultFallbackValue = '';
 
@@ -114,6 +114,19 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 		const max = dotProp.get( objectValue, key, defaultFallbackValue );
 
 		defaultValue = { min, max };
+	}
+
+	// Special case for PrependAppend.
+	if ( control.name === 'PrependAppend' ) {
+		defaultFallbackValue = '';
+
+		key = bracketsToDots( name.replace( 'prepend_append', 'prepend' ) );
+		const prepend = dotProp.get( objectValue, key, defaultFallbackValue );
+
+		key = bracketsToDots( name.replace( 'prepend_append', 'append' ) );
+		const append = dotProp.get( objectValue, key, defaultFallbackValue );
+
+		defaultValue = { prepend, append };
 	}
 
 	return [ Control, input, defaultValue ];

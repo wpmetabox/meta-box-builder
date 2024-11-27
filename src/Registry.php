@@ -707,8 +707,7 @@ class Registry {
 			'std_switch'                   => Control::Checkbox( 'std', __( 'ON by default', 'meta-box-builder' ) ),
 
 			// Text.
-			Control::Input( 'prepend', __( 'Prepend text', 'meta-box-builder' ) ),
-			Control::Input( 'append', __( 'Append text', 'meta-box-builder' ) ),
+			Control::PrependAppend( 'prepend_append', __( 'Text wrap', 'meta-box-builder' ) ),
 			Control::Textarea( 'datalist_choices', [
 				'label'   => __( 'Predefined values', 'meta-box-builder' ),
 				'tooltip' => __( 'Known as "datalist", these are values that users can select from (they still can enter text if they want). Enter each value on a line.', 'meta-box-builder' ),
