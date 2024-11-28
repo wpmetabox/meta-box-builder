@@ -56,3 +56,9 @@
 		line-height: 1;
 	}
 }
+
+&-input-group-grid-2 {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 16px;
+}

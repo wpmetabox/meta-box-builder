@@ -20,8 +20,7 @@ class Group {
 				'name',
 				'id',
 				'type',
-				'label_description',
-				'desc',
+				'descriptions',
 				Control::Checkbox( 'collapsible', __( 'Collapsible', 'meta-box-builder' ) ),
 				Control::ToggleGroup( 'default_state', [
 					'label'      => __( 'Default state', 'meta-box-builder' ),

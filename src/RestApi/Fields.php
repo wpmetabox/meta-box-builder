@@ -72,7 +72,7 @@ class Fields extends Base {
 	public function get_field_types() {
 		$this->registry->register_default_controls();
 
-		$general  = [ 'name', 'id', 'type', 'label_description', 'desc' ];
+		$general  = [ 'name', 'id', 'type', 'descriptions' ];
 		$advanced = [ 'before', 'after', 'class', 'sanitize_callback', 'save_field', 'attributes', 'validation', 'custom_settings' ];
 		$clone    = [ 'clone', 'clone_features', 'clone_quantity', 'add_button' ];
 		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'input_attributes', 'js_options' ];
