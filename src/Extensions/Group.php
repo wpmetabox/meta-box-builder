@@ -23,7 +23,7 @@ class Group {
 				'label_description',
 				'desc',
 				Control::Checkbox( 'collapsible', __( 'Collapsible', 'meta-box-builder' ) ),
-				Control::Select( 'default_state', [
+				Control::ToggleGroup( 'default_state', [
 					'label'      => __( 'Default state', 'meta-box-builder' ),
 					'dependency' => 'collapsible:true',
 					'options'    => [
@@ -32,7 +32,7 @@ class Group {
 					],
 				], 'expanded' ),
 				Control::Checkbox( 'save_state', [
-					'label'      => __( 'Save state', 'meta-box-builder' ),
+					'label'      => __( 'Remember state', 'meta-box-builder' ),
 					'dependency' => 'collapsible:true',
 				] ),
 				Control::GroupTitle( 'group_title', [
