@@ -13,7 +13,7 @@ const CustomTable = ( { defaultValue } ) => {
 			componentId="settings-table_enable"
 			defaultValue={ !!defaultValue.enable }
 		/>
-		<DivRow htmlFor="settings-table_name" dependency="table_enable:true" label={ __( 'Table name', 'meta-box-builder' ) }>
+		<DivRow htmlFor="settings-table_name" dependency="table_enable:true" label={ `<span class="og-indent"></span>${ __( 'Table name', 'meta-box-builder' ) }` }>
 			<div className="og-input-group">
 				<input
 					type="text"

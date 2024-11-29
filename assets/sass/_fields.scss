@@ -505,3 +505,10 @@
 		height: auto;
 	}
 }
+
+// Indentation for labels of sub-controls.
+&-indent {
+	display: inline-block;
+	width: 24px;
+	height: 1px;
+}

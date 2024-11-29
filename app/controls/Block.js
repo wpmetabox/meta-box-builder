@@ -364,7 +364,7 @@ const Block = () => {
 
         <Input
             name="settings[block_json][path]"
-            label={ __( 'Block folder', 'meta-box-builder' ) }
+            label={ `<span class="og-indent"></span>${ __( 'Block folder', 'meta-box-builder' ) }` }
             componentId="settings-block-path"
             description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
             defaultValue={ settings.block_json?.path }
@@ -376,7 +376,7 @@ const Block = () => {
         <input type="hidden" name="settings[block_json][version]" value={ settings.block_json?.version } />
 
         { isNewer &&
-            <DivRow label={ __( 'Synchronize block.json', 'meta-box-builder' ) }>
+            <DivRow label={ `<span class="og-indent"></span>${ __( 'Synchronize block.json', 'meta-box-builder' ) }` }>
                 <Flex direction="column">
                     <div dangerouslySetInnerHTML={ {
                         __html: __( 'We detected a newer version of <code>block.json</code> from the current folder, do you want to override settings from this path?', 'meta-box-builder' )
@@ -399,7 +399,7 @@ const Block = () => {
             </DivRow>
         }
 
-        <DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
+        <DivRow label={ `<span class="og-indent"></span>${ __( 'Supported variables', 'meta-box-builder' ) }` } >
             <table className="og-block-description">
                 <tbody>
                     <tr>
