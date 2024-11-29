@@ -1,13 +1,13 @@
 import { Dashicon } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { fetcher, uniqid } from "../functions";
-import useObjectType from "../hooks/useObjectType";
-import usePostTypes from "../hooks/usePostTypes";
-import DivRow from './DivRow';
-import ReactAsyncSelect from './ReactAsyncSelect';
+import DivRow from '../../controls/DivRow';
+import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
+import { fetcher, uniqid } from "../../functions";
+import useObjectType from "../../hooks/useObjectType";
+import usePostTypes from "../../hooks/usePostTypes";
 
-const IncludeExclude = ( { defaultValue } ) => {
+const IncludeExclude = ( { defaultValue = {} } ) => {
 	const objectType = useObjectType( state => state.type );
 	const postTypes = usePostTypes( state => state.types );
 	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );

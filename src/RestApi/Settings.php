@@ -7,7 +7,6 @@ class Settings extends Base {
 	public function get_settings_controls() {
 		// Use big numeric index for extensions to add at specific places.
 		$controls = [
-			0  => Control::Location( 'location' ),
 			10 => Control::Post( 'post' ),
 			20 => Control::Input( 'class', [
 				'label'   => __( 'Custom CSS class', 'meta-box-builder' ),

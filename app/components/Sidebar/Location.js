@@ -1,12 +1,12 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { getSettings } from "../functions";
-import useObjectType from "../hooks/useObjectType";
-import usePostTypes from "../hooks/usePostTypes";
-import Checkbox from './Checkbox';
-import DivRow from './DivRow';
-import ReactSelect from './ReactSelect';
-import Select from './Select';
+import { getSettings } from "../../functions";
+import useObjectType from "../../hooks/useObjectType";
+import usePostTypes from "../../hooks/usePostTypes";
+import Checkbox from '../../controls/Checkbox';
+import DivRow from '../../controls/DivRow';
+import ReactSelect from '../../controls/ReactSelect';
+import Select from '../../controls/Select';
 import { ensureArray } from '/functions';
 
 const Location = () => {

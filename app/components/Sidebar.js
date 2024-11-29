@@ -4,6 +4,8 @@ import { __ } from "@wordpress/i18n";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { getControlParams } from "../functions";
 import useApi from "../hooks/useApi";
+import Location from './Sidebar/Location';
+import IncludeExclude from './Sidebar/IncludeExclude';
 
 const Sidebar = () => {
 	const settingsControls = useApi( 'settings-controls', [] );
@@ -18,6 +20,12 @@ const Sidebar = () => {
 					{ MbbApp.modifiedtime && <p><label>{ __( 'Last modified', 'meta-box-builder' ) }</label> { MbbApp.modifiedtime }</p> }
 					<p><label>{ __( 'Author', 'meta-box-builder' ) }</label> { MbbApp.author }</p>
 					<p><Button href={ MbbApp.trash } isDestructive={ true } variant="secondary">{ __( 'Move to trash', 'meta-box-builder' ) }</Button></p>
+				</PanelRow>
+			</PanelBody>
+			<PanelBody title={ __( 'Location', 'meta-box-builder' ) } initialOpen={ true }>
+				<PanelRow>
+					<Location />
+					{ MbbApp.extensions.includeExclude && <IncludeExclude /> }
 				</PanelRow>
 			</PanelBody>
 			{

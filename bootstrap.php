@@ -31,7 +31,6 @@ new Extensions\Columns();
 new Extensions\ConditionalLogic();
 new Extensions\CustomTable();
 new Extensions\Group();
-new Extensions\IncludeExclude();
 new Extensions\Relationships();
 new Extensions\SettingsPage();
 new Extensions\ShowHide();
