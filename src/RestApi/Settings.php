@@ -1,8 +1,6 @@
 <?php
 namespace MBB\RestApi;
 
-use MBB\Control;
-
 class Settings extends Base {
 	public function get_settings_controls() {
 		// Use big numeric index for extensions to add at specific places.

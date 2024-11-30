@@ -10,7 +10,6 @@ class Blocks {
 		if ( ! Data::is_extension_active( 'mb-blocks' ) ) {
 			return;
 		}
-		add_filter( 'mbb_settings_controls', [ $this, 'add_settings_controls' ] );
 		add_filter( 'mbb_app_data', [ $this, 'add_app_data' ] );
 		add_action( 'mbb_after_save', [ $this, 'generate_block_json' ], 10, 3 );
 		add_action( 'init', [ $this, 'register_blocks' ] );
@@ -164,11 +163,6 @@ class Blocks {
 			// Now we register the block with the provided path
 			register_block_type( trailingslashit( $meta_box['block_json']['path'] ) . $meta_box['id'] );
 		}
-	}
-
-	public function add_settings_controls( $controls ) {
-		$controls[12] = Control::Block( 'block' );
-		return $controls;
 	}
 
 	public function add_app_data( array $data ) {
