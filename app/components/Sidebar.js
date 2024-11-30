@@ -1,10 +1,6 @@
 import { Button, Panel, PanelBody, PanelRow } from '@wordpress/components';
-import { useContext } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { SettingsContext } from "../contexts/SettingsContext";
-import useApi from "../hooks/useApi";
 import useObjectType from "../hooks/useObjectType";
-import usePostTypes from "../hooks/usePostTypes";
 import Advanced from './Sidebar/Advanced';
 import Block from './Sidebar/Block';
 import BlockJSONSettings from './Sidebar/BlockJSONSettings';
@@ -18,10 +14,7 @@ import ShowHide from './Sidebar/ShowHide';
 import Tabs from './Sidebar/Tabs';
 
 const Sidebar = () => {
-	const settingsControls = useApi( 'settings-controls', [] );
-	const { settings, updateSettings } = useContext( SettingsContext );
 	const objectType = useObjectType( state => state.type );
-	const postTypes = usePostTypes( state => state.types );
 
 	return (
 		<Panel className="mb-sidebar">
@@ -42,7 +35,7 @@ const Sidebar = () => {
 				}
 			</PanelBody>
 			{
-				objectType === 'post' && postTypes.length > 0 &&
+				objectType === 'post' &&
 				<PanelBody title={ __( 'Settings', 'meta-box-builder' ) } initialOpen={ true }>
 					<PanelRow><Post /></PanelRow>
 				</PanelBody>
