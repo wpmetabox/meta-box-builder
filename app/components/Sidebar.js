@@ -7,6 +7,7 @@ import useApi from "../hooks/useApi";
 import ConditionalLogic from './Sidebar/ConditionalLogic';
 import IncludeExclude from './Sidebar/IncludeExclude';
 import Location from './Sidebar/Location';
+import ShowHide from './Sidebar/ShowHide';
 
 const Sidebar = () => {
 	const settingsControls = useApi( 'settings-controls', [] );
@@ -27,6 +28,12 @@ const Sidebar = () => {
 				<PanelRow><Location /></PanelRow>
 				{ MbbApp.extensions.includeExclude && <PanelRow><IncludeExclude /></PanelRow> }
 			</PanelBody>
+			{
+				MbbApp.extensions.showHide &&
+				<PanelBody title={ __( 'Toggle rules', 'meta-box-builder' ) }>
+					<PanelRow className="og-include-exclude"><ShowHide /></PanelRow>
+				</PanelBody>
+			}
 			{
 				MbbApp.extensions.conditionalLogic &&
 				<PanelBody title={ __( 'Conditional logic', 'meta-box-builder' ) }>

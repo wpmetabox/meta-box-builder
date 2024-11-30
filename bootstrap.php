@@ -33,7 +33,6 @@ new Extensions\CustomTable();
 new Extensions\Group();
 new Extensions\Relationships();
 new Extensions\SettingsPage();
-new Extensions\ShowHide();
 new Extensions\Tabs();
 new Extensions\Tooltip();
 new Extensions\RestApi();
