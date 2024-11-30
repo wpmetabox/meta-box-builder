@@ -7,6 +7,8 @@ import useObjectType from "../hooks/useObjectType";
 import usePostTypes from "../hooks/usePostTypes";
 import Advanced from './Sidebar/Advanced';
 import Block from './Sidebar/Block';
+import BlockJSONSettings from './Sidebar/BlockJSONSettings';
+import BlockRenderSettings from './Sidebar/BlockRenderSettings';
 import ConditionalLogic from './Sidebar/ConditionalLogic';
 import CustomTable from './Sidebar/CustomTable';
 import IncludeExclude from './Sidebar/IncludeExclude';
@@ -49,6 +51,18 @@ const Sidebar = () => {
 				objectType === 'block' &&
 				<PanelBody title={ __( 'Block settings', 'meta-box-builder' ) } initialOpen={ true }>
 					<PanelRow><Block /></PanelRow>
+				</PanelBody>
+			}
+			{
+				objectType === 'block' &&
+				<PanelBody title={ __( 'Block render settings', 'meta-box-builder' ) } initialOpen={ false }>
+					<PanelRow><BlockRenderSettings /></PanelRow>
+				</PanelBody>
+			}
+			{
+				objectType === 'block' &&
+				<PanelBody title={ __( 'Block JSON settings', 'meta-box-builder' ) } initialOpen={ false }>
+					<PanelRow><BlockJSONSettings /></PanelRow>
 				</PanelBody>
 			}
 			{
