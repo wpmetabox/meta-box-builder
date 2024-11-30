@@ -17,9 +17,12 @@
 	@import "toggle-group";
 }
 
-.mb-sidebar {
-	.og {
-		@import "sidebar/base";
-		@import "sidebar/location";
-	}
+.mb-content .og {
+	@import "include-exclude";
+}
+
+.mb-sidebar .og {
+	@import "sidebar/base";
+	@import "sidebar/location";
+	@import "sidebar/include-exclude";
 }
