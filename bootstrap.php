@@ -12,7 +12,6 @@ new RestApi\Generator();
 new RestApi\ThemeCode\ThemeCode();
 
 new RestApi\Fields( new Registry() );
-new RestApi\Settings();
 
 if ( Helpers\Data::is_extension_active( 'mb-blocks' ) ) {
 	new RestApi\Blocks();
