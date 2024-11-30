@@ -5,11 +5,13 @@ import { SettingsContext } from "../contexts/SettingsContext";
 import { getControlParams } from "../functions";
 import useApi from "../hooks/useApi";
 import useObjectType from "../hooks/useObjectType";
+import usePostTypes from "../hooks/usePostTypes";
 import Advanced from './Sidebar/Advanced';
 import ConditionalLogic from './Sidebar/ConditionalLogic';
 import CustomTable from './Sidebar/CustomTable';
 import IncludeExclude from './Sidebar/IncludeExclude';
 import Location from './Sidebar/Location';
+import Post from './Sidebar/Post';
 import ShowHide from './Sidebar/ShowHide';
 import Tabs from './Sidebar/Tabs';
 
@@ -17,6 +19,7 @@ const Sidebar = () => {
 	const settingsControls = useApi( 'settings-controls', [] );
 	const { settings, updateSettings } = useContext( SettingsContext );
 	const objectType = useObjectType( state => state.type );
+	const postTypes = usePostTypes( state => state.types );
 
 	return (
 		<Panel className="mb-sidebar">
@@ -46,6 +49,12 @@ const Sidebar = () => {
 				MbbApp.extensions.conditionalLogic &&
 				<PanelBody title={ __( 'Conditional logic', 'meta-box-builder' ) }>
 					<PanelRow className="og-include-exclude"><ConditionalLogic /></PanelRow>
+				</PanelBody>
+			}
+			{
+				objectType === 'post' && postTypes.length > 0 &&
+				<PanelBody title={ __( 'Settings', 'meta-box-builder' ) }>
+					<PanelRow><Post /></PanelRow>
 				</PanelBody>
 			}
 			{

@@ -6,9 +6,7 @@ use MBB\Control;
 class Settings extends Base {
 	public function get_settings_controls() {
 		// Use big numeric index for extensions to add at specific places.
-		$controls = [
-			10 => Control::Post( 'post' ),
-		];
+		$controls = [];
 
 		$controls = apply_filters( 'mbb_settings_controls', $controls );
 
