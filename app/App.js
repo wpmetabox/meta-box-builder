@@ -28,7 +28,7 @@ const AppWrapper = ( { children } ) => {
 
 			<Flex gap={ 0 } align="flex-start" className="mb-body">
 				<div className="mb-body__inner">
-					<div className="mb-body__main">
+					<div className="mb-content">
 						<div className="wp-header-end" />
 
 						<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
