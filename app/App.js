@@ -26,7 +26,7 @@ const AppWrapper = ( { children } ) => {
 		<>
 			<Header showSidebar={ showSidebar } toggleSidebar={ toggleSidebar } />
 
-			<Flex gap={ 0 } align="flex-start" className="mb-body">
+			<Flex gap={ 0 } align="stretch" className="mb-body">
 				<div className="mb-body__inner">
 					<div className="mb-content">
 						<div className="wp-header-end" />

@@ -19,6 +19,22 @@
 	padding-left: 0;
 }
 
+#wpbody-content {
+	padding-bottom: 0;
+}
+
+// App: full height
+@media (min-width:782px) {
+	.mb {
+		min-height: calc(100vh - 32px);
+	}
+}
+
+.mb {
+	display: flex;
+	flex-direction: column;
+}
+
 // Header
 .mb-header {
 	background: #fff;
@@ -94,6 +110,7 @@
 
 // Body: main area
 .mb-body {
+	flex: 1;
 	position: relative;
 
 	// Notices
