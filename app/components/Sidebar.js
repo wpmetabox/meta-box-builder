@@ -4,8 +4,8 @@ import { __ } from "@wordpress/i18n";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { getControlParams } from "../functions";
 import useApi from "../hooks/useApi";
-import Location from './Sidebar/Location';
 import IncludeExclude from './Sidebar/IncludeExclude';
+import Location from './Sidebar/Location';
 
 const Sidebar = () => {
 	const settingsControls = useApi( 'settings-controls', [] );
@@ -25,8 +25,8 @@ const Sidebar = () => {
 			<PanelBody title={ __( 'Location', 'meta-box-builder' ) } initialOpen={ true }>
 				<PanelRow>
 					<Location />
-					{ MbbApp.extensions.includeExclude && <IncludeExclude /> }
 				</PanelRow>
+				{ MbbApp.extensions.includeExclude && <PanelRow><IncludeExclude /></PanelRow> }
 			</PanelBody>
 			{
 				settingsControls.length > 0 &&

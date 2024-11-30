@@ -15,7 +15,11 @@
 	@import "field-inserter";
 	@import "input-group";
 	@import "toggle-group";
+}
 
-	@import "sidebar/base";
-	@import "sidebar/location";
+.mb-sidebar {
+	.og {
+		@import "sidebar/base";
+		@import "sidebar/location";
+	}
 }

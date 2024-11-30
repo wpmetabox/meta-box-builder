@@ -1,4 +1,3 @@
-import { Dashicon } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from '../../controls/DivRow';
@@ -18,7 +17,7 @@ const IncludeExclude = ( { defaultValue = {} } ) => {
 	return ( objectType !== 'block' &&
 		<DivRow
 			className="og-include-exclude"
-			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced location rules', 'meta-box-builder' ) }</a>` }
+			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced rules', 'meta-box-builder' ) }</a>` }
 			tooltip={ __( 'More rules on where to display the field group. For each rule, maximum 10 items are displayed. To select other items, please use the search.', 'meta-box-builder' ) }
 		>
 			{ rules.length > 0 && <Intro defaultValue={ defaultValue } /> }
@@ -42,6 +41,7 @@ const Intro = ( { defaultValue } ) => (
 			<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
+		<br />
 		<select name="settings[include_exclude][relation]" defaultValue={ defaultValue.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
@@ -73,7 +73,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 	const loadOptions = s => fetcher( 'include-exclude', { name, s, post_types: postTypes } );
 
 	return (
-		<div className="og-include-exclude__rule og-attribute">
+		<div className="og-include-exclude__rule">
 			<input type="hidden" name={ `${ baseName }[id]` } defaultValue={ rule.id } />
 			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" defaultValue={ name } onChange={ onChangeName }>
 				{ objectType === 'post' && <option value="ID">{ __( 'Post', 'meta-box-builder' ) }</option> }
@@ -120,7 +120,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 					defaultValue={ rule.value }
 				/>
 			}
-			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
+			<a href="#" className="og-include-exclude__remove" onClick={ () => removeRule( rule.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
 		</div>
 	);
 };

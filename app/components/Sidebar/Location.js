@@ -1,12 +1,12 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { getSettings } from "../../functions";
-import useObjectType from "../../hooks/useObjectType";
-import usePostTypes from "../../hooks/usePostTypes";
 import Checkbox from '../../controls/Checkbox';
 import DivRow from '../../controls/DivRow';
 import ReactSelect from '../../controls/ReactSelect';
 import Select from '../../controls/Select';
+import { getSettings } from "../../functions";
+import useObjectType from "../../hooks/useObjectType";
+import usePostTypes from "../../hooks/usePostTypes";
 import { ensureArray } from '/functions';
 
 const Location = () => {
@@ -23,7 +23,7 @@ const Location = () => {
 
 	return (
 		<>
-			<DivRow label={ __( 'Location', 'meta-box-builder' ) } htmlFor="settings-object_type" className="og-location" tooltip={ __( 'Select where to display the field group', 'meta-box-builder' ) }>
+			<DivRow label={ __( 'Rule', 'meta-box-builder' ) } htmlFor="settings-object_type" className="og-location" tooltip={ __( 'Where to display the field group', 'meta-box-builder' ) }>
 				<select id="settings-object_type" name="settings[object_type]" defaultValue={ objectType } onChange={ e => setObjectType( e.target.value ) }>
 					<option value="post">{ __( 'Post type', 'meta-box-builder' ) }</option>
 					{ MbbApp.extensions.termMeta && <option value="term">{ __( 'Taxonomy', 'meta-box-builder' ) }</option> }

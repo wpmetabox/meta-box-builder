@@ -7,6 +7,7 @@
 
 &-include-exclude {
 	select {
+		max-width: 100%;
 		width: auto;
 	}
 
@@ -15,22 +16,30 @@
 
 		select {
 			margin-right: 8px;
+			width: 80px;
 
-			&:not(:first-child) {
-				margin-left: 8px;
+			&:first-child {
+				margin-bottom: 4px;
 			}
 		}
 	}
 
 	&__rule {
-		align-items: flex-start;
+		border: 1px solid var(--color-gray);
+		padding: 8px;
+		margin-bottom: 8px;
+		border-radius: 4px;
+		background: var(--color-lightest);
 	}
 
-	&__name {
-		flex: 1;
-	}
-
+	&__name,
 	&__value {
-		flex: 2;
+		margin-bottom: 8px;
+	}
+
+	&__remove,
+	&__remove:hover {
+		color: var(--color-red);
+		font-size: 11px;
 	}
 }
