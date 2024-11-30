@@ -1,9 +1,9 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import Checkbox from '../../controls/Checkbox';
 import DivRow from '../../controls/DivRow';
 import ReactSelect from '../../controls/ReactSelect';
 import Select from '../../controls/Select';
+import Toggle from "../../controls/Toggle";
 import { getSettings } from "../../functions";
 import useObjectType from "../../hooks/useObjectType";
 import usePostTypes from "../../hooks/usePostTypes";
@@ -64,11 +64,10 @@ const Location = () => {
 			</DivRow>
 			{
 				'post' === objectType && postTypes.includes( 'attachment' ) &&
-				<Checkbox
+				<Toggle
 					label={ __( 'Show in media modal', 'meta-box-builder' ) }
 					name="settings[media_modal]"
 					defaultValue={ !!settings.media_modal }
-					componentId="settings-media_modal"
 				/>
 			}
 			{
