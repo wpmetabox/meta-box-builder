@@ -11,8 +11,9 @@ import { getSettings } from "../../functions";
 import { ensureArray } from '/functions';
 
 const Block = () => {
-	const [ settings, setSettings ] = useState( getSettings() );
+	const settings = getSettings();
 	const [ iconType, setIconType ] = useState( settings.icon_type || 'dashicons' );
+	const [ context, setContext ] = useState( settings.block_context || 'side' );
 
 	useEffect( () => {
 		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
@@ -25,8 +26,7 @@ const Block = () => {
 			name="settings[description]"
 			label={ __( 'Description', 'meta-box-builder' ) }
 			componentId="settings-block-description"
-			value={ settings.description }
-			onChange={ e => setSettings( { ...settings, description: e.target.value } ) }
+			defaultValue={ settings.description }
 		/>
 		<Select
 			name="settings[icon_type]"
@@ -96,9 +96,10 @@ const Block = () => {
 					value: 'side',
 				},
 			] }
-			selected={ settings.block_context || 'side' }
-			onChange={ value => setSettings( { ...settings, block_context: value } ) }
+			selected={ context }
+			onChange={ setContext }
 		/>
+		<input type="hidden" name="settings[block_context]" value={ context } />
 		<ReactSelect
 			name="settings[supports][align][]"
 			label={ __( 'Alignment', 'meta-box-builder' ) }
