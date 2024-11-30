@@ -8,6 +8,7 @@ import ConditionalLogic from './Sidebar/ConditionalLogic';
 import IncludeExclude from './Sidebar/IncludeExclude';
 import Location from './Sidebar/Location';
 import ShowHide from './Sidebar/ShowHide';
+import Tabs from './Sidebar/Tabs';
 
 const Sidebar = () => {
 	const settingsControls = useApi( 'settings-controls', [] );
@@ -50,6 +51,12 @@ const Sidebar = () => {
 							) )
 						}
 					</PanelRow>
+				</PanelBody>
+			}
+			{
+				MbbApp.extensions.tabs &&
+				<PanelBody title={ __( 'Tab settings', 'meta-box-builder' ) }>
+					<PanelRow><Tabs /></PanelRow>
 				</PanelBody>
 			}
 		</Panel>
