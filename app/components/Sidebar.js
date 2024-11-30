@@ -1,17 +1,17 @@
 import { Button, Panel, PanelBody, PanelRow } from '@wordpress/components';
 import { Suspense, useContext } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import useObjectType from "../hooks/useObjectType";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { getControlParams } from "../functions";
 import useApi from "../hooks/useApi";
+import useObjectType from "../hooks/useObjectType";
+import Advanced from './Sidebar/Advanced';
 import ConditionalLogic from './Sidebar/ConditionalLogic';
 import CustomTable from './Sidebar/CustomTable';
 import IncludeExclude from './Sidebar/IncludeExclude';
 import Location from './Sidebar/Location';
 import ShowHide from './Sidebar/ShowHide';
 import Tabs from './Sidebar/Tabs';
-import Advanced from './Sidebar/Advanced';
 
 const Sidebar = () => {
 	const settingsControls = useApi( 'settings-controls', [] );
@@ -31,10 +31,13 @@ const Sidebar = () => {
 			</PanelBody>
 			<PanelBody title={ __( 'Location', 'meta-box-builder' ) } initialOpen={ true }>
 				<PanelRow><Location /></PanelRow>
-				{ MbbApp.extensions.includeExclude && <PanelRow><IncludeExclude /></PanelRow> }
+				{
+					MbbApp.extensions.includeExclude && objectType !== 'block' &&
+					<PanelRow><IncludeExclude /></PanelRow>
+				}
 			</PanelBody>
 			{
-				MbbApp.extensions.showHide &&
+				MbbApp.extensions.showHide && objectType !== 'block' &&
 				<PanelBody title={ __( 'Toggle rules', 'meta-box-builder' ) }>
 					<PanelRow className="og-include-exclude"><ShowHide /></PanelRow>
 				</PanelBody>

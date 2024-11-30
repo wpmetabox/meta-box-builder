@@ -2,13 +2,11 @@ import { Tooltip } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import DivRow from "../../controls/DivRow";
 import Toggle from "../../controls/Toggle";
-import useObjectType from "../../hooks/useObjectType";
 
 const CustomTable = () => {
 	const defaultValue = MbbApp?.settings?.custom_table || {};
-	const objectType = useObjectType( state => state.type );
 
-	return ![ 'setting', 'block' ].includes( objectType ) && <>
+	return <>
 		<Toggle
 			name="settings[custom_table][enable]"
 			label={ __( 'Save data in a custom table', 'meta-box-builder' ) }

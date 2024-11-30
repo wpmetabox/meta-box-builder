@@ -8,14 +8,13 @@ import usePostTypes from "../../hooks/usePostTypes";
 
 const IncludeExclude = () => {
 	const defaultValue = MbbApp?.settings?.include_exclude || {};
-	const objectType = useObjectType( state => state.type );
 	const postTypes = usePostTypes( state => state.types );
 	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
 
 	const addRule = () => setRules( prev => [ ...prev, { name: 'ID', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
-	return ( objectType !== 'block' &&
+	return (
 		<DivRow
 			className="og-include-exclude"
 			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced rules', 'meta-box-builder' ) }</a>` }

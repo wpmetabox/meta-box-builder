@@ -13,7 +13,7 @@ const ShowHide = () => {
 	const addRule = () => setRules( prev => [ ...prev, { name: 'template', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
-	return ( objectType !== 'block' &&
+	return (
 		<>
 			{ rules.length > 0 && <Intro defaultValue={ defaultValue } /> }
 			{
