@@ -29,7 +29,6 @@ new Extensions\AdminColumns();
 new Extensions\Blocks();
 new Extensions\Columns();
 new Extensions\ConditionalLogic();
-new Extensions\CustomTable();
 new Extensions\Group();
 new Extensions\Relationships();
 new Extensions\SettingsPage();

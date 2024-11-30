@@ -5,6 +5,7 @@ import { SettingsContext } from "../contexts/SettingsContext";
 import { getControlParams } from "../functions";
 import useApi from "../hooks/useApi";
 import ConditionalLogic from './Sidebar/ConditionalLogic';
+import CustomTable from './Sidebar/CustomTable';
 import IncludeExclude from './Sidebar/IncludeExclude';
 import Location from './Sidebar/Location';
 import ShowHide from './Sidebar/ShowHide';
@@ -57,6 +58,12 @@ const Sidebar = () => {
 				MbbApp.extensions.tabs &&
 				<PanelBody title={ __( 'Tab settings', 'meta-box-builder' ) }>
 					<PanelRow><Tabs /></PanelRow>
+				</PanelBody>
+			}
+			{
+				MbbApp.extensions.customTable &&
+				<PanelBody title={ __( 'Custom table', 'meta-box-builder' ) }>
+					<PanelRow><CustomTable /></PanelRow>
 				</PanelBody>
 			}
 		</Panel>
