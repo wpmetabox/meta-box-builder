@@ -1,6 +1,7 @@
 import { Button, Panel, PanelBody, PanelRow } from '@wordpress/components';
 import { Suspense, useContext } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import useObjectType from "../hooks/useObjectType";
 import { SettingsContext } from "../contexts/SettingsContext";
 import { getControlParams } from "../functions";
 import useApi from "../hooks/useApi";
@@ -10,10 +11,12 @@ import IncludeExclude from './Sidebar/IncludeExclude';
 import Location from './Sidebar/Location';
 import ShowHide from './Sidebar/ShowHide';
 import Tabs from './Sidebar/Tabs';
+import Advanced from './Sidebar/Advanced';
 
 const Sidebar = () => {
 	const settingsControls = useApi( 'settings-controls', [] );
 	const { settings, updateSettings } = useContext( SettingsContext );
+	const objectType = useObjectType( state => state.type );
 
 	return (
 		<Panel className="mb-sidebar">
@@ -61,9 +64,15 @@ const Sidebar = () => {
 				</PanelBody>
 			}
 			{
-				MbbApp.extensions.customTable &&
+				MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) &&
 				<PanelBody title={ __( 'Custom table', 'meta-box-builder' ) }>
 					<PanelRow><CustomTable /></PanelRow>
+				</PanelBody>
+			}
+			{
+				![ 'setting', 'block' ].includes( objectType ) &&
+				<PanelBody title={ __( 'Advanced', 'meta-box-builder' ) }>
+					<PanelRow><Advanced /></PanelRow>
 				</PanelBody>
 			}
 		</Panel>
