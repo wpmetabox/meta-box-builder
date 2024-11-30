@@ -5,7 +5,7 @@ import { UnControlled as CodeMirror } from 'react-codemirror2';
 import DivRow from '../../controls/DivRow';
 import Input from '../../controls/Input';
 import Select from '../../controls/Select';
-import { fetcher, getSettings } from "../../functions";
+import { getSettings } from "../../functions";
 
 const renderWithOptions = {
 	callback: __( 'PHP callback function', 'meta-box-builder' ),
@@ -24,8 +24,7 @@ const getRenderViewId = ( renderView ) => {
 };
 
 const BlockRenderSettings = () => {
-	const [ settings, setSettings ] = useState( getSettings() );
-	const [ iconType, setIconType ] = useState( settings.icon_type || 'dashicons' );
+	const settings = getSettings();
 	const [ renderWith, setRenderWith ] = useState( settings.render_with || 'callback' );
 	const [ codeEditor, setCodeEditor ] = useState();
 
@@ -37,15 +36,7 @@ const BlockRenderSettings = () => {
 
 	const codeRef = useRef();
 
-	useEffect( () => {
-		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
-	}, [ iconType ] );
-
-	const updateIconType = e => setIconType( e.target.value );
 	const updateRenderWith = e => setRenderWith( e.target.value );
-
-	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
-	const [ isNewer, setIsNewer ] = useState( false );
 
 	const modalConfig = {
 		hideElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
@@ -66,30 +57,6 @@ const BlockRenderSettings = () => {
 			setRenderView( postName );
 		},
 	};
-	/**
-	 * Get local path data, including whether the path is writable, block.json version.
-	 *
-	 * @param any _
-	 * @param string path
-	 */
-	const getLocalPathData = async ( _, path ) => {
-		const postName = document.getElementById( 'post_name' ).value;
-
-		if ( !postName ) {
-			return;
-		}
-
-		const { is_writable, is_newer } = await fetcher( 'local-path-data', {
-			path,
-			version: settings.block_json?.version || 0,
-			postName
-		} );
-
-		const errorMessage = is_writable ? '' : __( 'The path is not writable.', 'meta-box-builder' );
-
-		setIsNewer( is_newer );
-		setBlockPathError( errorMessage );
-	};
 
 	const showEditViewModal = e => {
 		const $this = jQuery( e );
@@ -108,14 +75,6 @@ const BlockRenderSettings = () => {
 	const handleSelectView = e => {
 		setRenderView( e.target.value );
 	};
-
-	useEffect( () => {
-		if ( !settings.block_json?.path ) {
-			return;
-		}
-
-		getLocalPathData( null, settings.block_json?.path );
-	}, [] );
 
 	useEffect( () => {
 		if ( codeEditor ) {
@@ -199,33 +158,25 @@ const BlockRenderSettings = () => {
 
 		{
 			renderWith === 'view' && MbbApp.extensions.views &&
-			<DivRow label={ __( 'Select a view', 'meta-box-builder' ) } className="og-field--block-view">
+			<DivRow htmlFor="settings-block-render_view" label={ __( 'Select a view', 'meta-box-builder' ) } className="og-field--block-view">
 				<select
 					name="settings[render_view]"
-					componentId="settings-block-render_view"
+					id="settings-block-render_view"
 					value={ renderView }
 					onChange={ handleSelectView }
 				>
 					<option value="">{ __( 'Select a view', 'meta-box-builder' ) }</option>
-					{ Object.entries( views ).map( ( [ id, view ] ) => (
-						<option data-id={ id } value={ view.post_name }>{ view.post_title }</option>
-					) ) }
+					{
+						Object.entries( views ).map( ( [ id, view ] ) => (
+							<option key={ id } data-id={ id } value={ view.post_name }>{ view.post_title }</option>
+						) )
+					}
 				</select>
 
 				<Flex justify="left">
-					<a
-						href="#"
-						ref={ addViewButtonRef }
-						role="button"
-						data-url={ MbbApp.viewAddUrl }
-					>{ __( '+ Add View', 'meta-box-builder' ) }</a>
-
-					{ renderView &&
-						<a
-							href="#"
-							ref={ editViewButtonRef }
-							role="button"
-						>{ __( 'Edit View', 'meta-box-builder' ) }</a>
+					<a href="#" ref={ addViewButtonRef } data-url={ MbbApp.viewAddUrl }>{ __( '+ Add View', 'meta-box-builder' ) }</a>
+					{
+						renderView && <a href="#" ref={ editViewButtonRef }>{ __( 'Edit View', 'meta-box-builder' ) }</a>
 					}
 				</Flex>
 			</DivRow>
