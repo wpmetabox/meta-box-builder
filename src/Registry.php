@@ -29,6 +29,9 @@ class Registry {
 				'tooltip'     => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
 				'description' => __( 'Use only lowercase letters, numbers, underscores (and be careful dashes).', 'meta-box-builder' ),
 			] ),
+			Control::Descriptions( 'descriptions', [
+				'label'   => __( 'Description', 'meta-box-builder' ),
+			] ),
 			Control::Input( 'label_description', [
 				'label'   => __( 'Label description', 'meta-box-builder' ),
 				'tooltip' => __( 'Display below the field label', 'meta-box-builder' ),
@@ -80,38 +83,16 @@ class Registry {
 				'label'   => __( 'Cloneable', 'meta-box-builder' ),
 				'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
 			] ),
-			Control::Checkbox( 'sort_clone', [
-				'label'      => __( 'Sortable', 'meta-box-builder' ),
-				'tooltip'    => __( 'Allows to drag-and-drop reorder clones', 'meta-box-builder' ),
+			Control::CloneFeatures( 'clone_features', [
+				'label'      => '<span class="og-indent"></span>' . __( 'Clone features', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
-			Control::Checkbox( 'clone_default', [
-				'label'      => __( 'Clone default value', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::Checkbox( 'clone_as_multiple', [
-				'label'      => __( 'Clone as multiple', 'meta-box-builder' ),
-				'tooltip'    => __( 'Save clones in multiple rows in the database', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::Checkbox( 'clone_empty_start', [
-				'label'      => __( 'Clone empty start', 'meta-box-builder' ),
-				'tooltip'    => __( 'Start from no items except the "+ Add more" button', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::Input( 'min_clone', [
-				'type'       => 'number',
-				'label'      => __( 'Min number of clones', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::Input( 'max_clone', [
-				'type'       => 'number',
-				'label'      => __( 'Max number of clones', 'meta-box-builder' ),
-				'tooltip'    => __( 'Leave empty for unlimited clones', 'meta-box-builder' ),
+			Control::CloneQuantity( 'clone_quantity', [
+				'label'      => '<span class="og-indent"></span>' . __( 'Number of clones', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
 			Control::Input( 'add_button', [
-				'label'      => __( 'Add more text', 'meta-box-builder' ),
+				'label'      => '<span class="og-indent"></span>' . __( 'Add more text', 'meta-box-builder' ),
 				'tooltip'    => __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
@@ -157,6 +138,7 @@ class Registry {
 			Control::Checkbox( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
 			Control::Checkbox( 'required', __( 'Required', 'meta-box-builder' ) ),
 			Control::Checkbox( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
+			Control::InputAttributes( 'input_attributes', __( 'Attributes', 'meta-box-builder' ) ),
 			'js_options_date'              => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'jQueryUI date picker options', 'meta-box-builder' ),
@@ -714,8 +696,7 @@ class Registry {
 			'std_switch'                   => Control::Checkbox( 'std', __( 'ON by default', 'meta-box-builder' ) ),
 
 			// Text.
-			Control::Input( 'prepend', __( 'Prepend text', 'meta-box-builder' ) ),
-			Control::Input( 'append', __( 'Append text', 'meta-box-builder' ) ),
+			Control::PrependAppend( 'prepend_append', __( 'Text wrap', 'meta-box-builder' ) ),
 			Control::Textarea( 'datalist_choices', [
 				'label'   => __( 'Predefined values', 'meta-box-builder' ),
 				'tooltip' => __( 'Known as "datalist", these are values that users can select from (they still can enter text if they want). Enter each value on a line.', 'meta-box-builder' ),

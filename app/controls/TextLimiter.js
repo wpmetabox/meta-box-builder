@@ -4,7 +4,7 @@ import DivRow from './DivRow';
 const TextLimiter = ( { defaultValue, componentId, fieldType, name, ...rest } ) => {
 	return [ 'text', 'textarea', 'wysiwyg' ].includes( fieldType ) &&
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<div className="og-text-limit">
+			<div className="og-input-group">
 				<input
 					type="number"
 					min="0"

@@ -4,14 +4,25 @@
 @import "gutenberg";
 
 .og {
-  @import "elements";
-  @import "fields";
-  @import "group";
-  @import "toggle";
-  @import "inserter";
-  @import "settings";
-  @import "themecode";
-  @import "result";
-  @import "field-inserter";
-  @import "text-limit";
+	@import "elements";
+	@import "fields";
+	@import "group";
+	@import "toggle";
+	@import "inserter";
+	@import "settings";
+	@import "themecode";
+	@import "result";
+	@import "field-inserter";
+	@import "input-group";
+	@import "toggle-group";
+}
+
+.mb-content .og {
+	@import "include-exclude";
+}
+
+.mb-sidebar .og {
+	@import "sidebar/base";
+	@import "sidebar/location";
+	@import "sidebar/include-exclude";
 }

@@ -38,14 +38,7 @@ export const ensureArray = arr => {
 	return typeof arr === 'object' ? Object.values( arr ) : [ arr ];
 };
 
-export const getSettings = () => {
-	const urlParams = parseQueryString( window.location.search );
-	const settings = MbbApp.settings || {};
-
-	return { ...settings, ...urlParams.settings };
-};
-
-const parseQueryString = queryString => {
+export const parseQueryString = queryString => {
 	const params = new URLSearchParams( queryString );
 	return convert( params );
 };
@@ -100,10 +93,36 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 		defaultFallbackValue = getDefaultControlValue( control.name );
 	}
 
-	const key = bracketsToDots( name );
-	const defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
+	let key = bracketsToDots( name );
+	let defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
+
+	if ( control.name === 'CloneQuantity' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_quantity', [ 'min_clone', 'max_clone' ], '' );
+	}
+	if ( control.name === 'PrependAppend' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'prepend_append', [ 'prepend', 'append' ], '' );
+	}
+	if ( control.name === 'InputAttributes' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'required', 'disabled', 'readonly' ], false );
+	}
+	if ( control.name === 'CloneFeatures' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_features', [ 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple' ], false );
+	}
+	if ( control.name === 'Descriptions' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'descriptions', [ 'label_description', 'desc' ], false );
+	}
 
 	return [ Control, input, defaultValue ];
+};
+
+const getFieldValueForCombinedControl = ( objectValue, name, inputName, params, defaultFallbackValue ) => {
+	let defaultValue = {};
+	params.forEach( param => {
+		const key = bracketsToDots( name.replace( inputName, param ) );
+		defaultValue[ param ] = dotProp.get( objectValue, key, defaultFallbackValue );
+	} );
+
+	return defaultValue;
 };
 
 const getDefaultControlValue = name => {

@@ -1,42 +1,13 @@
 & {
 	margin-top: 24px;
+
+	&.mb {
+		margin-top: 0;
+	}
 }
 
 label {
 	cursor: pointer;
-}
-
-// Admin color schemes.
-.admin-color-blue {
-	--color-primary: #e1a948;
-}
-
-.admin-color-coffee {
-	--color-primary: #c7a589;
-}
-
-.admin-color-ectoplasm {
-	--color-primary: #a3b745;
-}
-
-.admin-color-light {
-	--color-primary: #04a4cc;
-}
-
-.admin-color-midnight {
-	--color-primary: #e14d43;
-}
-
-.admin-color-modern {
-	--color-primary: #3858e9;
-}
-
-.admin-color-ocean {
-	--color-primary: #9ebaa0;
-}
-
-.admin-color-sunrise {
-	--color-primary: #dd823b;
 }
 
 h3 {
@@ -57,7 +28,7 @@ input[type=search] {
 	outline-offset: -2px;
 }
 
-svg {
+.mb-content svg {
 	width: 16px;
 	height: 16px;
 	fill: var(--color-gray);
@@ -68,6 +39,11 @@ svg {
 	width: 16px;
 	height: 16px;
 	color: var(--color-gray);
+}
+
+// Block editor components
+.components-tooltip {
+	max-width: 400px;
 }
 
 // Visibility.

@@ -72,17 +72,17 @@ class Fields extends Base {
 	public function get_field_types() {
 		$this->registry->register_default_controls();
 
-		$general  = [ 'name', 'id', 'type', 'label_description', 'desc' ];
+		$general  = [ 'name', 'id', 'type', 'descriptions' ];
 		$advanced = [ 'before', 'after', 'class', 'sanitize_callback', 'save_field', 'attributes', 'validation', 'custom_settings' ];
-		$clone    = [ 'clone', 'sort_clone', 'clone_default', 'clone_as_multiple', 'clone_empty_start', 'min_clone', 'max_clone', 'add_button' ];
-		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'required', 'disabled', 'readonly', 'js_options' ];
+		$clone    = [ 'clone', 'clone_features', 'clone_quantity', 'add_button' ];
+		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'input_attributes', 'js_options' ];
 		$map      = [ 'std', 'address_field', 'language', 'region', 'required' ];
 		$taxonomy = [ 'taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args' ];
 		$post     = [ 'post_type', 'field_type', 'add_new', 'multiple', 'select_all_none', 'parent', 'required', 'placeholder', 'query_args' ];
 		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];
 		$upload   = [ 'max_file_uploads', 'max_status', 'force_delete', 'required' ];
-		$input    = [ 'required', 'disabled', 'readonly' ];
-		$html5    = [ 'std', 'placeholder', 'size', 'required', 'disabled', 'readonly' ];
+		$input    = [ 'input_attributes' ];
+		$html5    = [ 'std', 'placeholder', 'size', 'input_attributes' ];
 		$icon     = [ 'icon_set', 'icon_file', 'icon_dir', 'icon_css' ];
 
 		$field_types = [
@@ -155,7 +155,7 @@ class Fields extends Base {
 			'email'             => [
 				'title'       => __( 'Email', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, [ 'prepend', 'append' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, $html5, [ 'prepend_append' ], $clone, $advanced ),
 				'description' => __( 'For entering an email address with browser validation', 'meta-box-builder' ),
 			],
 			'fieldset_text'     => [
@@ -245,7 +245,7 @@ class Fields extends Base {
 			'number'            => [
 				'title'       => __( 'Number', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, [ 'min', 'max', 'step' ], $html5, [ 'prepend', 'append' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, [ 'min', 'max', 'step' ], $html5, [ 'prepend_append' ], $clone, $advanced ),
 				'description' => __( 'For entering a number with browser validation', 'meta-box-builder' ),
 			],
 			'oembed'            => [
@@ -335,7 +335,7 @@ class Fields extends Base {
 			'text'              => [
 				'title'       => __( 'Text', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, $html5, [ 'prepend', 'append', 'datalist_choices' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, $html5, [ 'prepend_append', 'datalist_choices' ], $clone, $advanced ),
 				'description' => __( 'A single-line text input', 'meta-box-builder' ),
 			],
 			'text_list'         => [
@@ -365,7 +365,7 @@ class Fields extends Base {
 			'url'               => [
 				'title'       => __( 'URL', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, [ 'prepend', 'append' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, $html5, [ 'prepend_append' ], $clone, $advanced ),
 				'description' => __( 'An input for URL with browser validation', 'meta-box-builder' ),
 			],
 			'video'             => [

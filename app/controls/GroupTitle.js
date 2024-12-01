@@ -1,6 +1,5 @@
-import { useContext } from '@wordpress/element';
-import { SettingsContext } from "../contexts/SettingsContext";
 import useFieldIds from '../hooks/useFieldIds';
+import useSettings from '../hooks/useSettings';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
@@ -9,7 +8,7 @@ import FieldInserter from './FieldInserter';
  * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
  */
 const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) => {
-	const { settings } = useContext( SettingsContext );
+	const { getPrefix } = useSettings();
 
 	const ids = useFieldIds( state => state.ids );
 	const fields = [ '{#}', ...Array.from( new Set( Object.values( ids ) ) ) ];
@@ -17,7 +16,7 @@ const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) 
 	const handleChange = ( inputRef, value ) => nameIdData.updateGroupTitle( value );
 
 	const handleSelectItem = ( inputRef, value ) => {
-		const title = value === '{#}' ? value : `{${ settings.prefix || '' }${ value }}`;
+		const title = value === '{#}' ? value : `{${ getPrefix() || '' }${ value }}`;
 		inputRef.current.value += title;
 		nameIdData.updateGroupTitle( inputRef.current.value );
 	};
