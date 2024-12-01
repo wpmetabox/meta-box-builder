@@ -2,10 +2,8 @@ import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import KeyValue from '../../controls/KeyValue';
 import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
-import { fetcher, getSettings, uniqid } from "../../functions";
+import { fetcher, uniqid } from "../../functions";
 import useSettings from "../../hooks/useSettings";
-
-const settings = getSettings();
 
 const ShowHide = () => {
 	const name = 'settings[show_hide]';

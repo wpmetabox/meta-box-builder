@@ -1,16 +1,17 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import FieldInserter from '../../controls/FieldInserter';
-import { getSettings, uniqid } from "../../functions";
+import { uniqid } from "../../functions";
 import useFieldIds from '../../hooks/useFieldIds';
-
-const settings = getSettings();
+import useSettings from "../../hooks/useSettings";
 
 const ConditionalLogic = () => {
-	const defaultValue = settings?.conditional_logic || {};
 	const name = 'settings[conditional_logic]';
-	const [ rules, setRules ] = useState( Object.values( defaultValue.when || {} ) );
 
+	const { getSetting } = useSettings();
+	const setting = getSetting( 'conditional_logic', {} );
+
+	const [ rules, setRules ] = useState( Object.values( setting.when || {} ) );
 	const addRule = () => setRules( prev => [ ...prev, { name: '', operator: '=', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
@@ -19,7 +20,7 @@ const ConditionalLogic = () => {
 
 	return (
 		<>
-			{ rules.length > 0 && <Intro name={ name } defaultValue={ defaultValue } /> }
+			{ rules.length > 0 && <Intro name={ name } setting={ setting } /> }
 			{
 				rules.map( rule => <Rule
 					key={ rule.id }
@@ -34,15 +35,15 @@ const ConditionalLogic = () => {
 	);
 };
 
-const Intro = ( { name, defaultValue } ) => (
+const Intro = ( { name, setting } ) => (
 	<div className="og-include-exclude__intro">
-		<select name={ `${ name }[type]` } defaultValue={ defaultValue.type || 'visible' }>
+		<select name={ `${ name }[type]` } defaultValue={ setting.type || 'visible' }>
 			<option value="visible">{ __( 'Visible', 'meta-box-builder' ) }</option>
 			<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
 		<br />
-		<select name={ `${ name }[relation]` } defaultValue={ defaultValue.relation || 'or' }>
+		<select name={ `${ name }[relation]` } defaultValue={ setting.relation || 'or' }>
 			<option value="or">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>

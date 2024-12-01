@@ -11,11 +11,7 @@ const $ = jQuery;
 const Box = () => {
 	const fieldIds = useFieldIds( state => state.ids );
 	const { settings, getObjectType } = useSettings();
-
-	// No fields (with ids) or is a block?
-	if ( MbbApp.fields.length === 0 || fieldIds.length === 0 || getObjectType() === 'block' ) {
-		return '';
-	}
+	const [ tab, setTab ] = useState( 0 );
 
 	// Generate Code
 	const themeCode = useApi( [ 'theme-code-generate', {
@@ -23,7 +19,10 @@ const Box = () => {
 		settings
 	}, 'POST' ] );
 
-	const [ tab, setTab ] = useState( 0 );
+	// No fields (with ids) or is a block?
+	if ( MbbApp.fields.length === 0 || fieldIds.length === 0 || getObjectType() === 'block' ) {
+		return '';
+	}
 
 	return (
 		<div className="mb-box">

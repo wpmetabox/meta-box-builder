@@ -4,10 +4,12 @@ import { __ } from "@wordpress/i18n";
 import DivRow from '../../controls/DivRow';
 import Input from '../../controls/Input';
 import Toggle from "../../controls/Toggle";
-import { fetcher, getSettings } from "../../functions";
+import { fetcher } from "../../functions";
+import useSettings from "../../hooks/useSettings";
 
 const BlockJSONSettings = () => {
-	const settings = getSettings();
+	const { getSetting } = useSettings();
+	const block_json = getSetting( 'block_json', {} );
 
 	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
 	const [ isNewer, setIsNewer ] = useState( true );
@@ -27,7 +29,7 @@ const BlockJSONSettings = () => {
 
 		const { is_writable, is_newer } = await fetcher( 'local-path-data', {
 			path,
-			version: settings.block_json?.version || 0,
+			version: block_json.version || 0,
 			postName
 		} );
 
@@ -38,11 +40,11 @@ const BlockJSONSettings = () => {
 	};
 
 	useEffect( () => {
-		if ( !settings.block_json?.path ) {
+		if ( !block_json.path ) {
 			return;
 		}
 
-		getLocalPathData( null, settings.block_json?.path );
+		getLocalPathData( null, block_json.path );
 	}, [] );
 
 	return <>
@@ -50,7 +52,7 @@ const BlockJSONSettings = () => {
 			name="settings[block_json][enable]"
 			label={ __( 'Generate block.json', 'meta-box-builder' ) }
 			componentId="settings-block_json_enable"
-			defaultValue={ !!settings.block_json?.enable }
+			defaultValue={ !!block_json.enable }
 		/>
 
 		<Input
@@ -58,13 +60,13 @@ const BlockJSONSettings = () => {
 			label={ `<span class="og-indent"></span>${ __( 'Block folder', 'meta-box-builder' ) }` }
 			componentId="settings-block-path"
 			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
-			defaultValue={ settings.block_json?.path }
+			defaultValue={ block_json.path }
 			error={ blockPathError }
 			updateFieldData={ getLocalPathData }
 			dependency="block_json_enable:true"
 		/>
 
-		<input type="hidden" name="settings[block_json][version]" value={ settings.block_json?.version } />
+		<input type="hidden" name="settings[block_json][version]" value={ block_json.version } />
 
 		{
 			isNewer &&

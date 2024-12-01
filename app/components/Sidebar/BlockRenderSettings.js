@@ -5,7 +5,7 @@ import { UnControlled as CodeMirror } from 'react-codemirror2';
 import DivRow from '../../controls/DivRow';
 import Input from '../../controls/Input';
 import Select from '../../controls/Select';
-import { getSettings } from "../../functions";
+import useSettings from "../../hooks/useSettings";
 
 const renderWithOptions = {
 	callback: __( 'PHP callback function', 'meta-box-builder' ),
@@ -24,12 +24,12 @@ const getRenderViewId = ( renderView ) => {
 };
 
 const BlockRenderSettings = () => {
-	const settings = getSettings();
-	const [ renderWith, setRenderWith ] = useState( settings.render_with || 'callback' );
+	const { getSetting } = useSettings();
+	const [ renderWith, setRenderWith ] = useState( getSetting( 'render_with', 'callback' ) );
 	const [ codeEditor, setCodeEditor ] = useState();
 
 	const [ views, setViews ] = useState( MbbApp.views );
-	const [ renderView, setRenderView ] = useState( settings.render_view );
+	const [ renderView, setRenderView ] = useState( getSetting( 'render_view' ) );
 
 	const addViewButtonRef = useRef();
 	const editViewButtonRef = useRef();
@@ -106,7 +106,7 @@ const BlockRenderSettings = () => {
 				label={ __( 'Render callback', 'meta-box-builder' ) }
 				componentId="settings-block-render_callback"
 				placeholder={ __( 'Enter PHP function name', 'meta-box-builder' ) }
-				defaultValue={ settings.render_callback }
+				defaultValue={ getSetting( 'render_callback', '' ) }
 			/>
 		}
 		{
@@ -116,7 +116,7 @@ const BlockRenderSettings = () => {
 				label={ __( 'Render template', 'meta-box-builder' ) }
 				componentId="settings-block-render_template"
 				placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) }
-				defaultValue={ settings.render_template }
+				defaultValue={ getSetting( 'render_template', '' ) }
 			/>
 		}
 		{
@@ -124,11 +124,11 @@ const BlockRenderSettings = () => {
 			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
 				<CodeMirror
 					options={ { mode: 'php' } }
-					value={ settings.render_code }
+					value={ getSetting( 'render_code', '' ) }
 					onChange={ ( editor, data, value ) => codeRef.current.value = value }
 					editorDidMount={ setCodeEditor }
 				/>
-				<input type="hidden" name="settings[render_code]" ref={ codeRef } defaultValue={ settings.render_code } />
+				<input type="hidden" name="settings[render_code]" ref={ codeRef } defaultValue={ getSetting( 'render_code', '' ) } />
 				<table className="og-block-description">
 					<tbody>
 						<tr>
@@ -187,21 +187,21 @@ const BlockRenderSettings = () => {
 			label={ __( 'Custom CSS', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_style"
 			placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
-			defaultValue={ settings.enqueue_style }
+			defaultValue={ getSetting( 'enqueue_style', '' ) }
 		/>
 		<Input
 			name="settings[enqueue_script]"
 			label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_script"
 			placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
-			defaultValue={ settings.enqueue_script }
+			defaultValue={ getSetting( 'enqueue_script', '' ) }
 		/>
 		<Input
 			name="settings[enqueue_assets]"
 			label={ __( 'Custom assets callback', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_assets"
 			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
-			defaultValue={ settings.enqueue_assets }
+			defaultValue={ getSetting( 'enqueue_assets', '' ) }
 		/>
 
 		<DivRow label={ `<span class="og-indent"></span>${ __( 'Supported variables', 'meta-box-builder' ) }` } >

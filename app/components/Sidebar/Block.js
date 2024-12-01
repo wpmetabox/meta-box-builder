@@ -7,13 +7,13 @@ import ReactSelect from '../../controls/ReactSelect';
 import Select from '../../controls/Select';
 import Textarea from '../../controls/Textarea';
 import Toggle from "../../controls/Toggle";
-import { getSettings } from "../../functions";
+import useSettings from "../../hooks/useSettings";
 import { ensureArray } from '/functions';
 
 const Block = () => {
-	const settings = getSettings();
-	const [ iconType, setIconType ] = useState( settings.icon_type || 'dashicons' );
-	const [ context, setContext ] = useState( settings.block_context || 'side' );
+	const { getSetting } = useSettings();
+	const [ iconType, setIconType ] = useState( getSetting( 'icon_type', 'dashicons' ) );
+	const [ context, setContext ] = useState( getSetting( 'block_context', 'side' ) );
 
 	useEffect( () => {
 		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
@@ -26,7 +26,7 @@ const Block = () => {
 			name="settings[description]"
 			label={ __( 'Description', 'meta-box-builder' ) }
 			componentId="settings-block-description"
-			defaultValue={ settings.description }
+			defaultValue={ getSetting( 'description', '' ) }
 		/>
 		<Select
 			name="settings[icon_type]"
@@ -43,10 +43,10 @@ const Block = () => {
 				label={ __( 'SVG icon', 'meta-box-builder' ) }
 				componentId="settings-block-icon_svg"
 				placeholder={ __( 'Paste the SVG content here', 'meta-box-builder' ) }
-				defaultValue={ settings.icon_svg }
+				defaultValue={ getSetting( 'icon_svg', '' ) }
 			/>
 		}
-		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" defaultValue={ settings.icon } /> }
+		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" defaultValue={ getSetting( 'icon' ) } /> }
 		{
 			iconType === 'dashicons' &&
 			<Input
@@ -55,7 +55,7 @@ const Block = () => {
 				componentId="settings-block-icon_foreground"
 				label={ __( 'Icon color', 'meta-box-builder' ) }
 				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
-				defaultValue={ settings.icon_foreground }
+				defaultValue={ getSetting( 'icon_foreground', '' ) }
 			/>
 		}
 		{
@@ -66,7 +66,7 @@ const Block = () => {
 				componentId="settings-block-icon_background"
 				label={ __( 'Icon background color', 'meta-box-builder' ) }
 				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
-				defaultValue={ settings.icon_background }
+				defaultValue={ getSetting( 'icon_background', '' ) }
 			/>
 		}
 		<Select
@@ -74,14 +74,14 @@ const Block = () => {
 			label={ __( 'Category', 'meta-box-builder' ) }
 			componentId="settings-block-category"
 			options={ MbbApp.blockCategories }
-			defaultValue={ settings.category }
+			defaultValue={ getSetting( 'category', '' ) }
 		/>
 		<Input
 			name="settings[keywords]"
 			label={ __( 'Keywords', 'meta-box-builder' ) }
 			componentId="settings-block-keywords"
 			tooltip={ __( 'Separate by commas', 'meta-box-builder' ) }
-			defaultValue={ settings.keywords }
+			defaultValue={ getSetting( 'keywords', '' ) }
 		/>
 		<RadioControl
 			className="og-field"
@@ -111,14 +111,14 @@ const Block = () => {
 				wide: __( 'Wide', 'meta-box-builder' ),
 				full: __( 'Full', 'meta-box-builder' ),
 			} }
-			defaultValue={ ensureArray( settings.supports?.align || [] ) }
+			defaultValue={ ensureArray( getSetting( 'supports', {} ).align || [] ) }
 		/>
 
 		<Toggle
 			name="settings[supports][customClassName]"
 			label={ __( 'Custom CSS class name', 'meta-box-builder' ) }
 			componentId="settings-block-supports-custom-class-name"
-			defaultValue={ !!settings.supports?.customClassName }
+			defaultValue={ !!getSetting( 'supports', {} ).customClassName }
 		/>
 	</>;
 };

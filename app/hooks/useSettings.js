@@ -1,5 +1,12 @@
 import { create } from 'zustand';
-import { ensureArray, getSettings } from '../functions';
+import { ensureArray, parseQueryString } from '../functions';
+
+const getSettings = () => {
+	const urlParams = parseQueryString( window.location.search );
+	const settings = MbbApp.settings || {};
+
+	return { ...settings, ...urlParams.settings };
+};
 
 const sanitize = types => {
 	let t = types && Array.isArray( types ) ? types : [ 'post' ];

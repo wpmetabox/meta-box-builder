@@ -2,19 +2,18 @@ import { Tooltip } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import DivRow from "../../controls/DivRow";
 import Toggle from "../../controls/Toggle";
-import { getSettings } from "../../functions";
-
-const settings = getSettings();
+import useSettings from "../../hooks/useSettings";
 
 const CustomTable = () => {
-	const defaultValue = settings?.custom_table || {};
+	const { getSetting } = useSettings();
+	const setting = getSetting( 'custom_table', {} );
 
 	return <>
 		<Toggle
 			name="settings[custom_table][enable]"
 			label={ __( 'Save data in a custom table', 'meta-box-builder' ) }
 			componentId="settings-table_enable"
-			defaultValue={ !!defaultValue.enable }
+			defaultValue={ !!setting.enable }
 		/>
 		<Toggle
 			dependency="table_enable:true"
@@ -22,7 +21,7 @@ const CustomTable = () => {
 			label={ __( 'Auto create table', 'meta-box-builder' ) }
 			tooltip={ __( 'This settings will create the table with all columns as TEXT. Create the table manually to set proper column types for a better performance.', 'meta-box-builder' ) }
 			componentId="settings-table_create"
-			defaultValue={ !!defaultValue.create }
+			defaultValue={ !!setting.create }
 		/>
 		<DivRow htmlFor="settings-table_name" dependency="table_enable:true" label={ `<span class="og-indent"></span>${ __( 'Table name', 'meta-box-builder' ) }` }>
 			<div className="og-input-group">
@@ -31,14 +30,14 @@ const CustomTable = () => {
 					size={ 16 }
 					id="settings-table_name"
 					name="settings[custom_table][name]"
-					defaultValue={ defaultValue.name }
+					defaultValue={ setting.name }
 				/>
 				<label>
 					<input type="hidden" name="settings[custom_table][prefix]" value={ false } />
 					<input
 						type="checkbox"
 						name="settings[custom_table][prefix]"
-						defaultChecked={ !!defaultValue.prefix }
+						defaultChecked={ !!setting.prefix }
 						value={ true }
 					/>
 					<span className="dashicons dashicons-yes-alt"></span>
