@@ -1,48 +1,45 @@
-import { Dashicon } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { fetcher, uniqid } from "../functions";
-import useObjectType from "../hooks/useObjectType";
-import DivRow from './DivRow';
-import KeyValue from './KeyValue';
-import ReactAsyncSelect from './ReactAsyncSelect';
+import KeyValue from '../../controls/KeyValue';
+import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
+import { fetcher, uniqid } from "../../functions";
+import useSettings from "../../hooks/useSettings";
 
-const ShowHide = ( { defaultValue } ) => {
-	const objectType = useObjectType( state => state.type );
-	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
+const ShowHide = () => {
+	const name = 'settings[show_hide]';
 
+	const { getSetting } = useSettings();
+	const setting = getSetting( 'show_hide', {} );
+
+	const [ rules, setRules ] = useState( Object.values( setting.rules || {} ) );
 	const addRule = () => setRules( prev => [ ...prev, { name: 'template', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
-	return ( objectType !== 'block' &&
-		<DivRow
-			className="og-include-exclude"
-			label={ `<a href="https://metabox.io/plugins/meta-box-show-hide/" target="_blank" rel="noopener norefferer">${ __( 'Toggle rules', 'meta-box-builder' ) }</a>` }
-			tooltip={ __( 'Conditions to toggle visibility of the field group. For each rule, maximum 10 items are displayed. To select other items, please use the search.', 'meta-box-builder' ) }
-		>
-			{ rules.length > 0 && <Intro defaultValue={ defaultValue } /> }
+	return (
+		<>
+			{ rules.length > 0 && <Intro name={ name } setting={ setting } /> }
 			{
 				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					baseName={ `settings[show_hide][rules][${ rule.id }]` }
+					baseName={ `${ name }[rules][${ rule.id }]` }
 					removeRule={ removeRule }
-					objectType={ objectType }
 				/> )
 			}
 			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
-		</DivRow>
+		</>
 	);
 };
 
-const Intro = ( { defaultValue } ) => (
+const Intro = ( { name, setting } ) => (
 	<div className="og-include-exclude__intro">
-		<select name="settings[show_hide][type]" defaultValue={ defaultValue.type || 'show' }>
+		<select name={ `${ name }[type]` } defaultValue={ setting.type || 'show' }>
 			<option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<select name="settings[show_hide][relation]" defaultValue={ defaultValue.relation || 'OR' }>
+		<br />
+		<select name={ `${ name }[relation]` } defaultValue={ setting.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
@@ -50,7 +47,10 @@ const Intro = ( { defaultValue } ) => (
 	</div>
 );
 
-const Rule = ( { rule, baseName, removeRule, objectType } ) => {
+const Rule = ( { rule, baseName, removeRule } ) => {
+	const { getObjectType } = useSettings();
+	const objectType = getObjectType();
+
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 	const loadOptions = s => fetcher( 'show-hide', { name, s } );
@@ -63,7 +63,7 @@ const Rule = ( { rule, baseName, removeRule, objectType } ) => {
 	}, [ objectType ] );
 
 	return (
-		<div className={ `og-include-exclude__rule og-attribute${ name === 'input_value' ? ' og-show-hide__inputs' : '' }` }>
+		<div className={ `og-include-exclude__rule ${ name === 'input_value' ? ' og-show-hide__inputs' : '' }` }>
 			<input type="hidden" name={ `${ baseName }[id]` } defaultValue={ rule.id } />
 			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" defaultValue={ name } onChange={ onChangeName }>
 				{ objectType === 'post' && <option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option> }
@@ -101,7 +101,7 @@ const Rule = ( { rule, baseName, removeRule, objectType } ) => {
 					defaultValue={ name === rule.name ? rule.value : {} }
 				/>
 			}
-			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
+			<a href="#" className="og-include-exclude__remove" onClick={ () => removeRule( rule.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
 		</div>
 	);
 };

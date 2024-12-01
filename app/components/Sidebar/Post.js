@@ -1,82 +1,77 @@
 import { __ } from "@wordpress/i18n";
-import { getSettings } from "../functions";
-import useObjectType from "../hooks/useObjectType";
-import usePostTypes from "../hooks/usePostTypes";
-import Checkbox from './Checkbox';
-import Select from './Select';
-import ToggleGroup from "./ToggleGroup";
+import Select from "../../controls/Select";
+import Toggle from "../../controls/Toggle";
+import ToggleGroup from "../../controls/ToggleGroup";
+import useSettings from "../../hooks/useSettings";
 
 const Post = () => {
-	const settings = getSettings();
-	const objectType = useObjectType( state => state.type );
-	const postTypes = usePostTypes( state => state.types );
+	const { getPostTypes, getSetting } = useSettings();
+	const postTypes = getPostTypes();
+
 	const isClassic = !MbbApp.postTypes.find( pt => postTypes.includes( pt.slug ) && pt.block_editor );
 
+	let ContextControl = ToggleGroup;
 	let contextOptions = {
 		normal: __( 'After content', 'meta-box-builder' ),
 		side: __( 'Side', 'meta-box-builder' ),
 	};
 	if ( isClassic ) {
+		ContextControl = Select;
 		contextOptions.form_top = __( 'Before post title', 'meta-box-builder' );
 		contextOptions.after_title = __( 'After post title', 'meta-box-builder' );
 	}
 
-	return objectType === 'post' && postTypes.length > 0 && <>
-		<ToggleGroup
+	return <>
+		<ContextControl
 			name="settings[context]"
 			label={ __( 'Position', 'meta-box-builder' ) }
 			options={ contextOptions }
-			defaultValue={ settings.context || 'normal' }
+			defaultValue={ getSetting( 'context', 'normal' ) }
 		/>
 		<ToggleGroup
 			name="settings[priority]"
 			label={ __( 'Priority', 'meta-box-builder' ) }
 			options={ { high: __( 'High', 'meta-box-builder' ), low: __( 'Low', 'meta-box-builder' ) } }
-			defaultValue={ settings.priority || 'high' }
+			defaultValue={ getSetting( 'priority', 'high' ) }
 		/>
 		<ToggleGroup
 			name="settings[style]"
 			label={ __( 'Style', 'meta-box-builder' ) }
 			options={ { default: __( 'Standard', 'meta-box-builder' ), seamless: __( 'Seamless', 'meta-box-builder' ) } }
-			defaultValue={ settings.style || 'default' }
+			defaultValue={ getSetting( 'style', 'default' ) }
 		/>
-		<Checkbox
+		<Toggle
 			name="settings[closed]"
 			label={ __( 'Collapsed by default', 'meta-box-builder' ) }
 			tooltip={ __( 'Whether to collapse the meta box when page loads', 'meta-box-builder' ) }
-			defaultValue={ !!settings.closed }
-			componentId="settings-closed"
+			defaultValue={ !!getSetting( 'closed', false ) }
 		/>
 		{
 			isClassic &&
-			<Checkbox
+			<Toggle
 				name="settings[default_hidden]"
 				label={ __( 'Hidden by default', 'meta-box-builder' ) }
 				tooltip={ __( 'The meta box is hidden by default and requires users to select the corresponding checkbox in Screen Options to show it', 'meta-box-builder' ) }
-				defaultValue={ !!settings.default_hidden }
-				componentId="settings-default_hidden"
+				defaultValue={ !!getSetting( 'default_hidden', false ) }
 			/>
 		}
 		{
 			isClassic &&
-			<Checkbox
+			<Toggle
 				name="settings[autosave]"
 				label={ __( 'Autosave', 'meta-box-builder' ) }
-				defaultValue={ !!settings.autosave }
-				componentId="settings-autosave"
+				defaultValue={ !!getSetting( 'autosave', false ) }
 			/>
 		}
 		{
 			MbbApp.extensions.revision &&
-			<Checkbox
+			<Toggle
 				name="settings[revision]"
 				label={ __( 'Enable revision', 'meta-box-builder' ) }
 				tooltip={ __( 'Track changes of custom fields with revisions', 'meta-box-builder' ) }
-				defaultValue={ !!settings.revision }
-				componentId="settings-revision"
+				defaultValue={ !!getSetting( 'revision', false ) }
 			/>
 		}
-
 	</>;
 };
 

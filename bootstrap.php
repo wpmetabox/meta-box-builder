@@ -12,7 +12,6 @@ new RestApi\Generator();
 new RestApi\ThemeCode\ThemeCode();
 
 new RestApi\Fields( new Registry() );
-new RestApi\Settings();
 
 if ( Helpers\Data::is_extension_active( 'mb-blocks' ) ) {
 	new RestApi\Blocks();
@@ -29,12 +28,9 @@ new Extensions\AdminColumns();
 new Extensions\Blocks();
 new Extensions\Columns();
 new Extensions\ConditionalLogic();
-new Extensions\CustomTable();
 new Extensions\Group();
-new Extensions\IncludeExclude();
 new Extensions\Relationships();
 new Extensions\SettingsPage();
-new Extensions\ShowHide();
 new Extensions\Tabs();
 new Extensions\Tooltip();
 new Extensions\RestApi();

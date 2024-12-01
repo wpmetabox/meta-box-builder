@@ -16,3 +16,13 @@
 	@import "input-group";
 	@import "toggle-group";
 }
+
+.mb-content .og {
+	@import "include-exclude";
+}
+
+.mb-sidebar .og {
+	@import "sidebar/base";
+	@import "sidebar/location";
+	@import "sidebar/include-exclude";
+}

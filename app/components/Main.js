@@ -1,9 +1,8 @@
 import { __ } from "@wordpress/i18n";
-import { Icon, category, cog } from "@wordpress/icons";
+import { Icon, category } from "@wordpress/icons";
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Fields from './Tabs/Fields';
 import Result from './Tabs/Result';
-import Settings from './Tabs/Settings';
 
 const Main = () => (
 	<Tabs forceRenderTabPanel={ true } className="react-tabs mb-tabs">
@@ -12,17 +11,10 @@ const Main = () => (
 				<Icon icon={ category } />
 				{ __( 'Fields', 'meta-box-builder' ) }
 			</Tab>
-			<Tab>
-				<Icon icon={ cog } />
-				{ __( 'Settings', 'meta-box-builder' ) }
-			</Tab>
 			<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
 		</TabList>
 		<TabPanel>
 			<Fields fields={ MbbApp.fields } />
-		</TabPanel>
-		<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-			<Settings />
 		</TabPanel>
 		<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
 			<Result endPoint="generate" />

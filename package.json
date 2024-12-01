@@ -8,7 +8,8 @@
     "build:css": "npm run css:main && npm run css:settings && npm run css:relationships",
     "build:js": "wp-scripts build",
     "build": "npm run build:css && npm run build:js",
-    "start": "wp-scripts start"
+    "start": "wp-scripts start",
+    "scan": "npx react-scan@latest http://mb.test/wp-admin/edit.php?post_type=meta-box"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",

@@ -1,5 +1,34 @@
 [x] Check edit slug/id của field group
 [x] Fix toggle field settings lag.
 [ ] Check if we need to store field._expand and use toggle from useFields.
+	NOTE: Không bỏ được, do liên quan đến phần Toggle all fields
+[ ] Chuyển settings của field group sang sidebar
+	[x] Check lại xem khi nào chỉ cần dùng getSettings() (VD: truyền biến qua URL), khi nào chỉ cần lấy trực tiếp qua MbbApp. Với 2 case này thì nên dùng chung 1 code (qua getSettings()). Lưu ý chỉ dùng cho stateless.
+	[x] Check lại xem khi nào dùng settings context và các giá trị dạng stateful (object type, ...)
+	[ ] Kiểm tra khi settings có thì open panel: Tạm thời để sau...
+[ ] Chuyển settings của fields sang sidebar
+
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
+
+
+## Settings của field group:
+
+- Settings được lấy từ biến MbbApp.settings và có thể truyền qua URL (trong trường hợp muốn tự setup settings cho 1 post type khi vừa mới tạo xong)
+- Các settings lấy và update từ hook `useSettings`. Một số setting được dùng chung trong các component như sau:
+	- prefix: để lấy đúng ID (bao gồm cả prefix) của các field text gợi ý. Được dùng trong các component:
+		+ `AddressField`
+		+ `FieldInserter` (admin columns, conditional logic)
+		+ `GroupTitle`
+	- `object_type`: để lấy object type dùng trong các component dưới:
+		+ `Sidebar`
+		+ `Location`
+		+ `IncludeExclude`
+		+ `ShowHide`
+		+ `AdminColumnsPosition`
+	- `post_types`: để lấy post types được chọn cho các component dưới:
+		+ `Location`
+		+ `Post`
+		+ `IncludeExclude`
+- Các settings sẽ được hiển thị ở sidebar, chia thành các panel. Các extensions khi được cài cũng sẽ tạo ra các panel của riêng chúng.
+- Mặc định thì có các panel sau là mở: summary, location, settings (dành cho post), block settings

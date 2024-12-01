@@ -1,11 +1,13 @@
 import { __ } from "@wordpress/i18n";
-import useObjectType from "../hooks/useObjectType";
-import DivRow from './DivRow';
 import useFieldIds from '../hooks/useFieldIds';
+import useSettings from "../hooks/useSettings";
+import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
 const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) => {
-	const objectType = useObjectType( state => state.type );
+	const { getObjectType } = useSettings();
+	const objectType = getObjectType();
+
 	const defaultColumns = {
 		term: 'name',
 		user: 'username'
@@ -27,13 +29,13 @@ const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) =>
 	);
 };
 
-const objectTypeFields = ( { objectType } ) => {
+const objectTypeFields = objectType => {
 	if ( objectType === 'term' ) {
-		return [ 'cb, name, description, slug, count' ];
+		return [ 'cb', 'name', 'description', 'slug', 'count' ];
 	}
 
 	if ( objectType === 'user' ) {
-		return [ 'cb, username, name, email, role, posts' ];
+		return [ 'cb', 'username', 'name', 'email', 'role', 'posts' ];
 	}
 
 	return [ 'cb', 'title', 'author', 'categories', 'tags', 'comments', 'date' ];

@@ -2,11 +2,12 @@ import { useCopyToClipboard } from "@wordpress/compose";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import { getSettings } from "../../functions";
+import useSettings from "../../hooks/useSettings";
 import Input from '/controls/Input';
 
 const ResultCode = ( { endPoint } ) => {
-	const settings = getSettings();
+	const { getSetting } = useSettings();
+
 	const [ data, setData ] = useState( '' );
 	const [ isGenerating, setIsGenerating ] = useState( false );
 	const [ copied, setCopied ] = useState( false );
@@ -42,13 +43,13 @@ const ResultCode = ( { endPoint } ) => {
 			name="settings[text_domain]"
 			label={ __( 'Text domain', 'meta-box-builder' ) }
 			tooltip={ __( 'Required for multilingual website. Used in the exported code only.', 'meta-box-builder' ) }
-			defaultValue={ settings.text_domain || 'your-text-domain' }
+			defaultValue={ getSetting( 'text_domain', 'your-text-domain' ) }
 			componentId="text-domain"
 		/>
 		<Input
 			name="settings[function_name]"
 			label={ __( 'Function name', 'meta-box-builder' ) }
-			defaultValue={ settings.function_name || 'your_prefix_function_name' }
+			defaultValue={ getSetting( 'function_name', 'your_prefix_function_name' ) }
 			componentId="function-name"
 		/>
 		<button type="button" className="button" onClick={ onClick } disabled={ isGenerating }>{ __( 'Generate', 'meta-box-builder' ) }</button>
