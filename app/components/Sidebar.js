@@ -1,6 +1,6 @@
 import { Button, Panel, PanelBody, PanelRow } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import useObjectType from "../hooks/useObjectType";
+import useSettings from '../hooks/useSettings';
 import Advanced from './Sidebar/Advanced';
 import Block from './Sidebar/Block';
 import BlockJSONSettings from './Sidebar/BlockJSONSettings';
@@ -14,7 +14,8 @@ import ShowHide from './Sidebar/ShowHide';
 import Tabs from './Sidebar/Tabs';
 
 const Sidebar = () => {
-	const objectType = useObjectType( state => state.type );
+	const { getObjectType } = useSettings();
+	const objectType = getObjectType();
 
 	return (
 		<Panel className="mb-sidebar">

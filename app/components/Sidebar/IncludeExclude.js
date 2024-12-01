@@ -2,17 +2,16 @@ import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from '../../controls/DivRow';
 import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
-import { fetcher, getSettings, uniqid } from "../../functions";
-import useObjectType from "../../hooks/useObjectType";
-import usePostTypes from "../../hooks/usePostTypes";
-
-const settings = getSettings();
+import { fetcher, uniqid } from "../../functions";
+import useSettings from "../../hooks/useSettings";
 
 const IncludeExclude = () => {
-	const defaultValue = settings?.include_exclude || {};
-	const postTypes = usePostTypes( state => state.types );
-	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
+	const name = 'settings[include_exclude]';
 
+	const { getSetting } = useSettings();
+	const setting = getSetting( 'include_exclude', {} );
+
+	const [ rules, setRules ] = useState( Object.values( setting.rules || {} ) );
 	const addRule = () => setRules( prev => [ ...prev, { name: 'ID', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
@@ -22,12 +21,12 @@ const IncludeExclude = () => {
 			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced rules', 'meta-box-builder' ) }</a>` }
 			tooltip={ __( 'More rules on where to display the field group. For each rule, maximum 10 items are displayed. To select other items, please use the search.', 'meta-box-builder' ) }
 		>
-			{ rules.length > 0 && <Intro defaultValue={ defaultValue } /> }
+			{ rules.length > 0 && <Intro name={ name } setting={ setting } /> }
 			{
 				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					baseName={ `settings[include_exclude][rules][${ rule.id }]` }
+					baseName={ `${ name }[rules][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
 			}
@@ -36,15 +35,15 @@ const IncludeExclude = () => {
 	);
 };
 
-const Intro = ( { defaultValue } ) => (
+const Intro = ( { name, setting } ) => (
 	<div className="og-include-exclude__intro">
-		<select name="settings[include_exclude][type]" defaultValue={ defaultValue.type || 'include' }>
+		<select name={ `${ name }[type]` } defaultValue={ setting.type || 'include' }>
 			<option value="include">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
 		<br />
-		<select name="settings[include_exclude][relation]" defaultValue={ defaultValue.relation || 'OR' }>
+		<select name={ `${ name }[relation]` } defaultValue={ setting.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
@@ -53,8 +52,9 @@ const Intro = ( { defaultValue } ) => (
 );
 
 const Rule = ( { rule, baseName, removeRule } ) => {
-	const objectType = useObjectType( state => state.type );
-	const postTypes = usePostTypes( state => state.types );
+	const { getObjectType, getPostTypes } = useSettings();
+	const postTypes = getPostTypes();
+	const objectType = getObjectType();
 
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );

@@ -1,8 +1,7 @@
 import { Button, Dropdown } from "@wordpress/components";
-import { useContext } from '@wordpress/element';
-import { SettingsContext } from "../contexts/SettingsContext";
-import { RawHTML, useLayoutEffect, useRef, useState } from "@wordpress/element";
+import { RawHTML, useLayoutEffect, useRef, useState } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
+import useSettings from "../hooks/useSettings";
 
 const Search = ( { handleSearch } ) => (
 	<div className="og-dropdown__search">
@@ -40,8 +39,9 @@ const DropdownInserter = ( { items = [], onSelect } ) => {
 };
 
 const FieldInserter = ( { items = [], required = false, className = '', isID = false, exclude = [], onChange, onSelect, ...rest } ) => {
+	const { getPrefix } = useSettings();
+
 	const [ selection, setSelection ] = useState();
-	const { settings } = useContext( SettingsContext );
 	const ref = useRef();
 
 	const handleChange = e => {
@@ -54,7 +54,7 @@ const FieldInserter = ( { items = [], required = false, className = '', isID = f
 		if ( onSelect ) {
 			onSelect( ref, e.target.dataset.value );
 		} else {
-			ref.current.value = ! isID || exclude.includes( e.target.dataset.value ) ? e.target.dataset.value : `${ settings.prefix || '' }${ e.target.dataset.value }`;
+			ref.current.value = ! isID || exclude.includes( e.target.dataset.value ) ? e.target.dataset.value : `${ getPrefix() || '' }${ e.target.dataset.value }`;
 		}
 	};
 

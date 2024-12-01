@@ -3,28 +3,29 @@ import { __ } from "@wordpress/i18n";
 import KeyValue from '../../controls/KeyValue';
 import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
 import { fetcher, getSettings, uniqid } from "../../functions";
-import useObjectType from "../../hooks/useObjectType";
+import useSettings from "../../hooks/useSettings";
 
 const settings = getSettings();
 
 const ShowHide = () => {
-	const defaultValue = settings?.show_hide || {};
-	const objectType = useObjectType( state => state.type );
-	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
+	const name = 'settings[show_hide]';
 
+	const { getSetting } = useSettings();
+	const setting = getSetting( 'show_hide', {} );
+
+	const [ rules, setRules ] = useState( Object.values( setting.rules || {} ) );
 	const addRule = () => setRules( prev => [ ...prev, { name: 'template', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
 	return (
 		<>
-			{ rules.length > 0 && <Intro defaultValue={ defaultValue } /> }
+			{ rules.length > 0 && <Intro name={ name } setting={ setting } /> }
 			{
 				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					baseName={ `settings[show_hide][rules][${ rule.id }]` }
+					baseName={ `${ name }[rules][${ rule.id }]` }
 					removeRule={ removeRule }
-					objectType={ objectType }
 				/> )
 			}
 			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
@@ -32,15 +33,15 @@ const ShowHide = () => {
 	);
 };
 
-const Intro = ( { defaultValue } ) => (
+const Intro = ( { name, setting } ) => (
 	<div className="og-include-exclude__intro">
-		<select name="settings[show_hide][type]" defaultValue={ defaultValue.type || 'show' }>
+		<select name={ `${ name }[type]` } defaultValue={ setting.type || 'show' }>
 			<option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
 		<br />
-		<select name="settings[show_hide][relation]" defaultValue={ defaultValue.relation || 'OR' }>
+		<select name={ `${ name }[relation]` } defaultValue={ setting.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
@@ -48,7 +49,10 @@ const Intro = ( { defaultValue } ) => (
 	</div>
 );
 
-const Rule = ( { rule, baseName, removeRule, objectType } ) => {
+const Rule = ( { rule, baseName, removeRule } ) => {
+	const { getObjectType } = useSettings();
+	const objectType = getObjectType();
+
 	const [ name, setName ] = useState( rule.name );
 	const onChangeName = e => setName( e.target.value );
 	const loadOptions = s => fetcher( 'show-hide', { name, s } );

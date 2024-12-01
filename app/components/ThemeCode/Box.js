@@ -1,19 +1,19 @@
-import { RawHTML, useContext, useState } from "@wordpress/element";
+import { RawHTML, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { SettingsContext } from "../../contexts/SettingsContext";
 import { htmlDecode } from "../../functions";
 import useApi from "../../hooks/useApi";
 import useFieldIds from "../../hooks/useFieldIds";
+import useSettings from "../../hooks/useSettings";
 import Content from "./Content";
 
 const $ = jQuery;
 
 const Box = () => {
 	const fieldIds = useFieldIds( state => state.ids );
-	const { settings } = useContext( SettingsContext );
+	const { settings, getObjectType } = useSettings();
 
 	// No fields (with ids) or is a block?
-	if ( MbbApp.fields.length === 0 || fieldIds.length === 0 || settings.object_type === 'block' ) {
+	if ( MbbApp.fields.length === 0 || fieldIds.length === 0 || getObjectType() === 'block' ) {
 		return '';
 	}
 
