@@ -2,12 +2,14 @@ import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from '../../controls/DivRow';
 import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
-import { fetcher, uniqid } from "../../functions";
+import { fetcher, getSettings, uniqid } from "../../functions";
 import useObjectType from "../../hooks/useObjectType";
 import usePostTypes from "../../hooks/usePostTypes";
 
+const settings = getSettings();
+
 const IncludeExclude = () => {
-	const defaultValue = MbbApp?.settings?.include_exclude || {};
+	const defaultValue = settings?.include_exclude || {};
 	const postTypes = usePostTypes( state => state.types );
 	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
 

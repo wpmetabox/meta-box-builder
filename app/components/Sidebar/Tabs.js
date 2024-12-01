@@ -1,6 +1,9 @@
 import { __ } from "@wordpress/i18n";
 import Input from "../../controls/Input";
 import ToggleGroup from "../../controls/ToggleGroup";
+import { getSettings } from "../../functions";
+
+const settings = getSettings();
 
 const Tabs = () => (
 	<>
@@ -13,12 +16,12 @@ const Tabs = () => (
 				box: __( 'Box', 'meta-box-builder' ),
 				left: __( 'Left', 'meta-box-builder' ),
 			} }
-			defaultValue={ MbbApp?.settings?.tab_style || 'default' }
+			defaultValue={ settings?.tab_style || 'default' }
 		/>
 		<Input
 			label={ __( 'Default active tab ID', 'meta-box-builder' ) }
 			name="settings[tab_default_active]"
-			defaultValue={ MbbApp?.settings?.tab_default_active || '' }
+			defaultValue={ settings?.tab_default_active || '' }
 		/>
 	</>
 );

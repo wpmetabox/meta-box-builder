@@ -1,11 +1,13 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import FieldInserter from '../../controls/FieldInserter';
+import { getSettings, uniqid } from "../../functions";
 import useFieldIds from '../../hooks/useFieldIds';
-import { uniqid } from '/functions';
+
+const settings = getSettings();
 
 const ConditionalLogic = () => {
-	const defaultValue = MbbApp?.settings?.conditional_logic || {};
+	const defaultValue = settings?.conditional_logic || {};
 	const name = 'settings[conditional_logic]';
 	const [ rules, setRules ] = useState( Object.values( defaultValue.when || {} ) );
 

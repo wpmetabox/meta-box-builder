@@ -2,11 +2,13 @@ import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import KeyValue from '../../controls/KeyValue';
 import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
-import { fetcher, uniqid } from "../../functions";
+import { fetcher, getSettings, uniqid } from "../../functions";
 import useObjectType from "../../hooks/useObjectType";
 
+const settings = getSettings();
+
 const ShowHide = () => {
-	const defaultValue = MbbApp?.settings?.show_hide || {};
+	const defaultValue = settings?.show_hide || {};
 	const objectType = useObjectType( state => state.type );
 	const [ rules, setRules ] = useState( Object.values( defaultValue.rules || {} ) );
 

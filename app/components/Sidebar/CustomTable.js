@@ -2,9 +2,12 @@ import { Tooltip } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import DivRow from "../../controls/DivRow";
 import Toggle from "../../controls/Toggle";
+import { getSettings } from "../../functions";
+
+const settings = getSettings();
 
 const CustomTable = () => {
-	const defaultValue = MbbApp?.settings?.custom_table || {};
+	const defaultValue = settings?.custom_table || {};
 
 	return <>
 		<Toggle
