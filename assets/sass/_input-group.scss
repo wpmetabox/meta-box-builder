@@ -57,8 +57,55 @@
 	}
 }
 
-&-input-group-grid-2 {
+// Multiple input groups: label + input
+&-input-groups {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 16px;
+	grid-template-columns: min-content 1fr;
+	row-gap: 8px;
+
+	label {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		padding-inline: 8px;
+		border: 1px solid #8c8f94;
+		background: var(--color-lightest);
+		white-space: nowrap;
+
+		&:has(input:checked) {
+			.dashicons {
+				color: var(--color-primary);
+			}
+		}
+	}
+
+	input,
+	select {
+		margin-inline: 0;
+
+		&:focus {
+			z-index: 2;
+		}
+	}
+
+	:nth-child(2n+1) {
+		border-radius: 4px 0 0 4px;
+	}
+
+	:nth-child(2n) {
+		border-radius: 0 4px 4px 0;
+		margin-left: -1px;
+	}
+
+	input[type="checkbox"] {
+		display: none;
+	}
+
+	.dashicons {
+		width: 12px;
+		height: 12px;
+		font-size: 12px;
+		color: var(--color-light);
+		line-height: 1;
+	}
 }
