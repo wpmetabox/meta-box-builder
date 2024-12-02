@@ -1,4 +1,4 @@
-import { useReducer } from "@wordpress/element";
+import { createPortal, useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, chevronDown, chevronUp, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
@@ -6,12 +6,19 @@ import { inside } from "../../../functions";
 import useFieldData from "../../../hooks/useFieldData";
 import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFields from "../../../hooks/useFields";
+import usePortal from "../../../hooks/usePortal";
 import Field from './Field';
 import Group from './Group';
 import HeaderIcon from "./HeaderIcon";
 import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
+
+const EditFieldSettings = ( { children } ) => {
+	const { portal } = usePortal();
+
+	return portal && createPortal( children, portal );
+};
 
 const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType, toggle } ) => {
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
@@ -73,11 +80,13 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle field settings', 'meta-box-builder' ) }><Icon icon={ isExpanded ? chevronUp : chevronDown } /></span>
 				</span>
 			</div>
-			{
-				field.type === 'group'
-					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } />
-					: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
-			}
+			<EditFieldSettings>
+				{
+					field.type === 'group'
+						? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } />
+						: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
+				}
+			</EditFieldSettings>
 		</div>
 	);
 };

@@ -8,7 +8,8 @@ import Sidebar from './components/Sidebar';
 import ThemeCodeBox from "./components/ThemeCode/Box";
 
 const AppWrapper = ( { children } ) => {
-	const [ sidebarPanel, setSidebarPanel ] = useState( 'add_field' );
+	// const [ sidebarPanel, setSidebarPanel ] = useState( 'add_field' );
+	const [ sidebarPanel, setSidebarPanel ] = useState( 'edit_field_settings' );
 
 	return (
 		<>
