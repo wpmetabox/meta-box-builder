@@ -1,4 +1,3 @@
-import { useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
@@ -17,7 +16,6 @@ import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
 const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
-	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
 	const { setActiveFieldId } = useEditFieldSettingsPanel();
@@ -49,7 +47,6 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			'og-item',
 			`og-item--${ field.type }`,
 			groupHasFields && 'og-item--group--has-fields',
-			!showSubfields && 'og-item--hide-fields',
 		) }>
 			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
 			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
@@ -57,7 +54,6 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 				<span className="og-column--label">
 					<HeaderIcon data={ data } />
 					<HeaderLabel nameIdData={ nameIdData } />
-					{ groupHasFields && <span className="og-item__toggle" onClick={ toggleSubfields } title={ __( 'Toggle subfields', 'meta-box-builder' ) }>[{ showSubfields ? '-' : '+' }]</span> }
 				</span>
 				<span className="og-column--space"></span>
 				<HeaderId nameIdData={ nameIdData } />
@@ -73,13 +69,15 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
 				</span>
 			</div>
-			<EditSingleFieldSettings id={ id }>
-				{
-					field.type === 'group'
-						? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } />
-						: <Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
-				}
-			</EditSingleFieldSettings>
+			{
+				field.type === 'group'
+					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } />
+					: (
+						<EditSingleFieldSettings id={ id }>
+							<Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
+						</EditSingleFieldSettings>
+					)
+			}
 		</div>
 	);
 };

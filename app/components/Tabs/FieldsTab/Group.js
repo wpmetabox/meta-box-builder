@@ -3,9 +3,8 @@ import clsx from "clsx";
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
+import EditSingleFieldSettings from "../../Sidebar/EditSingleFieldSettings";
 import Content from './Content';
-import Header from "./Header";
-import { Inserter } from './Inserter';
 import Node from './Node';
 
 const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData } ) => {
@@ -28,26 +27,26 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 
 	return (
 		<>
-			<Tabs forceRenderTabPanel={ true } className="og-item__body">
-				<TabList>
-					<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
-					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
-				</TabList>
-				<TabPanel>
-					<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } />
-				</TabPanel>
-				<TabPanel>
-					<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } nameIdData={ nameIdData } />
-				</TabPanel>
-			</Tabs>
+			<EditSingleFieldSettings id={ id }>
+				<Tabs forceRenderTabPanel={ true } className="og-item__body">
+					<TabList>
+						<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
+						<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
+					</TabList>
+					<TabPanel>
+						<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } />
+					</TabPanel>
+					<TabPanel>
+						<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } nameIdData={ nameIdData } />
+					</TabPanel>
+				</Tabs>
+			</EditSingleFieldSettings>
 
 			<div className={ clsx( 'og-group-fields', fields.length === 0 && 'og-group-fields--empty' ) }>
 				{
 					fields.length > 0 &&
 					<>
-						<div className="og-group-fields__title">{ __( 'Subfields', 'meta-box-builder' ) }</div>
 						<div className="og-group-fields__inner">
-							<Header />
 							<ReactSortable
 								group={ {
 									name: 'nested',
@@ -76,8 +75,6 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 						</div>
 					</>
 				}
-
-				<Inserter addField={ add } buttonType="secondary" buttonText={ __( '+ Add Subfield', 'meta-box-builder' ) } />
 			</div>
 		</>
 	);
