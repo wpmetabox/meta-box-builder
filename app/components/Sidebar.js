@@ -13,12 +13,12 @@ import Post from './Sidebar/Post';
 import ShowHide from './Sidebar/ShowHide';
 import Tabs from './Sidebar/Tabs';
 
-const Sidebar = () => {
+const Sidebar = ( { show } ) => {
 	const { getObjectType } = useSettings();
 	const objectType = getObjectType();
 
 	return (
-		<Panel className="mb-sidebar">
+		<Panel className={ `mb-sidebar ${ show && 'mb-sidebar--show' }` }>
 			<PanelBody title={ __( 'Summary', 'meta-box-builder' ) } initialOpen={ true }>
 				<PanelRow className="summary">
 					<p className="status"><label>{ __( 'Status', 'meta-box-builder' ) }</label> { MbbApp.status }</p>

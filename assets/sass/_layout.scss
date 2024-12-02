@@ -133,7 +133,7 @@
 	}
 }
 
-.mb-content {
+.mb-main {
 	// max-width: 900px;
 	margin-inline: auto;
 }
@@ -147,8 +147,13 @@
 
 // Sidebar
 .mb-sidebar {
+	display: none;
 	width: 300px;
 	border-top: none;
+
+	&--show {
+		display: block;
+	}
 
 	.components-panel__row {
 		display: block;
