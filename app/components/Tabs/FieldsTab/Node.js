@@ -2,12 +2,12 @@ import { __ } from "@wordpress/i18n";
 import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
 import { inside } from "../../../functions";
-import useEditFieldSettingsPanel from "../../../hooks/useEditFieldSettingsPanel";
 import useFieldData from "../../../hooks/useFieldData";
 import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFields from "../../../hooks/useFields";
+import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import useSidebarPanel from "../../../hooks/useSidebarPanel";
-import EditSingleFieldSettings from "../../Sidebar/EditSingleFieldSettings";
+import FieldSettings from "../../Sidebar/FieldSettings";
 import Field from './Field';
 import Group from './Group';
 import HeaderIcon from "./HeaderIcon";
@@ -18,13 +18,13 @@ import { Inserter } from "./Inserter";
 const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
-	const { setActiveFieldId } = useEditFieldSettingsPanel();
+	const { setActiveFieldId } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
 
 	const toggleSettings = e => {
 		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions,.og-column--label,.components-popover' ) ) {
 			setActiveFieldId( id );
-			setSidebarPanel( 'edit_field_settings' );
+			setSidebarPanel( 'field_settings' );
 		}
 	};
 
@@ -73,9 +73,9 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 				field.type === 'group'
 					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } />
 					: (
-						<EditSingleFieldSettings id={ id }>
+						<FieldSettings id={ id }>
 							<Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
-						</EditSingleFieldSettings>
+						</FieldSettings>
 					)
 			}
 		</div>

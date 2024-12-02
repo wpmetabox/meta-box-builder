@@ -1,7 +1,7 @@
 import useSidebarPanel from "../hooks/useSidebarPanel";
 import AddFieldPanel from "./Sidebar/AddFieldPanel";
-import EditFieldSettingsPanel from "./Sidebar/EditFieldSettingsPanel";
 import FieldGroupSettingsPanel from "./Sidebar/FieldGroupSettingsPanel";
+import FieldSettingsPanel from "./Sidebar/FieldSettingsPanel";
 
 const Sidebar = () => {
 	const { sidebarPanel } = useSidebarPanel();
@@ -10,7 +10,7 @@ const Sidebar = () => {
 		<div className="mb-sidebar">
 			<AddFieldPanel show={ sidebarPanel === 'add_field' } />
 			<FieldGroupSettingsPanel show={ sidebarPanel === 'field_group_settings' } />
-			<EditFieldSettingsPanel show={ sidebarPanel === 'edit_field_settings' } />
+			<FieldSettingsPanel show={ sidebarPanel === 'field_settings' } />
 		</div>
 	);
 };

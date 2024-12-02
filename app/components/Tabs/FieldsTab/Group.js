@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { ReactSortable } from 'react-sortablejs';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
-import EditSingleFieldSettings from "../../Sidebar/EditSingleFieldSettings";
+import FieldSettings from "../../Sidebar/FieldSettings";
 import Content from './Content';
 import Node from './Node';
 
@@ -27,7 +27,7 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 
 	return (
 		<>
-			<EditSingleFieldSettings id={ id }>
+			<FieldSettings id={ id }>
 				<Tabs forceRenderTabPanel={ true } className="og-item__body">
 					<TabList>
 						<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
@@ -40,7 +40,7 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 						<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } nameIdData={ nameIdData } />
 					</TabPanel>
 				</Tabs>
-			</EditSingleFieldSettings>
+			</FieldSettings>
 
 			<div className={ clsx( 'og-group-fields', fields.length === 0 && 'og-group-fields--empty' ) }>
 				{

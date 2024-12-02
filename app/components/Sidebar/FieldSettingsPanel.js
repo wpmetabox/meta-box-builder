@@ -1,10 +1,10 @@
 import { Panel } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
-import useEditFieldSettingsPanel from '../../hooks/useEditFieldSettingsPanel';
+import useFieldSettingsPanel from '../../hooks/useFieldSettingsPanel';
 
-const EditFieldSettingsPanel = ( { show = false } ) => {
+const FieldSettingsPanel = ( { show = false } ) => {
 	const ref = useRef();
-	const { setPortalElement } = useEditFieldSettingsPanel();
+	const { setPortalElement } = useFieldSettingsPanel();
 
 	useEffect( () => {
 		setPortalElement( ref.current ); // Setup the ref to the portal only once, when the component is rendered.
@@ -13,4 +13,4 @@ const EditFieldSettingsPanel = ( { show = false } ) => {
 	return <Panel ref={ ref } className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` } />;
 };
 
-export default EditFieldSettingsPanel;
+export default FieldSettingsPanel;
