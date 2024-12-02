@@ -3,9 +3,11 @@ import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { cog, plusCircle } from "@wordpress/icons";
 import AutosizeInput from 'react-input-autosize';
+import useSidebarPanel from '../hooks/useSidebarPanel';
 import { ReactComponent as Logo } from './logo.svg';
 
-const Header = ( { sidebarPanel, setSidebarPanel } ) => {
+const Header = () => {
+	const { sidebarPanel, setSidebarPanel } = useSidebarPanel();
 	const [ title, setTitle ] = useState( MbbApp.title );
 	const [ slug, setSlug ] = useState( MbbApp.slug );
 

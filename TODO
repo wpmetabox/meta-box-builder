@@ -39,3 +39,12 @@
 		+ `IncludeExclude`
 - Các settings sẽ được hiển thị ở sidebar, chia thành các panel. Các extensions khi được cài cũng sẽ tạo ra các panel của riêng chúng.
 - Mặc định thì có các panel sau là mở: summary, location, settings (dành cho post), block settings
+
+## Settings của fields
+
+- Phần settings của field sẽ được hiện ở sidebar, trong panel `EditFieldSettingsPanel`. Trong panel này sẽ hiện tất cả các settings của các field (do dùng uncontrolled form nên buộc phải có các input trong DOM).
+- Panel này chứa 1 div để làm portal cho các field. Mỗi field sẽ tách làm 2 phần, 1 phần preview ở phần main và 1 phần edit settings nằm trong portal.
+- Khi lựa chọn 1 field ở vùng main thì
+	- Lưu unique ID của field đó vào trong hook `useEditFieldSettingsPanel`
+	- Thêm class để hiển thị settings của field đó trong panel
+	- Setup sidebar hiện panel `EditFieldSettingsPanel`. Do phần ẩn hiện sidebar panel này được sử dụng khi chọn 1 field, nên id của sidebar panel và action ẩn hiện được đưa vào hook `useSidebarPanel`.
