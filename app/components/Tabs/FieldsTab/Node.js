@@ -3,9 +3,11 @@ import { __ } from "@wordpress/i18n";
 import { Icon, chevronDown, chevronUp, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
 import { inside } from "../../../functions";
+import useEditFieldSettingsPanel from "../../../hooks/useEditFieldSettingsPanel";
 import useFieldData from "../../../hooks/useFieldData";
 import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFields from "../../../hooks/useFields";
+import useSidebarPanel from "../../../hooks/useSidebarPanel";
 import EditSingleFieldSettings from "../../Sidebar/EditSingleFieldSettings";
 import Field from './Field';
 import Group from './Group';
@@ -14,14 +16,17 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType, toggle } ) => {
+const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
 	const [ showSubfields, toggleSubfields ] = useReducer( show => !show, true );
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
+	const { setActiveFieldId } = useEditFieldSettingsPanel();
+	const { setSidebarPanel } = useSidebarPanel();
 
 	const toggleSettings = e => {
 		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions,.og-column--label,.components-popover' ) ) {
-			toggle( id );
+			setActiveFieldId( id );
+			setSidebarPanel( 'edit_field_settings' );
 		}
 	};
 
@@ -74,7 +79,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle field settings', 'meta-box-builder' ) }><Icon icon={ isExpanded ? chevronUp : chevronDown } /></span>
 				</span>
 			</div>
-			<EditSingleFieldSettings>
+			<EditSingleFieldSettings id={ id }>
 				{
 					field.type === 'group'
 						? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } />
