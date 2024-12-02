@@ -16,9 +16,6 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 		duplicate,
 		updateType,
 		setFields,
-		toggle,
-		toggleAll,
-		expandAll,
 	} = groupData;
 
 	const fieldTypes = useApi( 'field-types', {} );
@@ -50,7 +47,7 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 					<>
 						<div className="og-group-fields__title">{ __( 'Subfields', 'meta-box-builder' ) }</div>
 						<div className="og-group-fields__inner">
-							<Header expandAll={ expandAll } toggleAll={ toggleAll } />
+							<Header />
 							<ReactSortable
 								group={ {
 									name: 'nested',
@@ -73,7 +70,6 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 										removeField={ remove }
 										duplicateField={ duplicate }
 										updateFieldType={ updateType }
-										toggle={ toggle }
 									/> )
 								}
 							</ReactSortable>
