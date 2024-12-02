@@ -19,12 +19,12 @@ const Field = props => {
 	const advanced = controls.filter( control => control.tab === 'advanced' );
 
 	if ( advanced.length === 0 ) {
-		return <div className="og-item__body og-collapsible__body">
+		return <div className="og-item__body">
 			<Content { ...props } controls={ general } />
 		</div>;
 	}
 
-	return <Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
+	return <Tabs forceRenderTabPanel={ true } className="og-item__body">
 		<TabList>
 			<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
 			<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>

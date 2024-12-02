@@ -31,7 +31,7 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 
 	return (
 		<>
-			<Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
+			<Tabs forceRenderTabPanel={ true } className="og-item__body">
 				<TabList>
 					<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
 					<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>

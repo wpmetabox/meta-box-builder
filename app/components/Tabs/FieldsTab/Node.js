@@ -1,6 +1,6 @@
 import { useReducer } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { Icon, chevronDown, chevronUp, copy, dragHandle, trash } from "@wordpress/icons";
+import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
 import { inside } from "../../../functions";
 import useEditFieldSettingsPanel from "../../../hooks/useEditFieldSettingsPanel";
@@ -44,16 +44,11 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 	);
 	const groupHasFields = field.type === 'group' && groupData.fields.length > 0;
 
-	const isExpanded = field._expand;
-
 	return field.type && (
 		<div className={ clsx(
 			'og-item',
 			`og-item--${ field.type }`,
 			groupHasFields && 'og-item--group--has-fields',
-			'og-collapsible',
-			isExpanded && 'og-collapsible--expanded',
-			!isExpanded && 'og-collapsible--collapsed',
 			!showSubfields && 'og-item--hide-fields',
 		) }>
 			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
@@ -76,7 +71,6 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 					}
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
-					<span className="og-item__action og-item__action--toggle" title={ __( 'Toggle field settings', 'meta-box-builder' ) }><Icon icon={ isExpanded ? chevronUp : chevronDown } /></span>
 				</span>
 			</div>
 			<EditSingleFieldSettings id={ id }>
