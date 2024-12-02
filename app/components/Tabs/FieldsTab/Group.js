@@ -1,7 +1,7 @@
+import { PanelBody, PanelRow } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import clsx from "clsx";
 import { ReactSortable } from 'react-sortablejs';
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
 import FieldSettings from "../../Sidebar/FieldSettings";
 import Content from './Content';
@@ -24,22 +24,25 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 	}
 
 	const controls = [ ...fieldTypes[ field.type ].controls ];
+	const general = controls.filter( control => control.tab === 'general' );
+	const advanced = controls.filter( control => control.tab === 'advanced' );
 
 	return (
 		<>
 			<FieldSettings id={ id }>
-				<Tabs forceRenderTabPanel={ true } className="og-item__body">
-					<TabList>
-						<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
-						<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
-					</TabList>
-					<TabPanel>
-						<Content id={ id } controls={ controls.filter( control => control.tab === 'general' ) } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } />
-					</TabPanel>
-					<TabPanel>
-						<Content id={ id } controls={ controls.filter( control => control.tab === 'advanced' ) } field={ field } parent={ parent } nameIdData={ nameIdData } />
-					</TabPanel>
-				</Tabs>
+				<PanelBody title={ __( 'General', 'meta-box-builder' ) } initialOpen={ true }>
+					<PanelRow>
+						<Content id={ id } controls={ general } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } />
+					</PanelRow>
+				</PanelBody>
+				{
+					advanced.length > 0 &&
+					<PanelBody title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ true }>
+						<PanelRow>
+							<Content id={ id } controls={ advanced } field={ field } parent={ parent } nameIdData={ nameIdData } />
+						</PanelRow>
+					</PanelBody>
+				}
 			</FieldSettings>
 
 			<div className={ clsx( 'og-group-fields', fields.length === 0 && 'og-group-fields--empty' ) }>

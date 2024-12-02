@@ -1,5 +1,5 @@
+import { PanelBody, PanelRow } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
 import Content from './Content';
 
@@ -18,24 +18,21 @@ const Field = props => {
 	const general = controls.filter( control => control.tab === 'general' );
 	const advanced = controls.filter( control => control.tab === 'advanced' );
 
-	if ( advanced.length === 0 ) {
-		return <div className="og-item__body">
-			<Content { ...props } controls={ general } />
-		</div>;
-	}
-
-	return <Tabs forceRenderTabPanel={ true } className="og-item__body">
-		<TabList>
-			<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
-			<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
-		</TabList>
-		<TabPanel>
-			<Content { ...props } controls={ general } />
-		</TabPanel>
-		<TabPanel>
-			<Content { ...props } controls={ advanced } />
-		</TabPanel>
-	</Tabs>;
+	return <>
+		<PanelBody title={ __( 'General', 'meta-box-builder' ) } initialOpen={ true }>
+			<PanelRow>
+				<Content { ...props } controls={ general } />
+			</PanelRow>
+		</PanelBody>
+		{
+			advanced.length > 0 &&
+			<PanelBody title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ true }>
+				<PanelRow>
+					<Content { ...props } controls={ advanced } />
+				</PanelRow>
+			</PanelBody>
+		}
+	</>;
 };
 
 export default Field;
