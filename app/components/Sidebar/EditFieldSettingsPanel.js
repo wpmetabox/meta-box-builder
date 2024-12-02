@@ -1,13 +1,13 @@
 import { Panel } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
-import usePortal from '../../hooks/usePortal';
+import useEditFieldSettingsPanel from '../../hooks/useEditFieldSettingsPanel';
 
 const EditFieldSettingsPanel = ( { show = false } ) => {
 	const ref = useRef();
-	const { setup } = usePortal();
+	const { setPortalElement } = useEditFieldSettingsPanel();
 
 	useEffect( () => {
-		setup( ref.current ); // Setup the ref to the portal only once, when the component is rendered.
+		setPortalElement( ref.current ); // Setup the ref to the portal only once, when the component is rendered.
 	}, [] );
 
 	return <Panel ref={ ref } className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` } />;
