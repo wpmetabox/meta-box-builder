@@ -34,6 +34,7 @@ class Control {
 	private static function get_default_value( $name ) {
 		$defaults = [
 			'Checkbox'         => false,
+			'Toggle'           => false,
 			'KeyValue'         => [],
 			'ReactSelect'      => [],
 			'IncludeExclude'   => [],

@@ -12,8 +12,8 @@
 	[x] Toogle 2 panel đó mượt mà
 	[ ] Cho phép thêm được field
 	[ ] Style add field panel
-	[ ] Làm 1 portal cho edit field settings
-	[ ] Khi click vào 1 field thì show panel edit field settings
+	[x] Làm 1 portal cho edit field settings
+	[x] Khi click vào 1 field thì show panel edit field settings
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships

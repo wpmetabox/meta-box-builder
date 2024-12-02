@@ -13,9 +13,9 @@ class RestApi {
 	}
 
 	public function add_field_controls( $controls ) {
-		$controls[] = Control::Checkbox( 'hide_from_rest', [
+		$controls[] = Control::Toggle( 'hide_from_rest', [
 			'name'  => 'hide_from_rest',
-			'label' => '<a href="https://metabox.io/plugins/mb-rest-api/" target="_blank" rel="nofollow noopenner">' . __( 'Hide from Rest API?', 'meta-box-builder' ) . '</a>',
+			'label' => __( 'Hide from Rest API?', 'meta-box-builder' ),
 		] );
 
 		return $controls;

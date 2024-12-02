@@ -13,9 +13,9 @@ class FrontendSubmission {
 	}
 
 	public function add_field_controls( $controls ) {
-		$controls[] = Control::Checkbox( 'hide_from_front', [
+		$controls[] = Control::Toggle( 'hide_from_front', [
 			'name'  => 'hide_from_front',
-			'label' => '<a href="https://metabox.io/plugins/mb-frontend-submission/" target="_blank" rel="nofollow noopenner">' . __( 'Hide from front end?', 'meta-box-builder' ) . '</a>',
+			'label' => __( 'Hide from front end?', 'meta-box-builder' ),
 		] );
 
 		return $controls;

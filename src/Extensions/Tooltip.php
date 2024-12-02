@@ -15,19 +15,19 @@ class Tooltip {
 	}
 
 	public function add_field_controls( $controls ) {
-		$controls[] = Control::Checkbox( 'tooltip_enable', [
+		$controls[] = Control::Toggle( 'tooltip_enable', [
 			'name'  => 'tooltip[enable]',
-			'label' => '<a href="https://metabox.io/plugins/meta-box-tooltip/" target="_blank" rel="nofollow noopenner">' . __( 'Tooltip', 'meta-box-builder' ) . '</a>',
+			'label' => __( 'Tooltip', 'meta-box-builder' ),
 		] );
 		$controls[] = Control::Input( 'tooltip_icon', [
 			'name'       => 'tooltip[icon]',
-			'label'      => '<span class="og-indent"></span>' . '<a href="https://developer.wordpress.org/resource/dashicons/" target="_blank" rel="nofollow noopenner">' . __( 'Icon', 'meta-box-builder' ) . '</a>',
+			'label'      => '<a href="https://developer.wordpress.org/resource/dashicons/" target="_blank" rel="nofollow noopenner">' . __( 'Icon', 'meta-box-builder' ) . '</a>',
 			'tooltip'    => __( 'Can be "info" (default), "help", Dashicons or URL of the custom icon image', 'meta-box-builder' ),
 			'dependency' => 'tooltip_enable:true',
 		] );
 		$controls[] = Control::ToggleGroup( 'tooltip_position', [
 			'name'       => 'tooltip[position]',
-			'label'      => '<span class="og-indent"></span>' . __( 'Position', 'meta-box-builder' ),
+			'label'      => __( 'Position', 'meta-box-builder' ),
 			'dependency' => 'tooltip_enable:true',
 			'options'    => [
 				'top'    => __( 'Top', 'meta-box-builder' ),
@@ -38,7 +38,7 @@ class Tooltip {
 		], 'top' );
 		$controls[] = Control::Input( 'tooltip_content', [
 			'name'       => 'tooltip[content]',
-			'label'      => '<span class="og-indent"></span>' . __( 'Content', 'meta-box-builder' ),
+			'label'      => __( 'Content', 'meta-box-builder' ),
 			'dependency' => 'tooltip_enable:true',
 		] );
 

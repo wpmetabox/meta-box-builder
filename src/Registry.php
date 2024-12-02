@@ -54,7 +54,7 @@ class Registry {
 				'tooltip' => __( 'Custom HTML displayed after the field output', 'meta-box-builder' ),
 			], '', 'advanced' ),
 			Control::Input( 'class', __( 'Custom CSS class', 'meta-box-builder' ), '', 'advanced' ),
-			Control::Checkbox( 'save_field', [
+			Control::Toggle( 'save_field', [
 				'label'   => __( 'Save field value', 'meta-box-builder' ),
 				'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' ),
 			], true, 'advanced' ),
@@ -78,20 +78,20 @@ class Registry {
 			], [], 'advanced' ),
 
 			// Clone.
-			Control::Checkbox( 'clone', [
+			Control::Toggle( 'clone', [
 				'label'   => __( 'Cloneable', 'meta-box-builder' ),
 				'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
 			] ),
 			Control::CloneFeatures( 'clone_features', [
-				'label'      => '<span class="og-indent"></span>' . __( 'Clone features', 'meta-box-builder' ),
+				'label'      => __( 'Clone features', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
 			Control::CloneQuantity( 'clone_quantity', [
-				'label'      => '<span class="og-indent"></span>' . __( 'Number of clones', 'meta-box-builder' ),
+				'label'      => __( 'Number of clones', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
 			Control::Input( 'add_button', [
-				'label'      => '<span class="og-indent"></span>' . __( 'Add more text', 'meta-box-builder' ),
+				'label'      => __( 'Add more text', 'meta-box-builder' ),
 				'tooltip'    => __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ),
 				'dependency' => 'clone:true',
 			] ),
@@ -125,18 +125,18 @@ class Registry {
 					'M j, Y h:i A' => 'Mar 28, 2024 09:20 AM (M j, Y h:i A)',
 				],
 			] ),
-			Control::Checkbox( 'timestamp', __( 'Save value as timestamp', 'meta-box-builder' ) ),
-			'inline_date'                  => Control::Checkbox( 'inline', [
+			Control::Toggle( 'timestamp', __( 'Save value as timestamp', 'meta-box-builder' ) ),
+			'inline_date'                  => Control::Toggle( 'inline', [
 				'label'   => __( 'Inline', 'meta-box-builder' ),
 				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
 			] ),
-			'inline_datetime'              => Control::Checkbox( 'inline', [
+			'inline_datetime'              => Control::Toggle( 'inline', [
 				'label'   => __( 'Inline', 'meta-box-builder' ),
 				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
 			] ),
-			Control::Checkbox( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
-			Control::Checkbox( 'required', __( 'Required', 'meta-box-builder' ) ),
-			Control::Checkbox( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
+			Control::Toggle( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
+			Control::Toggle( 'required', __( 'Required', 'meta-box-builder' ) ),
+			Control::Toggle( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
 			Control::InputAttributes( 'input_attributes', __( 'Attributes', 'meta-box-builder' ) ),
 			'js_options_date'              => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
@@ -238,16 +238,16 @@ class Registry {
 					'radio_list'      => __( 'Radio list', 'meta-box-builder' ),
 				],
 			], 'select_advanced' ),
-			Control::Checkbox( 'add_new', [
+			Control::Toggle( 'add_new', [
 				'label'   => __( 'Add new', 'meta-box-builder' ),
 				'tooltip' => __( 'Allow users to create a new item', 'meta-box-builder' ),
 			] ),
-			Control::Checkbox( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
-			Control::Checkbox( 'multiple', [
+			Control::Toggle( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
+			Control::Toggle( 'multiple', [
 				'label'   => __( 'Multiple', 'meta-box-builder' ),
 				'tooltip' => __( 'Allow to select multiple choices', 'meta-box-builder' ),
 			] ),
-			Control::Checkbox( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ) ),
+			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ) ),
 			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
@@ -329,11 +329,11 @@ class Registry {
 				'label'   => __( 'Max number of files', 'meta-box-builder' ),
 				'tooltip' => __( 'Leave empty for unlimited uploads', 'meta-box-builder' ),
 			] ),
-			Control::Checkbox( 'max_status', [
+			Control::Toggle( 'max_status', [
 				'label'   => __( 'Show status', 'meta-box-builder' ),
 				'tooltip' => __( 'Display how many files uploaded/remaining', 'meta-box-builder' ),
 			], true ),
-			Control::Checkbox( 'force_delete', [
+			Control::Toggle( 'force_delete', [
 				'label'   => __( 'Force delete', 'meta-box-builder' ),
 				'tooltip' => __( 'Delete files from the Media Library when deleting them from post meta', 'meta-box-builder' ),
 			] ),
@@ -358,23 +358,23 @@ class Registry {
 					'<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ) .
 					'<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
 			] ),
-			'inline_button_group'          => Control::Checkbox( 'inline', __( 'Display buttons horizontally', 'meta-box-builder' ), true ),
+			'inline_button_group'          => Control::Toggle( 'inline', __( 'Display buttons horizontally', 'meta-box-builder' ), true ),
 
 			// Checkbox.
-			'std_checkbox'                 => Control::Checkbox( 'std', __( 'Checked by default', 'meta-box-builder' ) ),
+			'std_checkbox'                 => Control::Toggle( 'std', __( 'Checked by default', 'meta-box-builder' ) ),
 
 			// Checkbox list.
 			'std_checkbox_list'            => Control::Textarea( 'std', [
 				'label'   => __( 'Default value', 'meta-box-builder' ),
 				'tooltip' => __( 'Enter each value on a line', 'meta-box-builder' ),
 			] ),
-			Control::Checkbox( 'inline', [
+			Control::Toggle( 'inline', [
 				'label'   => __( 'Inline', 'meta-box-builder' ),
 				'tooltip' => __( 'Display choices on a single line', 'meta-box-builder' ),
 			] ),
 
 			// Color.
-			Control::Checkbox( 'alpha_channel', __( 'Allow to select opacity', 'meta-box-builder' ) ),
+			Control::Toggle( 'alpha_channel', __( 'Allow to select opacity', 'meta-box-builder' ) ),
 			'js_options_color'             => Control::KeyValue( 'js_options', [
 				'label'   => '<a href="https://automattic.github.io/Iris/" target="_blank" rel="nofollow noopenner">' . __( 'Color picker options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Color picker options', 'meta-box-builder' ),
@@ -472,7 +472,7 @@ class Registry {
 				'label'   => __( 'Post types', 'meta-box-builder' ),
 				'options' => $this->get_post_types(),
 			], [ 'post' ] ),
-			Control::Checkbox( 'parent', [
+			Control::Toggle( 'parent', [
 				'label'   => __( 'Set as parent', 'meta-box-builder' ),
 				'tooltip' => __( 'Set the selected post as the parent of current post being edited.', 'meta-box-builder' ),
 			] ),
@@ -692,7 +692,7 @@ class Registry {
 			], 'rounded' ),
 			Control::Input( 'on_label', __( 'Custom ON status label', 'meta-box-builder' ) ),
 			Control::Input( 'off_label', __( 'Custom OFF status label', 'meta-box-builder' ) ),
-			'std_switch'                   => Control::Checkbox( 'std', __( 'ON by default', 'meta-box-builder' ) ),
+			'std_switch'                   => Control::Toggle( 'std', __( 'ON by default', 'meta-box-builder' ) ),
 
 			// Text.
 			Control::PrependAppend( 'prepend_append', __( 'Text wrap', 'meta-box-builder' ) ),
@@ -720,7 +720,7 @@ class Registry {
 			] ),
 
 			// Time.
-			'inline_time'                  => Control::Checkbox( 'inline', [
+			'inline_time'                  => Control::Toggle( 'inline', [
 				'label'   => __( 'Inline', 'meta-box-builder' ),
 				'tooltip' => __( 'Display the time picker inline with the input. Do not require to click the input field to trigger the time picker.', 'meta-box-builder' ),
 			] ),
@@ -800,7 +800,7 @@ class Registry {
 			] ),
 
 			// Wysiwyg.
-			Control::Checkbox( 'raw', __( 'Save data in the raw format', 'meta-box-builder' ) ),
+			Control::Toggle( 'raw', __( 'Save data in the raw format', 'meta-box-builder' ) ),
 			'options_wysiwyg'              => Control::KeyValue( 'options', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/functions/wp_editor/" target="_blank" rel="nofollow noopenner">' . __( 'Editor options', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'The editor options, the same as settings for wp_editor() function', 'meta-box-builder' ),
