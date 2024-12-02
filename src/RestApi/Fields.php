@@ -72,7 +72,7 @@ class Fields extends Base {
 	public function get_field_types() {
 		$this->registry->register_default_controls();
 
-		$general  = [ 'name', 'id', 'type', 'descriptions' ];
+		$general  = [ 'name', 'id', 'descriptions' ];
 		$advanced = [ 'before', 'after', 'class', 'sanitize_callback', 'save_field', 'attributes', 'validation', 'custom_settings' ];
 		$clone    = [ 'clone', 'clone_features', 'clone_quantity', 'add_button' ];
 		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'input_attributes', 'js_options' ];
@@ -149,7 +149,7 @@ class Fields extends Base {
 			'divider'           => [
 				'title'       => __( 'Divider', 'meta-box-builder' ),
 				'category'    => 'layout',
-				'controls'    => [ 'type', 'before', 'after' ],
+				'controls'    => [ 'before', 'after' ],
 				'description' => __( 'Simple horizontal line', 'meta-box-builder' ),
 			],
 			'email'             => [
@@ -197,13 +197,13 @@ class Fields extends Base {
 			'heading'           => [
 				'title'       => __( 'Heading', 'meta-box-builder' ),
 				'category'    => 'layout',
-				'controls'    => array_merge( [ 'type', 'name', 'desc' ], $advanced ),
+				'controls'    => array_merge( [ 'name', 'desc' ], $advanced ),
 				'description' => __( 'Heading text', 'meta-box-builder' ),
 			],
 			'hidden'            => [
 				'title'       => __( 'Hidden', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( [ 'id', 'type', 'std' ], $advanced ),
+				'controls'    => array_merge( [ 'id', 'std' ], $advanced ),
 				'description' => __( 'For storing a default hidden value', 'meta-box-builder' ),
 			],
 			'icon'              => [

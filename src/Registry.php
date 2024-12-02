@@ -18,7 +18,6 @@ class Registry {
 		// In the same order as in Fields class.
 		$controls = [
 			// General.
-			Control::Type( 'type', __( 'Type', 'meta-box-builder' ) ),
 			Control::Name( 'name', [
 				'label'   => __( 'Label', 'meta-box-builder' ),
 				'tooltip' => __( 'Leave empty to make the input 100% width.', 'meta-box-builder' ),

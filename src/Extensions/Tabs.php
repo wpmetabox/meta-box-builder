@@ -22,7 +22,6 @@ class Tabs {
 			'controls' => [
 				'name',
 				'id',
-				'type',
 				Control::Select( 'icon_type', [
 					'label'   => __( 'Icon type', 'meta-box-builder' ),
 					'options' => [
