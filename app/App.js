@@ -1,5 +1,5 @@
 import { Flex } from '@wordpress/components';
-import { render, useReducer } from "@wordpress/element";
+import { render, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ErrorBoundary } from "react-error-boundary";
 import Header from './components/Header';
@@ -8,11 +8,11 @@ import Sidebar from './components/Sidebar';
 import ThemeCodeBox from "./components/ThemeCode/Box";
 
 const AppWrapper = ( { children } ) => {
-	const [ showSidebar, toggleSidebar ] = useReducer( show => !show, true );
+	const [ sidebarPanel, setSidebarPanel ] = useState( 'add_field' );
 
 	return (
 		<>
-			<Header showSidebar={ showSidebar } toggleSidebar={ toggleSidebar } />
+			<Header sidebarPanel={ sidebarPanel } setSidebarPanel={ setSidebarPanel } />
 
 			<Flex gap={ 0 } align="stretch" className="mb-body">
 				<div className="mb-body__inner">
@@ -25,7 +25,7 @@ const AppWrapper = ( { children } ) => {
 					</div>
 				</div>
 
-				<Sidebar show={ showSidebar } />
+				<Sidebar panel={ sidebarPanel } />
 			</Flex >
 		</>
 	);
