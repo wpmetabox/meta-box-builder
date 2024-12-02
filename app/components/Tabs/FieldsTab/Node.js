@@ -15,7 +15,7 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { id, field, parent = '', removeField, duplicateField, updateFieldType } ) => {
+const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
 	const { setActiveFieldId } = useFieldSettingsPanel();
@@ -71,10 +71,10 @@ const Node = ( { id, field, parent = '', removeField, duplicateField, updateFiel
 			</div>
 			{
 				field.type === 'group'
-					? <Group id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } groupData={ groupData } />
+					? <Group id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } groupData={ groupData } />
 					: (
 						<FieldSettings id={ id }>
-							<Field id={ id } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
+							<Field id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
 						</FieldSettings>
 					)
 			}

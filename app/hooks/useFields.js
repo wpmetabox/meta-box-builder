@@ -46,22 +46,11 @@ const useFields = ( initialFields, baseId ) => {
 		} );
 	};
 
-	const updateType = ( id, type ) => setFields( prev => {
-		const index = prev.findIndex( field => field._id === id );
-		let newFields = [ ...prev ];
-
-		// Maintain existing input values.
-		newFields[ index ] = { ...getFieldValue( `${ baseId }[${ id }]` ), type };
-
-		return newFields;
-	} );
-
 	return {
 		fields,
 		add,
 		remove,
 		duplicate,
-		updateType,
 		setFields,
 	};
 };

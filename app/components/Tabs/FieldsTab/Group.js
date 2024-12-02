@@ -7,13 +7,12 @@ import FieldSettings from "../../Sidebar/FieldSettings";
 import Content from './Content';
 import Node from './Node';
 
-const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData } ) => {
+const Group = ( { id, field, parent = '', nameIdData, groupData } ) => {
 	const {
 		fields,
 		add,
 		remove,
 		duplicate,
-		updateType,
 		setFields,
 	} = groupData;
 
@@ -32,7 +31,7 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 			<FieldSettings id={ id }>
 				<PanelBody title={ __( 'General', 'meta-box-builder' ) } initialOpen={ true }>
 					<PanelRow>
-						<Content id={ id } controls={ general } field={ field } parent={ parent } updateFieldType={ updateFieldType } nameIdData={ nameIdData } />
+						<Content id={ id } controls={ general } field={ field } parent={ parent } nameIdData={ nameIdData } />
 					</PanelRow>
 				</PanelBody>
 				{
@@ -71,7 +70,6 @@ const Group = ( { id, field, parent = '', updateFieldType, nameIdData, groupData
 										parent={ `${ parent }[${ id }][fields]` }
 										removeField={ remove }
 										duplicateField={ duplicate }
-										updateFieldType={ updateType }
 									/> )
 								}
 							</ReactSortable>

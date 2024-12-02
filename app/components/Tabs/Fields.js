@@ -13,7 +13,6 @@ const Fields = prop => {
 		add,
 		remove,
 		duplicate,
-		updateType,
 		setFields,
 	} = useFields( prop.fields.filter( field => field.type ), 'fields' );
 
@@ -52,7 +51,6 @@ const Fields = prop => {
 						field={ field }
 						removeField={ remove }
 						duplicateField={ duplicate }
-						updateFieldType={ updateType }
 					/> )
 				}
 			</ReactSortable>
