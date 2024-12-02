@@ -1,8 +1,8 @@
 import { __ } from "@wordpress/i18n";
-import DivRow from '../../controls/DivRow';
-import Input from "../../controls/Input";
-import KeyValue from "../../controls/KeyValue";
-import useSettings from "../../hooks/useSettings";
+import DivRow from '../../../controls/DivRow';
+import Input from "../../../controls/Input";
+import KeyValue from "../../../controls/KeyValue";
+import useSettings from "../../../hooks/useSettings";
 
 const Advanced = () => {
 	const { getSetting, getPrefix, updatePrefix } = useSettings();

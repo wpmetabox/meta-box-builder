@@ -1,10 +1,10 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import DivRow from '../../controls/DivRow';
-import ReactSelect from '../../controls/ReactSelect';
-import Select from '../../controls/Select';
-import Toggle from "../../controls/Toggle";
-import useSettings from "../../hooks/useSettings";
+import DivRow from '../../../controls/DivRow';
+import ReactSelect from '../../../controls/ReactSelect';
+import Select from '../../../controls/Select';
+import Toggle from "../../../controls/Toggle";
+import useSettings from "../../../hooks/useSettings";
 import { ensureArray } from '/functions';
 
 const Location = () => {

@@ -50,7 +50,7 @@ const Header = ( { showSidebar, toggleSidebar } ) => {
 			<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
 				<input type="submit" data-status="draft" className="components-button is-compact is-tertiary" value={ MbbApp.status == 'publish' ? __( 'Switch to draft', 'meta-box-builder' ) : __( 'Save draft', 'meta-box-builder' ) } />
 				<input type="submit" data-status="publish" className="components-button is-primary" value={ MbbApp.status == 'publish' ? __( 'Update', 'meta-box-builder' ) : __( 'Publish', 'meta-box-builder' ) } />
-				<Button onClick={ toggleSidebar } className="is-compact" icon={ drawerRight } size="compact" label={ __( 'Toggle sidebar', 'meta-box-builder' ) } showTooltip={ true } isPressed={ showSidebar } />
+				<Button onClick={ toggleSidebar } className="is-compact" icon={ drawerRight } size="compact" label={ __( 'Toggle field group settings', 'meta-box-builder' ) } showTooltip={ true } isPressed={ showSidebar } />
 			</Flex>
 		</Flex>
 	);

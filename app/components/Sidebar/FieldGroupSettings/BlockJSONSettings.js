@@ -1,11 +1,11 @@
 import { Flex } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import DivRow from '../../controls/DivRow';
-import Input from '../../controls/Input';
-import Toggle from "../../controls/Toggle";
-import { fetcher } from "../../functions";
-import useSettings from "../../hooks/useSettings";
+import DivRow from '../../../controls/DivRow';
+import Input from '../../../controls/Input';
+import Toggle from "../../../controls/Toggle";
+import { fetcher } from "../../../functions";
+import useSettings from "../../../hooks/useSettings";
 
 const BlockJSONSettings = () => {
 	const { getSetting } = useSettings();

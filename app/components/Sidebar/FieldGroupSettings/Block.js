@@ -1,13 +1,13 @@
 import { RadioControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import Icon from '../../controls/Icon';
-import Input from '../../controls/Input';
-import ReactSelect from '../../controls/ReactSelect';
-import Select from '../../controls/Select';
-import Textarea from '../../controls/Textarea';
-import Toggle from "../../controls/Toggle";
-import useSettings from "../../hooks/useSettings";
+import Icon from '../../../controls/Icon';
+import Input from '../../../controls/Input';
+import ReactSelect from '../../../controls/ReactSelect';
+import Select from '../../../controls/Select';
+import Textarea from '../../../controls/Textarea';
+import Toggle from "../../../controls/Toggle";
+import useSettings from "../../../hooks/useSettings";
 import { ensureArray } from '/functions';
 
 const Block = () => {

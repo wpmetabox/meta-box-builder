@@ -1,9 +1,9 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import FieldInserter from '../../controls/FieldInserter';
-import { uniqid } from "../../functions";
-import useFieldIds from '../../hooks/useFieldIds';
-import useSettings from "../../hooks/useSettings";
+import FieldInserter from '../../../controls/FieldInserter';
+import { uniqid } from "../../../functions";
+import useFieldIds from '../../../hooks/useFieldIds';
+import useSettings from "../../../hooks/useSettings";
 
 const ConditionalLogic = () => {
 	const name = 'settings[conditional_logic]';

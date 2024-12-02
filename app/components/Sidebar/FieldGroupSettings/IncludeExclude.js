@@ -1,9 +1,9 @@
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import DivRow from '../../controls/DivRow';
-import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
-import { fetcher, uniqid } from "../../functions";
-import useSettings from "../../hooks/useSettings";
+import DivRow from '../../../controls/DivRow';
+import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
+import { fetcher, uniqid } from "../../../functions";
+import useSettings from "../../../hooks/useSettings";
 
 const IncludeExclude = () => {
 	const name = 'settings[include_exclude]';

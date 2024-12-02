@@ -1,17 +1,17 @@
 import { Button, Panel, PanelBody, PanelRow } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import useSettings from '../hooks/useSettings';
-import Advanced from './Sidebar/Advanced';
-import Block from './Sidebar/Block';
-import BlockJSONSettings from './Sidebar/BlockJSONSettings';
-import BlockRenderSettings from './Sidebar/BlockRenderSettings';
-import ConditionalLogic from './Sidebar/ConditionalLogic';
-import CustomTable from './Sidebar/CustomTable';
-import IncludeExclude from './Sidebar/IncludeExclude';
-import Location from './Sidebar/Location';
-import Post from './Sidebar/Post';
-import ShowHide from './Sidebar/ShowHide';
-import Tabs from './Sidebar/Tabs';
+import Advanced from './Sidebar/FieldGroupSettings/Advanced';
+import Block from './Sidebar/FieldGroupSettings/Block';
+import BlockJSONSettings from './Sidebar/FieldGroupSettings/BlockJSONSettings';
+import BlockRenderSettings from './Sidebar/FieldGroupSettings/BlockRenderSettings';
+import ConditionalLogic from './Sidebar/FieldGroupSettings/ConditionalLogic';
+import CustomTable from './Sidebar/FieldGroupSettings/CustomTable';
+import IncludeExclude from './Sidebar/FieldGroupSettings/IncludeExclude';
+import Location from './Sidebar/FieldGroupSettings/Location';
+import Post from './Sidebar/FieldGroupSettings/Post';
+import ShowHide from './Sidebar/FieldGroupSettings/ShowHide';
+import Tabs from './Sidebar/FieldGroupSettings/Tabs';
 
 const Sidebar = ( { show } ) => {
 	const { getObjectType } = useSettings();
