@@ -23,7 +23,7 @@ const FieldGroupSettingsPanel = ( { show = false } ) => {
 				<PanelRow className="summary">
 					<p className="status"><label>{ __( 'Status', 'meta-box-builder' ) }</label> { MbbApp.status }</p>
 					<p><label>{ __( 'Published', 'meta-box-builder' ) }</label> { MbbApp.published }</p>
-					{ MbbApp.modifiedtime && <p><label>{ __( 'Last modified', 'meta-box-builder' ) }</label> { MbbApp.modifiedtime }</p> }
+					{ MbbApp.modified && <p><label>{ __( 'Last modified', 'meta-box-builder' ) }</label> { MbbApp.modified }</p> }
 					<p><label>{ __( 'Author', 'meta-box-builder' ) }</label> { MbbApp.author }</p>
 					<p><Button href={ MbbApp.trash } isDestructive={ true } variant="secondary">{ __( 'Move to trash', 'meta-box-builder' ) }</Button></p>
 				</PanelRow>

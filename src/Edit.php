@@ -43,7 +43,7 @@ class Edit extends BaseEditPage {
 			'author'        => get_the_author_meta( 'display_name', (int) $post->post_author ),
 			'trash'         => get_delete_post_link(),
 			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
-			'modifiedtime'  => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
+			'modified'      => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
 			'saving'        => __( 'Saving...', 'meta-box-builder' ),
 
 			'fields'        => $fields,
