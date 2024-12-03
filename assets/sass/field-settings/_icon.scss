@@ -1,0 +1,148 @@
+&-icon {
+	&__pick.button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-color: #8c8f94;
+		color: inherit;
+		width: 30px;
+		box-sizing: border-box;
+	}
+
+	&__dropdown .components-popover__content {
+		overflow-x: hidden !important;
+	}
+
+	&__search {
+		width: 100%;
+		margin-bottom: 12px;
+	}
+
+	&__items {
+		display: grid;
+		grid-template-columns: repeat(3, 80px);
+		gap: 8px;
+		max-height: 240px;
+		width: calc(3 * 80px + 2 * 8px + 12px);
+	}
+
+	&__item {
+		border-radius: 4px;
+		padding: 6px;
+		cursor: pointer;
+		border: 1px solid transparent;
+
+		.dashicons {
+			font-size: 18px;
+		}
+
+		&:hover {
+			border-color: var(--color-light);
+		}
+
+		&--selected,
+		&--selected:hover {
+			border-color: var(--color-primary);
+			color: var(--color-primary);
+		}
+	}
+
+	&__text {
+		color: var(--color-gray);
+		font-size: 11px;
+		line-height: 1.1;
+	}
+
+	&__select {
+		position: relative;
+		display: inline-block;
+		margin: 0 4px 4px 0;
+	}
+
+	// WordPress 5.6+
+	.og-dashicon {
+		border-radius: 4px;
+		width: 24px;
+		height: 24px;
+		color: currentColor;
+		display: grid;
+		place-items: center;
+	}
+
+	&-selected {
+		display: flex;
+		gap: 8px;
+
+		span {
+			min-width: 30px;
+			height: 30px;
+			box-sizing: border-box;
+			border: 1px solid #8c8f94;
+			border-radius: 4px;
+			display: grid;
+			place-items: center;
+		}
+
+		.og-icon-search {
+			opacity: 1;
+			position: relative;
+		}
+
+		.icon-fontawesome::before {
+			font-size: 18px;
+		}
+	}
+
+	&-items {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 8px 4px;
+		max-height: 180px;
+		overflow-y: auto;
+		border: 1px solid #8c8f94;
+		border-radius: 4px;
+		padding: 4px;
+		margin-top: 12px;
+	}
+
+	&-item {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		border-radius: 4px;
+		padding-bottom: 4px;
+
+		.dashicons {
+			font-size: 18px;
+		}
+
+		.og-icon__select {
+			margin: 0;
+		}
+
+		&__text {
+			color: var(--color-gray);
+			font-size: 11px;
+			line-height: 1.1;
+			padding-inline: 4px;
+		}
+
+		&:hover {
+			background: var(--color-lightest);
+		}
+
+		&:has(input:checked) {
+			background: var(--color-primary);
+			color: #fff;
+		}
+
+		&:has(input:checked) .og-icon-item__text {
+			color: #fff;
+		}
+	}
+
+	input {
+		position: absolute;
+		opacity: 0;
+	}
+}
