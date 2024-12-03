@@ -25,11 +25,7 @@ const Content = ( { id, controls, field, parent = '', nameIdData, updateFieldDat
 		/>;
 	};
 
-	return (
-		<div className="og-item__content">
-			{ controls.map( control => <Suspense fallback={ null } key={ control.setting }>{ getControlComponent( control ) }</Suspense> ) }
-		</div>
-	);
+	return controls.map( control => <Suspense fallback={ null } key={ control.setting }>{ getControlComponent( control ) }</Suspense> );
 };
 
 export default Content;
