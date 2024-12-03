@@ -108,9 +108,6 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	if ( control.name === 'CloneFeatures' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_features', [ 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple' ], false );
 	}
-	if ( control.name === 'Descriptions' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'descriptions', [ 'label_description', 'desc' ], false );
-	}
 
 	return [ Control, input, defaultValue ];
 };

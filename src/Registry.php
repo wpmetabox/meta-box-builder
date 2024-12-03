@@ -28,32 +28,37 @@ class Registry {
 				'tooltip'     => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
 				'description' => __( 'Use only lowercase letters, numbers, underscores (and be careful dashes).', 'meta-box-builder' ),
 			] ),
-			Control::Descriptions( 'descriptions', [
-				'label'   => __( 'Description', 'meta-box-builder' ),
-			] ),
+
+			// Appearance
 			Control::Input( 'label_description', [
-				'label'   => __( 'Label description', 'meta-box-builder' ),
-				'tooltip' => __( 'Display below the field label', 'meta-box-builder' ),
-			] ),
+				'label'       => __( 'Label description', 'meta-box-builder' ),
+				'description' => __( 'Display below the field label.', 'meta-box-builder' ),
+			], '', 'appearance' ),
 			Control::Input( 'desc', [
-				'label'   => __( 'Input description', 'meta-box-builder' ),
-				'tooltip' => __( 'Display below the field input', 'meta-box-builder' ),
-			] ),
+				'label'       => __( 'Input description', 'meta-box-builder' ),
+				'description' => __( 'Display below the field input.', 'meta-box-builder' ),
+			], '', 'appearance' ),
+			Control::Input( 'placeholder', __( 'Placeholder', 'meta-box-builder' ), '', 'appearance' ),
+			Control::PrependAppend( 'prepend_append', __( 'Text wrap', 'meta-box-builder' ), '', 'appearance' ),
+			Control::Input( 'class', __( 'Custom CSS class', 'meta-box-builder' ), '', 'appearance' ),
+			Control::Input( 'size', [
+				'type'  => 'number',
+				'label' => __( 'Size of the input box', 'meta-box-builder' ),
+			], '', 'appearance' ),
+			Control::Textarea( 'before', [
+				'label'   => __( 'Before', 'meta-box-builder' ),
+				'tooltip' => __( 'Custom HTML displayed before the field output', 'meta-box-builder' ),
+			], '', 'appearance' ),
+			Control::Textarea( 'after', [
+				'label'   => __( 'After', 'meta-box-builder' ),
+				'tooltip' => __( 'Custom HTML displayed after the field output', 'meta-box-builder' ),
+			], '', 'appearance' ),
 
 			// Advanced.
 			Control::Validation( 'validation', [
 				'label'   => '<a href="https://docs.metabox.io/validation/" target="_blank" rel="noreffer noopener">' . __( 'Validation', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Advanced validation rules powered by jQuery validation', 'meta-box-builder' ),
 			], [], 'advanced' ),
-			Control::Textarea( 'before', [
-				'label'   => __( 'Before', 'meta-box-builder' ),
-				'tooltip' => __( 'Custom HTML displayed before the field output', 'meta-box-builder' ),
-			], '', 'advanced' ),
-			Control::Textarea( 'after', [
-				'label'   => __( 'After', 'meta-box-builder' ),
-				'tooltip' => __( 'Custom HTML displayed after the field output', 'meta-box-builder' ),
-			], '', 'advanced' ),
-			Control::Input( 'class', __( 'Custom CSS class', 'meta-box-builder' ), '', 'advanced' ),
 			Control::Toggle( 'save_field', [
 				'label'   => __( 'Save field value', 'meta-box-builder' ),
 				'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' ),
@@ -98,11 +103,6 @@ class Registry {
 
 			// Date.
 			Control::Input( 'std', __( 'Default value', 'meta-box-builder' ) ),
-			Control::Input( 'placeholder', __( 'Placeholder', 'meta-box-builder' ) ),
-			Control::Input( 'size', [
-				'type'  => 'number',
-				'label' => __( 'Size of the input box', 'meta-box-builder' ),
-			] ),
 			Control::DateTime( 'save_format', [
 				'label'       => __( 'Save format', 'meta-box-builder' ),
 				'description' => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
@@ -695,10 +695,9 @@ class Registry {
 			'std_switch'                   => Control::Toggle( 'std', __( 'ON by default', 'meta-box-builder' ) ),
 
 			// Text.
-			Control::PrependAppend( 'prepend_append', __( 'Text wrap', 'meta-box-builder' ) ),
 			Control::Textarea( 'datalist_choices', [
-				'label'   => __( 'Predefined values', 'meta-box-builder' ),
-				'tooltip' => __( 'Known as "datalist", these are values that users can select from (they still can enter text if they want). Enter each value on a line.', 'meta-box-builder' ),
+				'label'       => __( 'Predefined values', 'meta-box-builder' ),
+				'description' => __( 'Known as "datalist", these are values that users can select from (they still can enter text if they want). Enter each value on a line.', 'meta-box-builder' ),
 			] ),
 
 			// Text list.

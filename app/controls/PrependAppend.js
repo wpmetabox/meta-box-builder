@@ -3,7 +3,7 @@ import DivRow from './DivRow';
 
 const PrependAppend = ( { defaultValue, componentId, fieldType, name, ...rest } ) => (
 	<DivRow { ...rest }>
-		<div className="og-input-groups">
+		<div className="og-input-group">
 			<label htmlFor={ `${ componentId }-prepend` }>{ __( 'Prepend', 'meta-box-builder' ) }</label>
 			<input
 				type="text"
@@ -11,13 +11,15 @@ const PrependAppend = ( { defaultValue, componentId, fieldType, name, ...rest } 
 				name={ `${ name.replace( 'prepend_append', 'prepend' ) }` }
 				defaultValue={ defaultValue.prepend }
 			/>
-			<label htmlFor={ `${ componentId }-append` }>{ __( 'Append', 'meta-box-builder' ) }</label>
+		</div>
+		<div className="og-input-group">
 			<input
 				type="text"
 				id={ `${ componentId }-append` }
 				name={ `${ name.replace( 'prepend_append', 'append' ) }` }
 				defaultValue={ defaultValue.append }
 			/>
+			<label htmlFor={ `${ componentId }-append` }>{ __( 'Append', 'meta-box-builder' ) }</label>
 		</div>
 	</DivRow>
 );

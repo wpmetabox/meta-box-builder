@@ -13,6 +13,10 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 			label: __( 'General', 'meta-box-builder' ),
 		},
 		{
+			value: 'appearance',
+			label: __( 'Appearance', 'meta-box-builder' ),
+		},
+		{
 			value: 'conditional_logic',
 			label: __( 'Conditional logic', 'meta-box-builder' ),
 		},

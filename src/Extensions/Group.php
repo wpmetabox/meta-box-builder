@@ -19,7 +19,8 @@ class Group {
 			'controls' => [
 				'name',
 				'id',
-				'descriptions',
+				'label_description',
+				'desc',
 				Control::Toggle( 'collapsible', __( 'Collapsible', 'meta-box-builder' ) ),
 				Control::ToggleGroup( 'default_state', [
 					'label'      => __( 'Default state', 'meta-box-builder' ),

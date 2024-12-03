@@ -72,7 +72,7 @@ class Fields extends Base {
 	public function get_field_types() {
 		$this->registry->register_default_controls();
 
-		$general  = [ 'name', 'id', 'descriptions' ];
+		$general  = [ 'name', 'id', 'label_description', 'desc' ];
 		$advanced = [ 'before', 'after', 'class', 'sanitize_callback', 'save_field', 'attributes', 'validation', 'custom_settings' ];
 		$clone    = [ 'clone', 'clone_features', 'clone_quantity', 'add_button' ];
 		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'input_attributes', 'js_options' ];
@@ -335,7 +335,7 @@ class Fields extends Base {
 			'text'              => [
 				'title'       => __( 'Text', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, $html5, [ 'prepend_append', 'datalist_choices' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, [ 'std', 'datalist_choices', 'input_attributes', 'placeholder', 'size', 'prepend_append' ], $clone, $advanced ),
 				'description' => __( 'A single-line text input', 'meta-box-builder' ),
 			],
 			'text_list'         => [
