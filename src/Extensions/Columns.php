@@ -22,7 +22,7 @@ class Columns {
 		$controls[] = Control::Range( 'columns', [
 			'label'   => '<a href="https://metabox.io/plugins/meta-box-columns/" target="_blank" rel="nofollow noopenner">' . __( 'Columns', 'meta-box-builder' ) . '</a>',
 			'tooltip' => __( 'Select number of columns for this field in a 12-column grid', 'meta-box-builder' ),
-		], 12 );
+		], 12, 'appearance' );
 
 		return $controls;
 	}
