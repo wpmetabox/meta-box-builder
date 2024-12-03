@@ -1,7 +1,7 @@
 import { RadioControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import Icon from '../../../controls/Icon';
+import DashiconPicker from '../../../controls/DashiconPicker';
 import Input from '../../../controls/Input';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
@@ -46,7 +46,14 @@ const Block = () => {
 				defaultValue={ getSetting( 'icon_svg', '' ) }
 			/>
 		}
-		{ iconType === 'dashicons' && <Icon label={ __( 'Icon', 'meta-box-builder' ) } name="settings[icon]" defaultValue={ getSetting( 'icon' ) } /> }
+		{
+			iconType === 'dashicons' &&
+			<DashiconPicker
+				label={ __( 'Icon', 'meta-box-builder' ) }
+				name="settings[icon]"
+				defaultValue={ getSetting( 'icon' ) }
+			/>
+		}
 		{
 			iconType === 'dashicons' &&
 			<Input

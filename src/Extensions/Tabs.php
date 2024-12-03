@@ -30,7 +30,7 @@ class Tabs {
 						'url'         => __( 'Custom URL', 'meta-box-builder' ),
 					],
 				], 'dashicons' ),
-				Control::Icon( 'icon', [
+				Control::DashiconPicker( 'icon', [
 					'label'      => __( 'Icon', 'meta-box-builder' ),
 					'dependency' => 'icon_type:dashicons',
 				] ),
