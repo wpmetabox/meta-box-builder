@@ -14,6 +14,7 @@
 	[ ] Style add field panel
 	[x] Làm 1 portal cho edit field settings
 	[x] Khi click vào 1 field thì show panel edit field settings
+	[ ] Check xem tại sao admin columns, clone vẫn hiện các subfields khi các checkbox ban đầu ko enable
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships

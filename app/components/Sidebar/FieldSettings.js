@@ -17,6 +17,10 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 			label: __( 'Conditional logic', 'meta-box-builder' ),
 		},
 		{
+			value: 'admin_columns',
+			label: __( 'Admin columns', 'meta-box-builder' ),
+		},
+		{
 			value: 'advanced',
 			label: __( 'Advanced', 'meta-box-builder' ),
 		},
