@@ -10,11 +10,15 @@ class AdminColumns {
 		if ( ! Data::is_extension_active( 'mb-admin-columns' ) ) {
 			return;
 		}
-		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ] );
+		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ], 10, 2 );
 		add_filter( 'mbb_field_settings', [ $this, 'parse_field_settings' ] );
 	}
 
-	public function add_field_controls( $controls ) {
+	public function add_field_controls( array $controls, string $type ): array {
+		if ( in_array( $type, [ 'tab' ] ) ) {
+			return $controls;
+		}
+
 		$controls[] = Control::Toggle( 'admin_columns_enable', [
 			'name'    => 'admin_columns[enable]',
 			'label'   => __( 'Show as an admin column', 'meta-box-builder' ),

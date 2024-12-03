@@ -10,11 +10,15 @@ class Tooltip {
 		if ( ! Data::is_extension_active( 'meta-box-tooltip' ) ) {
 			return;
 		}
-		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ] );
+		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ], 10, 2 );
 		add_filter( 'mbb_field_settings', [ $this, 'parse_field_settings' ] );
 	}
 
-	public function add_field_controls( $controls ) {
+	public function add_field_controls( array $controls, string $type ): array {
+		if ( in_array( $type, [ 'tab' ] ) ) {
+			return $controls;
+		}
+
 		$controls[] = Control::Toggle( 'tooltip_enable', [
 			'name'  => 'tooltip[enable]',
 			'label' => __( 'Tooltip', 'meta-box-builder' ),

@@ -20,8 +20,15 @@ class Tabs {
 			'title'    => __( 'Tab', 'meta-box-builder' ),
 			'category' => 'layout',
 			'controls' => [
-				'name',
-				'id',
+				Control::Name( 'name', [
+					'required' => true,
+					'label'    => __( 'Label', 'meta-box-builder' ),
+				] ),
+				Control::Id( 'id', [
+					'label'       => __( 'ID', 'meta-box-builder' ),
+					'required'    => true,
+					'description' => __( 'Use only lowercase letters, numbers, underscores (and be careful dashes).', 'meta-box-builder' ),
+				] ),
 				Control::Radio( 'icon_type', [
 					'label'   => __( 'Icon type', 'meta-box-builder' ),
 					'options' => [

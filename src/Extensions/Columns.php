@@ -10,11 +10,15 @@ class Columns {
 		if ( ! Data::is_extension_active( 'meta-box-columns' ) ) {
 			return;
 		}
-		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ] );
+		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ], 10, 2 );
 		add_filter( 'mbb_field_settings', [ $this, 'parse_field_settings' ] );
 	}
 
-	public function add_field_controls( array $controls ): array {
+	public function add_field_controls( array $controls, string $type ): array {
+		if ( in_array( $type, [ 'tab' ] ) ) {
+			return $controls;
+		}
+
 		$controls[] = Control::Range( 'columns', [
 			'label'   => '<a href="https://metabox.io/plugins/meta-box-columns/" target="_blank" rel="nofollow noopenner">' . __( 'Columns', 'meta-box-builder' ) . '</a>',
 			'tooltip' => __( 'Select number of columns for this field in a 12-column grid', 'meta-box-builder' ),
