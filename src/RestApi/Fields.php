@@ -73,7 +73,7 @@ class Fields extends Base {
 		$this->registry->register_default_controls();
 
 		$general  = [ 'name', 'id', 'label_description', 'desc' ];
-		$advanced = [ 'before', 'after', 'class', 'sanitize_callback', 'save_field', 'attributes', 'validation', 'custom_settings' ];
+		$advanced = [ 'class', 'before', 'after', 'save_field', 'sanitize_callback', 'attributes', 'validation', 'custom_settings' ];
 		$clone    = [ 'clone', 'clone_features', 'clone_quantity', 'add_button' ];
 		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'input_attributes', 'js_options' ];
 		$map      = [ 'std', 'address_field', 'language', 'region', 'required' ];

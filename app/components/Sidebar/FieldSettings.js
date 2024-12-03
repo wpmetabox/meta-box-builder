@@ -1,8 +1,8 @@
 import { PanelBody, PanelRow } from '@wordpress/components';
 import { createPortal } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
 import Content from '../Tabs/FieldsTab/Content';
-import { __ } from '@wordpress/i18n';
 
 const FieldSettings = ( { id, controls, ...rest } ) => {
 	const { activeFieldId, portalElement } = useFieldSettingsPanel();
@@ -15,6 +15,10 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 		{
 			value: 'appearance',
 			label: __( 'Appearance', 'meta-box-builder' ),
+		},
+		{
+			value: 'validation',
+			label: __( 'Validation', 'meta-box-builder' ),
 		},
 		{
 			value: 'conditional_logic',

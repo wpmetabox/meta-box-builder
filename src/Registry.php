@@ -43,43 +43,42 @@ class Registry {
 			Control::Input( 'class', __( 'Custom CSS class', 'meta-box-builder' ), '', 'appearance' ),
 			Control::Input( 'size', [
 				'type'  => 'number',
-				'label' => __( 'Size of the input box', 'meta-box-builder' ),
+				'label' => __( 'Input size', 'meta-box-builder' ),
 			], '', 'appearance' ),
 			Control::Textarea( 'before', [
-				'label'   => __( 'Before', 'meta-box-builder' ),
-				'tooltip' => __( 'Custom HTML displayed before the field output', 'meta-box-builder' ),
+				'label'       => __( 'Before', 'meta-box-builder' ),
+				'description' => __( 'Custom HTML displayed before the field wrapper HTML.', 'meta-box-builder' ),
 			], '', 'appearance' ),
 			Control::Textarea( 'after', [
-				'label'   => __( 'After', 'meta-box-builder' ),
-				'tooltip' => __( 'Custom HTML displayed after the field output', 'meta-box-builder' ),
+				'label'       => __( 'After', 'meta-box-builder' ),
+				'description' => __( 'Custom HTML displayed after the field wrapper HTML.', 'meta-box-builder' ),
 			], '', 'appearance' ),
 
+			// Validation.
+			Control::Validation( 'validation', [], [], 'validation' ),
+
 			// Advanced.
-			Control::Validation( 'validation', [
-				'label'   => '<a href="https://docs.metabox.io/validation/" target="_blank" rel="noreffer noopener">' . __( 'Validation', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Advanced validation rules powered by jQuery validation', 'meta-box-builder' ),
-			], [], 'advanced' ),
 			Control::Toggle( 'save_field', [
-				'label'   => __( 'Save field value', 'meta-box-builder' ),
-				'tooltip' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' ),
+				'label'       => __( 'Save field value', 'meta-box-builder' ),
+				'description' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' ),
 			], true, 'advanced' ),
 			Control::Input( 'sanitize_callback', [
-				'label'   => '<a href="https://docs.metabox.io/sanitization/" target="_blank" rel="noreferrer noopener">' . __( 'Custom sanitize callback', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Enter PHP function name for custom sanitization. Enter "none" to disable sanitization.', 'meta-box-builder' ),
+				'label'       => __( 'Custom sanitize callback', 'meta-box-builder' ),
+				'description' => __( 'Enter a PHP function name to manually sanitize the value before saving it to the database. Enter "none" to bypass sanitization.', 'meta-box-builder' ),
 			], '', 'advanced' ),
 			Control::KeyValue( 'attributes', [
-				'label'   => '<a href="https://docs.metabox.io/custom-attributes/" target="_blank" rel="noreferrer noopener">' . __( 'Custom HTML5 attributes', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Use this to add custom HTML5 attributes (like data-*). Work only for text input fields.', 'meta-box-builder' ),
-				'keys'    => [ 'disabled', 'max', 'maxlength', 'min', 'minlength', 'pattern', 'readonly', 'required', 'step', 'type' ],
-				'values'  => [
+				'label'       => __( 'Custom attributes', 'meta-box-builder' ),
+				'description' => __( 'Add custom attributes (like data-*) to the input. Work only for text fields.', 'meta-box-builder' ),
+				'keys'        => [ 'disabled', 'max', 'maxlength', 'min', 'minlength', 'pattern', 'readonly', 'required', 'step', 'type' ],
+				'values'      => [
 					'disabled' => [ 'true', 'false' ],
 					'readonly' => [ 'true', 'false' ],
 					'required' => [ 'true', 'false' ],
 				],
 			], [], 'advanced' ),
 			Control::KeyValue( 'custom_settings', [
-				'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-builder/#custom-attributes">' . __( 'Custom settings', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Use this to add custom settings for the field. The custom settings will overwrite existing settings if they have the same key.', 'meta-box-builder' ),
+				'label'       => __( 'Custom settings', 'meta-box-builder' ),
+				'description' => __( 'Add custom settings to the field. Will overwrite existing settings if they have the <a href="https://docs.metabox.io/field-settings/" target="_blank">same key</a>. Use <a href="https://docs.metabox.io/extensions/meta-box-builder/#custom-settings" target="_blank">dot/JSON notation</a> to add nested settings.', 'meta-box-builder' ),
 			], [], 'advanced' ),
 
 			// Clone.

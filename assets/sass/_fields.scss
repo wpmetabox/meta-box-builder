@@ -295,44 +295,6 @@
 	}
 }
 
-&-attribute {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	grid-gap: 6px;
-	margin-bottom: 12px;
-
-	.og-remove {
-		padding: 0;
-		border: none;
-		background: none;
-		visibility: hidden;
-		transition: unset;
-		width: 16px;
-		height: 16px;
-	}
-
-	&:hover>.og-remove {
-		visibility: visible;
-		cursor: pointer;
-	}
-
-	// WordPress < 5.6
-	svg:hover {
-		fill: var(--color-red);
-	}
-
-	// WordPress 5.6+
-	.dashicon:hover {
-		color: var(--color-red);
-	}
-
-	input {
-		min-width: 0; // To make the input not exceed parent's width (see conditional logic in a sub-field of nested groups).
-		flex: 1;
-	}
-}
-
 // React select.
 .react-select {
 	&__control.react-select__control {
