@@ -15,24 +15,33 @@ const Field = props => {
 	}
 
 	const controls = [ ...fieldTypes[ type ].controls ];
-	const general = controls.filter( control => control.tab === 'general' );
-	const advanced = controls.filter( control => control.tab === 'advanced' );
 
-	return <>
-		<PanelBody title={ __( 'General', 'meta-box-builder' ) } initialOpen={ true }>
-			<PanelRow>
-				<Content { ...props } controls={ general } />
-			</PanelRow>
-		</PanelBody>
+	const tabs = [
 		{
-			advanced.length > 0 &&
-			<PanelBody title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ true }>
+			value: 'general',
+			label: __( 'General', 'meta-box-builder' ),
+		},
+		{
+			value: 'conditional_logic',
+			label: __( 'Conditional logic', 'meta-box-builder' ),
+		},
+		{
+			value: 'advanced',
+			label: __( 'Advanced', 'meta-box-builder' ),
+		},
+	];
+
+	return tabs.map( tab => {
+		const tabControls = controls.filter( control => control.tab === tab.value );
+
+		return tabControls.length > 0 && (
+			<PanelBody key={ tab.value } title={ tab.label }>
 				<PanelRow>
-					<Content { ...props } controls={ advanced } />
+					<Content { ...props } controls={ tabControls } />
 				</PanelRow>
 			</PanelBody>
-		}
-	</>;
+		);
+	} );
 };
 
 export default Field;
