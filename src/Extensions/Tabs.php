@@ -22,28 +22,27 @@ class Tabs {
 			'controls' => [
 				'name',
 				'id',
-				Control::Select( 'icon_type', [
+				Control::Radio( 'icon_type', [
 					'label'   => __( 'Icon type', 'meta-box-builder' ),
 					'options' => [
 						'dashicons'   => __( 'Dashicons', 'meta-box-builder' ),
 						'fontawesome' => __( 'Font Awesome', 'meta-box-builder' ),
-						'url'         => __( 'Custom URL', 'meta-box-builder' ),
+						'url'         => __( 'Custom', 'meta-box-builder' ),
 					],
-				], 'dashicons' ),
+				], 'dashicons', 'appearance' ),
 				Control::DashiconPicker( 'icon', [
 					'label'      => __( 'Icon', 'meta-box-builder' ),
 					'dependency' => 'icon_type:dashicons',
-				] ),
+				], '', 'appearance' ),
 				Control::Fontawesome( 'icon_fa', [
 					'label'       => __( 'Icon', 'meta-box-builder' ),
-					'tooltip'     => __( 'The icon to be used for the admin menu (FontAwesome)', 'meta-box-builder' ),
-					'description' => __( 'Enter <a target="_blank" href="https://fontawesome.com/search?o=r&m=free">FontAwesome</a> icon class here. Supports FontAwesome free version only.', 'meta-box-builder' ),
+					'description' => __( 'Enter <a target="_blank" href="https://fontawesome.com/search?o=r&m=free">Font Awesome</a> icon class here. Supports the free version only.', 'meta-box-builder' ),
 					'dependency'  => 'icon_type:fontawesome',
-				] ),
+				], '', 'appearance' ),
 				Control::Input( 'icon_url', [
 					'label'      => __( 'Icon URL', 'meta-box-builder' ),
 					'dependency' => 'icon_type:url',
-				] ),
+				], '', 'appearance' ),
 			],
 		];
 
