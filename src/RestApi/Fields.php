@@ -113,7 +113,7 @@ class Fields extends Base {
 			'checkbox'          => [
 				'title'       => __( 'Checkbox', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, [ 'std', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge( $general, [ 'std', 'required' ], $advanced ),
 				'description' => __( 'A simple checkbox, usually used for Yes/No question', 'meta-box-builder' ),
 			],
 			'checkbox_list'     => [
