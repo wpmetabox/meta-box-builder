@@ -48,6 +48,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 			groupHasFields && 'og-item--group--has-fields',
 		) }>
 			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
+			<input type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
 			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
