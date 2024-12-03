@@ -60,7 +60,7 @@ class Registry {
 			// Advanced.
 			Control::Toggle( 'save_field', [
 				'label'       => __( 'Save field value', 'meta-box-builder' ),
-				'description' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Useful when you want to save yourself. Note: not working in the block editor.', 'meta-box-builder' ),
+				'description' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Use only when you want to save the data yourself with code.', 'meta-box-builder' ),
 			], true, 'advanced' ),
 			Control::Input( 'sanitize_callback', [
 				'label'       => __( 'Custom sanitize callback', 'meta-box-builder' ),
