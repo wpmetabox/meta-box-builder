@@ -19,13 +19,13 @@ class Registry {
 		$controls = [
 			// General.
 			Control::Name( 'name', [
-				'label'   => __( 'Label', 'meta-box-builder' ),
-				'tooltip' => __( 'Leave empty to make the input 100% width.', 'meta-box-builder' ),
+				'label'       => __( 'Label', 'meta-box-builder' ),
+				'description' => __( 'Leave empty to make the input 100% width.', 'meta-box-builder' ),
 			] ),
 			Control::Id( 'id', [
 				'label'       => __( 'ID', 'meta-box-builder' ),
 				'required'    => true,
-				'tooltip'     => __( 'Must be unique, will be used as meta key when saving to the database. Recommended to use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ),
+				'tooltip'     => __( 'Must be unique, will be used as meta key when saving to the database', 'meta-box-builder' ),
 				'description' => __( 'Use only lowercase letters, numbers, underscores (and be careful dashes).', 'meta-box-builder' ),
 			] ),
 
