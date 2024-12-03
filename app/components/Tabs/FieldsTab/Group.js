@@ -23,26 +23,16 @@ const Group = ( { id, field, parent = '', nameIdData, groupData } ) => {
 	}
 
 	const controls = [ ...fieldTypes[ field.type ].controls ];
-	const general = controls.filter( control => control.tab === 'general' );
-	const advanced = controls.filter( control => control.tab === 'advanced' );
 
 	return (
 		<>
-			<FieldSettings id={ id }>
-				<PanelBody title={ __( 'General', 'meta-box-builder' ) } initialOpen={ true }>
-					<PanelRow>
-						<Content id={ id } controls={ general } field={ field } parent={ parent } nameIdData={ nameIdData } />
-					</PanelRow>
-				</PanelBody>
-				{
-					advanced.length > 0 &&
-					<PanelBody title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ true }>
-						<PanelRow>
-							<Content id={ id } controls={ advanced } field={ field } parent={ parent } nameIdData={ nameIdData } />
-						</PanelRow>
-					</PanelBody>
-				}
-			</FieldSettings>
+			<FieldSettings
+				id={ id }
+				controls={ controls }
+				field={ field }
+				parent={ parent }
+				nameIdData={ nameIdData }
+			/>
 
 			<div className={ clsx( 'og-group-fields', fields.length === 0 && 'og-group-fields--empty' ) }>
 				{

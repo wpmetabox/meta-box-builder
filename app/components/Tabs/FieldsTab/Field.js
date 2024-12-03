@@ -1,7 +1,5 @@
-import { PanelBody, PanelRow } from '@wordpress/components';
-import { __ } from "@wordpress/i18n";
 import useApi from "../../../hooks/useApi";
-import Content from './Content';
+import FieldSettings from "../../Sidebar/FieldSettings";
 
 const Field = props => {
 	const fieldTypes = useApi( 'field-types', {} );
@@ -16,32 +14,7 @@ const Field = props => {
 
 	const controls = [ ...fieldTypes[ type ].controls ];
 
-	const tabs = [
-		{
-			value: 'general',
-			label: __( 'General', 'meta-box-builder' ),
-		},
-		{
-			value: 'conditional_logic',
-			label: __( 'Conditional logic', 'meta-box-builder' ),
-		},
-		{
-			value: 'advanced',
-			label: __( 'Advanced', 'meta-box-builder' ),
-		},
-	];
-
-	return tabs.map( tab => {
-		const tabControls = controls.filter( control => control.tab === tab.value );
-
-		return tabControls.length > 0 && (
-			<PanelBody key={ tab.value } title={ tab.label }>
-				<PanelRow>
-					<Content { ...props } controls={ tabControls } />
-				</PanelRow>
-			</PanelBody>
-		);
-	} );
+	return <FieldSettings controls={ controls } { ...props } />;
 };
 
 export default Field;

@@ -7,7 +7,6 @@ import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFields from "../../../hooks/useFields";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import useSidebarPanel from "../../../hooks/useSidebarPanel";
-import FieldSettings from "../../Sidebar/FieldSettings";
 import Field from './Field';
 import Group from './Group';
 import HeaderIcon from "./HeaderIcon";
@@ -72,11 +71,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 			{
 				field.type === 'group'
 					? <Group id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } groupData={ groupData } />
-					: (
-						<FieldSettings id={ id }>
-							<Field id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
-						</FieldSettings>
-					)
+					: <Field id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
 			}
 		</div>
 	);
