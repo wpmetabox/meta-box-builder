@@ -341,10 +341,8 @@
 	// WordPress 5.6+
 	.og-dashicon {
 		border-radius: 4px;
-		width: 36px;
-		height: 36px;
-		padding: 4px;
-		box-sizing: border-box;
+		width: 24px;
+		height: 24px;
 		color: currentColor;
 		display: grid;
 		place-items: center;
@@ -352,15 +350,14 @@
 
 	&-selected {
 		display: flex;
+		gap: 8px;
 
 		span {
-			width: 36px;
-			height: 36px;
-			padding: 4px;
+			min-width: 30px;
+			height: 30px;
 			box-sizing: border-box;
 			border: 1px solid #8c8f94;
 			border-radius: 4px;
-			margin-right: 10px;
 			display: grid;
 			place-items: center;
 		}
@@ -377,31 +374,28 @@
 
 	&-items {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, 65px);
-		gap: 10px 15px;
-		max-height: 25em;
-		overflow: auto;
-		padding: 1px;
-		margin-top: 15px;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 8px 4px;
+		max-height: 180px;
+		overflow-y: auto;
+		border: 1px solid #8c8f94;
+		border-radius: 4px;
+		padding: 4px;
+		margin-top: 12px;
 	}
 
 	&-item {
 		display: flex;
 		flex-direction: column;
-		justify-content: start;
-		align-items: center;
-		text-align: center;
+		align-items: flex-start;
+		border-radius: 4px;
+		padding-bottom: 4px;
 
-		&:hover .og-icon__select {
-			box-shadow: 0 0 0 1px rgba(0, 0, 0, .3);
-		}
-
-		&:has(input:checked):hover .og-icon__select {
-			box-shadow: none;
+		.dashicons {
+			font-size: 18px;
 		}
 
 		.og-icon__select {
-			border-radius: 4px;
 			margin: 0;
 		}
 
@@ -409,20 +403,26 @@
 			color: var(--color-gray);
 			font-size: 11px;
 			line-height: 1.1;
-			margin-top: 4px;
+			padding-inline: 4px;
+		}
+
+		&:hover {
+			background: var(--color-lightest);
+		}
+
+		&:has(input:checked) {
+			background: var(--color-primary);
+			color: #fff;
+		}
+
+		&:has(input:checked) .og-icon-item__text {
+			color: #fff;
 		}
 	}
 
 	input {
 		position: absolute;
 		opacity: 0;
-
-		// WordPress 5.6+
-		&:checked~.og-dashicon {
-			color: #fff;
-			background-color: var(--color-primary);
-			border-color: var(--color-primary);
-		}
 	}
 }
 

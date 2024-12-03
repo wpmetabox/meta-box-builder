@@ -1,6 +1,6 @@
 import { useState } from "@wordpress/element";
-import DivRow from './DivRow';
 import { __ } from "@wordpress/i18n";
+import DivRow from './DivRow';
 
 const getIconLabel = icon => {
 	let label = icon.replace( /-/g, ' ' ).trim();
@@ -48,26 +48,27 @@ const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, updateFi
 	const handleChange = e => {
 		setValue( e.target.value );
 		updateFieldData && updateFieldData( name, e.target.value );
-	}
+	};
 
 	return (
-		<DivRow htmlFor={ componentId } className="og-icon" { ...rest }>
+		<DivRow className="og-icon" { ...rest }>
 			<div className='og-icon-selected'>
 				<span className={ `dashicons dashicons-${ value }` }></span>
-				<input 
-                    type="search" 
-                    className="og-icon-search" 
-                    placeholder={__( 'Search...', 'meta-box-builder' ) } 
-                    value={ query } 
-                    onChange={ event => setQuery( event.target.value ) } 
-                />
+				<input
+					type="search"
+					className="og-icon-search"
+					placeholder={ __( 'Search...', 'meta-box-builder' ) }
+					value={ query }
+					onChange={ event => setQuery( event.target.value ) }
+				/>
 			</div>
 			<div className="og-icon-items">
 				{
 					filteredIcons.map( ( [ icon, label ] ) => (
-						<div key={ icon } className='og-icon-item'>
-							<label key={ icon } className="og-icon__select">
+						<label key={ icon } htmlFor={ `${ componentId }-${ icon }` } className="og-icon-item" >
+							<div className="og-icon__select">
 								<input
+									id={ `${ componentId }-${ icon }` }
 									type="radio"
 									name={ name }
 									value={ icon }
@@ -75,9 +76,9 @@ const Icon = ( { name, componentId, defaultValue, icons = MbbApp.icons, updateFi
 									onChange={ handleChange }
 								/>
 								<span className={ `og-dashicon dashicons dashicons-${ icon }` }></span>
-							</label>
+							</div>
 							<span className='og-icon-item__text'>{ label }</span>
-						</div>
+						</label>
 					) )
 				}
 			</div>
