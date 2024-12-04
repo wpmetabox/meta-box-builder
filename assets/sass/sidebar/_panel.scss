@@ -14,3 +14,19 @@
 .og-panel-body {
 	padding-top: 8px;
 }
+
+
+// Summary
+.summary {
+	p {
+		display: flex;
+	}
+
+	label {
+		width: 40%;
+	}
+}
+
+.status {
+	text-transform: capitalize;
+}

@@ -1,4 +1,3 @@
-import { Flex } from '@wordpress/components';
 import { render } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ErrorBoundary } from "react-error-boundary";
@@ -11,7 +10,7 @@ const AppWrapper = ( { children } ) => (
 	<>
 		<Header />
 
-		<Flex gap={ 0 } align="stretch" className="mb-body">
+		<div className="mb-body">
 			<div className="mb-body__inner">
 				<div className="mb-main">
 					<div className="wp-header-end" />
@@ -23,7 +22,7 @@ const AppWrapper = ( { children } ) => (
 			</div>
 
 			<Sidebar />
-		</Flex >
+		</div >
 	</>
 );
 

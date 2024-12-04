@@ -44,7 +44,7 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 		<div className={ `og-field-settings ${ id === activeField._id ? 'og-field-settings--show' : '' }` }>
 			{
 				tabs.map( tab => tab.controls.length > 0 && (
-					<PersistentPanelBody key={ tab.value } title={ tab.label }>
+					<PersistentPanelBody key={ tab.value } title={ tab.label } initialOpen={ tab.value === 'general' }>
 						<Content controls={ tab.controls } id={ id } { ...rest } />
 					</PersistentPanelBody>
 				) )

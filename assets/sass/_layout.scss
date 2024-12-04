@@ -157,25 +157,6 @@
 	border-radius: 6px;
 }
 
-// Sidebar
-.mb-sidebar {
-	width: var(--sidebar-width);
-
-	.summary {
-		p {
-			display: flex;
-		}
-
-		label {
-			width: 40%;
-		}
-	}
-
-	.status {
-		text-transform: capitalize;
-	}
-}
-
 // Sidebar panel
 .mb-panel {
 	position: fixed;
@@ -199,6 +180,8 @@
 		position: absolute;
 		top: 46px;
 		bottom: 0;
+		right: 0;
+		width: var(--sidebar-width);
 		overflow: scroll;
 	}
 }
