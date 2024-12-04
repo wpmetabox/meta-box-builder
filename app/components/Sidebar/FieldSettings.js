@@ -43,7 +43,7 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 	return portalElement && createPortal(
 		<div className={ `og-field-settings ${ id === activeField._id ? 'og-field-settings--show' : '' }` }>
 			{
-				tabs.map( tab => (
+				tabs.map( tab => tab.controls.length > 0 && (
 					<PersistentPanelBody key={ tab.value } title={ tab.label }>
 						<Content controls={ tab.controls } id={ id } { ...rest } />
 					</PersistentPanelBody>
