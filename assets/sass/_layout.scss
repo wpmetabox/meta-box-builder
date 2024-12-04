@@ -147,7 +147,9 @@
 
 // Sidebar
 .mb-sidebar {
-	width: 300px;
+	--width: 360px;
+
+	width: var(--width);
 
 	.components-panel__row {
 		display: block;
@@ -174,10 +176,10 @@
 	top: calc(32px + 60px + 1px); // Admin bar + header + border
 	bottom: 0;
 	right: 0;
-	width: 300px;
+	width: var(--width);
 	z-index: 99;
 	transition: all .25s;
-	transform: translateX(300px);
+	transform: translateX(var(--width));
 	overflow-y: scroll;
 
 	margin-top: -1px; // Override to the header's border

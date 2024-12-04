@@ -42,7 +42,6 @@ const Intro = ( { name, setting } ) => (
 			<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<br />
 		<select name={ `${ name }[relation]` } defaultValue={ setting.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
