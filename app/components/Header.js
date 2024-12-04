@@ -3,6 +3,7 @@ import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { cog, plusCircle } from "@wordpress/icons";
 import AutosizeInput from 'react-input-autosize';
+import { sanitizeId } from '../functions';
 import useSidebarPanel from '../hooks/useSidebarPanel';
 import { ReactComponent as Logo } from './logo.svg';
 
@@ -10,9 +11,20 @@ const Header = () => {
 	const { sidebarPanel, setSidebarPanel } = useSidebarPanel();
 	const [ title, setTitle ] = useState( MbbApp.title );
 	const [ slug, setSlug ] = useState( MbbApp.slug );
+	const [ manualSlug, setManualSlug ] = useState( !!MbbApp.slug );
 
-	const updateTitle = e => setTitle( e.target.value );
-	const updateSlug = e => setSlug( e.target.value );
+	const updateTitle = e => {
+		setTitle( e.target.value );
+
+		if ( !manualSlug ) {
+			setSlug( sanitizeId( e.target.value ) );
+		}
+	};
+
+	const updateSlug = e => {
+		setSlug( e.target.value );
+		setManualSlug( true );
+	};
 
 	return (
 		<Flex className="mb-header">
