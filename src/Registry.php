@@ -40,17 +40,20 @@ class Registry {
 			], '', 'appearance' ),
 			Control::Input( 'placeholder', __( 'Placeholder', 'meta-box-builder' ), '', 'appearance' ),
 			Control::PrependAppend( 'prepend_append', __( 'Text wrap', 'meta-box-builder' ), '', 'appearance' ),
-			Control::Input( 'class', __( 'Custom CSS class', 'meta-box-builder' ), '', 'appearance' ),
+			Control::Input( 'class', [
+				'label'       => __( 'Custom CSS class', 'meta-box-builder' ),
+				'description' => __( 'Custom CSS class for the field wrapper div.', 'meta-box-builder' ),
+			], '', 'appearance' ),
 			Control::Input( 'size', [
 				'type'  => 'number',
 				'label' => __( 'Input size', 'meta-box-builder' ),
 			], '', 'appearance' ),
 			Control::Textarea( 'before', [
-				'label'       => __( 'Before', 'meta-box-builder' ),
+				'label'       => __( 'HTML before', 'meta-box-builder' ),
 				'description' => __( 'Custom HTML displayed before the field wrapper HTML.', 'meta-box-builder' ),
 			], '', 'appearance' ),
 			Control::Textarea( 'after', [
-				'label'       => __( 'After', 'meta-box-builder' ),
+				'label'       => __( 'HTML after', 'meta-box-builder' ),
 				'description' => __( 'Custom HTML displayed after the field wrapper HTML.', 'meta-box-builder' ),
 			], '', 'appearance' ),
 
