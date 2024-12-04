@@ -19,6 +19,10 @@
 	@import "field-settings/icon";
 }
 
+.mb-sidebar {
+	@import "sidebar/_panel";
+}
+
 .mb-sidebar .og {
 	@import "sidebar/base";
 	@import "sidebar/location";
