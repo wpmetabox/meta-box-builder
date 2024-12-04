@@ -7,7 +7,7 @@ import Content from '../Tabs/FieldsTab/Content';
 const FieldSettings = ( { id, controls, ...rest } ) => {
 	const { activeFieldId, portalElement } = useFieldSettingsPanel();
 
-	const tabs = [
+	let tabs = [
 		{
 			value: 'general',
 			label: __( 'General', 'meta-box-builder' ),
@@ -34,20 +34,26 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 		},
 	];
 
+	// Get controls for each tab.
+	tabs = tabs.map( tab => ( {
+		...tab,
+		controls: controls.filter( control => control.tab === tab.value )
+	} ) );
+
 	return portalElement && createPortal(
 		<div className={ `og-field-settings ${ id === activeFieldId ? 'og-field-settings--show' : '' }` }>
 			{
-				tabs.map( tab => {
-					const tabControls = controls.filter( control => control.tab === tab.value );
-
-					return tabControls.length > 0 && (
-						<PanelBody key={ tab.value } title={ tab.label }>
-							<PanelRow>
-								<Content controls={ tabControls } id={ id } { ...rest } />
-							</PanelRow>
-						</PanelBody>
-					);
-				} )
+				tabs.map( tab => (
+					<PanelBody key={ tab.value } title={ tab.label }>
+						{
+							( { opened } ) => (
+								<PanelRow className={ `og-field-settings__list ${ opened ? '' : 'og-field-settings__list--closed' }` }>
+									<Content controls={ tab.controls } id={ id } { ...rest } />
+								</PanelRow>
+							)
+						}
+					</PanelBody>
+				) )
 			}
 		</div>,
 		portalElement
