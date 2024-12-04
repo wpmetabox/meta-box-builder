@@ -15,7 +15,7 @@ const AddFieldPanel = ( { show = true } ) => {
 	};
 
 	return (
-		<Panel className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` }>
+		<Panel header={ __( 'Add a new field', 'meta-box-builder' ) } className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` }>
 			<PanelBody title={ __( 'Add a new field', 'meta-box-builder' ) } opened={ true }>
 				<div className="og-inserter__search">
 					<input type="search" placeholder={ __( 'Search for a field type', 'meta-box-builder' ) } onChange={ search } />

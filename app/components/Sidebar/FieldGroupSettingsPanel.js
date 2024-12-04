@@ -19,7 +19,7 @@ const FieldGroupSettingsPanel = ( { show = false } ) => {
 	const objectType = getObjectType();
 
 	return (
-		<Panel className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` }>
+		<Panel header={ __( 'Edit field group settings', 'meta-box-builder' ) } className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` }>
 
 			<PersistentPanelBody title={ __( 'Summary', 'meta-box-builder' ) } className="summary" initialOpen={ true }>
 				<p className="status"><label>{ __( 'Status', 'meta-box-builder' ) }</label> { MbbApp.status }</p>
