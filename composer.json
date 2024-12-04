@@ -41,7 +41,10 @@
 			"rm -rf vendor/**/**/.git"
 		],
 		"phpcs": [
-			"phpcs > phpcs.txt"
+			"phpcs --standard=../meta-box-aio/phpcs.xml > phpcs.txt"
+		],
+		"phpcbf": [
+			"phpcbf --standard=../meta-box-aio/phpcs.xml"
 		]
 	},
 	"extra": {
