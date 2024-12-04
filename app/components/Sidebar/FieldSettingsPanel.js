@@ -15,7 +15,7 @@ const FieldSettingsPanel = ( { show = false } ) => {
 
 	return (
 		<Panel header={ fieldType } className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` }>
-			<div ref={ ref } />
+			<div className="mb-panel__inner" ref={ ref } />
 		</Panel>
 	);
 };
