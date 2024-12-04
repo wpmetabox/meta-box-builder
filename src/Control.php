@@ -59,4 +59,18 @@ class Control {
 		}
 		return array_values( $new );
 	}
+
+	/**
+	 * A public helper to insert a new control before a specific position.
+	 */
+	public static function insert_before( array $controls, string $setting, array $control ): array {
+		$new = [];
+		foreach ( $controls as $c ) {
+			if ( $c === $setting || ( is_array( $c ) && $c['setting'] === $setting ) ) {
+				$new[] = $control;
+			}
+			$new[] = $c;
+		}
+		return array_values( $new );
+	}
 }
