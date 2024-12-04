@@ -7,6 +7,11 @@
 	padding-top: 8px;
 }
 
-.og-field-settings__list--closed {
+// Hide panel body, but keep it in DOM for uncontrolled inputs.
+.components-panel__body:not(.is-opened) .og-panel-body {
 	display: none;
+}
+
+.og-panel-body {
+	padding-top: 8px;
 }

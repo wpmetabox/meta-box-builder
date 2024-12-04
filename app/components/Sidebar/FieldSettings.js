@@ -1,7 +1,7 @@
-import { PanelBody, PanelRow } from '@wordpress/components';
 import { createPortal } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
+import PersistentPanelBody from '../PersistentPanelBody';
 import Content from '../Tabs/FieldsTab/Content';
 
 const FieldSettings = ( { id, controls, ...rest } ) => {
@@ -44,15 +44,9 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 		<div className={ `og-field-settings ${ id === activeFieldId ? 'og-field-settings--show' : '' }` }>
 			{
 				tabs.map( tab => (
-					<PanelBody key={ tab.value } title={ tab.label }>
-						{
-							( { opened } ) => (
-								<PanelRow className={ `og-field-settings__list ${ opened ? '' : 'og-field-settings__list--closed' }` }>
-									<Content controls={ tab.controls } id={ id } { ...rest } />
-								</PanelRow>
-							)
-						}
-					</PanelBody>
+					<PersistentPanelBody key={ tab.value } title={ tab.label }>
+						<Content controls={ tab.controls } id={ id } { ...rest } />
+					</PersistentPanelBody>
 				) )
 			}
 		</div>,
