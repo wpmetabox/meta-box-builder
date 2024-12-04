@@ -85,6 +85,11 @@ class Fields extends Base {
 		$html5    = [ 'std', 'placeholder', 'size', 'input_attributes' ];
 		$icon     = [ 'icon_set', 'icon_file', 'icon_dir', 'icon_css' ];
 
+		$general_tab    = [ 'name', 'id' ];
+		$appearance_tab = [ 'label_description', 'desc', 'class', 'before', 'after' ];
+		$validation_tab = [ 'validation' ];
+		$advanced_tab   = [ 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' ];
+
 		$field_types = [
 			'autocomplete'      => [
 				'title'       => __( 'Autocomplete', 'meta-box-builder' ),
@@ -113,7 +118,12 @@ class Fields extends Base {
 			'checkbox'          => [
 				'title'       => __( 'Checkbox', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, [ 'std', 'required' ], $advanced ),
+				'controls'    => array_merge(
+					array_merge( $general_tab, [ 'std', 'required' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab,
+				),
 				'description' => __( 'A simple checkbox, usually used for Yes/No question', 'meta-box-builder' ),
 			],
 			'checkbox_list'     => [
