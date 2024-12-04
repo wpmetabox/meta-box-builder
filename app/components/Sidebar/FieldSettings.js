@@ -5,7 +5,7 @@ import PersistentPanelBody from '../PersistentPanelBody';
 import Content from '../Tabs/FieldsTab/Content';
 
 const FieldSettings = ( { id, controls, ...rest } ) => {
-	const { activeFieldId, portalElement } = useFieldSettingsPanel();
+	const { activeField, portalElement } = useFieldSettingsPanel();
 
 	let tabs = [
 		{
@@ -41,7 +41,7 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 	} ) );
 
 	return portalElement && createPortal(
-		<div className={ `og-field-settings ${ id === activeFieldId ? 'og-field-settings--show' : '' }` }>
+		<div className={ `og-field-settings ${ id === activeField._id ? 'og-field-settings--show' : '' }` }>
 			{
 				tabs.map( tab => (
 					<PersistentPanelBody key={ tab.value } title={ tab.label }>

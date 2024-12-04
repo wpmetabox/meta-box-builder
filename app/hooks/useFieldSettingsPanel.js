@@ -2,9 +2,14 @@ import { create } from 'zustand';
 
 const useFieldSettingsPanel = create( set => ( {
 	portalElement: null,
-	activeFieldId: '',
+	activeField: {},
 	setPortalElement: portalElement => set( state => ( { portalElement } ) ),
-	setActiveFieldId: activeFieldId => set( state => ( { activeFieldId } ) ),
+	setActiveField: activeField => set( state => ( {
+		activeField: {
+			...state.activeField,
+			...activeField,
+		},
+	} ) ),
 } ) );
 
 export default useFieldSettingsPanel;

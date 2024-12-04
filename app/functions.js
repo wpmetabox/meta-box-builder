@@ -4,7 +4,7 @@ import slugify from "slugify";
 
 export const htmlDecode = innerHTML => Object.assign( document.createElement( 'textarea' ), { innerHTML } ).value;
 
-const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
+const ucfirst = string => string.length > 0 ? string[ 0 ].toUpperCase() + string.slice( 1 ) : string;
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );

@@ -17,12 +17,12 @@ import { Inserter } from "./Inserter";
 const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
-	const { setActiveFieldId } = useFieldSettingsPanel();
+	const { setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
 
 	const toggleSettings = e => {
 		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions,.og-column--label,.components-popover' ) ) {
-			setActiveFieldId( id );
+			setActiveField( field );
 			setSidebarPanel( 'field_settings' );
 		}
 	};

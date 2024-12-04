@@ -1,16 +1,23 @@
 import { Panel } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
+import { ucwords } from '../../functions';
 import useFieldSettingsPanel from '../../hooks/useFieldSettingsPanel';
 
 const FieldSettingsPanel = ( { show = false } ) => {
 	const ref = useRef();
-	const { setPortalElement } = useFieldSettingsPanel();
+	const { activeField, setPortalElement } = useFieldSettingsPanel();
 
 	useEffect( () => {
 		setPortalElement( ref.current ); // Setup the ref to the portal only once, when the component is rendered.
 	}, [] );
 
-	return <Panel ref={ ref } className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` } />;
+	const fieldType = ucwords( activeField.type || '', '_' );
+
+	return (
+		<Panel header={ fieldType } className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` }>
+			<div ref={ ref } />
+		</Panel>
+	);
 };
 
 export default FieldSettingsPanel;
