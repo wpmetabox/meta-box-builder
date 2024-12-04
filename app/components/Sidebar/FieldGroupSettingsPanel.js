@@ -1,6 +1,7 @@
-import { Button, Panel, PanelBody, PanelRow } from '@wordpress/components';
+import { Button, Panel, PanelRow } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import useSettings from '../../hooks/useSettings';
+import PersistentPanelBody from '../PersistentPanelBody';
 import Advanced from './FieldGroupSettings/Advanced';
 import Block from './FieldGroupSettings/Block';
 import BlockJSONSettings from './FieldGroupSettings/BlockJSONSettings';
@@ -19,75 +20,74 @@ const FieldGroupSettingsPanel = ( { show = false } ) => {
 
 	return (
 		<Panel className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` }>
-			<PanelBody title={ __( 'Summary', 'meta-box-builder' ) } initialOpen={ true }>
-				<PanelRow className="summary">
-					<p className="status"><label>{ __( 'Status', 'meta-box-builder' ) }</label> { MbbApp.status }</p>
-					<p><label>{ __( 'Published', 'meta-box-builder' ) }</label> { MbbApp.published }</p>
-					{ MbbApp.modified && <p><label>{ __( 'Last modified', 'meta-box-builder' ) }</label> { MbbApp.modified }</p> }
-					<p><label>{ __( 'Author', 'meta-box-builder' ) }</label> { MbbApp.author }</p>
-					<p><Button href={ MbbApp.trash } isDestructive={ true } variant="secondary">{ __( 'Move to trash', 'meta-box-builder' ) }</Button></p>
-				</PanelRow>
-			</PanelBody>
-			<PanelBody title={ __( 'Location', 'meta-box-builder' ) } initialOpen={ true }>
+
+			<PersistentPanelBody title={ __( 'Summary', 'meta-box-builder' ) } className="summary" initialOpen={ true }>
+				<p className="status"><label>{ __( 'Status', 'meta-box-builder' ) }</label> { MbbApp.status }</p>
+				<p><label>{ __( 'Published', 'meta-box-builder' ) }</label> { MbbApp.published }</p>
+				{ MbbApp.modified && <p><label>{ __( 'Last modified', 'meta-box-builder' ) }</label> { MbbApp.modified }</p> }
+				<p><label>{ __( 'Author', 'meta-box-builder' ) }</label> { MbbApp.author }</p>
+				<p><Button href={ MbbApp.trash } isDestructive={ true } variant="secondary">{ __( 'Move to trash', 'meta-box-builder' ) }</Button></p>
+			</PersistentPanelBody>
+			<PersistentPanelBody title={ __( 'Location', 'meta-box-builder' ) } initialOpen={ true }>
 				<PanelRow><Location /></PanelRow>
 				{
 					MbbApp.extensions.includeExclude && objectType !== 'block' &&
 					<PanelRow><IncludeExclude /></PanelRow>
 				}
-			</PanelBody>
+			</PersistentPanelBody>
 			{
 				objectType === 'post' &&
-				<PanelBody title={ __( 'Settings', 'meta-box-builder' ) } initialOpen={ true }>
-					<PanelRow><Post /></PanelRow>
-				</PanelBody>
+				<PersistentPanelBody title={ __( 'Settings', 'meta-box-builder' ) } initialOpen={ true }>
+					<Post />
+				</PersistentPanelBody>
 			}
 			{
 				objectType === 'block' &&
-				<PanelBody title={ __( 'Block settings', 'meta-box-builder' ) } initialOpen={ true }>
-					<PanelRow><Block /></PanelRow>
-				</PanelBody>
+				<PersistentPanelBody title={ __( 'Block settings', 'meta-box-builder' ) } initialOpen={ true }>
+					<Block />
+				</PersistentPanelBody>
 			}
 			{
 				objectType === 'block' &&
-				<PanelBody title={ __( 'Block render settings', 'meta-box-builder' ) } initialOpen={ false }>
-					<PanelRow><BlockRenderSettings /></PanelRow>
-				</PanelBody>
+				<PersistentPanelBody title={ __( 'Block render settings', 'meta-box-builder' ) } initialOpen={ false }>
+					<BlockRenderSettings />
+				</PersistentPanelBody>
 			}
 			{
 				objectType === 'block' &&
-				<PanelBody title={ __( 'Block JSON settings', 'meta-box-builder' ) } initialOpen={ false }>
-					<PanelRow><BlockJSONSettings /></PanelRow>
-				</PanelBody>
+				<PersistentPanelBody title={ __( 'Block JSON settings', 'meta-box-builder' ) } initialOpen={ false }>
+					<BlockJSONSettings />
+				</PersistentPanelBody>
 			}
 			{
 				MbbApp.extensions.showHide && objectType !== 'block' &&
-				<PanelBody title={ __( 'Toggle rules', 'meta-box-builder' ) } initialOpen={ false }>
-					<PanelRow className="og-include-exclude"><ShowHide /></PanelRow>
-				</PanelBody>
+				<PersistentPanelBody title={ __( 'Toggle rules', 'meta-box-builder' ) } className="og-include-exclude" initialOpen={ false }>
+					<ShowHide />
+				</PersistentPanelBody>
 			}
 			{
 				MbbApp.extensions.conditionalLogic &&
-				<PanelBody title={ __( 'Conditional logic', 'meta-box-builder' ) } initialOpen={ false }>
-					<PanelRow className="og-include-exclude"><ConditionalLogic /></PanelRow>
-				</PanelBody>
+				<PersistentPanelBody title={ __( 'Conditional logic', 'meta-box-builder' ) } className="og-include-exclude" initialOpen={ false }>
+					<ConditionalLogic />
+				</PersistentPanelBody>
 			}
 			{
 				MbbApp.extensions.tabs &&
-				<PanelBody title={ __( 'Tab settings', 'meta-box-builder' ) } initialOpen={ false }>
-					<PanelRow><Tabs /></PanelRow>
-				</PanelBody>
+				<PersistentPanelBody title={ __( 'Tab settings', 'meta-box-builder' ) } initialOpen={ false }>
+					<Tabs />
+				</PersistentPanelBody>
 			}
 			{
 				MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) &&
-				<PanelBody title={ __( 'Custom table', 'meta-box-builder' ) } initialOpen={ false }>
-					<PanelRow><CustomTable /></PanelRow>
-				</PanelBody>
+				<PersistentPanelBody title={ __( 'Custom table', 'meta-box-builder' ) } initialOpen={ false }>
+					<CustomTable />
+				</PersistentPanelBody>
 			}
 			{
 				![ 'setting', 'block' ].includes( objectType ) &&
-				<PanelBody title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ false }>
-					<PanelRow><Advanced /></PanelRow>
-				</PanelBody>
+				<PersistentPanelBody title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ false }>
+					<Advanced />
+				</PersistentPanelBody>
 			}
 		</Panel>
 	);
