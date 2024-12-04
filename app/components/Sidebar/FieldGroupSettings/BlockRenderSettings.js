@@ -204,7 +204,7 @@ const BlockRenderSettings = () => {
 			defaultValue={ getSetting( 'enqueue_assets', '' ) }
 		/>
 
-		<DivRow label={ `<span class="og-indent"></span>${ __( 'Supported variables', 'meta-box-builder' ) }` } >
+		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
 			<table className="og-block-description">
 				<tbody>
 					<tr>
