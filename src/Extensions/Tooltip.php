@@ -29,16 +29,10 @@ class Tooltip {
 			'tooltip'    => __( 'Can be "info" (default), "help", Dashicons or URL of the custom icon image', 'meta-box-builder' ),
 			'dependency' => 'tooltip_enable:true',
 		] );
-		$controls[] = Control::ToggleGroup( 'tooltip_position', [
+		$controls[] = Control::Position( 'tooltip_position', [
 			'name'       => 'tooltip[position]',
 			'label'      => __( 'Position', 'meta-box-builder' ),
 			'dependency' => 'tooltip_enable:true',
-			'options'    => [
-				'top'    => __( 'Top', 'meta-box-builder' ),
-				'bottom' => __( 'Bottom', 'meta-box-builder' ),
-				'left'   => __( 'Left', 'meta-box-builder' ),
-				'right'  => __( 'Right', 'meta-box-builder' ),
-			],
 		], 'top' );
 		$controls[] = Control::Input( 'tooltip_content', [
 			'name'       => 'tooltip[content]',
