@@ -17,11 +17,12 @@ class RestApi {
 			return $controls;
 		}
 
-		$controls[] = Control::Toggle( 'hide_from_rest', [
-			'name'  => 'hide_from_rest',
-			'label' => __( 'Hide from Rest API?', 'meta-box-builder' ),
-		] );
+		$control = Control::Toggle( 'hide_from_rest', [
+			'name'        => 'hide_from_rest',
+			'label'       => __( 'Hide from Rest API?', 'meta-box-builder' ),
+			'description' => __( 'Do not show the value of this field in the Rest API responses.', 'meta-box-builder' ),
+		], false, 'advanced' );
 
-		return $controls;
+		return Control::insert_before( $controls, 'save_field', $control );
 	}
 }

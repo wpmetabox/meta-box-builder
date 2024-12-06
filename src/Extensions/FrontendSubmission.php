@@ -17,11 +17,12 @@ class FrontendSubmission {
 			return $controls;
 		}
 
-		$controls[] = Control::Toggle( 'hide_from_front', [
-			'name'  => 'hide_from_front',
-			'label' => __( 'Hide from front end?', 'meta-box-builder' ),
-		] );
+		$control = Control::Toggle( 'hide_from_front', [
+			'name'        => 'hide_from_front',
+			'label'       => __( 'Hide from front end?', 'meta-box-builder' ),
+			'description' => __( 'Do not show this field in front-end forms.', 'meta-box-builder' ),
+		], false, 'advanced' );
 
-		return $controls;
+		return Control::insert_before( $controls, 'save_field', $control );
 	}
 }
