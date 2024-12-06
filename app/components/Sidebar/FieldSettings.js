@@ -1,4 +1,4 @@
-import { createPortal } from '@wordpress/element';
+import { createPortal, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
 import PersistentPanelBody from '../PersistentPanelBody';
@@ -11,6 +11,8 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 	const headerSettings = [ 'required', 'clone_settings' ];
 	const headerControls = controls.filter( control => headerSettings.includes( control.setting ) );
 	controls = controls.filter( control => !headerSettings.includes( control.setting ) );
+
+	const [ activeTab, setActiveTab ] = useState( 'general' );
 
 	let tabs = [
 		{
@@ -45,6 +47,12 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 		controls: controls.filter( control => control.tab === tab.value )
 	} ) );
 
+	useEffect( () => {
+		if ( portalElement ) {
+			portalElement.scrollTop = 0; // Reset scroll position to top.
+		}
+	}, [ activeTab ] );
+
 	return portalElement && createPortal(
 		<div className={ `og-field-settings ${ id === activeField._id ? 'og-field-settings--show' : '' }` }>
 			<div className="og-field-settings__header">
@@ -53,7 +61,12 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 
 			{
 				tabs.map( tab => tab.controls.length > 0 && (
-					<PersistentPanelBody key={ tab.value } title={ tab.label } initialOpen={ tab.value === 'general' }>
+					<PersistentPanelBody
+						key={ tab.value }
+						title={ tab.label }
+						open={ tab.value === activeTab }
+						onClick={ () => setActiveTab( tab.value ) }
+					>
 						<Content controls={ tab.controls } id={ id } { ...rest } />
 					</PersistentPanelBody>
 				) )

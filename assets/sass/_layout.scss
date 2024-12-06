@@ -178,7 +178,7 @@
 	// Only scroll inner content, keep the panel header sticky
 	&__inner {
 		position: absolute;
-		top: 46px;
+		top: calc(48px - 1px); // 48px: header, -1px: margin top
 		bottom: 0;
 		right: 0;
 		width: var(--sidebar-width);

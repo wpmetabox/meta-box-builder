@@ -70,10 +70,13 @@
 }
 
 &-field {
-	margin-bottom: 16px;
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
+
+	&:not(:last-child) {
+		margin-bottom: 16px;
+	}
 
 	&--checkbox-list .og-input {
 		label {
