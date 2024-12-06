@@ -28,7 +28,7 @@ class Fields extends Base {
 
 			foreach ( $post_fields as $field ) {
 				if ( ! empty( $field['id'] ) ) {
-					$fields[ $field['id'] ] = $value;
+					$fields[ $field['id'] ] = array_merge( $value, [ '_id' => $field['_id'] ?? ( $field['id'] ?? '' ) ] );
 				}
 			}
 		}
