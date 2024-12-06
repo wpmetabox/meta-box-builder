@@ -75,7 +75,7 @@ class AdminColumns {
 		$controls[] = Control::ToggleGroup( 'admin_columns_link', [
 			'name'       => 'admin_columns[link]',
 			'label'      => __( 'Item link type', 'meta-box-builder' ),
-			'tooltip'    => __( 'The link for the items displayed in the admin column. Applied for "post", "taxonomy", "taxonomy_advanced", and "user" fields only.', 'meta-box-builder' ),
+			'tooltip'    => __( 'The link for the items displayed in the admin column.', 'meta-box-builder' ),
 			'options'    => [
 				'false' => __( 'No link', 'meta-box-builder' ),
 				'view'  => __( 'View', 'meta-box-builder' ),
