@@ -236,7 +236,7 @@ class Registry {
 				'label'   => __( 'Multiple', 'meta-box-builder' ),
 				'tooltip' => __( 'Allow to select multiple choices', 'meta-box-builder' ),
 			] ),
-			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ) ),
+			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ), false, 'appearance' ),
 			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
 				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
@@ -353,9 +353,7 @@ class Registry {
 				'label'       => __( 'Default value', 'meta-box-builder' ),
 				'description' => __( 'Enter each value on a line.', 'meta-box-builder' ),
 			] ),
-			Control::Toggle( 'inline', [
-				'label' => __( 'Display choices on a single line', 'meta-box-builder' ),
-			] ),
+			Control::Toggle( 'inline', __( 'Display choices horizontally', 'meta-box-builder' ), false, 'appearance' ),
 
 			// Color.
 			Control::Toggle( 'alpha_channel', __( 'Allow to select opacity', 'meta-box-builder' ) ),

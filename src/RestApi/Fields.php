@@ -129,7 +129,12 @@ class Fields extends Base {
 			'checkbox_list'     => [
 				'title'       => __( 'Checkbox List', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, [ 'options', 'std', 'inline', 'select_all_none', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					array_merge( $general_tab, [ 'options', 'std', 'required', 'clone_settings' ] ),
+					array_merge( [ 'inline', 'select_all_none' ], $appearance_tab ),
+					$validation_tab,
+					$advanced_tab,
+				),
 				'description' => __( 'A list of checkboxes where you can select multiple choices', 'meta-box-builder' ),
 			],
 			'color'             => [
