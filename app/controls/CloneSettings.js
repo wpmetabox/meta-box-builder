@@ -5,7 +5,7 @@ import { close } from "@wordpress/icons";
 import DivRow from "./DivRow";
 import Tooltip from "./Tooltip";
 
-const Clone = ( { name, componentId, defaultValue, ...rest } ) => {
+const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 	const [ clone, toggleClone ] = useReducer( on => !on, defaultValue.clone );
 	const [ sortable, toggleSortable ] = useReducer( on => !on, defaultValue.sortable );
 	const [ clone_default, toggleCloneDefault ] = useReducer( on => !on, defaultValue.clone_default );
@@ -28,14 +28,14 @@ const Clone = ( { name, componentId, defaultValue, ...rest } ) => {
 							{ __( 'Clone', 'meta-box-builder' ) }
 						</label>
 
-						<input type="hidden" name={ name } value={ clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone', 'sortable' ) }` } value={ sortable } />
-						<input type="hidden" name={ `${ name.replace( 'clone', 'clone_default' ) }` } value={ clone_default } />
-						<input type="hidden" name={ `${ name.replace( 'clone', 'clone_empty_start' ) }` } value={ clone_empty_start } />
-						<input type="hidden" name={ `${ name.replace( 'clone', 'clone_as_multiple' ) }` } value={ clone_as_multiple } />
-						<input type="hidden" name={ `${ name.replace( 'clone', 'min_clone' ) }` } value={ min_clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone', 'max_clone' ) }` } value={ max_clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone', 'add_button' ) }` } value={ add_button } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone' ) }` } value={ clone } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'sortable' ) }` } value={ sortable } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_default' ) }` } value={ clone_default } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_empty_start' ) }` } value={ clone_empty_start } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_as_multiple' ) }` } value={ clone_as_multiple } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'min_clone' ) }` } value={ min_clone } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'max_clone' ) }` } value={ max_clone } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'add_button' ) }` } value={ add_button } />
 					</>
 				) }
 				renderContent={ ( { onToggle } ) => (
@@ -122,4 +122,4 @@ const Toggle = ( { componentId, label, defaultValue, tooltip, onChange } ) => (
 	</DivRow>
 );
 
-export default Clone;
+export default CloneSettings;

@@ -96,8 +96,8 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	let key = bracketsToDots( name );
 	let defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
 
-	if ( control.name === 'Clone' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone', [ 'clone', 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ] );
+	if ( control.name === 'CloneSettings' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_settings', [ 'clone', 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ] );
 	}
 	if ( control.name === 'PrependAppend' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'prepend_append', [ 'prepend', 'append' ], '' );

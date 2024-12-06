@@ -8,7 +8,7 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 	const { activeField, portalElement } = useFieldSettingsPanel();
 
 	// Extract controls displayed in the panel header.
-	const headerSettings = [ 'required', 'clone' ];
+	const headerSettings = [ 'required', 'clone_settings' ];
 	const headerControls = controls.filter( control => headerSettings.includes( control.setting ) );
 	controls = controls.filter( control => !headerSettings.includes( control.setting ) );
 

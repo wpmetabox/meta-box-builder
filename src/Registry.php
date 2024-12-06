@@ -85,7 +85,7 @@ class Registry {
 			], [], 'advanced' ),
 
 			// Clone.
-			Control::Clone( 'clone', [
+			Control::CloneSettings( 'clone_settings', [
 				'label'   => __( 'Cloneable', 'meta-box-builder' ),
 				'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
 			] ),

@@ -74,7 +74,7 @@ class Fields extends Base {
 
 		$general  = [ 'name', 'id', 'label_description', 'desc' ];
 		$advanced = [ 'class', 'before', 'after', 'save_field', 'sanitize_callback', 'attributes', 'validation', 'custom_settings' ];
-		$clone    = [ 'clone' ];
+		$clone    = [ 'clone_settings' ];
 		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'input_attributes', 'js_options' ];
 		$map      = [ 'std', 'address_field', 'language', 'region', 'required' ];
 		$taxonomy = [ 'taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args' ];
