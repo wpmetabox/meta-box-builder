@@ -28,7 +28,8 @@
 	}
 
 	// Active status
-	&:has(input:checked) {
+	&:has(input:checked),
+	&--active {
 		border-color: #57c091;
 		background: #eefcf0;
 		color: #276a52;
