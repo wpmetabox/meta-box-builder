@@ -137,7 +137,7 @@ class Registry {
 				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
 			] ),
 			Control::Toggle( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
-			Control::Toggle( 'required', __( 'Required', 'meta-box-builder' ) ),
+			Control::Required( 'required', __( 'Required', 'meta-box-builder' ) ),
 			Control::Toggle( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
 			Control::InputAttributes( 'input_attributes', __( 'Attributes', 'meta-box-builder' ) ),
 			'js_options_date'              => Control::KeyValue( 'js_options', [
