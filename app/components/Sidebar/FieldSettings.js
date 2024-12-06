@@ -13,7 +13,7 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 	controls = controls.filter( control => !headerSettings.includes( control.setting ) );
 
 	const [ activeTab, setActiveTab ] = useState( 'general' );
-	const updateActiveTab = key => () => setActiveTab( key );
+	const updateActiveTab = key => () => setActiveTab( key === activeTab ? '' : key );
 
 	let tabs = [
 		{

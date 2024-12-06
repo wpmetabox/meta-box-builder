@@ -20,7 +20,7 @@ const FieldGroupSettingsPanel = ( { show = false } ) => {
 	const objectType = getObjectType();
 
 	const [ activeTab, setActiveTab ] = useState( 'location' );
-	const updateActiveTab = key => () => setActiveTab( key );
+	const updateActiveTab = key => () => setActiveTab( key === activeTab ? '' : key );
 
 	const ref = useRef();
 
