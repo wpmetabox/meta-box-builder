@@ -7,6 +7,11 @@ import Content from '../Tabs/FieldsTab/Content';
 const FieldSettings = ( { id, controls, ...rest } ) => {
 	const { activeField, portalElement } = useFieldSettingsPanel();
 
+	// Extract controls displayed in the panel header.
+	const headerSettings = [ 'required', 'clone' ];
+	const headerControls = controls.filter( control => headerSettings.includes( control.setting ) );
+	controls = controls.filter( control => !headerSettings.includes( control.setting ) );
+
 	let tabs = [
 		{
 			value: 'general',
@@ -42,6 +47,10 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 
 	return portalElement && createPortal(
 		<div className={ `og-field-settings ${ id === activeField._id ? 'og-field-settings--show' : '' }` }>
+			<div className="og-field-settings__header">
+				<Content controls={ headerControls } id={ id } { ...rest } />
+			</div>
+
 			{
 				tabs.map( tab => tab.controls.length > 0 && (
 					<PersistentPanelBody key={ tab.value } title={ tab.label } initialOpen={ tab.value === 'general' }>

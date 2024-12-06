@@ -1,8 +1,12 @@
-&-clone {
-	position: absolute;
+&-field-settings__header {
+	position: fixed;
 	right: 16px;
 	top: 12px;
+	display: flex;
+	gap: 8px;
+}
 
+&-clone {
 	&__content {
 		margin-top: 0;
 
