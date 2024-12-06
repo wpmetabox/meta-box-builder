@@ -13,6 +13,20 @@
 		.components-popover__content {
 			width: 300px;
 			padding: 16px;
+
+			&:before {
+				content: "";
+				display: block;
+				width: 8px;
+				height: 8px;
+				border-top: 1px solid #ccc;
+				border-right: 1px solid #ccc;
+				position: absolute;
+				top: -5px;
+				right: 24px;
+				transform: rotate(-45deg);
+				background: #fff;
+			}
 		}
 
 		.components-button {
