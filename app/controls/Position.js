@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { Icon, arrowDown, arrowLeft, arrowRight, arrowUp } from '@wordpress/icons';
 import DivRow from './DivRow';
 
-const Position = ( { name, options, defaultValue = 'top', ...rest } ) =>
+const Position = ( { name, defaultValue = 'top', ...rest } ) =>
 (
 	<DivRow { ...rest }>
 		<div className="og-toggle-group og-toggle-group--no-check">

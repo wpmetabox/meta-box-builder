@@ -19,28 +19,14 @@ class Tooltip {
 			return $controls;
 		}
 
-		$controls[] = Control::Toggle( 'tooltip_enable', [
-			'name'  => 'tooltip[enable]',
-			'label' => __( 'Tooltip', 'meta-box-builder' ),
-		] );
-		$controls[] = Control::Input( 'tooltip_icon', [
-			'name'       => 'tooltip[icon]',
-			'label'      => '<a href="https://developer.wordpress.org/resource/dashicons/" target="_blank" rel="nofollow noopenner">' . __( 'Icon', 'meta-box-builder' ) . '</a>',
-			'tooltip'    => __( 'Can be "info" (default), "help", Dashicons or URL of the custom icon image', 'meta-box-builder' ),
-			'dependency' => 'tooltip_enable:true',
-		] );
-		$controls[] = Control::Position( 'tooltip_position', [
-			'name'       => 'tooltip[position]',
-			'label'      => __( 'Position', 'meta-box-builder' ),
-			'dependency' => 'tooltip_enable:true',
-		], 'top' );
-		$controls[] = Control::Input( 'tooltip_content', [
-			'name'       => 'tooltip[content]',
-			'label'      => __( 'Content', 'meta-box-builder' ),
-			'dependency' => 'tooltip_enable:true',
-		] );
+		$control = Control::TooltipSettings( 'tooltip', '', [
+			'enable'  => false,
+			'icon'     => 'info',
+			'position' => 'top',
+			'content'  => '',
+		], 'appearance' );
 
-		return $controls;
+		return Control::insert_before( $controls, 'label_description', $control );
 	}
 
 	public function parse_field_settings( $settings ) {
