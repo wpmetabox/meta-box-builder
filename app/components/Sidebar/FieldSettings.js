@@ -13,6 +13,7 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 	controls = controls.filter( control => !headerSettings.includes( control.setting ) );
 
 	const [ activeTab, setActiveTab ] = useState( 'general' );
+	const updateActiveTab = key => () => setActiveTab( key );
 
 	let tabs = [
 		{
@@ -65,7 +66,7 @@ const FieldSettings = ( { id, controls, ...rest } ) => {
 						key={ tab.value }
 						title={ tab.label }
 						open={ tab.value === activeTab }
-						onClick={ () => setActiveTab( tab.value ) }
+						onClick={ updateActiveTab( tab.value ) }
 					>
 						<Content controls={ tab.controls } id={ id } { ...rest } />
 					</PersistentPanelBody>
