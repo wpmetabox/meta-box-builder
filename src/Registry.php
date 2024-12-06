@@ -89,19 +89,6 @@ class Registry {
 				'label'   => __( 'Cloneable', 'meta-box-builder' ),
 				'tooltip' => __( 'Make field cloneable (repeatable)', 'meta-box-builder' ),
 			] ),
-			Control::CloneFeatures( 'clone_features', [
-				'label'      => __( 'Clone features', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::CloneQuantity( 'clone_quantity', [
-				'label'      => __( 'Number of clones', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
-			Control::Input( 'add_button', [
-				'label'      => __( 'Add more text', 'meta-box-builder' ),
-				'tooltip'    => __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ),
-				'dependency' => 'clone:true',
-			] ),
 
 			// Date.
 			Control::Input( 'std', __( 'Default value', 'meta-box-builder' ) ),
