@@ -25,7 +25,7 @@ class Registry {
 			Control::Id( 'id', [
 				'label'       => __( 'ID', 'meta-box-builder' ),
 				'required'    => true,
-				'tooltip'     => __( 'Must be unique, will be used as meta key when saving to the database', 'meta-box-builder' ),
+				'tooltip'     => __( 'Must be unique, will be used as the key when saving to the database', 'meta-box-builder' ),
 				'description' => __( 'Use only lowercase letters, numbers, underscores (and be careful dashes).', 'meta-box-builder' ),
 			] ),
 
@@ -332,9 +332,7 @@ class Registry {
 			// Autocomplete.
 			Control::Textarea( 'options', [
 				'label'       => __( 'Choices', 'meta-box-builder' ),
-				'description' => __( 'Enter each choice per line. You can also set both value and label like <code>red: Red</code>.', 'meta-box-builder' ) .
-					'<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ) .
-					'<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
+				'description' => __( 'Enter each choice per line. Use <code>value: Label</code> format for both value and label or <code>callback: function_name</code> for a PHP callback (the function must exist).', 'meta-box-builder' ),
 			] ),
 
 			// Button.
@@ -343,9 +341,7 @@ class Registry {
 			// Button group.
 			'options_button_group'         => Control::Textarea( 'options', [
 				'label'       => __( 'Buttons', 'meta-box-builder' ),
-				'description' => __( 'Enter each button text per line. You can also set both value and label like <code>red: Red</code>.', 'meta-box-builder' ) .
-					'<br>' . __( 'To use a PHP function that returns an array of options, enter <code>callback: function_name</code>.', 'meta-box-builder' ) .
-					'<br>' . __( 'The callback function must be declared before adding to the box.', 'meta-box-builder' ),
+				'description' => __( 'Enter each button text per line. Use <code>value: Label</code> format for both value and label or <code>callback: function_name</code> for a PHP callback (the function must exist).', 'meta-box-builder' ),
 			] ),
 			'inline_button_group'          => Control::Toggle( 'inline', __( 'Display buttons horizontally', 'meta-box-builder' ), true ),
 
@@ -354,12 +350,11 @@ class Registry {
 
 			// Checkbox list.
 			'std_checkbox_list'            => Control::Textarea( 'std', [
-				'label'   => __( 'Default value', 'meta-box-builder' ),
-				'tooltip' => __( 'Enter each value on a line', 'meta-box-builder' ),
+				'label'       => __( 'Default value', 'meta-box-builder' ),
+				'description' => __( 'Enter each value on a line.', 'meta-box-builder' ),
 			] ),
 			Control::Toggle( 'inline', [
-				'label'   => __( 'Inline', 'meta-box-builder' ),
-				'tooltip' => __( 'Display choices on a single line', 'meta-box-builder' ),
+				'label' => __( 'Display choices on a single line', 'meta-box-builder' ),
 			] ),
 
 			// Color.
