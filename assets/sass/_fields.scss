@@ -72,7 +72,8 @@
 &-field {
 	margin-bottom: 16px;
 	display: flex;
-	justify-content: space-between;
+	flex-direction: column;
+	gap: 8px;
 
 	&--checkbox-list .og-input {
 		label {
@@ -106,7 +107,11 @@
 }
 
 &-label {
-	flex: 0 0 180px;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.4;
+	text-transform: uppercase;
+	display: block;
 
 	>div {
 		display: inline;
@@ -127,15 +132,17 @@
 }
 
 &-input {
-	flex: 1;
-	min-width: 0; // To make the input not exceed parent's width (see conditional logic in a sub-field of nested groups).
+	// Reset style for label, which is set in Panel component
+	label {
+		max-width: none;
+		margin-right: 0;
+	}
 }
 
 &-description {
-	font-style: italic;
 	font-size: 12px;
 	margin-top: 4px;
-	color: var(--color-gray);
+	color: #757575;
 
 	code {
 		font-style: normal;
