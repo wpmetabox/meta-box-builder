@@ -141,7 +141,7 @@
 		bottom: 0;
 		left: 0;
 		right: var(--sidebar-width);
-		overflow: scroll;
+		overflow-y: auto;
 	}
 }
 
@@ -182,7 +182,7 @@
 		bottom: 0;
 		right: 0;
 		width: var(--sidebar-width);
-		overflow: scroll;
+		overflow-y: auto;
 	}
 }
 
