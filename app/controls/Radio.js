@@ -3,7 +3,7 @@ import { useEffect, useState } from '@wordpress/element';
 import { useToggle } from '../hooks/useToggle';
 import DivRow from './DivRow';
 
-const Range = ( { componentId, label, name, options, defaultValue, updateFieldData, ...rest } ) => {
+const Radio = ( { componentId, label, name, options, defaultValue, updateFieldData, ...rest } ) => {
 	const toggle = useToggle( componentId );
 	const [ value, setValue ] = useState( defaultValue );
 
@@ -25,4 +25,4 @@ const Range = ( { componentId, label, name, options, defaultValue, updateFieldDa
 	</DivRow>;
 };
 
-export default Range;
+export default Radio;
