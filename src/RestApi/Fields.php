@@ -119,7 +119,8 @@ class Fields extends Base {
 				'title'       => __( 'Checkbox', 'meta-box-builder' ),
 				'category'    => 'basic',
 				'controls'    => array_merge(
-					array_merge( $general_tab, [ 'std', 'required' ] ),
+					[ 'required' ],
+					array_merge( $general_tab, [ 'std' ] ),
 					$appearance_tab,
 					$validation_tab,
 					$advanced_tab,
@@ -130,7 +131,8 @@ class Fields extends Base {
 				'title'       => __( 'Checkbox List', 'meta-box-builder' ),
 				'category'    => 'basic',
 				'controls'    => array_merge(
-					array_merge( $general_tab, [ 'options', 'std', 'required', 'clone_settings' ] ),
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'options', 'std' ] ),
 					array_merge( [ 'inline', 'select_all_none' ], $appearance_tab ),
 					$validation_tab,
 					$advanced_tab,
@@ -291,7 +293,8 @@ class Fields extends Base {
 				'title'       => __( 'Radio', 'meta-box-builder' ),
 				'category'    => 'basic',
 				'controls'    => array_merge(
-					array_merge( $general_tab, [ 'options', 'std', 'required', 'clone_settings' ] ),
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'options', 'std' ] ),
 					array_merge( [ 'inline' ], $appearance_tab ),
 					$validation_tab,
 					$advanced_tab,
@@ -307,7 +310,13 @@ class Fields extends Base {
 			'select'            => [
 				'title'       => __( 'Select', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, [ 'options', 'std', 'placeholder', 'multiple', 'select_all_none' ], $input, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'options', 'std', 'multiple' ] ),
+					array_merge( [ 'placeholder', 'select_all_none' ], $appearance_tab ),
+					$validation_tab,
+					$advanced_tab,
+				),
 				'description' => __( 'Select dropdown where you can select one or multiple choice', 'meta-box-builder' ),
 			],
 			'select_advanced'   => [
