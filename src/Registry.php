@@ -107,11 +107,11 @@ class Registry {
 					'MM dd, yy' => 'March 28, 2024 (MM dd, yy)',
 				],
 			] ),
-			Control::DateTimeSaveFormat( 'save_format', [
+			'save_format_date' => Control::SelectWithInput( 'save_format', [
 				'label'       => __( 'Save format', 'meta-box-builder' ),
 				// Translators: %s - URL to PHP's date() function page.
 				'description' => sprintf( __( '<a href="%s" target="_blank">PHP date format</a> for the value saved in the database. Leave empty to save as it is.', 'meta-box-builder' ), 'https://www.php.net/manual/en/datetime.format.php' ),
-				'date'        => [
+				'options'        => [
 					'Y-m-d'  => '2024-03-28 (Y-m-d)',
 					'd-m-Y'  => '28-03-2024 (d-m-Y)',
 					'm/d/Y'  => '03/28/2024 (m/d/Y)',
@@ -119,11 +119,13 @@ class Registry {
 					'M j, Y' => 'Mar 03, 2024 (M j, Y)',
 					'F j, Y' => 'March 28, 2024 (F j, Y)',
 				],
-				'time'        => [
-					'H:i'   => '09:20 (H:i)',
-					'h:i A' => '04:20 AM (h:i A)',
-				],
-				'datetime'    => [
+				'dependency' => 'timestamp:false'
+			] ),
+			'save_format_datetime' => Control::SelectWithInput( 'save_format', [
+				'label'       => __( 'Save format', 'meta-box-builder' ),
+				// Translators: %s - URL to PHP's date() function page.
+				'description' => sprintf( __( '<a href="%s" target="_blank">PHP date format</a> for the value saved in the database. Leave empty to save as it is.', 'meta-box-builder' ), 'https://www.php.net/manual/en/datetime.format.php' ),
+				'options'    => [
 					'Y-m-d H:i'    => '2024-03-28 09:20 (Y-m-d H:i)',
 					'd-m-Y H:i'    => '28-03-2024 09:20 (d-m-Y H:i)',
 					'm/d/Y H:i'    => '03/28/2024 09:20 (m/d/Y H:i)',
