@@ -94,7 +94,13 @@ class Fields extends Base {
 			'autocomplete'      => [
 				'title'       => __( 'Autocomplete', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'options', 'size' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'clone_settings' ],
+					array_merge( $general_tab, [ 'options' ] ),
+					[ 'label_description', 'desc', 'size', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab,
+				),
 				'description' => __( 'Text input that uses an autocomplete library to suggest user input. Not recommended. Use the Select or Select advanced field type instead.', 'meta-box-builder' ),
 			],
 			'background'        => [
