@@ -357,10 +357,10 @@ class Registry {
 			// Color.
 			Control::Toggle( 'alpha_channel', __( 'Allow to select opacity', 'meta-box-builder' ) ),
 			'js_options_color'             => Control::KeyValue( 'js_options', [
-				'label'   => '<a href="https://automattic.github.io/Iris/" target="_blank" rel="nofollow noopenner">' . __( 'Color picker options', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Color picker options', 'meta-box-builder' ),
-				'keys'    => [ 'mode', 'width', 'palettes' ],
-				'values'  => [
+				'label'       => __( 'Color picker options', 'meta-box-builder' ),
+				'description' => __( 'Custom options for the color picker library. <a href="https://automattic.github.io/Iris/" target="_blank">Get them here</a>.', 'meta-box-builder' ),
+				'keys'        => [ 'mode', 'width', 'palettes' ],
+				'values'      => [
 					'mode' => [ 'hsl', 'hsv' ],
 				],
 			] ),
@@ -368,8 +368,8 @@ class Registry {
 			// Custom HTML.
 			'std_custom_html'              => Control::Textarea( 'std', __( 'Content (HTML allowed)', 'meta-box-builder' ) ),
 			Control::Input( 'callback', [
-				'label'   => __( 'PHP Callback', 'meta-box-builder' ),
-				'tooltip' => __( 'PHP function that is called to show custom HTML content. Will overwrite the content setting above.', 'meta-box-builder' ),
+				'label'       => __( 'Custom callback', 'meta-box-builder' ),
+				'description' => __( 'A PHP function that is called to show custom HTML content. Will overwrite the content setting above.', 'meta-box-builder' ),
 			] ),
 
 			// Fieldset text.

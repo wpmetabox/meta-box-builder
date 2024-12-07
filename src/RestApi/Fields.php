@@ -166,13 +166,24 @@ class Fields extends Base {
 			'color'             => [
 				'title'       => __( 'Color Picker', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'std', 'js_options', 'alpha_channel' ], $input, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std', 'alpha_channel', 'js_options' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Color picker', 'meta-box-builder' ),
 			],
 			'custom_html'       => [
 				'title'       => __( 'Custom HTML', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( array_diff( $general, [ 'id' ] ), [ 'std', 'callback' ], $advanced ),
+				'controls'    => array_merge(
+					[ 'name', 'std', 'callback' ],
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Output custom HTML content', 'meta-box-builder' ),
 			],
 			'date'              => [
