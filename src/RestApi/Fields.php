@@ -86,7 +86,7 @@ class Fields extends Base {
 		$icon     = [ 'icon_set', 'icon_file', 'icon_dir', 'icon_css' ];
 
 		$general_tab    = [ 'name', 'id' ];
-		$appearance_tab = [ 'label_description', 'desc', 'class', 'before', 'after' ];
+		$appearance_tab = [ 'label_description', 'desc', 'appearance_divider', 'class', 'before', 'after' ];
 		$validation_tab = [ 'validation' ];
 		$advanced_tab   = [ 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' ];
 

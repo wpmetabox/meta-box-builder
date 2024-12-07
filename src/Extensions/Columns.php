@@ -24,7 +24,7 @@ class Columns {
 			'description' => __( 'Select number of columns for this field in a 12-column grid.', 'meta-box-builder' ),
 		], 12, 'appearance' );
 
-		return Control::insert_before( $controls, 'class', $control );
+		return Control::insert_before( $controls, 'appearance_divider', $control );
 	}
 
 	public function parse_field_settings( $settings ) {

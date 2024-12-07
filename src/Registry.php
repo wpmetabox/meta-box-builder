@@ -39,14 +39,16 @@ class Registry {
 				'description' => __( 'Display below the field input.', 'meta-box-builder' ),
 			], '', 'appearance' ),
 			Control::Input( 'placeholder', __( 'Placeholder', 'meta-box-builder' ), '', 'appearance' ),
+			Control::Divider( 'appearance_divider', '', '', 'appearance' ),
 			Control::PrependAppend( 'prepend_append', __( 'Text wrap', 'meta-box-builder' ), '', 'appearance' ),
 			Control::Input( 'class', [
 				'label'       => __( 'Custom CSS class', 'meta-box-builder' ),
 				'description' => __( 'Custom CSS class for the field wrapper div.', 'meta-box-builder' ),
 			], '', 'appearance' ),
 			Control::Input( 'size', [
-				'type'  => 'number',
-				'label' => __( 'Input size', 'meta-box-builder' ),
+				'type'        => 'number',
+				'label'       => __( 'Input size', 'meta-box-builder' ),
+				'description' => __( 'Leave empty to make the input 100% width.', 'meta-box-builder' ),
 			], '', 'appearance' ),
 			Control::Textarea( 'before', [
 				'label'       => __( 'HTML before', 'meta-box-builder' ),

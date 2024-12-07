@@ -94,6 +94,12 @@
 		display: inline-block;
 		margin-left: 6px;
 	}
+
+	&--divider {
+		border-bottom: 0;
+		border-color: var(--color-light);
+		margin-inline: -16px;
+	}
 }
 
 &-field--check &-input {
@@ -135,6 +141,7 @@
 }
 
 &-input {
+
 	// Reset style for label, which is set in Panel component
 	label {
 		max-width: none;
