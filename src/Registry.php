@@ -94,11 +94,11 @@ class Registry {
 
 			// Date.
 			Control::Input( 'std', __( 'Default value', 'meta-box-builder' ) ),
-			Control::DateFormat( 'format', [
+			Control::SelectWithInput( 'format', [
 				'label' => __( 'Display format', 'meta-box-builder' ),
 				// Translators: %s - URL to jQueryUI date picker page.
 				'description' => sprintf( __( '<a href="%s" target="_blank">jQueryUI date format</a> (not PHP) to show in the input.', 'meta-box-builder' ), 'https://api.jqueryui.com/datepicker/#utility-formatDate' ),
-				'formats'     => [
+				'options'     => [
 					'yy-mm-dd'  => '2024-03-28 (yy-mm-dd)',
 					'dd-mm-yy'  => '28-03-2024 (dd-mm-yy)',
 					'mm/dd/yy'  => '03/28/2024 (mm/dd/yy)',
