@@ -99,26 +99,44 @@ class Fields extends Base {
 					array_merge( $general_tab, [ 'options' ] ),
 					[ 'label_description', 'desc', 'size', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
-					$advanced_tab,
+					$advanced_tab
 				),
 				'description' => __( 'Text input that uses an autocomplete library to suggest user input. Not recommended. Use the Select or Select advanced field type instead.', 'meta-box-builder' ),
 			],
 			'background'        => [
 				'title'       => __( 'Background', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'clone_settings' ],
+					$general_tab,
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Set background properties', 'meta-box-builder' ),
 			],
 			'button'            => [
 				'title'       => __( 'Button', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'std', 'disabled' ], $advanced ),
+				'controls'    => array_merge(
+					[ 'clone_settings' ],
+					array_merge( $general_tab, [ 'std' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'A simple button, usually used for JavaScript triggers', 'meta-box-builder' ),
 			],
 			'button_group'      => [
 				'title'       => __( 'Button Group', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'options', 'std', 'inline', 'multiple', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'options', 'std', 'multiple' ] ),
+					array_merge( ['inline'], $appearance_tab ),
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Select one or multiple choices by enabling button(s) from a group', 'meta-box-builder' ),
 			],
 			'checkbox'          => [
@@ -129,7 +147,7 @@ class Fields extends Base {
 					array_merge( $general_tab, [ 'std' ] ),
 					$appearance_tab,
 					$validation_tab,
-					$advanced_tab,
+					$advanced_tab
 				),
 				'description' => __( 'A simple checkbox, usually used for Yes/No question', 'meta-box-builder' ),
 			],
@@ -141,7 +159,7 @@ class Fields extends Base {
 					array_merge( $general_tab, [ 'options', 'std' ] ),
 					array_merge( [ 'inline', 'select_all_none' ], $appearance_tab ),
 					$validation_tab,
-					$advanced_tab,
+					$advanced_tab
 				),
 				'description' => __( 'A list of checkboxes where you can select multiple choices', 'meta-box-builder' ),
 			],
@@ -303,7 +321,7 @@ class Fields extends Base {
 					array_merge( $general_tab, [ 'options', 'std' ] ),
 					array_merge( [ 'inline' ], $appearance_tab ),
 					$validation_tab,
-					$advanced_tab,
+					$advanced_tab
 				),
 				'description' => __( 'Radio input where you can select only one choice', 'meta-box-builder' ),
 			],
@@ -321,7 +339,7 @@ class Fields extends Base {
 					array_merge( $general_tab, [ 'options', 'std', 'multiple' ] ),
 					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
-					$advanced_tab,
+					$advanced_tab
 				),
 				'description' => __( 'Select dropdown where you can select one or multiple choice', 'meta-box-builder' ),
 			],
@@ -375,7 +393,7 @@ class Fields extends Base {
 					array_merge( $general_tab, [ 'std' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
-					array_merge( [ 'datalist_choices' ], $advanced_tab ),
+					array_merge( [ 'datalist_choices' ], $advanced_tab )
 				),
 				'description' => __( 'A single-line text input', 'meta-box-builder' ),
 			],
@@ -393,7 +411,7 @@ class Fields extends Base {
 					array_merge( $general_tab, [ 'std' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'textarea_size', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
-					array_merge( $advanced_tab ),
+					$advanced_tab
 				),
 				'description' => __( 'A paragraph text input', 'meta-box-builder' ),
 			],

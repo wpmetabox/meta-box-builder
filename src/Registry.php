@@ -342,7 +342,7 @@ class Registry {
 				'label'       => __( 'Buttons', 'meta-box-builder' ),
 				'description' => __( 'Enter each button text per line. Use <code>value: Label</code> format for both value and label or <code>callback: function_name</code> for a PHP callback (the function must exist).', 'meta-box-builder' ),
 			] ),
-			'inline_button_group'          => Control::Toggle( 'inline', __( 'Display buttons horizontally', 'meta-box-builder' ), true ),
+			'inline_button_group'          => Control::Toggle( 'inline', __( 'Display buttons horizontally', 'meta-box-builder' ), true, 'appearance' ),
 
 			// Checkbox.
 			'std_checkbox'                 => Control::Toggle( 'std', __( 'Checked by default', 'meta-box-builder' ) ),
