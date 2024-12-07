@@ -94,10 +94,23 @@ class Registry {
 
 			// Date.
 			Control::Input( 'std', __( 'Default value', 'meta-box-builder' ) ),
+			Control::DateFormat( 'format', [
+				'label' => __( 'Display format', 'meta-box-builder' ),
+				// Translators: %s - URL to jQueryUI date picker page.
+				'description' => sprintf( __( '<a href="%s" target="_blank">jQueryUI date format</a> (not PHP) to show in the input.', 'meta-box-builder' ), 'https://api.jqueryui.com/datepicker/#utility-formatDate' ),
+				'formats'     => [
+					'yy-mm-dd'  => '2024-03-28 (yy-mm-dd)',
+					'dd-mm-yy'  => '28-03-2024 (dd-mm-yy)',
+					'mm/dd/yy'  => '03/28/2024 (mm/dd/yy)',
+					'dd MM yy'  => '28 March 2024 (dd MM yy)',
+					'M dd, yy' => 'Mar 03, 2024 (M dd, yy)',
+					'MM dd, yy' => 'March 28, 2024 (MM dd, yy)',
+				],
+			] ),
 			Control::DateTime( 'save_format', [
 				'label'       => __( 'Save format', 'meta-box-builder' ),
 				// Translators: %s - URL to PHP's date() function page.
-				'description' => sprintf( __( 'Custom format for the value saved in the database. Accepts same formats as the PHP <a href="%s">date()</a> function. Leave empty to save as it is.', 'meta-box-builder' ), 'https://www.php.net/manual/en/datetime.format.php' ),
+				'description' => sprintf( __( '<a href="%s" target="_blank">PHP date format</a> for the value saved in the database. Leave empty to save as it is.', 'meta-box-builder' ), 'https://www.php.net/manual/en/datetime.format.php' ),
 				'date'        => [
 					'Y-m-d'  => '2024-03-28 (Y-m-d)',
 					'd-m-Y'  => '28-03-2024 (d-m-Y)',
@@ -111,11 +124,12 @@ class Registry {
 					'h:i A' => '04:20 AM (h:i A)',
 				],
 				'datetime'    => [
+					'Y-m-d H:i'    => '2024-03-28 09:20 (Y-m-d H:i)',
 					'd-m-Y H:i'    => '28-03-2024 09:20 (d-m-Y H:i)',
 					'm/d/Y H:i'    => '03/28/2024 09:20 (m/d/Y H:i)',
-					'Y-m-d H:i'    => '2024-03-28 09:20 (Y-m-d H:i)',
 					'M j, Y h:i A' => 'Mar 28, 2024 09:20 AM (M j, Y h:i A)',
 				],
+				'dependency' => 'timestamp:false'
 			] ),
 			Control::Toggle( 'timestamp', __( 'Save value as timestamp', 'meta-box-builder' ) ),
 			'inline_date'     => Control::Toggle( 'inline', __( 'Display the date picker inline with the input', 'meta-box-builder' ), false, 'appearance' ),
@@ -127,7 +141,7 @@ class Registry {
 			'js_options_date'              => Control::KeyValue( 'js_options', [
 				'label'       => __( 'Date picker options', 'meta-box-builder' ),
 				// Translators: %s - URL to the jQueryUI date picker page.
-				'description' => sprintf( __( 'Custom options for the jQueryUI date picker library. <a href="%s" target="_blank">See here</a>.', 'meta-box-builder' ), 'https://api.jqueryui.com/datepicker/' ),
+				'description' => sprintf( __( 'Custom options for the <a href="%s" target="_blank">jQueryUI date picker</a> library.', 'meta-box-builder' ), 'https://api.jqueryui.com/datepicker/' ),
 				'keys'        => [
 					'buttonText',
 					'changeMonth',
@@ -154,11 +168,11 @@ class Registry {
 					'dateFormat'      => [ 'yy-mm-dd', 'mm/dd/yy', 'dd-mm-yy' ],
 					'showButtonPanel' => [ 'true', 'false' ],
 				],
-			] ),
+			], [], 'advanced' ),
 			'js_options_datetime'          => Control::KeyValue( 'js_options', [
-				'label'   => __( 'Date picker options', 'meta-box-builder' ),
-				// Translators: %s - URL to the jQueryUI date picker page.
-				'description' => sprintf( __( 'Custom options for the jQueryUI date picker library. <a href="%s" target="_blank">See here</a>.', 'meta-box-builder' ), 'https://api.jqueryui.com/datepicker/' ),
+				'label'   => __( 'Datetime picker options', 'meta-box-builder' ),
+				// Translators: %1$s - URL to the jQueryUI date picker page, %2$s - URL to the jQueryUI time picker page.
+				'description' => sprintf( __( 'Custom options for the jQueryUI <a href="%1$s" target="_blank">date picker</a> and <a href="%2$s" target="_blank">time picker</a> libraries.', 'meta-box-builder' ), 'https://api.jqueryui.com/datepicker/', 'https://trentrichardson.com/examples/timepicker/' ),
 				'keys'    => [
 					'buttonText',
 					'changeMonth',
@@ -187,7 +201,7 @@ class Registry {
 					'dateFormat'      => [ 'yy-mm-dd', 'mm/dd/yy', 'dd-mm-yy' ],
 					'showButtonPanel' => [ 'true', 'false' ],
 				],
-			] ),
+			], [], 'advanced' ),
 
 			// Map.
 			'std_map'                      => Control::Input( 'std', [

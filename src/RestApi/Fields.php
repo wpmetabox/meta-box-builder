@@ -191,10 +191,10 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'timestamp', 'save_format', 'js_options' ] ),
+					array_merge( $general_tab, [ 'std', 'format', 'timestamp', 'save_format' ] ),
 					[ 'inline', 'label_description', 'desc', 'placeholder', 'size', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
-					$advanced_tab
+					array_merge( ['js_options'], $advanced_tab )
 				),
 				'description' => __( 'Date picker', 'meta-box-builder' ),
 			],
@@ -203,10 +203,10 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'timestamp', 'save_format', 'js_options' ] ),
+					array_merge( $general_tab, [ 'std', 'format', 'timestamp', 'save_format' ] ),
 					[ 'inline', 'label_description', 'desc', 'placeholder', 'size', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
-					$advanced_tab
+					array_merge( ['js_options'], $advanced_tab )
 				),
 				'description' => __( 'Date and time picker', 'meta-box-builder' ),
 			],
