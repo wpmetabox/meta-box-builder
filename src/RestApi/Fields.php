@@ -364,7 +364,13 @@ class Fields extends Base {
 			'text'              => [
 				'title'       => __( 'Text', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, [ 'std', 'datalist_choices', 'input_attributes', 'placeholder', 'size', 'prepend_append' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std', 'input_attributes' ] ),
+					array_merge( [ 'placeholder', 'size', 'prepend_append' ], $appearance_tab ),
+					$validation_tab,
+					array_merge( [ 'datalist_choices' ], $advanced_tab ),
+				),
 				'description' => __( 'A single-line text input', 'meta-box-builder' ),
 			],
 			'text_list'         => [

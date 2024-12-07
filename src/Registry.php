@@ -677,7 +677,7 @@ class Registry {
 			Control::Textarea( 'datalist_choices', [
 				'label'       => __( 'Predefined values', 'meta-box-builder' ),
 				'description' => __( 'Known as "datalist", these are values that users can select from (they still can enter text if they want). Enter each value on a line.', 'meta-box-builder' ),
-			] ),
+			], '', 'advanced' ),
 
 			// Text list.
 			'options_text_list'            => Control::KeyValue( 'options', [
