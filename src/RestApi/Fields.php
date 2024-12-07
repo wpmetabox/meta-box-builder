@@ -372,7 +372,7 @@ class Fields extends Base {
 				'category'    => 'basic',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'input_attributes' ] ),
+					array_merge( $general_tab, [ 'std' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
 					array_merge( [ 'datalist_choices' ], $advanced_tab ),
@@ -390,7 +390,7 @@ class Fields extends Base {
 				'category'    => 'basic',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'input_attributes' ] ),
+					array_merge( $general_tab, [ 'std' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'textarea_size', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
 					array_merge( $advanced_tab ),
