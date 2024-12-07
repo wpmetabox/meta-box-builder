@@ -119,11 +119,8 @@ class Fields extends Base {
 				'title'       => __( 'Button', 'meta-box-builder' ),
 				'category'    => 'advanced',
 				'controls'    => array_merge(
-					[ 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					$appearance_tab,
-					$validation_tab,
-					$advanced_tab
+					$appearance_tab
 				),
 				'description' => __( 'A simple button, usually used for JavaScript triggers', 'meta-box-builder' ),
 			],
@@ -180,9 +177,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'name', 'std', 'callback' ],
-					$appearance_tab,
-					$validation_tab,
-					$advanced_tab
+					$appearance_tab
 				),
 				'description' => __( 'Output custom HTML content', 'meta-box-builder' ),
 			],

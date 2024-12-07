@@ -15,7 +15,7 @@ class AdminColumns {
 	}
 
 	public function add_field_controls( array $controls, string $type ): array {
-		if ( in_array( $type, [ 'tab' ] ) ) {
+		if ( in_array( $type, [ 'button', 'custom_html', 'divider', 'heading', 'tab' ] ) ) {
 			return $controls;
 		}
 
