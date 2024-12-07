@@ -49,6 +49,13 @@ const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 							onChange={ toggleClone }
 						/>
 						<Toggle
+							label={ __( 'Start from no inputs', 'meta-box-builder' ) }
+							tooltip={ __( 'Start from no inputs except the "+ Add more" button', 'meta-box-builder' ) }
+							onChange={ toggleCloneEmptyStart }
+							defaultValue={ clone_empty_start }
+							componentId={ `${ componentId }-clone_empty_start` }
+						/>
+						<Toggle
 							label={ __( 'Allow to reorder clones', 'meta-box-builder' ) }
 							onChange={ toggleSortable }
 							defaultValue={ sortable }
@@ -59,13 +66,6 @@ const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 							onChange={ toggleCloneDefault }
 							defaultValue={ clone_default }
 							componentId={ `${ componentId }-clone_default` }
-						/>
-						<Toggle
-							label={ __( 'Start from no inputs', 'meta-box-builder' ) }
-							tooltip={ __( 'Start from no inputs except the "+ Add more" button', 'meta-box-builder' ) }
-							onChange={ toggleCloneEmptyStart }
-							defaultValue={ clone_empty_start }
-							componentId={ `${ componentId }-clone_empty_start` }
 						/>
 						<Toggle
 							label={ __( 'Save in multiple rows', 'meta-box-builder' ) }
