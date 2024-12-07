@@ -22,7 +22,7 @@ const TooltipSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 			<input type="hidden" name={ `${ name }[icon]` } value={ icon } />
 
 			<Toggle
-				label={ __( 'Enable tooltip', 'meta-box-builder' ) }
+				label={ __( 'Tooltip', 'meta-box-builder' ) }
 				defaultValue={ enable }
 				componentId={ `${ componentId }-enable` }
 				onChange={ toggleEnable }

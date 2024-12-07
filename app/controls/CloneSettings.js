@@ -25,7 +25,7 @@ const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 				renderToggle={ ( { onToggle } ) => (
 					<>
 						<label className={ `og-status ${ clone ? 'og-status--active' : '' }` } onClick={ onToggle }>
-							{ __( 'Clone', 'meta-box-builder' ) }
+							{ __( 'Cloneable', 'meta-box-builder' ) }
 						</label>
 
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone' ) }` } value={ clone } />
@@ -43,22 +43,19 @@ const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 						<Button icon={ close } onClick={ onToggle } iconSize={ 16 } />
 
 						<Toggle
-							label={ __( 'Enable clone', 'meta-box-builder' ) }
-							tooltip={ __( 'Make the field cloneable (repeatable)', 'meta-box-builder' ) }
+							label={ __( 'Make the field cloneable', 'meta-box-builder' ) }
 							defaultValue={ clone }
 							componentId={ `${ componentId }-clone` }
 							onChange={ toggleClone }
 						/>
 						<Toggle
-							label={ __( 'Sortable', 'meta-box-builder' ) }
-							tooltip={ __( 'Allow to drag-and-drop reorder clones', 'meta-box-builder' ) }
+							label={ __( 'Allow to reorder clones', 'meta-box-builder' ) }
 							onChange={ toggleSortable }
 							defaultValue={ sortable }
 							componentId={ `${ componentId }-sortable` }
 						/>
 						<Toggle
-							label={ __( 'Clone default value', 'meta-box-builder' ) }
-							tooltip={ __( 'Set default values for new clones', 'meta-box-builder' ) }
+							label={ __( 'Set default values for new clones', 'meta-box-builder' ) }
 							onChange={ toggleCloneDefault }
 							defaultValue={ clone_default }
 							componentId={ `${ componentId }-clone_default` }
