@@ -96,7 +96,8 @@ class Registry {
 			Control::Input( 'std', __( 'Default value', 'meta-box-builder' ) ),
 			Control::DateTime( 'save_format', [
 				'label'       => __( 'Save format', 'meta-box-builder' ),
-				'description' => __( 'Custom format for the value saved in the database. Accepts same formats as the PHP date() function. Leave empty to save as it is.', 'meta-box-builder' ),
+				// Translators: %s - URL to PHP's date() function page.
+				'description' => sprintf( __( 'Custom format for the value saved in the database. Accepts same formats as the PHP <a href="%s">date()</a> function. Leave empty to save as it is.', 'meta-box-builder' ), 'https://www.php.net/manual/en/datetime.format.php' ),
 				'date'        => [
 					'Y-m-d'  => '2024-03-28 (Y-m-d)',
 					'd-m-Y'  => '28-03-2024 (d-m-Y)',
@@ -117,22 +118,17 @@ class Registry {
 				],
 			] ),
 			Control::Toggle( 'timestamp', __( 'Save value as timestamp', 'meta-box-builder' ) ),
-			'inline_date'                  => Control::Toggle( 'inline', [
-				'label'   => __( 'Inline', 'meta-box-builder' ),
-				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
-			] ),
-			'inline_datetime'              => Control::Toggle( 'inline', [
-				'label'   => __( 'Inline', 'meta-box-builder' ),
-				'tooltip' => __( 'Display the date picker inline with the input. Do not require to click the input field to trigger the date picker.', 'meta-box-builder' ),
-			] ),
+			'inline_date'     => Control::Toggle( 'inline', __( 'Display the date picker inline with the input', 'meta-box-builder' ), false, 'appearance' ),
+			'inline_datetime' => Control::Toggle( 'inline', __( 'Display the date picker inline with the input', 'meta-box-builder' ), false, 'appearance' ),
 			Control::Toggle( 'disabled', __( 'Disabled', 'meta-box-builder' ) ),
 			Control::Required( 'required', __( 'Required', 'meta-box-builder' ) ),
 			Control::Toggle( 'readonly', __( 'Read only', 'meta-box-builder' ) ),
 			Control::InputAttributes( 'input_attributes', __( 'Attributes', 'meta-box-builder' ) ),
 			'js_options_date'              => Control::KeyValue( 'js_options', [
-				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'jQueryUI date picker options', 'meta-box-builder' ),
-				'keys'    => [
+				'label'       => __( 'Date picker options', 'meta-box-builder' ),
+				// Translators: %s - URL to the jQueryUI date picker page.
+				'description' => sprintf( __( 'Custom options for the jQueryUI date picker library. <a href="%s" target="_blank">See here</a>.', 'meta-box-builder' ), 'https://api.jqueryui.com/datepicker/' ),
+				'keys'        => [
 					'buttonText',
 					'changeMonth',
 					'changeYear',
@@ -160,8 +156,9 @@ class Registry {
 				],
 			] ),
 			'js_options_datetime'          => Control::KeyValue( 'js_options', [
-				'label'   => '<a href="https://api.jqueryui.com/datepicker/" target="_blank" rel="nofollow noopenner">' . __( 'Date picker options', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'jQueryUI date and time picker options', 'meta-box-builder' ),
+				'label'   => __( 'Date picker options', 'meta-box-builder' ),
+				// Translators: %s - URL to the jQueryUI date picker page.
+				'description' => sprintf( __( 'Custom options for the jQueryUI date picker library. <a href="%s" target="_blank">See here</a>.', 'meta-box-builder' ), 'https://api.jqueryui.com/datepicker/' ),
 				'keys'    => [
 					'buttonText',
 					'changeMonth',
@@ -358,7 +355,7 @@ class Registry {
 			Control::Toggle( 'alpha_channel', __( 'Allow to select opacity', 'meta-box-builder' ) ),
 			'js_options_color'             => Control::KeyValue( 'js_options', [
 				'label'       => __( 'Color picker options', 'meta-box-builder' ),
-				'description' => __( 'Custom options for the color picker library. <a href="https://automattic.github.io/Iris/" target="_blank">Get them here</a>.', 'meta-box-builder' ),
+				'description' => __( 'Custom options for the color picker library. <a href="https://automattic.github.io/Iris/" target="_blank">See here</a>.', 'meta-box-builder' ),
 				'keys'        => [ 'mode', 'width', 'palettes' ],
 				'values'      => [
 					'mode' => [ 'hsl', 'hsv' ],
