@@ -105,6 +105,9 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	if ( control.name === 'InputAttributes' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'disabled', 'readonly' ], false );
 	}
+	if ( control.name === 'TextareaSize' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'textarea_size', [ 'cols', 'rows' ], '' );
+	}
 
 	return [ Control, input, defaultValue ];
 };

@@ -382,7 +382,13 @@ class Fields extends Base {
 			'textarea'          => [
 				'title'       => __( 'Textarea', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, [ 'std', 'placeholder', 'rows', 'cols' ], $input, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std', 'input_attributes' ] ),
+					array_merge( [ 'placeholder', 'textarea_size' ], $appearance_tab ),
+					$validation_tab,
+					array_merge( $advanced_tab ),
+				),
 				'description' => __( 'A paragraph text input', 'meta-box-builder' ),
 			],
 			'time'              => [

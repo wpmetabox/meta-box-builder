@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
 
-const PrependAppend = ( { defaultValue, componentId, fieldType, name, ...rest } ) => (
+const PrependAppend = ( { defaultValue, componentId, name, ...rest } ) => (
 	<DivRow { ...rest }>
 		<div className="og-input-group">
 			<label htmlFor={ `${ componentId }-prepend` }>{ __( 'Prepend', 'meta-box-builder' ) }</label>

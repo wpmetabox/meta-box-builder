@@ -690,14 +690,7 @@ class Registry {
 
 			// Textarea.
 			'std_textarea'                 => Control::Textarea( 'std', __( 'Default value', 'meta-box-builder' ) ),
-			Control::Input( 'rows', [
-				'type'  => 'number',
-				'label' => __( 'Rows', 'meta-box-builder' ),
-			] ),
-			Control::Input( 'cols', [
-				'type'  => 'number',
-				'label' => __( 'Columns', 'meta-box-builder' ),
-			] ),
+			Control::TextareaSize( 'textarea_size', __( 'Size', 'meta-box-builder' ), [ 'rowls' => '', 'cols' => '' ], 'appearance' ),
 
 			// Time.
 			'inline_time'                  => Control::Toggle( 'inline', [
