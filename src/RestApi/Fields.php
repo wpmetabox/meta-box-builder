@@ -290,7 +290,12 @@ class Fields extends Base {
 			'radio'             => [
 				'title'       => __( 'Radio', 'meta-box-builder' ),
 				'category'    => 'basic',
-				'controls'    => array_merge( $general, [ 'options', 'std', 'inline', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					array_merge( $general_tab, [ 'options', 'std', 'required', 'clone_settings' ] ),
+					array_merge( [ 'inline' ], $appearance_tab ),
+					$validation_tab,
+					$advanced_tab,
+				),
 				'description' => __( 'Radio input where you can select only one choice', 'meta-box-builder' ),
 			],
 			'range'             => [
