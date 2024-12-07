@@ -107,7 +107,7 @@ class Registry {
 					'MM dd, yy' => 'March 28, 2024 (MM dd, yy)',
 				],
 			] ),
-			Control::DateTime( 'save_format', [
+			Control::DateTimeSaveFormat( 'save_format', [
 				'label'       => __( 'Save format', 'meta-box-builder' ),
 				// Translators: %s - URL to PHP's date() function page.
 				'description' => sprintf( __( '<a href="%s" target="_blank">PHP date format</a> for the value saved in the database. Leave empty to save as it is.', 'meta-box-builder' ), 'https://www.php.net/manual/en/datetime.format.php' ),
