@@ -184,7 +184,7 @@ class Registry {
 				'values'  => [
 					'changeMonth'     => [ 'true', 'false' ],
 					'changeYear'      => [ 'true', 'false' ],
-					'dateFormat'      => [ 'yy-mm-dd HH:mm', 'mm/dd/yy HH:mm', 'dd-mm-yy HH:mm' ],
+					'dateFormat'      => [ 'yy-mm-dd', 'mm/dd/yy', 'dd-mm-yy' ],
 					'showButtonPanel' => [ 'true', 'false' ],
 				],
 			] ),
