@@ -232,10 +232,7 @@ class Registry {
 				'tooltip' => __( 'Allow users to create a new item', 'meta-box-builder' ),
 			] ),
 			Control::Toggle( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
-			Control::Toggle( 'multiple', [
-				'label'   => __( 'Multiple', 'meta-box-builder' ),
-				'tooltip' => __( 'Allow to select multiple choices', 'meta-box-builder' ),
-			] ),
+			Control::Toggle( 'multiple', __( 'Allow to select multiple choices', 'meta-box-builder' ) ),
 			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ), false, 'appearance' ),
 			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
 				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
