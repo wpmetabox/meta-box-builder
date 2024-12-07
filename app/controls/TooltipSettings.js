@@ -1,13 +1,14 @@
-import { RadioControl } from '@wordpress/components';
-import { useReducer, useState } from "@wordpress/element";
+import { Button, Flex, RadioControl } from '@wordpress/components';
+import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import { settings } from '@wordpress/icons';
 import DashiconPicker from "./DashiconPicker";
 import DivRow from "./DivRow";
 import Position from "./Position";
-import Tooltip from "./Tooltip";
 
 const TooltipSettings = ( { name, componentId, defaultValue, ...rest } ) => {
-	const [ enable, toggleEnable ] = useReducer( on => !on, defaultValue.enable );
+	const [ showSettings, setShowSettings ] = useState( false );
+	const [ enable, setEnable ] = useState( defaultValue.enable );
 	const [ icon, setIcon ] = useState( defaultValue.icon || 'info' );
 
 	let isDashicons = false;
@@ -16,24 +17,32 @@ const TooltipSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 	}
 	const [ icon_type, setIconType ] = useState( isDashicons ? 'dashicons' : 'url' );
 
+	const toggleEnable = e => {
+		setShowSettings( e.target.checked );
+		setEnable( e.target.checked );
+	};
+
+	const toggleShowSettings = () => setShowSettings( prev => !prev );
+
 	return (
 		<>
 			<input type="hidden" name={ `${ name }[enable]` } value={ enable } />
 			<input type="hidden" name={ `${ name }[icon]` } value={ icon } />
 
-			<Toggle
-				label={ __( 'Tooltip', 'meta-box-builder' ) }
-				defaultValue={ enable }
-				componentId={ `${ componentId }-enable` }
-				onChange={ toggleEnable }
-			/>
+			<DivRow>
+				<Flex className='og-with-toggle-sub-settings'>
+					<label className="og-toggle">
+						<input type="checkbox" id={ `${ componentId }-enable` } onChange={ toggleEnable } defaultChecked={ enable } />
+						<div className="og-toggle__switch"></div>
+						{ __( 'Tooltip', 'meta-box-builder' ) }
+					</label>
+					{ enable && <Button icon={ settings } size="small" onClick={ toggleShowSettings } isPressed={ showSettings } /> }
+				</Flex>
+			</DivRow>
 			{
-				enable && (
+				showSettings && (
 					<div className="og-sub-settings">
-						<DivRow
-							htmlFor={ `${ componentId }-content` }
-							label={ __( 'Content', 'meta-box-builder' ) }
-						>
+						<DivRow htmlFor={ `${ componentId }-content` } label={ __( 'Content', 'meta-box-builder' ) }>
 							<input type="text" id={ `${ componentId }-content` } name={ `${ name }[content]` } defaultValue={ defaultValue.content } />
 						</DivRow>
 						<DivRow label={ __( 'Icon type', 'meta-box-builder' ) }>
@@ -75,16 +84,5 @@ const TooltipSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 		</>
 	);
 };
-
-const Toggle = ( { componentId, label, defaultValue, tooltip, onChange } ) => (
-	<DivRow>
-		<label className="og-toggle">
-			<input type="checkbox" id={ componentId } onChange={ onChange } defaultChecked={ defaultValue } />
-			<div className="og-toggle__switch"></div>
-			{ label }
-			{ tooltip && <Tooltip id={ componentId } content={ tooltip } /> }
-		</label>
-	</DivRow>
-);
 
 export default TooltipSettings;
