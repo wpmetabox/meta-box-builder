@@ -1,6 +1,6 @@
 import { Icon, chevronDown, chevronUp } from '@wordpress/icons';
 
-const PersistentPanelBody = ( { title, open, onClick, className, children } ) => {
+const PersistentPanelBody = ( { title, open, onClick, className = '', children } ) => {
 	return (
 		<>
 			<button type="button" className={ `og-panel__header ${ open ? 'og-panel__header--open' : '' }` } onClick={ onClick }>

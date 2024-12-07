@@ -72,13 +72,15 @@
 	}
 
 	&__body {
-		overflow-y: hidden;
-		max-height: 0;
-		transition: all .2s ease-in-out;
+		display: none;
+		// overflow-y: hidden;
+		// max-height: 0;
+		// transition: all .2s ease-in-out;
 		padding-inline: 16px;
 
 		&--open {
-			max-height: 999999px;
+			display: block;
+			// max-height: 999999px;
 			padding-block: 16px;
 		}
 	}
