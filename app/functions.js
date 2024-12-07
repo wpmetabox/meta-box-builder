@@ -103,7 +103,7 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'prepend_append', [ 'prepend', 'append' ], '' );
 	}
 	if ( control.name === 'InputAttributes' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'required', 'disabled', 'readonly' ], false );
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'disabled', 'readonly' ], false );
 	}
 
 	return [ Control, input, defaultValue ];
