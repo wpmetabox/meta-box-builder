@@ -421,10 +421,13 @@ class Registry {
 			] ),
 
 			// Heading.
-			'desc_heading'                 => Control::Input( 'desc', [
-				'label'   => __( 'Input description', 'meta-box-builder' ),
-				'tooltip' => __( 'Display below the field input', 'meta-box-builder' ),
+			'name_heading' => Control::Name( 'name', [
+				'label' => __( 'Heading text', 'meta-box-builder' ),
 			] ),
+			'desc_heading' => Control::Input( 'desc', [
+				'label'       => __( 'Description', 'meta-box-builder' ),
+				'description' => __( 'Display below the heading text.', 'meta-box-builder' ),
+			], '', 'general' ),
 
 			// Image advanced.
 			Control::Select( 'image_size', [

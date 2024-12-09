@@ -76,7 +76,6 @@ class Fields extends Base {
 		$advanced = [ 'class', 'before', 'after', 'save_field', 'sanitize_callback', 'attributes', 'validation', 'custom_settings' ];
 		$clone    = [ 'clone_settings' ];
 		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'input_attributes', 'js_options' ];
-		$map      = [ 'std', 'address_field', 'language', 'region', 'required' ];
 		$taxonomy = [ 'taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args' ];
 		$post     = [ 'post_type', 'field_type', 'add_new', 'multiple', 'select_all_none', 'parent', 'required', 'placeholder', 'query_args' ];
 		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];
@@ -297,13 +296,20 @@ class Fields extends Base {
 			'heading'           => [
 				'title'       => __( 'Heading', 'meta-box-builder' ),
 				'category'    => 'layout',
-				'controls'    => array_merge( [ 'name', 'desc' ], $advanced ),
+				'controls'    => array_merge(
+					[ 'name', 'desc' ],
+					[ 'class', 'before', 'after' ],
+				),
 				'description' => __( 'Heading text', 'meta-box-builder' ),
 			],
 			'hidden'            => [
 				'title'       => __( 'Hidden', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( [ 'id', 'std' ], $advanced ),
+				'controls'    => array_merge(
+					[ 'id', 'std' ],
+					[ 'before', 'after' ],
+					[ 'custom_settings' ]
+				),
 				'description' => __( 'For storing a default hidden value', 'meta-box-builder' ),
 			],
 			'icon'              => [

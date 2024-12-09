@@ -14,7 +14,7 @@ class ConditionalLogic {
 	}
 
 	public function add_field_controls( array $controls, string $type ): array {
-		if ( $type === 'tab' ) {
+		if ( in_array( $type, [ 'hidden', 'tab' ] ) ) {
 			return $controls;
 		}
 		$controls[] = Control::ConditionalLogic( 'conditional_logic', [], [], 'conditional_logic' );
