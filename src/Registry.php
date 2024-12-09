@@ -435,7 +435,7 @@ class Registry {
 				'tooltip' => __( 'Image size that displays in the edit page, used to make sure images are not blurry. It\'s not meant to display images with the exact width and height.', 'meta-box-builder' ),
 				'options' => $this->get_image_sizes(),
 			], 'thumbnail' ),
-			Control::Select( 'add_to', [
+			Control::Radio( 'add_to', [
 				'label'   => __( 'New image placement', 'meta-box-builder' ),
 				'options' => [
 					'beginning' => __( 'Beginning of the list', 'meta-box-builder' ),

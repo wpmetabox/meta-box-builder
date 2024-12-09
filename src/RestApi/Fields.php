@@ -82,7 +82,6 @@ class Fields extends Base {
 		$upload   = [ 'max_file_uploads', 'max_status', 'force_delete', 'required' ];
 		$input    = [ 'input_attributes' ];
 		$html5    = [ 'std', 'placeholder', 'size', 'input_attributes' ];
-		$icon     = [ 'icon_set', 'icon_file', 'icon_dir', 'icon_css' ];
 
 		$general_tab    = [ 'name', 'id' ];
 		$appearance_tab = [ 'label_description', 'desc', 'appearance_divider', 'class', 'before', 'after' ];
@@ -326,25 +325,49 @@ class Fields extends Base {
 			'image'             => [
 				'title'       => __( 'Image', 'meta-box-builder' ),
 				'category'    => 'upload',
-				'controls'    => array_merge( $general, [ 'max_file_uploads', 'force_delete', 'upload_dir', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'max_file_uploads', 'upload_dir', 'force_delete' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Simple image upload with default UI like <input type="file" />. Not recommended. Use Image advanced instead.', 'meta-box-builder' ),
 			],
 			'image_advanced'    => [
 				'title'       => __( 'Image Advanced', 'meta-box-builder' ),
 				'category'    => 'upload',
-				'controls'    => array_merge( $general, $upload, [ 'image_size', 'add_to' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'max_file_uploads', 'image_size', 'max_status', 'force_delete', 'add_to' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Multiple image uploads with WordPress media popup, usually used for a gallery', 'meta-box-builder' ),
 			],
 			'image_select'      => [
 				'title'       => __( 'Image Select', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'options', 'std', 'multiple', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'options', 'std', 'multiple' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Select a choice with images', 'meta-box-builder' ),
 			],
 			'image_upload'      => [
 				'title'       => __( 'Image Upload', 'meta-box-builder' ),
 				'category'    => 'upload',
-				'controls'    => array_merge( $general, [ 'max_file_size', 'image_size', 'add_to' ], $upload, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'max_file_uploads', 'max_file_size', 'image_size', 'max_status', 'force_delete', 'add_to' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Multiple image uploads with a drag and drop area', 'meta-box-builder' ),
 			],
 			'key_value'         => [
