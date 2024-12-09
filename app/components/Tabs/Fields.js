@@ -13,11 +13,7 @@ const Fields = prop => {
 		add,
 		remove,
 		duplicate,
-		updateType,
 		setFields,
-		toggle,
-		toggleAll,
-		expandAll,
 	} = useFields( prop.fields.filter( field => field.type ), 'fields' );
 
 	// Don't render any field if fields data is not available.
@@ -34,7 +30,7 @@ const Fields = prop => {
 			<Inserter addField={ add } />
 		</>
 		: <>
-			<Header expandAll={ expandAll } toggleAll={ toggleAll } />
+			<Header />
 			<ReactSortable group={ {
 				name: 'root',
 				pull: true,
@@ -55,8 +51,6 @@ const Fields = prop => {
 						field={ field }
 						removeField={ remove }
 						duplicateField={ duplicate }
-						updateFieldType={ updateType }
-						toggle={ toggle }
 					/> )
 				}
 			</ReactSortable>

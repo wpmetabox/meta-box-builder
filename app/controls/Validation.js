@@ -1,4 +1,3 @@
-import { Dashicon } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
@@ -29,7 +28,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 	const onChangeName = e => setName( e.target.value );
 
 	return (
-		<div className="og-include-exclude__rule og-attribute">
+		<div className="og-include-exclude__rule">
 			<input type="hidden" name={ `${ baseName }[id]` } defaultValue={ rule.id } />
 			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" defaultValue={ rule.name } onChange={ onChangeName }>
 				<option value="required">{ __( 'Required', 'meta-box-builder' ) }</option>
@@ -66,7 +65,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 				<input defaultValue={ rule.value } type="text" placeholder={ __( 'Ex. 2,6', 'meta-box-builder' ) } title={ __( 'Separate values by a comma', 'meta-box-builder' ) } name={ `${ baseName }[value]` } />
 			}
 			<input defaultValue={ rule.message } type="text" placeholder={ __( 'Custom error message', 'meta-box-builder' ) } name={ `${ baseName }[message]` } />
-			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
+			<a href="#" className="og-include-exclude__remove" onClick={ () => removeRule( rule.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
 		</div>
 	);
 };

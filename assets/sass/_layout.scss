@@ -23,23 +23,28 @@
 	padding-bottom: 0;
 }
 
-// App: full height
-@media (min-width:782px) {
-	.mb {
-		min-height: calc(100vh - 32px);
-	}
-}
-
 .mb {
+	--sidebar-width: 360px;
+
 	display: flex;
 	flex-direction: column;
+
+	// For sticky header.
+	position: fixed;
+	top: 32px;
+	bottom: 0;
+	left: 160px; // Admin menu open
+	right: 0;
+
+	// Admin menu folded.
+	.folded & {
+		left: 36px;
+	}
 }
 
 // Header
 .mb-header {
 	background: #fff;
-	position: sticky;
-	top: 32px;
 	z-index: 99;
 	border-bottom: 1px solid var(--color-light);
 
@@ -127,13 +132,20 @@
 	}
 
 	&__inner {
-		margin: 48px 48px 48px;
-		// margin: 40px 16px 16px;
+		padding: 48px 48px 48px;
 		flex: 1;
+
+		// Show scrollbar inside this area.
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: var(--sidebar-width);
+		overflow-y: auto;
 	}
 }
 
-.mb-content {
+.mb-main {
 	// max-width: 900px;
 	margin-inline: auto;
 }
@@ -145,27 +157,32 @@
 	border-radius: 6px;
 }
 
-// Sidebar
-.mb-sidebar {
-	width: 300px;
-	border-top: none;
+// Sidebar panel
+.mb-panel {
+	position: fixed;
+	top: calc(32px + 60px + 1px); // Admin bar + header + border
+	bottom: 0;
+	right: 0;
+	width: var(--sidebar-width);
+	z-index: 99;
+	transition: all .25s;
+	transform: translateX(var(--sidebar-width));
 
-	.components-panel__row {
-		display: block;
+	margin-top: -1px; // Override to the header's border
+	border-right: 0;
+
+	&--show {
+		transform: translateX(0);
 	}
 
-	.summary {
-		p {
-			display: flex;
-		}
-
-		label {
-			width: 40%;
-		}
-	}
-
-	.status {
-		text-transform: capitalize;
+	// Only scroll inner content, keep the panel header sticky
+	&__inner {
+		position: absolute;
+		top: calc(48px - 1px); // 48px: header, -1px: margin top
+		bottom: 0;
+		right: 0;
+		width: var(--sidebar-width);
+		overflow-y: auto;
 	}
 }
 

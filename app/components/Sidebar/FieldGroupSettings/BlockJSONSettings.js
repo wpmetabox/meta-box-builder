@@ -1,11 +1,11 @@
 import { Flex } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import DivRow from '../../controls/DivRow';
-import Input from '../../controls/Input';
-import Toggle from "../../controls/Toggle";
-import { fetcher } from "../../functions";
-import useSettings from "../../hooks/useSettings";
+import DivRow from '../../../controls/DivRow';
+import Input from '../../../controls/Input';
+import Toggle from "../../../controls/Toggle";
+import { fetcher } from "../../../functions";
+import useSettings from "../../../hooks/useSettings";
 
 const BlockJSONSettings = () => {
 	const { getSetting } = useSettings();
@@ -57,7 +57,7 @@ const BlockJSONSettings = () => {
 
 		<Input
 			name="settings[block_json][path]"
-			label={ `<span class="og-indent"></span>${ __( 'Block folder', 'meta-box-builder' ) }` }
+			label={ __( 'Block folder', 'meta-box-builder' ) }
 			componentId="settings-block-path"
 			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
 			defaultValue={ block_json.path }
@@ -70,7 +70,7 @@ const BlockJSONSettings = () => {
 
 		{
 			isNewer &&
-			<DivRow dependency="block_json_enable:true" label={ `<span class="og-indent"></span>${ __( 'Synchronize block.json', 'meta-box-builder' ) }` }>
+			<DivRow dependency="block_json_enable:true" label={ __( 'Synchronize block.json', 'meta-box-builder' ) }>
 				<Flex direction="column">
 					<div className="og-description" dangerouslySetInnerHTML={ {
 						__html: __( 'We detected a newer version of <code>block.json</code> from the current folder, do you want to override settings from this path?', 'meta-box-builder' )

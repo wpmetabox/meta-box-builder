@@ -1,5 +1,4 @@
-import { Flex } from '@wordpress/components';
-import { render, useReducer } from "@wordpress/element";
+import { render } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ErrorBoundary } from "react-error-boundary";
 import Header from './components/Header';
@@ -7,29 +6,25 @@ import Main from './components/Main';
 import Sidebar from './components/Sidebar';
 import ThemeCodeBox from "./components/ThemeCode/Box";
 
-const AppWrapper = ( { children } ) => {
-	const [ showSidebar, toggleSidebar ] = useReducer( show => !show, true );
+const AppWrapper = ( { children } ) => (
+	<>
+		<Header />
 
-	return (
-		<>
-			<Header showSidebar={ showSidebar } toggleSidebar={ toggleSidebar } />
+		<div className="mb-body">
+			<div className="mb-body__inner">
+				<div className="mb-main">
+					<div className="wp-header-end" />
 
-			<Flex gap={ 0 } align="stretch" className="mb-body">
-				<div className="mb-body__inner">
-					<div className="mb-content">
-						<div className="wp-header-end" />
-
-						<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
-							{ children }
-						</ErrorBoundary>
-					</div>
+					<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
+						{ children }
+					</ErrorBoundary>
 				</div>
+			</div>
 
-				{ showSidebar && <Sidebar /> }
-			</Flex >
-		</>
-	);
-};
+			<Sidebar />
+		</div >
+	</>
+);
 
 const App = () => (
 	<AppWrapper>

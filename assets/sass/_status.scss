@@ -1,0 +1,41 @@
+&-status {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	border: 1px solid;
+	border-radius: 99px;
+	padding: 0 8px;
+	font-size: 12px;
+
+	&:before {
+		content: '';
+		width: 6px;
+		height: 6px;
+		display: inline-block;
+		border-radius: 99px;
+	}
+
+	input {
+		display: none;
+	}
+
+	// Default inactive status
+	border-color: var(--color-light);
+	background: var(--color-lighter);
+
+	&:before {
+		background: var(--color-gray);
+	}
+
+	// Active status
+	&:has(input:checked),
+	&--active {
+		border-color: #57c091;
+		background: #eefcf0;
+		color: #276a52;
+
+		&:before {
+			background: #28b77e;
+		}
+	}
+}

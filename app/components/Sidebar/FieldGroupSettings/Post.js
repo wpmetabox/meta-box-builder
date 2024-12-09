@@ -1,8 +1,8 @@
 import { __ } from "@wordpress/i18n";
-import Select from "../../controls/Select";
-import Toggle from "../../controls/Toggle";
-import ToggleGroup from "../../controls/ToggleGroup";
-import useSettings from "../../hooks/useSettings";
+import Select from "../../../controls/Select";
+import Toggle from "../../../controls/Toggle";
+import ToggleGroup from "../../../controls/ToggleGroup";
+import useSettings from "../../../hooks/useSettings";
 
 const Post = () => {
 	const { getPostTypes, getSetting } = useSettings();

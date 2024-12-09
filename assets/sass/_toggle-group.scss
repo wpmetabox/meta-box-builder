@@ -50,4 +50,23 @@
 	input {
 		display: none;
 	}
+
+	&--no-check {
+		label {
+			&:hover {
+				background: var(--color-lightest);
+			}
+
+			&:has(input:checked),
+			&:has(input:checked):hover {
+				background: var(--color-primary);
+				border-color: var(--color-primary);
+				color: #fff;
+
+				svg {
+					fill: #fff;
+				}
+			}
+		}
+	}
 }

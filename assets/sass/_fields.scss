@@ -70,9 +70,13 @@
 }
 
 &-field {
-	margin-bottom: 16px;
 	display: flex;
-	justify-content: space-between;
+	flex-direction: column;
+	gap: 8px;
+
+	&:not(:last-child) {
+		margin-bottom: 16px;
+	}
 
 	&--checkbox-list .og-input {
 		label {
@@ -90,6 +94,12 @@
 		display: inline-block;
 		margin-left: 6px;
 	}
+
+	&--divider {
+		border-bottom: 0;
+		border-color: var(--color-light);
+		margin-inline: -16px;
+	}
 }
 
 &-field--check &-input {
@@ -106,7 +116,11 @@
 }
 
 &-label {
-	flex: 0 0 180px;
+	font-size: 11px;
+	font-weight: 500;
+	line-height: 1.4;
+	text-transform: uppercase;
+	display: block;
 
 	>div {
 		display: inline;
@@ -127,15 +141,18 @@
 }
 
 &-input {
-	flex: 1;
-	min-width: 0; // To make the input not exceed parent's width (see conditional logic in a sub-field of nested groups).
+
+	// Reset style for label, which is set in Panel component
+	label {
+		max-width: none;
+		margin-right: 0;
+	}
 }
 
 &-description {
-	font-style: italic;
 	font-size: 12px;
 	margin-top: 4px;
-	color: var(--color-gray);
+	color: #757575;
 
 	code {
 		font-style: normal;
@@ -295,44 +312,6 @@
 	}
 }
 
-&-attribute {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	grid-gap: 6px;
-	margin-bottom: 12px;
-
-	.og-remove {
-		padding: 0;
-		border: none;
-		background: none;
-		visibility: hidden;
-		transition: unset;
-		width: 16px;
-		height: 16px;
-	}
-
-	&:hover>.og-remove {
-		visibility: visible;
-		cursor: pointer;
-	}
-
-	// WordPress < 5.6
-	svg:hover {
-		fill: var(--color-red);
-	}
-
-	// WordPress 5.6+
-	.dashicon:hover {
-		color: var(--color-red);
-	}
-
-	input {
-		min-width: 0; // To make the input not exceed parent's width (see conditional logic in a sub-field of nested groups).
-		flex: 1;
-	}
-}
-
 // React select.
 .react-select {
 	&__control.react-select__control {
@@ -365,102 +344,6 @@
 
 	&__indicator.react-select__indicator {
 		padding: 4px;
-	}
-}
-
-// Icon.
-&-icon {
-	&__select {
-		position: relative;
-		display: inline-block;
-		margin: 0 4px 4px 0;
-	}
-
-	// WordPress 5.6+
-	.og-dashicon {
-		border-radius: 4px;
-		width: 36px;
-		height: 36px;
-		padding: 4px;
-		box-sizing: border-box;
-		color: currentColor;
-		display: grid;
-		place-items: center;
-	}
-
-	&-selected {
-		display: flex;
-
-		span {
-			width: 36px;
-			height: 36px;
-			padding: 4px;
-			box-sizing: border-box;
-			border: 1px solid #8c8f94;
-			border-radius: 4px;
-			margin-right: 10px;
-			display: grid;
-			place-items: center;
-		}
-
-		.og-icon-search {
-			opacity: 1;
-			position: relative;
-		}
-
-		.icon-fontawesome::before {
-			font-size: 18px;
-		}
-	}
-
-	&-items {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, 65px);
-		gap: 10px 15px;
-		max-height: 25em;
-		overflow: auto;
-		padding: 1px;
-		margin-top: 15px;
-	}
-
-	&-item {
-		display: flex;
-		flex-direction: column;
-		justify-content: start;
-		align-items: center;
-		text-align: center;
-
-		&:hover .og-icon__select {
-			box-shadow: 0 0 0 1px rgba(0, 0, 0, .3);
-		}
-
-		&:has(input:checked):hover .og-icon__select {
-			box-shadow: none;
-		}
-
-		.og-icon__select {
-			border-radius: 4px;
-			margin: 0;
-		}
-
-		&__text {
-			color: var(--color-gray);
-			font-size: 11px;
-			line-height: 1.1;
-			margin-top: 4px;
-		}
-	}
-
-	input {
-		position: absolute;
-		opacity: 0;
-
-		// WordPress 5.6+
-		&:checked~.og-dashicon {
-			color: #fff;
-			background-color: var(--color-primary);
-			border-color: var(--color-primary);
-		}
 	}
 }
 
@@ -504,11 +387,4 @@
 		max-width: 24px;
 		height: auto;
 	}
-}
-
-// Indentation for labels of sub-controls.
-&-indent {
-	display: inline-block;
-	width: 24px;
-	height: 1px;
 }

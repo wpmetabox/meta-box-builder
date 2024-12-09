@@ -1,0 +1,102 @@
+.components-panel__row {
+	display: block;
+}
+
+// Hide panel body, but keep it in DOM for uncontrolled inputs.
+.components-panel__body:not(.is-opened) .og-panel-body {
+	display: none;
+}
+
+
+.og-panel {
+	&__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		padding-inline: 16px;
+		width: 100%;
+		height: 48px;
+
+		color: #1e1e1e;
+		font-weight: 500;
+
+		border-inline: none;
+		border-block: 1px solid #ddd;
+		margin-top: -1px;
+
+		transition: background .1s ease-in-out;
+		background: #fff;
+
+		cursor: pointer;
+
+		position: sticky;
+		top: -1px; // Override a border above
+		z-index: 9;
+
+		&--open {
+			background: var(--color-lighter);
+		}
+
+		&:nth-of-type(2) {
+			top: calc(1 * 48px - 2px);
+		}
+
+		&:nth-of-type(3) {
+			top: calc(2 * 48px - 3px);
+		}
+
+		&:nth-of-type(4) {
+			top: calc(3 * 48px - 4px);
+		}
+
+		&:nth-of-type(5) {
+			top: calc(4 * 48px - 5px);
+		}
+
+		&:nth-of-type(6) {
+			top: calc(5 * 48px - 6px);
+		}
+
+		&:nth-of-type(7) {
+			top: calc(6 * 48px - 7px);
+		}
+
+		&:nth-of-type(8) {
+			top: calc(7 * 48px - 8px);
+		}
+
+		&:nth-of-type(9) {
+			top: calc(8 * 48px - 9px);
+		}
+	}
+
+	&__body {
+		display: none;
+		// overflow-y: hidden;
+		// max-height: 0;
+		// transition: all .2s ease-in-out;
+		padding-inline: 16px;
+
+		&--open {
+			display: block;
+			// max-height: 999999px;
+			padding-block: 16px;
+		}
+	}
+}
+
+// Summary
+.summary {
+	p {
+		display: flex;
+	}
+
+	label {
+		width: 40%;
+	}
+}
+
+.status {
+	text-transform: capitalize;
+}

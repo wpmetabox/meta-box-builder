@@ -1,9 +1,9 @@
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import DivRow from '../../controls/DivRow';
-import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
-import { fetcher, uniqid } from "../../functions";
-import useSettings from "../../hooks/useSettings";
+import DivRow from '../../../controls/DivRow';
+import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
+import { fetcher, uniqid } from "../../../functions";
+import useSettings from "../../../hooks/useSettings";
 
 const IncludeExclude = () => {
 	const name = 'settings[include_exclude]';
@@ -42,7 +42,6 @@ const Intro = ( { name, setting } ) => (
 			<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<br />
 		<select name={ `${ name }[relation]` } defaultValue={ setting.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>

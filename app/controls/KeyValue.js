@@ -1,5 +1,4 @@
-import { Dashicon } from "@wordpress/components";
-import { useState } from "@wordpress/element";
+import { RawHTML, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
@@ -12,6 +11,8 @@ const KeyValue = ( {
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
 	keys = [],
 	values = [],
+	description = '',
+	className = 'og-attribute-wrapper',
 	...rest
 } ) => {
 	const [ items, setItems ] = useState( Object.values( defaultValue || {} ) );
@@ -20,7 +21,8 @@ const KeyValue = ( {
 	const remove = id => setItems( prev => prev.filter( item => item.id !== id ) );
 
 	return (
-		<DivRow { ...rest }>
+		<DivRow className={ className } { ...rest }>
+			{ description && <RawHTML className="og-description">{ description }</RawHTML> }
 			{
 				items.map( item => (
 					<Item
@@ -47,16 +49,16 @@ const Item = ( { name, keysList, valuesList, item, remove, keyPlaceholder, value
 	const handleSelect = ( inputRef, value ) => {
 		inputRef.current.value = value;
 
-		const newValuesList = objectDepth( valuesList ) == 1 ? valuesList : valuesList[ value ] ? valuesList[ value ] : valuesList['default'];
+		const newValuesList = objectDepth( valuesList ) == 1 ? valuesList : valuesList[ value ] ? valuesList[ value ] : valuesList[ 'default' ];
 		setValues( newValuesList || [] );
 	};
 
 	return (
 		<div className="og-attribute">
 			<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
-			<FieldInserter placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } items={ keysList }  onSelect={ handleSelect } onChange={ handleSelect } />
+			<FieldInserter placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } items={ keysList } onSelect={ handleSelect } onChange={ handleSelect } />
 			<FieldInserter placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } items={ values } />
-			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => remove( item.id ) }><Dashicon icon="dismiss" /></button>
+			<a href="#" className="og-remove" onClick={ () => remove( item.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
 		</div>
 	);
 };

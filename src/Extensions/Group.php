@@ -19,30 +19,27 @@ class Group {
 			'controls' => [
 				'name',
 				'id',
-				'type',
-				'descriptions',
-				Control::Checkbox( 'collapsible', __( 'Collapsible', 'meta-box-builder' ) ),
+				'label_description',
+				'desc',
+				Control::Toggle( 'collapsible', __( 'Collapsible', 'meta-box-builder' ) ),
 				Control::ToggleGroup( 'default_state', [
-					'label'      => '<span class="og-indent"></span>' . __( 'Default state', 'meta-box-builder' ),
+					'label'      => __( 'Default state', 'meta-box-builder' ),
 					'dependency' => 'collapsible:true',
 					'options'    => [
 						'expanded'  => __( 'Expanded', 'meta-box-builder' ),
 						'collapsed' => __( 'Collapsed', 'meta-box-builder' ),
 					],
 				], 'expanded' ),
-				Control::Checkbox( 'save_state', [
-					'label'      => '<span class="og-indent"></span>' . __( 'Remember state', 'meta-box-builder' ),
+				Control::Toggle( 'save_state', [
+					'label'      => __( 'Remember state', 'meta-box-builder' ),
 					'dependency' => 'collapsible:true',
 				] ),
 				Control::GroupTitle( 'group_title', [
-					'label'      => '<span class="og-indent"></span>' . __( 'Group title', 'meta-box-builder' ),
+					'label'      => __( 'Group title', 'meta-box-builder' ),
 					'tooltip'    => __( 'Use {field_id} for a sub-field value and {#} for the clone index (if the group is cloneable)', 'meta-box-builder' ),
 					'dependency' => 'collapsible:true',
 				] ),
-				'clone',
-				'clone_features',
-				'clone_quantity',
-				'add_button',
+				'clone_settings',
 				'before',
 				'after',
 				'class',

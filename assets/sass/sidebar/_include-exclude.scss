@@ -1,14 +1,12 @@
 &-include-exclude {
 	&__intro {
 		margin-bottom: 12px;
+		display: flex;
+		align-items: center;
+		gap: 4px;
 
 		select {
-			margin-right: 8px;
-			width: 80px;
-
-			&:first-child {
-				margin-bottom: 4px;
-			}
+			width: auto;
 		}
 	}
 

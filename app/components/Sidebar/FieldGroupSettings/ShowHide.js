@@ -1,9 +1,9 @@
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import KeyValue from '../../controls/KeyValue';
-import ReactAsyncSelect from '../../controls/ReactAsyncSelect';
-import { fetcher, uniqid } from "../../functions";
-import useSettings from "../../hooks/useSettings";
+import KeyValue from '../../../controls/KeyValue';
+import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
+import { fetcher, uniqid } from "../../../functions";
+import useSettings from "../../../hooks/useSettings";
 
 const ShowHide = () => {
 	const name = 'settings[show_hide]';
@@ -38,7 +38,6 @@ const Intro = ( { name, setting } ) => (
 			<option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<br />
 		<select name={ `${ name }[relation]` } defaultValue={ setting.relation || 'OR' }>
 			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>

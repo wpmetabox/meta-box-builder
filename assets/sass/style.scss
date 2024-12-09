@@ -15,14 +15,22 @@
 	@import "field-inserter";
 	@import "input-group";
 	@import "toggle-group";
+	@import "status";
+
+	@import "field-settings/icon";
+	@import "field-settings/header";
+	@import "field-settings/sub-settings";
+	@import "field-settings/select-with-input";
 }
 
-.mb-content .og {
-	@import "include-exclude";
+.mb-sidebar {
+	@import "sidebar/_panel";
 }
 
 .mb-sidebar .og {
 	@import "sidebar/base";
 	@import "sidebar/location";
 	@import "sidebar/include-exclude";
+	@import "sidebar/field-settings";
+	@import "sidebar/attribute";
 }

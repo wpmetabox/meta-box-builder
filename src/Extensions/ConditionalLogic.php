@@ -14,13 +14,10 @@ class ConditionalLogic {
 	}
 
 	public function add_field_controls( array $controls, string $type ): array {
-		if ( $type === 'tab' ) {
+		if ( in_array( $type, [ 'hidden', 'tab' ] ) ) {
 			return $controls;
 		}
-		$controls[] = Control::ConditionalLogic( 'conditional_logic', [
-			'label'   => '<a href="https://docs.metabox.io/extensions/meta-box-conditional-logic/" target="_blank" rel="noreferrer noopenner">' . __( 'Conditional logic', 'meta-box-builder' ) . '</a>',
-			'tooltip' => __( 'Toggle the field visibility by other fields\' values', 'meta-box-builder' ),
-		], [], 'advanced' );
+		$controls[] = Control::ConditionalLogic( 'conditional_logic', [], [], 'conditional_logic' );
 
 		return $controls;
 	}

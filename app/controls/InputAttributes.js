@@ -5,17 +5,6 @@ const InputAttributes = ( { defaultValue, name, ...rest } ) => (
 	<DivRow { ...rest }>
 		<div className="og-toggle-group">
 			<label>
-				<input type="hidden" name={ `${ name.replace( 'input_attributes', 'required' ) }` } value={ false } />
-				<input
-					type="checkbox"
-					name={ `${ name.replace( 'input_attributes', 'required' ) }` }
-					defaultChecked={ defaultValue.required }
-					value={ true }
-				/>
-				<span className="dashicons dashicons-yes-alt"></span>
-				<span>{ __( 'Required', 'meta-box-builder' ) }</span>
-			</label>
-			<label>
 				<input type="hidden" name={ `${ name.replace( 'input_attributes', 'disabled' ) }` } value={ false } />
 				<input
 					type="checkbox"

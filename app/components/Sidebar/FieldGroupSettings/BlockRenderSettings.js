@@ -2,10 +2,10 @@ import { Flex } from "@wordpress/components";
 import { RawHTML, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import DivRow from '../../controls/DivRow';
-import Input from '../../controls/Input';
-import Select from '../../controls/Select';
-import useSettings from "../../hooks/useSettings";
+import DivRow from '../../../controls/DivRow';
+import Input from '../../../controls/Input';
+import Select from '../../../controls/Select';
+import useSettings from "../../../hooks/useSettings";
 
 const renderWithOptions = {
 	callback: __( 'PHP callback function', 'meta-box-builder' ),
@@ -204,7 +204,7 @@ const BlockRenderSettings = () => {
 			defaultValue={ getSetting( 'enqueue_assets', '' ) }
 		/>
 
-		<DivRow label={ `<span class="og-indent"></span>${ __( 'Supported variables', 'meta-box-builder' ) }` } >
+		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >
 			<table className="og-block-description">
 				<tbody>
 					<tr>

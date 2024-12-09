@@ -1,8 +1,8 @@
 import { Tooltip } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
-import DivRow from "../../controls/DivRow";
-import Toggle from "../../controls/Toggle";
-import useSettings from "../../hooks/useSettings";
+import DivRow from "../../../controls/DivRow";
+import Toggle from "../../../controls/Toggle";
+import useSettings from "../../../hooks/useSettings";
 
 const CustomTable = () => {
 	const { getSetting } = useSettings();
@@ -23,7 +23,7 @@ const CustomTable = () => {
 			componentId="settings-table_create"
 			defaultValue={ !!setting.create }
 		/>
-		<DivRow htmlFor="settings-table_name" dependency="table_enable:true" label={ `<span class="og-indent"></span>${ __( 'Table name', 'meta-box-builder' ) }` }>
+		<DivRow htmlFor="settings-table_name" dependency="table_enable:true" label={ __( 'Table name', 'meta-box-builder' ) }>
 			<div className="og-input-group">
 				<input
 					type="text"

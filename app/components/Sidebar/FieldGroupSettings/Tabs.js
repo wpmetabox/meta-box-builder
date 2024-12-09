@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
-import Input from "../../controls/Input";
-import ToggleGroup from "../../controls/ToggleGroup";
-import useSettings from "../../hooks/useSettings";
+import Input from "../../../controls/Input";
+import ToggleGroup from "../../../controls/ToggleGroup";
+import useSettings from "../../../hooks/useSettings";
 
 const Tabs = () => {
 	const { getSetting } = useSettings();

@@ -4,7 +4,7 @@ import slugify from "slugify";
 
 export const htmlDecode = innerHTML => Object.assign( document.createElement( 'textarea' ), { innerHTML } ).value;
 
-const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
+const ucfirst = string => string.length > 0 ? string[ 0 ].toUpperCase() + string.slice( 1 ) : string;
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
@@ -96,20 +96,14 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	let key = bracketsToDots( name );
 	let defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
 
-	if ( control.name === 'CloneQuantity' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_quantity', [ 'min_clone', 'max_clone' ], '' );
-	}
-	if ( control.name === 'PrependAppend' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'prepend_append', [ 'prepend', 'append' ], '' );
+	if ( control.name === 'CloneSettings' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_settings', [ 'clone', 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ] );
 	}
 	if ( control.name === 'InputAttributes' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'required', 'disabled', 'readonly' ], false );
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'disabled', 'readonly' ], false );
 	}
-	if ( control.name === 'CloneFeatures' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_features', [ 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple' ], false );
-	}
-	if ( control.name === 'Descriptions' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'descriptions', [ 'label_description', 'desc' ], false );
+	if ( control.name === 'InputGroup' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, control.setting, [ control.props.key1, control.props.key2 ], '' );
 	}
 
 	return [ Control, input, defaultValue ];

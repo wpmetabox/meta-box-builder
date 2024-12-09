@@ -1,9 +1,9 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import FieldInserter from '../../controls/FieldInserter';
-import { uniqid } from "../../functions";
-import useFieldIds from '../../hooks/useFieldIds';
-import useSettings from "../../hooks/useSettings";
+import FieldInserter from '../../../controls/FieldInserter';
+import { uniqid } from "../../../functions";
+import useFieldIds from '../../../hooks/useFieldIds';
+import useSettings from "../../../hooks/useSettings";
 
 const ConditionalLogic = () => {
 	const name = 'settings[conditional_logic]';
@@ -42,7 +42,6 @@ const Intro = ( { name, setting } ) => (
 			<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'when', 'meta-box-builder' ) }
-		<br />
 		<select name={ `${ name }[relation]` } defaultValue={ setting.relation || 'or' }>
 			<option value="or">{ __( 'any', 'meta-box-builder' ) }</option>
 			<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
