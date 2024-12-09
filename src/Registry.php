@@ -724,19 +724,17 @@ class Registry {
 			], [ 'rowls' => '', 'cols' => '' ], 'appearance' ),
 
 			// Time.
-			'inline_time'                  => Control::Toggle( 'inline', [
-				'label'   => __( 'Inline', 'meta-box-builder' ),
-				'tooltip' => __( 'Display the time picker inline with the input. Do not require to click the input field to trigger the time picker.', 'meta-box-builder' ),
-			] ),
+			'inline_time'                  => Control::Toggle( 'inline', __( 'Display the time picker inline with the input', 'meta-box-builder' ), false, 'appearance' ),
 			'js_options_time'              => Control::KeyValue( 'js_options', [
-				'label'   => '<a href="http://trentrichardson.com/examples/timepicker" target="_blank" rel="nofollow noopenner">' . __( 'Time picker options', 'meta-box-builder' ) . '<a/>',
-				'tooltip' => __( 'jQueryUI time picker options', 'meta-box-builder' ),
-				'keys'    => [ 'controlType', 'timeFormat' ],
-				'values'  => [
+				'label'       => __( 'Time picker options', 'meta-box-builder' ),
+				// Translators: %s - URL to the time picker page.
+				'description' => sprintf( __( 'Custom options for the <a href="%s">jQueryUI time picker</a> library.', 'meta-box-builder' ), 'http://trentrichardson.com/examples/timepicker' ),
+				'keys'        => [ 'controlType', 'timeFormat' ],
+				'values'      => [
 					'controlType' => [ 'select', 'slider' ],
 					'timeFormat'  => [ 'HH:mm', 'HH:mm T' ],
 				],
-			] ),
+			], [], 'advanced' ),
 
 			// User.
 			'query_args_user'              => Control::KeyValue( 'query_args', [
