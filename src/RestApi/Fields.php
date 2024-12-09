@@ -397,7 +397,13 @@ class Fields extends Base {
 			'oembed'            => [
 				'title'       => __( 'oEmbed', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, $html5, [ 'not_available_string' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std', 'not_available_string' ] ),
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Input for media from Youtube, Vimeo, and all supported sites by WordPress', 'meta-box-builder' ),
 			],
 			'osm'               => [
@@ -414,7 +420,13 @@ class Fields extends Base {
 			'password'          => [
 				'title'       => __( 'Password', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, $html5, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std' ] ),
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'For entering a password', 'meta-box-builder' ),
 			],
 			'post'              => [

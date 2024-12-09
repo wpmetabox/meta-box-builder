@@ -453,8 +453,8 @@ class Registry {
 
 			// Oembed.
 			Control::Input( 'not_available_string', [
-				'label'   => __( 'Not available text', 'meta-box-builder' ),
-				'tooltip' => __( 'The text message displayed to users when the embed media is not available. Accepts HTML.', 'meta-box-builder' ),
+				'label'       => __( 'Not available text', 'meta-box-builder' ),
+				'description' => __( 'The text message displayed to users when the embed media is not available. Accepts HTML.', 'meta-box-builder' ),
 			] ),
 
 			// Post.
