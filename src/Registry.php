@@ -326,9 +326,9 @@ class Registry {
 
 			// Upload.
 			Control::Input( 'max_file_uploads', [
-				'type'    => 'number',
-				'label'   => __( 'Max number of files', 'meta-box-builder' ),
-				'tooltip' => __( 'Leave empty for unlimited uploads', 'meta-box-builder' ),
+				'type'        => 'number',
+				'label'       => __( 'Max number of files', 'meta-box-builder' ),
+				'description' => __( 'Leave empty for unlimited uploads.', 'meta-box-builder' ),
 			] ),
 			Control::Toggle( 'max_status', [
 				'label'   => __( 'Show status', 'meta-box-builder' ),
@@ -336,7 +336,7 @@ class Registry {
 			], true ),
 			Control::Toggle( 'force_delete', [
 				'label'   => __( 'Force delete', 'meta-box-builder' ),
-				'tooltip' => __( 'Delete files from the Media Library when deleting them from post meta', 'meta-box-builder' ),
+				'tooltip' => __( 'Delete files when deleting them from post meta', 'meta-box-builder' ),
 			] ),
 
 			// Field specific.
@@ -393,8 +393,8 @@ class Registry {
 
 			// File.
 			Control::Input( 'upload_dir', [
-				'label'   => __( 'Custom upload folder', 'meta-box-builder' ),
-				'tooltip' => __( 'Relatively to the WordPress root path', 'meta-box-builder' ),
+				'label'       => __( 'Custom upload folder', 'meta-box-builder' ),
+				'description' => __( 'Relatively to the WordPress root path.', 'meta-box-builder' ),
 			] ),
 
 			// File advanced.
@@ -405,8 +405,8 @@ class Registry {
 
 			// File upload.
 			Control::Input( 'max_file_size', [
-				'label'   => __( 'Max file size', 'meta-box-builder' ),
-				'tooltip' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
+				'label'       => __( 'Max file size', 'meta-box-builder' ),
+				'description' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
 			] ),
 
 			// Map.

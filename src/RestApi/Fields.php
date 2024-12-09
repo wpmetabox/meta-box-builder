@@ -238,25 +238,49 @@ class Fields extends Base {
 			'file'              => [
 				'title'       => __( 'File', 'meta-box-builder' ),
 				'category'    => 'upload',
-				'controls'    => array_merge( $general, [ 'max_file_uploads', 'force_delete', 'upload_dir', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'max_file_uploads', 'upload_dir', 'force_delete' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Simple file upload with default UI like <input type="file" />. Not recommended. Use File advanced instead.', 'meta-box-builder' ),
 			],
 			'file_advanced'     => [
 				'title'       => __( 'File Advanced', 'meta-box-builder' ),
 				'category'    => 'upload',
-				'controls'    => array_merge( $general, [ 'mime_type' ], $upload, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'max_file_uploads', 'mime_type', 'max_status', 'force_delete' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Multiple file uploads with WordPress media popup', 'meta-box-builder' ),
 			],
 			'file_input'        => [
 				'title'       => __( 'File Input', 'meta-box-builder' ),
 				'category'    => 'upload',
-				'controls'    => array_merge( $general, $html5, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std' ] ),
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'A text input for entering a file URL with the ability to select a file from the Media Library', 'meta-box-builder' ),
 			],
 			'file_upload'       => [
 				'title'       => __( 'File Upload', 'meta-box-builder' ),
 				'category'    => 'upload',
-				'controls'    => array_merge( $general, [ 'mime_type', 'max_file_size' ], $upload, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'max_file_uploads', 'max_file_size', 'mime_type', 'max_status', 'force_delete' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Multiple file uploads with a drag and drop area', 'meta-box-builder' ),
 			],
 			'map'               => [
