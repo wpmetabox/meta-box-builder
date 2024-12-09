@@ -1,5 +1,5 @@
 import { Button, Flex, Icon } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { category, code, copy } from '@wordpress/icons';
 import Fields from './Fields';
@@ -28,6 +28,11 @@ const MainInner = ( { fields, php, theme_code } ) => {
 		php: code,
 		theme_code: copy
 	};
+
+	useEffect( () => {
+		// Trigger 'resize' event on window to make the theme code tab render react-mirror2 component properly.
+		window.dispatchEvent( new Event( 'resize' ) );
+	}, [ area ] );
 
 	return (
 		<div className="mb-main">
