@@ -99,17 +99,8 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	if ( control.name === 'CloneSettings' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_settings', [ 'clone', 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ] );
 	}
-	if ( control.name === 'PrependAppend' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'prepend_append', [ 'prepend', 'append' ], '' );
-	}
 	if ( control.name === 'InputAttributes' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'disabled', 'readonly' ], false );
-	}
-	if ( control.name === 'TextareaSize' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'textarea_size', [ 'cols', 'rows' ], '' );
-	}
-	if ( control.name === 'MinMax' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'minmax', [ 'min', 'max' ], '' );
 	}
 	if ( control.name === 'InputGroup' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, control.setting, [ control.props.key1, control.props.key2 ], '' );

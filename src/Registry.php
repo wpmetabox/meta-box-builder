@@ -40,7 +40,13 @@ class Registry {
 			], '', 'appearance' ),
 			Control::Input( 'placeholder', __( 'Placeholder', 'meta-box-builder' ), '', 'appearance' ),
 			Control::Divider( 'appearance_divider', '', '', 'appearance' ),
-			Control::PrependAppend( 'prepend_append', __( 'Text wrap', 'meta-box-builder' ), '', 'appearance' ),
+			Control::InputGroup( 'prepend_append', [
+				'label'  => __( 'Text wrap', 'meta-box-builder' ),
+				'label1' => __( 'Prepend', 'meta-box-builder' ),
+				'label2' => __( 'Append', 'meta-box-builder' ),
+				'key1'   => 'prepend',
+				'key2'   => 'append',
+			], [ 'prepend' => '', 'append' => '' ], 'appearance' ),
 			Control::Input( 'class', [
 				'label'       => __( 'Custom CSS class', 'meta-box-builder' ),
 				'description' => __( 'Custom CSS class for the field wrapper div.', 'meta-box-builder' ),
@@ -442,7 +448,13 @@ class Registry {
 			Control::Input( 'placeholder_value', __( 'Placeholder for value', 'meta-box-builder' ), '', 'appearance' ),
 
 			// Number.
-			Control::MinMax( 'minmax', __( 'Limit', 'meta-box-builder' ) ),
+			Control::InputGroup( 'minmax', [
+				'label'  => __( 'Limit', 'meta-box-builder' ),
+				'label1' => __( 'Min', 'meta-box-builder' ),
+				'label2' => __( 'Max', 'meta-box-builder' ),
+				'key1'   => 'min',
+				'key2'   => 'max',
+			] ),
 			Control::Input( 'step', [
 				'label'       => __( 'Step', 'meta-box-builder' ),
 				'description' => __( "Set the increments at which a numeric value can be set. Enter 'any' to accept any number.", 'meta-box-builder' ),
@@ -700,8 +712,14 @@ class Registry {
 			] ),
 
 			// Textarea.
-			'std_textarea'                 => Control::Textarea( 'std', __( 'Default value', 'meta-box-builder' ) ),
-			Control::TextareaSize( 'textarea_size', __( 'Size', 'meta-box-builder' ), [ 'rowls' => '', 'cols' => '' ], 'appearance' ),
+			'std_textarea' => Control::Textarea( 'std', __( 'Default value', 'meta-box-builder' ) ),
+			Control::InputGroup( 'textarea_size', [
+				'label'  => __( 'Size', 'meta-box-builder' ),
+				'label1' => __( 'Rows', 'meta-box-builder' ),
+				'label2' => __( 'Columns', 'meta-box-builder' ),
+				'key1'   => 'rows',
+				'key2'   => 'cols',
+			], [ 'rowls' => '', 'cols' => '' ], 'appearance' ),
 
 			// Time.
 			'inline_time'                  => Control::Toggle( 'inline', [
