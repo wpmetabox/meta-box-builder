@@ -479,7 +479,13 @@ class Fields extends Base {
 			'select_advanced'   => [
 				'title'       => __( 'Select Advanced', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'options', 'std', 'placeholder', 'multiple', 'select_all_none' ], $input, [ 'js_options' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'options', 'std', 'multiple', 'js_options' ] ),
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Beautiful select dropdown using select2 library', 'meta-box-builder' ),
 			],
 			'sidebar'           => [

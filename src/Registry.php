@@ -568,9 +568,9 @@ class Registry {
 
 			// Select advanced.
 			'js_options_select_advanced'   => Control::KeyValue( 'js_options', [
-				'label'   => '<a href="https://select2.org/configuration/options-api" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
-				'keys'    => [
+				'label'       => __( 'Select2 options', 'meta-box-builder' ),
+				'description' => sprintf( __( 'Advanced options for the <a href="%s" target="_blank">select2</a> library.', 'meta-box-builder' ), 'https://select2.org/configuration/options-api' ),
+				'keys'        => [
 					'ajax',
 					'allowClear',
 					'closeOnSelect',
