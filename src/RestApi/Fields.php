@@ -491,13 +491,25 @@ class Fields extends Base {
 			'sidebar'           => [
 				'title'       => __( 'Sidebar', 'meta-box-builder' ),
 				'category'    => 'wordpress',
-				'controls'    => array_merge( $general, [ 'std', 'placeholder', 'field_type' ], $input, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std', 'field_type' ] ),
+					[ 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'For selecting sidebars', 'meta-box-builder' ),
 			],
 			'single_image'      => [
 				'title'       => __( 'Single Image', 'meta-box-builder' ),
 				'category'    => 'upload',
-				'controls'    => array_merge( $general, [ 'force_delete', 'image_size', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'force_delete', 'image_size' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Single image upload with WordPress media popup', 'meta-box-builder' ),
 			],
 			'slider'            => [
