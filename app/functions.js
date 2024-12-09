@@ -4,7 +4,7 @@ import slugify from "slugify";
 
 export const htmlDecode = innerHTML => Object.assign( document.createElement( 'textarea' ), { innerHTML } ).value;
 
-const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
+const ucfirst = string => string.length > 0 ? string[ 0 ].toUpperCase() + string.slice( 1 ) : string;
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
@@ -38,14 +38,7 @@ export const ensureArray = arr => {
 	return typeof arr === 'object' ? Object.values( arr ) : [ arr ];
 };
 
-export const getSettings = () => {
-	const urlParams = parseQueryString( window.location.search );
-	const settings = MbbApp.settings || {};
-
-	return { ...settings, ...urlParams.settings };
-};
-
-const parseQueryString = queryString => {
+export const parseQueryString = queryString => {
 	const params = new URLSearchParams( queryString );
 	return convert( params );
 };
@@ -100,10 +93,30 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 		defaultFallbackValue = getDefaultControlValue( control.name );
 	}
 
-	const key = bracketsToDots( name );
-	const defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
+	let key = bracketsToDots( name );
+	let defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
+
+	if ( control.name === 'CloneSettings' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_settings', [ 'clone', 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ] );
+	}
+	if ( control.name === 'InputAttributes' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'disabled', 'readonly' ], false );
+	}
+	if ( control.name === 'InputGroup' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, control.setting, [ control.props.key1, control.props.key2 ], '' );
+	}
 
 	return [ Control, input, defaultValue ];
+};
+
+const getFieldValueForCombinedControl = ( objectValue, name, inputName, params, defaultFallbackValue ) => {
+	let defaultValue = {};
+	params.forEach( param => {
+		const key = bracketsToDots( name.replace( inputName, param ) );
+		defaultValue[ param ] = dotProp.get( objectValue, key, defaultFallbackValue );
+	} );
+
+	return defaultValue;
 };
 
 const getDefaultControlValue = name => {

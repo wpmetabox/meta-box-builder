@@ -23,6 +23,11 @@
 	&--empty>.og-inserter {
 		padding-top: 0;
 	}
+
+	// Remove border bottom for the last subfield.
+	>.og-group-fields__inner>div>.og-item:last-child {
+		border-bottom: 0;
+	}
 }
 
 &-item--group {
@@ -54,63 +59,5 @@
 
 	&:hover {
 		color: inherit;
-	}
-}
-
-
-/************************************
- * Collapsed state
- ************************************/
-
-&-collapsible--collapsed {
-	>.og-group-fields {
-
-		// Show subfields (maybe) but hide the inserter button.
-		>.og-inserter,
-		// Hide the "Subfields" title.
-		>.og-group-fields__title,
-		// Hide the header bar.
-		>.og-group-fields__inner>.og-header {
-			display: none;
-		}
-
-		// Remove border bottom for the last subfield.
-		>.og-group-fields__inner>div>.og-item:last-child {
-			border-bottom: 0;
-		}
-	}
-
-	// Hide subfields.
-	&.og-item--hide-fields {
-		>.og-group-fields {
-			display: none;
-		}
-
-		// Remove border bottom for item header.
-		>.og-item__header {
-			border-bottom: 0;
-		}
-	}
-}
-
-/************************************
- * Expanded state:
- ************************************/
-
-&-collapsible--expanded {
-
-	// Hide toggle subfields button.
-	>.og-item__header .og-item__toggle {
-		display: none;
-	}
-
-	>.og-group-fields {
-		// Add right space to put the table inside the group's content.
-		padding-right: 36px;
-
-		// Re-add the right border.
-		&:not(.og-group-fields--empty)>.og-group-fields__inner {
-			border-right: var(--border-lighter);
-		}
 	}
 }

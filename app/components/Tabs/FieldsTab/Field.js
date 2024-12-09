@@ -1,7 +1,5 @@
-import { __ } from "@wordpress/i18n";
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import useApi from "../../../hooks/useApi";
-import Content from './Content';
+import FieldSettings from "../../Sidebar/FieldSettings";
 
 const Field = props => {
 	const fieldTypes = useApi( 'field-types', {} );
@@ -15,27 +13,8 @@ const Field = props => {
 	}
 
 	const controls = [ ...fieldTypes[ type ].controls ];
-	const general = controls.filter( control => control.tab === 'general' );
-	const advanced = controls.filter( control => control.tab === 'advanced' );
 
-	if ( advanced.length === 0 ) {
-		return <div className="og-item__body og-collapsible__body">
-			<Content { ...props } controls={ general } />
-		</div>;
-	}
-
-	return <Tabs forceRenderTabPanel={ true } className="og-item__body og-collapsible__body">
-		<TabList>
-			<Tab>{ __( 'General', 'meta-box-builder' ) }</Tab>
-			<Tab>{ __( 'Advanced', 'meta-box-builder' ) }</Tab>
-		</TabList>
-		<TabPanel>
-			<Content { ...props } controls={ general } />
-		</TabPanel>
-		<TabPanel>
-			<Content { ...props } controls={ advanced } />
-		</TabPanel>
-	</Tabs>;
+	return <FieldSettings controls={ controls } { ...props } />;
 };
 
 export default Field;

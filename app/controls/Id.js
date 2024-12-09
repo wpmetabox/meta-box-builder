@@ -21,11 +21,15 @@ const Id = ( { name, componentId, nameIdData, ...rest } ) => {
 	};
 
 	const checkDuplicateId = value => {
-		if ( ids[ value ] === undefined ) {
+		// Has a duplicate and not the current field
+		if ( ids[ value ] !== undefined && ids[ value ]?._id !== rest.fieldId ) {
+			setExistingFieldGroup( ids[ value ] );
+			setDuplicate( true );
 			return;
 		}
-		setExistingFieldGroup( ids[ value ] );
-		setDuplicate( true );
+
+		setExistingFieldGroup( {} );
+		setDuplicate( false );
 	};
 
 	useLayoutEffect( () => {
