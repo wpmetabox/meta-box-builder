@@ -4,10 +4,10 @@
 	border-radius: 6px;
 
 	&__header {
-		font-size: 16px;
 		font-weight: 600;
-		line-height: 1;
-		padding: 16px 12px;
+		padding-inline: 12px;
+		height: 48px;
+		box-sizing: border-box;
 		border-bottom: var(--border);
 	}
 }

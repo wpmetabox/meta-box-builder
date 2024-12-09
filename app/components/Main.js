@@ -1,7 +1,7 @@
+import { Button, Flex, Icon } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { category, code, copy } from '@wordpress/icons';
-import useMainArea from "../hooks/useMainArea";
-import Box from "./Box";
 import Form from './Form';
 import PHP from "./PHP";
 import ThemeCode from "./ThemeCode/ThemeCode";
@@ -15,7 +15,7 @@ const Main = () => (
 );
 
 const MainInner = ( { fields, php, theme_code } ) => {
-	const { area } = useMainArea();
+	const [ area, setArea ] = useState( 'fields' );
 
 	const titles = {
 		fields: __( 'Fields', 'meta-box-builder' ),
@@ -33,17 +33,30 @@ const MainInner = ( { fields, php, theme_code } ) => {
 		<div className="mb-main">
 			<div className="wp-header-end" />
 
-			<Box title={ titles[ area ] } icon={ icons[ area ] }>
-				<div className={ `mb-area ${ area === 'fields' ? 'mb-area--show' : '' }` }>
-					{ fields }
+			<div className="mb-box">
+				<Flex align="center" className="mb-box__header">
+					<Flex align="center" justify="flex-start" gap={ 1 } className="mb-box__title">
+						<Icon icon={ icons[ area ] } />
+						{ titles[ area ] }
+					</Flex>
+					<Flex expanded={ false } className="mb-box__actions">
+						<Button size="small" icon={ category } onClick={ () => setArea( 'fields' ) } label={ __( 'Show fields', 'meta-box-builder' ) } showTooltip={ true } />
+						<Button size="small" icon={ code } onClick={ () => setArea( 'php' ) } label={ __( 'Get PHP code to register fields', 'meta-box-builder' ) } showTooltip={ true } />
+						<Button size="small" icon={ copy } onClick={ () => setArea( 'theme_code' ) } label={ __( 'Generate ready-to-copy PHP code to show fields', 'meta-box-builder' ) } showTooltip={ true } />
+					</Flex>
+				</Flex>
+				<div className="mb-box__body">
+					<div className={ `mb-area ${ area === 'fields' ? 'mb-area--show' : '' }` }>
+						{ fields }
+					</div>
+					<div className={ `mb-area ${ area === 'php' ? 'mb-area--show' : '' }` }>
+						{ php }
+					</div>
+					<div className={ `mb-area ${ area === 'theme_code' ? 'mb-area--show' : '' }` }>
+						{ theme_code }
+					</div>
 				</div>
-				<div className={ `mb-area ${ area === 'php' ? 'mb-area--show' : '' }` }>
-					{ php }
-				</div>
-				<div className={ `mb-area ${ area === 'theme_code' ? 'mb-area--show' : '' }` }>
-					{ theme_code }
-				</div>
-			</Box>
+			</div>
 		</div>
 	);
 };
