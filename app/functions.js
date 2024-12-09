@@ -102,9 +102,6 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	if ( control.name === 'PrependAppend' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'prepend_append', [ 'prepend', 'append' ], '' );
 	}
-	if ( control.name === 'PrefixSuffix' ) {
-		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'prefix_suffix', [ 'prefix', 'suffix' ], '' );
-	}
 	if ( control.name === 'InputAttributes' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'disabled', 'readonly' ], false );
 	}

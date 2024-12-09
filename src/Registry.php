@@ -652,7 +652,13 @@ class Registry {
 			] ),
 
 			// Slider.
-			Control::PrefixSuffix( 'prefix_suffix', __( 'Text wrap', 'meta-box-builder' ), [], 'appearance' ),
+			Control::InputGroup( 'prefix_suffix', [
+				'label'  => __( 'Text wrap', 'meta-box-builder' ),
+				'label1' => __( 'Prefix', 'meta-box-builder' ),
+				'label2' => __( 'Suffix', 'meta-box-builder' ),
+				'key1'   => 'prefix',
+				'key2'   => 'suffix',
+			], ['prefix' => '', 'suffix' => ''], 'appearance' ),
 			'js_options_slider' => Control::KeyValue( 'js_options', [
 				'label'       => __( 'Slider options', 'meta-box-builder' ),
 				'description' => sprintf( __( 'Custom options for the <a href="%s" target="_blank">jQueryUI slider</a>.', 'meta-box-builder' ), 'https://api.jqueryui.com/slider' ),
