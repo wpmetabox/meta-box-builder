@@ -150,11 +150,16 @@
 	margin-inline: auto;
 }
 
-// Tabs in the main content area
-.mb-tabs {
-	background: #fff;
-	border: 1px solid #e0e0e0;
-	border-radius: 6px;
+.mb-area {
+	display: none;
+
+	&--show {
+		display: block;
+	}
+
+	&--padding {
+		padding: 32px;
+	}
 }
 
 // Sidebar panel
@@ -183,21 +188,5 @@
 		right: 0;
 		width: var(--sidebar-width);
 		overflow-y: auto;
-	}
-}
-
-// Box
-.mb-box {
-	background: #fff;
-	border: 1px solid #e0e0e0;
-	border-radius: 6px;
-	margin-top: 24px;
-
-	&__header {
-		font-size: 16px;
-		font-weight: 600;
-		line-height: 1;
-		padding: 16px 12px;
-		border-bottom: var(--border);
 	}
 }

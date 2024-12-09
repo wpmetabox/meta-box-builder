@@ -1,10 +1,11 @@
 &-theme-code {
+
 	&__intro,
 	&__none {
 		padding-inline: 12px;
 	}
 
-	&__intro > div,
+	&__intro>div,
 	&__none {
 		margin: 1em 0;
 	}
@@ -42,11 +43,13 @@
 	}
 
 	&__body {
-		padding: 12px;
-
 		.og-result__body {
 			position: sticky;
-			top: 48px;
+			top: -48px;
 		}
+	}
+
+	.react-codemirror2 {
+		border-width: 0 0 1px;
 	}
 }

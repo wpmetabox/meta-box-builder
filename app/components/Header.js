@@ -1,7 +1,7 @@
 import { Button, Flex, Tooltip } from '@wordpress/components';
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { cog, plusCircle } from "@wordpress/icons";
+import { drawerRight, plusCircle } from "@wordpress/icons";
 import AutosizeInput from 'react-input-autosize';
 import { sanitizeId } from '../functions';
 import useSidebarPanel from '../hooks/useSidebarPanel';
@@ -64,7 +64,7 @@ const Header = () => {
 			<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
 				<input type="submit" data-status="draft" className="components-button is-compact is-tertiary" value={ MbbApp.status == 'publish' ? __( 'Switch to draft', 'meta-box-builder' ) : __( 'Save draft', 'meta-box-builder' ) } />
 				<Button onClick={ () => setSidebarPanel( 'add_field' ) } className="is-compact" icon={ plusCircle } size="compact" label={ __( 'Add a new field', 'meta-box-builder' ) } showTooltip={ true } isPressed={ sidebarPanel === 'add_field' } />
-				<Button onClick={ () => setSidebarPanel( 'field_group_settings' ) } className="is-compact" icon={ cog } size="compact" label={ __( 'Edit field group settings', 'meta-box-builder' ) } showTooltip={ true } isPressed={ sidebarPanel === 'field_group_settings' } />
+				<Button onClick={ () => setSidebarPanel( 'field_group_settings' ) } className="is-compact" icon={ drawerRight } size="compact" label={ __( 'Edit field group settings', 'meta-box-builder' ) } showTooltip={ true } isPressed={ sidebarPanel === 'field_group_settings' } />
 				<input type="submit" data-status="publish" className="components-button is-primary" value={ MbbApp.status == 'publish' ? __( 'Update', 'meta-box-builder' ) : __( 'Publish', 'meta-box-builder' ) } />
 			</Flex>
 		</Flex>

@@ -1,20 +1,20 @@
 import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
-import useApi from "../../hooks/useApi";
-import useFields from "../../hooks/useFields";
-import Header from "./FieldsTab/Header";
-import { Inserter } from './FieldsTab/Inserter';
-import Node from './FieldsTab/Node';
+import useApi from "../hooks/useApi";
+import useFields from "../hooks/useFields";
+import Header from "./Tabs/FieldsTab/Header";
+import { Inserter } from './Tabs/FieldsTab/Inserter';
+import Node from './Tabs/FieldsTab/Node';
 
-const Fields = prop => {
+const Fields = () => {
 	const {
 		fields,
 		add,
 		remove,
 		duplicate,
 		setFields,
-	} = useFields( prop.fields.filter( field => field.type ), 'fields' );
+	} = useFields( MbbApp.fields.filter( field => field.type ), 'fields' );
 
 	// Don't render any field if fields data is not available.
 	const types = useApi( 'field-types', {} );

@@ -1,0 +1,13 @@
+.mb-box {
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+
+	&__header {
+		font-weight: 600;
+		padding-inline: 12px 20px;
+		height: 48px;
+		box-sizing: border-box;
+		border-bottom: var(--border);
+	}
+}
