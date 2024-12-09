@@ -246,10 +246,7 @@ class Registry {
 					'radio_list'      => __( 'Radio list', 'meta-box-builder' ),
 				],
 			], 'select_advanced' ),
-			Control::Toggle( 'add_new', [
-				'label'   => __( 'Add new', 'meta-box-builder' ),
-				'tooltip' => __( 'Allow users to create a new item', 'meta-box-builder' ),
-			] ),
+			Control::Toggle( 'add_new', __( 'Allow to create a new item', 'meta-box-builder' ) ),
 			Control::Toggle( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
 			Control::Toggle( 'multiple', __( 'Allow to select multiple choices', 'meta-box-builder' ) ),
 			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ), false, 'appearance' ),
@@ -468,9 +465,9 @@ class Registry {
 				'tooltip' => __( 'Set the selected post as the parent of current post being edited.', 'meta-box-builder' ),
 			] ),
 			'query_args_post'              => Control::KeyValue( 'query_args', [
-				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Query arguments for getting posts. Same as in the WP_Query class.', 'meta-box-builder' ),
-				'keys'    => [
+				'label'       => __( 'Query args', 'meta-box-builder' ),
+				'description' => sprintf( __( 'Query arguments for getting posts. Same as in the <a href="%s" target="_blank">WP_Query</a> class.', 'meta-box-builder' ), 'https://developer.wordpress.org/reference/classes/wp_query/' ),
+				'keys'        => [
 					'author',
 					'author_name',
 					'author__in',

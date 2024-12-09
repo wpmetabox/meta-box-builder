@@ -77,7 +77,6 @@ class Fields extends Base {
 		$clone    = [ 'clone_settings' ];
 		$date     = [ 'std', 'placeholder', 'size', 'save_format', 'timestamp', 'inline', 'input_attributes', 'js_options' ];
 		$taxonomy = [ 'taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args' ];
-		$post     = [ 'post_type', 'field_type', 'add_new', 'multiple', 'select_all_none', 'parent', 'required', 'placeholder', 'query_args' ];
 		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];
 		$upload   = [ 'max_file_uploads', 'max_status', 'force_delete', 'required' ];
 		$input    = [ 'input_attributes' ];
@@ -432,7 +431,13 @@ class Fields extends Base {
 			'post'              => [
 				'title'       => __( 'Post', 'meta-box-builder' ),
 				'category'    => 'wordpress',
-				'controls'    => array_merge( $general, $post, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'post_type', 'field_type', 'add_new', 'multiple', 'parent', 'query_args' ] ),
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'For selecting posts', 'meta-box-builder' ),
 			],
 			'radio'             => [
