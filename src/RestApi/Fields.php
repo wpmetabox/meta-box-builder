@@ -226,7 +226,13 @@ class Fields extends Base {
 			'fieldset_text'     => [
 				'title'       => __( 'Fieldset Text', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'options', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'options' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Group of text inputs. Not recommended. Use the Group field type instead.', 'meta-box-builder' ),
 			],
 			'file'              => [
