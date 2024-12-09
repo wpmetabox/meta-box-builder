@@ -638,7 +638,7 @@ class Registry {
 					'scrollAfterSelect' => [ 'true', 'false' ],
 				],
 			] ),
-			Control::Select( 'icon_set', [
+			Control::Radio( 'icon_set', [
 				'label'   => __( 'Icon set', 'meta-box-builder' ),
 				'options' => [
 					'font-awesome-free' => __( 'Font Awesome Free', 'meta-box-builder' ),
@@ -647,21 +647,21 @@ class Registry {
 				],
 			], 'font-awesome-free' ),
 			Control::Input( 'icon_file', [
-				'type'       => 'text',
-				'label'      => __( 'Icon file', 'meta-box-builder' ),
-				'tooltip'    => __( 'The full path to the icon file definition, which can be a text or JSON file.', 'meta-box-builder' ),
-				'dependency' => 'icon_set:[font-awesome-pro,custom]',
+				'type'        => 'text',
+				'label'       => __( 'Icon file', 'meta-box-builder' ),
+				'description' => __( 'The full path to the icon file definition, which can be a text or JSON file.', 'meta-box-builder' ),
+				'dependency'  => 'icon_set:[font-awesome-pro,custom]',
 			] ),
 			Control::Input( 'icon_dir', [
-				'type'       => 'text',
-				'label'      => __( 'Icon dir', 'meta-box-builder' ),
-				'tooltip'    => __( 'Full path to the folder that contains all SVGs of icons.', 'meta-box-builder' ),
-				'dependency' => 'icon_set:custom',
+				'type'        => 'text',
+				'label'       => __( 'Icon dir', 'meta-box-builder' ),
+				'description' => __( 'Full path to the folder that contains all SVGs of icons.', 'meta-box-builder' ),
+				'dependency'  => 'icon_set:custom',
 			] ),
 			Control::Input( 'icon_css', [
-				'label'      => __( 'Icon CSS', 'meta-box-builder' ),
-				'tooltip'    => __( 'URL to the icon CSS file. It\'s required only when you use icons as an icon font (e.g. no SVG).', 'meta-box-builder' ),
-				'dependency' => 'icon_set:custom',
+				'label'       => __( 'Icon CSS URL', 'meta-box-builder' ),
+				'description' => __( 'Required only when you use icons as an icon font (e.g. no SVG).', 'meta-box-builder' ),
+				'dependency'  => 'icon_set:custom',
 			] ),
 
 			// Slider.

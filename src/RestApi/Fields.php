@@ -315,7 +315,12 @@ class Fields extends Base {
 			'icon'              => [
 				'title'       => __( 'Icon', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'std', 'placeholder' ], $input, $clone, $advanced, $icon ),
+				'controls'    => array_merge(
+					['required', 'clone_settings'],
+					array_merge( $general_tab, ['std', 'icon_set', 'icon_file', 'icon_dir', 'icon_css' ] ),
+					[ 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					$advanced_tab
+				),
 				'description' => __( 'Icon with FontAwesome set', 'meta-box-builder' ),
 			],
 			'image'             => [
