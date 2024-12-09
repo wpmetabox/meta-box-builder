@@ -286,7 +286,12 @@ class Fields extends Base {
 			'map'               => [
 				'title'       => __( 'Google Maps', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'api_key' ], $map, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std', 'address_field', 'language', 'region' ] ),
+					$appearance_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Google Maps', 'meta-box-builder' ),
 			],
 			'heading'           => [
@@ -352,7 +357,12 @@ class Fields extends Base {
 			'osm'               => [
 				'title'       => __( 'Open Street Maps', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, $map, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std', 'address_field', 'language', 'region' ] ),
+					$appearance_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Open Street Maps', 'meta-box-builder' ),
 			],
 			'password'          => [

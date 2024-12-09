@@ -207,12 +207,16 @@ class Registry {
 
 			// Map.
 			'std_map'                      => Control::Input( 'std', [
-				'label'   => __( 'Default location', 'meta-box-builder' ),
-				'tooltip' => __( 'Format: latitude,longitude.', 'meta-box-builder' ),
+				'label'       => __( 'Default location', 'meta-box-builder' ),
+				'description' => __( 'Format: latitude,longitude.', 'meta-box-builder' ),
+			] ),
+			'std_osm'                      => Control::Input( 'std', [
+				'label'       => __( 'Default location', 'meta-box-builder' ),
+				'description' => __( 'Format: latitude,longitude.', 'meta-box-builder' ),
 			] ),
 			Control::AddressField( 'address_field', [
 				'label'       => __( 'Address field', 'meta-box-builder' ),
-				'tooltip'     => __( 'The ID of address field. For multiple fields, separate them by comma.', 'meta-box-builder' ),
+				'description' => __( 'The ID of the address field. For multiple fields, separate them by comma.', 'meta-box-builder' ),
 				'placeholder' => __( 'Enter or select a field ID', 'meta-box-builder' ),
 				'required'    => true,
 			] ),
