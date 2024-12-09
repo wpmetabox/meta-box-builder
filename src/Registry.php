@@ -441,21 +441,14 @@ class Registry {
 			], 'end' ),
 
 			// Key value.
-			Control::Input( 'placeholder_key', __( 'Placeholder for key', 'meta-box-builder' ) ),
-			Control::Input( 'placeholder_value', __( 'Placeholder for value', 'meta-box-builder' ) ),
+			Control::Input( 'placeholder_key', __( 'Placeholder for key', 'meta-box-builder' ), '', 'appearance' ),
+			Control::Input( 'placeholder_value', __( 'Placeholder for value', 'meta-box-builder' ), '', 'appearance' ),
 
 			// Number.
-			Control::Input( 'min', [
-				'type'  => 'number',
-				'label' => __( 'Min value', 'meta-box-builder' ),
-			] ),
-			Control::Input( 'max', [
-				'type'  => 'number',
-				'label' => __( 'Max value', 'meta-box-builder' ),
-			] ),
+			Control::MinMax( 'minmax', __( 'Limit', 'meta-box-builder' ) ),
 			Control::Input( 'step', [
-				'label'   => __( 'Step', 'meta-box-builder' ),
-				'tooltip' => __( "Set the increments at which a numeric value can be set. Enter 'any' to accept any number.", 'meta-box-builder' ),
+				'label'       => __( 'Step', 'meta-box-builder' ),
+				'description' => __( "Set the increments at which a numeric value can be set. Enter 'any' to accept any number.", 'meta-box-builder' ),
 			] ),
 
 			// Oembed.

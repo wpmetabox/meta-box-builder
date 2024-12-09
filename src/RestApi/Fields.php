@@ -373,13 +373,25 @@ class Fields extends Base {
 			'key_value'         => [
 				'title'       => __( 'Key Value', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'placeholder_key', 'placeholder_value', 'required' ], $advanced ),
+				'controls'    => array_merge(
+					[ 'required' ],
+					$general_tab,
+					[ 'label_description', 'desc', 'placeholder_key', 'placeholder_value', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Add an unlimited group of key-value pairs', 'meta-box-builder' ),
 			],
 			'number'            => [
 				'title'       => __( 'Number', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, [ 'min', 'max', 'step' ], $html5, [ 'prepend_append' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'minmax', 'step', 'std' ] ),
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'For entering a number with browser validation', 'meta-box-builder' ),
 			],
 			'oembed'            => [

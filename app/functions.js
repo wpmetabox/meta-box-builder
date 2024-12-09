@@ -108,6 +108,9 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	if ( control.name === 'TextareaSize' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'textarea_size', [ 'cols', 'rows' ], '' );
 	}
+	if ( control.name === 'MinMax' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'minmax', [ 'min', 'max' ], '' );
+	}
 
 	return [ Control, input, defaultValue ];
 };
