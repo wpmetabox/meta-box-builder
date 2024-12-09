@@ -664,16 +664,21 @@ class Registry {
 			] ),
 
 			// Switch.
-			Control::Select( 'style', [
+			Control::ToggleGroup( 'style', [
 				'label'   => __( 'Style', 'meta-box-builder' ),
 				'options' => [
 					'rounded' => __( 'Rounded', 'meta-box-builder' ),
 					'square'  => __( 'Square', 'meta-box-builder' ),
 				],
-			], 'rounded' ),
-			Control::Input( 'on_label', __( 'Custom ON status label', 'meta-box-builder' ) ),
-			Control::Input( 'off_label', __( 'Custom OFF status label', 'meta-box-builder' ) ),
-			'std_switch'                   => Control::Toggle( 'std', __( 'ON by default', 'meta-box-builder' ) ),
+			], 'rounded', 'appearance' ),
+			Control::InputGroup( 'on_off', [
+				'label'  => __( 'Labels', 'meta-box-builder' ),
+				'label1' => __( 'ON', 'meta-box-builder' ),
+				'label2' => __( 'OFF', 'meta-box-builder' ),
+				'key1'   => 'on_label',
+				'key2'   => 'off_label',
+			], [ 'on_label' => '', 'off_label' => '' ], 'appearance' ),
+			'std_switch' => Control::Toggle( 'std', __( 'ON by default', 'meta-box-builder' ) ),
 
 			// Text.
 			Control::Textarea( 'datalist_choices', [

@@ -526,7 +526,13 @@ class Fields extends Base {
 			'switch'            => [
 				'title'       => __( 'Switch', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'style', 'on_label', 'off_label', 'std', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required' ],
+					array_merge( $general_tab, [ 'std' ] ),
+					[ 'label_description', 'desc', 'style', 'on_off', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'On/off switch with iOS style', 'meta-box-builder' ),
 			],
 			'taxonomy'          => [

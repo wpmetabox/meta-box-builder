@@ -114,6 +114,9 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 	if ( control.name === 'MinMax' ) {
 		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'minmax', [ 'min', 'max' ], '' );
 	}
+	if ( control.name === 'InputGroup' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, control.setting, [ control.props.key1, control.props.key2 ], '' );
+	}
 
 	return [ Control, input, defaultValue ];
 };
