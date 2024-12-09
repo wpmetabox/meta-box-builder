@@ -4,12 +4,11 @@ import { htmlDecode } from "../../functions";
 import useApi from "../../hooks/useApi";
 import useFieldIds from "../../hooks/useFieldIds";
 import useSettings from "../../hooks/useSettings";
-import Box from "../Box";
 import Content from "./Content";
 
 const $ = jQuery;
 
-const ThemeCode = ( { show } ) => {
+const ThemeCode = () => {
 	const fieldIds = useFieldIds( state => state.ids );
 	const { settings, getObjectType } = useSettings();
 	const [ tab, setTab ] = useState( 0 );
@@ -26,7 +25,7 @@ const ThemeCode = ( { show } ) => {
 	}
 
 	return (
-		<Box show={ show } title={ __( "Theme code", "meta-box-builder" ) }>
+		<>
 			<div className="og-theme-code__intro">
 				<RawHTML>{ sprintf( __( 'Below is the auto-generated code to <a href="%s">display fields\' values</a> that you can use in your theme. We display several ways to output the fields\' values if possible, so choose which one is best for you.', 'meta-box-builder' ), 'https://docs.metabox.io/displaying-fields-with-code/' ) }</RawHTML>
 				<RawHTML className="og-theme-code__note">{ sprintf( __( 'Please use this code as a starting point and modify it to fit your needs. For more details about fields, please refer to the <a href="%s">documentation</a>.', 'meta-box-builder' ), 'https://docs.metabox.io/fields/' ) }</RawHTML>
@@ -60,7 +59,7 @@ const ThemeCode = ( { show } ) => {
 						</>
 				}
 			</div>
-		</Box>
+		</>
 	);
 };
 

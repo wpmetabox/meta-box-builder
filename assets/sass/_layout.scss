@@ -150,11 +150,12 @@
 	margin-inline: auto;
 }
 
-// Tabs in the main content area
-.mb-tabs {
-	background: #fff;
-	border: 1px solid #e0e0e0;
-	border-radius: 6px;
+.mb-area {
+	display: none;
+
+	&--show {
+		display: block;
+	}
 }
 
 // Sidebar panel

@@ -3,10 +3,9 @@ import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import useSettings from "../hooks/useSettings";
-import Box from "./Box";
 import Input from '/controls/Input';
 
-const PHP = ( { show } ) => {
+const PHP = () => {
 	const { getSetting } = useSettings();
 
 	const [ data, setData ] = useState( '' );
@@ -40,7 +39,7 @@ const PHP = ( { show } ) => {
 	};
 
 	return (
-		<Box show={ show } title={ __( 'PHP Code', 'meta-box-builder' ) }>
+		<>
 			<Input
 				name="settings[text_domain]"
 				label={ __( 'Text domain', 'meta-box-builder' ) }
@@ -75,7 +74,7 @@ const PHP = ( { show } ) => {
 					</div>
 				</div>
 			}
-		</Box>
+		</>
 	);
 };
 
