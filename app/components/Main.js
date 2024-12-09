@@ -52,7 +52,7 @@ const MainInner = ( { fields, php, theme_code } ) => {
 					<div className={ `mb-area mb-area--padding ${ area === 'php' ? 'mb-area--show' : '' }` }>
 						{ php }
 					</div>
-					<div className={ `mb-area ${ area === 'theme_code' ? 'mb-area--show' : '' }` }>
+					<div className={ `mb-area og-theme-code ${ area === 'theme_code' ? 'mb-area--show' : '' }` }>
 						{ theme_code }
 					</div>
 				</div>

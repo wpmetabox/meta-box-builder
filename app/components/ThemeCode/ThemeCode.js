@@ -15,7 +15,7 @@ const ThemeCode = () => {
 
 	// Generate Code
 	const themeCode = useApi( [ 'theme-code-generate', {
-		fields: Object.values( MbbApp.fields ).filter( field => ![ 'button', 'custom_html', 'divider', 'heading', 'tab' ].includes( field.type ) ),
+		fields: Object.values( MbbApp.fields ).filter( field => ![ 'button', 'custom_html', 'divider', 'heading', 'hidden', 'tab' ].includes( field.type ) ),
 		settings
 	}, 'POST' ] );
 
