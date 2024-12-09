@@ -408,10 +408,7 @@ class Registry {
 			] ),
 
 			// File upload.
-			Control::Input( 'max_file_size', [
-				'label'       => __( 'Max file size', 'meta-box-builder' ),
-				'description' => __( 'Supports b, kb, mb, gb, tb suffixes. e.g. "10mb" or "1gb".', 'meta-box-builder' ),
-			] ),
+			Control::FileSize( 'max_file_size', __( 'Max file size', 'meta-box-builder' ) ),
 
 			// Map.
 			Control::Input( 'api_key', [

@@ -56,8 +56,15 @@
 		line-height: 1;
 	}
 
-	& + .og-input-group {
+	&+.og-input-group {
 		margin-top: 8px;
+	}
+
+	// Special case for text limit & max file size
+	&--small {
+		input[type="number"] {
+			width: 6em;
+		}
 	}
 }
 
@@ -111,12 +118,5 @@
 		font-size: 12px;
 		color: var(--color-light);
 		line-height: 1;
-	}
-}
-
-// Special case for text limit
-&-text-limit {
-	input[type="number"] {
-		width: 6em;
 	}
 }

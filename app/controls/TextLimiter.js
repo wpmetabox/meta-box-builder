@@ -2,8 +2,8 @@ import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
 
 const TextLimiter = ( { defaultValue, componentId, name, ...rest } ) => (
-	<DivRow className="og-text-limit" htmlFor={ componentId } { ...rest }>
-		<div className="og-input-group">
+	<DivRow htmlFor={ componentId } { ...rest }>
+		<div className="og-input-group og-input-group--small">
 			<input
 				type="number"
 				min="0"
