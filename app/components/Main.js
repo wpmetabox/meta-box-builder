@@ -2,13 +2,13 @@ import { Button, Flex, Icon } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { category, code, copy } from '@wordpress/icons';
-import Form from './Form';
+import Fields from './Fields';
 import PHP from "./PHP";
 import ThemeCode from "./ThemeCode/ThemeCode";
 
 const Main = () => (
 	<MainInner
-		fields={ <Form /> }
+		fields={ <Fields /> }
 		php={ <PHP /> }
 		theme_code={ <ThemeCode /> }
 	/>
