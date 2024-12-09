@@ -214,7 +214,13 @@ class Fields extends Base {
 			'email'             => [
 				'title'       => __( 'Email', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, [ 'prepend_append' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std' ] ),
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'For entering an email address with browser validation', 'meta-box-builder' ),
 			],
 			'fieldset_text'     => [
