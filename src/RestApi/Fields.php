@@ -538,13 +538,25 @@ class Fields extends Base {
 			'taxonomy'          => [
 				'title'       => __( 'Taxonomy', 'meta-box-builder' ),
 				'category'    => 'wordpress',
-				'controls'    => array_merge( $general, $taxonomy, $advanced ),
+				'controls'    => array_merge(
+					[ 'required' ],
+					array_merge( $general_tab, [ 'taxonomy', 'field_type', 'add_new', 'remove_default', 'multiple', 'query_args' ] ),
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'For selecting taxonomy terms. Doesn\'t save term IDs in post meta, but set post terms.', 'meta-box-builder' ),
 			],
 			'taxonomy_advanced' => [
 				'title'       => __( 'Taxonomy Advanced', 'meta-box-builder' ),
 				'category'    => 'wordpress',
-				'controls'    => array_merge( $general, $taxonomy, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'taxonomy', 'field_type', 'add_new', 'remove_default', 'multiple', 'query_args' ] ),
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'For selecting taxonomy terms and saving term IDs in post meta as a comma-separated string. It doesn\'t set post terms.', 'meta-box-builder' ),
 			],
 			'text'              => [

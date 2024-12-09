@@ -257,9 +257,10 @@ class Registry {
 			Control::Toggle( 'multiple', __( 'Allow to select multiple choices', 'meta-box-builder' ) ),
 			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ), false, 'appearance' ),
 			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
-				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
-				'keys'    => [
+				'label'       => __( 'Query args', 'meta-box-builder' ),
+				// Translators: %s - URL to the get_terms() docs.
+				'description' => sprintf( __( 'Query arguments for getting terms. Same as in the <a href="%s" target="_blank">get_terms()</a> function.', 'meta-box-builder' ), 'https://developer.wordpress.org/reference/classes/wp_term_query/__construct/' ),
+				'keys'        => [
 					'object_ids',
 					'orderby',
 					'order',
@@ -294,8 +295,9 @@ class Registry {
 				],
 			] ),
 			'query_args_taxonomy_advanced' => Control::KeyValue( 'query_args', [
-				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_term_query/__construct/" target="_blank" rel="nofollow noreferrer">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Query arguments for getting terms. Same as in the get_terms() function.', 'meta-box-builder' ),
+				'label'       => __( 'Query args', 'meta-box-builder' ),
+				// Translators: %s - URL to the get_terms() docs.
+				'description' => sprintf( __( 'Query arguments for getting terms. Same as in the <a href="%s" target="_blank">get_terms()</a> function.', 'meta-box-builder' ), 'https://developer.wordpress.org/reference/classes/wp_term_query/__construct/' ),
 				'keys'    => [
 					'object_ids',
 					'orderby',
