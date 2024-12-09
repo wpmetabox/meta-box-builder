@@ -455,7 +455,13 @@ class Fields extends Base {
 			'range'             => [
 				'title'       => __( 'Range', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, [ 'std', 'min', 'max', 'step' ], $input, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'minmax', 'step', 'std' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'A slider for selecting a number', 'meta-box-builder' ),
 			],
 			'select'            => [
