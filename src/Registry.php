@@ -652,19 +652,12 @@ class Registry {
 			] ),
 
 			// Slider.
-			Control::Input( 'prefix', [
-				'label'   => __( 'Prefix', 'meta-box-builder' ),
-				'tooltip' => __( 'Text displayed before the field value', 'meta-box-builder' ),
-			] ),
-			Control::Input( 'suffix', [
-				'label'   => __( 'Suffix', 'meta-box-builder' ),
-				'tooltip' => __( 'Text displayed after the field value', 'meta-box-builder' ),
-			] ),
-			'js_options_slider'            => Control::KeyValue( 'js_options', [
-				'label'   => '<a href="https://api.jqueryui.com/slider" target="_blank" rel="nofollow noopenner">' . __( 'Slider options', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'jQueryUI slider options', 'meta-box-builder' ),
-				'keys'    => [ 'animate', 'max', 'min', 'orientation', 'step' ],
-				'values'  => [
+			Control::PrefixSuffix( 'prefix_suffix', __( 'Text wrap', 'meta-box-builder' ), [], 'appearance' ),
+			'js_options_slider' => Control::KeyValue( 'js_options', [
+				'label'       => __( 'Slider options', 'meta-box-builder' ),
+				'description' => sprintf( __( 'Custom options for the <a href="%s" target="_blank">jQueryUI slider</a>.', 'meta-box-builder' ), 'https://api.jqueryui.com/slider' ),
+				'keys'        => [ 'animate', 'max', 'min', 'orientation', 'step' ],
+				'values'      => [
 					'orientation' => [ 'horizontal', 'vertical' ],
 					'animate'     => [ 'true', 'false', 'fast', 'slow' ],
 				],

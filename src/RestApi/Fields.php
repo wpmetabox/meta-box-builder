@@ -79,7 +79,6 @@ class Fields extends Base {
 		$taxonomy = [ 'taxonomy', 'field_type', 'placeholder', 'add_new', 'remove_default', 'multiple', 'select_all_none', 'required', 'query_args' ];
 		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];
 		$upload   = [ 'max_file_uploads', 'max_status', 'force_delete', 'required' ];
-		$input    = [ 'input_attributes' ];
 		$html5    = [ 'std', 'placeholder', 'size', 'input_attributes' ];
 
 		$general_tab    = [ 'name', 'id' ];
@@ -515,7 +514,13 @@ class Fields extends Base {
 			'slider'            => [
 				'title'       => __( 'jQuery UI Slider', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'std', 'prefix', 'suffix', 'required', 'js_options' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std', 'js_options' ] ),
+					[ 'label_description', 'desc', 'prefix_suffix', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'jQuery UI slider', 'meta-box-builder' ),
 			],
 			'switch'            => [
