@@ -385,7 +385,7 @@ class Registry {
 				'values'      => [
 					'mode' => [ 'hsl', 'hsv' ],
 				],
-			] ),
+			], [], 'advanced' ),
 
 			// Custom HTML.
 			'std_custom_html'              => Control::Textarea( 'std', __( 'Content (HTML allowed)', 'meta-box-builder' ) ),
@@ -608,37 +608,9 @@ class Registry {
 					'disabled'          => [ 'true', 'false' ],
 					'scrollAfterSelect' => [ 'true', 'false' ],
 				],
-			] ),
+			], [], 'advanced' ),
 
 			// Icon.
-			'js_options_icon'              => Control::KeyValue( 'js_options', [
-				'label'   => '<a href="https://select2.org/configuration/options-api" target="_blank" rel="nofollow noopenner">' . __( 'Select2 options', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Select2 options', 'meta-box-builder' ),
-				'keys'    => [
-					'ajax',
-					'allowClear',
-					'closeOnSelect',
-					'dir',
-					'disabled',
-					'dropdownAutoWidth',
-					'dropdownCssClass',
-					'language',
-					'maximumInputLength',
-					'maximumSelectionLength',
-					'minimumInputLength',
-					'minimumResultsForSearch',
-					'scrollAfterSelect',
-					'selectionCssClass',
-					'selectOnClose',
-					'width',
-				],
-				'values'  => [
-					'allowClear'        => [ 'true', 'false' ],
-					'closeOnSelect'     => [ 'true', 'false' ],
-					'disabled'          => [ 'true', 'false' ],
-					'scrollAfterSelect' => [ 'true', 'false' ],
-				],
-			] ),
 			Control::Radio( 'icon_set', [
 				'label'   => __( 'Icon set', 'meta-box-builder' ),
 				'options' => [
@@ -681,7 +653,7 @@ class Registry {
 					'orientation' => [ 'horizontal', 'vertical' ],
 					'animate'     => [ 'true', 'false', 'fast', 'slow' ],
 				],
-			] ),
+			], [], 'advanced' ),
 
 			// Switch.
 			Control::ToggleGroup( 'style', [
@@ -728,7 +700,7 @@ class Registry {
 			'js_options_time'              => Control::KeyValue( 'js_options', [
 				'label'       => __( 'Time picker options', 'meta-box-builder' ),
 				// Translators: %s - URL to the time picker page.
-				'description' => sprintf( __( 'Custom options for the <a href="%s">jQueryUI time picker</a> library.', 'meta-box-builder' ), 'http://trentrichardson.com/examples/timepicker' ),
+				'description' => sprintf( __( 'Custom options for the <a href="%s" target="_blank">jQueryUI time picker</a> library.', 'meta-box-builder' ), 'http://trentrichardson.com/examples/timepicker' ),
 				'keys'        => [ 'controlType', 'timeFormat' ],
 				'values'      => [
 					'controlType' => [ 'select', 'slider' ],
@@ -738,9 +710,10 @@ class Registry {
 
 			// User.
 			'query_args_user'              => Control::KeyValue( 'query_args', [
-				'label'   => '<a href="https://developer.wordpress.org/reference/classes/wp_user_query/prepare_query/" target="_blank" rel="nofollow noopenner">' . __( 'Query args', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'Query arguments for getting user. Same as in the get_user() function.', 'meta-box-builder' ),
-				'keys'    => [
+				'label'       => __( 'Query args', 'meta-box-builder' ),
+				// Translators: %s - URL to the get_users() page.
+				'description' => sprintf( __( 'Query arguments for getting user. Same as in the <a href="%s target="_blank">get_user()</a> function.', 'meta-box-builder' ), 'https://developer.wordpress.org/reference/classes/wp_user_query/prepare_query/' ),
+				'keys'        => [
 					'blog_id',
 					'role',
 					'role__in',
@@ -802,18 +775,22 @@ class Registry {
 			] ),
 
 			// Wysiwyg.
-			Control::Toggle( 'raw', __( 'Save data in the raw format', 'meta-box-builder' ) ),
+			Control::Toggle( 'raw', [
+				'label'   => __( 'Save data in the raw format.', 'meta-box-builder' ),
+				'tooltip' => __( 'Do not apply wpautop() to the value before saving to the database', 'meta-box-builder' )
+			] ),
 			'options_wysiwyg'              => Control::KeyValue( 'options', [
-				'label'   => '<a href="https://developer.wordpress.org/reference/functions/wp_editor/" target="_blank" rel="nofollow noopenner">' . __( 'Editor options', 'meta-box-builder' ) . '</a>',
-				'tooltip' => __( 'The editor options, the same as settings for wp_editor() function', 'meta-box-builder' ),
-				'keys'    => [ 'media_buttons', 'default_editor', 'drag_drop_upload', 'quicktags', 'textarea_rows', 'teeny' ],
-				'values'  => [
+				'label'       => __( 'Editor options', 'meta-box-builder' ),
+				// Translators: %s - URL to the wp_editor() page.
+				'description' => sprintf( __( 'The editor options, the same as settings for the <a href="%s" target="_blank">wp_editor()</a> function', 'meta-box-builder' ), 'https://developer.wordpress.org/reference/functions/wp_editor/' ),
+				'keys'        => [ 'media_buttons', 'default_editor', 'drag_drop_upload', 'quicktags', 'textarea_rows', 'teeny' ],
+				'values'      => [
 					'media_buttons'    => [ 'true', 'false' ],
 					'drag_drop_upload' => [ 'true', 'false' ],
 					'teeny'            => [ 'true', 'false' ],
 					'default'          => [ 'true', 'false', 'tinymce', 'html' ],
 				],
-			] ),
+			], [], 'advanced' ),
 		];
 
 		foreach ( $controls as $id => $control ) {

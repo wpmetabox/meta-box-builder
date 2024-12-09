@@ -72,13 +72,6 @@ class Fields extends Base {
 	public function get_field_types() {
 		$this->registry->register_default_controls();
 
-		$general  = [ 'name', 'id', 'label_description', 'desc' ];
-		$advanced = [ 'class', 'before', 'after', 'save_field', 'sanitize_callback', 'attributes', 'validation', 'custom_settings' ];
-		$clone    = [ 'clone_settings' ];
-		$user     = [ 'field_type', 'placeholder', 'add_new', 'multiple', 'select_all_none', 'required', 'query_args' ];
-		$upload   = [ 'max_file_uploads', 'max_status', 'force_delete', 'required' ];
-		$html5    = [ 'std', 'placeholder', 'size', 'input_attributes' ];
-
 		$general_tab    = [ 'name', 'id' ];
 		$appearance_tab = [ 'label_description', 'desc', 'appearance_divider', 'class', 'before', 'after' ];
 		$validation_tab = [ 'validation' ];
@@ -159,10 +152,10 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'alpha_channel', 'js_options' ] ),
+					array_merge( $general_tab, [ 'std', 'alpha_channel' ] ),
 					$appearance_tab,
 					$validation_tab,
-					$advanced_tab
+					array_merge( ['js_options'], $advanced_tab )
 				),
 				'description' => __( 'Color picker', 'meta-box-builder' ),
 			],
@@ -478,10 +471,10 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'options', 'std', 'multiple', 'js_options' ] ),
+					array_merge( $general_tab, [ 'options', 'std', 'multiple' ] ),
 					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
-					$advanced_tab
+					array_merge( ['js_options'], $advanced_tab )
 				),
 				'description' => __( 'Beautiful select dropdown using select2 library', 'meta-box-builder' ),
 			],
@@ -514,10 +507,10 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'js_options' ] ),
+					array_merge( $general_tab, [ 'std' ] ),
 					[ 'label_description', 'desc', 'prefix_suffix', 'appearance_divider', 'class', 'before', 'after' ],
 					$validation_tab,
-					$advanced_tab
+					array_merge( ['js_options', $advanced_tab ] )
 				),
 				'description' => __( 'jQuery UI slider', 'meta-box-builder' ),
 			],
@@ -608,25 +601,49 @@ class Fields extends Base {
 			'user'              => [
 				'title'       => __( 'User', 'meta-box-builder' ),
 				'category'    => 'wordpress',
-				'controls'    => array_merge( $general, $user, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'field_type', 'add_new', 'multiple', 'query_args' ] ),
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'For selecting users', 'meta-box-builder' ),
 			],
 			'url'               => [
 				'title'       => __( 'URL', 'meta-box-builder' ),
 				'category'    => 'html5',
-				'controls'    => array_merge( $general, $html5, [ 'prepend_append' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std' ] ),
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'An input for URL with browser validation', 'meta-box-builder' ),
 			],
 			'video'             => [
 				'title'       => __( 'Video', 'meta-box-builder' ),
 				'category'    => 'upload',
-				'controls'    => array_merge( $general, $upload, $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'max_file_uploads', 'max_status', 'force_delete' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
 				'description' => __( 'Multiple video uploads with WordPress media popup', 'meta-box-builder' ),
 			],
 			'wysiwyg'           => [
 				'title'       => __( 'WYSIWYG Editor', 'meta-box-builder' ),
 				'category'    => 'advanced',
-				'controls'    => array_merge( $general, [ 'std', 'raw', 'options', 'required' ], $clone, $advanced ),
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					array_merge( $general_tab, [ 'std', 'raw' ] ),
+					$appearance_tab,
+					$validation_tab,
+					array_merge( ['options'], $advanced_tab )
+				),
 				'description' => __( 'WordPress editor', 'meta-box-builder' ),
 			],
 		];
