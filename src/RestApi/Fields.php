@@ -73,9 +73,9 @@ class Fields extends Base {
 		$this->registry->register_default_controls();
 
 		$general_tab    = [ 'name', 'id' ];
-		$appearance_tab = [ 'label_description', 'desc', 'appearance_divider', 'class', 'before', 'after' ];
+		$appearance_tab = [ 'label_description', 'desc' ];
 		$validation_tab = [ 'validation' ];
-		$advanced_tab   = [ 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' ];
+		$advanced_tab   = [ 'class', 'before', 'after', 'save_field', 'sanitize_callback', 'attributes', 'custom_settings' ];
 
 		$field_types = [
 			'autocomplete'      => [
@@ -84,7 +84,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'clone_settings' ],
 					array_merge( $general_tab, [ 'options' ] ),
-					[ 'label_description', 'desc', 'size', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'size' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -174,7 +174,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std', 'format', 'timestamp', 'save_format' ] ),
-					[ 'inline', 'label_description', 'desc', 'placeholder', 'size', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'inline', 'label_description', 'desc', 'placeholder', 'size' ],
 					$validation_tab,
 					array_merge( ['js_options'], $advanced_tab )
 				),
@@ -186,7 +186,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std', 'format', 'timestamp', 'save_format' ] ),
-					[ 'inline', 'label_description', 'desc', 'placeholder', 'size', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'inline', 'label_description', 'desc', 'placeholder', 'size' ],
 					$validation_tab,
 					array_merge( ['js_options'], $advanced_tab )
 				),
@@ -195,7 +195,7 @@ class Fields extends Base {
 			'divider'           => [
 				'title'       => __( 'Divider', 'meta-box-builder' ),
 				'category'    => 'layout',
-				'controls'    => [ 'before', 'after' ],
+				'controls'    => [ 'class', 'before', 'after' ],
 				'description' => __( 'Simple horizontal line', 'meta-box-builder' ),
 			],
 			'email'             => [
@@ -204,7 +204,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -252,7 +252,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -295,8 +295,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'id', 'std' ],
-					[ 'before', 'after' ],
-					[ 'custom_settings' ]
+					[ 'class', 'before', 'after', 'custom_settings' ],
 				),
 				'description' => __( 'For storing a default hidden value', 'meta-box-builder' ),
 			],
@@ -306,7 +305,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					['required', 'clone_settings'],
 					array_merge( $general_tab, ['std', 'icon_set', 'icon_file', 'icon_dir', 'icon_css' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder' ],
 					$advanced_tab
 				),
 				'description' => __( 'Icon with FontAwesome set', 'meta-box-builder' ),
@@ -365,7 +364,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required' ],
 					$general_tab,
-					[ 'label_description', 'desc', 'placeholder_key', 'placeholder_value', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder_key', 'placeholder_value' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -377,7 +376,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'minmax', 'step', 'std' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -389,7 +388,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std', 'not_available_string' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -412,7 +411,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -424,7 +423,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'post_type', 'field_type', 'add_new', 'multiple', 'parent', 'query_args' ] ),
-					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -460,7 +459,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'options', 'std', 'multiple' ] ),
-					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -472,7 +471,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'options', 'std', 'multiple' ] ),
-					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder' ],
 					$validation_tab,
 					array_merge( ['js_options'], $advanced_tab )
 				),
@@ -484,7 +483,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std', 'field_type' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -508,7 +507,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'label_description', 'desc', 'prefix_suffix', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'prefix_suffix' ],
 					$validation_tab,
 					array_merge( ['js_options', $advanced_tab ] )
 				),
@@ -520,7 +519,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'label_description', 'desc', 'style', 'on_off', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'style', 'on_off' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -532,7 +531,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required' ],
 					array_merge( $general_tab, [ 'taxonomy', 'field_type', 'add_new', 'remove_default', 'multiple', 'query_args' ] ),
-					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -544,7 +543,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'taxonomy', 'field_type', 'add_new', 'remove_default', 'multiple', 'query_args' ] ),
-					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -556,7 +555,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					array_merge( [ 'datalist_choices' ], $advanced_tab )
 				),
@@ -580,7 +579,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'textarea_size', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder', 'textarea_size' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -592,7 +591,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'inline', 'label_description', 'desc', 'placeholder', 'size', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'inline', 'label_description', 'desc', 'placeholder', 'size' ],
 					$validation_tab,
 					array_merge( ['js_options'], $advanced_tab )
 				),
@@ -604,7 +603,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'field_type', 'add_new', 'multiple', 'query_args' ] ),
-					[ 'select_all_none', 'label_description', 'desc', 'placeholder', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'select_all_none', 'label_description', 'desc', 'placeholder' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -616,7 +615,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append', 'appearance_divider', 'class', 'before', 'after' ],
+					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
 				),

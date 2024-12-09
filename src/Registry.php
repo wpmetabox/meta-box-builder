@@ -39,7 +39,6 @@ class Registry {
 				'description' => __( 'Display below the field input.', 'meta-box-builder' ),
 			], '', 'appearance' ),
 			Control::Input( 'placeholder', __( 'Placeholder', 'meta-box-builder' ), '', 'appearance' ),
-			Control::Divider( 'appearance_divider', '', '', 'appearance' ),
 			Control::InputGroup( 'prepend_append', [
 				'label'  => __( 'Text wrap', 'meta-box-builder' ),
 				'label1' => __( 'Prepend', 'meta-box-builder' ),
@@ -47,28 +46,29 @@ class Registry {
 				'key1'   => 'prepend',
 				'key2'   => 'append',
 			], [ 'prepend' => '', 'append' => '' ], 'appearance' ),
-			Control::Input( 'class', [
-				'label'       => __( 'Custom CSS class', 'meta-box-builder' ),
-				'description' => __( 'Custom CSS class for the field wrapper div.', 'meta-box-builder' ),
-			], '', 'appearance' ),
 			Control::Input( 'size', [
 				'type'        => 'number',
 				'label'       => __( 'Input size', 'meta-box-builder' ),
 				'description' => __( 'Leave empty to make the input 100% width.', 'meta-box-builder' ),
 			], '', 'appearance' ),
-			Control::Textarea( 'before', [
-				'label'       => __( 'HTML before', 'meta-box-builder' ),
-				'description' => __( 'Custom HTML displayed before the field wrapper HTML.', 'meta-box-builder' ),
-			], '', 'appearance' ),
-			Control::Textarea( 'after', [
-				'label'       => __( 'HTML after', 'meta-box-builder' ),
-				'description' => __( 'Custom HTML displayed after the field wrapper HTML.', 'meta-box-builder' ),
-			], '', 'appearance' ),
+
 
 			// Validation.
 			Control::Validation( 'validation', [], [], 'validation' ),
 
 			// Advanced.
+			Control::Input( 'class', [
+				'label'       => __( 'Custom CSS class', 'meta-box-builder' ),
+				'description' => __( 'Custom CSS class for the field wrapper div.', 'meta-box-builder' ),
+			], '', 'advanced' ),
+			Control::Textarea( 'before', [
+				'label'       => __( 'HTML before', 'meta-box-builder' ),
+				'description' => __( 'Custom HTML displayed before the field wrapper HTML.', 'meta-box-builder' ),
+			], '', 'advanced' ),
+			Control::Textarea( 'after', [
+				'label'       => __( 'HTML after', 'meta-box-builder' ),
+				'description' => __( 'Custom HTML displayed after the field wrapper HTML.', 'meta-box-builder' ),
+			], '', 'advanced' ),
 			Control::Toggle( 'save_field', [
 				'label'       => __( 'Save field value', 'meta-box-builder' ),
 				'description' => __( 'Uncheck this checkbox to prevent the field from saving its value into the database. Use only when you want to save the data yourself with code.', 'meta-box-builder' ),
