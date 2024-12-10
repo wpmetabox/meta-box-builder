@@ -2,7 +2,6 @@ import { Button, Panel, SearchControl } from '@wordpress/components';
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import useApi from "../../hooks/useApi";
-import PersistentPanelBody from '../PersistentPanelBody';
 
 const AddFieldPanel = ( { show = true } ) => {
 	const addField = () => {};
@@ -46,9 +45,10 @@ const Category = ( { category, addField, onClick, open } ) => {
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug );
 
 	return fields.length > 0 && (
-		<PersistentPanelBody title={ category.title } onClick={ onClick } open={ open }>
+		<>
+			<div className="og-add-field__title">{ category.title }</div>
 			<FieldList fields={ fields } addField={ addField } />
-		</PersistentPanelBody>
+		</>
 	);
 };
 
@@ -56,11 +56,7 @@ const SearchResult = ( { searchQuery, addField } ) => {
 	const fieldTypes = useApi( 'field-types', {} );
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.title.toLowerCase().includes( searchQuery.toLowerCase() ) );
 
-	return (
-		<div className='og-add-field__search-results'>
-			<FieldList fields={ fields } addField={ addField } />
-		</div>
-	);
+	return <FieldList fields={ fields } addField={ addField } />;
 };
 
 const FieldList = ( { fields, addField } ) => (
