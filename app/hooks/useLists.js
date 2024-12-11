@@ -121,6 +121,16 @@ const useLists = create( ( set, get ) => ( {
 			setFields: fields => get().setFields( listId, fields ),
 		};
 	},
+
+	getAllFields: () => {
+		let fields = [];
+
+		get().lists.forEach( list => {
+			fields = [ ...fields, ...list.fields ];
+		} );
+
+		return fields;
+	},
 } ) );
 
 export default useLists;
