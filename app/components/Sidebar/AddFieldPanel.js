@@ -72,7 +72,7 @@ const FieldList = ( { fields, addField } ) => (
 	</div>
 );
 
-const FieldButton = ( { type, title, addField } ) => <Button variant="secondary" icon={ getFieldIcon( type ) } onClick={ e => addField( type ) }>{ title }</Button>;
+const FieldButton = ( { type, title, addField } ) => <Button variant="tertiary" icon={ getFieldIcon( type ) } onClick={ e => addField( type ) }>{ title }</Button>;
 
 const getFieldIcon = type => {
 	const iconMap = {
