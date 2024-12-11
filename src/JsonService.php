@@ -1,13 +1,12 @@
 <?php
 namespace MBB;
 
-class JsonService
-{
-    private static function get_meta_box_by_meta_box_id( string $meta_box_id ): array {
+class JsonService {
+	private static function get_meta_box_by_meta_box_id( string $meta_box_id ): array {
 		$meta_boxes = self::get_meta_boxes();
 
 		// Filter by meta box id
-		$meta_box = array_filter( $meta_boxes, function ($meta_box) use ( $meta_box_id ) {
+		$meta_box = array_filter( $meta_boxes, function ($meta_box) use ($meta_box_id) {
 			return $meta_box['meta_box']['id'] === $meta_box_id;
 		} );
 
@@ -16,48 +15,59 @@ class JsonService
 
 		// No posts found, return empty array
 		if ( empty( $keys ) ) {
-			return [ 
-				null,
-				[ 
-					'settings' => [ 'version' => 'v0' ],
-				],
-			];
+			return [ null, [] ];
 		}
 
 		// [post_id, meta_box]
 		return [ $keys[0], $meta_box[ $keys[0] ] ];
 	}
 
-    private static function get_sync_status( $file ) {
+	private static function get_sync_status( $file ) {
 		$local = json_decode( file_get_contents( $file ), true );
 		$mb_id = $local['meta_box']['id'] ?? $local['post_name'];
 
 		[ $post_id, $remote ] = self::get_meta_box_by_meta_box_id( $mb_id );
 
-		$is_newer = version_compare( $local['settings']['version'], $remote['settings']['version'] );
+		$is_newer = version_compare( $local['settings']['version'], $remote['settings']['version'] ?? 'v0' );
 
-		$diff = wp_text_diff( wp_json_encode( $local, JSON_PRETTY_PRINT ), wp_json_encode( $remote, JSON_PRETTY_PRINT ), [ 
-			'title_left' => esc_html__( 'Local', 'meta-box-builder' ),
-			'title_right' => esc_html__( 'Remote', 'meta-box-builder' ),
+		$left = empty( $remote ) ? null : wp_json_encode( $remote, JSON_PRETTY_PRINT );
+
+		$sync_json_to_db_text = __( 'Sync JSON to DB', 'meta-box-builder' );
+		$sync_db_to_json_text = __( 'Sync DB to JSON', 'meta-box-builder' );
+		$sync_json_to_db_url  = add_query_arg( [ 
+			'action' => 'mbb-sync',
+			'target' => 'to-db',
+			'id' => $mb_id,
+		] );
+		$sync_db_to_json_url  = add_query_arg( [ 
+			'action' => 'mbb-sync',
+			'target' => 'to-json',
+			'id' => $mb_id,
+		] );
+
+		$diff = wp_text_diff( $left, wp_json_encode( $local, JSON_PRETTY_PRINT ), [ 
+			'title_left' => "<h3><a href=\"$sync_json_to_db_url\" class=\"button button-secondary\">$sync_json_to_db_text</a></h3>",
+			'title_right' => "<h3><a href=\"$sync_db_to_json_url\" class=\"button button-secondary\">$sync_db_to_json_text</a></h3>",
+			'show_split_view' => ! empty( $remote ),
 		] );
 
 		return compact( 'is_newer', 'local', 'remote', 'diff', 'post_id', 'file', 'mb_id' );
 	}
 
-    public static function get_json(): ?array {
-        $files = self::get_files();
+	public static function get_json(): ?array {
+		$files = self::get_files();
 
-        $json = [];
-        foreach ( $files as $file ) {
-            $mid          = rtrim( basename( $file ), '.json' );
-            $json[ $mid ] = self::get_sync_status( $file );
-        }
+		$json = [];
+		foreach ( $files as $file ) {
+			$mid          = rtrim( basename( $file ), '.json' );
+			$json[ $mid ] = self::get_sync_status( $file );
+		}
 
 		return $json;
-    }
+	}
 
-    public static function get_meta_boxes(): array {
-        $query = new \WP_Query( [ 
+	public static function get_meta_boxes(): array {
+		$query = new \WP_Query( [ 
 			'post_type' => 'meta-box',
 			'posts_per_page' => -1,
 			'no_found_rows' => true,
@@ -89,33 +99,33 @@ class JsonService
 			$meta_boxes[ $post->ID ]          = $post_data;
 		}
 
-        return $meta_boxes;
-    }
+		return $meta_boxes;
+	}
 
-    public static function get_files(): array {
-        $paths = self::get_paths();
+	public static function get_files(): array {
+		$paths = self::get_paths();
 
-        $all_files = [];
+		$all_files = [];
 
-        foreach ($paths as $path) {
-            $files = glob( "$path/*.json" );
+		foreach ( $paths as $path ) {
+			$files = glob( "$path/*.json" );
 
-            foreach ($files as $file) {
-                $all_files[] = $file;
-            }
-        }
+			foreach ( $files as $file ) {
+				$all_files[] = $file;
+			}
+		}
 
-        return $all_files;
-    }
+		return $all_files;
+	}
 
-    public static function get_paths() {
+	public static function get_paths() {
 		$theme_path    = get_template_directory();
 		$mb_json_paths = [];
 
-        if ( file_exists( "$theme_path/mb-json" ) ) {
-            $mb_json_paths[] = "$theme_path/mb-json";
-        }
-        
+		if ( file_exists( "$theme_path/mb-json" ) ) {
+			$mb_json_paths[] = "$theme_path/mb-json";
+		}
+
 		$mb_json_paths = apply_filters( 'mb_json_paths', $mb_json_paths );
 
 		// @todo: Should we create the directory if it doesn't exist?

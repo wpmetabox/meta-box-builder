@@ -1,4 +1,4 @@
-jQuery( function ( $ ) {
+jQuery( $ => {
 	// Add "Export" option to the Bulk Actions dropdowns.
 	$( '<option value="mbb-export">' )
 		.text( MBB.export )
@@ -10,16 +10,16 @@ jQuery( function ( $ ) {
 		.text( MBB.import )
 		.insertAfter( '.page-title-action' );
 
-	$toggle.on( 'click', function( e ) {
+	$toggle.on( 'click', e => {
 		e.preventDefault();
 		$form.toggle();
 	} );
 
 	// Enable submit button when selecting a file.
-	var $input = $form.find( 'input[type="file"]' ),
+	const $input = $form.find( 'input[type="file"]' ),
 		$submit = $form.find( 'input[type="submit"]' );
 
-	$input.on( 'change', function() {
+	$input.on( 'change', () => {
 		$submit.prop( 'disabled', ! $input.val() );
 	} );
 
