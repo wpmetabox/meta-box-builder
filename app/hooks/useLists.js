@@ -20,7 +20,7 @@ const useLists = create( ( set, get ) => ( {
 
 		set( state => ( {
 			lists: state.lists.map( l => {
-				if ( l !== listId ) {
+				if ( l.id !== listId ) {
 					return l;
 				}
 
@@ -34,7 +34,7 @@ const useLists = create( ( set, get ) => ( {
 	removeField: ( listId, fieldId ) => {
 		set( state => ( {
 			lists: state.lists.map( l => {
-				if ( l !== listId ) {
+				if ( l.id !== listId ) {
 					return l;
 				}
 
@@ -57,7 +57,7 @@ const useLists = create( ( set, get ) => ( {
 
 		set( state => ( {
 			lists: state.lists.map( l => {
-				if ( l !== listId ) {
+				if ( l.id !== listId ) {
 					return l;
 				}
 

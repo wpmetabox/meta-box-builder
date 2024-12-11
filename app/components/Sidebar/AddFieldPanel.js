@@ -3,10 +3,9 @@ import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { archive, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, inbox, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
 import useApi from "../../hooks/useApi";
+import useLists from '../../hooks/useLists';
 
 const AddFieldPanel = ( { show = true } ) => {
-	const addField = () => {};
-
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 
 	return (
@@ -15,15 +14,15 @@ const AddFieldPanel = ( { show = true } ) => {
 				<SearchControl value={ searchQuery } onChange={ setSearchQuery } __nextHasNoMarginBottom />
 				{
 					searchQuery ?
-						<SearchResult searchQuery={ searchQuery } addField={ addField } />
-						: <Categories addField={ addField } />
+						<SearchResult searchQuery={ searchQuery } />
+						: <Categories />
 				}
 			</div>
 		</Panel>
 	);
 };
 
-const Categories = ( { addField } ) => {
+const Categories = () => {
 	const [ activeCategory, setActiveCategory ] = useState( 'basic' );
 
 	const fieldCategories = useApi( 'field-categories', [] );
@@ -35,44 +34,46 @@ const Categories = ( { addField } ) => {
 				open={ category.slug === activeCategory }
 				onClick={ () => setActiveCategory( activeCategory === category.slug ? '' : category.slug ) }
 				category={ category }
-				addField={ addField }
 			/>
 		)
 		: <p>{ __( 'Fetching field types, please wait...', 'meta-box-builder' ) }</p>;
 };
 
-const Category = ( { category, addField, onClick, open } ) => {
+const Category = ( { category, onClick, open } ) => {
 	const fieldTypes = useApi( 'field-types', {} );
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug );
-
-	console.debug( Object.keys( fieldTypes ) );
 
 	return fields.length > 0 && (
 		<>
 			<div className="og-add-field__title">{ category.title }</div>
-			<FieldList fields={ fields } addField={ addField } />
+			<FieldList fields={ fields } />
 		</>
 	);
 };
 
-const SearchResult = ( { searchQuery, addField } ) => {
+const SearchResult = ( { searchQuery } ) => {
 	const fieldTypes = useApi( 'field-types', {} );
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.title.toLowerCase().includes( searchQuery.toLowerCase() ) );
 
-	return <FieldList fields={ fields } addField={ addField } />;
+	return <FieldList fields={ fields } />;
 };
 
-const FieldList = ( { fields, addField } ) => (
+const FieldList = ( { fields } ) => (
 	<div className="og-add-field__list">
 		{
 			fields.map( ( [ type, field ] ) =>
-				<FieldButton key={ type } type={ type } title={ field.title } addField={ addField } />
+				<FieldButton key={ type } type={ type } title={ field.title } />
 			)
 		}
 	</div>
 );
 
-const FieldButton = ( { type, title, addField } ) => <Button variant="tertiary" icon={ getFieldIcon( type ) } onClick={ e => addField( type ) }>{ title }</Button>;
+const FieldButton = ( { type, title } ) => {
+	const { addField } = useLists();
+	const add = () => addField( 'root', type );
+
+	return <Button variant="tertiary" icon={ getFieldIcon( type ) } onClick={ add }>{ title }</Button>;
+};
 
 const getFieldIcon = type => {
 	const iconMap = {
