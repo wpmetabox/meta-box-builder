@@ -31,6 +31,16 @@ class LocalJson {
 		return Import::import_json( $data );
 	}
 
+	public static function import_many( array $file_paths ) {
+		foreach ( $file_paths as $file_path ) {
+			if ( ! file_exists( $file_path ) ) {
+				continue;
+			}
+			
+			self::import( $file_path );
+		}
+	}
+
 	public static function update_remote( int $post_id, string $file_path ) {
 		if ( ! file_exists( $file_path ) ) {
 			return new \WP_Error( 'file_not_found', __( 'File not found!', 'meta-box-builder' ) );

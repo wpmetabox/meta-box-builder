@@ -20,6 +20,48 @@ class AdminColumns {
 		add_filter( "bulk_actions-edit-meta-box", [ $this, 'admin_table_bulk_actions' ], 10, 1 );
 		add_action( 'current_screen', [ $this, 'current_screen' ] );
 		add_action( 'admin_footer', [ $this, 'render_diff_dialog' ] );
+		add_action( 'admin_notices', [ $this, 'admin_notices' ] );
+	}
+
+	public function admin_notices() {
+		$custom_admin_notice = $_GET['status'] ?? '';
+		$messages            = [ 
+			'imported' => [ 
+				'status' => 'success',
+				'message' => __( 'Imported successfully', 'meta-box-builder' ),
+			],
+			'import-failed' => [ 
+				'status' => 'error',
+				'message' => __( 'Import failed', 'meta-box-builder' ),
+			],
+
+			'remote-updated' => [ 
+				'status' => 'success',
+				'message' => __( 'Imported to DB successfully', 'meta-box-builder' ),
+			],
+
+			'remote-update-failed' => [ 
+				'status' => 'error',
+				'message' => __( 'Import to DB failed', 'meta-box-builder' ),
+			],
+
+			'local-updated' => [ 
+				'status' => 'success',
+				'message' => __( 'Export to JSON successfully', 'meta-box-builder' ),
+			],
+
+			'local-update-failed' => [ 
+				'status' => 'error',
+				'message' => __( 'Error during exporting to JSON', 'meta-box-builder' ),
+			],
+		];
+
+		if ( isset( $messages[ $custom_admin_notice ] ) ) { ?>
+			<div class="notice notice-<?= $messages[ $custom_admin_notice ]['status'] ?> is-dismissible">
+				<p><?= $messages[ $custom_admin_notice ]['message'] ?></p>
+			</div>
+			<?php
+		}
 	}
 
 	public function render_diff_dialog() {
@@ -80,15 +122,31 @@ class AdminColumns {
 			wp_die( __( 'Not allowed', 'meta-box-builder' ) );
 		}
 
-		$mb_id = $_GET['id'] ?? ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
+		$mb_id = $_GET['id'] ?? $_GET['post'] ?? ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
 
 		if ( empty( $mb_id ) ) {
 			wp_die( __( 'Not found', 'meta-box-builder' ) );
 		}
 
-		$target = in_array( $_GET['target'], ['to-db', 'to-json'] ) ? $_GET['target'] : 'to-db'; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
+		$target = in_array( $_GET['target'], [ 'to-db', 'to-json' ] ) ? $_GET['target'] : 'to-db'; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
 
-		$json      = JsonService::get_json();
+		$json = JsonService::get_json();
+
+		// Bulk actions
+		if ( is_array( $mb_id ) ) {
+			$file_paths = [];
+
+			foreach ( $json as $id => $data ) {
+				$file_paths[] = $data['file'];
+			}
+
+			$file_paths = array_unique( $file_paths );
+			LocalJson::import_many( $file_paths );
+
+			wp_safe_redirect( admin_url( 'edit.php?post_type=meta-box&message=import-success' ) );
+			exit;
+		}
+
 		$data      = $json[ $mb_id ];
 		$file_path = $data['file'];
 
@@ -188,7 +246,7 @@ class AdminColumns {
 
 	public function admin_table_bulk_actions( $actions ) {
 		if ( $this->is_status( 'sync' ) ) {
-			$actions['sync'] = __( 'Import', 'meta-box-builder' );
+			$actions['mbb-sync'] = __( 'Sync JSON to DB', 'meta-box-builder' );
 		}
 
 		return $actions;
@@ -298,8 +356,8 @@ class AdminColumns {
 		if ( empty( $sync_data ) || $sync_data['is_newer'] === 0 ) {
 			return;
 		}
-		$status_text = empty( $sync_data['post_id'] ) ? 
-			__( 'Not Imported', 'meta-box-builder' ) : 
+		$status_text = empty( $sync_data['post_id'] ) ?
+			__( 'Not Imported', 'meta-box-builder' ) :
 			__( 'Changes detected', 'meta-box-builder' );
 		?>
 		<strong><?php esc_html_e( $status_text ) ?></strong>
@@ -317,12 +375,12 @@ class AdminColumns {
 		$object_type = Arr::get( $data, 'object_type', 'post' );
 
 		$labels = [ 
-			'user'    => __( 'Users', 'meta-box-builder' ),
+			'user' => __( 'Users', 'meta-box-builder' ),
 			'comment' => __( 'Comments', 'meta-box-builder' ),
 			'setting' => __( 'Settings Pages', 'meta-box-builder' ),
-			'post'    => __( 'Posts', 'meta-box-builder' ),
-			'term'    => __( 'Taxonomies', 'meta-box-builder' ),
-			'block'   => __( 'Blocks', 'meta-box-builder' ),
+			'post' => __( 'Posts', 'meta-box-builder' ),
+			'term' => __( 'Taxonomies', 'meta-box-builder' ),
+			'block' => __( 'Blocks', 'meta-box-builder' ),
 		];
 
 		if ( isset( $labels[ $object_type ] ) ) {

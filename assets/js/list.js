@@ -26,11 +26,6 @@ jQuery( $ => {
 	document.getElementById( 'mbb-diff-dialog-close' ).addEventListener( 'click', () => {
 		document.getElementById( 'mbb-diff-dialog' ).close();
 	} );
-
-	document.getElementById( 'mbb-diff-dialog-sync-btn' ).addEventListener( 'click', () => {
-		document.getElementById( 'mbb-diff-dialog' ).close();
-	} );
-
 	document.getElementById( 'mbb-diff-dialog-close-btn' ).addEventListener( 'click', () => {
 		document.getElementById( 'mbb-diff-dialog' ).close();
 	} );
