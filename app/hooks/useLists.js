@@ -26,26 +26,39 @@ parseLists( MbbApp, 'root', 'fields' );
 const useLists = create( ( set, get ) => ( {
 	lists,
 	addField: ( listId, fieldType ) => {
-		const fieldId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: fieldId, // Internal use, won't change
-			type: fieldType,
-			id: fieldId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		set( state => {
+			const fieldId = `${ fieldType }_${ uniqid() }`;
+			const field = {
+				_id: fieldId, // Internal use, won't change
+				type: fieldType,
+				id: fieldId, // ID of the field that use can edit
+				name: ucwords( fieldType, '_' ),
+			};
 
-		set( state => ( {
-			lists: state.lists.map( l => {
+			// Add field to the list.
+			let lists = state.lists.map( l => {
 				if ( l.id !== listId ) {
 					return l;
 				}
 
 				return {
 					...l,
-					fields: [ ...l.fields, newField ]
+					fields: [ ...l.fields, field ]
 				};
-			} )
-		} ) );
+			} );
+
+			// Create a new list for group fields.
+			if ( fieldType === 'group' ) {
+				const list = get().lists.find( l => l.id === listId );
+				lists.push( {
+					id: fieldId,
+					fields: [],
+					baseInputName: `${ list.baseInputName }[${ fieldId }][fields]`,
+				} );
+			}
+
+			return { lists };
+		} );
 	},
 	removeField: ( listId, fieldId ) => {
 		set( state => ( {
@@ -62,7 +75,7 @@ const useLists = create( ( set, get ) => ( {
 		} ) );
 	},
 	duplicateField: ( listId, fieldId ) => {
-		const list = get().lists.filter( l => l.id === listId );
+		const list = get().lists.find( l => l.id === listId );
 
 		let newField = getFieldValue( `${ list.baseInputName }[${ fieldId }]` );
 		const newId = `${ newField.type }_${ uniqid() }`;
