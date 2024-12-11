@@ -25,56 +25,52 @@ parseLists( MbbApp, 'root', 'fields' );
 
 const useLists = create( ( set, get ) => ( {
 	lists,
-	addField: ( listId, fieldType ) => {
-		set( state => {
-			const fieldId = `${ fieldType }_${ uniqid() }`;
-			const field = {
-				_id: fieldId, // Internal use, won't change
-				type: fieldType,
-				id: fieldId, // ID of the field that use can edit
-				name: ucwords( fieldType, '_' ),
-			};
+	addField: ( listId, fieldType ) => set( state => {
+		const fieldId = `${ fieldType }_${ uniqid() }`;
+		const field = {
+			_id: fieldId, // Internal use, won't change
+			type: fieldType,
+			id: fieldId, // ID of the field that use can edit
+			name: ucwords( fieldType, '_' ),
+		};
 
-			// Add field to the list.
-			let lists = state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
-				}
-
-				return {
-					...l,
-					fields: [ ...l.fields, field ]
-				};
-			} );
-
-			// Create a new list for group fields.
-			if ( fieldType === 'group' ) {
-				const list = get().lists.find( l => l.id === listId );
-				lists.push( {
-					id: fieldId,
-					fields: [],
-					baseInputName: `${ list.baseInputName }[${ fieldId }][fields]`,
-				} );
+		// Add field to the list.
+		let lists = state.lists.map( l => {
+			if ( l.id !== listId ) {
+				return l;
 			}
 
-			return { lists };
+			return {
+				...l,
+				fields: [ ...l.fields, field ]
+			};
 		} );
-	},
-	removeField: ( listId, fieldId ) => {
-		set( state => ( {
-			lists: state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
-				}
 
-				return {
-					...l,
-					fields: l.fields.filter( f => f._id !== fieldId )
-				};
-			} )
-		} ) );
-	},
-	duplicateField: ( listId, fieldId ) => {
+		// Create a new list for group fields.
+		if ( fieldType === 'group' ) {
+			const list = get().lists.find( l => l.id === listId );
+			lists.push( {
+				id: fieldId,
+				fields: [],
+				baseInputName: `${ list.baseInputName }[${ fieldId }][fields]`,
+			} );
+		}
+
+		return { lists };
+	} ),
+	removeField: ( listId, fieldId ) => set( state => ( {
+		lists: state.lists.map( l => {
+			if ( l.id !== listId ) {
+				return l;
+			}
+
+			return {
+				...l,
+				fields: l.fields.filter( f => f._id !== fieldId )
+			};
+		} )
+	} ) ),
+	duplicateField: ( listId, fieldId ) => set( state => {
 		const list = get().lists.find( l => l.id === listId );
 
 		let newField = getFieldValue( `${ list.baseInputName }[${ fieldId }]` );
@@ -84,37 +80,35 @@ const useLists = create( ( set, get ) => ( {
 		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
-		set( state => ( {
-			lists: state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
-				}
+		const lists = state.lists.map( l => {
+			if ( l.id !== listId ) {
+				return l;
+			}
 
-				const index = l.fields.findIndex( f => f._id === fieldId );
-				let newFields = [ ...l.fields ];
-				newFields.splice( index + 1, 0, newField );
+			const index = l.fields.findIndex( f => f._id === fieldId );
+			let newFields = [ ...l.fields ];
+			newFields.splice( index + 1, 0, newField );
 
-				return {
-					...l,
-					fields: newFields,
-				};
-			} )
-		} ) );
-	},
-	setFields: ( listId, fields ) => {
-		set( state => ( {
-			lists: state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
-				}
+			return {
+				...l,
+				fields: newFields,
+			};
+		} );
 
-				return {
-					...l,
-					fields,
-				};
-			} )
-		} ) );
-	},
+		return { lists };
+	} ),
+	setFields: ( listId, fields ) => set( state => ( {
+		lists: state.lists.map( l => {
+			if ( l.id !== listId ) {
+				return l;
+			}
+
+			return {
+				...l,
+				fields,
+			};
+		} )
+	} ) ),
 
 	getForList: listId => {
 		const list = get().lists.find( l => l.id === listId );
