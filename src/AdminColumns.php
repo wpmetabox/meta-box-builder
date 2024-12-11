@@ -65,9 +65,6 @@ class AdminColumns {
 	}
 
 	public function render_diff_dialog() {
-		if ( ! $this->is_status( 'sync' ) ) {
-			return;
-		}
 		?>
 		<dialog id="mbb-diff-dialog">
 			<header>
@@ -314,9 +311,7 @@ class AdminColumns {
 			$new_columns['shortcode'] = __( 'Shortcode', 'meta-box-builder' ) . Data::tooltip( __( 'Embed the field group in the front end for users to submit posts.', 'meta-box-builder' ) );
 		}
 
-		if ( $this->is_status( 'sync' ) ) {
-			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' );
-		}
+		$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' );
 
 		$columns = array_slice( $columns, 0, 2, true ) + $new_columns + array_slice( $columns, 2, null, true );
 
@@ -329,6 +324,11 @@ class AdminColumns {
 
 	public function show_column( $column, $post_id ) {
 		if ( ! in_array( $column, [ 'for', 'location', 'shortcode', 'sync_status' ], true ) ) {
+			return;
+		}
+
+		if ( $column === 'sync_status' ) {
+			$this->show_sync_status( $post_id );
 			return;
 		}
 
@@ -349,18 +349,33 @@ class AdminColumns {
 	}
 
 	private function show_sync_status( string $mb_id ) {
-		$json      = JsonService::get_json();
+		$json = JsonService::get_json();
+		if ( ! $this->is_status( 'sync' ) ) {
+			foreach ( $json as $json_mb_id => $data ) {
+				if ( isset( $data['post_id'] ) && $data['post_id'] == $mb_id ) {
+					$mb_id = $json_mb_id;
+					break;
+				}
+			}
+		}
+
 		$sync_data = $json[ $mb_id ];
 
 		// Empty sync data means no related json file.
-		if ( empty( $sync_data ) || $sync_data['is_newer'] === 0 ) {
+		if ( empty( $sync_data ) ) {
 			return;
 		}
+
 		$status_text = empty( $sync_data['post_id'] ) ?
 			__( 'Not Imported', 'meta-box-builder' ) :
 			__( 'Changes detected', 'meta-box-builder' );
+
+		if ( $sync_data['is_newer'] === 0 ) {
+			$status_text = __( 'Synced', 'meta-box-builder' );
+		}
 		?>
 		<strong><?php esc_html_e( $status_text ) ?></strong>
+		<?php if ( $sync_data['is_newer'] !== 0 ) { ?>
 		<div class="row-actions">
 			<span class="review">
 				<a href="javascript:;" role="button" onclick="return showDialog('<?= $mb_id ?>');">
@@ -368,6 +383,7 @@ class AdminColumns {
 				</a>
 			</span>
 		</div>
+		<?php } ?>
 		<?php
 	}
 
