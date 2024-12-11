@@ -4,8 +4,8 @@ import clsx from "clsx";
 import { inside } from "../../../functions";
 import useFieldData from "../../../hooks/useFieldData";
 import useFieldNameId from "../../../hooks/useFieldNameId";
-import useFields from "../../../hooks/useFields";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
+import useLists from "../../../hooks/useLists";
 import useSidebarPanel from "../../../hooks/useSidebarPanel";
 import Field from './Field';
 import Group from './Group';
@@ -35,17 +35,13 @@ const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 
 	const duplicate = () => duplicateField( id );
 
-	const groupData = useFields(
-		Object.values( field.fields || {} ).filter( field => field.type ),
-		`fields${ parent }[${ id }][fields]`
-	);
-	const groupHasFields = field.type === 'group' && groupData.fields.length > 0;
+	const { getForList } = useLists();
+	const addField = field.type === 'group' ? getForList( id ).addField : undefined;
 
 	return field.type && (
 		<div className={ clsx(
 			'og-item',
 			`og-item--${ field.type }`,
-			groupHasFields && 'og-item--group--has-fields',
 		) }>
 			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
 			<input type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
@@ -60,10 +56,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
-						field.type === 'group' && <Inserter
-							addField={ groupData.add }
-							type="group"
-						/>
+						field.type === 'group' && <Inserter addField={ addField } type="group" />
 					}
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
@@ -71,7 +64,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 			</div>
 			{
 				field.type === 'group'
-					? <Group id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } groupData={ groupData } />
+					? <Group id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } />
 					: <Field id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
 			}
 		</div>

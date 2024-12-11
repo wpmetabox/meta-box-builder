@@ -1,6 +1,6 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import useFieldIds from '../hooks/useFieldIds';
+import useLists from "../hooks/useLists";
 import FieldInserter from './FieldInserter';
 import { uniqid } from '/functions';
 
@@ -11,9 +11,6 @@ const ConditionalLogic = ( { defaultValue, name } ) => {
 	const addRule = () => setRules( prev => [ ...prev, { name: '', operator: '=', value: '', id: uniqid() } ] );
 	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
 
-	const ids = useFieldIds( state => state.ids );
-	const fields = Array.from( new Set( Object.values( ids ) ) );
-
 	return (
 		<div className="og-include-exclude">
 			{ rules.length > 0 && <Intro name={ name } setting={ setting } /> }
@@ -21,7 +18,6 @@ const ConditionalLogic = ( { defaultValue, name } ) => {
 				rules.map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					fields={ fields }
 					name={ `${ name }[when][${ rule.id }]` }
 					removeRule={ removeRule }
 				/> )
@@ -46,33 +42,41 @@ const Intro = ( { name, setting } ) => (
 	</div>
 );
 
-const Rule = ( { rule, fields, name, removeRule } ) => (
-	<div className="og-include-exclude__rule">
-		<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
-		<FieldInserter name={ `${ name }[name]` } defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } items={ fields } isID = { true } />
-		<select name={ `${ name }[operator]` } className="og-include-exclude__operator" defaultValue={ rule.operator }>
-			<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
-			<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
-			<option value="<">{ __( '<', 'meta-box-builder' ) }</option>
-			<option value=">=">{ __( '>=', 'meta-box-builder' ) }</option>
-			<option value="<=">{ __( '<=', 'meta-box-builder' ) }</option>
-			<option value="!=">{ __( '!=', 'meta-box-builder' ) }</option>
-			<option value="contains">{ __( 'contains', 'meta-box-builder' ) }</option>
-			<option value="not contains">{ __( 'not contains', 'meta-box-builder' ) }</option>
-			<option value="starts with">{ __( 'starts with', 'meta-box-builder' ) }</option>
-			<option value="not starts with">{ __( 'not starts with', 'meta-box-builder' ) }</option>
-			<option value="ends with">{ __( 'ends with', 'meta-box-builder' ) }</option>
-			<option value="not ends with">{ __( 'not ends with', 'meta-box-builder' ) }</option>
-			<option value="between">{ __( 'between', 'meta-box-builder' ) }</option>
-			<option value="not between">{ __( 'not between', 'meta-box-builder' ) }</option>
-			<option value="in">{ __( 'in', 'meta-box-builder' ) }</option>
-			<option value="not in">{ __( 'not in', 'meta-box-builder' ) }</option>
-			<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
-			<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
-		</select>
-		<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ name }[value]` } />
-		<a href="#" className="og-include-exclude__remove" onClick={ () => removeRule( rule.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
-	</div>
-);
+const Rule = ( { rule, name, removeRule } ) => {
+	const { getAllFields } = useLists();
+	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
+	const fields = getAllFields()
+		.filter( field => !ignoreTypes.includes( field.type ) )
+		.map( field => [ field.id, field.name ] );
+
+	return (
+		<div className="og-include-exclude__rule">
+			<input type="hidden" name={ `${ name }[id]` } defaultValue={ rule.id } />
+			<FieldInserter name={ `${ name }[name]` } defaultValue={ rule.name } placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) } items={ fields } isID={ true } />
+			<select name={ `${ name }[operator]` } className="og-include-exclude__operator" defaultValue={ rule.operator }>
+				<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
+				<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
+				<option value="<">{ __( '<', 'meta-box-builder' ) }</option>
+				<option value=">=">{ __( '>=', 'meta-box-builder' ) }</option>
+				<option value="<=">{ __( '<=', 'meta-box-builder' ) }</option>
+				<option value="!=">{ __( '!=', 'meta-box-builder' ) }</option>
+				<option value="contains">{ __( 'contains', 'meta-box-builder' ) }</option>
+				<option value="not contains">{ __( 'not contains', 'meta-box-builder' ) }</option>
+				<option value="starts with">{ __( 'starts with', 'meta-box-builder' ) }</option>
+				<option value="not starts with">{ __( 'not starts with', 'meta-box-builder' ) }</option>
+				<option value="ends with">{ __( 'ends with', 'meta-box-builder' ) }</option>
+				<option value="not ends with">{ __( 'not ends with', 'meta-box-builder' ) }</option>
+				<option value="between">{ __( 'between', 'meta-box-builder' ) }</option>
+				<option value="not between">{ __( 'not between', 'meta-box-builder' ) }</option>
+				<option value="in">{ __( 'in', 'meta-box-builder' ) }</option>
+				<option value="not in">{ __( 'not in', 'meta-box-builder' ) }</option>
+				<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
+				<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
+			</select>
+			<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ name }[value]` } />
+			<a href="#" className="og-include-exclude__remove" onClick={ () => removeRule( rule.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
+		</div>
+	);
+};
 
 export default ConditionalLogic;

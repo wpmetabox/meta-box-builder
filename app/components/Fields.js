@@ -2,19 +2,14 @@ import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useApi from "../hooks/useApi";
-import useFields from "../hooks/useFields";
+import useLists from "../hooks/useLists";
 import Header from "./Tabs/FieldsTab/Header";
 import { Inserter } from './Tabs/FieldsTab/Inserter';
 import Node from './Tabs/FieldsTab/Node';
 
 const Fields = () => {
-	const {
-		fields,
-		add,
-		remove,
-		duplicate,
-		setFields,
-	} = useFields( MbbApp.fields.filter( field => field.type ), 'fields' );
+	const { getForList } = useLists();
+	const { fields, addField, removeField, duplicateField, setFields } = getForList( 'root' );
 
 	// Don't render any field if fields data is not available.
 	const types = useApi( 'field-types', {} );
@@ -24,10 +19,10 @@ const Fields = () => {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
-	return fields.length === 0 ?
+	return !fields || fields.length === 0 ?
 		<>
 			<RawHTML className="og-none">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
-			<Inserter addField={ add } />
+			<Inserter addField={ addField } />
 		</>
 		: <>
 			<Header />
@@ -49,12 +44,12 @@ const Fields = () => {
 						key={ field._id }
 						id={ field._id }
 						field={ field }
-						removeField={ remove }
-						duplicateField={ duplicate }
+						removeField={ removeField }
+						duplicateField={ duplicateField }
 					/> )
 				}
 			</ReactSortable>
-			<Inserter addField={ add } />
+			<Inserter addField={ addField } />
 		</>;
 };
 

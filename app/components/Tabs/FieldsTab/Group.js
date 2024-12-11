@@ -1,20 +1,12 @@
-import { PanelBody, PanelRow } from '@wordpress/components';
-import { __ } from "@wordpress/i18n";
-import clsx from "clsx";
 import { ReactSortable } from 'react-sortablejs';
 import useApi from "../../../hooks/useApi";
+import useLists from "../../../hooks/useLists";
 import FieldSettings from "../../Sidebar/FieldSettings";
-import Content from './Content';
 import Node from './Node';
 
-const Group = ( { id, field, parent = '', nameIdData, groupData } ) => {
-	const {
-		fields,
-		add,
-		remove,
-		duplicate,
-		setFields,
-	} = groupData;
+const Group = ( { id, field, parent = '', nameIdData } ) => {
+	const { getForList } = useLists();
+	const { fields, removeField, duplicateField, setFields } = getForList( id );
 
 	const fieldTypes = useApi( 'field-types', {} );
 
@@ -34,39 +26,37 @@ const Group = ( { id, field, parent = '', nameIdData, groupData } ) => {
 				nameIdData={ nameIdData }
 			/>
 
-			<div className={ clsx( 'og-group-fields', fields.length === 0 && 'og-group-fields--empty' ) }>
-				{
-					fields.length > 0 &&
-					<>
-						<div className="og-group-fields__inner">
-							<ReactSortable
-								group={ {
-									name: 'nested',
-									pull: true,
-									put: [ 'root', 'nested' ],
-								} }
-								animation={ 200 }
-								delayOnTouchStart={ true }
-								delay={ 2 }
-								list={ fields }
-								setList={ setFields }
-								handle=".og-item__header"
-							>
-								{
-									fields.map( ( field, index ) => <Node
-										key={ field._id }
-										id={ field._id }
-										field={ field }
-										parent={ `${ parent }[${ id }][fields]` }
-										removeField={ remove }
-										duplicateField={ duplicate }
-									/> )
-								}
-							</ReactSortable>
-						</div>
-					</>
-				}
-			</div>
+			{
+				fields.length > 0 &&
+				<div className="og-group-fields">
+					<div className="og-group-fields__inner">
+						<ReactSortable
+							group={ {
+								name: 'nested',
+								pull: true,
+								put: [ 'root', 'nested' ],
+							} }
+							animation={ 200 }
+							delayOnTouchStart={ true }
+							delay={ 2 }
+							list={ fields }
+							setList={ setFields }
+							handle=".og-item__header"
+						>
+							{
+								fields.map( ( field, index ) => <Node
+									key={ field._id }
+									id={ field._id }
+									field={ field }
+									parent={ `${ parent }[${ id }][fields]` }
+									removeField={ removeField }
+									duplicateField={ duplicateField }
+								/> )
+							}
+						</ReactSortable>
+					</div>
+				</div>
+			}
 		</>
 	);
 };
