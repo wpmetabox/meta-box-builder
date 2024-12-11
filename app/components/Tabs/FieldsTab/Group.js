@@ -1,18 +1,14 @@
-import { PanelBody, PanelRow } from '@wordpress/components';
-import { __ } from "@wordpress/i18n";
 import clsx from "clsx";
 import { ReactSortable } from 'react-sortablejs';
 import useApi from "../../../hooks/useApi";
 import FieldSettings from "../../Sidebar/FieldSettings";
-import Content from './Content';
 import Node from './Node';
 
 const Group = ( { id, field, parent = '', nameIdData, groupData } ) => {
 	const {
 		fields,
-		add,
-		remove,
-		duplicate,
+		removeField,
+		duplicateField,
 		setFields,
 	} = groupData;
 
@@ -58,8 +54,8 @@ const Group = ( { id, field, parent = '', nameIdData, groupData } ) => {
 										id={ field._id }
 										field={ field }
 										parent={ `${ parent }[${ id }][fields]` }
-										removeField={ remove }
-										duplicateField={ duplicate }
+										removeField={ removeField }
+										duplicateField={ duplicateField }
 									/> )
 								}
 							</ReactSortable>

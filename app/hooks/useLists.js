@@ -1,14 +1,30 @@
 import { create } from 'zustand';
-import { ucwords, uniqid } from '../functions';
+import { ensureArray, ucwords, uniqid } from '../functions';
+
+let lists = [];
+
+// Parse fields and put into the lists.
+// Recursively put groups' fields into other lists.
+const parseLists = ( obj, listId, baseInputName ) => {
+	let fields = ensureArray( obj.fields );
+	fields = fields.filter( field => field.type );
+
+	lists.push( {
+		id: listId,
+		fields,
+		baseInputName,
+	} );
+
+	fields.forEach( field => {
+		if ( field.type === 'group' ) {
+			parseLists( field, field._id, `${ baseInputName }[${ field._id }][fields]` );
+		}
+	} );
+};
+parseLists( MbbApp, 'root', 'fields' );
 
 const useLists = create( ( set, get ) => ( {
-	lists: [
-		{
-			id: 'root',
-			fields: MbbApp.fields.filter( field => field.type ),
-			baseInputName: 'fields',
-		}
-	],
+	lists,
 	addField: ( listId, fieldType ) => {
 		const fieldId = `${ fieldType }_${ uniqid() }`;
 		const newField = {

@@ -4,8 +4,8 @@ import clsx from "clsx";
 import { inside } from "../../../functions";
 import useFieldData from "../../../hooks/useFieldData";
 import useFieldNameId from "../../../hooks/useFieldNameId";
-import useFields from "../../../hooks/useFields";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
+import useLists from "../../../hooks/useLists";
 import useSidebarPanel from "../../../hooks/useSidebarPanel";
 import Field from './Field';
 import Group from './Group';
@@ -35,10 +35,9 @@ const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 
 	const duplicate = () => duplicateField( id );
 
-	const groupData = useFields(
-		Object.values( field.fields || {} ).filter( field => field.type ),
-		`fields${ parent }[${ id }][fields]`
-	);
+	const { getForList } = useLists();
+	const groupData = field.type === 'group' ? getForList( id ) : undefined;
+
 	const groupHasFields = field.type === 'group' && groupData.fields.length > 0;
 
 	return field.type && (
@@ -61,7 +60,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 				<span className="og-column--actions og-item__actions">
 					{
 						field.type === 'group' && <Inserter
-							addField={ groupData.add }
+							addField={ groupData.addField }
 							type="group"
 						/>
 					}
