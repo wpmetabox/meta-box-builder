@@ -48,7 +48,7 @@ const useLists = create( ( set, get ) => ( {
 
 		// Create a new list for group fields.
 		if ( fieldType === 'group' ) {
-			const list = get().lists.find( l => l.id === listId );
+			const list = state.lists.find( l => l.id === listId );
 			lists.push( {
 				id: fieldId,
 				fields: [],
@@ -70,8 +70,28 @@ const useLists = create( ( set, get ) => ( {
 			};
 		} )
 	} ) ),
+	updateField: ( listId, fieldId, key, value ) => set( state => ( {
+		lists: state.lists.map( l => {
+			if ( l.id !== listId ) {
+				return l;
+			}
+
+			const index = l.fields.findIndex( f => f._id === fieldId );
+			if ( index === -1 ) {
+				return l;
+			}
+
+			let newFields = [ ...l.fields ];
+			newFields[ index ][ key ] = value;
+
+			return {
+				...l,
+				fields: newFields,
+			};
+		} )
+	} ) ),
 	duplicateField: ( listId, fieldId ) => set( state => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = state.lists.find( l => l.id === listId );
 
 		let newField = getFieldValue( `${ list.baseInputName }[${ fieldId }]` );
 		const newId = `${ newField.type }_${ uniqid() }`;
@@ -117,6 +137,7 @@ const useLists = create( ( set, get ) => ( {
 			fields: list.fields,
 			addField: fieldType => get().addField( listId, fieldType ),
 			removeField: fieldType => get().removeField( listId, fieldType ),
+			updateField: ( fieldId, key, value ) => get().updateField( listId, fieldId, key, value ),
 			duplicateField: fieldType => get().duplicateField( listId, fieldType ),
 			setFields: fields => get().setFields( listId, fields ),
 		};
