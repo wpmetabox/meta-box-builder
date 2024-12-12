@@ -7,28 +7,28 @@ import FieldInserter from './FieldInserter';
  * Fix cursor jumping to the end of the `<input>` after typing.
  * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
  */
-const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) => {
+const GroupTitle = ( { name, componentId, field, updateField, ...rest } ) => {
 	const { getPrefix } = useSettings();
 
 	const { getAllFields } = useLists();
 	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
 	let fields = getAllFields()
-		.filter( field => !ignoreTypes.includes( field.type ) )
-		.map( field => [ field.id, field.name ] );
+		.filter( f => !ignoreTypes.includes( f.type ) )
+		.map( f => [ f.id, f.name ] );
 
 	fields = [ [ '{#}', '{#}' ], ...fields ];
 
-	const handleChange = ( inputRef, value ) => nameIdData.updateGroupTitle( value );
+	const handleChange = ( inputRef, value ) => updateField( 'group_title', value );
 
 	const handleSelectItem = ( inputRef, value ) => {
 		const title = value === '{#}' ? value : `{${ getPrefix() }${ value }}`;
 		inputRef.current.value += title;
-		nameIdData.updateGroupTitle( inputRef.current.value );
+		updateField( 'group_title', inputRef.current.value );
 	};
 
 	return (
 		<DivRow className="og-group-title" htmlFor={ componentId } { ...rest }>
-			<FieldInserter id={ componentId } name={ name } defaultValue={ defaultValue } items={ fields } onChange={ handleChange } onSelect={ handleSelectItem } />
+			<FieldInserter id={ componentId } name={ name } defaultValue={ field.group_title } items={ fields } onChange={ handleChange } onSelect={ handleSelectItem } />
 		</DivRow>
 	);
 };
