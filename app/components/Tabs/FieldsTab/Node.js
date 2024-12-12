@@ -14,7 +14,7 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
+const Node = ( { id, field, parent = '', removeField, updateField, duplicateField } ) => {
 	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
 	const { setActiveField } = useFieldSettingsPanel();
@@ -52,7 +52,7 @@ const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 					<HeaderLabel nameIdData={ nameIdData } />
 				</span>
 				<span className="og-column--space"></span>
-				<HeaderId nameIdData={ nameIdData } />
+				<HeaderId updateField={ updateField } fieldId={ id } defaultValue={ field.id || '' } />
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
@@ -64,8 +64,8 @@ const Node = ( { id, field, parent = '', removeField, duplicateField } ) => {
 			</div>
 			{
 				field.type === 'group'
-					? <Group id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } />
-					: <Field id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateFieldData={ updateFieldData } />
+					? <Group id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateField={ updateField } />
+					: <Field id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateFieldData={ updateFieldData } updateField={ updateField } />
 			}
 		</div>
 	);

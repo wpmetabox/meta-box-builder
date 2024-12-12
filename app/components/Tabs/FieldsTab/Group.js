@@ -4,9 +4,9 @@ import useLists from "../../../hooks/useLists";
 import FieldSettings from "../../Sidebar/FieldSettings";
 import Node from './Node';
 
-const Group = ( { id, field, parent = '', nameIdData } ) => {
+const Group = ( { id, field, parent = '', nameIdData, updateField } ) => {
 	const { getForList } = useLists();
-	const { fields, removeField, duplicateField, setFields } = getForList( id );
+	const { fields, removeField, updateField: updateSubField, duplicateField, setFields } = getForList( id );
 
 	const fieldTypes = useApi( 'field-types', {} );
 
@@ -24,6 +24,7 @@ const Group = ( { id, field, parent = '', nameIdData } ) => {
 				field={ field }
 				parent={ parent }
 				nameIdData={ nameIdData }
+				updateField={ updateField }
 			/>
 
 			{
@@ -51,6 +52,7 @@ const Group = ( { id, field, parent = '', nameIdData } ) => {
 									parent={ `${ parent }[${ id }][fields]` }
 									removeField={ removeField }
 									duplicateField={ duplicateField }
+									updateField={ updateSubField }
 								/> )
 							}
 						</ReactSortable>

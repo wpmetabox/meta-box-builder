@@ -7,7 +7,7 @@ import DivRow from './DivRow';
  * Fix cursor jumping to the end of the `<input>` after typing.
  * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
  */
-const Id = ( { name, componentId, nameIdData, ...rest } ) => {
+const Id = ( { fieldId, defaultValue, name, componentId, updateField, ...rest } ) => {
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
 	const ids = useApi( 'fields-ids', [] );
@@ -16,7 +16,7 @@ const Id = ( { name, componentId, nameIdData, ...rest } ) => {
 
 	const handleChange = e => {
 		setTimeout( () => checkDuplicateId( e.target.value ), 200 );
-		nameIdData.updateId( e.target.value );
+		updateField( fieldId, 'id', e.target.value );
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	};
 
@@ -45,7 +45,7 @@ const Id = ( { name, componentId, nameIdData, ...rest } ) => {
 				type="text"
 				id={ componentId }
 				name={ name }
-				value={ nameIdData.id }
+				value={ defaultValue }
 				onChange={ handleChange }
 				pattern="[A-Za-z0-9\-_]+"
 			/>
