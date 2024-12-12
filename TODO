@@ -50,3 +50,10 @@
 	- Lưu unique ID của field đó vào trong hook `useEditFieldSettingsPanel`
 	- Thêm class để hiển thị settings của field đó trong panel
 	- Setup sidebar hiện panel `EditFieldSettingsPanel`. Do phần ẩn hiện sidebar panel này được sử dụng khi chọn 1 field, nên id của sidebar panel và action ẩn hiện được đưa vào hook `useSidebarPanel`.
+
+## Danh sách fields
+
+- Do sử dụng library SortableJS nên cần phải tạo nhiều list để chứa các field. Mỗi 1 group sẽ là 1 list, và có 1 list là root, chứa các field root.
+- Sử dụng `useLists` hook để truy xuất đến các list này ở mọi nơi (globally), khác với cách dùng `useFields` trước đây, chỉ dùng cục bộ.
+- Khi cần sử dụng các hàm CRUD cho từng list, gọi qua hàm `getForList`.
+- Do lưu tất cả các field vào đây, nên có thể lấy danh sách tất cả các field, thay thế cho hook `useFieldIds` trước đây. Vì có thể lấy đủ thông tin, nên các phần suggestion trong `<FieldInserter>` của group title, address, conditional logic, ... có thể hiện tên field và khi chọn thì điền ID của field.
