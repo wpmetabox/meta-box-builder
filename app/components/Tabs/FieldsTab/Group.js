@@ -4,7 +4,7 @@ import useLists from "../../../hooks/useLists";
 import FieldSettings from "../../Sidebar/FieldSettings";
 import Node from './Node';
 
-const Group = ( { id, field, parent = '', nameIdData, updateField } ) => {
+const Group = ( { id, field, parent = '', updateField } ) => {
 	const { getForList } = useLists();
 	const { fields, removeField, updateField: updateSubField, duplicateField, setFields } = getForList( id );
 
@@ -23,7 +23,6 @@ const Group = ( { id, field, parent = '', nameIdData, updateField } ) => {
 				controls={ controls }
 				field={ field }
 				parent={ parent }
-				nameIdData={ nameIdData }
 				updateField={ updateField }
 			/>
 

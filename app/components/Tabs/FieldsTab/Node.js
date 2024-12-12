@@ -3,7 +3,6 @@ import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
 import { inside } from "../../../functions";
 import useFieldData from "../../../hooks/useFieldData";
-import useFieldNameId from "../../../hooks/useFieldNameId";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import useLists from "../../../hooks/useLists";
 import useSidebarPanel from "../../../hooks/useSidebarPanel";
@@ -15,7 +14,6 @@ import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
 const Node = ( { id, field, parent = '', removeField, updateField, duplicateField } ) => {
-	const nameIdData = useFieldNameId( field );
 	const { data, updateFieldData } = useFieldData( field );
 	const { setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
@@ -65,8 +63,8 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 			</div>
 			{
 				field.type === 'group'
-					? <Group id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateField={ update } />
-					: <Field id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateFieldData={ updateFieldData } updateField={ update } />
+					? <Group id={ id } field={ field } parent={ parent } updateField={ update } />
+					: <Field id={ id } field={ field } parent={ parent } updateFieldData={ updateFieldData } updateField={ update } />
 			}
 		</div>
 	);
