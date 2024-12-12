@@ -148,7 +148,7 @@ const useLists = create( ( set, get ) => ( {
 			addField: fieldType => get().addField( listId, fieldType ),
 			removeField: fieldType => get().removeField( listId, fieldType ),
 			updateField: ( fieldId, key, value ) => get().updateField( listId, fieldId, key, value ),
-			duplicateField: fieldType => get().duplicateField( listId, fieldType ),
+			duplicateField: fieldId => get().duplicateField( listId, fieldId ),
 			setFields: fields => get().setFields( listId, fields ),
 		};
 	},

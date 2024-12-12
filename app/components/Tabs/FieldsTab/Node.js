@@ -34,6 +34,7 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 	};
 
 	const duplicate = () => duplicateField( id );
+	const update = ( key, value ) => updateField( id, key, value );
 
 	const { getForList } = useLists();
 	const addField = field.type === 'group' ? getForList( id ).addField : undefined;
@@ -52,7 +53,7 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 					<HeaderLabel nameIdData={ nameIdData } />
 				</span>
 				<span className="og-column--space"></span>
-				<HeaderId updateField={ updateField } fieldId={ id } defaultValue={ field.id || '' } />
+				<HeaderId updateField={ update } defaultValue={ field.id || '' } />
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
@@ -64,8 +65,8 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 			</div>
 			{
 				field.type === 'group'
-					? <Group id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateField={ updateField } />
-					: <Field id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateFieldData={ updateFieldData } updateField={ updateField } />
+					? <Group id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateField={ update } />
+					: <Field id={ id } field={ field } parent={ parent } nameIdData={ nameIdData } updateFieldData={ updateFieldData } updateField={ update } />
 			}
 		</div>
 	);

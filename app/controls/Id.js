@@ -16,7 +16,7 @@ const Id = ( { fieldId, defaultValue, name, componentId, updateField, ...rest } 
 
 	const handleChange = e => {
 		setTimeout( () => checkDuplicateId( e.target.value ), 200 );
-		updateField( fieldId, 'id', e.target.value );
+		updateField( 'id', e.target.value );
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	};
 

@@ -2,7 +2,7 @@ import { __ } from "@wordpress/i18n";
 import AutosizeInput from 'react-input-autosize';
 
 // Output field id on the header bar with live input.
-const HeaderId = ( { fieldId, defaultValue, updateField } ) => {
+const HeaderId = ( { defaultValue, updateField } ) => {
 	// Release when pressing "Enter" or "Escape".
 	const maybeFinishEditing = e => {
 		if ( ![ 'Enter', 'Escape' ].includes( e.key ) ) {
@@ -12,7 +12,7 @@ const HeaderId = ( { fieldId, defaultValue, updateField } ) => {
 		e.target.blur();
 	};
 
-	const handleChange = e => updateField( fieldId, 'id', e.target.value );
+	const handleChange = e => updateField( 'id', e.target.value );
 
 	return (
 		<span className="og-column--id">
