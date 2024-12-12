@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { sanitizeId } from '../functions';
 import DivRow from './DivRow';
 
 /**
@@ -28,7 +29,7 @@ const Name = ( { name, componentId, field, updateField, ...rest } ) => {
 		}
 
 		// If ID is already manually changed, do nothing.
-		if ( !field._id_changed ) {
+		if ( field._id_changed ) {
 			return;
 		}
 

@@ -1,6 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import AutosizeInput from 'react-input-autosize';
-import { sanitizeId } from "../../../functions";
+import { sanitizeId, ucwords } from "../../../functions";
 
 const getFieldLabel = field => [ 'hidden', 'divider' ].includes( field.type )
 	? ucwords( field.type )
@@ -16,8 +16,7 @@ const HeaderLabel = ( { field, updateField } ) => {
 		e.preventDefault();
 		e.target.blur();
 
-		// When done updating "name", don't auto generate ID.
-		updateField( '_id_changed', true );
+		stopGeneratingId();
 	};
 
 	const handleChange = e => {
@@ -37,11 +36,16 @@ const HeaderLabel = ( { field, updateField } ) => {
 		}
 
 		// If ID is already manually changed, do nothing.
-		if ( !field._id_changed ) {
+		if ( field._id_changed ) {
 			return;
 		}
 
 		updateField( 'id', sanitizeId( value ) );
+	};
+
+	// When done updating "name", don't auto generate ID.
+	const stopGeneratingId = () => {
+		updateField( '_id_changed', true );
 	};
 
 	return (
@@ -54,6 +58,7 @@ const HeaderLabel = ( { field, updateField } ) => {
 				value={ getFieldLabel( field ) }
 				onChange={ handleChange }
 				onKeyDown={ maybeFinishEditing }
+				onInput={ handleChange }
 			/>
 			<span className="dashicons dashicons-edit"></span>
 		</>

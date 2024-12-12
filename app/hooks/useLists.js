@@ -30,6 +30,7 @@ const useLists = create( ( set, get ) => ( {
 		const fieldId = `${ fieldType }_${ uniqid() }`;
 		const field = {
 			_id: fieldId, // Internal use, won't change
+			_new: true, // Detect the field is newly added, to auto generate ID
 			type: fieldType,
 			id: fieldId, // ID of the field that use can edit
 			name: ucwords( fieldType, '_' ),
