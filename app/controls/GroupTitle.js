@@ -1,4 +1,4 @@
-import useFieldIds from '../hooks/useFieldIds';
+import useLists from '../hooks/useLists';
 import useSettings from '../hooks/useSettings';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
@@ -10,13 +10,18 @@ import FieldInserter from './FieldInserter';
 const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) => {
 	const { getPrefix } = useSettings();
 
-	const ids = useFieldIds( state => state.ids );
-	const fields = [ '{#}', ...Array.from( new Set( Object.values( ids ) ) ) ];
+	const { getAllFields } = useLists();
+	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
+	let fields = getAllFields()
+		.filter( field => !ignoreTypes.includes( field.type ) )
+		.map( field => [ field.id, field.name ] );
+
+	fields = [ [ '{#}', '{#}' ], ...fields ];
 
 	const handleChange = ( inputRef, value ) => nameIdData.updateGroupTitle( value );
 
 	const handleSelectItem = ( inputRef, value ) => {
-		const title = value === '{#}' ? value : `{${ getPrefix() || '' }${ value }}`;
+		const title = value === '{#}' ? value : `{${ getPrefix() }${ value }}`;
 		inputRef.current.value += title;
 		nameIdData.updateGroupTitle( inputRef.current.value );
 	};
