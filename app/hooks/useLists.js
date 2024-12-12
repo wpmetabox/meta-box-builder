@@ -1,5 +1,6 @@
+import { __ } from '@wordpress/i18n';
 import { create } from 'zustand';
-import { ensureArray, ucwords, uniqid } from '../functions';
+import { ensureArray, getFieldValue, ucwords, uniqid } from '../functions';
 
 let lists = [];
 
@@ -114,6 +115,15 @@ const useLists = create( ( set, get ) => ( {
 				fields: newFields,
 			};
 		} );
+
+		// Create a new list for group fields.
+		if ( newField.type === 'group' ) {
+			lists.push( {
+				id: newId,
+				fields: [],
+				baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+			} );
+		}
 
 		return { lists };
 	} ),
