@@ -1,11 +1,13 @@
-import { useEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import AutosizeInput from 'react-input-autosize';
+import { sanitizeId } from "../../../functions";
+
+const getFieldLabel = field => [ 'hidden', 'divider' ].includes( field.type )
+	? ucwords( field.type )
+	: field.name || field.group_title || __( '(No label)', 'meta-box-builder' );
 
 // Output field label on the header bar.
-const HeaderLabel = ( { nameIdData } ) => {
-	const hiddenRef = useRef();
-	const inputRef = useRef();
-
+const HeaderLabel = ( { field, updateField } ) => {
 	// Release when pressing "Enter" or "Escape".
 	const maybeFinishEditing = e => {
 		if ( ![ 'Enter', 'Escape' ].includes( e.key ) ) {
@@ -13,29 +15,45 @@ const HeaderLabel = ( { nameIdData } ) => {
 		}
 		e.preventDefault();
 		e.target.blur();
-		nameIdData.noAutoGenerateId();
+
+		// When done updating "name", don't auto generate ID.
+		updateField( '_id_changed', true );
 	};
 
-	const displayedLabel = nameIdData.label || __( '(No label)', 'meta-box-builder' );
+	const handleChange = e => {
+		updateField( 'name', e.target.value );
+		maybeGenerateId( e.target.value );
+	};
 
-	// Update the width of the input to match the width of the text.
-	useEffect( () => {
-		inputRef.current.style.width = `${ hiddenRef.current.offsetWidth || nameIdData.label.length * 7 }px`;
-	}, [ displayedLabel ] );
+	const maybeGenerateId = value => {
+		// No ID?
+		if ( [ 'custom_html', 'divider', 'heading' ].includes( field.type ) ) {
+			return;
+		}
+
+		// Only do for new fields.
+		if ( !field._new ) {
+			return;
+		}
+
+		// If ID is already manually changed, do nothing.
+		if ( !field._id_changed ) {
+			return;
+		}
+
+		updateField( 'id', sanitizeId( value ) );
+	};
 
 	return (
 		<>
-			<span className="og-item__hidden-text og-item__hidden-text--label" ref={ hiddenRef }>{ displayedLabel }</span>
-			<input
+			<AutosizeInput
 				type="text"
-				className="og-item__editable og-item__editable--label"
+				className="og-item__editable"
+				inputStyle={ { fontSize: 13, fontWeight: 500 } }
 				title={ __( 'Click to edit', 'meta-box-builder' ) }
-				placeholder={ displayedLabel }
-				value={ nameIdData.label }
+				value={ getFieldLabel( field ) }
+				onChange={ handleChange }
 				onKeyDown={ maybeFinishEditing }
-				onChange={ e => nameIdData.updateName( e.target.value ) }
-				onBlur={ nameIdData.noAutoGenerateId }
-				ref={ inputRef }
 			/>
 			<span className="dashicons dashicons-edit"></span>
 		</>

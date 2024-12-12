@@ -24,6 +24,7 @@ const Content = ( { id, controls, field, parent = '', nameIdData, updateFieldDat
 			fieldType={ field.type }
 
 			updateField={ updateField }
+			field={ field }
 		/>;
 	};
 

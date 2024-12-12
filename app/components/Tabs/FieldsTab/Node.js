@@ -50,10 +50,10 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
 					<HeaderIcon data={ data } />
-					<HeaderLabel nameIdData={ nameIdData } />
+					<HeaderLabel field={ field } updateField={ update } />
 				</span>
 				<span className="og-column--space"></span>
-				<HeaderId updateField={ update } defaultValue={ field.id || '' } />
+				<HeaderId field={ field } updateField={ update } />
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
