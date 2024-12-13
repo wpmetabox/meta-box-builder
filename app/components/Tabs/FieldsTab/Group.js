@@ -43,9 +43,9 @@ const Group = ( { field, parent = '', updateField } ) => {
 							handle=".og-item__header"
 						>
 							{
-								fields.map( ( field, index ) => <Node
-									key={ field._id }
-									field={ field }
+								fields.map( f => <Node
+									key={ f._id }
+									field={ f }
 									parent={ `${ parent }[${ field._id }][fields]` }
 									removeField={ removeField }
 									duplicateField={ duplicateField }
