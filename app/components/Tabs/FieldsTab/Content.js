@@ -10,15 +10,29 @@ const Content = ( { controls, field, parent = '', updateField } ) => {
 			defaultValue = [ 'datetime-local', 'month', 'tel', 'week' ].includes( defaultValue ) ? 'text' : defaultValue;
 		}
 
-		return <Control
-			componentName={ control.setting }
-			componentId={ `fields-${ field._id }-${ control.setting }` }
-			{ ...control.props }
-			name={ `fields${ parent }[${ field._id }]${ input }` }
-			defaultValue={ defaultValue }
-			updateField={ updateField }
-			field={ field }
-		/>;
+		let props = {
+			componentName: control.setting,
+			componentId: `fields-${ field._id }-${ control.setting }`,
+			...control.props,
+			name: `fields${ parent }[${ field._id }]${ input }`,
+			defaultValue,
+			field,
+		};
+
+		// Specific settings that have live update.
+		const settingsWithLiveUpdate = [
+			'name',
+			'id',
+			'group_title',
+			'icon',
+			'icon_url',
+			'icon_fa',
+		];
+		if ( settingsWithLiveUpdate.includes( control.setting ) ) {
+			props = { ...props, updateField };
+		}
+
+		return <Control { ...props } />;
 	};
 
 	return controls.map( control => <Suspense fallback={ null } key={ control.setting }>{ getControlComponent( control ) }</Suspense> );
