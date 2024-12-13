@@ -57,7 +57,7 @@ const Node = ( { field, parent = '', removeField, updateField, duplicateField } 
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
-						field.type === 'group' && <GroupAddField id={ field._id } />
+						field.type === 'group' && <GroupAddField listId={ field._id } />
 					}
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
@@ -72,9 +72,9 @@ const Node = ( { field, parent = '', removeField, updateField, duplicateField } 
 	);
 };
 
-const GroupAddField = ( { id } ) => {
+const GroupAddField = ( { listId } ) => {
 	const { getForList } = useLists();
-	const { addField } = getForList( id );
+	const { addField } = getForList( listId );
 
 	return <Inserter addField={ addField } type="group" />;
 };
