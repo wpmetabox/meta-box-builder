@@ -40,10 +40,10 @@ const getIconLabel = icon => {
 	return label.trim().toLowerCase();
 };
 
-const DashiconPicker = ( { name, componentId, defaultValue, icons = MbbApp.icons, updateField, ...rest } ) => {
+const DashiconPicker = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
 	const [ query, setQuery ] = useState( '' );
 	const [ value, setValue ] = useState( defaultValue );
-	let filteredIcons = icons.map( icon => [ icon, getIconLabel( icon ) ] )
+	let filteredIcons = MbbApp.icons.map( icon => [ icon, getIconLabel( icon ) ] )
 		.filter( item => query === '' || item[ 1 ].includes( query.toLowerCase() ) );
 
 	const handleChange = ( icon, onToggle ) => {
