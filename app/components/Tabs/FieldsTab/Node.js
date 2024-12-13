@@ -1,5 +1,7 @@
+import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
+import { isEqual } from 'lodash';
 import { inside } from "../../../functions";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import useLists from "../../../hooks/useLists";
@@ -36,7 +38,7 @@ const Node = ( { field, parent = '', removeField, updateField, duplicateField } 
 		}
 
 		updateField( field._id, key, value );
-	}
+	};
 
 	return field.type && (
 		<div className={ `og-item og-item--${ field.type }` }>
@@ -75,4 +77,9 @@ const GroupAddField = ( { id } ) => {
 	return <Inserter addField={ addField } type="group" />;
 };
 
-export default Node;
+export default memo( Node, ( prev, next ) => {
+	delete prev.field.fields;
+	delete next.field.fields;
+
+	return prev.parent === next.parent && isEqual( prev.field, next.field );
+} );
