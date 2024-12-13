@@ -37,9 +37,7 @@ const Name = ( { name, componentId, field, updateField, ...rest } ) => {
 	};
 
 	// When done updating "name", don't auto generate ID.
-	const stopGeneratingId = () => {
-		updateField( '_id_changed', true );
-	};
+	const stopGeneratingId = () => updateField( '_id_changed', true );
 
 	useLayoutEffect( () => {
 		if ( selection && ref.current ) {
