@@ -1,6 +1,5 @@
 import { __ } from "@wordpress/i18n";
 import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
-import clsx from "clsx";
 import { inside } from "../../../functions";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import useLists from "../../../hooks/useLists";
@@ -40,10 +39,7 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 	};
 
 	return field.type && (
-		<div className={ clsx(
-			'og-item',
-			`og-item--${ field.type }`,
-		) }>
+		<div className={ `og-item og-item--${ field.type }` }>
 			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
 			<input type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
 			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
