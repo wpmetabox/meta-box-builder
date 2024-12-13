@@ -27,6 +27,12 @@ parseLists( MbbApp, 'root', 'fields' );
 const useLists = create( ( set, get ) => ( {
 	lists,
 	addField: ( listId, fieldType ) => set( state => {
+		const list = state.lists.find( l => l.id === listId );
+		if ( !list ) {
+			console.error( `List with id ${ listId } not found.` );
+			return {};
+		}
+
 		const fieldId = `${ fieldType }_${ uniqid() }`;
 		const field = {
 			_id: fieldId, // Internal use, won't change
@@ -37,20 +43,14 @@ const useLists = create( ( set, get ) => ( {
 		};
 
 		// Add field to the list.
-		let lists = state.lists.map( l => {
-			if ( l.id !== listId ) {
-				return l;
-			}
-
-			return {
-				...l,
-				fields: [ ...l.fields, field ]
-			};
-		} );
+		let lists = state.lists.map( l =>
+			l.id === listId
+				? { ...l, fields: [ ...l.fields, field ] }
+				: l
+		);
 
 		// Create a new list for group fields.
 		if ( fieldType === 'group' ) {
-			const list = state.lists.find( l => l.id === listId );
 			lists.push( {
 				id: fieldId,
 				fields: [],
@@ -68,9 +68,9 @@ const useLists = create( ( set, get ) => ( {
 
 			return {
 				...l,
-				fields: l.fields.filter( f => f._id !== fieldId )
+				fields: l.fields.filter( f => f._id !== fieldId ),
 			};
-		} )
+		} ),
 	} ) ),
 	updateField: ( listId, fieldId, key, value ) => set( state => ( {
 		lists: state.lists.map( l => {
@@ -78,22 +78,22 @@ const useLists = create( ( set, get ) => ( {
 				return l;
 			}
 
-			const index = l.fields.findIndex( f => f._id === fieldId );
-			if ( index === -1 ) {
-				return l;
-			}
-
-			let newFields = [ ...l.fields ];
-			newFields[ index ][ key ] = value;
-
 			return {
 				...l,
-				fields: newFields,
+				fields: l.fields.map( f =>
+					f._id === fieldId
+						? { ...f, [ key ]: value }
+						: f,
+				)
 			};
 		} )
 	} ) ),
 	duplicateField: ( listId, fieldId ) => set( state => {
 		const list = state.lists.find( l => l.id === listId );
+		if ( !list ) {
+			console.error( `List with id ${ listId } not found.` );
+			return {};
+		}
 
 		let newField = getFieldValue( `${ list.baseInputName }[${ fieldId }]` );
 		const newId = `${ newField.type }_${ uniqid() }`;
