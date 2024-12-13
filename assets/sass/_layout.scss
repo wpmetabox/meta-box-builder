@@ -189,4 +189,11 @@
 		width: var(--sidebar-width);
 		overflow-y: auto;
 	}
+
+	// Field settings panel
+	&--field-settings {
+		.components-panel__header svg {
+			fill: var(--color-gray);
+		}
+	}
 }

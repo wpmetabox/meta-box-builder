@@ -1,7 +1,7 @@
 import { Button, Panel, SearchControl } from '@wordpress/components';
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { archive, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, inbox, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
+import { getFieldIcon } from '../../functions';
 import useApi from "../../hooks/useApi";
 import useLists from '../../hooks/useLists';
 
@@ -73,66 +73,6 @@ const FieldButton = ( { type, title } ) => {
 	const add = () => addField( 'root', type );
 
 	return <Button variant="tertiary" icon={ getFieldIcon( type ) } onClick={ add }>{ title }</Button>;
-};
-
-const getFieldIcon = type => {
-	const iconMap = {
-		autocomplete: lineDotted,
-		background: brush,
-		button: button,
-		button_group: buttons,
-		checkbox: check,
-		checkbox_list: formatListBullets,
-		color: color,
-		custom_html: code,
-		date: postDate,
-		datetime: calendar,
-		divider: separator,
-		email: inbox,
-		fieldset_text: grid,
-		file: page,
-		file_advanced: pages,
-		file_input: flipHorizontal,
-		file_upload: cloudUpload,
-		map: mapMarker,
-		heading: heading,
-		hidden: unseen,
-		icon: starEmpty,
-		image: image,
-		image_advanced: gallery,
-		image_select: fullscreen,
-		image_upload: cloudUpload,
-		key_value: category,
-		number: chevronUpDown,
-		oembed: video,
-		osm: mapMarker,
-		password: shield,
-		post: postFeaturedImage,
-		radio: border,
-		range: queryPaginationNumbers,
-		select: chevronUpDown,
-		select_advanced: chevronUpDown,
-		sidebar: drawerRight,
-		single_image: image,
-		slider: queryPaginationNumbers,
-		switch: border,
-		taxonomy: tag,
-		taxonomy_advanced: tag,
-		text: textColor,
-		text_list: table,
-		textarea: paragraph,
-		time: backup,
-		user: commentAuthorAvatar,
-		url: link,
-		video: captureVideo,
-		wysiwyg: typography,
-		group: group,
-		tab: archive,
-	};
-
-	if ( iconMap[ type ] ) {
-		return iconMap[ type ];
-	}
 };
 
 export default AddFieldPanel;
