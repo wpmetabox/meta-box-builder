@@ -1,16 +1,9 @@
 import { Dropdown } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import clsx from "clsx";
 import useApi from "../../../hooks/useApi";
 
-export const Inserter = ( {
-	addField,
-	type = '',
-	buttonType = 'primary',
-	buttonText = __( '+ Add Field', 'meta-box-builder' ),
-	title = __( 'Add a new field', 'meta-box-builder' ),
-} ) => {
+export const Inserter = ( { addField, type = '' } ) => {
 	const fieldCategories = useApi( 'field-categories', [] );
 	const [ searchParam, setSearchParam ] = useState( '' );
 
@@ -25,13 +18,13 @@ export const Inserter = ( {
 			className="og-inserter"
 			onClose={ () => setSearchParam( '' ) }
 			renderToggle={ ( { onToggle } ) => type === 'group'
-				? <span className="og-item__action og-item__action--add" onClick={ onToggle } title={ title }>
+				? <span className="og-item__action og-item__action--add" onClick={ onToggle } title={ __( 'Add a new field', 'meta-box-builder' ) }>
 					<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 						<path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zm6 7h6m-3-3v6" />
 					</svg>
 				</span>
-				: <button type="button" className={ clsx( 'button', buttonType === 'primary' && 'button-primary' ) } onClick={ onToggle } title={ title }>
-					{ buttonText }
+				: <button type="button" className="button button-primary" onClick={ onToggle } title={ __( 'Add a new field', 'meta-box-builder' ) }>
+					{ __( '+ Add Field', 'meta-box-builder' ) }
 				</button>
 			}
 			renderContent={ ( { onToggle } ) => (
