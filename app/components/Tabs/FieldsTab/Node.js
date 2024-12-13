@@ -14,12 +14,14 @@ import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
 const Node = ( { field, parent = '', removeField, updateField, duplicateField } ) => {
-	const { setActiveField } = useFieldSettingsPanel();
+	const { activeField, setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
+
+	const updateActiveField = () => setActiveField( field );
 
 	const toggleSettings = e => {
 		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions,.og-column--label,.components-popover' ) ) {
-			setActiveField( field );
+			updateActiveField();
 			setSidebarPanel( 'field_settings' );
 		}
 	};
@@ -41,17 +43,17 @@ const Node = ( { field, parent = '', removeField, updateField, duplicateField } 
 	};
 
 	return field.type && (
-		<div className={ `og-item og-item--${ field.type }` }>
+		<div className={ `og-item og-item--${ field.type } ${ field._id === activeField._id ? 'og-item--active' : '' }` }>
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
 			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
 					<HeaderIcon field={ field } />
-					<HeaderLabel field={ field } updateField={ update } />
+					<HeaderLabel field={ field } updateField={ update } updateActiveField={ updateActiveField } />
 				</span>
 				<span className="og-column--space"></span>
-				<HeaderId field={ field } updateField={ update } />
+				<HeaderId field={ field } updateField={ update } updateActiveField={ updateActiveField } />
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
