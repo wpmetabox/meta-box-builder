@@ -11,7 +11,7 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { id, field, parent = '', removeField, updateField, duplicateField } ) => {
+const Node = ( { field, parent = '', removeField, updateField, duplicateField } ) => {
 	const { setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
 
@@ -24,24 +24,24 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 
 	const remove = () => {
 		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
-			removeField( id );
+			removeField( field._id );
 		}
 	};
 
-	const duplicate = () => duplicateField( id );
+	const duplicate = () => duplicateField( field._id );
 	const update = ( key, value ) => {
 		if ( key.includes( '[' ) ) {
 			// Get correct key in the last [].
 			key = key.replace( /\]/g, '' ).split( '[' ).pop();
 		}
 
-		updateField( id, key, value );
+		updateField( field._id, key, value );
 	}
 
 	return field.type && (
 		<div className={ `og-item og-item--${ field.type }` }>
-			<input type="hidden" name={ `fields${ parent }[${ id }][_id]` } defaultValue={ id } />
-			<input type="hidden" name={ `fields${ parent }[${ id }][type]` } defaultValue={ field.type } />
+			<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
+			<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
 			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
@@ -53,7 +53,7 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
-						field.type === 'group' && <GroupAddField id={ id } />
+						field.type === 'group' && <GroupAddField id={ field._id } />
 					}
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
@@ -61,8 +61,8 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 			</div>
 			{
 				field.type === 'group'
-					? <Group id={ id } field={ field } parent={ parent } updateField={ update } />
-					: <Field id={ id } field={ field } parent={ parent } updateField={ update } />
+					? <Group field={ field } parent={ parent } updateField={ update } />
+					: <Field field={ field } parent={ parent } updateField={ update } />
 			}
 		</div>
 	);

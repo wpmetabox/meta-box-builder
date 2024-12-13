@@ -42,7 +42,6 @@ const Fields = () => {
 				{
 					fields.map( field => <Node
 						key={ field._id }
-						id={ field._id }
 						field={ field }
 						removeField={ removeField }
 						duplicateField={ duplicateField }

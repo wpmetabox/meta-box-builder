@@ -4,9 +4,9 @@ import useLists from "../../../hooks/useLists";
 import FieldSettings from "../../Sidebar/FieldSettings";
 import Node from './Node';
 
-const Group = ( { id, field, parent = '', updateField } ) => {
+const Group = ( { field, parent = '', updateField } ) => {
 	const { getForList } = useLists();
-	const { fields, removeField, updateField: updateSubField, duplicateField, setFields } = getForList( id );
+	const { fields, removeField, updateField: updateSubField, duplicateField, setFields } = getForList( field._id );
 
 	const fieldTypes = useApi( 'field-types', {} );
 
@@ -19,7 +19,6 @@ const Group = ( { id, field, parent = '', updateField } ) => {
 	return (
 		<>
 			<FieldSettings
-				id={ id }
 				controls={ controls }
 				field={ field }
 				parent={ parent }
@@ -46,9 +45,8 @@ const Group = ( { id, field, parent = '', updateField } ) => {
 							{
 								fields.map( ( field, index ) => <Node
 									key={ field._id }
-									id={ field._id }
 									field={ field }
-									parent={ `${ parent }[${ id }][fields]` }
+									parent={ `${ parent }[${ field._id }][fields]` }
 									removeField={ removeField }
 									duplicateField={ duplicateField }
 									updateField={ updateSubField }

@@ -7,7 +7,7 @@ import DivRow from './DivRow';
  * Fix cursor jumping to the end of the `<input>` after typing.
  * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
  */
-const Id = ( { fieldId, field, name, componentId, updateField, ...rest } ) => {
+const Id = ( { field, name, componentId, updateField, ...rest } ) => {
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
 	const ids = useApi( 'fields-ids', [] );
@@ -22,7 +22,7 @@ const Id = ( { fieldId, field, name, componentId, updateField, ...rest } ) => {
 
 	const checkDuplicateId = value => {
 		// Has a duplicate and not the current field
-		if ( ids[ value ] !== undefined && ids[ value ]?._id !== rest.fieldId ) {
+		if ( ids[ value ] !== undefined && ids[ value ]?._id !== field._id ) {
 			setExistingFieldGroup( ids[ value ] );
 			setDuplicate( true );
 			return;
