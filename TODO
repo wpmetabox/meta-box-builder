@@ -14,7 +14,7 @@
 	[x] Style add field panel
 	[x] Làm 1 portal cho edit field settings
 	[x] Khi click vào 1 field thì show panel edit field settings
-	[ ] Check xem tại sao admin columns, clone vẫn hiện các subfields khi các checkbox ban đầu ko enable
+	[x] Check xem tại sao admin columns, clone vẫn hiện các subfields khi các checkbox ban đầu ko enable
 	[ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 	[ ] Highlight field đang được edit
 [ ] Click add new field thì ra modal chọn field, các field có icon kèm theo
