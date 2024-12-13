@@ -39,9 +39,6 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 		updateField( id, key, value );
 	};
 
-	const { getForList } = useLists();
-	const addField = field.type === 'group' ? getForList( id ).addField : undefined;
-
 	return field.type && (
 		<div className={ clsx(
 			'og-item',
@@ -60,7 +57,7 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					{
-						field.type === 'group' && <Inserter addField={ addField } type="group" />
+						field.type === 'group' && <GroupAddField id={ id } />
 					}
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
@@ -73,6 +70,13 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 			}
 		</div>
 	);
+};
+
+const GroupAddField = ( { id } ) => {
+	const { getForList } = useLists();
+	const { addField } = getForList( id );
+
+	return <Inserter addField={ addField } type="group" />;
 };
 
 export default Node;
