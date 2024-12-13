@@ -1,7 +1,7 @@
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
-const DateFormat = ( { name, componentId, placeholder, defaultValue, fieldType, required, ...rest } ) => (
+const DateFormat = ( { name, componentId, placeholder, defaultValue, required, ...rest } ) => (
 	<DivRow htmlFor={ componentId } { ...rest }>
 		<FieldInserter
 			id={ componentId }

@@ -17,9 +17,6 @@ const Content = ( { id, controls, field, parent = '', updateField } ) => {
 			{ ...control.props }
 			name={ `fields${ parent }[${ id }]${ input }` }
 			defaultValue={ defaultValue }
-
-			fieldType={ field.type }
-
 			updateField={ updateField }
 			field={ field }
 		/>;
