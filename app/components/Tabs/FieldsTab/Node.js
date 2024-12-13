@@ -2,7 +2,6 @@ import { __ } from "@wordpress/i18n";
 import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
 import clsx from "clsx";
 import { inside } from "../../../functions";
-import useFieldData from "../../../hooks/useFieldData";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import useLists from "../../../hooks/useLists";
 import useSidebarPanel from "../../../hooks/useSidebarPanel";
@@ -14,7 +13,6 @@ import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
 const Node = ( { id, field, parent = '', removeField, updateField, duplicateField } ) => {
-	const { data, updateFieldData } = useFieldData( field );
 	const { setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
 
@@ -34,6 +32,13 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 	const duplicate = () => duplicateField( id );
 	const update = ( key, value ) => updateField( id, key, value );
 
+	const updateFieldData = ( name, value ) => {
+		// Get correct key in the last [].
+		const key = name.replace( /\]/g, '' ).split( '[' ).pop();
+
+		updateField( id, key, value );
+	};
+
 	const { getForList } = useLists();
 	const addField = field.type === 'group' ? getForList( id ).addField : undefined;
 
@@ -47,7 +52,7 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
-					<HeaderIcon data={ data } />
+					<HeaderIcon field={ field } />
 					<HeaderLabel field={ field } updateField={ update } />
 				</span>
 				<span className="og-column--space"></span>
