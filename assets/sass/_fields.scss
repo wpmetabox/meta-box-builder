@@ -360,14 +360,19 @@
 	}
 
 	.og-item__icon {
-		color: var(--color-gray);
-		margin-right: 6px;
+		margin-right: 4px;
+
 
 		&.dashicons {
 			font-size: 16px;
 			height: 16px;
 			width: 16px;
 		}
+	}
+
+	svg.og-item__icon {
+		width: 20px;
+		height: 20px;
 	}
 
 	img.og-item__icon {
