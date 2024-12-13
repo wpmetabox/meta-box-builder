@@ -29,14 +29,14 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 	};
 
 	const duplicate = () => duplicateField( id );
-	const update = ( key, value ) => updateField( id, key, value );
-
-	const updateFieldData = ( name, value ) => {
-		// Get correct key in the last [].
-		const key = name.replace( /\]/g, '' ).split( '[' ).pop();
+	const update = ( key, value ) => {
+		if ( key.includes( '[' ) ) {
+			// Get correct key in the last [].
+			key = key.replace( /\]/g, '' ).split( '[' ).pop();
+		}
 
 		updateField( id, key, value );
-	};
+	}
 
 	return field.type && (
 		<div className={ `og-item og-item--${ field.type }` }>
@@ -62,7 +62,7 @@ const Node = ( { id, field, parent = '', removeField, updateField, duplicateFiel
 			{
 				field.type === 'group'
 					? <Group id={ id } field={ field } parent={ parent } updateField={ update } />
-					: <Field id={ id } field={ field } parent={ parent } updateFieldData={ updateFieldData } updateField={ update } />
+					: <Field id={ id } field={ field } parent={ parent } updateField={ update } />
 			}
 		</div>
 	);

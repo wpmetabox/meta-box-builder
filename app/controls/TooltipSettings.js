@@ -67,7 +67,7 @@ const TooltipSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 									label={ __( 'Icon', 'meta-box-builder' ) }
 									defaultValue={ isDashicons ? icon.replace( 'dashicons-', '' ) : '' }
 									componentId={ `${ componentId }-icon` }
-									updateFieldData={ ( name, value ) => setIcon( `dashicons-${ value }` ) }
+									updateField={ ( name, value ) => setIcon( `dashicons-${ value }` ) }
 								/>
 								: <DivRow htmlFor={ `${ componentId }-url` } label={ __( 'Icon URL', 'meta-box-builder' ) }>
 									<input type="text" id={ `${ componentId }-url` } defaultValue={ isDashicons ? '' : icon } onChange={ setIcon } />
