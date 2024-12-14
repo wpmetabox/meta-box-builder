@@ -70,6 +70,48 @@ const useLists = create( ( set, get ) => ( {
 		setSidebarPanel( 'field_settings' );
 		setActiveField( newField );
 	},
+	prependField: ( listId, fieldType ) => {
+		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setActiveField } = useFieldSettingsPanel.getState();
+
+		const list = get().lists.find( l => l.id === listId );
+		if ( !list ) {
+			console.error( `List with id ${ listId } not found.` );
+			return;
+		}
+
+		const newId = `${ fieldType }_${ uniqid() }`;
+		const newField = {
+			_id: newId, // Internal use, won't change
+			_new: true, // Detect the field is newly added, to auto generate ID
+			type: fieldType,
+			id: newId, // ID of the field that use can edit
+			name: ucwords( fieldType, '_' ),
+		};
+
+		set( state => {
+			// Add field to the list.
+			let lists = state.lists.map( l =>
+				l.id === listId
+					? { ...l, fields: [ newField, ...l.fields ] }
+					: l
+			);
+
+			// Create a new list for group fields.
+			if ( fieldType === 'group' ) {
+				lists.push( {
+					id: newId,
+					fields: [],
+					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+				} );
+			}
+
+			return { lists };
+		} );
+
+		setSidebarPanel( 'field_settings' );
+		setActiveField( newField );
+	},
 	addFieldBefore: ( listId, fieldId, fieldType ) => {
 		const { setSidebarPanel } = useSidebarPanel.getState();
 		const { setActiveField } = useFieldSettingsPanel.getState();
@@ -271,6 +313,7 @@ const useLists = create( ( set, get ) => ( {
 			fields: list.fields,
 			setFields: fields => get().setFields( listId, fields ),
 			addField: fieldType => get().addField( listId, fieldType ),
+			prependField: fieldType => get().prependField( listId, fieldType ),
 
 			addFieldBefore: ( fieldId, fieldType ) => get().addFieldBefore( listId, fieldId, fieldType ),
 			addFieldAfter: ( fieldId, fieldType ) => get().addFieldAfter( listId, fieldId, fieldType ),

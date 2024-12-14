@@ -62,13 +62,6 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	);
 };
 
-const GroupAddField = ( { listId } ) => {
-	const { getForList } = useLists();
-	const { addField } = getForList( listId );
-
-	return <Inserter addField={ addField } type="group" />;
-};
-
 export default memo( Node, ( prev, next ) => {
 	delete prev.field.fields;
 	delete next.field.fields;

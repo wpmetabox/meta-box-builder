@@ -2,9 +2,11 @@ import { DropdownMenu, MenuGroup, MenuItem, Modal } from '@wordpress/components'
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { arrowDown, arrowUp, copy, insertAfter, insertBefore, moreVertical, trash } from "@wordpress/icons";
+import useLists from '../../hooks/useLists';
 import AddFieldContent from '../AddFieldContent';
 
 const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, removeField } ) => {
+	const { getForList } = useLists();
 	const [ action, setAction ] = useState( () => () => {} );
 	const [ isOpen, setOpen ] = useState( false );
 	const openModal = () => setOpen( true );
@@ -13,6 +15,14 @@ const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, remove
 	const actionMap = {
 		addBefore: fieldType => addFieldBefore( field._id, fieldType ),
 		addAfter: fieldType => addFieldAfter( field._id, fieldType ),
+		addSubFieldBefore: fieldType => {
+			const { prependField } = getForList( field._id );
+			prependField( fieldType );
+		},
+		addSubFieldAfter: fieldType => {
+			const { addField } = getForList( field._id );
+			addField( fieldType );
+		},
 	};
 
 	const actionCallback = ( closeMenu, name ) => () => {
@@ -54,10 +64,10 @@ const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, remove
 							{
 								field.type === 'group' && (
 									<MenuGroup>
-										<MenuItem icon={ insertBefore } onClick={ onClose }>
+										<MenuItem icon={ insertBefore } onClick={ actionCallback( onClose, 'addSubFieldBefore' ) }>
 											{ __( 'Add a sub-field at the beginning', 'meta-box-builder' ) }
 										</MenuItem>
-										<MenuItem icon={ insertAfter } onClick={ onClose }>
+										<MenuItem icon={ insertAfter } onClick={ actionCallback( onClose, 'addSubFieldAfter' ) }>
 											{ __( 'Add a sub-field at the end', 'meta-box-builder' ) }
 										</MenuItem>
 									</MenuGroup>
