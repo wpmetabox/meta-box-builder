@@ -6,7 +6,7 @@ import Node from './Node';
 
 const Group = ( { field, parent = '', updateField } ) => {
 	const { getForList } = useLists();
-	const { fields, removeField, updateField: updateSubField, duplicateField, setFields } = getForList( field._id );
+	const { fields, setFields, ...fieldActions } = getForList( field._id );
 
 	const fieldTypes = useApi( 'field-types', {} );
 
@@ -47,9 +47,7 @@ const Group = ( { field, parent = '', updateField } ) => {
 									key={ f._id }
 									field={ f }
 									parent={ `${ parent }[${ field._id }][fields]` }
-									removeField={ removeField }
-									duplicateField={ duplicateField }
-									updateField={ updateSubField }
+									{ ...fieldActions }
 								/> )
 							}
 						</ReactSortable>

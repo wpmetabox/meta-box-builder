@@ -1,11 +1,12 @@
 import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
+import { Icon, dragHandle } from "@wordpress/icons";
 import { isEqual } from 'lodash';
 import { inside } from "../../../functions";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import useLists from "../../../hooks/useLists";
 import useSidebarPanel from "../../../hooks/useSidebarPanel";
+import Actions from '../../Structure/Actions';
 import Field from './Field';
 import Group from './Group';
 import HeaderIcon from "./HeaderIcon";
@@ -13,33 +14,26 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { field, parent = '', removeField, updateField, duplicateField } ) => {
+const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
 
 	const updateActiveField = () => setActiveField( field );
 
 	const toggleSettings = e => {
-		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions,.og-column--label,.components-popover' ) ) {
+		if ( !inside( e.target, '.og-item__editable,.og-column--actions,.og-column--label,.components-menu-item__item,.og-add-field' ) ) {
 			updateActiveField();
 			setSidebarPanel( 'field_settings' );
 		}
 	};
 
-	const remove = () => {
-		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
-			removeField( field._id );
-		}
-	};
-
-	const duplicate = () => duplicateField( field._id );
 	const update = ( key, value ) => {
 		if ( key.includes( '[' ) ) {
 			// Get correct key in the last [].
 			key = key.replace( /\]/g, '' ).split( '[' ).pop();
 		}
 
-		updateField( field._id, key, value );
+		fieldActions.updateField( field._id, key, value );
 	};
 
 	return field.type && (
@@ -56,11 +50,7 @@ const Node = ( { field, parent = '', removeField, updateField, duplicateField } 
 				<HeaderId field={ field } updateField={ update } updateActiveField={ updateActiveField } />
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
-					{
-						field.type === 'group' && <GroupAddField listId={ field._id } />
-					}
-					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
-					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
+					<Actions field={ field } { ...fieldActions } />
 				</span>
 			</div>
 			{
@@ -70,13 +60,6 @@ const Node = ( { field, parent = '', removeField, updateField, duplicateField } 
 			}
 		</div>
 	);
-};
-
-const GroupAddField = ( { listId } ) => {
-	const { getForList } = useLists();
-	const { addField } = getForList( listId );
-
-	return <Inserter addField={ addField } type="group" />;
 };
 
 export default memo( Node, ( prev, next ) => {
