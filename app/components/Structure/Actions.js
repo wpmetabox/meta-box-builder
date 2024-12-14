@@ -5,7 +5,7 @@ import { arrowDown, arrowUp, copy, insertAfter, insertBefore, moreVertical, tras
 import useLists from '../../hooks/useLists';
 import AddFieldContent from '../AddFieldContent';
 
-const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, removeField } ) => {
+const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, removeField, moveFieldUp, moveFieldDown } ) => {
 	const { getForList } = useLists();
 	const [ action, setAction ] = useState( () => () => {} );
 	const [ isOpen, setOpen ] = useState( false );
@@ -44,6 +44,16 @@ const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, remove
 		}
 	};
 
+	const moveUp = closeMenu => () => {
+		closeMenu();
+		moveFieldUp( field._id );
+	};
+
+	const moveDown = closeMenu => () => {
+		closeMenu();
+		moveFieldDown( field._id );
+	};
+
 	return (
 		<>
 			<DropdownMenu icon={ moreVertical } label={ __( 'Select an action', 'meta-box-builder' ) }>
@@ -74,10 +84,10 @@ const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, remove
 								)
 							}
 							<MenuGroup>
-								<MenuItem icon={ arrowUp } onClick={ onClose }>
+								<MenuItem icon={ arrowUp } onClick={ moveUp( onClose ) }>
 									{ __( 'Move up', 'meta-box-builder' ) }
 								</MenuItem>
-								<MenuItem icon={ arrowDown } onClick={ onClose }>
+								<MenuItem icon={ arrowDown } onClick={ moveDown( onClose ) }>
 									{ __( 'Move down', 'meta-box-builder' ) }
 								</MenuItem>
 							</MenuGroup>

@@ -294,6 +294,46 @@ const useLists = create( ( set, get ) => ( {
 			};
 		} )
 	} ) ),
+	moveFieldUp: ( listId, fieldId ) => set( state => ( {
+		lists: state.lists.map( l => {
+			if ( l.id !== listId ) {
+				return l;
+			}
+
+			const index = l.fields.findIndex( f => f._id === fieldId );
+			if ( index <= 0 ) {
+				return l;
+			}
+
+			let newFields = [ ...l.fields ];
+			[ newFields[ index - 1 ], newFields[ index ] ] = [ newFields[ index ], newFields[ index - 1 ] ];
+
+			return {
+				...l,
+				fields: newFields
+			};
+		} )
+	} ) ),
+	moveFieldDown: ( listId, fieldId ) => set( state => ( {
+		lists: state.lists.map( l => {
+			if ( l.id !== listId ) {
+				return l;
+			}
+
+			const index = l.fields.findIndex( f => f._id === fieldId );
+			if ( index >= l.fields.length - 1 ) {
+				return l;
+			}
+
+			let newFields = [ ...l.fields ];
+			[ newFields[ index ], newFields[ index + 1 ] ] = [ newFields[ index + 1 ], newFields[ index ] ];
+
+			return {
+				...l,
+				fields: newFields
+			};
+		} )
+	} ) ),
 	setFields: ( listId, fields ) => set( state => ( {
 		lists: state.lists.map( l => {
 			if ( l.id !== listId ) {
@@ -320,6 +360,8 @@ const useLists = create( ( set, get ) => ( {
 			duplicateField: fieldId => get().duplicateField( listId, fieldId ),
 			removeField: fieldId => get().removeField( listId, fieldId ),
 			updateField: ( fieldId, key, value ) => get().updateField( listId, fieldId, key, value ),
+			moveFieldUp: fieldId => get().moveFieldUp( listId, fieldId ),
+			moveFieldDown: fieldId => get().moveFieldDown( listId, fieldId ),
 		};
 	},
 
