@@ -21,7 +21,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const updateActiveField = () => setActiveField( field );
 
 	const toggleSettings = e => {
-		if ( inside( e.target, '.og-item__action--toggle' ) || !inside( e.target, '.og-item__editable,.og-item__toggle,.og-item__actions,.og-column--label,.components-popover' ) ) {
+		if ( !inside( e.target, '.og-item__editable,.og-column--actions,.og-column--label,.components-menu-item__item,.og-add-field' ) ) {
 			updateActiveField();
 			setSidebarPanel( 'field_settings' );
 		}
