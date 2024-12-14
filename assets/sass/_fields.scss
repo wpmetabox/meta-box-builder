@@ -287,6 +287,10 @@
 		min-height: 30px;
 	}
 
+	&__menu {
+		z-index: 99;
+	}
+
 	&__value-container {
 		padding-top: 0;
 		padding-bottom: 0;
