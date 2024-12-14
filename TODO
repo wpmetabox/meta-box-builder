@@ -17,7 +17,7 @@
 	[x] Check xem tại sao admin columns, clone vẫn hiện các subfields khi các checkbox ban đầu ko enable
 	[ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 	[x] Highlight field đang được edit
-[ ] Click add new field thì ra modal chọn field, các field có icon kèm theo
+[x] Click add new field thì ra modal chọn field, các field có icon kèm theo
 [ ] Làm context menu, khi click chuột phải cũng ra menu để thêm field, insert field before, after, duplicate, delete, ...
 [ ] Kéo thả nút add field vào danh sách field
 
