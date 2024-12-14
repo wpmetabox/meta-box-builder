@@ -14,7 +14,7 @@ import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
 
-const Node = ( { field, parent = '', removeField, updateField, duplicateField } ) => {
+const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
 
@@ -27,20 +27,13 @@ const Node = ( { field, parent = '', removeField, updateField, duplicateField } 
 		}
 	};
 
-	const remove = () => {
-		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
-			removeField( field._id );
-		}
-	};
-
-	const duplicate = () => duplicateField( field._id );
 	const update = ( key, value ) => {
 		if ( key.includes( '[' ) ) {
 			// Get correct key in the last [].
 			key = key.replace( /\]/g, '' ).split( '[' ).pop();
 		}
 
-		updateField( field._id, key, value );
+		fieldActions.updateField( field._id, key, value );
 	};
 
 	return field.type && (
@@ -57,12 +50,11 @@ const Node = ( { field, parent = '', removeField, updateField, duplicateField } 
 				<HeaderId field={ field } updateField={ update } updateActiveField={ updateActiveField } />
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
-					{
-						field.type === 'group' && <GroupAddField listId={ field._id } />
-					}
-					<Actions field={ field } />
-					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
-					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
+					<DropdownMenu icon={ moreVertical } label={ __( 'Select an action', 'meta-box-builder' ) }>
+						{
+							( { onClose } ) => <Actions onClose={ onClose } field={ field } { ...fieldActions } />
+						}
+					</DropdownMenu>
 				</span>
 			</div>
 			{
@@ -81,54 +73,59 @@ const GroupAddField = ( { listId } ) => {
 	return <Inserter addField={ addField } type="group" />;
 };
 
-const Actions = ( { field } ) => {
-	const onClose = () => {};
+const Actions = ( { onClose, field, addFieldBefore, addFieldAfter, duplicateField, removeField } ) => {
+	const duplicate = () => {
+		onClose();
+		duplicateField( field._id );
+	};
+
+	const remove = () => {
+		onClose();
+
+		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
+			removeField( field._id );
+		}
+	};
 
 	return (
-		<DropdownMenu icon={ moreVertical } label={ __( 'Select an action', 'meta-box-builder' ) }>
+		<>
+			<MenuGroup>
+				<MenuItem icon={ insertBefore } onClick={ onClose }>
+					{ __( 'Add a field before', 'meta-box-builder' ) }
+				</MenuItem>
+				<MenuItem icon={ insertAfter } onClick={ onClose }>
+					{ __( 'Add a field after', 'meta-box-builder' ) }
+				</MenuItem>
+				<MenuItem icon={ copy } onClick={ duplicate }>
+					{ __( 'Duplicate', 'meta-box-builder' ) }
+				</MenuItem>
+			</MenuGroup>
 			{
-				( { onClose } ) => (
-					<>
-						<MenuGroup>
-							<MenuItem icon={ insertBefore } onClick={ onClose }>
-								{ __( 'Add a field before', 'meta-box-builder' ) }
-							</MenuItem>
-							<MenuItem icon={ insertAfter } onClick={ onClose }>
-								{ __( 'Add a field after', 'meta-box-builder' ) }
-							</MenuItem>
-							<MenuItem icon={ copy } onClick={ onClose }>
-								{ __( 'Duplicate', 'meta-box-builder' ) }
-							</MenuItem>
-						</MenuGroup>
-						{
-							field.type === 'group' && (
-								<MenuGroup>
-									<MenuItem icon={ insertBefore } onClick={ onClose }>
-										{ __( 'Add a sub-field at the beginning', 'meta-box-builder' ) }
-									</MenuItem>
-									<MenuItem icon={ insertAfter } onClick={ onClose }>
-										{ __( 'Add a sub-field at the end', 'meta-box-builder' ) }
-									</MenuItem>
-								</MenuGroup>
-							)
-						}
-						<MenuGroup>
-							<MenuItem icon={ arrowUp } onClick={ onClose }>
-								{ __( 'Move up', 'meta-box-builder' ) }
-							</MenuItem>
-							<MenuItem icon={ arrowDown } onClick={ onClose }>
-								{ __( 'Move down', 'meta-box-builder' ) }
-							</MenuItem>
-						</MenuGroup>
-						<MenuGroup>
-							<MenuItem icon={ trash } onClick={ onClose }>
-								{ __( 'Remove', 'meta-box-builder' ) }
-							</MenuItem>
-						</MenuGroup>
-					</>
+				field.type === 'group' && (
+					<MenuGroup>
+						<MenuItem icon={ insertBefore } onClick={ onClose }>
+							{ __( 'Add a sub-field at the beginning', 'meta-box-builder' ) }
+						</MenuItem>
+						<MenuItem icon={ insertAfter } onClick={ onClose }>
+							{ __( 'Add a sub-field at the end', 'meta-box-builder' ) }
+						</MenuItem>
+					</MenuGroup>
 				)
 			}
-		</DropdownMenu>
+			<MenuGroup>
+				<MenuItem icon={ arrowUp } onClick={ onClose }>
+					{ __( 'Move up', 'meta-box-builder' ) }
+				</MenuItem>
+				<MenuItem icon={ arrowDown } onClick={ onClose }>
+					{ __( 'Move down', 'meta-box-builder' ) }
+				</MenuItem>
+			</MenuGroup>
+			<MenuGroup>
+				<MenuItem icon={ trash } onClick={ remove }>
+					{ __( 'Remove', 'meta-box-builder' ) }
+				</MenuItem>
+			</MenuGroup>
+		</>
 	);
 };
 
