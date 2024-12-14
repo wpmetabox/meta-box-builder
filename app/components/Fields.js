@@ -9,7 +9,7 @@ import Node from './Tabs/FieldsTab/Node';
 
 const Fields = () => {
 	const { getForList } = useLists();
-	const { fields, addField, removeField, updateField, duplicateField, setFields } = getForList( 'root' );
+	const { fields, setFields, addField, ...fieldActions } = getForList( 'root' );
 
 	// Don't render any field if fields data is not available.
 	const types = useApi( 'field-types', {} );
@@ -43,9 +43,7 @@ const Fields = () => {
 					fields.map( field => <Node
 						key={ field._id }
 						field={ field }
-						removeField={ removeField }
-						duplicateField={ duplicateField }
-						updateField={ updateField }
+						{ ...fieldActions }
 					/> )
 				}
 			</ReactSortable>
