@@ -1,6 +1,8 @@
 import { __ } from '@wordpress/i18n';
 import { create } from 'zustand';
 import { ensureArray, getFieldValue, ucwords, uniqid } from '../functions';
+import useFieldSettingsPanel from './useFieldSettingsPanel';
+import useSidebarPanel from './useSidebarPanel';
 
 let lists = [];
 
@@ -26,11 +28,14 @@ parseLists( MbbApp, 'root', 'fields' );
 
 const useLists = create( ( set, get ) => ( {
 	lists,
-	addField: ( listId, fieldType ) => set( state => {
-		const list = state.lists.find( l => l.id === listId );
+	addField: ( listId, fieldType ) => {
+		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setActiveField } = useFieldSettingsPanel.getState();
+
+		const list = get().lists.find( l => l.id === listId );
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
-			return {};
+			return;
 		}
 
 		const newId = `${ fieldType }_${ uniqid() }`;
@@ -42,71 +47,37 @@ const useLists = create( ( set, get ) => ( {
 			name: ucwords( fieldType, '_' ),
 		};
 
-		// Add field to the list.
-		let lists = state.lists.map( l =>
-			l.id === listId
-				? { ...l, fields: [ ...l.fields, newField ] }
-				: l
-		);
+		set( state => {
+			// Add field to the list.
+			let lists = state.lists.map( l =>
+				l.id === listId
+					? { ...l, fields: [ ...l.fields, newField ] }
+					: l
+			);
 
-		// Create a new list for group fields.
-		if ( fieldType === 'group' ) {
-			lists.push( {
-				id: newId,
-				fields: [],
-				baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-			} );
-		}
-
-		return { lists };
-	} ),
-	addFieldBefore: ( listId, fieldId, fieldType ) => set( state => {
-		const list = state.lists.find( l => l.id === listId );
-		if ( !list ) {
-			console.error( `List with id ${ listId } not found.` );
-			return {};
-		}
-
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
-
-		const lists = state.lists.map( l => {
-			if ( l.id !== listId ) {
-				return l;
+			// Create a new list for group fields.
+			if ( fieldType === 'group' ) {
+				lists.push( {
+					id: newId,
+					fields: [],
+					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+				} );
 			}
 
-			const index = l.fields.findIndex( f => f._id === fieldId );
-			let newFields = [ ...l.fields ];
-			newFields.splice( index, 0, newField );
-
-			return {
-				...l,
-				fields: newFields,
-			};
+			return { lists };
 		} );
 
-		// Create a new list for group fields.
-		if ( newField.type === 'group' ) {
-			lists.push( {
-				id: newId,
-				fields: [],
-				baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-			} );
-		}
+		setSidebarPanel( 'field_settings' );
+		setActiveField( newField );
+	},
+	addFieldBefore: ( listId, fieldId, fieldType ) => {
+		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setActiveField } = useFieldSettingsPanel.getState();
 
-		return { lists };
-	} ),
-	addFieldAfter: ( listId, fieldId, fieldType ) => set( state => {
-		const list = state.lists.find( l => l.id === listId );
+		const list = get().lists.find( l => l.id === listId );
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
-			return {};
+			return;
 		}
 
 		const newId = `${ fieldType }_${ uniqid() }`;
@@ -118,37 +89,95 @@ const useLists = create( ( set, get ) => ( {
 			name: ucwords( fieldType, '_' ),
 		};
 
-		const lists = state.lists.map( l => {
-			if ( l.id !== listId ) {
-				return l;
+		set( state => {
+			const lists = state.lists.map( l => {
+				if ( l.id !== listId ) {
+					return l;
+				}
+
+				const index = l.fields.findIndex( f => f._id === fieldId );
+				let newFields = [ ...l.fields ];
+				newFields.splice( index, 0, newField );
+
+				return {
+					...l,
+					fields: newFields,
+				};
+			} );
+
+			// Create a new list for group fields.
+			if ( newField.type === 'group' ) {
+				lists.push( {
+					id: newId,
+					fields: [],
+					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+				} );
 			}
 
-			const index = l.fields.findIndex( f => f._id === fieldId );
-			let newFields = [ ...l.fields ];
-			newFields.splice( index + 1, 0, newField );
-
-			return {
-				...l,
-				fields: newFields,
-			};
+			return { lists };
 		} );
 
-		// Create a new list for group fields.
-		if ( newField.type === 'group' ) {
-			lists.push( {
-				id: newId,
-				fields: [],
-				baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-			} );
-		}
+		setSidebarPanel( 'field_settings' );
+		setActiveField( newField );
+	},
+	addFieldAfter: ( listId, fieldId, fieldType ) => {
+		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setActiveField } = useFieldSettingsPanel.getState();
 
-		return { lists };
-	} ),
-	duplicateField: ( listId, fieldId ) => set( state => {
-		const list = state.lists.find( l => l.id === listId );
+		const list = get().lists.find( l => l.id === listId );
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
-			return {};
+			return;
+		}
+
+		const newId = `${ fieldType }_${ uniqid() }`;
+		const newField = {
+			_id: newId, // Internal use, won't change
+			_new: true, // Detect the field is newly added, to auto generate ID
+			type: fieldType,
+			id: newId, // ID of the field that use can edit
+			name: ucwords( fieldType, '_' ),
+		};
+
+		set( state => {
+			const lists = state.lists.map( l => {
+				if ( l.id !== listId ) {
+					return l;
+				}
+
+				const index = l.fields.findIndex( f => f._id === fieldId );
+				let newFields = [ ...l.fields ];
+				newFields.splice( index + 1, 0, newField );
+
+				return {
+					...l,
+					fields: newFields,
+				};
+			} );
+
+			// Create a new list for group fields.
+			if ( newField.type === 'group' ) {
+				lists.push( {
+					id: newId,
+					fields: [],
+					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+				} );
+			}
+
+			return { lists };
+		} );
+
+		setSidebarPanel( 'field_settings' );
+		setActiveField( newField );
+	},
+	duplicateField: ( listId, fieldId ) => {
+		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setActiveField } = useFieldSettingsPanel.getState();
+
+		const list = get().lists.find( l => l.id === listId );
+		if ( !list ) {
+			console.error( `List with id ${ listId } not found.` );
+			return;
 		}
 
 		let newField = getFieldValue( `${ list.baseInputName }[${ fieldId }]` );
@@ -158,44 +187,55 @@ const useLists = create( ( set, get ) => ( {
 		newField._id = newId;
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
-		const lists = state.lists.map( l => {
-			if ( l.id !== listId ) {
-				return l;
+		set( state => {
+			const lists = state.lists.map( l => {
+				if ( l.id !== listId ) {
+					return l;
+				}
+
+				const index = l.fields.findIndex( f => f._id === fieldId );
+				let newFields = [ ...l.fields ];
+				newFields.splice( index + 1, 0, newField );
+
+				return {
+					...l,
+					fields: newFields,
+				};
+			} );
+
+			// Create a new list for group fields.
+			if ( newField.type === 'group' ) {
+				lists.push( {
+					id: newId,
+					fields: [],
+					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+				} );
 			}
 
-			const index = l.fields.findIndex( f => f._id === fieldId );
-			let newFields = [ ...l.fields ];
-			newFields.splice( index + 1, 0, newField );
-
-			return {
-				...l,
-				fields: newFields,
-			};
+			return { lists };
 		} );
 
-		// Create a new list for group fields.
-		if ( newField.type === 'group' ) {
-			lists.push( {
-				id: newId,
-				fields: [],
-				baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-			} );
-		}
+		setSidebarPanel( 'field_settings' );
+		setActiveField( newField );
+	},
+	removeField: ( listId, fieldId ) => {
+		const { setSidebarPanel } = useSidebarPanel.getState();
 
-		return { lists };
-	} ),
-	removeField: ( listId, fieldId ) => set( state => ( {
-		lists: state.lists.map( l => {
-			if ( l.id !== listId ) {
-				return l;
-			}
+		set( state => ( {
+			lists: state.lists.map( l => {
+				if ( l.id !== listId ) {
+					return l;
+				}
 
-			return {
-				...l,
-				fields: l.fields.filter( f => f._id !== fieldId ),
-			};
-		} ),
-	} ) ),
+				return {
+					...l,
+					fields: l.fields.filter( f => f._id !== fieldId ),
+				};
+			} ),
+		} ) );
+
+		setSidebarPanel( 'add_field' );
+	},
 	updateField: ( listId, fieldId, key, value ) => set( state => ( {
 		lists: state.lists.map( l => {
 			if ( l.id !== listId ) {
