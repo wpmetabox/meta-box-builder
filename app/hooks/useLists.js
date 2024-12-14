@@ -33,28 +33,28 @@ const useLists = create( ( set, get ) => ( {
 			return {};
 		}
 
-		const fieldId = `${ fieldType }_${ uniqid() }`;
-		const field = {
-			_id: fieldId, // Internal use, won't change
+		const newId = `${ fieldType }_${ uniqid() }`;
+		const newField = {
+			_id: newId, // Internal use, won't change
 			_new: true, // Detect the field is newly added, to auto generate ID
 			type: fieldType,
-			id: fieldId, // ID of the field that use can edit
+			id: newId, // ID of the field that use can edit
 			name: ucwords( fieldType, '_' ),
 		};
 
 		// Add field to the list.
 		let lists = state.lists.map( l =>
 			l.id === listId
-				? { ...l, fields: [ ...l.fields, field ] }
+				? { ...l, fields: [ ...l.fields, newField ] }
 				: l
 		);
 
 		// Create a new list for group fields.
 		if ( fieldType === 'group' ) {
 			lists.push( {
-				id: fieldId,
+				id: newId,
 				fields: [],
-				baseInputName: `${ list.baseInputName }[${ fieldId }][fields]`,
+				baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
 			} );
 		}
 
