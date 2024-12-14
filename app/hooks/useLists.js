@@ -60,34 +60,90 @@ const useLists = create( ( set, get ) => ( {
 
 		return { lists };
 	} ),
-	removeField: ( listId, fieldId ) => set( state => ( {
-		lists: state.lists.map( l => {
+	addFieldBefore: ( listId, fieldId, fieldType ) => set( state => {
+		const list = state.lists.find( l => l.id === listId );
+		if ( !list ) {
+			console.error( `List with id ${ listId } not found.` );
+			return {};
+		}
+
+		const newId = `${ fieldType }_${ uniqid() }`;
+		const newField = {
+			_id: newId, // Internal use, won't change
+			_new: true, // Detect the field is newly added, to auto generate ID
+			type: fieldType,
+			id: newId, // ID of the field that use can edit
+			name: ucwords( fieldType, '_' ),
+		};
+
+		const lists = state.lists.map( l => {
 			if ( l.id !== listId ) {
 				return l;
 			}
 
+			const index = l.fields.findIndex( f => f._id === fieldId );
+			let newFields = [ ...l.fields ];
+			newFields.splice( index, 0, newField );
+
 			return {
 				...l,
-				fields: l.fields.filter( f => f._id !== fieldId ),
+				fields: newFields,
 			};
-		} ),
-	} ) ),
-	updateField: ( listId, fieldId, key, value ) => set( state => ( {
-		lists: state.lists.map( l => {
+		} );
+
+		// Create a new list for group fields.
+		if ( newField.type === 'group' ) {
+			lists.push( {
+				id: newId,
+				fields: [],
+				baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+			} );
+		}
+
+		return { lists };
+	} ),
+	addFieldAfter: ( listId, fieldId, fieldType ) => set( state => {
+		const list = state.lists.find( l => l.id === listId );
+		if ( !list ) {
+			console.error( `List with id ${ listId } not found.` );
+			return {};
+		}
+
+		const newId = `${ fieldType }_${ uniqid() }`;
+		const newField = {
+			_id: newId, // Internal use, won't change
+			_new: true, // Detect the field is newly added, to auto generate ID
+			type: fieldType,
+			id: newId, // ID of the field that use can edit
+			name: ucwords( fieldType, '_' ),
+		};
+
+		const lists = state.lists.map( l => {
 			if ( l.id !== listId ) {
 				return l;
 			}
 
+			const index = l.fields.findIndex( f => f._id === fieldId );
+			let newFields = [ ...l.fields ];
+			newFields.splice( index + 1, 0, newField );
+
 			return {
 				...l,
-				fields: l.fields.map( f =>
-					f._id === fieldId
-						? { ...f, [ key ]: value }
-						: f,
-				)
+				fields: newFields,
 			};
-		} )
-	} ) ),
+		} );
+
+		// Create a new list for group fields.
+		if ( newField.type === 'group' ) {
+			lists.push( {
+				id: newId,
+				fields: [],
+				baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+			} );
+		}
+
+		return { lists };
+	} ),
 	duplicateField: ( listId, fieldId ) => set( state => {
 		const list = state.lists.find( l => l.id === listId );
 		if ( !list ) {
@@ -128,6 +184,34 @@ const useLists = create( ( set, get ) => ( {
 
 		return { lists };
 	} ),
+	removeField: ( listId, fieldId ) => set( state => ( {
+		lists: state.lists.map( l => {
+			if ( l.id !== listId ) {
+				return l;
+			}
+
+			return {
+				...l,
+				fields: l.fields.filter( f => f._id !== fieldId ),
+			};
+		} ),
+	} ) ),
+	updateField: ( listId, fieldId, key, value ) => set( state => ( {
+		lists: state.lists.map( l => {
+			if ( l.id !== listId ) {
+				return l;
+			}
+
+			return {
+				...l,
+				fields: l.fields.map( f =>
+					f._id === fieldId
+						? { ...f, [ key ]: value }
+						: f,
+				)
+			};
+		} )
+	} ) ),
 	setFields: ( listId, fields ) => set( state => ( {
 		lists: state.lists.map( l => {
 			if ( l.id !== listId ) {
@@ -140,17 +224,19 @@ const useLists = create( ( set, get ) => ( {
 			};
 		} )
 	} ) ),
-
 	getForList: listId => {
 		const list = get().lists.find( l => l.id === listId );
 
 		return {
 			fields: list.fields,
-			addField: fieldType => get().addField( listId, fieldType ),
-			removeField: fieldType => get().removeField( listId, fieldType ),
-			updateField: ( fieldId, key, value ) => get().updateField( listId, fieldId, key, value ),
-			duplicateField: fieldId => get().duplicateField( listId, fieldId ),
 			setFields: fields => get().setFields( listId, fields ),
+			addField: fieldType => get().addField( listId, fieldType ),
+
+			addFieldBefore: ( fieldId, fieldType ) => get().addFieldBefore( listId, fieldId, fieldType ),
+			addFieldAfter: ( fieldId, fieldType ) => get().addFieldAfter( listId, fieldId, fieldType ),
+			duplicateField: fieldId => get().duplicateField( listId, fieldId ),
+			removeField: fieldId => get().removeField( listId, fieldId ),
+			updateField: ( fieldId, key, value ) => get().updateField( listId, fieldId, key, value ),
 		};
 	},
 
