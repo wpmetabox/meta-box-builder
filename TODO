@@ -18,6 +18,7 @@
 	[ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 	[x] Highlight field đang được edit
 [x] Click add new field thì ra modal chọn field, các field có icon kèm theo
+[ ] Làm dropdown menu, insert field before/after, duplicate, delete, ...
 [ ] Làm context menu, khi click chuột phải cũng ra menu để thêm field, insert field before, after, duplicate, delete, ...
 [ ] Kéo thả nút add field vào danh sách field
 

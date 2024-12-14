@@ -1,6 +1,7 @@
+import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
 import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { Icon, copy, dragHandle, trash } from "@wordpress/icons";
+import { Icon, arrowDown, arrowUp, copy, dragHandle, insertAfter, insertBefore, moreVertical, trash } from "@wordpress/icons";
 import { isEqual } from 'lodash';
 import { inside } from "../../../functions";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
@@ -59,6 +60,7 @@ const Node = ( { field, parent = '', removeField, updateField, duplicateField } 
 					{
 						field.type === 'group' && <GroupAddField listId={ field._id } />
 					}
+					<Actions field={ field } />
 					<span className="og-item__action og-item__action--duplicate" title={ __( 'Duplicate', 'meta-box-builder' ) } onClick={ duplicate }><Icon icon={ copy } /></span>
 					<span className="og-item__action og-item__action--remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ remove }><Icon icon={ trash } /></span>
 				</span>
@@ -77,6 +79,57 @@ const GroupAddField = ( { listId } ) => {
 	const { addField } = getForList( listId );
 
 	return <Inserter addField={ addField } type="group" />;
+};
+
+const Actions = ( { field } ) => {
+	const onClose = () => {};
+
+	return (
+		<DropdownMenu icon={ moreVertical } label={ __( 'Select an action', 'meta-box-builder' ) }>
+			{
+				( { onClose } ) => (
+					<>
+						<MenuGroup>
+							<MenuItem icon={ insertBefore } onClick={ onClose }>
+								{ __( 'Add a field before', 'meta-box-builder' ) }
+							</MenuItem>
+							<MenuItem icon={ insertAfter } onClick={ onClose }>
+								{ __( 'Add a field after', 'meta-box-builder' ) }
+							</MenuItem>
+							<MenuItem icon={ copy } onClick={ onClose }>
+								{ __( 'Duplicate', 'meta-box-builder' ) }
+							</MenuItem>
+						</MenuGroup>
+						{
+							field.type === 'group' && (
+								<MenuGroup>
+									<MenuItem icon={ insertBefore } onClick={ onClose }>
+										{ __( 'Add a sub-field at the beginning', 'meta-box-builder' ) }
+									</MenuItem>
+									<MenuItem icon={ insertAfter } onClick={ onClose }>
+										{ __( 'Add a sub-field at the end', 'meta-box-builder' ) }
+									</MenuItem>
+								</MenuGroup>
+							)
+						}
+						<MenuGroup>
+							<MenuItem icon={ arrowUp } onClick={ onClose }>
+								{ __( 'Move up', 'meta-box-builder' ) }
+							</MenuItem>
+							<MenuItem icon={ arrowDown } onClick={ onClose }>
+								{ __( 'Move down', 'meta-box-builder' ) }
+							</MenuItem>
+						</MenuGroup>
+						<MenuGroup>
+							<MenuItem icon={ trash } onClick={ onClose }>
+								{ __( 'Remove', 'meta-box-builder' ) }
+							</MenuItem>
+						</MenuGroup>
+					</>
+				)
+			}
+		</DropdownMenu>
+	);
 };
 
 export default memo( Node, ( prev, next ) => {
