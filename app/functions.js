@@ -203,3 +203,8 @@ export const getFieldIcon = type => {
 		return iconMap[ type ];
 	}
 };
+
+export const isPositiveInteger = value => {
+	const number = Number( value );
+	return Number.isInteger( number ) && number > 0;
+};

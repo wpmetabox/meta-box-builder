@@ -1,4 +1,5 @@
 import { __ } from "@wordpress/i18n";
+import { isPositiveInteger } from "../../../functions";
 import FieldLabel from "../FieldLabel";
 
 const Text = ( { field, updateField } ) => (
@@ -36,13 +37,38 @@ const Text = ( { field, updateField } ) => (
 );
 
 const Input = ( { field } ) => {
-	const prepend = field.prepend && <span class="rwmb-input-group-text">{ field.prepend }</span>;
-	const append = field.append && <span class="rwmb-input-group-text">{ field.append }</span>;
+	const prepend = field.prepend && <span className="rwmb-input-group-text">{ field.prepend }</span>;
+	const append = field.append && <span className="rwmb-input-group-text">{ field.append }</span>;
 	const input = <input type="text" placeholder={ field.placeholder } size={ field.size } />;
 
-	return prepend || append
-		? <div class="rwmb-input-group">{ prepend }{ input }{ append }</div>
+	const output = prepend || append
+		? <div className="rwmb-input-group">{ prepend }{ input }{ append }</div>
 		: input;
+
+	return (
+		<>
+			{ output }
+			<TextLimiter field={ field } />
+		</>
+	);
+};
+
+const TextLimiter = ( { field } ) => {
+	if ( !field.text_limiter.limit || !isPositiveInteger( field.text_limiter.limit ) ) {
+		return;
+	}
+
+	const type = field.text_limiter.limit_type || 'character';
+	const text = 'word' === type ? __( 'Word Count', 'meta-box-builder' ) : __( 'Character Count', 'meta-box-builder' );
+
+	return (
+		<div className="text-limiter">
+			<span>
+				{ text }:&nbsp;
+				<span className="counter">0</span>/<span className="maximum">{ field.text_limiter.limit }</span>
+			</span>
+		</div>
+	);
 };
 
 export default Text;
