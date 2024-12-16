@@ -35,6 +35,14 @@ const Text = ( { field, updateField } ) => (
 	</>
 );
 
-const Input = ( { field } ) => <input type="text" placeholder={ field.placeholder } size={ field.size } />;
+const Input = ( { field } ) => {
+	const prepend = field.prepend && <span class="rwmb-input-group-text">{ field.prepend }</span>;
+	const append = field.append && <span class="rwmb-input-group-text">{ field.append }</span>;
+	const input = <input type="text" placeholder={ field.placeholder } size={ field.size } />;
+
+	return prepend || append
+		? <div class="rwmb-input-group">{ prepend }{ input }{ append }</div>
+		: input;
+};
 
 export default Text;
