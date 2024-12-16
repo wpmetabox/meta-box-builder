@@ -6,12 +6,17 @@
 	padding-top: 8px;
 }
 
+// Dropdown menu for field actions.
 .components-menu-items__item-icon.components-menu-items__item-icon {
 	width: 16px;
 	height: 16px;
 	fill: var(--color-gray);
 }
 
-.components-menu-group + .components-menu-group {
+.components-button.components-dropdown-menu__toggle {
+	height: calc(16px + 2 * 6px); // SVG height: 16px, button pading: 6px.
+}
+
+.components-menu-group+.components-menu-group {
 	border-top-color: var(--color-light);
 }
