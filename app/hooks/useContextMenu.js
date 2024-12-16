@@ -8,14 +8,17 @@ const useContextMenu = () => {
 	} );
 
 	const openContextMenu = e => {
-		e.preventDefault();
-		setOpen( true );
-
 		const parent = e.target.closest( '.og-item, .mb-field' );
+		if ( !parent ) {
+			return;
+		}
+
 		const rect = parent.getBoundingClientRect();
 		const x = event.clientX - rect.left;
 		const y = event.clientY - rect.top;
 
+		e.preventDefault();
+		setOpen( true );
 		setPosition( { x, y } );
 	};
 
