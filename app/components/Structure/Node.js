@@ -19,13 +19,13 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { setSidebarPanel } = useSidebarPanel();
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
 
-	const updateActiveField = () => setActiveField( field );
-
 	const toggleSettings = e => {
-		if ( !inside( e.target, '.og-item__editable,.og-column--actions,.og-column--label,.components-menu-item__item,.og-add-field' ) ) {
-			updateActiveField();
-			setSidebarPanel( 'field_settings' );
+		if ( inside( e.target, '.og-item__editable,.og-column--actions,.og-column--label,.components-menu-item__item,.og-add-field' ) ) {
+			return;
 		}
+
+		setActiveField( activeField._id === field._id ? {} : field );
+		setSidebarPanel( activeField._id === field._id ? '' : 'field_settings' );
 	};
 
 	const update = ( key, value ) => {
@@ -50,10 +50,10 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
 					<HeaderIcon field={ field } />
-					<HeaderLabel field={ field } updateField={ update } updateActiveField={ updateActiveField } />
+					<HeaderLabel field={ field } updateField={ update } />
 				</span>
 				<span className="og-column--space"></span>
-				<HeaderId field={ field } updateField={ update } updateActiveField={ updateActiveField } />
+				<HeaderId field={ field } updateField={ update } />
 				<span className="og-column--type">{ field.type }</span>
 				<span className="og-column--actions og-item__actions">
 					<Actions field={ field } { ...fieldActions } />
