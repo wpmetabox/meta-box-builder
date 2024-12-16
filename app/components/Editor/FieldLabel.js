@@ -7,7 +7,7 @@ const getFieldLabel = field => [ 'hidden', 'divider' ].includes( field.type )
 	: field.name || field.group_title || __( '(No label)', 'meta-box-builder' );
 
 // Output field label on the header bar.
-const HeaderLabel = ( { field, updateField } ) => {
+const FieldLabel = ( { field, updateField } ) => {
 	// Release when pressing "Enter" or "Escape".
 	const maybeFinishEditing = e => {
 		if ( ![ 'Enter', 'Escape' ].includes( e.key ) ) {
@@ -58,9 +58,8 @@ const HeaderLabel = ( { field, updateField } ) => {
 				onKeyDown={ maybeFinishEditing }
 				onInput={ handleChange }
 			/>
-			<span className="dashicons dashicons-edit"></span>
 		</>
 	);
 };
 
-export default HeaderLabel;
+export default FieldLabel;

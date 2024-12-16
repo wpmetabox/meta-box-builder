@@ -1,4 +1,4 @@
-import HeaderLabel from "../../Structure/HeaderLabel";
+import FieldLabel from "../FieldLabel";
 
 const Text = ( { field, updateField } ) => (
 	<>
@@ -6,7 +6,7 @@ const Text = ( { field, updateField } ) => (
 		<div className={ `rwmb-field rwmb-${ field.type }-wrapper ${ field.class } ${ field.required ? 'required' : '' }` }>
 			<div className="rwmb-label">
 				<label>
-					<HeaderLabel field={ field } updateField={ updateField } />
+					<FieldLabel field={ field } updateField={ updateField } />
 				</label>
 				{ field.required && <span className="rwmb-required">*</span> }
 			</div>
