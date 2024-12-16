@@ -11,7 +11,7 @@ const useContextMenu = () => {
 		e.preventDefault();
 		setOpen( true );
 
-		const parent = e.target.closest( '.og-item' );
+		const parent = e.target.closest( '.og-item, .mb-field' );
 		const rect = parent.getBoundingClientRect();
 		const x = event.clientX - rect.left;
 		const y = event.clientY - rect.top;

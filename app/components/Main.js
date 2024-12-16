@@ -51,7 +51,7 @@ const MainInner = ( { fields, php, theme_code } ) => {
 					</Flex>
 				</Flex>
 				<div className="mb-box__body">
-					<div className={ `mb-area ${ area === 'fields' ? 'mb-area--show' : '' }` }>
+					<div className={ `mb-area mb-editor ${ area === 'fields' ? 'mb-area--show' : '' }` }>
 						{ fields }
 					</div>
 					<div className={ `mb-area mb-area--padding ${ area === 'php' ? 'mb-area--show' : '' }` }>

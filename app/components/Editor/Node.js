@@ -1,8 +1,8 @@
-import { memo } from "@wordpress/element";
+import { memo, lazy, Suspense } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, dragHandle } from "@wordpress/icons";
 import { isEqual } from 'lodash';
-import { inside } from "../../functions";
+import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
 import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
 import useSidebarPanel from "../../hooks/useSidebarPanel";
@@ -37,26 +37,25 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		fieldActions.updateField( field._id, key, value );
 	};
 
-	return field.type && (
-		<div className={ `og-item og-item--${ field.type } ${ field._id === activeField._id ? 'og-item--active' : '' }` }>
-			<div
-				className="og-item__header"
-				title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
-				onClick={ toggleSettings }
-				onContextMenu={ openContextMenu }
-			>
-				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
-				<span className="og-column--label">
-					<HeaderIcon field={ field } />
-					<HeaderLabel field={ field } updateField={ update } />
-				</span>
-				<span className="og-column--space"></span>
-				<HeaderId field={ field } updateField={ update } />
-				<span className="og-column--type">{ field.type }</span>
-				<span className="og-column--actions og-item__actions">
-					<Actions field={ field } { ...fieldActions } />
-				</span>
-			</div>
+	if ( !field.type ) {
+		return;
+	}
+
+	const FieldType = lazy( () => import( `./FieldTemplates/${ ucwords( field.type, '_', '' ) }` ) );
+
+	return (
+		<div
+			className={ `mb-field ${ field._id === activeField._id ? 'mb-field--active' : '' }` }
+			onClick={ toggleSettings }
+			onContextMenu={ openContextMenu }
+		>
+			<Suspense fallback={ null }>
+				<FieldType
+					field={ field }
+					{ ...fieldActions }
+					updateField={ update }
+				/>
+			</Suspense>
 			{
 				<ContextMenu
 					open={ isContextMenuOpen }

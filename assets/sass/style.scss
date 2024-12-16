@@ -4,6 +4,10 @@
 @use "base/wordpress";
 @use "base/react-select";
 
+// Editor
+@use "editor/meta-box";
+@use "editor/field";
+
 .og {
 	@import "elements";
 	@import "fields";

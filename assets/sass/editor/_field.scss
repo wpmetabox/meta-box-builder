@@ -1,0 +1,16 @@
+// Basic style
+.mb-field {
+	border-bottom: none;
+	padding: 24px;
+	position: relative;
+
+	&--active,
+	&:hover {
+		background: var(--color-lightest);
+	}
+
+	&--active {
+		outline: 1px solid var(--color-primary);
+		outline-offset: -1px;
+	}
+}

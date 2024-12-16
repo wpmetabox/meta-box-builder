@@ -1,0 +1,19 @@
+// Tweaks, overwrite CSS from Meta Box.
+
+// Remove margin for the last field.
+.mb-field {
+	.rwmb-field.rwmb-field {
+		margin-bottom: 0;
+	}
+}
+
+// Disable entering for inputs
+.mb-field .rwmb-input {
+
+	input,
+	select,
+	textarea {
+		pointer-events: none;
+		user-select: none;
+	}
+}
