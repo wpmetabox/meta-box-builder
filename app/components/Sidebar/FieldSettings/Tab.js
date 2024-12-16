@@ -23,6 +23,12 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 		const settingsWithLiveUpdate = [
 			'name',
 			'id',
+			'required',
+			'clone_settings',
+			'label_description',
+			'desc',
+			'placeholder',
+			'size',
 			'group_title',
 			'icon',
 			'icon_url',

@@ -14,11 +14,11 @@ h3 {
 	margin-top: 32px;
 }
 
-input[type="text"],
-input[type="search"],
-input[type="number"],
-textarea,
-select {
+input[type="text"]:not(.rwmb-input input),
+input[type="search"]:not(.rwmb-input input),
+input[type="number"]:not(.rwmb-input input),
+textarea:not(.rwmb-input textarea),
+select:not(.rwmb-input select) {
 	width: 100%;
 	max-width: none;
 }

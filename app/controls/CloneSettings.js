@@ -5,8 +5,8 @@ import { close } from "@wordpress/icons";
 import DivRow from "./DivRow";
 import Tooltip from "./Tooltip";
 
-const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
-	const [ clone, toggleClone ] = useReducer( on => !on, defaultValue.clone );
+const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
+	const [ clone, setClone ] = useState( defaultValue.clone );
 	const [ sortable, toggleSortable ] = useReducer( on => !on, defaultValue.sortable );
 	const [ clone_default, toggleCloneDefault ] = useReducer( on => !on, defaultValue.clone_default );
 	const [ clone_empty_start, toggleCloneEmptyStart ] = useReducer( on => !on, defaultValue.clone_empty_start );
@@ -14,6 +14,16 @@ const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 	const [ min_clone, setMinClone ] = useState( defaultValue.min_clone );
 	const [ max_clone, setMaxClone ] = useState( defaultValue.max_clone );
 	const [ add_button, setAddButton ] = useState( defaultValue.add_button );
+
+	const toggleClone = () => setClone( prev => {
+		updateField( 'clone', !prev );
+		return !prev;
+	} );
+
+	const updateAddButton = e => {
+		setAddButton( e.target.value );
+		updateField( 'add_button', e.target.value );
+	};
 
 	return (
 		<>
@@ -99,7 +109,7 @@ const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 							label={ __( 'Add more text', 'meta-box-builder' ) }
 							description={ __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ) }
 						>
-							<input type="text" id={ `${ componentId }-add_button` } defaultValue={ add_button } onChange={ e => setAddButton( e.target.value ) } />
+							<input type="text" id={ `${ componentId }-add_button` } defaultValue={ add_button } onChange={ updateAddButton } />
 						</DivRow>
 					</>
 				) }
