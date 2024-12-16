@@ -2,25 +2,26 @@ import { RawHTML, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import { htmlDecode } from "../../functions";
 import useApi from "../../hooks/useApi";
-import useFieldIds from "../../hooks/useFieldIds";
 import useSettings from "../../hooks/useSettings";
 import Content from "./Content";
 
 const $ = jQuery;
 
 const ThemeCode = () => {
-	const fieldIds = useFieldIds( state => state.ids );
 	const { settings, getObjectType } = useSettings();
 	const [ tab, setTab ] = useState( 0 );
 
+	const excludeFieldTypes = [ 'button', 'custom_html', 'divider', 'heading', 'hidden', 'tab' ];
+	const fields = MbbApp.fields.filter( field => !excludeFieldTypes.includes( field.type ) );
+
 	// Generate Code
 	const themeCode = useApi( [ 'theme-code-generate', {
-		fields: Object.values( MbbApp.fields ).filter( field => ![ 'button', 'custom_html', 'divider', 'heading', 'hidden', 'tab' ].includes( field.type ) ),
+		fields,
 		settings
 	}, 'POST' ] );
 
 	// No fields (with ids) or is a block?
-	if ( MbbApp.fields.length === 0 || fieldIds.length === 0 || getObjectType() === 'block' ) {
+	if ( fields.length === 0 || getObjectType() === 'block' ) {
 		return '';
 	}
 

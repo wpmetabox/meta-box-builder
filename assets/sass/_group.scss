@@ -33,7 +33,7 @@
 &-item--group {
 
 	// Show border bottom for header bar if has subfields.
-	&--has-fields>.og-item__header {
+	&:has(.og-group-fields)>.og-item__header {
 		border-bottom: var(--border-lighter);
 	}
 

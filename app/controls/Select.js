@@ -1,13 +1,13 @@
 import DivRow from './DivRow';
 import { useToggle } from '/hooks/useToggle';
 
-const Select = ( { componentId, name, options, defaultValue, onChange, placeholder, updateFieldData, ...rest } ) => {
+const Select = ( { componentId, name, options, defaultValue, onChange, placeholder, updateField, ...rest } ) => {
 	const toggle = useToggle( componentId );
 
 	const handleChange = e => {
 		toggle();
 		onChange && onChange( e );
-		updateFieldData && updateFieldData( name, e.target.value );
+		updateField && updateField( name, e.target.value );
 	};
 
 	return <DivRow htmlFor={ componentId } { ...rest }>

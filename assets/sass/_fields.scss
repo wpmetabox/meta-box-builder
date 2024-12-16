@@ -173,33 +173,33 @@
 
 	&__header {
 		padding: 10px;
+		transition: all .1s ease-in-out;
 	}
 
-	&__hidden-text {
-		position: absolute;
-		height: 0;
-		overflow: hidden;
-		white-space: pre;
+	&__editable {
+		input {
+			line-height: 24px;
 
-		&--label {
-			font-weight: 500;
+			// Reset WP style for the input.
+			border: 0;
+			border-radius: 0;
+			background: none;
+			padding: 0;
+			min-height: 24px;
+			font-size: 13px;
+
+			// Fix layout shifting when focus.
+			height: 24px;
+			box-sizing: border-box;
+
+			// Add border bottom when focus, mimic edit effect.
+			&:hover,
+			&:focus {
+				outline: none;
+				color: inherit;
+				box-shadow: 0 1px var(--color-light);
+			}
 		}
-	}
-
-	&__editable.og-item__editable.og-item__editable {
-		line-height: 24px;
-
-		// Reset WP style for the input.
-		border: 0;
-		border-radius: 0;
-		background: none;
-		padding: 0;
-		min-height: 24px;
-		font-size: 13px;
-
-		// Fix layout shifting when focus.
-		height: 24px;
-		box-sizing: border-box;
 
 		+.dashicons {
 			font-size: 16px;
@@ -214,18 +214,6 @@
 		// Show edit title icon when hover.
 		&:hover+.dashicons {
 			opacity: 1;
-		}
-
-		// Add border bottom when focus, mimic edit effect.
-		&:focus {
-			outline: none;
-			color: inherit;
-			box-shadow: 0 1px var(--color-light);
-
-			// Hide edit icon when focus.
-			+.dashicons {
-				opacity: 0;
-			}
 		}
 
 		&--label {
@@ -265,30 +253,6 @@
 		visibility: hidden;
 		cursor: grab;
 	}
-
-	.react-tabs__tab-list {
-		border: none;
-		margin: 0 0 24px;
-	}
-
-	.react-tabs__tab {
-		height: auto;
-		line-height: 1;
-		padding: 0;
-
-		&:not(:last-child) {
-			border-right: 1px solid var(--color-light);
-			padding-right: 8px;
-			margin-right: 8px;
-		}
-
-		&--selected,
-		&:hover {
-			box-shadow: none;
-			color: inherit;
-			color: var(--color-primary);
-		}
-	}
 }
 
 // Border bottom: an item always have border bottom, and when expanded: add a border bottom to its header bar.
@@ -300,9 +264,9 @@
 	}
 }
 
-// On hover and expand.
+// On hover & active.
 .og-item__header:hover,
-.og-collapsible--expanded>.og-item__header {
+.og-item--active > .og-item__header {
 	background: var(--color-lightest);
 
 	// Show drag icon.
@@ -311,12 +275,20 @@
 		visibility: visible;
 	}
 }
+.og-item--active > .og-item__header {
+	outline: 1px solid var(--color-primary);
+	outline-offset: -1px;
+}
 
 // React select.
 .react-select {
 	&__control.react-select__control {
 		border-color: #7e8993;
 		min-height: 30px;
+	}
+
+	&__menu {
+		z-index: 99;
 	}
 
 	&__value-container {
@@ -374,13 +346,18 @@
 
 	.og-item__icon {
 		color: var(--color-gray);
-		margin-right: 6px;
+		margin-right: 4px;
 
 		&.dashicons {
 			font-size: 16px;
 			height: 16px;
 			width: 16px;
 		}
+	}
+
+	svg.og-item__icon {
+		width: 20px;
+		height: 20px;
 	}
 
 	img.og-item__icon {

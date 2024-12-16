@@ -1,3 +1,17 @@
 .components-tooltip {
 	max-width: 400px;
 }
+
+.components-modal__header {
+	padding-top: 8px;
+}
+
+.components-menu-items__item-icon.components-menu-items__item-icon {
+	width: 16px;
+	height: 16px;
+	fill: var(--color-gray);
+}
+
+.components-menu-group + .components-menu-group {
+	border-top-color: var(--color-light);
+}

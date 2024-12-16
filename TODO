@@ -1,7 +1,7 @@
 [x] Check edit slug/id của field group
 [x] Fix toggle field settings lag.
-[ ] Check if we need to store field._expand and use toggle from useFields.
-	NOTE: Không bỏ được, do liên quan đến phần Toggle all fields
+[x] Check if we need to store field._expand and use toggle from useFields.
+	Đã bỏ, do không còn cần expand field nữa
 [ ] Chuyển settings của field group sang sidebar
 	[x] Check lại xem khi nào chỉ cần dùng getSettings() (VD: truyền biến qua URL), khi nào chỉ cần lấy trực tiếp qua MbbApp. Với 2 case này thì nên dùng chung 1 code (qua getSettings()). Lưu ý chỉ dùng cho stateless.
 	[x] Check lại xem khi nào dùng settings context và các giá trị dạng stateful (object type, ...)
@@ -10,11 +10,18 @@
 [ ] Chuyển settings của fields sang sidebar
 	[x] Làm 2 nút trên sidebar cho: add field, edit field group settings
 	[x] Toogle 2 panel đó mượt mà
-	[ ] Cho phép thêm được field
-	[ ] Style add field panel
+	[x] Cho phép thêm được field
+	[x] Style add field panel
 	[x] Làm 1 portal cho edit field settings
 	[x] Khi click vào 1 field thì show panel edit field settings
-	[ ] Check xem tại sao admin columns, clone vẫn hiện các subfields khi các checkbox ban đầu ko enable
+	[x] Check xem tại sao admin columns, clone vẫn hiện các subfields khi các checkbox ban đầu ko enable
+	[ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
+	[x] Highlight field đang được edit
+[x] Click add new field thì ra modal chọn field, các field có icon kèm theo
+[ ] Làm dropdown menu, insert field before/after, duplicate, delete, ...
+[ ] Làm context menu, khi click chuột phải cũng ra menu để thêm field, insert field before, after, duplicate, delete, ...
+[ ] Kéo thả nút add field vào danh sách field
+
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
@@ -50,3 +57,11 @@
 	- Lưu unique ID của field đó vào trong hook `useEditFieldSettingsPanel`
 	- Thêm class để hiển thị settings của field đó trong panel
 	- Setup sidebar hiện panel `EditFieldSettingsPanel`. Do phần ẩn hiện sidebar panel này được sử dụng khi chọn 1 field, nên id của sidebar panel và action ẩn hiện được đưa vào hook `useSidebarPanel`.
+
+## Danh sách fields
+
+- Do sử dụng library SortableJS nên cần phải tạo nhiều list để chứa các field. Mỗi 1 group sẽ là 1 list, và có 1 list là root, chứa các field root.
+- Sử dụng `useLists` hook để truy xuất đến các list này ở mọi nơi (globally), khác với cách dùng `useFields` trước đây, chỉ dùng cục bộ.
+- Khi cần sử dụng các hàm CRUD cho từng list, gọi qua hàm `getForList`.
+- Do lưu tất cả các field vào đây, nên có thể lấy danh sách tất cả các field, thay thế cho hook `useFieldIds` trước đây. Vì có thể lấy đủ thông tin, nên các phần suggestion trong `<FieldInserter>` của group title, address, conditional logic, ... có thể hiện tên field và khi chọn thì điền ID của field.
+- Các update về field như name/id/label hoặc icon thông qua các hook cũ `useFieldData` hoặc `useFieldNameId` đều bỏ, thay thế bằng `updateField`.

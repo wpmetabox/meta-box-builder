@@ -1,20 +1,14 @@
 import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
-import useApi from "../hooks/useApi";
-import useFields from "../hooks/useFields";
-import Header from "./Tabs/FieldsTab/Header";
-import { Inserter } from './Tabs/FieldsTab/Inserter';
-import Node from './Tabs/FieldsTab/Node';
+import useApi from "../../hooks/useApi";
+import useLists from "../../hooks/useLists";
+import Header from "./Header";
+import Node from './Node';
 
 const Fields = () => {
-	const {
-		fields,
-		add,
-		remove,
-		duplicate,
-		setFields,
-	} = useFields( MbbApp.fields.filter( field => field.type ), 'fields' );
+	const { getForList } = useLists();
+	const { fields, setFields, addField, ...fieldActions } = getForList( 'root' );
 
 	// Don't render any field if fields data is not available.
 	const types = useApi( 'field-types', {} );
@@ -24,10 +18,9 @@ const Fields = () => {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
-	return fields.length === 0 ?
+	return !fields || fields.length === 0 ?
 		<>
-			<RawHTML className="og-none">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
-			<Inserter addField={ add } />
+			<RawHTML className="og-none">{ __( 'There are no fields here. Add a new field from the list on the right panel.', 'meta-box-builder' ) }</RawHTML>
 		</>
 		: <>
 			<Header />
@@ -47,14 +40,11 @@ const Fields = () => {
 				{
 					fields.map( field => <Node
 						key={ field._id }
-						id={ field._id }
 						field={ field }
-						removeField={ remove }
-						duplicateField={ duplicate }
+						{ ...fieldActions }
 					/> )
 				}
 			</ReactSortable>
-			<Inserter addField={ add } />
 		</>;
 };
 

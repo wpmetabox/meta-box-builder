@@ -62,7 +62,7 @@ const BlockJSONSettings = () => {
 			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
 			defaultValue={ block_json.path }
 			error={ blockPathError }
-			updateFieldData={ getLocalPathData }
+			updateField={ getLocalPathData }
 			dependency="block_json_enable:true"
 		/>
 

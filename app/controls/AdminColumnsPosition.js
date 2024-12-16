@@ -1,5 +1,5 @@
 import { __ } from "@wordpress/i18n";
-import useFieldIds from '../hooks/useFieldIds';
+import useLists from "../hooks/useLists";
 import useSettings from "../hooks/useSettings";
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
@@ -11,11 +11,16 @@ const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) =>
 	const defaultColumns = {
 		term: 'name',
 		user: 'username'
-	}
+	};
 	const defaultColumn = defaultColumns[ objectType ] || 'title';
 
-	const ids = useFieldIds( state => state.ids );
-	const fields = [ ...objectTypeFields( objectType ) , ...Array.from( new Set( Object.values( ids ) ) ) ];
+	const { getAllFields } = useLists();
+	// Select only text and select fields.
+	let fields = getAllFields()
+		.filter( field => [ 'text', 'select' ].includes( field.type ) )
+		.map( field => [ field.id, field.name ] );
+
+	fields = [ ...objectTypeFields( objectType ), ...fields ];
 
 	return (
 		<DivRow { ...rest }>
@@ -24,21 +29,42 @@ const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) =>
 				<option value="before">{ __( 'Before', 'meta-box-builder' ) }</option>
 				<option value="replace">{ __( 'Replace', 'meta-box-builder' ) }</option>
 			</select>
-			<FieldInserter id={ componentId } name={ `${ name }[column]` } defaultValue={ defaultValue.column || defaultColumn } items={ fields } isID = { true } exclude={ objectTypeFields( objectType ) } />
+			<FieldInserter id={ componentId } name={ `${ name }[column]` } defaultValue={ defaultValue.column || defaultColumn } items={ fields } isID={ true } exclude={ objectTypeFields( objectType ) } />
 		</DivRow>
 	);
 };
 
 const objectTypeFields = objectType => {
 	if ( objectType === 'term' ) {
-		return [ 'cb', 'name', 'description', 'slug', 'count' ];
+		return [
+			[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
+			[ 'name', __( 'Name', 'meta-box-builder' ) ],
+			[ 'description', __( 'Description', 'meta-box-builder' ) ],
+			[ 'slug', __( 'Slug', 'meta-box-builder' ) ],
+			[ 'count', __( 'Count', 'meta-box-builder' ) ],
+		];
 	}
 
 	if ( objectType === 'user' ) {
-		return [ 'cb', 'username', 'name', 'email', 'role', 'posts' ];
+		return [
+			[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
+			[ 'username', __( 'Username', 'meta-box-builder' ) ],
+			[ 'name', __( 'Name', 'meta-box-builder' ) ],
+			[ 'email', __( 'Email', 'meta-box-builder' ) ],
+			[ 'role', __( 'Role', 'meta-box-builder' ) ],
+			[ 'posts', __( 'Posts', 'meta-box-builder' ) ],
+		];
 	}
 
-	return [ 'cb', 'title', 'author', 'categories', 'tags', 'comments', 'date' ];
+	return [
+		[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
+		[ 'title', __( 'Title', 'meta-box-builder' ) ],
+		[ 'author', __( 'Author', 'meta-box-builder' ) ],
+		[ 'categories', __( 'Categories', 'meta-box-builder' ) ],
+		[ 'tags', __( 'Tags', 'meta-box-builder' ) ],
+		[ 'comments', __( 'Comments', 'meta-box-builder' ) ],
+		[ 'date', __( 'Date', 'meta-box-builder' ) ],
+	];
 };
 
 export default AdminColumnsPosition;
