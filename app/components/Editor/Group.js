@@ -1,25 +1,15 @@
 import { ReactSortable } from 'react-sortablejs';
-import useApi from "../../hooks/useApi";
 import useLists from "../../hooks/useLists";
-import FieldSettings from "../Sidebar/FieldSettings/FieldSettings";
+import Field from './Field';
 import Node from './Node';
 
 const Group = ( { field, parent = '', updateField } ) => {
 	const { getForList } = useLists();
 	const { fields, setFields, ...fieldActions } = getForList( field._id );
 
-	const fieldTypes = useApi( 'field-types', {} );
-
-	if ( !fieldTypes.hasOwnProperty( field.type ) ) {
-		return;
-	}
-
-	const controls = [ ...fieldTypes[ field.type ].controls ];
-
 	return (
 		<>
-			<FieldSettings
-				controls={ controls }
+			<Field
 				field={ field }
 				parent={ parent }
 				updateField={ updateField }
