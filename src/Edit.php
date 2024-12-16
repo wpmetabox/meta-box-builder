@@ -8,6 +8,8 @@ use MBB\Helpers\Data;
 
 class Edit extends BaseEditPage {
 	public function enqueue() {
+		$this->enqueue_meta_box_assets();
+
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
 		wp_enqueue_style( 'wp-edit-post' );
 
@@ -83,6 +85,18 @@ class Edit extends BaseEditPage {
 		$data = apply_filters( 'mbb_app_data', $data );
 
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
+	}
+
+	private function enqueue_meta_box_assets(): void {
+		wp_enqueue_style( 'rwmb', RWMB_CSS_URL . 'style.css', [], RWMB_VER );
+		wp_style_add_data( 'rwmb', 'path', RWMB_CSS_DIR . 'style.css' );
+		if ( is_rtl() ) {
+			wp_enqueue_style( 'rwmb-rtl', RWMB_CSS_URL . 'style-rtl.css', [], RWMB_VER );
+			wp_style_add_data( 'rwmb-rtl', 'path', RWMB_CSS_DIR . 'style-rtl.css' );
+		}
+
+		wp_enqueue_style( 'rwmb-input', RWMB_CSS_URL . 'input.css', [], RWMB_VER );
+		wp_style_add_data( 'rwmb-input', 'path', RWMB_CSS_DIR . 'input.css' );
 	}
 
 	public function save( $post_id, $post ) {
