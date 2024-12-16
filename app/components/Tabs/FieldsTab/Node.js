@@ -3,18 +3,16 @@ import { __ } from "@wordpress/i18n";
 import { Icon, dragHandle } from "@wordpress/icons";
 import { isEqual } from 'lodash';
 import { inside } from "../../../functions";
+import useContextMenu from "../../../hooks/useContextMenu";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
-import useLists from "../../../hooks/useLists";
 import useSidebarPanel from "../../../hooks/useSidebarPanel";
 import Actions from '../../Structure/Actions';
+import ContextMenu from "../../Structure/ContextMenu";
 import Field from './Field';
 import Group from './Group';
 import HeaderIcon from "./HeaderIcon";
 import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
-import { Inserter } from "./Inserter";
-import useContextMenu from "../../../hooks/useContextMenu";
-import ContextMenu from "../../Structure/ContextMenu";
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
@@ -62,8 +60,13 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				</span>
 			</div>
 			{
-				isContextMenuOpen &&
-				<ContextMenu top={ contextMenuPosition.y } left={ contextMenuPosition.x } field={ field } { ...fieldActions } />
+				<ContextMenu
+					open={ isContextMenuOpen }
+					top={ contextMenuPosition.y }
+					left={ contextMenuPosition.x }
+					field={ field }
+					{ ...fieldActions }
+				/>
 			}
 			{
 				field.type === 'group'

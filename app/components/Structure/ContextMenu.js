@@ -6,6 +6,7 @@ import useLists from '../../hooks/useLists';
 import AddFieldContent from '../AddFieldContent';
 
 const ContextMenu = ( {
+	open,
 	top,
 	left,
 	field,
@@ -53,7 +54,7 @@ const ContextMenu = ( {
 
 	return (
 		<>
-			<div className="og-context-menu" style={ { top, left } }>
+			<div className={ `og-context-menu ${ open ? 'og-context-menu--show' : '' }` } style={ { top, left } }>
 				<MenuGroup>
 					<MenuItem icon={ insertBefore } onClick={ actionCallback( 'addBefore' ) }>
 						{ __( 'Add a field before', 'meta-box-builder' ) }
