@@ -1,4 +1,3 @@
-import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useApi from "../../hooks/useApi";
@@ -18,11 +17,12 @@ const Fields = () => {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
 	}
 
-	return !fields || fields.length === 0 ?
+	if ( !fields || fields.length === 0 ) {
+		return <p className="og-none">{ __( 'There are no fields here. Add a new field from the list on the right panel.', 'meta-box-builder' ) }</p>;
+	}
+
+	return (
 		<>
-			<RawHTML className="og-none">{ __( 'There are no fields here. Add a new field from the list on the right panel.', 'meta-box-builder' ) }</RawHTML>
-		</>
-		: <>
 			<Header />
 			<ReactSortable group={ {
 				name: 'root',
@@ -45,7 +45,8 @@ const Fields = () => {
 					/> )
 				}
 			</ReactSortable>
-		</>;
+		</>
+	);
 };
 
 export default Fields;
