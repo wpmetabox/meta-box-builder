@@ -14,6 +14,7 @@ h3 {
 	margin-top: 32px;
 }
 
+// Set width 100% for inputs not inside Meta Box field preview
 input[type="text"]:not(.rwmb-input input),
 input[type="search"]:not(.rwmb-input input),
 input[type="number"]:not(.rwmb-input input),
