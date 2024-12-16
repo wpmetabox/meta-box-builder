@@ -1,7 +1,8 @@
-@import "variables";
-@import "layout";
-@import "box";
-@import "gutenberg";
+@use "variables";
+@use "layout";
+@use "box";
+@use "gutenberg";
+@use "base/react-select";
 
 .og {
 	@import "elements";
