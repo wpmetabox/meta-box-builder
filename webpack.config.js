@@ -1,60 +1,36 @@
+// Import the original config from the @wordpress/scripts package.
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 
-// https://www.cssigniter.com/how-to-use-external-react-components-in-your-gutenberg-blocks/
 const externals = {
-	react: 'React',
-	'react-dom': 'ReactDOM',
-	'@wordpress/i18n': 'wp.i18n',
-	'@wordpress/element': 'wp.element',
-	'@wordpress/components': 'wp.components',
-	'@wordpress/compose': 'wp.compose',
+	...defaultConfig.externals,
 	'jquery': 'jQuery',
 	'jquery-ui': 'jQuery',
 	codemirror: 'wp.CodeMirror',
 	clipboard: 'ClipboardJS',
 };
 
-const commonModules = {
-	rules: [
-		{
-			test: /\.js$/,
-			exclude: /node_modules/,
-			use: {
-				loader: 'babel-loader',
-				options: {
-					plugins: [ '@babel/plugin-transform-react-jsx' ]
-				}
-			}
-		},
-	]
-};
-
 const resolve = {
 	roots: [ path.resolve( 'app' ) ]
 };
 
-const plugins = [
-	new webpack.optimize.LimitChunkCountPlugin( {
-		maxChunks: 1
-	} )
-];
-
 // Main Meta Box Builder app.
 const main = {
+	...defaultConfig,
 	entry: './app/App.js',
 	output: {
-		path: path.resolve( 'assets/js' ),
+		path: path.resolve( 'assets/js/build' ),
 		filename: 'app.js'
 	},
 	externals,
 	resolve,
-	plugins,
-	module: commonModules
 };
 
 // Settings page app.
 const settingsPage = {
+	...defaultConfig,
 	entry: './modules/settings-page/app/App.js',
 	output: {
 		path: path.resolve( 'modules/settings-page/assets' ),
@@ -62,12 +38,11 @@ const settingsPage = {
 	},
 	externals,
 	resolve,
-	plugins,
-	module: commonModules
 };
 
 // Relationships app.
 const relationships = {
+	...defaultConfig,
 	entry: './modules/relationships/app/App.js',
 	output: {
 		path: path.resolve( 'modules/relationships/assets' ),
@@ -75,8 +50,7 @@ const relationships = {
 	},
 	externals,
 	resolve,
-	plugins,
-	module: commonModules
 };
 
-module.exports = [ main, settingsPage, relationships ];
+module.exports = [ main ];
+// module.exports = [ main, settingsPage, relationships ];
