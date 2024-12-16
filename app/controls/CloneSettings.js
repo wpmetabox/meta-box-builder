@@ -7,9 +7,10 @@ import Tooltip from "./Tooltip";
 
 const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
 	const [ clone, setClone ] = useState( defaultValue.clone );
+	const [ clone_empty_start, setCloneEmptyStart ] = useState( defaultValue.clone_empty_start );
+
 	const [ sortable, toggleSortable ] = useReducer( on => !on, defaultValue.sortable );
 	const [ clone_default, toggleCloneDefault ] = useReducer( on => !on, defaultValue.clone_default );
-	const [ clone_empty_start, toggleCloneEmptyStart ] = useReducer( on => !on, defaultValue.clone_empty_start );
 	const [ clone_as_multiple, toggleCloneAsMultiple ] = useReducer( on => !on, defaultValue.clone_as_multiple );
 	const [ min_clone, setMinClone ] = useState( defaultValue.min_clone );
 	const [ max_clone, setMaxClone ] = useState( defaultValue.max_clone );
@@ -17,6 +18,11 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 
 	const toggleClone = () => setClone( prev => {
 		updateField( 'clone', !prev );
+		return !prev;
+	} );
+
+	const toggleCloneEmptyStart = () => setCloneEmptyStart( prev => {
+		updateField( 'clone_empty_start', !prev );
 		return !prev;
 	} );
 
