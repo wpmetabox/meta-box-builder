@@ -1,4 +1,4 @@
-import { useState, useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 
 const useContextMenu = () => {
 	const [ isOpen, setOpen ] = useState( false );
@@ -10,7 +10,13 @@ const useContextMenu = () => {
 	const openContextMenu = e => {
 		e.preventDefault();
 		setOpen( true );
-		setPosition( { x: event.offsetX, y: event.offsetY } );
+
+		const parent = e.target.closest( '.og-item' );
+		const rect = parent.getBoundingClientRect();
+		const x = event.clientX - rect.left;
+		const y = event.clientY - rect.top;
+
+		setPosition( { x, y } );
 	};
 
 	const clostContextMenu = () => setOpen( false );
