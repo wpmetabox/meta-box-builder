@@ -22,6 +22,11 @@
 [x] Làm context menu, khi click chuột phải cũng ra menu để thêm field, insert field before, after, duplicate, delete, ...
 [ ] Kéo thả nút add field vào danh sách field
 
+Preview:
+
+[ ] Clone empty start
+[ ] Fix css khi input có size thì nút clone bị đẩy cùng dòng
+
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
