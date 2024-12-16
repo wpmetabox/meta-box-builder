@@ -15,10 +15,17 @@ const Text = ( { field, updateField } ) => (
 				}
 			</div>
 			<div className="rwmb-input">
-				<input type="text" placeholder={ field.placeholder } size={ field.size } />
+				{
+					field.clone && !field.clone_empty_start && (
+						<div className="rwmb-clone">
+							<Input field={ field } />
+						</div>
+					)
+				}
 				{
 					field.clone && <a href="#" className="rwmb-button button add-clone">{ field.add_button || __( '+ Add more', 'meta-box-builder' ) }</a>
 				}
+				{ !field.clone && <Input field={ field } /> }
 				{
 					field.desc && <p className="description">{ field.desc }</p>
 				}
@@ -27,5 +34,7 @@ const Text = ( { field, updateField } ) => (
 		{ field.after }
 	</>
 );
+
+const Input = ( { field } ) => <input type="text" placeholder={ field.placeholder } size={ field.size } />;
 
 export default Text;

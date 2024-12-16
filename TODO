@@ -25,7 +25,7 @@
 Preview:
 
 [ ] Clone empty start
-[ ] Fix css khi input có size thì nút clone bị đẩy cùng dòng
+[x] Fix css khi input có size thì nút clone bị đẩy cùng dòng
 
 
 [ ] Update UI for creating settings pages
