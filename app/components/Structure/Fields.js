@@ -7,7 +7,7 @@ import Node from './Node';
 
 const Fields = () => {
 	const { getForList } = useLists();
-	const { fields, setFields, addField, ...fieldActions } = getForList( 'root' );
+	const { fields, setFields, ...fieldActions } = getForList( 'root' );
 
 	// Don't render any field if fields data is not available.
 	const types = useApi( 'field-types', {} );
