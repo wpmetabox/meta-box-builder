@@ -1,8 +1,8 @@
 import { createPortal, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
-import PersistentPanelBody from '../PersistentPanelBody';
-import Content from '../Tabs/FieldsTab/Content';
+import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
+import PersistentPanelBody from '../../PersistentPanelBody';
+import Tab from './Tab';
 
 const FieldSettings = ( { controls, field, ...rest } ) => {
 	const { activeField, portalElement } = useFieldSettingsPanel();
@@ -57,7 +57,7 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 	return portalElement && createPortal(
 		<div className={ `og-field-settings ${ field._id === activeField._id ? 'og-field-settings--show' : '' }` }>
 			<div className="og-field-settings__header">
-				<Content controls={ headerControls } field={ field } { ...rest } />
+				<Tab controls={ headerControls } field={ field } { ...rest } />
 			</div>
 
 			{
@@ -68,7 +68,7 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 						open={ tab.value === activeTab }
 						onClick={ updateActiveTab( tab.value ) }
 					>
-						<Content controls={ tab.controls } field={ field } { ...rest } />
+						<Tab controls={ tab.controls } field={ field } { ...rest } />
 					</PersistentPanelBody>
 				) )
 			}

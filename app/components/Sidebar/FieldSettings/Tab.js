@@ -1,7 +1,7 @@
 import { Suspense } from "@wordpress/element";
 import { getControlParams } from '/functions';
 
-const Content = ( { controls, field, parent = '', updateField } ) => {
+const Tab = ( { controls, field, parent = '', updateField } ) => {
 	const getControlComponent = control => {
 		let [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
 
@@ -38,4 +38,4 @@ const Content = ( { controls, field, parent = '', updateField } ) => {
 	return controls.map( control => <Suspense fallback={ null } key={ control.setting }>{ getControlComponent( control ) }</Suspense> );
 };
 
-export default Content;
+export default Tab;
