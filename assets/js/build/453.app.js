@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[453],{8453:(e,a,t)=>{t.r(a),t.d(a,{default:()=>u});var l=t(1609);const u=({name:e,label:a,defaultValue:t,...u})=>(0,l.createElement)("label",{className:"og-status"},(0,l.createElement)("input",{type:"hidden",name:e,value:!1}),(0,l.createElement)("input",{type:"checkbox",name:e,defaultChecked:t,value:!0}),a)}}]);
