@@ -1,7 +1,7 @@
 import { ReactSortable } from 'react-sortablejs';
-import useApi from "../../../hooks/useApi";
-import useLists from "../../../hooks/useLists";
-import FieldSettings from "../../Sidebar/FieldSettings";
+import useApi from "../../hooks/useApi";
+import useLists from "../../hooks/useLists";
+import FieldSettings from "../Sidebar/FieldSettings";
 import Node from './Node';
 
 const Group = ( { field, parent = '', updateField } ) => {

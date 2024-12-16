@@ -1,5 +1,5 @@
-import useApi from "../../../hooks/useApi";
-import FieldSettings from "../../Sidebar/FieldSettings";
+import useApi from "../../hooks/useApi";
+import FieldSettings from "../Sidebar/FieldSettings";
 
 const Field = props => {
 	const fieldTypes = useApi( 'field-types', {} );

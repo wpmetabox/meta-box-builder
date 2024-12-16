@@ -1,9 +1,9 @@
 import { Button, Flex, Icon } from '@wordpress/components';
-import { useState, useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { category, code, copy } from '@wordpress/icons';
-import Fields from './Fields';
 import PHP from "./PHP";
+import Fields from './Structure/Fields';
 import ThemeCode from "./ThemeCode/ThemeCode";
 
 const Main = () => (
