@@ -71,4 +71,8 @@ const TextLimiter = ( { field } ) => {
 	);
 };
 
+const Tooltip = ( { field } ) => {
+	
+}
+
 export default Text;
