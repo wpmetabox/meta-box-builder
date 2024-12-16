@@ -4,7 +4,6 @@ import { ReactSortable } from 'react-sortablejs';
 import useApi from "../hooks/useApi";
 import useLists from "../hooks/useLists";
 import Header from "./Tabs/FieldsTab/Header";
-import { Inserter } from './Tabs/FieldsTab/Inserter';
 import Node from './Tabs/FieldsTab/Node';
 
 const Fields = () => {
@@ -21,8 +20,7 @@ const Fields = () => {
 
 	return !fields || fields.length === 0 ?
 		<>
-			<RawHTML className="og-none">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
-			<Inserter addField={ addField } />
+			<RawHTML className="og-none">{ __( 'There are no fields here. Add a new field from the list on the right panel.', 'meta-box-builder' ) }</RawHTML>
 		</>
 		: <>
 			<Header />
@@ -47,7 +45,6 @@ const Fields = () => {
 					/> )
 				}
 			</ReactSortable>
-			<Inserter addField={ addField } />
 		</>;
 };
 
