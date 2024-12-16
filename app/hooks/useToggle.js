@@ -60,7 +60,7 @@ const toggleDependents = el => {
 };
 
 const getDependents = el => {
-	const scope = el.closest( '.og-item' ) || el.closest( '.react-tabs__tab-panel' ) || el.closest( '.og' );
+	const scope = el.closest( '.og-item' ) || el.closest( '.og' );
 	const shortName = getShortName( el.id );
 	return scope ? [ ...scope.querySelectorAll( `[class*="dep:${ shortName }:"]` ) ] : [];
 };
