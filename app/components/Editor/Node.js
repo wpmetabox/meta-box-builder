@@ -1,18 +1,12 @@
-import { memo, lazy, Suspense } from "@wordpress/element";
-import { __ } from "@wordpress/i18n";
-import { Icon, dragHandle } from "@wordpress/icons";
+import { lazy, memo, Suspense } from "@wordpress/element";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
 import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
 import useSidebarPanel from "../../hooks/useSidebarPanel";
-import Actions from './Actions';
 import ContextMenu from "./ContextMenu";
 import Field from './Field';
 import Group from './Group';
-import HeaderIcon from "./HeaderIcon";
-import HeaderId from "./HeaderId";
-import HeaderLabel from "./HeaderLabel";
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
@@ -20,7 +14,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
 
 	const toggleSettings = e => {
-		if ( inside( e.target, '.og-item__editable,.og-column--actions,.og-column--label,.components-menu-item__item,.og-add-field' ) ) {
+		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.og-context-menu ' ) ) {
 			return;
 		}
 
