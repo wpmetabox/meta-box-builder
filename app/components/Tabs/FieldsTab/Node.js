@@ -13,10 +13,13 @@ import HeaderIcon from "./HeaderIcon";
 import HeaderId from "./HeaderId";
 import HeaderLabel from "./HeaderLabel";
 import { Inserter } from "./Inserter";
+import useContextMenu from "../../../hooks/useContextMenu";
+import ContextMenu from "../../Structure/ContextMenu";
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
+	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
 
 	const updateActiveField = () => setActiveField( field );
 
@@ -40,7 +43,12 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		<div className={ `og-item og-item--${ field.type } ${ field._id === activeField._id ? 'og-item--active' : '' }` }>
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
-			<div className="og-item__header og-collapsible__header" onClick={ toggleSettings } title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }>
+			<div
+				className="og-item__header og-collapsible__header"
+				title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
+				onClick={ toggleSettings }
+				onContextMenu={ openContextMenu }
+			>
 				<span className="og-column--drag"><Icon icon={ dragHandle } /></span>
 				<span className="og-column--label">
 					<HeaderIcon field={ field } />
@@ -53,6 +61,10 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 					<Actions field={ field } { ...fieldActions } />
 				</span>
 			</div>
+			{
+				isContextMenuOpen &&
+				<ContextMenu top={ contextMenuPosition.y } left={ contextMenuPosition.x } field={ field } { ...fieldActions } />
+			}
 			{
 				field.type === 'group'
 					? <Group field={ field } parent={ parent } updateField={ update } />
