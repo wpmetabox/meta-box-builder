@@ -142,6 +142,10 @@
 		left: 0;
 		right: var(--sidebar-width);
 		overflow-y: auto;
+
+		.mb-no-sidebar & {
+			right: 0;
+		}
 	}
 }
 
