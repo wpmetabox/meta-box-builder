@@ -172,6 +172,11 @@
 	position: relative;
 
 	&__header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background: #fff;
+
 		padding: 10px;
 		transition: all .1s ease-in-out;
 	}
@@ -258,10 +263,6 @@
 // Border bottom: an item always have border bottom, and when expanded: add a border bottom to its header bar.
 &-item {
 	border-bottom: var(--border-lighter);
-
-	&.og-collapsible--expanded>.og-item__header {
-		border-bottom: var(--border-lighter);
-	}
 }
 
 // On hover & active.

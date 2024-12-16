@@ -42,7 +42,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
 			<div
-				className="og-item__header og-collapsible__header"
+				className="og-item__header"
 				title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 				onClick={ toggleSettings }
 				onContextMenu={ openContextMenu }

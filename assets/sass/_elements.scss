@@ -71,31 +71,6 @@ input[type=search] {
 	min-width: 255px;
 }
 
-// Collapsible panel
-&-collapsible {
-	&__header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		background: #fff;
-	}
-
-	&__body {
-		overflow-y: hidden;
-		max-height: 0;
-		transition: all 0.2s ease;
-		padding-inline: 36px;
-		background: #fff;
-	}
-
-	&--expanded {
-		>.og-collapsible__body {
-			max-height: 999999px;
-			padding-block: 18px;
-		}
-	}
-}
-
 // Tooltip
 &-tooltip-icon {
 
