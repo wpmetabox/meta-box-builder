@@ -256,6 +256,10 @@ class Registry {
 			Control::Toggle( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
 			Control::Toggle( 'multiple', __( 'Allow to select multiple choices', 'meta-box-builder' ) ),
 			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ), false, 'appearance' ),
+			'select_all_none_select' => Control::Toggle( 'select_all_none', [
+				'label'      => __( 'Display "Select: All | None" button', 'meta-box-builder' ),
+				'dependency' => 'multiple:true',
+			], false, 'appearance' ),
 			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
 				'label'       => __( 'Query args', 'meta-box-builder' ),
 				// Translators: %s - URL to the get_terms() docs.
