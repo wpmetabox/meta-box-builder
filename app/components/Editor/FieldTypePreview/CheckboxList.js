@@ -26,7 +26,7 @@ const CheckboxList = ( { field } ) => {
 	);
 };
 
-const getOptions = text => text.split( "\n" ).map( option => {
+const getOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
 	if ( !option.includes( ':' ) ) {
 		return option.trim();
 	}
