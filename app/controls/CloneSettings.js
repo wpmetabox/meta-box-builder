@@ -50,8 +50,8 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 							onChange={ toggleClone }
 						/>
 						<Toggle
-							label={ __( 'Start from no inputs', 'meta-box-builder' ) }
-							tooltip={ __( 'Start from no inputs except the "+ Add more" button', 'meta-box-builder' ) }
+							label={ __( 'Start with no inputs', 'meta-box-builder' ) }
+							tooltip={ __( 'Show no inputs at first except the "+ Add more" button', 'meta-box-builder' ) }
 							onChange={ toggleCloneEmptyStart }
 							defaultValue={ defaultValue.clone_empty_start }
 							componentId={ `${ componentId }-clone_empty_start` }
