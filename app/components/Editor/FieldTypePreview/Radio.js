@@ -1,3 +1,4 @@
+import { getOptions } from "../../../functions";
 
 const Radio = ( { field } ) => {
 	const doNothing = () => {};
@@ -16,13 +17,5 @@ const Radio = ( { field } ) => {
 		</fieldset>
 	);
 };
-
-const getOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
-	if ( !option.includes( ':' ) ) {
-		return option.trim();
-	}
-	const [ value, label ] = option.split( ':' );
-	return label.trim();
-} );
 
 export default Radio;

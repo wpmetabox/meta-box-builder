@@ -1,4 +1,5 @@
 import { __ } from "@wordpress/i18n";
+import { getOptions } from "../../../functions";
 
 const CheckboxList = ( { field } ) => {
 	const doNothing = () => {};
@@ -25,13 +26,5 @@ const CheckboxList = ( { field } ) => {
 		</>
 	);
 };
-
-const getOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
-	if ( !option.includes( ':' ) ) {
-		return option.trim();
-	}
-	const [ value, label ] = option.split( ':' );
-	return label.trim();
-} );
 
 export default CheckboxList;

@@ -208,3 +208,11 @@ export const isPositiveInteger = value => {
 	const number = Number( value );
 	return Number.isInteger( number ) && number > 0;
 };
+
+export const getOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
+	if ( !option.includes( ':' ) ) {
+		return option.trim();
+	}
+	const [ value, label ] = option.split( ':' );
+	return label.trim();
+} );
