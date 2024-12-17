@@ -31,6 +31,7 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'size',
 			'prepend_append',
 			'text_limiter',
+			'tooltip',
 			'group_title',
 			'icon',
 			'icon_url',

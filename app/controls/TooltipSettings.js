@@ -6,9 +6,9 @@ import DashiconPicker from "./DashiconPicker";
 import DivRow from "./DivRow";
 import Position from "./Position";
 
-const TooltipSettings = ( { name, componentId, defaultValue, ...rest } ) => {
+const TooltipSettings = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
 	const [ showSettings, setShowSettings ] = useState( false );
-	const [ enable, setEnable ] = useState( defaultValue.enable );
+	const enable = defaultValue.enable;
 	const [ icon, setIcon ] = useState( defaultValue.icon || 'info' );
 
 	let isDashicons = false;
@@ -19,7 +19,10 @@ const TooltipSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 
 	const toggleEnable = e => {
 		setShowSettings( e.target.checked );
-		setEnable( e.target.checked );
+		updateField( 'tooltip', {
+			...defaultValue,
+			enable: e.target.checked
+		} );
 	};
 
 	const toggleShowSettings = () => setShowSettings( prev => !prev );
