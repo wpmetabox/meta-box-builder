@@ -2,7 +2,7 @@ import { __ } from "@wordpress/i18n";
 import { isPositiveInteger } from "../../../functions";
 import FieldLabel from "../FieldLabel";
 
-const Text = ( { field, updateField } ) => (
+const Base = ( { field, updateField, children } ) => (
 	<>
 		{ field.before }
 		<div className={ `rwmb-field rwmb-${ field.type }-wrapper ${ field.class } ${ field.required ? 'required' : '' }` }>
@@ -20,14 +20,22 @@ const Text = ( { field, updateField } ) => (
 				{
 					field.clone && !field.clone_empty_start && (
 						<div className="rwmb-clone">
-							<Input field={ field } />
+							{ children }
+							<TextLimiter field={ field } />
 						</div>
 					)
 				}
 				{
 					field.clone && <a href="#" className="rwmb-button button add-clone">{ field.add_button || __( '+ Add more', 'meta-box-builder' ) }</a>
 				}
-				{ !field.clone && <Input field={ field } /> }
+				{
+					!field.clone && (
+						<>
+							{ children }
+							<TextLimiter field={ field } />
+						</>
+					)
+				}
 				{
 					field.desc && <p className="description">{ field.desc }</p>
 				}
@@ -94,6 +102,6 @@ const Tooltip = ( { field } ) => {
 	}
 
 	return tooltip && <span className="mb-tooltip">{ tooltip }</span>;
-}
+};
 
-export default Text;
+export default Base;

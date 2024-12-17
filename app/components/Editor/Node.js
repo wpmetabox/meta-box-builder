@@ -6,6 +6,7 @@ import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
 import useSidebarPanel from "../../hooks/useSidebarPanel";
 import ContextMenu from "./ContextMenu";
 import Field from './Field';
+import Base from "./FieldTypePreview/Base";
 import Group from './Group';
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
@@ -35,7 +36,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		return;
 	}
 
-	const FieldType = lazy( () => import( `./FieldTemplates/${ ucwords( field.type, '_', '' ) }` ) );
+	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) );
 
 	return (
 		<div
@@ -43,13 +44,11 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			onClick={ toggleSettings }
 			onContextMenu={ openContextMenu }
 		>
-			<Suspense fallback={ null }>
-				<FieldType
-					field={ field }
-					{ ...fieldActions }
-					updateField={ update }
-				/>
-			</Suspense>
+			<Base field={ field } { ...fieldActions } updateField={ update }>
+				<Suspense fallback={ null }>
+					<FieldType field={ field } />
+				</Suspense>
+			</Base>
 			{
 				<ContextMenu
 					open={ isContextMenuOpen }
