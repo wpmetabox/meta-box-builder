@@ -12,14 +12,12 @@ class Assets {
 
 	private static function enqueue_meta_box_assets(): void {
 		wp_enqueue_style( 'rwmb', RWMB_CSS_URL . 'style.css', [], RWMB_VER );
-		wp_style_add_data( 'rwmb', 'path', RWMB_CSS_DIR . 'style.css' );
 		if ( is_rtl() ) {
 			wp_enqueue_style( 'rwmb-rtl', RWMB_CSS_URL . 'style-rtl.css', [], RWMB_VER );
-			wp_style_add_data( 'rwmb-rtl', 'path', RWMB_CSS_DIR . 'style-rtl.css' );
 		}
 
 		wp_enqueue_style( 'rwmb-input', RWMB_CSS_URL . 'input.css', [], RWMB_VER );
-		wp_style_add_data( 'rwmb-input', 'path', RWMB_CSS_DIR . 'input.css' );
+		wp_enqueue_style( 'rwmb-input-list', RWMB_CSS_URL . 'input-list.css', [], RWMB_VER );
 	}
 
 	private static function enqueue_extensions_assets(): void {

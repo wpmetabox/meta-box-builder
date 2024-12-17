@@ -7,11 +7,24 @@ const Textarea = ( {
 	placeholder,
 	rows = 2,
 	textareaClassName = '',
+	updateField,
 	...rest
-} ) => (
-	<DivRow { ...rest } htmlFor={ componentId }>
-		<textarea defaultValue={ defaultValue } id={ componentId } name={ name } rows={ rows } placeholder={ placeholder } className={ textareaClassName }></textarea>
-	</DivRow>
-);
+} ) => {
+	const handleChange = e => updateField && updateField( name, e.target.value );
+
+	return (
+		<DivRow { ...rest } htmlFor={ componentId }>
+			<textarea
+				id={ componentId }
+				name={ name }
+				rows={ rows }
+				placeholder={ placeholder }
+				className={ textareaClassName }
+				defaultValue={ defaultValue }
+				onChange={ handleChange }
+			/>
+		</DivRow>
+	);
+};
 
 export default Textarea;
