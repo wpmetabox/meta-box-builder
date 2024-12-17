@@ -54,11 +54,11 @@ const Input = ( { field } ) => {
 };
 
 const TextLimiter = ( { field } ) => {
-	if ( !field.text_limiter.limit || !isPositiveInteger( field.text_limiter.limit ) ) {
+	if ( !field.text_limiter?.limit || !isPositiveInteger( field.text_limiter.limit ) ) {
 		return;
 	}
 
-	const type = field.text_limiter.limit_type || 'character';
+	const type = field.text_limiter?.limit_type || 'character';
 	const text = 'word' === type ? __( 'Word Count', 'meta-box-builder' ) : __( 'Character Count', 'meta-box-builder' );
 
 	return (

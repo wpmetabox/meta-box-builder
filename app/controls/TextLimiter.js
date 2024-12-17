@@ -1,9 +1,9 @@
 import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
 
-const TextLimiter = ( { defaultValue, componentId, name, field, updateField, ...rest } ) => {
+const TextLimiter = ( { defaultValue, componentId, name, updateField, ...rest } ) => {
 	const update = key => e => updateField( 'text_limiter', {
-		...field.text_limiter,
+		...defaultValue,
 		[ key ]: e.target.value
 	} );
 
