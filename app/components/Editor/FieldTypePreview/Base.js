@@ -37,7 +37,7 @@ const Base = ( { field, updateField, children } ) => (
 					)
 				}
 				{
-					field.desc && <p className="description">{ field.desc }</p>
+					field.desc && ![ 'checkbox', 'switch' ].includes( field.type ) && <p className="description">{ field.desc }</p>
 				}
 			</div>
 		</div>
