@@ -9,9 +9,9 @@ const Text = ( { field, updateField } ) => (
 			<div className="rwmb-label">
 				<label>
 					<FieldLabel field={ field } updateField={ updateField } />
+					{ field.required && <span className="rwmb-required">*</span> }
 					<Tooltip field={ field } />
 				</label>
-				{ field.required && <span className="rwmb-required">*</span> }
 				{
 					field.label_description && <p className="description">{ field.label_description }</p>
 				}

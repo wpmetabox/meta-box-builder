@@ -7,15 +7,16 @@ import DivRow from "./DivRow";
 import Position from "./Position";
 
 const TooltipSettings = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
-	const [ showSettings, setShowSettings ] = useState( false );
 	const enable = defaultValue.enable;
-	const [ icon, setIcon ] = useState( defaultValue.icon || 'info' );
+	const icon = defaultValue.icon || 'info';
 
 	let isDashicons = false;
 	if ( !icon || [ 'info', 'help' ].includes( icon ) || icon.includes( 'dashicons' ) ) {
 		isDashicons = true;
 	}
+
 	const [ icon_type, setIconType ] = useState( isDashicons ? 'dashicons' : 'url' );
+	const [ showSettings, setShowSettings ] = useState( false );
 
 	const toggleEnable = e => {
 		setShowSettings( e.target.checked );
@@ -26,6 +27,14 @@ const TooltipSettings = ( { name, componentId, defaultValue, updateField, ...res
 	};
 
 	const toggleShowSettings = () => setShowSettings( prev => !prev );
+	const updateContent = e => updateField( 'tooltip', {
+		...defaultValue,
+		content: e.target.value,
+	} );
+	const updateIcon = value => updateField( 'tooltip', {
+		...defaultValue,
+		icon: value,
+	} );
 
 	return (
 		<>
@@ -46,7 +55,13 @@ const TooltipSettings = ( { name, componentId, defaultValue, updateField, ...res
 				showSettings && (
 					<div className="og-sub-settings">
 						<DivRow htmlFor={ `${ componentId }-content` } label={ __( 'Content', 'meta-box-builder' ) }>
-							<input type="text" id={ `${ componentId }-content` } name={ `${ name }[content]` } defaultValue={ defaultValue.content } />
+							<input
+								type="text"
+								id={ `${ componentId }-content` }
+								name={ `${ name }[content]` }
+								value={ defaultValue.content }
+								onChange={ updateContent }
+							/>
 						</DivRow>
 						<DivRow label={ __( 'Icon type', 'meta-box-builder' ) }>
 							<RadioControl
@@ -70,10 +85,10 @@ const TooltipSettings = ( { name, componentId, defaultValue, updateField, ...res
 									label={ __( 'Icon', 'meta-box-builder' ) }
 									defaultValue={ isDashicons ? icon.replace( 'dashicons-', '' ) : '' }
 									componentId={ `${ componentId }-icon` }
-									updateField={ ( name, value ) => setIcon( `dashicons-${ value }` ) }
+									updateField={ ( name, value ) => updateIcon( `dashicons-${ value }` ) }
 								/>
 								: <DivRow htmlFor={ `${ componentId }-url` } label={ __( 'Icon URL', 'meta-box-builder' ) }>
-									<input type="text" id={ `${ componentId }-url` } defaultValue={ isDashicons ? '' : icon } onChange={ setIcon } />
+									<input type="text" id={ `${ componentId }-url` } defaultValue={ isDashicons ? '' : icon } onChange={ e => updateIcon( e.target.value ) } />
 								</DivRow>
 						}
 						<Position
