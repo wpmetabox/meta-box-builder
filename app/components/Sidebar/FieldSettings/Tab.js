@@ -21,6 +21,8 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 
 		// Specific settings that have live update.
 		const settingsWithLiveUpdate = [
+			'before',
+			'after',
 			'name',
 			'id',
 			'required',

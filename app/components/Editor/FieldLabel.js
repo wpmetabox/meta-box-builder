@@ -1,10 +1,9 @@
 import { __ } from "@wordpress/i18n";
 import AutosizeInput from 'react-input-autosize';
-import { sanitizeId, ucwords } from "../../functions";
+import { sanitizeId } from "../../functions";
 
-const getFieldLabel = field => [ 'hidden', 'divider' ].includes( field.type )
-	? ucwords( field.type )
-	: field.name || field.group_title || __( '(No label)', 'meta-box-builder' );
+// Unlike in structure area, here always use field.name, not group.title or (No label).
+const getFieldLabel = field => field.name;
 
 // Output field label on the header bar.
 const FieldLabel = ( { field, updateField } ) => {

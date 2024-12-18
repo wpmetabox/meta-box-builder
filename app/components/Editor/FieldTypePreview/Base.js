@@ -1,21 +1,26 @@
+import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isPositiveInteger } from "../../../functions";
 import FieldLabel from "../FieldLabel";
 
 const Base = ( { field, updateField, children } ) => (
 	<>
-		{ field.before }
+		<RawHTML>{ field.before }</RawHTML>
 		<div className={ `rwmb-field rwmb-${ field.type }-wrapper ${ field.class } ${ field.required ? 'required' : '' }` }>
-			<div className="rwmb-label">
-				<label>
-					<FieldLabel field={ field } updateField={ updateField } />
-					{ field.required && <span className="rwmb-required">*</span> }
-					<Tooltip field={ field } />
-				</label>
-				{
-					field.label_description && <p className="description">{ field.label_description }</p>
-				}
-			</div>
+			{
+				field.name && (
+					<div className="rwmb-label">
+						<label>
+							<FieldLabel field={ field } updateField={ updateField } />
+							{ field.required && <span className="rwmb-required">*</span> }
+							<Tooltip field={ field } />
+						</label>
+						{
+							field.label_description && <p className="description">{ field.label_description }</p>
+						}
+					</div>
+				)
+			}
 			<div className="rwmb-input">
 				{
 					field.clone && !field.clone_empty_start && (
@@ -41,7 +46,7 @@ const Base = ( { field, updateField, children } ) => (
 				}
 			</div>
 		</div>
-		{ field.after }
+		<RawHTML>{ field.after }</RawHTML>
 	</>
 );
 
