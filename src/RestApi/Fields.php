@@ -84,7 +84,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'clone_settings' ],
 					array_merge( $general_tab, [ 'options' ] ),
-					[ 'label_description', 'desc', 'size' ],
+					[ 'label_description', 'desc' ],
 					$validation_tab,
 					$advanced_tab
 				),
