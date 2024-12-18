@@ -1,13 +1,19 @@
-// Tweaks, overwrite CSS from Meta Box.
+// Tweaks, overwrite CSS from Meta Box
 
-// Remove margin for the last field.
 .mb-field {
+	// Remove margin for the last field
 	.rwmb-field.rwmb-field {
 		margin-bottom: 0;
 	}
 
+	// Fix the clone background
 	.rwmb-clone {
 		background: inherit;
+	}
+
+	// Show hidden notes
+	.rwmb-hidden-wrapper {
+		display: block;
 	}
 }
 
