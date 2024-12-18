@@ -421,9 +421,9 @@ class Registry {
 
 			// Map.
 			Control::Input( 'api_key', [
-				'label'    => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopenner noreferrer">' . __( 'Google Maps API key', 'meta-box-builder' ) . '</a>',
-				'tooltip'  => __( 'Your unique API Key for Google Maps Platform', 'meta-box-builder' ),
-				'required' => true,
+				'label'       => __( 'Google Maps API key', 'meta-box-builder' ),
+				'description' => sprintf( __( 'If you don\'t have one, <a href="%s" target="_blank">create one here</a>.', 'meta-box-builder' ), 'https://developers.google.com/maps/documentation/javascript/get-api-key' ),
+				'required'    => true,
 			] ),
 
 			// Heading.
