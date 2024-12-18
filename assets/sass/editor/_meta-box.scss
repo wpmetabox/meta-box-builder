@@ -18,8 +18,12 @@
 	select,
 	textarea,
 	button,
-	label, // For checkboxes
-	a { // For links and buttons
+	// For checkboxes
+	label,
+	// For links and buttons
+	a,
+	// For jQueryUI widgets (date, time picker)
+	.ui-widget {
 		pointer-events: none;
 		user-select: none;
 	}

@@ -39,6 +39,8 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'inline',
 			'select_all_none',
 			'multiple',
+			'format',
+			'save_format',
 			'group_title',
 			'icon',
 			'icon_url',
