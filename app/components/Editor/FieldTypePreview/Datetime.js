@@ -22,13 +22,14 @@ const Datetime = ( { field } ) => {
 			altFieldTimeOnly: false,
 		} );
 
-		const [ formatDate, formatTime ] = field.format.split( ' ' );
-		const [ stdDate, stdTime ] = field.std.split( ' ' );
+		const format = field.format || '';
+		const std = field.std || '';
+		const [ stdDate, stdTime ] = std.split( ' ' );
 
 		try {
-			$.datepicker.parseDate( formatDate, stdDate );
-			$inline.datetimepicker( 'option', 'dateFormat', formatDate );
-			$inline.datetimepicker( 'setDate', stdDate );
+			$.datepicker.parseDate( format, stdDate );
+			$inline.datetimepicker( 'option', 'dateFormat', format );
+			$inline.datetimepicker( 'setDate', field.std );
 		} catch ( error ) {
 			console.debug( sprintf( __( 'Field %s: invalid format for the datetime picker default value', 'meta-box-builder' ), field.name ) );
 		}
