@@ -216,3 +216,6 @@ export const getOptions = text => text === "" ? [] : text.split( "\n" ).map( opt
 	const [ value, label ] = option.split( ':' );
 	return label.trim();
 } );
+
+// Do nothing callback function for field preview inputs
+export const doNothing = () => {};
