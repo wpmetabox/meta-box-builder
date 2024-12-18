@@ -361,7 +361,7 @@ class Registry {
 			] ),
 
 			// Button.
-			'std_button'                   => Control::Input( 'std', __( 'Button text', 'meta-box-builder' ) ),
+			'std_button'                   => Control::Input( 'std', __( 'Button text', 'meta-box-builder' ), __( 'Click me', 'meta-box-builder' ) ),
 
 			// Button group.
 			'options_button_group'         => Control::Textarea( 'options', [
