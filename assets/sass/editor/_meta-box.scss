@@ -17,8 +17,9 @@
 	input,
 	select,
 	textarea,
+	button,
 	label, // For checkboxes
-	.rwmb-button {
+	a { // For links and buttons
 		pointer-events: none;
 		user-select: none;
 	}
