@@ -59,7 +59,7 @@ const TooltipSettings = ( { name, componentId, defaultValue, updateField, ...res
 								type="text"
 								id={ `${ componentId }-content` }
 								name={ `${ name }[content]` }
-								value={ defaultValue.content }
+								defaultValue={ defaultValue.content || '' }
 								onChange={ updateContent }
 							/>
 						</DivRow>
