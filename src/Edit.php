@@ -80,6 +80,8 @@ class Edit extends BaseEditPage {
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
 				'views'              => Data::is_extension_active( 'mb-views' ),
 			],
+
+			'assetsBaseUrl' => MBB_URL . 'assets',
 		];
 
 		$data = apply_filters( 'mbb_app_data', $data );
