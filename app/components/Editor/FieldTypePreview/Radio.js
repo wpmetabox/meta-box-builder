@@ -1,7 +1,6 @@
-import { getOptions } from "../../../functions";
+import { doNothing, getOptions } from "../../../functions";
 
 const Radio = ( { field } ) => {
-	const doNothing = () => {};
 	const options = getOptions( field.options || '' );
 	return (
 		<fieldset className={ `rwmb-input-list ${ field.inline ? 'rwmb-inline' : '' }` }>

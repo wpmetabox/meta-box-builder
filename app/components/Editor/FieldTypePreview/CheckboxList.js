@@ -1,8 +1,7 @@
 import { __ } from "@wordpress/i18n";
-import { getOptions } from "../../../functions";
+import { doNothing, getOptions } from "../../../functions";
 
 const CheckboxList = ( { field } ) => {
-	const doNothing = () => {};
 	const options = getOptions( field.options || '' );
 	const std = getOptions( field.std || '' );
 	return (
