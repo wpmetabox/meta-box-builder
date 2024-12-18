@@ -20,6 +20,8 @@ class Assets {
 		wp_enqueue_style( 'rwmb-input-list', RWMB_CSS_URL . 'input-list.css', [], RWMB_VER );
 		wp_enqueue_style( 'rwmb-select', RWMB_CSS_URL . 'select.css', [], RWMB_VER );
 		wp_enqueue_style( 'rwmb-button-group', RWMB_CSS_URL . 'button-group.css', [], RWMB_VER );
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'wp-color-picker' );
 	}
 
 	private static function enqueue_extensions_assets(): void {
