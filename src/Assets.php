@@ -23,6 +23,7 @@ class Assets {
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'wp-color-picker' );
 		wp_enqueue_style( 'rwmb-fieldset-text', RWMB_CSS_URL . 'fieldset-text.css', [], RWMB_VER );
+		wp_enqueue_style( 'rwmb-image-select', RWMB_CSS_URL . 'image-select.css', [], RWMB_VER );
 
 		self::enqueue_datetime_assets();
 	}

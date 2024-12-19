@@ -217,5 +217,13 @@ export const getOptions = text => text === "" ? [] : text.split( "\n" ).map( opt
 	return label.trim();
 } );
 
+export const getFullOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
+	if ( !option.includes( ':' ) ) {
+		return { value: option.trim(), label: option.trim() };
+	}
+	const parts = option.split( ':' );
+	return { value: parts[ 0 ].trim(), label: parts.slice( 1 ).join( ":" ).trim() };
+} );
+
 // Do nothing callback function for field preview inputs
 export const doNothing = () => {};

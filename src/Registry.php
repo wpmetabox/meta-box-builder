@@ -435,6 +435,12 @@ class Registry {
 				'description' => __( 'Display below the heading text.', 'meta-box-builder' ),
 			], '', 'general' ),
 
+			// Image select.
+			'options_image_select' => Control::Textarea( 'options', [
+				'label'       => __( 'Choices', 'meta-box-builder' ),
+				'description' => __( 'Enter each choice per line. Use <code>value: image URL</code> format or <code>callback: function_name</code> for a PHP callback (the function must exist).', 'meta-box-builder' ),
+			] ),
+
 			// Image advanced.
 			Control::Select( 'image_size', [
 				'label'   => __( 'Image size', 'meta-box-builder' ),
