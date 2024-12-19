@@ -304,7 +304,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					['required', 'clone_settings'],
-					array_merge( $general_tab, ['std', 'icon_set', 'icon_file', 'icon_dir', 'icon_css' ] ),
+					array_merge( $general_tab, [ 'icon_set', 'icon_file', 'icon_dir', 'icon_css', 'std' ] ),
 					[ 'label_description', 'desc', 'placeholder' ],
 					$advanced_tab
 				),
