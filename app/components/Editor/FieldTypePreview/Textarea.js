@@ -5,7 +5,7 @@ const Textarea = ( { field } ) => (
 		placeholder={ field.placeholder }
 		cols={ field.cols }
 		rows={ field.rows }
-		value={ field.std }
+		value={ field.std || '' }
 		onChange={ doNothing }
 	/>
 );
