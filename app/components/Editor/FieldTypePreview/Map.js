@@ -1,3 +1,3 @@
-const Map = () => <img src={ `${ MbbApp.assetsBaseUrl }/img/map.png` } />;
+const Map = ( { field } ) => <img src={ `${ MbbApp.assetsBaseUrl }/img/${ field.type }.png` } />;
 
 export default Map;
