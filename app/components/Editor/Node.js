@@ -38,6 +38,10 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) );
 
+	if ( field.type === 'key_value' ) {
+		field.clone = true;
+	}
+
 	return (
 		<div
 			className={ `mb-field ${ field._id === activeField._id ? 'mb-field--active' : '' }` }

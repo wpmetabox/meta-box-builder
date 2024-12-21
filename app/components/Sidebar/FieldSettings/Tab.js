@@ -42,6 +42,8 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'format',
 			'save_format',
 			'options',
+			'placeholder_key',
+			'placeholder_value',
 			'group_title',
 			'icon',
 			'icon_url',

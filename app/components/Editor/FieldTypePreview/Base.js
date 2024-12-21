@@ -6,7 +6,7 @@ import FieldLabel from "../FieldLabel";
 const Base = ( { field, updateField, children } ) => (
 	<>
 		<RawHTML>{ field.before }</RawHTML>
-		<div className={ `rwmb-field rwmb-${ field.type }-wrapper ${ field.class } ${ field.required ? 'required' : '' }` }>
+		<div className={ `rwmb-field rwmb-${ field.type }-wrapper ${ field.class || '' } ${ field.required ? 'required' : '' }` }>
 			{
 				field.name && (
 					<div className="rwmb-label">
@@ -23,8 +23,11 @@ const Base = ( { field, updateField, children } ) => (
 			}
 			<div className="rwmb-input">
 				{
+					field.desc && [ 'key_value' ].includes( field.type ) && <p className="description">{ field.desc }</p>
+				}
+				{
 					field.clone && !field.clone_empty_start && (
-						<div className="rwmb-clone">
+						<div className={ `rwmb-clone rwmb-${ field.type }-clone` }>
 							{ children }
 							<TextLimiter field={ field } />
 						</div>
@@ -42,7 +45,7 @@ const Base = ( { field, updateField, children } ) => (
 					)
 				}
 				{
-					field.desc && ![ 'checkbox', 'fieldset_text', 'switch' ].includes( field.type ) && <p className="description">{ field.desc }</p>
+					field.desc && ![ 'checkbox', 'fieldset_text', 'key_value', 'switch' ].includes( field.type ) && <p className="description">{ field.desc }</p>
 				}
 			</div>
 		</div>
