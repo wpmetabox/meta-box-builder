@@ -26,9 +26,17 @@ class Assets {
 		wp_enqueue_style( 'rwmb-image-select', RWMB_CSS_URL . 'image-select.css', [], RWMB_VER );
 		wp_enqueue_style( 'rwmb-key-value', RWMB_CSS_URL . 'key-value.css', [], RWMB_VER );
 
+		// Select advanced.
 		wp_enqueue_style( 'rwmb-select2', RWMB_CSS_URL . 'select2/select2.css', [], '4.0.10' );
 		wp_enqueue_style( 'rwmb-select-advanced', RWMB_CSS_URL . 'select-advanced.css', [], RWMB_VER );
 		wp_enqueue_script( 'rwmb-select2', RWMB_JS_URL . 'select2/select2.min.js', [ 'jquery' ], '4.0.10', true );
+
+		// jQueryUI slider.
+		$url = RWMB_CSS_URL . 'jqueryui';
+		wp_enqueue_style( 'jquery-ui-core', "$url/core.css", [], '1.13.2' );
+		wp_enqueue_style( 'jquery-ui-theme', "$url/theme.css", [], '1.13.2' );
+		wp_enqueue_style( 'jquery-ui-slider', "$url/slider.css", [ 'jquery-ui-core', 'jquery-ui-theme' ], '1.13.2' );
+		wp_enqueue_style( 'rwmb-slider', RWMB_CSS_URL . 'slider.css', [ 'jquery-ui-slider' ], RWMB_VER );
 
 		self::enqueue_datetime_assets();
 	}

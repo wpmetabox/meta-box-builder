@@ -44,6 +44,7 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'options',
 			'placeholder_key',
 			'placeholder_value',
+			'prefix_suffix',
 			'group_title',
 			'icon',
 			'icon_url',

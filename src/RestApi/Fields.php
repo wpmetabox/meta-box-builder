@@ -509,7 +509,7 @@ class Fields extends Base {
 					array_merge( $general_tab, [ 'std' ] ),
 					[ 'label_description', 'desc', 'prefix_suffix' ],
 					$validation_tab,
-					array_merge( ['js_options', $advanced_tab ] )
+					array_merge( [ 'js_options' ], $advanced_tab )
 				),
 				'description' => __( 'jQuery UI slider', 'meta-box-builder' ),
 			],
