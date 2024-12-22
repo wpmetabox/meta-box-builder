@@ -32,22 +32,19 @@ class Assets {
 	private static function enqueue_datetime_assets(): void {
 		// jQueryUI base theme: https://github.com/jquery/jquery-ui/tree/1.13.2/themes/base
 		$url = RWMB_CSS_URL . 'jqueryui';
-		wp_register_style( 'jquery-ui-core', "$url/core.css", [], '1.13.2' );
-		wp_register_style( 'jquery-ui-theme', "$url/theme.css", [], '1.13.2' );
-		wp_register_style( 'jquery-ui-datepicker', "$url/datepicker.css", [ 'jquery-ui-core', 'jquery-ui-theme' ], '1.13.2' );
+		wp_enqueue_style( 'jquery-ui-core', "$url/core.css", [], '1.13.2' );
+		wp_enqueue_style( 'jquery-ui-theme', "$url/theme.css", [], '1.13.2' );
+		wp_enqueue_style( 'jquery-ui-datepicker', "$url/datepicker.css", [ 'jquery-ui-core', 'jquery-ui-theme' ], '1.13.2' );
 
-		wp_register_style( 'rwmb-date', RWMB_CSS_URL . 'date.css', [ 'jquery-ui-datepicker' ], RWMB_VER );
+		wp_enqueue_style( 'rwmb-date', RWMB_CSS_URL . 'date.css', [ 'jquery-ui-datepicker' ], RWMB_VER );
 
 		// jQueryUI timepicker addon: https://github.com/trentrichardson/jQuery-Timepicker-Addon
-		wp_register_style( 'jquery-ui-slider', "$url/slider.css", [ 'jquery-ui-core', 'jquery-ui-theme' ], '1.13.2' );
-		wp_register_style( 'jquery-ui-timepicker', "$url/jquery-ui-timepicker-addon.min.css", [ 'rwmb-date', 'jquery-ui-slider' ], '1.6.3' );
-
-		wp_enqueue_style( 'jquery-ui-timepicker' );
+		wp_enqueue_style( 'jquery-ui-slider', "$url/slider.css", [ 'jquery-ui-core', 'jquery-ui-theme' ], '1.13.2' );
+		wp_enqueue_style( 'jquery-ui-timepicker', "$url/jquery-ui-timepicker-addon.min.css", [ 'rwmb-date', 'jquery-ui-slider' ], '1.6.3' );
 
 		$url = RWMB_JS_URL . 'jqueryui';
-		wp_register_script( 'jquery-ui-timepicker', "$url/jquery-ui-timepicker-addon.min.js", [ 'jquery-ui-datepicker', 'jquery-ui-slider' ], '1.6.3', true );
-		wp_register_script( 'jquery-ui-timepicker-slider', "$url/jquery-ui-sliderAccess.js", [ 'jquery-ui-datepicker', 'jquery-ui-slider' ], '0.3', true );
-		wp_enqueue_script( 'jquery-ui-timepicker-i18n', "$url/jquery-ui-timepicker-addon-i18n.min.js", [ 'jquery-ui-timepicker' ], '1.6.3', true );
+		wp_enqueue_script( 'jquery-ui-timepicker', "$url/jquery-ui-timepicker-addon.min.js", [ 'jquery-ui-datepicker', 'jquery-ui-slider' ], '1.6.3', true );
+		wp_enqueue_script( 'jquery-ui-timepicker-slider', "$url/jquery-ui-sliderAccess.js", [ 'jquery-ui-datepicker', 'jquery-ui-slider' ], '0.3', true );
 	}
 
 	private static function enqueue_extensions_assets(): void {
