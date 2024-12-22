@@ -32,7 +32,7 @@ Preview:
 [ ] Background
 [ ] Switch to field khi có trường required chưa điền
 [x] Auto expand cho textarea
-[ ] Click vào vùng trống thì close sidebar
+[x] Click vào vùng trống thì close sidebar
 
 
 [ ] Update UI for creating settings pages
