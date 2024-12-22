@@ -1,3 +1,4 @@
+import TextareaAutosize from 'react-textarea-autosize';
 import DivRow from './DivRow';
 
 const Textarea = ( {
@@ -5,7 +6,6 @@ const Textarea = ( {
 	name,
 	defaultValue,
 	placeholder,
-	rows = 2,
 	textareaClassName = '',
 	updateField,
 	...rest
@@ -14,10 +14,11 @@ const Textarea = ( {
 
 	return (
 		<DivRow { ...rest } htmlFor={ componentId }>
-			<textarea
+			<TextareaAutosize
 				id={ componentId }
 				name={ name }
-				rows={ rows }
+				minRows={ 2 }
+				maxRows={ 6 }
 				placeholder={ placeholder }
 				className={ textareaClassName }
 				defaultValue={ defaultValue }
