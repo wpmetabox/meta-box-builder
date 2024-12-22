@@ -37,6 +37,16 @@ Preview:
 	[ ] Xoá react tabs
 	[ ] Xóa phần collapsible, bao gồm cả CSS
 
+Feedback:
+
+[ ] Add subfield cho group khó tìm
+[ ] Thay đổi field type
+[ ] Duplicate cả group
+[ ] Kéo 1 field vào thành subfield của group
+[ ] Conditional logic hiện thêm ID
+[ ] Nút add field ở vị trí khó nhìn
+[ ] icon mở sidebar setting của field group cũng khó nhìn
+
 ## Settings của field group:
 
 - Settings được lấy từ biến MbbApp.settings và có thể truyền qua URL (trong trường hợp muốn tự setup settings cho 1 post type khi vừa mới tạo xong)
