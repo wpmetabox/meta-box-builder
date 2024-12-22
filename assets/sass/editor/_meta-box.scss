@@ -29,7 +29,9 @@
 	// For links and buttons
 	a,
 	// For jQueryUI widgets (date, time picker)
-	.ui-widget {
+	.ui-widget,
+	// For select2
+	.select2 {
 		pointer-events: none;
 		user-select: none;
 	}
