@@ -263,7 +263,7 @@ class Fields extends Base {
 				'category'    => 'upload',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'max_file_uploads', 'max_file_size', 'mime_type', 'max_status', 'force_delete' ] ),
+					array_merge( $general_tab, [ 'max_file_size', 'mime_type', 'max_file_uploads', 'max_status', 'force_delete' ] ),
 					$appearance_tab,
 					$validation_tab,
 					$advanced_tab
@@ -351,7 +351,7 @@ class Fields extends Base {
 				'category'    => 'upload',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'max_file_uploads', 'max_file_size', 'image_size', 'max_status', 'force_delete', 'add_to' ] ),
+					array_merge( $general_tab, [ 'max_file_size', 'image_size', 'max_file_uploads', 'max_status', 'force_delete', 'add_to' ] ),
 					$appearance_tab,
 					$validation_tab,
 					$advanced_tab
