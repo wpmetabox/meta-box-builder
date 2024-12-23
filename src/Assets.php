@@ -41,6 +41,9 @@ class Assets {
 		wp_enqueue_style( 'rwmb-switch', RWMB_CSS_URL . 'switch.css', [], RWMB_VER );
 		wp_enqueue_style( 'rwmb-text-list', RWMB_CSS_URL . 'text-list.css', [], RWMB_VER );
 
+		wp_enqueue_editor();
+		wp_enqueue_style( 'rwmb-wysiwyg', RWMB_CSS_URL . 'wysiwyg.css', [], RWMB_VER );
+
 		self::enqueue_datetime_assets();
 	}
 
