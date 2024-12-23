@@ -47,6 +47,8 @@ class Assets {
 		wp_enqueue_style( 'rwmb-range', RWMB_CSS_URL . 'range.css', [], RWMB_VER );
 		wp_enqueue_style( 'rwmb-select-tree', RWMB_CSS_URL . 'select-tree.css', [ 'rwmb-select' ], RWMB_VER );
 		wp_enqueue_style( 'rwmb-file-input', RWMB_CSS_URL . 'file-input.css', [], RWMB_VER );
+		wp_enqueue_style( 'rwmb-media', RWMB_CSS_URL . 'media.css', [], RWMB_VER );
+		wp_enqueue_style( 'rwmb-upload', RWMB_CSS_URL . 'upload.css', [ 'rwmb-media' ], RWMB_VER );
 
 		self::enqueue_datetime_assets();
 	}
