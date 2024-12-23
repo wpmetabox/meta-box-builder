@@ -50,6 +50,7 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'minmax',
 			'field_type',
 			'add_new',
+			'max_file_uploads',
 			'group_title',
 			'icon',
 			'icon_url',
