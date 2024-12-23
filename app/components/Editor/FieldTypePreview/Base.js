@@ -4,8 +4,8 @@ import { isPositiveInteger } from "../../../functions";
 import FieldLabel from "../FieldLabel";
 
 const Base = ( { field, updateField, children } ) => {
-	return field.type === 'divider'
-		? <Divider field={ field } children={ children } />
+	return [ 'divider', 'heading' ].includes( field.type )
+		? <Plain field={ field } children={ children } />
 		: (
 			<>
 				<RawHTML>{ field.before }</RawHTML>
@@ -63,7 +63,7 @@ const Base = ( { field, updateField, children } ) => {
 		);
 };
 
-const Divider = ( { field, children } ) => (
+const Plain = ( { field, children } ) => (
 	<>
 		<RawHTML>{ field.before }</RawHTML>
 		<div className={ `rwmb-field rwmb-${ field.type }-wrapper ${ field.class || '' }` } >

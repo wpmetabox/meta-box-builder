@@ -50,6 +50,7 @@ class Assets {
 		wp_enqueue_style( 'rwmb-media', RWMB_CSS_URL . 'media.css', [], RWMB_VER );
 		wp_enqueue_style( 'rwmb-upload', RWMB_CSS_URL . 'upload.css', [ 'rwmb-media' ], RWMB_VER );
 		wp_enqueue_style( 'rwmb-divider', RWMB_CSS_URL . 'divider.css', [], RWMB_VER );
+		wp_enqueue_style( 'rwmb-heading', RWMB_CSS_URL . 'heading.css', [], RWMB_VER );
 
 		self::enqueue_datetime_assets();
 	}
