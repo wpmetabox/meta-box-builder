@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "@wordpress/element";
+import { useEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { doNothing, getOptions } from "../../../functions";
 
@@ -9,7 +9,12 @@ const SelectAdvanced = ( { field } ) => {
 	const ref = useRef();
 
 	useEffect( () => {
-		jQuery( ref.current ).select2( {
+		const $select = jQuery( ref.current );
+
+		// Remove previous select2 instance, like in "post" field, when changing field_type.
+		$select.siblings( '.select2-container' ).remove();
+
+		$select.select2( {
 			allowClear: true,
 			dropdownAutoWidth: true,
 			placeholder: field.placeholder || __( 'Select an item', 'meta-box-builder' ),

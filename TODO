@@ -33,6 +33,7 @@ Preview:
 [ ] Switch to field khi có trường required chưa điền
 [x] Auto expand cho textarea
 [x] Click vào vùng trống thì close sidebar
+[ ] Object field, chuyển chọn field type thành icon
 
 
 [ ] Update UI for creating settings pages

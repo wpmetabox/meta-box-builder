@@ -48,6 +48,8 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'style',
 			'on_off',
 			'minmax',
+			'field_type',
+			'add_new',
 			'group_title',
 			'icon',
 			'icon_url',
