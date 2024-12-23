@@ -428,8 +428,8 @@ class Registry {
 
 			// File advanced.
 			Control::Input( 'mime_type', [
-				'label'   => __( 'MIME types', 'meta-box-builder' ),
-				'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload. Separate by commas.', 'meta-box-builder' ),
+				'label'       => __( 'MIME types', 'meta-box-builder' ),
+				'description' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload. Separate by commas.', 'meta-box-builder' ),
 			] ),
 
 			// File upload.

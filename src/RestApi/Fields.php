@@ -239,7 +239,7 @@ class Fields extends Base {
 				'category'    => 'upload',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'max_file_uploads', 'mime_type', 'max_status', 'force_delete' ] ),
+					array_merge( $general_tab, [ 'mime_type', 'max_file_uploads', 'max_status', 'force_delete' ] ),
 					$appearance_tab,
 					$validation_tab,
 					$advanced_tab

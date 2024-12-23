@@ -51,6 +51,7 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'field_type',
 			'add_new',
 			'max_file_uploads',
+			'max_status',
 			'group_title',
 			'icon',
 			'icon_url',
