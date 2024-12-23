@@ -47,6 +47,7 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'prefix_suffix',
 			'style',
 			'on_off',
+			'minmax',
 			'group_title',
 			'icon',
 			'icon_url',
