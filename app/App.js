@@ -13,7 +13,7 @@ const Layout = ( { children } ) => {
 	const { setActiveField } = useFieldSettingsPanel();
 
 	const hideSidebar = e => {
-		if ( inside( e.target, '.mb-main, .mb-sidebar' ) ) {
+		if ( inside( e.target, '.mb-main, .mb-sidebar, .components-popover' ) ) {
 			return;
 		}
 		setSidebarPanel( '' );

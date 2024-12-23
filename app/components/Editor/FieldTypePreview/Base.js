@@ -6,7 +6,15 @@ import FieldLabel from "../FieldLabel";
 const Base = ( { field, updateField, children } ) => (
 	<>
 		<RawHTML>{ field.before }</RawHTML>
-		<div className={ `rwmb-field rwmb-${ field.type }-wrapper ${ field.class || '' } ${ field.required ? 'required' : '' }` }>
+		<div
+			className={
+				`rwmb-field
+				rwmb-${ field.type }-wrapper
+				${ field.class || '' }
+				${ field.type === 'text_list' && ! field.clone ? 'rwmb-text_list-non-cloneable' : ''}
+				${ field.required ? 'required' : '' }`
+			}
+		>
 			{
 				field.name && (
 					<div className="rwmb-label">
