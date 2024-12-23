@@ -4,7 +4,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import Header from './components/Header';
 import Main from './components/Main';
 import Sidebar from './components/Sidebar';
-import { inside } from "./functions";
 import useFieldSettingsPanel from "./hooks/useFieldSettingsPanel";
 import useSidebarPanel from "./hooks/useSidebarPanel";
 
@@ -13,7 +12,7 @@ const Layout = ( { children } ) => {
 	const { setActiveField } = useFieldSettingsPanel();
 
 	const hideSidebar = e => {
-		if ( inside( e.target, '.mb-main, .mb-sidebar, .components-popover' ) ) {
+		if ( !e.target.classList.contains( 'mb-body__inner' ) ) {
 			return;
 		}
 		setSidebarPanel( '' );
