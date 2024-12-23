@@ -13,7 +13,7 @@ const Layout = ( { children } ) => {
 	const { setActiveField } = useFieldSettingsPanel();
 
 	const hideSidebar = e => {
-		if ( inside( e.target, '.mb-main' ) ) {
+		if ( inside( e.target, '.mb-main, .mb-sidebar' ) ) {
 			return;
 		}
 		setSidebarPanel( '' );
