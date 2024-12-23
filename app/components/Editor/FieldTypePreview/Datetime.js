@@ -35,20 +35,27 @@ const Datetime = ( { field } ) => {
 		}
 	}, [ field.format, field.std, field.inline ] );
 
+	const prepend = field.prepend && <span className="rwmb-input-group-text">{ field.prepend }</span>;
+	const append = field.append && <span className="rwmb-input-group-text">{ field.append }</span>;
+	const input = <input
+		ref={ inputRef }
+		type="text"
+		placeholder={ field.placeholder }
+		size={ field.size }
+		value={ field.std || '' }
+		onChange={ doNothing }
+	/>;
+
 	return (
 		<>
-			<input
-				ref={ inputRef }
-				type="text"
-				placeholder={ field.placeholder }
-				size={ field.size }
-				value={ field.std || '' }
-				onChange={ doNothing }
-			/>
+			{
+				prepend || append
+					? <div className="rwmb-input-group">{ prepend }{ input }{ append }</div>
+					: input
+			}
 			{ field.inline && <div ref={ inlineRef } className="rwmb-datetime-inline"></div> }
 		</>
 	);
-
 };
 
 export default Datetime;
