@@ -1,5 +1,5 @@
 import { lazy } from "@wordpress/element";
-import { archive, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, inbox, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
+import { archive, atSymbol, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
 import dotProp from 'dot-prop';
 import slugify from "slugify";
 
@@ -157,7 +157,7 @@ export const getFieldIcon = type => {
 		date: postDate,
 		datetime: calendar,
 		divider: separator,
-		email: inbox,
+		email: atSymbol,
 		fieldset_text: grid,
 		file: page,
 		file_advanced: pages,
