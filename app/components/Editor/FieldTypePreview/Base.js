@@ -9,7 +9,7 @@ const Base = ( { field, updateField, children } ) => {
 		? <Plain field={ field } children={ children } />
 		: (
 			<>
-				<RawHTML>{ field.before }</RawHTML>
+				{ field.before && <RawHTML>{ field.before }</RawHTML> }
 				<div
 					className={
 						`rwmb-field
@@ -59,7 +59,7 @@ const Base = ( { field, updateField, children } ) => {
 						}
 					</div>
 				</div>
-				<RawHTML>{ field.after }</RawHTML>
+				{ field.after && <RawHTML>{ field.after }</RawHTML> }
 			</>
 		);
 };
