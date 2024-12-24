@@ -13,9 +13,8 @@ const useContextMenu = () => {
 			return;
 		}
 
-		const rect = parent.getBoundingClientRect();
-		const x = event.clientX - rect.left;
-		const y = event.clientY - rect.top;
+		const x = event.clientX;
+		const y = event.clientY;
 
 		e.preventDefault();
 		e.stopPropagation();

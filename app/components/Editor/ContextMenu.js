@@ -54,7 +54,7 @@ const ContextMenu = ( {
 
 	return (
 		<>
-			<div className={ `og-context-menu ${ open ? 'og-context-menu--show' : '' }` } style={ { top, left } }>
+			<div className={ `mb-context-menu ${ open ? 'mb-context-menu--show' : '' }` } style={ { top, left } }>
 				<MenuGroup>
 					<MenuItem icon={ insertBefore } onClick={ actionCallback( 'addBefore' ) }>
 						{ __( 'Add a field before', 'meta-box-builder' ) }

@@ -7,6 +7,7 @@
 // Editor
 @use "editor/meta-box";
 @use "editor/field";
+@use "editor/context-menu";
 
 .og {
 	@import "elements";
@@ -20,8 +21,6 @@
 	@import "input-group";
 	@import "toggle-group";
 	@import "status";
-
-	@import "structure/context-menu";
 
 	@import "field-settings/icon";
 	@import "field-settings/header";
