@@ -23,7 +23,8 @@
 	input,
 	select,
 	textarea,
-	button,
+	// For buttons, but not "Add field button"
+	button:not(.mb-editor__add-field-button),
 	// For checkboxes
 	label,
 	// For links and buttons

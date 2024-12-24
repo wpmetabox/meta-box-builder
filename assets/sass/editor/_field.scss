@@ -31,15 +31,23 @@
 	// Do not set padding for the group, let subfields handle it.
 	padding-block: 0;
 
-	> .rwmb-field > .rwmb-label {
+	>.rwmb-field>.rwmb-label {
 		padding-block: var(--spacing);
 	}
 
-	> .rwmb-field > .rwmb-input {
+	>.rwmb-field>.rwmb-input {
 		margin-block: 1px; // Don't override outline of parent group when hovering.
 	}
 
-	.mb-field {
-		padding-inline: 0; // Remove inline padding for subfields.
+	// Remove inline padding for subfields.
+	.mb-field,
+	// And for empty state.
+	.mb-editor__empty {
+		padding-inline: 0;
+	}
+
+	// Add margin-bottom for add clone button to avoid touching the edge.
+	.rwmb-button.add-clone {
+		margin-bottom: var(--spacing);
 	}
 }

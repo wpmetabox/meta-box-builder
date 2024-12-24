@@ -10,7 +10,7 @@ const AddFieldButton = ( { addField, variant = 'primary' } ) => {
 
 	return (
 		<>
-			<Button variant={ variant } onClick={ openModal } title={ __( 'Add a new field', 'meta-box-builder' ) }>
+			<Button className="mb-editor__add-field-button" variant={ variant } onClick={ openModal } title={ __( 'Add a new field', 'meta-box-builder' ) }>
 				{ __( '+ Add Field', 'meta-box-builder' ) }
 			</Button>
 			{
