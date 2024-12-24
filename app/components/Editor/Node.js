@@ -18,6 +18,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			return;
 		}
 
+		e.stopPropagation();
+
 		setActiveField( activeField._id === field._id ? {} : field );
 		setSidebarPanel( activeField._id === field._id ? '' : 'field_settings' );
 	};
@@ -43,7 +45,11 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	return (
 		<div
-			className={ `mb-field ${ field._id === activeField._id ? 'mb-field--active' : '' }` }
+			className={ `
+				mb-field
+				mb-field--${ field.type }
+				${ field._id === activeField._id ? 'mb-field--active' : '' }
+			` }
 			onClick={ toggleSettings }
 			onContextMenu={ openContextMenu }
 		>
