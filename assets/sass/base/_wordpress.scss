@@ -7,10 +7,9 @@
 }
 
 // Dropdown menu for field actions.
-.components-menu-items__item-icon.components-menu-items__item-icon {
-	width: 16px;
-	height: 16px;
-	fill: var(--color-gray);
+.components-menu-items__item-icon.components-menu-items__item-icon.components-menu-items__item-icon {
+	fill: currentColor;
+	opacity: .45;
 }
 
 .components-button.components-dropdown-menu__toggle {

@@ -87,7 +87,7 @@ const ContextMenu = ( {
 					</MenuItem>
 				</MenuGroup>
 				<MenuGroup>
-					<MenuItem icon={ trash } onClick={ remove }>
+					<MenuItem isDestructive icon={ trash } onClick={ remove }>
 						{ __( 'Remove', 'meta-box-builder' ) }
 					</MenuItem>
 				</MenuGroup>
