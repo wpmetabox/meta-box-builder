@@ -1,6 +1,7 @@
 import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isPositiveInteger } from "../../../functions";
+import useLists from "../../../hooks/useLists";
 import FieldLabel from "../FieldLabel";
 
 const Base = ( { field, updateField, children } ) => {
@@ -74,7 +75,23 @@ const Plain = ( { field, children } ) => (
 );
 
 const Description = ( { field } ) => field.desc && <p className="description">{ field.desc }</p>;
-const CloneButton = ( { field } ) => field.clone && <a href="#" className="rwmb-button button add-clone">{ field.add_button || __( '+ Add more', 'meta-box-builder' ) }</a>;
+const CloneButton = ( { field } ) => {
+	const { getForList } = useLists();
+
+	if ( !field.clone ) {
+		return;
+	}
+
+	// Do not show the clone button if the group has no subfields.
+	if ( field.type === 'group' ) {
+		const { fields } = getForList( field._id );
+		if ( fields.length === 0 ) {
+			return;
+		}
+	}
+
+	return <a href="#" className="rwmb-button button add-clone">{ field.add_button || __( '+ Add more', 'meta-box-builder' ) }</a>;
+};
 
 const TextLimiter = ( { field } ) => {
 	if ( ![ 'text', 'textarea', 'wysiwyg' ].includes( field.type ) ) {
