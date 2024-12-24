@@ -35,8 +35,11 @@
 		padding-block: var(--spacing);
 	}
 
+	> .rwmb-field > .rwmb-input {
+		margin-block: 1px; // Don't override outline of parent group when hovering.
+	}
+
 	.mb-field {
 		padding-inline: 0; // Remove inline padding for subfields.
-		margin-block: 1px; // Set 1px margin to not override outline of parent group when hovering.
 	}
 }
