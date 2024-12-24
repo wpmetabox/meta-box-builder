@@ -19,3 +19,23 @@
 .components-menu-group+.components-menu-group {
 	border-top-color: var(--color-light);
 }
+
+.components-accessible-toolbar,
+.components-toolbar,
+.components-toolbar-group {
+	border-color: var(--color-light);
+}
+
+.components-accessible-toolbar,
+.components-toolbar {
+	border-radius: 4px;
+}
+
+.components-toolbar-group {
+	min-height: auto;
+}
+
+.components-accessible-toolbar .components-button,
+.components-toolbar .components-button {
+	height: 32px;
+}

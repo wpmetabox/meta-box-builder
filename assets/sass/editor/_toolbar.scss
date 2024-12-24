@@ -1,0 +1,14 @@
+.mb-field__toolbar {
+	position: absolute;
+	top: -16px;
+	left: 0;
+	right: 0;
+	z-index: 999;
+	display: none;
+	justify-content: center;
+
+	.mb-field:hover>&,
+	.mb-field--active>& {
+		display: flex;
+	}
+}

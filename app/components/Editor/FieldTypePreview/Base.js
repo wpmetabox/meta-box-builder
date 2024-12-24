@@ -2,13 +2,15 @@ import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isPositiveInteger } from "../../../functions";
 import useLists from "../../../hooks/useLists";
+import ActionBar from "../ActionBar";
 import FieldLabel from "../FieldLabel";
 
-const Base = ( { field, updateField, children } ) => {
+const Base = ( { field, updateField, children, ...fieldActions } ) => {
 	return [ 'divider', 'heading' ].includes( field.type )
 		? <Plain field={ field } children={ children } />
 		: (
 			<>
+				<ActionBar field={ field } { ...fieldActions } />
 				{ field.before && <RawHTML>{ field.before }</RawHTML> }
 				<div
 					className={
