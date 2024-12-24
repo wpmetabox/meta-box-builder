@@ -1,7 +1,9 @@
+import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useApi from "../../hooks/useApi";
 import useLists from "../../hooks/useLists";
+import AddFieldButton from "./AddFieldButton";
 import Node from './Node';
 
 const Fields = () => {
@@ -13,11 +15,16 @@ const Fields = () => {
 	const categories = useApi( 'field-categories', [] );
 
 	if ( Object.keys( types ).length === 0 || Object.keys( categories ).length === 0 ) {
-		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
+		return <div className="mb-editor__empty">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</div>;
 	}
 
 	if ( fields.length === 0 ) {
-		return <p className="og-none">{ __( 'There are no fields here. Add a new field from the list on the right panel.', 'meta-box-builder' ) }</p>;
+		return (
+			<div className="mb-editor__empty">
+				<RawHTML>{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
+				<AddFieldButton { ...fieldActions } />
+			</div>
+		);
 	}
 
 	return (
