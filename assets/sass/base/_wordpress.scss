@@ -20,6 +20,7 @@
 	border-top-color: var(--color-light);
 }
 
+// Toolbar
 .components-accessible-toolbar,
 .components-toolbar,
 .components-toolbar-group {
@@ -35,7 +36,11 @@
 	min-height: auto;
 }
 
-.components-accessible-toolbar .components-button,
-.components-toolbar .components-button {
+.components-accessible-toolbar .components-button.components-button,
+.components-toolbar .components-button.components-button {
 	height: 32px;
+
+	svg {
+		fill: currentColor;
+	}
 }

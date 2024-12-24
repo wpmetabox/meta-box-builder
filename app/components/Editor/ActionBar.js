@@ -45,40 +45,24 @@ const ActionBar = ( { field, addFieldBefore, addFieldAfter, duplicateField, remo
 			<div className="mb-field__toolbar">
 				<Toolbar label={ __( 'Toolbar', 'meta-box-builder' ) }>
 					<ToolbarGroup>
-						<ToolbarButton size="small" icon={ insertBefore } onClick={ actionCallback( 'addBefore' ) }>
-							{ __( 'Add a field before', 'meta-box-builder' ) }
-						</ToolbarButton>
-						<ToolbarButton size="small" icon={ insertAfter } onClick={ actionCallback( 'addAfter' ) }>
-							{ __( 'Add a field after', 'meta-box-builder' ) }
-						</ToolbarButton>
-						<ToolbarButton size="small" icon={ copy } onClick={ duplicate }>
-							{ __( 'Duplicate', 'meta-box-builder' ) }
-						</ToolbarButton>
+						<ToolbarButton size="small" icon={ insertBefore } onClick={ actionCallback( 'addBefore' ) } label={ __( 'Add a field before', 'meta-box-builder' ) } />
+						<ToolbarButton size="small" icon={ insertAfter } onClick={ actionCallback( 'addAfter' ) } label={ __( 'Add a field after', 'meta-box-builder' ) } />
+						<ToolbarButton size="small" icon={ copy } onClick={ duplicate } label={ __( 'Duplicate', 'meta-box-builder' ) } />
 					</ToolbarGroup>
 					{
 						field.type === 'group' && (
 							<ToolbarGroup>
-								<ToolbarButton size="small" icon={ insertBefore } onClick={ actionCallback( 'addSubFieldBefore' ) }>
-									{ __( 'Add a sub-field at the beginning', 'meta-box-builder' ) }
-								</ToolbarButton>
-								<ToolbarButton size="small" icon={ insertAfter } onClick={ actionCallback( 'addSubFieldAfter' ) }>
-									{ __( 'Add a sub-field at the end', 'meta-box-builder' ) }
-								</ToolbarButton>
+								<ToolbarButton size="small" icon={ insertBefore } onClick={ actionCallback( 'addSubFieldBefore' ) } label={ __( 'Add a sub-field at the beginning', 'meta-box-builder' ) } />
+								<ToolbarButton size="small" icon={ insertAfter } onClick={ actionCallback( 'addSubFieldAfter' ) } label={ __( 'Add a sub-field at the end', 'meta-box-builder' ) } />
 							</ToolbarGroup>
 						)
 					}
 					<ToolbarGroup>
-						<ToolbarButton size="small" icon={ arrowUp } onClick={ moveUp }>
-							{ __( 'Move up', 'meta-box-builder' ) }
-						</ToolbarButton>
-						<ToolbarButton size="small" icon={ arrowDown } onClick={ moveDown }>
-							{ __( 'Move down', 'meta-box-builder' ) }
-						</ToolbarButton>
+						<ToolbarButton size="small" icon={ arrowUp } onClick={ moveUp } label={ __( 'Move up', 'meta-box-builder' ) } />
+						<ToolbarButton size="small" icon={ arrowDown } onClick={ moveDown } label={ __( 'Move down', 'meta-box-builder' ) } />
 					</ToolbarGroup>
 					<ToolbarGroup>
-						<ToolbarButton size="small" icon={ trash } onClick={ remove }>
-							{ __( 'Remove', 'meta-box-builder' ) }
-						</ToolbarButton>
+						<ToolbarButton isDestructive size="small" icon={ trash } onClick={ remove } label={ __( 'Remove', 'meta-box-builder' ) } />
 					</ToolbarGroup>
 				</Toolbar>
 			</div>
