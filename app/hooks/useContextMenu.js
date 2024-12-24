@@ -8,7 +8,7 @@ const useContextMenu = () => {
 	} );
 
 	const openContextMenu = e => {
-		const parent = e.target.closest( '.og-item, .mb-field' );
+		const parent = e.target.closest( '.mb-field' );
 		if ( !parent ) {
 			return;
 		}
@@ -18,6 +18,7 @@ const useContextMenu = () => {
 		const y = event.clientY - rect.top;
 
 		e.preventDefault();
+		e.stopPropagation();
 		setOpen( true );
 		setPosition( { x, y } );
 	};
