@@ -14,7 +14,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
 
 	const toggleSettings = e => {
-		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.og-context-menu ' ) ) {
+		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.mb-context-menu ' ) ) {
 			return;
 		}
 

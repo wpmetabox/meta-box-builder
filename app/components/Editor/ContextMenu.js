@@ -1,5 +1,5 @@
 import { MenuGroup, MenuItem, Modal } from '@wordpress/components';
-import { useState } from "@wordpress/element";
+import { createPortal, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { arrowDown, arrowUp, copy, insertAfter, insertBefore, trash } from "@wordpress/icons";
 import useLists from '../../hooks/useLists';
@@ -52,7 +52,7 @@ const ContextMenu = ( {
 	const moveUp = () => moveFieldUp( field._id );
 	const moveDown = () => moveFieldDown( field._id );
 
-	return (
+	return createPortal(
 		<>
 			<div className={ `mb-context-menu ${ open ? 'mb-context-menu--show' : '' }` } style={ { top, left } }>
 				<MenuGroup>
@@ -99,7 +99,8 @@ const ContextMenu = ( {
 					</Modal>
 				)
 			}
-		</>
+		</>,
+		document.body
 	);
 };
 
