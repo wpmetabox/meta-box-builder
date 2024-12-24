@@ -1,19 +1,14 @@
 import { ReactSortable } from 'react-sortablejs';
-import useLists from "../../hooks/useLists";
-import Field from './Field';
-import Node from './Node';
+import useLists from '../../../hooks/useLists';
+import Node from '../Node';
 
-const Group = ( { field, parent = '', updateField } ) => {
+const Group = ( { field, parent } ) => {
 	const { getForList } = useLists();
 	const { fields, setFields, ...fieldActions } = getForList( field._id );
 
 	return (
 		<>
-			<Field
-				field={ field }
-				parent={ parent }
-				updateField={ updateField }
-			/>
+			<CollapsibleElements field={ field } />
 
 			{
 				fields.length > 0 &&
@@ -46,6 +41,9 @@ const Group = ( { field, parent = '', updateField } ) => {
 			}
 		</>
 	);
+};
+
+const CollapsibleElements = ( { field } ) => {
 };
 
 export default Group;

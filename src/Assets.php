@@ -76,6 +76,7 @@ class Assets {
 	private static function enqueue_extensions_assets(): void {
 		self::enqueue_extension_css( 'meta-box-text-limiter', 'text-limiter.css' );
 		self::enqueue_extension_css( 'meta-box-tooltip', 'css/tooltip.css' );
+		self::enqueue_extension_css( 'meta-box-group', 'group.css' );
 	}
 
 	private static function enqueue_extension_css( string $extension, string $relative_path ): void {

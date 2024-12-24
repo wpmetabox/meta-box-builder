@@ -7,7 +7,6 @@ import useSidebarPanel from "../../hooks/useSidebarPanel";
 import ContextMenu from "./ContextMenu";
 import Field from './Field';
 import Base from "./FieldTypePreview/Base";
-import Group from './Group';
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
@@ -48,9 +47,9 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			onClick={ toggleSettings }
 			onContextMenu={ openContextMenu }
 		>
-			<Base field={ field } { ...fieldActions } updateField={ update }>
+			<Base field={ field } updateField={ update }>
 				<Suspense fallback={ null }>
-					<FieldType field={ field } />
+					<FieldType field={ field } parent={ parent } />
 				</Suspense>
 			</Base>
 			{
@@ -62,11 +61,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 					{ ...fieldActions }
 				/>
 			}
-			{
-				field.type === 'group'
-					? <Group field={ field } parent={ parent } updateField={ update } />
-					: <Field field={ field } parent={ parent } updateField={ update } />
-			}
+			<Field field={ field } parent={ parent } updateField={ update } />
 		</div>
 	);
 };
