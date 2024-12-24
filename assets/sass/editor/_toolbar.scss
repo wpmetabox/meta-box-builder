@@ -4,11 +4,6 @@
 	left: 0;
 	right: 0;
 	z-index: 999;
-	display: none;
+	display: flex;
 	justify-content: center;
-
-	.mb-field:hover>&,
-	.mb-field--active>& {
-		display: flex;
-	}
 }

@@ -1,9 +1,10 @@
-import { lazy, memo, Suspense } from "@wordpress/element";
+import { lazy, memo, Suspense, useState } from "@wordpress/element";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
 import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
 import useSidebarPanel from "../../hooks/useSidebarPanel";
+import ActionBar from "./ActionBar";
 import ContextMenu from "./ContextMenu";
 import Field from './Field';
 import Base from "./FieldTypePreview/Base";
@@ -12,6 +13,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
+	const [ hover, setHover ] = useState( false );
 
 	const toggleSettings = e => {
 		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.mb-context-menu ' ) ) {
@@ -43,6 +45,18 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		field.clone = true;
 	}
 
+	const handleMouseEnter = e => {
+		e.preventDefault();
+		e.stopPropagation();
+		setHover( true );
+	};
+
+	const handleMouseLeave = e => {
+		e.preventDefault();
+		e.stopPropagation();
+		setHover( false );
+	};
+
 	return (
 		<div
 			className={ `
@@ -52,21 +66,22 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			` }
 			onClick={ toggleSettings }
 			onContextMenu={ openContextMenu }
+			onMouseEnter={ handleMouseEnter }
+			onMouseLeave={ handleMouseLeave }
 		>
+			{ ( hover || field._id === activeField._id ) && <ActionBar field={ field } { ...fieldActions } /> }
 			<Base field={ field } { ...fieldActions } updateField={ update }>
 				<Suspense fallback={ null }>
 					<FieldType field={ field } parent={ parent } />
 				</Suspense>
 			</Base>
-			{
-				<ContextMenu
-					open={ isContextMenuOpen }
-					top={ contextMenuPosition.y }
-					left={ contextMenuPosition.x }
-					field={ field }
-					{ ...fieldActions }
-				/>
-			}
+			<ContextMenu
+				open={ isContextMenuOpen }
+				top={ contextMenuPosition.y }
+				left={ contextMenuPosition.x }
+				field={ field }
+				{ ...fieldActions }
+			/>
 			<Field field={ field } parent={ parent } updateField={ update } />
 		</div>
 	);
