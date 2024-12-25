@@ -49,6 +49,25 @@ const Group = ( { field, parent } ) => {
 };
 
 const CollapsibleElements = ( { field } ) => {
+	if ( !field.collapsible ) {
+		return;
+	}
+
+	const groupTitle = field.clone ? __( 'Entry {#}', 'meta-box-builder' ) : __( 'Entry', 'meta-box-builder' );
+
+	return (
+		<>
+			<div className="rwmb-group-title-wrapper">
+				<h4 className="rwmb-group-title">{ groupTitle }</h4>
+				{
+					field.clone && <a href="#" className="rwmb-group-remove">{ __( 'Remove', 'meta-box-builder' ) }</a>
+				}
+			</div>
+			<button aria-expanded={ field.default_state === 'expanded' } className="rwmb-group-toggle-handle button-link">
+				<span className="rwmb-group-toggle-indicator" />
+			</button>
+		</>
+	);
 };
 
 export default Group;

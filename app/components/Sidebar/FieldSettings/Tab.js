@@ -52,6 +52,8 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'add_new',
 			'max_file_uploads',
 			'max_status',
+			'collapsible',
+			'default_state',
 			'group_title',
 			'icon',
 			'icon_url',
