@@ -18,6 +18,19 @@
 	}
 }
 
+// Differentiate background for subfields
+.mb-field .mb-field:hover {
+	background: #f0f0f0;
+}
+
+.mb-field .mb-field .mb-field:hover {
+	background: #e9e9e9;
+}
+
+.mb-field .mb-field .mb-field .mb-field:hover {
+	background: #e0e0e0;
+}
+
 // Map
 .mb-field .rwmb-map-wrapper img,
 .mb-field .rwmb-osm-wrapper img {
