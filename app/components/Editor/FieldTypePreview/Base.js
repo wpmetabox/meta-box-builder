@@ -1,21 +1,23 @@
 import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { isPositiveInteger } from "../../../functions";
 import useLists from "../../../hooks/useLists";
 import FieldLabel from "../FieldLabel";
+import TextLimiter from "./Elements/TextLimiter";
+import Tooltip from "./Elements/Tooltip";
 
 const Base = ( { field, updateField, children } ) => {
+	field = normalize( field );
+
 	return [ 'divider', 'heading' ].includes( field.type )
 		? <Plain field={ field } children={ children } />
 		: (
 			<>
-				{ field.before && <RawHTML>{ field.before }</RawHTML> }
+				<Before field={ field } />
 				<div
 					className={
 						`rwmb-field
 						rwmb-${ field.type }-wrapper
 						${ field.class || '' }
-						${ field.type === 'text_list' && !field.clone ? 'rwmb-text_list-non-cloneable' : '' }
 						${ field.required ? 'required' : '' }`
 					}
 				>
@@ -59,18 +61,21 @@ const Base = ( { field, updateField, children } ) => {
 						}
 					</div>
 				</div>
-				{ field.after && <RawHTML>{ field.after }</RawHTML> }
+				<After field={ field } />
 			</>
 		);
 };
 
+const Before = ( { field } ) => field.before && <RawHTML>{ field.before }</RawHTML>;
+const After = ( { field } ) => field.after && <RawHTML>{ field.after }</RawHTML>;
+
 const Plain = ( { field, children } ) => (
 	<>
-		<RawHTML>{ field.before }</RawHTML>
+		<Before field={ field } />
 		<div className={ `rwmb-field rwmb-${ field.type }-wrapper ${ field.class || '' }` } >
 			{ children }
 		</div>
-		<RawHTML>{ field.after }</RawHTML>
+		<After field={ field } />
 	</>
 );
 
@@ -93,49 +98,29 @@ const CloneButton = ( { field } ) => {
 	return <a href="#" className="rwmb-button button add-clone">{ field.add_button || __( '+ Add more', 'meta-box-builder' ) }</a>;
 };
 
-const TextLimiter = ( { field } ) => {
-	if ( ![ 'text', 'textarea', 'wysiwyg' ].includes( field.type ) ) {
-		return;
-	}
-	if ( !field.text_limiter?.limit || !isPositiveInteger( field.text_limiter.limit ) ) {
-		return;
+const normalize = field => {
+	if ( field.type === 'key_value' ) {
+		field.clone = true;
 	}
 
-	const type = field.text_limiter?.limit_type || 'character';
-	const text = 'word' === type ? __( 'Word Count', 'meta-box-builder' ) : __( 'Character Count', 'meta-box-builder' );
+	let classNames = ( field.class || '' ).split( ' ' );
 
-	return (
-		<div className="text-limiter">
-			<span>
-				{ text }:&nbsp;
-				<span className="counter">0</span>/<span className="maximum">{ field.text_limiter.limit }</span>
-			</span>
-		</div>
-	);
-};
-
-const Tooltip = ( { field } ) => {
-	if ( !field.tooltip?.enable || !field.tooltip?.content ) {
-		return;
+	if ( field.type === 'group' ) {
+		if ( field.collapsible ) {
+			classNames.push( 'rwmb-group-collapsible' );
+		}
+		if ( !field.clone ) {
+			classNames.push( 'rwmb-group-non-cloneable' );
+		}
 	}
 
-	const icon = field.tooltip?.icon || 'info';
-	let tooltip = '';
-
-	if ( /^http/.test( icon ) ) {
-		tooltip = <img src={ icon } />;
-	}
-	if ( icon === 'info' ) {
-		tooltip = <span className="dashicons dashicons-info" />;
-	}
-	if ( icon === 'help' ) {
-		tooltip = <span className="dashicons dashicons-editor-help" />;
-	}
-	if ( icon.includes( 'dashicons' ) ) {
-		tooltip = <span className={ `dashicons ${ icon }` } />;
+	if ( field.type === 'text_list' && !field.clone ) {
+		classNames.push( 'rwmb-text_list-non-cloneable' );
 	}
 
-	return tooltip && <span className="mb-tooltip">{ tooltip }</span>;
+	field.class = [ ...new Set( classNames ) ].join( ' ' );
+
+	return field;
 };
 
 export default Base;
