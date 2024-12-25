@@ -85,8 +85,8 @@ class Assets {
 		}
 		$base = self::get_extensions_base();
 
-		$path = $base[0] . ltrim( $relative_path, '/' );
-		$url = $base[1] . ltrim( $relative_path, '/' );
+		$path = $base[0] . "$extension/$relative_path";
+		$url  = $base[1] . "$extension/$relative_path";
 
 		if ( file_exists( $path ) ) {
 			wp_enqueue_style( $extension, $url, [], filemtime( $path ) );
@@ -94,7 +94,8 @@ class Assets {
 	}
 
 	private static function get_extensions_base(): array {
-		$path = dirname( MBB_DIR );
-		return RWMB_Loader::get_path( $path );
+		$path = trailingslashit( dirname( MBB_DIR ) );
+		$url  = trailingslashit( dirname( MBB_URL ) );
+		return [ $path, $url ];
 	}
 }
