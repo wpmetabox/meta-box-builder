@@ -1,11 +1,22 @@
-import { Modal, Toolbar, ToolbarButton, ToolbarGroup } from '@wordpress/components';
-import { useState } from "@wordpress/element";
+import { Modal, Toolbar as T, ToolbarButton, ToolbarGroup } from '@wordpress/components';
+import { createPortal, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { arrowDown, arrowUp, copy, insertAfter, insertBefore, trash } from "@wordpress/icons";
+import useFieldSettingsPanel from '../../hooks/useFieldSettingsPanel';
 import useLists from '../../hooks/useLists';
 import AddFieldContent from '../AddFieldContent';
 
-const ActionBar = ( { field, addFieldBefore, addFieldAfter, duplicateField, removeField, moveFieldUp, moveFieldDown } ) => {
+const Toolbar = ( {
+	position = {},
+	field,
+	addFieldBefore,
+	addFieldAfter,
+	duplicateField,
+	removeField,
+	moveFieldUp,
+	moveFieldDown
+} ) => {
+	const { activeField } = useFieldSettingsPanel();
 	const { getForList } = useLists();
 	const [ action, setAction ] = useState( () => () => {} );
 	const [ isOpen, setOpen ] = useState( false );
@@ -40,10 +51,17 @@ const ActionBar = ( { field, addFieldBefore, addFieldAfter, duplicateField, remo
 	const moveUp = () => moveFieldUp( field._id );
 	const moveDown = () => moveFieldDown( field._id );
 
-	return (
+	return createPortal(
 		<>
-			<div className="mb-field__toolbar">
-				<Toolbar label={ __( 'Toolbar', 'meta-box-builder' ) }>
+			<div
+				className={ `mb-toolbar ${ activeField._id === field._id ? 'mb-toolbar--show' : '' }` }
+				style={ {
+					top: position.top,
+					left: position.left,
+					width: position.width,
+				} }
+			>
+				<T label={ __( 'Toolbar', 'meta-box-builder' ) }>
 					<ToolbarGroup>
 						<ToolbarButton size="small" icon={ insertBefore } onClick={ actionCallback( 'addBefore' ) } label={ __( 'Add a field before', 'meta-box-builder' ) } />
 						<ToolbarButton size="small" icon={ insertAfter } onClick={ actionCallback( 'addAfter' ) } label={ __( 'Add a field after', 'meta-box-builder' ) } />
@@ -64,7 +82,7 @@ const ActionBar = ( { field, addFieldBefore, addFieldAfter, duplicateField, remo
 					<ToolbarGroup>
 						<ToolbarButton isDestructive size="small" icon={ trash } onClick={ remove } label={ __( 'Remove', 'meta-box-builder' ) } />
 					</ToolbarGroup>
-				</Toolbar>
+				</T>
 			</div>
 			{
 				isOpen && (
@@ -73,8 +91,9 @@ const ActionBar = ( { field, addFieldBefore, addFieldAfter, duplicateField, remo
 					</Modal>
 				)
 			}
-		</>
+		</>,
+		document.body
 	);
 };
 
-export default ActionBar;
+export default Toolbar;

@@ -1,9 +1,11 @@
-.mb-field__toolbar {
-	position: absolute;
-	top: -16px;
-	left: 0;
-	right: 0;
-	z-index: 999;
-	display: flex;
+.mb-toolbar {
+	display: none;
+	position: fixed;
+	z-index: 999999;
 	justify-content: center;
+	margin-top: -16px;
+
+	&--show {
+		display: flex;
+	}
 }

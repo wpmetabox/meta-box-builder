@@ -4,26 +4,39 @@ import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
 import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
 import useSidebarPanel from "../../hooks/useSidebarPanel";
-import ActionBar from "./ActionBar";
+import useToolbar from "../../hooks/useToolbar";
 import ContextMenu from "./ContextMenu";
 import Field from './Field';
 import Base from "./FieldTypePreview/Base";
+import Toolbar from "./Toolbar";
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
+	const { showToolbar, toolbarPosition } = useToolbar();
 	const [ hover, setHover ] = useState( false );
 
+	const isActive = activeField._id === field._id;
+
 	const toggleSettings = e => {
-		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.mb-context-menu ' ) ) {
+		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.mb-context-menu ' ) || inside( e.target, '.mb-field__toolbar ' ) ) {
 			return;
 		}
 
 		e.stopPropagation();
 
-		setActiveField( activeField._id === field._id ? {} : field );
-		setSidebarPanel( activeField._id === field._id ? '' : 'field_settings' );
+		// If the field is already active, close it.
+		if ( isActive ) {
+			setActiveField( {} );
+			setSidebarPanel( '' );
+			return;
+		}
+
+		// Set active field and show settings panel.
+		setActiveField( field );
+		setSidebarPanel( 'field_settings' );
+		showToolbar( e );
 	};
 
 	const update = ( key, value ) => {
@@ -45,31 +58,21 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		field.clone = true;
 	}
 
-	const handleMouseEnter = e => {
-		e.preventDefault();
-		e.stopPropagation();
-		setHover( true );
-	};
-
-	const handleMouseLeave = e => {
-		e.preventDefault();
-		e.stopPropagation();
-		setHover( false );
-	};
-
 	return (
 		<div
 			className={ `
 				mb-field
 				mb-field--${ field.type }
-				${ field._id === activeField._id ? 'mb-field--active' : '' }
+				${ isActive ? 'mb-field--active' : '' }
 			` }
 			onClick={ toggleSettings }
 			onContextMenu={ openContextMenu }
-			onMouseEnter={ handleMouseEnter }
-			onMouseLeave={ handleMouseLeave }
 		>
-			{ ( hover || field._id === activeField._id ) && <ActionBar field={ field } { ...fieldActions } /> }
+			<Toolbar
+				position={ toolbarPosition }
+				field={ field }
+				{ ...fieldActions }
+			/>
 			<Base field={ field } { ...fieldActions } updateField={ update }>
 				<Suspense fallback={ null }>
 					<FieldType field={ field } parent={ parent } />
