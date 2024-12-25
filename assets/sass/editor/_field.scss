@@ -6,6 +6,7 @@
 	padding: var(--spacing);
 	position: relative;
 	cursor: pointer;
+	z-index: 1;
 
 	&--active,
 	&:hover {
@@ -13,8 +14,8 @@
 	}
 
 	&--active {
+		z-index: 2; // Use z-index to make sure the active field is on top of other fields.
 		outline: 1px solid var(--color-primary);
-		outline-offset: -1px;
 	}
 }
 
@@ -46,10 +47,6 @@
 
 	>.rwmb-field>.rwmb-label {
 		padding-block: var(--spacing);
-	}
-
-	>.rwmb-field>.rwmb-input {
-		margin-block: 1px; // Don't override outline of parent group when hovering.
 	}
 
 	// Remove inline padding for subfields.
