@@ -1,6 +1,7 @@
 // Tweaks, overwrite CSS from Meta Box
 
 .mb-field {
+
 	// Remove margin for the last field
 	.rwmb-field.rwmb-field {
 		margin-bottom: 0;
@@ -20,13 +21,14 @@
 // Disable entering for inputs
 .mb-field .rwmb-input {
 
-	input,
+	input:not(.og-item__editable input),
 	select,
 	textarea,
 	// For buttons, but not "Add field button"
 	button:not(.mb-editor__add-field-button),
 	// For checkboxes
-	label,
+	label:has([type="checkbox"]),
+	label:has([type="radio"]),
 	// For links and buttons
 	a,
 	.select2,
