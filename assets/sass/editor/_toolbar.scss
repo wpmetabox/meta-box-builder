@@ -1,11 +1,15 @@
 .mb-toolbar {
 	display: none;
 	position: fixed;
-	z-index: 999999;
 	justify-content: center;
 	margin-top: -16px;
 
 	&--show {
 		display: flex;
+	}
+
+	&__icon {
+		stroke: currentColor;
+		stroke-width: 1.2;
 	}
 }

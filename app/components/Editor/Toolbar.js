@@ -63,6 +63,10 @@ const Toolbar = ( {
 			>
 				<T label={ __( 'Toolbar', 'meta-box-builder' ) }>
 					<ToolbarGroup>
+						<ToolbarButton size="small" icon={ arrowUp } onClick={ moveUp } label={ __( 'Move up', 'meta-box-builder' ) } />
+						<ToolbarButton size="small" icon={ arrowDown } onClick={ moveDown } label={ __( 'Move down', 'meta-box-builder' ) } />
+					</ToolbarGroup>
+					<ToolbarGroup>
 						<ToolbarButton size="small" icon={ insertBefore } onClick={ actionCallback( 'addBefore' ) } label={ __( 'Add a field before', 'meta-box-builder' ) } />
 						<ToolbarButton size="small" icon={ insertAfter } onClick={ actionCallback( 'addAfter' ) } label={ __( 'Add a field after', 'meta-box-builder' ) } />
 						<ToolbarButton size="small" icon={ copy } onClick={ duplicate } label={ __( 'Duplicate', 'meta-box-builder' ) } />
@@ -70,15 +74,33 @@ const Toolbar = ( {
 					{
 						field.type === 'group' && (
 							<ToolbarGroup>
-								<ToolbarButton size="small" icon={ insertBefore } onClick={ actionCallback( 'addSubFieldBefore' ) } label={ __( 'Add a sub-field at the beginning', 'meta-box-builder' ) } />
-								<ToolbarButton size="small" icon={ insertAfter } onClick={ actionCallback( 'addSubFieldAfter' ) } label={ __( 'Add a sub-field at the end', 'meta-box-builder' ) } />
+								<ToolbarButton
+									icon={
+										<svg className="mb-toolbar__icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+											<line x1="2" y1="13" x2="14" y2="13" />
+											<line x1="2" y1="10.5" x2="14" y2="10.5" />
+											<line x1="5" y1="5" x2="11" y2="5" />
+											<line x1="8" y1="2" x2="8" y2="8" />
+										</svg>
+									}
+									onClick={ actionCallback( 'addSubFieldBefore' ) }
+									label={ __( 'Add a sub-field at the beginning', 'meta-box-builder' ) }
+								/>
+								<ToolbarButton
+									icon={
+										<svg className="mb-toolbar__icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+											<line x1="14" y1="3" x2="2" y2="3" />
+											<line x1="14" y1="5.5" x2="2" y2="5.5" />
+											<line x1="11" y1="11" x2="5" y2="11" />
+											<line x1="8" y1="14" x2="8" y2="8" />
+										</svg>
+									}
+									onClick={ actionCallback( 'addSubFieldAfter' ) }
+									label={ __( 'Add a sub-field at the end', 'meta-box-builder' ) }
+								/>
 							</ToolbarGroup>
 						)
 					}
-					<ToolbarGroup>
-						<ToolbarButton size="small" icon={ arrowUp } onClick={ moveUp } label={ __( 'Move up', 'meta-box-builder' ) } />
-						<ToolbarButton size="small" icon={ arrowDown } onClick={ moveDown } label={ __( 'Move down', 'meta-box-builder' ) } />
-					</ToolbarGroup>
 					<ToolbarGroup>
 						<ToolbarButton isDestructive size="small" icon={ trash } onClick={ remove } label={ __( 'Remove', 'meta-box-builder' ) } />
 					</ToolbarGroup>
