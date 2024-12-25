@@ -41,14 +41,13 @@ const ContextMenu = ( {
 		setAction( () => actionMap[ name ] );
 	};
 
-	const duplicate = () => duplicateField( field._id );
-
 	const remove = () => {
 		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
 			removeField( field._id );
 		}
 	};
 
+	const duplicate = () => duplicateField( field._id );
 	const moveUp = () => moveFieldUp( field._id );
 	const moveDown = () => moveFieldDown( field._id );
 

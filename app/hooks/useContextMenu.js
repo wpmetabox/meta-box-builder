@@ -13,8 +13,8 @@ const useContextMenu = () => {
 			return;
 		}
 
-		const x = event.clientX;
-		const y = event.clientY;
+		const x = e.clientX;
+		const y = e.clientY;
 
 		e.preventDefault();
 		e.stopPropagation();
@@ -22,13 +22,13 @@ const useContextMenu = () => {
 		setPosition( { x, y } );
 	};
 
-	const clostContextMenu = () => setOpen( false );
+	const closeContextMenu = () => setOpen( false );
 
 	useEffect( () => {
-		document.addEventListener( "click", clostContextMenu );
+		document.addEventListener( "click", closeContextMenu );
 
 		return () => {
-			document.removeEventListener( "click", clostContextMenu );
+			document.removeEventListener( "click", closeContextMenu );
 		};
 	}, [] );
 
