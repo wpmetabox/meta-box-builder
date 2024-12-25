@@ -8,7 +8,7 @@ const ToggleGroup = ( { name, options, defaultValue, updateField, ...rest } ) =>
 				{
 					Object.entries( options ).map( ( [ value, label ] ) => (
 						<label key={ value }>
-							<input type="radio" name={ name } value={ value } checked={ value === defaultValue } onChange={ handleChange } />
+							<input type="radio" name={ name } defaultValue={ value } defaultChecked={ value === defaultValue } onChange={ handleChange } />
 							<span className="dashicons dashicons-yes-alt"></span>
 							<span>{ label }</span>
 						</label>
