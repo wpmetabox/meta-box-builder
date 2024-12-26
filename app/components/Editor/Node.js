@@ -64,6 +64,9 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			onClick={ toggleSettings }
 			onContextMenu={ openContextMenu }
 		>
+			<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
+			<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
+
 			<Toolbar
 				position={ toolbarPosition }
 				field={ field }

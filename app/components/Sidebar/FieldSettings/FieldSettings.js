@@ -56,9 +56,6 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 
 	return portalElement && createPortal(
 		<div className={ `og-field-settings ${ field._id === activeField._id ? 'og-field-settings--show' : '' }` }>
-			<input type="hidden" name={ `fields${ rest.parent }[${ field._id }][_id]` } defaultValue={ field._id } />
-			<input type="hidden" name={ `fields${ rest.parent }[${ field._id }][type]` } defaultValue={ field.type } />
-
 			<div className="og-field-settings__header">
 				<Tab controls={ headerControls } field={ field } { ...rest } />
 			</div>
