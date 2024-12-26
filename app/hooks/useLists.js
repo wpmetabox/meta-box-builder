@@ -276,7 +276,7 @@ const useLists = create( ( set, get ) => ( {
 			} ),
 		} ) );
 
-		setSidebarPanel( 'add_field' );
+		setSidebarPanel( '' );
 	},
 	updateField: ( listId, fieldId, key, value ) => set( state => ( {
 		lists: state.lists.map( l => {
