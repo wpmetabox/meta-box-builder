@@ -29,7 +29,7 @@ Preview:
 [x] Tooltip
 [ ] Column
 
-[ ] Background
+[x] Background
 [ ] Switch to field khi có trường required chưa điền
 [x] Auto expand cho textarea
 [x] Click vào vùng trống thì close sidebar
