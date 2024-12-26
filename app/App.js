@@ -3,6 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { ErrorBoundary } from "react-error-boundary";
 import Header from './components/Header';
 import Main from './components/Main';
+import Nav from "./components/Nav";
 import Sidebar from './components/Sidebar';
 import useFieldSettingsPanel from "./hooks/useFieldSettingsPanel";
 import useSidebarPanel from "./hooks/useSidebarPanel";
@@ -24,6 +25,8 @@ const Layout = ( { children } ) => {
 			<Header />
 
 			<div className="mb-body">
+				<Nav />
+
 				<div className="mb-body__inner" onClick={ hideSidebar }>
 					{ children }
 				</div>
