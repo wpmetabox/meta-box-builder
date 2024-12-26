@@ -45,9 +45,10 @@
 
 	// No subfields, add padding and text
 	&__fields:empty {
-		border: 2px dashed var(--color-light);
+		padding-top: 24px;
 
 		&::before {
+			border: 2px dashed var(--color-light);
 			content: 'No subfields here, click the button below to add one or drag a field into this area.';
 			display: block;
 			color: var(--color-gray);
