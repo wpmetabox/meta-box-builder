@@ -1,7 +1,7 @@
 import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import useLists from "../../../hooks/useLists";
-import FieldLabel from "../FieldLabel";
+import FieldLabel from "./Elements/FieldLabel";
 import TextLimiter from "./Elements/TextLimiter";
 import Tooltip from "./Elements/Tooltip";
 

@@ -1,6 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import AutosizeInput from 'react-input-autosize';
-import { sanitizeId } from "../../functions";
+import { sanitizeId } from "../../../../functions";
 
 // Unlike in structure area, here always use field.name, not group.title or (No label).
 const getFieldLabel = field => field.name;
@@ -46,18 +46,16 @@ const FieldLabel = ( { field, updateField } ) => {
 	const stopGeneratingId = () => updateField( '_id_changed', true );
 
 	return (
-		<>
-			<AutosizeInput
-				type="text"
-				className="og-item__editable"
-				inputStyle={ { fontSize: 13, fontWeight: 500 } }
-				title={ __( 'Click to edit', 'meta-box-builder' ) }
-				value={ getFieldLabel( field ) }
-				onChange={ handleChange }
-				onKeyDown={ maybeFinishEditing }
-				onInput={ handleChange }
-			/>
-		</>
+		<AutosizeInput
+			type="text"
+			className="og-item__editable"
+			inputStyle={ { fontSize: 13, fontWeight: 500 } }
+			title={ __( 'Click to edit', 'meta-box-builder' ) }
+			value={ getFieldLabel( field ) }
+			onChange={ handleChange }
+			onKeyDown={ maybeFinishEditing }
+			onInput={ handleChange }
+		/>
 	);
 };
 

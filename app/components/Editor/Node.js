@@ -19,7 +19,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const isActive = activeField._id === field._id;
 
 	const toggleSettings = e => {
-		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.mb-context-menu ' ) || inside( e.target, '.mb-toolbar ' ) ) {
+		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.mb-context-menu,.mb-toolbar,.og-item__editable' ) ) {
 			return;
 		}
 
@@ -61,7 +61,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			` }
 			onClick={ toggleSettings }
 			onContextMenu={ openContextMenu }
-			title={ __( 'Click to reveal field settings. Drag and drop to reoder fields.', 'meta-box-builder' ) }
+			title={ __( 'Click to toggle field settings. Drag and drop to reoder fields.', 'meta-box-builder' ) }
 		>
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
