@@ -1,8 +1,10 @@
 .mb-toolbar {
 	display: none;
-	position: fixed;
+	position: absolute;
+	top: -16px;
+	left: 0;
+	right: 0;
 	justify-content: center;
-	margin-top: -16px;
 
 	&--show {
 		display: flex;
@@ -11,5 +13,12 @@
 	&__icon {
 		stroke: currentColor;
 		stroke-width: 1.2;
+	}
+
+	// Do not show outline for buttons, it's too distracting.
+	.components-accessible-toolbar .components-button:focus:before,
+	.components-toolbar .components-button:focus:before {
+		box-shadow: none;
+		outline: none;
 	}
 }

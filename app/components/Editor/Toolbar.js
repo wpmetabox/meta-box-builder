@@ -1,5 +1,5 @@
 import { Modal, Toolbar as T, ToolbarButton, ToolbarGroup } from '@wordpress/components';
-import { createPortal, useState } from "@wordpress/element";
+import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { arrowDown, arrowUp, copy, insertAfter, insertBefore, trash } from "@wordpress/icons";
 import useFieldSettingsPanel from '../../hooks/useFieldSettingsPanel';
@@ -7,7 +7,6 @@ import useLists from '../../hooks/useLists';
 import AddFieldContent from '../AddFieldContent';
 
 const Toolbar = ( {
-	position = {},
 	field,
 	addFieldBefore,
 	addFieldAfter,
@@ -51,16 +50,9 @@ const Toolbar = ( {
 	const moveUp = () => moveFieldUp( field._id );
 	const moveDown = () => moveFieldDown( field._id );
 
-	return createPortal(
+	return (
 		<>
-			<div
-				className={ `mb-toolbar ${ activeField._id === field._id ? 'mb-toolbar--show' : '' }` }
-				style={ {
-					top: position.top,
-					left: position.left,
-					width: position.width,
-				} }
-			>
+			<div className={ `mb-toolbar ${ activeField._id === field._id ? 'mb-toolbar--show' : '' }` }>
 				<T label={ __( 'Toolbar', 'meta-box-builder' ) }>
 					<ToolbarGroup>
 						<ToolbarButton size="small" icon={ arrowUp } onClick={ moveUp } label={ __( 'Move up', 'meta-box-builder' ) } />
@@ -113,8 +105,7 @@ const Toolbar = ( {
 					</Modal>
 				)
 			}
-		</>,
-		document.body
+		</>
 	);
 };
 

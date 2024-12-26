@@ -34,7 +34,7 @@ Preview:
 [x] Auto expand cho textarea
 [x] Click vào vùng trống thì close sidebar
 [ ] Object field, chuyển chọn field type thành icon
-[ ] Toolbar: khi di chuyển field thì toolbar di chuyển theo
+[x] Toolbar: khi di chuyển field thì toolbar di chuyển theo
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
@@ -43,10 +43,10 @@ Preview:
 
 Feedback:
 
-[ ] Add subfield cho group khó tìm
+[x] Add subfield cho group khó tìm
+[x] Kéo 1 field vào thành subfield của group
 [ ] Thay đổi field type
 [ ] Duplicate cả group
-[ ] Kéo 1 field vào thành subfield của group
 [ ] Conditional logic hiện thêm ID
 [ ] Nút add field ở vị trí khó nhìn
 [ ] icon mở sidebar setting của field group cũng khó nhìn

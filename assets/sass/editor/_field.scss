@@ -6,10 +6,8 @@
 	padding: var(--spacing);
 	position: relative;
 	cursor: grab;
-	z-index: 1;
 
 	&:not(:has(.mb-field:hover)):hover {
-		z-index: 2; // Make the field on top of other fields when hover
 		outline: 1px solid var(--color-primary);
 	}
 

@@ -24,8 +24,8 @@
 	input:not(.og-item__editable input),
 	select,
 	textarea,
-	// For buttons, but not "Add field button"
-	button:not(.mb-editor__add-field-button button),
+	// For buttons, but not "Add field" button or toolbar buttons
+	button:not(.mb-editor__add-field-button button):not(.mb-toolbar button),
 	// For checkboxes
 	label:has([type="checkbox"]),
 	label:has([type="radio"]),

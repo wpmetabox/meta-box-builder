@@ -5,7 +5,6 @@ import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
 import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
 import useSidebarPanel from "../../hooks/useSidebarPanel";
-import useToolbar from "../../hooks/useToolbar";
 import ContextMenu from "./ContextMenu";
 import Field from './Field';
 import Base from "./FieldTypePreview/Base";
@@ -15,13 +14,12 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
-	const { showToolbar, toolbarPosition } = useToolbar();
 	const [ hover, setHover ] = useState( false );
 
 	const isActive = activeField._id === field._id;
 
 	const toggleSettings = e => {
-		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.mb-context-menu ' ) || inside( e.target, '.mb-field__toolbar ' ) ) {
+		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.mb-context-menu ' ) || inside( e.target, '.mb-toolbar ' ) ) {
 			return;
 		}
 
@@ -37,7 +35,6 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		// Set active field and show settings panel.
 		setActiveField( field );
 		setSidebarPanel( 'field_settings' );
-		showToolbar( e );
 	};
 
 	const update = ( key, value ) => {
@@ -69,11 +66,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
 
-			<Toolbar
-				position={ toolbarPosition }
-				field={ field }
-				{ ...fieldActions }
-			/>
+			<Toolbar field={ field } { ...fieldActions } />
 			<Base field={ field } { ...fieldActions } updateField={ update }>
 				<Suspense fallback={ null }>
 					<FieldType field={ field } parent={ parent } />
