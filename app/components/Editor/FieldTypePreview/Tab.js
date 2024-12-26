@@ -12,12 +12,12 @@ const Tab = ( { field } ) => (
 
 const TabIcon = ( { field } ) => {
 	const maps = {
-		url: field.icon_url && <img className="og-item__icon" src={ field.icon_url } />,
-		dashicons: field.icon && <span className={ `og-item__icon dashicons dashicons-${ field.icon }` }></span>,
-		fontawesome: field.icon_fa && <span className={ `og-item__icon ${ field.icon_fa }` }></span>,
+		url: field.icon_url && <img src={ field.icon_url } />,
+		dashicons: field.icon && <span className={ `dashicons dashicons-${ field.icon }` }></span>,
+		fontawesome: field.icon_fa && <span className={ field.icon_fa }></span>,
 	};
 
-	const defaultIcon = <Icon className="og-item__icon" icon={ archive } />;
+	const defaultIcon = <Icon icon={ archive } />;
 
 	return maps[ field.icon_type ] || defaultIcon;
 };
