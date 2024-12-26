@@ -1,4 +1,5 @@
 import { lazy, memo, Suspense, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
@@ -63,6 +64,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			` }
 			onClick={ toggleSettings }
 			onContextMenu={ openContextMenu }
+			title={ __( 'Click to reveal field settings. Drag and drop to reoder fields.', 'meta-box-builder' ) }
 		>
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
 			<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />

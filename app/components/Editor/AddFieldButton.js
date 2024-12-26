@@ -3,15 +3,15 @@ import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import AddFieldContent from "../AddFieldContent";
 
-const AddFieldButton = ( { addField, variant = 'primary' } ) => {
+const AddFieldButton = ( { addField, variant = 'primary', text = __( '+ Add Field', 'meta-box-builder' ) } ) => {
 	const [ isOpen, setOpen ] = useState( false );
 	const openModal = () => setOpen( true );
 	const closeModal = () => setOpen( false );
 
 	return (
-		<>
-			<Button className="mb-editor__add-field-button" variant={ variant } onClick={ openModal } title={ __( 'Add a new field', 'meta-box-builder' ) }>
-				{ __( '+ Add Field', 'meta-box-builder' ) }
+		<div className="mb-editor__add-field-button">
+			<Button variant={ variant } onClick={ openModal } title={ __( 'Add a new field', 'meta-box-builder' ) }>
+				{ text }
 			</Button>
 			{
 				isOpen && (
@@ -20,7 +20,7 @@ const AddFieldButton = ( { addField, variant = 'primary' } ) => {
 					</Modal>
 				)
 			}
-		</>
+		</div>
 	);
 };
 

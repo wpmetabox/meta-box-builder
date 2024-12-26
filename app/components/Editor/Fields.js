@@ -18,37 +18,34 @@ const Fields = () => {
 		return <div className="mb-editor__empty">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</div>;
 	}
 
-	if ( fields.length === 0 ) {
-		return (
-			<div className="mb-editor__empty">
-				<RawHTML>{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
-				<AddFieldButton { ...fieldActions } />
-			</div>
-		);
-	}
-
 	return (
-		<ReactSortable group={ {
-			name: 'root',
-			pull: true,
-			put: true,
-		} }
-			animation={ 200 }
-			delayOnTouchStart={ true }
-			delay={ 2 }
-			className="og-fields"
-			list={ fields }
-			setList={ setFields }
-			handle=".og-column--drag"
-		>
+		<>
 			{
-				fields.map( field => <Node
-					key={ field._id }
-					field={ field }
-					{ ...fieldActions }
-				/> )
+				fields.length === 0
+					? <RawHTML className="mb-editor__empty">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
+					: <ReactSortable group={ {
+						name: 'root',
+						pull: true,
+						put: true,
+					} }
+						animation={ 200 }
+						delayOnTouchStart={ true }
+						delay={ 2 }
+						list={ fields }
+						setList={ setFields }
+						invertSwap={ true }
+					>
+						{
+							fields.map( field => <Node
+								key={ field._id }
+								field={ field }
+								{ ...fieldActions }
+							/> )
+						}
+					</ReactSortable>
 			}
-		</ReactSortable>
+			<AddFieldButton { ...fieldActions } />
+		</>
 	);
 };
 

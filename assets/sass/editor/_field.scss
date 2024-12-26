@@ -5,7 +5,7 @@
 	border-bottom: none;
 	padding: var(--spacing);
 	position: relative;
-	cursor: pointer;
+	cursor: grab;
 	z-index: 1;
 
 	&:not(:has(.mb-field:hover)):hover {
@@ -36,15 +36,26 @@
 	}
 
 	// Remove inline padding for subfields.
-	.mb-field,
-	// And for empty state.
-	.mb-editor__empty {
+	.mb-field {
 		padding-inline: 0;
 	}
 
 	// Add margin-bottom for add clone button to avoid touching the edge.
 	.rwmb-button.add-clone {
 		margin-bottom: var(--spacing);
+	}
+
+	// No subfields, add padding and text
+	&__fields:empty {
+		border: 2px dashed var(--color-light);
+
+		&::before {
+			content: 'No subfields here, click the button below to add one or drag a field into this area.';
+			display: block;
+			color: var(--color-gray);
+			font-size: 16px;
+			padding: var(--spacing);
+		}
 	}
 }
 

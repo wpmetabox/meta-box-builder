@@ -1,4 +1,3 @@
-import { RawHTML } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ReactSortable } from 'react-sortablejs';
 import useLists from '../../../hooks/useLists';
@@ -13,37 +12,30 @@ const Group = ( { field, parent } ) => {
 		<>
 			<CollapsibleElements field={ field } />
 
-			{
-				fields.length === 0
-					? (
-						<div className="mb-editor__empty">
-							<RawHTML>{ __( 'There are no sub-fields. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
-							<AddFieldButton variant='secondary' { ...fieldActions } />
-						</div>
-					)
-					: <ReactSortable
-						group={ {
-							name: 'nested',
-							pull: true,
-							put: [ 'root', 'nested' ],
-						} }
-						animation={ 200 }
-						delayOnTouchStart={ true }
-						delay={ 2 }
-						list={ fields }
-						setList={ setFields }
-						handle=".og-item__header"
-					>
-						{
-							fields.map( f => <Node
-								key={ f._id }
-								field={ f }
-								parent={ `${ parent }[${ field._id }][fields]` }
-								{ ...fieldActions }
-							/> )
-						}
-					</ReactSortable>
-			}
+			<ReactSortable
+				group={ {
+					name: 'nested',
+					pull: true,
+					put: [ 'root', 'nested' ],
+				} }
+				animation={ 200 }
+				delayOnTouchStart={ true }
+				delay={ 2 }
+				list={ fields }
+				setList={ setFields }
+				invertSwap={ true }
+				className="mb-field--group__fields"
+			>
+				{
+					fields.map( f => <Node
+						key={ f._id }
+						field={ f }
+						parent={ `${ parent }[${ field._id }][fields]` }
+						{ ...fieldActions }
+					/> )
+				}
+			</ReactSortable>
+			<AddFieldButton text={ __( '+ Add Subfield', 'meta-box-builder' ) } variant='secondary' { ...fieldActions } />
 		</>
 	);
 };

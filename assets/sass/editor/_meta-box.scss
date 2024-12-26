@@ -25,7 +25,7 @@
 	select,
 	textarea,
 	// For buttons, but not "Add field button"
-	button:not(.mb-editor__add-field-button),
+	button:not(.mb-editor__add-field-button button),
 	// For checkboxes
 	label:has([type="checkbox"]),
 	label:has([type="radio"]),
