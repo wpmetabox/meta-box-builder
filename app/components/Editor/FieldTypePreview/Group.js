@@ -53,7 +53,7 @@ const CollapsibleElements = ( { field } ) => {
 		return;
 	}
 
-	const groupTitle = field.clone ? __( 'Entry {#}', 'meta-box-builder' ) : __( 'Entry', 'meta-box-builder' );
+	const groupTitle = field.group_title || ( field.clone ? __( 'Entry {#}', 'meta-box-builder' ) : __( 'Entry', 'meta-box-builder' ) );
 
 	return (
 		<>
