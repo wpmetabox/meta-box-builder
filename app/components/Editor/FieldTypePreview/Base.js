@@ -5,8 +5,8 @@ import FieldLabel from "../FieldLabel";
 import TextLimiter from "./Elements/TextLimiter";
 import Tooltip from "./Elements/Tooltip";
 
-const Base = ( { field, updateField, children } ) => {
-	field = normalize( field );
+const Base = ( { field: f, updateField, children } ) => {
+	const field = normalize( f );
 
 	return [ 'divider', 'heading' ].includes( field.type )
 		? <Plain field={ field } children={ children } />
@@ -98,7 +98,9 @@ const CloneButton = ( { field } ) => {
 	return <a href="#" className="rwmb-button button add-clone">{ field.add_button || __( '+ Add more', 'meta-box-builder' ) }</a>;
 };
 
-const normalize = field => {
+const normalize = f => {
+	let field = { ...f };
+
 	if ( field.type === 'key_value' ) {
 		field.clone = true;
 	}

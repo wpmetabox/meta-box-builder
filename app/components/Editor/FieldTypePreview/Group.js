@@ -63,7 +63,7 @@ const CollapsibleElements = ( { field } ) => {
 					field.clone && <a href="#" className="rwmb-group-remove">{ __( 'Remove', 'meta-box-builder' ) }</a>
 				}
 			</div>
-			<button aria-expanded={ field.default_state === 'expanded' } className="rwmb-group-toggle-handle button-link">
+			<button className="rwmb-group-toggle-handle button-link">
 				<span className="rwmb-group-toggle-indicator" />
 			</button>
 		</>
