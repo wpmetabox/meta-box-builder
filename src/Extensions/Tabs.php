@@ -36,20 +36,20 @@ class Tabs {
 						'fontawesome' => __( 'Font Awesome', 'meta-box-builder' ),
 						'url'         => __( 'Custom', 'meta-box-builder' ),
 					],
-				], 'dashicons', 'appearance' ),
+				], 'dashicons' ),
 				Control::DashiconPicker( 'icon', [
 					'label'      => __( 'Icon', 'meta-box-builder' ),
 					'dependency' => 'icon_type:dashicons',
-				], '', 'appearance' ),
+				], '' ),
 				Control::Fontawesome( 'icon_fa', [
 					'label'       => __( 'Icon', 'meta-box-builder' ),
 					'description' => __( 'Enter <a target="_blank" href="https://fontawesome.com/search?o=r&m=free">Font Awesome</a> icon class here. Supports the free version only.', 'meta-box-builder' ),
 					'dependency'  => 'icon_type:fontawesome',
-				], '', 'appearance' ),
+				], '' ),
 				Control::Input( 'icon_url', [
 					'label'      => __( 'Icon URL', 'meta-box-builder' ),
 					'dependency' => 'icon_type:url',
-				], '', 'appearance' ),
+				], '' ),
 			],
 		];
 
