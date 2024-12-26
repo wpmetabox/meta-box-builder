@@ -108,7 +108,7 @@ const Toolbar = ( {
 			</div>
 			{
 				isOpen && (
-					<Modal title={ __( 'Add a new field', 'meta-box-builder' ) } size="large" onRequestClose={ closeModal }>
+					<Modal focusOnMount="firstContentElement" title={ __( 'Add a new field', 'meta-box-builder' ) } size="large" onRequestClose={ closeModal }>
 						<AddFieldContent addField={ action } onSelect={ closeModal } />
 					</Modal>
 				)
