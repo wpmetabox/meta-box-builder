@@ -47,3 +47,36 @@
 		margin-bottom: var(--spacing);
 	}
 }
+
+// Tab
+.mb-field--tab {
+	&__wrapper {
+		border-bottom: 1px solid var(--color-light);
+	}
+
+	&__content {
+		display: inline-flex;
+		gap: 4px;
+		border: 1px solid var(--color-light);
+		border-bottom: none;
+		padding: 8px 16px;
+		border-radius: 4px 4px 0 0;
+		align-items: center;
+	}
+
+	.dashicons {
+		width: 12px;
+		height: 12px;
+		font-size: 12px;
+	}
+
+	.fa:before,
+	.fas:before,
+	.fa-solid:before,
+	.fab:before,
+	.fa-brand:before,
+	.far:before,
+	.fa-regular:before {
+		font-size: 12px;
+	}
+}

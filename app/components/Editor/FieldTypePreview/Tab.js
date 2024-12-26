@@ -1,11 +1,16 @@
 import { Icon } from '@wordpress/components';
 import { archive } from '@wordpress/icons';
 
-const HeaderIcon = ( { field } ) => {
-	if ( field.type !== 'tab' ) {
-		return;
-	}
+const Tab = ( { field } ) => (
+	<div className="mb-field--tab__wrapper">
+		<div className="mb-field--tab__content">
+			<TabIcon field={ field } />
+			{ field.name }
+		</div>
+	</div>
+);
 
+const TabIcon = ( { field } ) => {
 	const maps = {
 		url: field.icon_url && <img className="og-item__icon" src={ field.icon_url } />,
 		dashicons: field.icon && <span className={ `og-item__icon dashicons dashicons-${ field.icon }` }></span>,
@@ -17,4 +22,4 @@ const HeaderIcon = ( { field } ) => {
 	return maps[ field.icon_type ] || defaultIcon;
 };
 
-export default HeaderIcon;
+export default Tab;

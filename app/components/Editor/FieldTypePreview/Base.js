@@ -8,62 +8,68 @@ import Tooltip from "./Elements/Tooltip";
 const Base = ( { field: f, updateField, children } ) => {
 	const field = normalize( f );
 
-	return [ 'divider', 'heading' ].includes( field.type )
-		? <Plain field={ field } children={ children } />
-		: (
-			<>
-				<Before field={ field } />
-				<div
-					className={
-						`rwmb-field
+	if ( field.type === 'tab' ) {
+		return children;
+	}
+
+	if ( [ 'divider', 'heading' ].includes( field.type ) ) {
+		return <Plain field={ field } children={ children } />;
+	}
+
+	return (
+		<>
+			<Before field={ field } />
+			<div
+				className={
+					`rwmb-field
 						rwmb-${ field.type }-wrapper
 						${ field.class || '' }
 						${ field.required ? 'required' : '' }`
-					}
-				>
+				}
+			>
+				{
+					field.name && (
+						<div className="rwmb-label">
+							<label>
+								<FieldLabel field={ field } updateField={ updateField } />
+								{ field.required && <span className="rwmb-required">*</span> }
+								<Tooltip field={ field } />
+							</label>
+							{
+								field.label_description && <p className="description">{ field.label_description }</p>
+							}
+						</div>
+					)
+				}
+				<div className="rwmb-input">
 					{
-						field.name && (
-							<div className="rwmb-label">
-								<label>
-									<FieldLabel field={ field } updateField={ updateField } />
-									{ field.required && <span className="rwmb-required">*</span> }
-									<Tooltip field={ field } />
-								</label>
-								{
-									field.label_description && <p className="description">{ field.label_description }</p>
-								}
+						[ 'key_value' ].includes( field.type ) && <Description field={ field } />
+					}
+					{
+						field.clone && !field.clone_empty_start && (
+							<div className={ `rwmb-clone rwmb-${ field.type }-clone` }>
+								{ children }
+								<TextLimiter field={ field } />
 							</div>
 						)
 					}
-					<div className="rwmb-input">
-						{
-							[ 'key_value' ].includes( field.type ) && <Description field={ field } />
-						}
-						{
-							field.clone && !field.clone_empty_start && (
-								<div className={ `rwmb-clone rwmb-${ field.type }-clone` }>
-									{ children }
-									<TextLimiter field={ field } />
-								</div>
-							)
-						}
-						<CloneButton field={ field } />
-						{
-							!field.clone && (
-								<>
-									{ children }
-									<TextLimiter field={ field } />
-								</>
-							)
-						}
-						{
-							![ 'checkbox', 'fieldset_text', 'key_value', 'switch' ].includes( field.type ) && <Description field={ field } />
-						}
-					</div>
+					<CloneButton field={ field } />
+					{
+						!field.clone && (
+							<>
+								{ children }
+								<TextLimiter field={ field } />
+							</>
+						)
+					}
+					{
+						![ 'checkbox', 'fieldset_text', 'key_value', 'switch' ].includes( field.type ) && <Description field={ field } />
+					}
 				</div>
-				<After field={ field } />
-			</>
-		);
+			</div>
+			<After field={ field } />
+		</>
+	);
 };
 
 const Before = ( { field } ) => field.before && <RawHTML>{ field.before }</RawHTML>;

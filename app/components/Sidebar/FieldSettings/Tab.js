@@ -55,6 +55,7 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			'collapsible',
 			'group_title',
 			'class',
+			'icon_type',
 			'icon',
 			'icon_url',
 			'icon_fa',
