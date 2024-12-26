@@ -34,7 +34,7 @@ Preview:
 [x] Auto expand cho textarea
 [x] Click vào vùng trống thì close sidebar
 [ ] Object field, chuyển chọn field type thành icon
-
+[ ] Toolbar: khi di chuyển field thì toolbar di chuyển theo
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
