@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 
+document.body.classList.add( 'mb-no-nav' );
+
 const useNav = create( set => ( {
-	navPanel: 'add_field',
+	navPanel: '',
 	setNavPanel: navPanel => {
 		set( state => ( { navPanel } ) );
 

@@ -24,6 +24,7 @@ const Header = () => {
 					variant="primary"
 					icon={ plus }
 					size="compact"
+					className="mb-header__add"
 					label={ __( 'Add a new field', 'meta-box-builder' ) }
 					showTooltip={ true }
 					onClick={ updateNavPanel( 'add_field' ) }
