@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 import useLists from '../../hooks/useLists';
 import AddFieldContent from '../AddFieldContent';
 
-const AddFieldPanel = ( { show = true } ) => {
+const AddFieldPanel = ( { show } ) => {
 	const { getForList } = useLists();
 	const { addField } = getForList( 'root' );
 
