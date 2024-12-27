@@ -2,7 +2,6 @@ import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useApi from "../../../hooks/useApi";
 import useLists from "../../../hooks/useLists";
-import Header from "./Header";
 import Node from './Node';
 
 const Fields = () => {
@@ -22,30 +21,26 @@ const Fields = () => {
 	}
 
 	return (
-		<>
-			<Header />
-			<ReactSortable group={ {
-				name: 'root',
-				pull: true,
-				put: true,
-			} }
-				animation={ 200 }
-				delayOnTouchStart={ true }
-				delay={ 2 }
-				className="og-fields"
-				list={ fields }
-				setList={ setFields }
-				handle=".og-column--drag"
-			>
-				{
-					fields.map( field => <Node
-						key={ field._id }
-						field={ field }
-						{ ...fieldActions }
-					/> )
-				}
-			</ReactSortable>
-		</>
+		<ReactSortable group={ {
+			name: 'root',
+			pull: true,
+			put: true,
+		} }
+			animation={ 200 }
+			delayOnTouchStart={ true }
+			delay={ 2 }
+			className="og-fields"
+			list={ fields }
+			setList={ setFields }
+		>
+			{
+				fields.map( field => <Node
+					key={ field._id }
+					field={ field }
+					{ ...fieldActions }
+				/> )
+			}
+		</ReactSortable>
 	);
 };
 
