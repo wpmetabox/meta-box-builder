@@ -2,8 +2,8 @@ import { MenuGroup, MenuItem, Modal } from '@wordpress/components';
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { arrowDown, arrowUp, copy, insertAfter, insertBefore, trash } from "@wordpress/icons";
-import useLists from '../../hooks/useLists';
-import AddFieldContent from '../AddFieldContent';
+import useLists from '../../../hooks/useLists';
+import AddFieldContent from '../../AddFieldContent';
 
 const ContextMenu = ( {
 	open,
