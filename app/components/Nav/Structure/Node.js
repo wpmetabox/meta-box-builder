@@ -1,4 +1,4 @@
-import { Icon } from '@wordpress/components';
+import { Flex, Icon } from '@wordpress/components';
 import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
@@ -13,7 +13,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { setSidebarPanel } = useSidebarPanel();
 
 	const toggleSettings = e => {
-		if ( inside( e.target, '.og-item__editable,.og-column--actions,.og-column--label,.components-menu-item__item,.og-add-field' ) ) {
+		if ( inside( e.target, '.components-button' ) ) {
 			return;
 		}
 
@@ -23,20 +23,17 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	return field.type && (
 		<div className={ `og-item og-item--${ field.type } ${ field._id === activeField._id ? 'og-item--active' : '' }` }>
-			<div
+			<Flex
+				gap={ 1 }
+				align="center"
 				className="og-item__header"
 				title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 				onClick={ toggleSettings }
 			>
-				<span className="og-column--label">
-					<Icon icon={ getFieldIcon( field.type ) } />
-					{ getFieldLabel( field ) }
-				</span>
-				<span className="og-column--space"></span>
-				<span className="og-column--actions og-item__actions">
-					<Actions field={ field } { ...fieldActions } />
-				</span>
-			</div>
+				<Icon size={ 16 } icon={ getFieldIcon( field.type ) } className="og-item__icon" />
+				<div className="og-item__label">{ getFieldLabel( field ) }</div>
+				<Actions field={ field } { ...fieldActions } />
+			</Flex>
 			{
 				field.type === 'group' && <Group field={ field } parent={ parent } />
 			}

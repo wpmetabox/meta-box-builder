@@ -1,32 +1,15 @@
-/************************************
- * General style
- ************************************/
 &-group-fields {
 	// Left indent the subfields.
-	padding-left: 36px;
+	padding-left: 32px;
 
 	// Add left border for the subfields wrapper.
 	&__inner {
 		border-left: var(--border-lighter);
-	}
 
-	&__title {
-		color: var(--color-gray);
-		font-size: 12px;
-		letter-spacing: .05em;
-		text-transform: uppercase;
-		font-weight: 500;
-		margin-bottom: 6px;
-	}
-
-	// Reduce the padding for inserter button if no subfields.
-	&--empty>.og-inserter {
-		padding-top: 0;
-	}
-
-	// Remove border bottom for the last subfield.
-	>.og-group-fields__inner>div>.og-item:last-child {
-		border-bottom: 0;
+		// Remove border bottom for the last subfield.
+		&>.og-item:last-child {
+			border-bottom: 0;
+		}
 	}
 }
 
@@ -35,29 +18,5 @@
 	// Show border bottom for header bar if has subfields.
 	&:has(.og-group-fields)>.og-item__header {
 		border-bottom: var(--border-lighter);
-	}
-
-	.og-inserter {
-		padding-inline: 0;
-	}
-}
-
-.og-column--actions .og-inserter {
-	padding: 0;
-}
-
-// Toggle subfields.
-&-item__toggle {
-	color: var(--color-gray);
-	display: inline-block;
-	padding: 4px;
-	cursor: pointer;
-	height: 16px;
-	width: 16px;
-	line-height: 16px;
-	font-size: 12px;
-
-	&:hover {
-		color: inherit;
 	}
 }
