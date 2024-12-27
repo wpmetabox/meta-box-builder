@@ -48,7 +48,7 @@ Feedback:
 [ ] Thay đổi field type
 [ ] Duplicate cả group
 [ ] Conditional logic hiện thêm ID
-[ ] Nút add field ở vị trí khó nhìn
+[x] Nút add field ở vị trí khó nhìn
 [ ] icon mở sidebar setting của field group cũng khó nhìn
 
 ## Settings của field group:

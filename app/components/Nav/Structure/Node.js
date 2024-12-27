@@ -27,7 +27,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				gap={ 1 }
 				align="center"
 				className="og-item__header"
-				title={ __( 'Click to reveal field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
+				title={ __( 'Click to toggle field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 				onClick={ toggleSettings }
 			>
 				<Icon size={ 16 } icon={ getFieldIcon( field.type ) } className="og-item__icon" />
