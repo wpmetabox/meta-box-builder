@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
-import useApi from "../../hooks/useApi";
-import useLists from "../../hooks/useLists";
+import useApi from "../../../hooks/useApi";
+import useLists from "../../../hooks/useLists";
 import Header from "./Header";
 import Node from './Node';
 

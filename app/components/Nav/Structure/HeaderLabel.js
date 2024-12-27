@@ -1,6 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import AutosizeInput from 'react-input-autosize';
-import { sanitizeId, ucwords } from "../../functions";
+import { sanitizeId, ucwords } from "../../../functions";
 
 const getFieldLabel = field => [ 'hidden', 'divider' ].includes( field.type )
 	? ucwords( field.type )
