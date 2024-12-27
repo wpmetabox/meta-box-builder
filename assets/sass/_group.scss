@@ -10,6 +10,19 @@
 		&>.og-item:last-child {
 			border-bottom: 0;
 		}
+
+		// No subfields, add padding and text
+		&:empty {
+			border-left: 0;
+			padding: 12px 12px 12px 0;
+
+			&:before {
+				display: block;
+				content: 'No subfields here, click the "3 dots" icon to add a new one or drag other fields into this area.';
+				font-size: 12px;
+				color: var(--color-gray);
+			}
+		}
 	}
 }
 

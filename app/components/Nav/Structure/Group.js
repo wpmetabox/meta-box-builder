@@ -6,7 +6,7 @@ const Group = ( { field, parent = '' } ) => {
 	const { getForList } = useLists();
 	const { fields, setFields, ...fieldActions } = getForList( field._id );
 
-	return fields.length > 0 && (
+	return (
 		<div className="og-group-fields">
 			<ReactSortable
 				group={ {
