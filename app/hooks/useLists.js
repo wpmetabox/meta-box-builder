@@ -28,6 +28,60 @@ parseLists( MbbApp, 'root', 'fields' );
 
 const useLists = create( ( set, get ) => ( {
 	lists,
+	addFieldAt: ( listId, fieldType, position ) => {
+		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setActiveField } = useFieldSettingsPanel.getState();
+
+		const list = get().lists.find( l => l.id === listId );
+		if ( !list ) {
+			console.error( `List with id ${ listId } not found.` );
+			return;
+		}
+
+		if ( position < 0 || position >= list.length ) {
+			console.error( 'Invalid position.' );
+			return;
+		}
+
+		const newId = `${ fieldType }_${ uniqid() }`;
+		const newField = {
+			_id: newId, // Internal use, won't change
+			_new: true, // Detect the field is newly added, to auto generate ID
+			type: fieldType,
+			id: newId, // ID of the field that use can edit
+			name: ucwords( fieldType, '_' ),
+		};
+
+		set( state => {
+			// Add field to the list.
+			let lists = state.lists.map( l =>
+				l.id === listId
+					? {
+						...l,
+						fields: [
+							...l.fields.slice( 0, position ),
+							newField,
+							...l.fields.slice( position )
+						]
+					}
+					: l
+			);
+
+			// Create a new list for group fields.
+			if ( fieldType === 'group' ) {
+				lists.push( {
+					id: newId,
+					fields: [],
+					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+				} );
+			}
+
+			return { lists };
+		} );
+
+		setSidebarPanel( 'field_settings' );
+		setActiveField( newField );
+	},
 	addField: ( listId, fieldType ) => {
 		const { setSidebarPanel } = useSidebarPanel.getState();
 		const { setActiveField } = useFieldSettingsPanel.getState();
@@ -379,6 +433,7 @@ const useLists = create( ( set, get ) => ( {
 		return {
 			fields: list.fields,
 			setFields: fields => get().setFields( listId, fields ),
+			addFieldAt: ( fieldType, position ) => get().addFieldAt( listId, fieldType, position ),
 			addField: fieldType => get().addField( listId, fieldType ),
 			prependField: fieldType => get().prependField( listId, fieldType ),
 

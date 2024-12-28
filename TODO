@@ -20,7 +20,7 @@
 [x] Click add new field thì ra modal chọn field, các field có icon kèm theo
 [x] Làm dropdown menu, insert field before/after, duplicate, delete, ...
 [x] Làm context menu, khi click chuột phải cũng ra menu để thêm field, insert field before, after, duplicate, delete, ...
-[ ] Kéo thả nút add field vào danh sách field
+[x] Kéo thả nút add field vào danh sách field
 
 Preview:
 
