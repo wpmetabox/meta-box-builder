@@ -9,17 +9,19 @@ const Group = ( { field, parent = '' } ) => {
 	return (
 		<div className="og-group-fields">
 			<ReactSortable
+				className="og-group-fields__inner"
+				delay={ 0 }
+				delayOnTouchOnly={ false }
+				touchStartThreshold={ 0 }
+				animation={ 200 }
+				invertSwap={ true }
 				group={ {
 					name: 'nested',
-					pull: true,
-					put: [ 'root', 'nested' ],
+					pull: true, // Allow to drag fields to other lists
+					put: true, // Allow to receive fields from other lists
 				} }
-				animation={ 200 }
-				delayOnTouchStart={ true }
-				delay={ 2 }
 				list={ fields }
 				setList={ setFields }
-				className="og-group-fields__inner"
 			>
 				{
 					fields.map( f => <Node

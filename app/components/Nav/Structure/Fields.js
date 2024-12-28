@@ -21,15 +21,17 @@ const Fields = () => {
 	}
 
 	return (
-		<ReactSortable group={ {
-			name: 'root',
-			pull: true,
-			put: true,
-		} }
+		<ReactSortable
+			delay={ 0 }
+			delayOnTouchOnly={ false }
+			touchStartThreshold={ 0 }
 			animation={ 200 }
-			delayOnTouchStart={ true }
-			delay={ 2 }
-			className="og-fields"
+			invertSwap={ true }
+			group={ {
+				name: 'root',
+				pull: true, // Allow to drag fields to other lists
+				put: true, // Allow to receive fields from other lists
+			} }
 			list={ fields }
 			setList={ setFields }
 		>
