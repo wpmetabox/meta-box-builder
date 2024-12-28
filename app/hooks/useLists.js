@@ -245,13 +245,40 @@ const useLists = create( ( set, get ) => ( {
 				};
 			} );
 
+			const createNewList = group => {
+				updateSubFieldIds( group );
+
+				lists.push( {
+					id: group._id,
+					fields: Object.values( group.fields ),
+					baseInputName: `${ list.baseInputName }[${ group._id }][fields]`,
+				} );
+			};
+
+			const updateSubFieldIds = group => {
+				// Convert to array to do easier.
+				let subFields = Object.values( group.fields || {} );
+
+				group.fields = {};
+
+				subFields.forEach( subField => {
+					// Change id
+					const newId = `${ subField.type }_${ uniqid() }`;
+					subField.id = newId;
+					subField._id = newId;
+
+					// Recurring update subfield IDs and create lists.
+					if ( subField.type === 'group' ) {
+						createNewList( subField );
+					};
+
+					group.fields[ subField._id ] = subField;
+				} );
+			};
+
 			// Create a new list for group fields.
 			if ( newField.type === 'group' ) {
-				lists.push( {
-					id: newId,
-					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-				} );
+				createNewList( newField );
 			}
 
 			return { lists };
