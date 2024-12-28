@@ -10,7 +10,7 @@ const AddressField = ( { name, componentId, placeholder, defaultValue, ...rest }
 	// Select only text and select fields.
 	const fields = getAllFields()
 		.filter( field => [ 'text', 'select' ].includes( field.type ) )
-		.map( field => [ field.id, field.name ] );
+		.map( field => [ field.id, `${ field.name } (${ field.id })` ] );
 
 	const handleSelectItem = ( inputRef, value ) => {
 		const address = !inputRef.current.value ? '' : inputRef.current.value + ',';

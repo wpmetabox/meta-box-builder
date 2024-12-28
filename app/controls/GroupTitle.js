@@ -1,3 +1,4 @@
+import { __ } from "@wordpress/i18n";
 import useLists from '../hooks/useLists';
 import useSettings from '../hooks/useSettings';
 import DivRow from './DivRow';
@@ -14,9 +15,9 @@ const GroupTitle = ( { name, componentId, field, updateField, ...rest } ) => {
 	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
 	let fields = getAllFields()
 		.filter( f => !ignoreTypes.includes( f.type ) )
-		.map( f => [ f.id, f.name ] );
+		.map( f => [ f.id, `${ f.name } (${ f.id })` ] );
 
-	fields = [ [ '{#}', '{#}' ], ...fields ];
+	fields = [ [ '{#}', __( 'Entry index', 'meta-box-builder' ) ], ...fields ];
 
 	const handleChange = ( inputRef, value ) => updateField( 'group_title', value );
 

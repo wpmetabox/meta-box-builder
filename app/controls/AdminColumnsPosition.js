@@ -18,7 +18,7 @@ const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) =>
 	// Select only text and select fields.
 	let fields = getAllFields()
 		.filter( field => [ 'text', 'select' ].includes( field.type ) )
-		.map( field => [ field.id, field.name ] );
+		.map( field => [ field.id, `${ field.name } (${ field.id })` ] );
 
 	fields = [ ...objectTypeFields( objectType ), ...fields ];
 

@@ -47,7 +47,7 @@ Feedback:
 [x] Kéo 1 field vào thành subfield của group
 [ ] Thay đổi field type
 [x] Duplicate cả group
-[ ] Conditional logic hiện thêm ID
+[x] Conditional logic hiện thêm ID
 [x] Nút add field ở vị trí khó nhìn
 [ ] icon mở sidebar setting của field group cũng khó nhìn
 
