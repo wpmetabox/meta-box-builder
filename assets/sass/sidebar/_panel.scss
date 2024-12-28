@@ -87,16 +87,16 @@
 }
 
 // Summary
-.summary {
+.mb-summary {
 	p {
 		display: flex;
 	}
 
 	label {
-		width: 40%;
+		min-width: 120px;
 	}
-}
 
-.status {
-	text-transform: capitalize;
+	&__status {
+		text-transform: capitalize;
+	}
 }

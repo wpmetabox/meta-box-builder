@@ -8,6 +8,8 @@ use MBB\Helpers\Data;
 
 class Edit extends BaseEditPage {
 	public function enqueue() {
+		Assets::enqueue();
+
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
 		wp_enqueue_style( 'wp-edit-post' );
 
@@ -78,6 +80,8 @@ class Edit extends BaseEditPage {
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
 				'views'              => Data::is_extension_active( 'mb-views' ),
 			],
+
+			'assetsBaseUrl' => MBB_URL . 'assets',
 		];
 
 		$data = apply_filters( 'mbb_app_data', $data );

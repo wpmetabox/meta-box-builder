@@ -8,24 +8,27 @@ const useContextMenu = () => {
 	} );
 
 	const openContextMenu = e => {
+		const parent = e.target.closest( '.mb-field' );
+		if ( !parent ) {
+			return;
+		}
+
+		const x = e.clientX;
+		const y = e.clientY;
+
 		e.preventDefault();
+		e.stopPropagation();
 		setOpen( true );
-
-		const parent = e.target.closest( '.og-item' );
-		const rect = parent.getBoundingClientRect();
-		const x = event.clientX - rect.left;
-		const y = event.clientY - rect.top;
-
 		setPosition( { x, y } );
 	};
 
-	const clostContextMenu = () => setOpen( false );
+	const closeContextMenu = () => setOpen( false );
 
 	useEffect( () => {
-		document.addEventListener( "click", clostContextMenu );
+		document.addEventListener( "click", closeContextMenu );
 
 		return () => {
-			document.removeEventListener( "click", clostContextMenu );
+			document.removeEventListener( "click", closeContextMenu );
 		};
 	}, [] );
 

@@ -51,7 +51,7 @@ const Rule = ( { rule, name, removeRule } ) => {
 	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
 	const fields = getAllFields()
 		.filter( field => !ignoreTypes.includes( field.type ) )
-		.map( field => [ field.id, field.name ] );
+		.map( field => [ field.id, `${ field.name } (${ field.id })` ] );
 
 	return (
 		<div className="og-include-exclude__rule">

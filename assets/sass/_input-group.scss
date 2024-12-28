@@ -27,10 +27,6 @@
 		}
 	}
 
-	select {
-		width: auto;
-	}
-
 	:first-child {
 		border-radius: 4px 0 0 4px;
 	}
@@ -59,13 +55,17 @@
 	&+.og-input-group {
 		margin-top: 8px;
 	}
+}
 
-	// Special case for text limit & max file size
-	&--small {
-		input[type="number"] {
-			width: 6em;
-		}
-	}
+// Use a long selector to overwrite CSS in _element.scss
+&-input-group.og-input-group.og-input-group select {
+	width: auto;
+}
+
+// Special case for text limit & max file size
+// Use a long selector to overwrite CSS in _element.scss
+&-input-group--small.og-input-group--small.og-input-group--small input[type="number"] {
+	width: 6em;
 }
 
 // Multiple input groups: label + input

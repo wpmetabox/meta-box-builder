@@ -1,5 +1,5 @@
 import { lazy } from "@wordpress/element";
-import { archive, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, inbox, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
+import { archive, atSymbol, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
 import dotProp from 'dot-prop';
 import slugify from "slugify";
 
@@ -157,7 +157,7 @@ export const getFieldIcon = type => {
 		date: postDate,
 		datetime: calendar,
 		divider: separator,
-		email: inbox,
+		email: atSymbol,
 		fieldset_text: grid,
 		file: page,
 		file_advanced: pages,
@@ -203,3 +203,27 @@ export const getFieldIcon = type => {
 		return iconMap[ type ];
 	}
 };
+
+export const isPositiveInteger = value => {
+	const number = Number( value );
+	return Number.isInteger( number ) && number > 0;
+};
+
+export const getOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
+	if ( !option.includes( ':' ) ) {
+		return option.trim();
+	}
+	const [ value, label ] = option.split( ':' );
+	return label.trim();
+} );
+
+export const getFullOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
+	if ( !option.includes( ':' ) ) {
+		return { value: option.trim(), label: option.trim() };
+	}
+	const parts = option.split( ':' );
+	return { value: parts[ 0 ].trim(), label: parts.slice( 1 ).join( ":" ).trim() };
+} );
+
+// Do nothing callback function for field preview inputs
+export const doNothing = () => {};

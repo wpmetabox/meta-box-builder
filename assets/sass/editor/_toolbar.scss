@@ -1,0 +1,25 @@
+.mb-toolbar {
+	display: none;
+	position: absolute;
+	top: -16px;
+	left: 0;
+	right: 0;
+	justify-content: center;
+	z-index: 1; // Ensure toolbar is above the field outline when hovering (1 is enough).
+
+	&--show {
+		display: flex;
+	}
+
+	&__icon {
+		stroke: currentColor;
+		stroke-width: 1.2;
+	}
+
+	// Do not show outline for buttons, it's too distracting.
+	.components-accessible-toolbar .components-button:focus:before,
+	.components-toolbar .components-button:focus:before {
+		box-shadow: none;
+		outline: none;
+	}
+}

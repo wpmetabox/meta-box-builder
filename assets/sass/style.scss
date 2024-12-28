@@ -4,12 +4,20 @@
 @use "base/wordpress";
 @use "base/react-select";
 
+// Editor
+@use "editor/empty";
+@use "editor/meta-box";
+@use "editor/field";
+@use "editor/context-menu";
+@use "editor/toolbar";
+@use "editor/sortable";
+@use "editor/add-button";
+
 .og {
 	@import "elements";
 	@import "fields";
 	@import "group";
 	@import "toggle";
-	@import "inserter";
 	@import "settings";
 	@import "themecode";
 	@import "result";
@@ -18,14 +26,12 @@
 	@import "toggle-group";
 	@import "status";
 
-	@import "structure/context-menu";
-
 	@import "field-settings/icon";
 	@import "field-settings/header";
 	@import "field-settings/sub-settings";
 	@import "field-settings/select-with-input";
 
-	@import "sidebar/add-field";
+	@import "nav/add-field";
 }
 
 .mb-sidebar {

@@ -22,11 +22,34 @@
 [x] Làm context menu, khi click chuột phải cũng ra menu để thêm field, insert field before, after, duplicate, delete, ...
 [ ] Kéo thả nút add field vào danh sách field
 
+Preview:
+
+[x] Clone empty start
+[x] Fix css khi input có size thì nút clone bị đẩy cùng dòng
+[x] Tooltip
+[ ] Column
+
+[x] Background
+[ ] Switch to field khi có trường required chưa điền
+[x] Auto expand cho textarea
+[x] Click vào vùng trống thì close sidebar
+[ ] Object field, chuyển chọn field type thành icon
+[x] Toolbar: khi di chuyển field thì toolbar di chuyển theo
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
 	[ ] Xoá react tabs
 	[ ] Xóa phần collapsible, bao gồm cả CSS
+
+Feedback:
+
+[x] Add subfield cho group khó tìm
+[x] Kéo 1 field vào thành subfield của group
+[ ] Thay đổi field type
+[x] Duplicate cả group
+[x] Conditional logic hiện thêm ID
+[x] Nút add field ở vị trí khó nhìn
+[ ] icon mở sidebar setting của field group cũng khó nhìn
 
 ## Settings của field group:
 

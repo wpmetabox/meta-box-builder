@@ -4,71 +4,6 @@
 	border-bottom: var(--border-lighter);
 }
 
-&-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	color: #999;
-	border-bottom: var(--border-lighter);
-	padding: 10px;
-	background: var(--color-lighter);
-	position: relative;
-}
-
-&-column {
-	&--drag {
-		display: flex;
-		padding: 24px 20px;
-		height: 24px;
-		box-sizing: border-box;
-		width: 100%;
-		inset: 0;
-		position: absolute;
-
-		svg {
-			margin-top: -8px;
-			margin-left: -8px;
-		}
-	}
-
-	&--label {
-		margin: 0 20px;
-		display: flex;
-		align-items: center;
-		z-index: 10;
-	}
-
-	&--space {
-		flex: 1;
-		height: 24px;
-	}
-
-	&--id {
-		width: 180px;
-		text-overflow: ellipsis;
-		padding-right: 20px;
-		display: flex;
-		align-items: center;
-		z-index: 9;
-	}
-
-	&--type {
-		width: 140px;
-		padding-right: 20px;
-		z-index: 10;
-	}
-
-	&--actions {
-		width: 24px * 3 + 4px * 2; // 3 icons + 2 gaps.
-		z-index: 10;
-	}
-}
-
-// Align the "Action" text in the item header bar.
-&-header .og-column--actions {
-	text-align: right;
-}
-
 &-field {
 	display: flex;
 	flex-direction: column;
@@ -169,16 +104,42 @@
 }
 
 &-item {
-	position: relative;
+	border-bottom: var(--border-lighter);
 
 	&__header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		background: #fff;
+		padding: 4px 0 4px 12px;
+		box-sizing: border-box;
+		cursor: grab;
+		transition: all .2s;
 
-		padding: 10px;
-		transition: all .1s ease-in-out;
+		&:hover {
+			background: var(--color-lightest);
+		}
+	}
+
+	.components-button.has-icon {
+		color: inherit;
+	}
+
+	svg {
+		fill: currentColor;
+	}
+
+	&__icon {
+		opacity: .5;
+	}
+
+	&__label {
+		margin-right: auto;
+	}
+
+	&--active>.og-item__header {
+		background: var(--color-primary);
+		color: #fff;
+
+		&>.og-item__icon {
+			opacity: .9;
+		}
 	}
 
 	&__editable {
@@ -225,60 +186,6 @@
 			font-weight: 500;
 		}
 	}
-
-	&__actions {
-		display: flex;
-		align-items: center;
-		justify-content: flex-end;
-		gap: 4px;
-
-		svg {
-			fill: currentColor;
-		}
-	}
-
-	&__action {
-		display: flex;
-		cursor: pointer;
-		color: var(--color-gray);
-		padding: 4px;
-		transition: all ease-out .2s;
-
-		&:hover {
-			color: inherit;
-		}
-
-		&--remove {
-			color: var(--color-red);
-		}
-	}
-
-	.og-column--drag {
-		opacity: 0;
-		visibility: hidden;
-		cursor: grab;
-	}
-}
-
-// Border bottom: an item always have border bottom, and when expanded: add a border bottom to its header bar.
-&-item {
-	border-bottom: var(--border-lighter);
-}
-
-// On hover & active.
-.og-item__header:hover,
-.og-item--active > .og-item__header {
-	background: var(--color-lightest);
-
-	// Show drag icon.
-	.og-column--drag {
-		opacity: 1;
-		visibility: visible;
-	}
-}
-.og-item--active > .og-item__header {
-	outline: 1px solid var(--color-primary);
-	outline-offset: -1px;
 }
 
 // Admin columns.
@@ -289,7 +196,7 @@
 	grid-gap: 6px;
 }
 
-&-admin-columns-position .og-input select {
+&-admin-columns-position.og-admin-columns-position .og-input select {
 	width: auto;
 }
 

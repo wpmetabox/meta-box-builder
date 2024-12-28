@@ -2,8 +2,8 @@ import { Button, Flex, Icon } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { category, code, copy } from '@wordpress/icons';
+import Fields from './Editor/Fields';
 import PHP from "./PHP";
-import Fields from './Structure/Fields';
 import ThemeCode from "./ThemeCode/ThemeCode";
 
 const Main = () => (
@@ -51,7 +51,7 @@ const MainInner = ( { fields, php, theme_code } ) => {
 					</Flex>
 				</Flex>
 				<div className="mb-box__body">
-					<div className={ `mb-area ${ area === 'fields' ? 'mb-area--show' : '' }` }>
+					<div className={ `mb-area mb-editor ${ area === 'fields' ? 'mb-area--show' : '' }` }>
 						{ fields }
 					</div>
 					<div className={ `mb-area mb-area--padding ${ area === 'php' ? 'mb-area--show' : '' }` }>

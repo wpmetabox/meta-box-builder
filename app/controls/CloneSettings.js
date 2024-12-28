@@ -5,15 +5,16 @@ import { close } from "@wordpress/icons";
 import DivRow from "./DivRow";
 import Tooltip from "./Tooltip";
 
-const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
-	const [ clone, toggleClone ] = useReducer( on => !on, defaultValue.clone );
+const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
 	const [ sortable, toggleSortable ] = useReducer( on => !on, defaultValue.sortable );
 	const [ clone_default, toggleCloneDefault ] = useReducer( on => !on, defaultValue.clone_default );
-	const [ clone_empty_start, toggleCloneEmptyStart ] = useReducer( on => !on, defaultValue.clone_empty_start );
 	const [ clone_as_multiple, toggleCloneAsMultiple ] = useReducer( on => !on, defaultValue.clone_as_multiple );
 	const [ min_clone, setMinClone ] = useState( defaultValue.min_clone );
 	const [ max_clone, setMaxClone ] = useState( defaultValue.max_clone );
-	const [ add_button, setAddButton ] = useState( defaultValue.add_button );
+
+	const toggleClone = e => updateField( 'clone', e.target.checked );
+	const toggleCloneEmptyStart = e => updateField( 'clone_empty_start', e.target.checked );
+	const updateAddButton = e => updateField( 'add_button', e.target.value );
 
 	return (
 		<>
@@ -24,18 +25,18 @@ const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 				focusOnMount={ false }
 				renderToggle={ ( { onToggle } ) => (
 					<>
-						<label className={ `og-status ${ clone ? 'og-status--active' : '' }` } onClick={ onToggle }>
+						<label className={ `og-status ${ defaultValue.clone ? 'og-status--active' : '' }` } onClick={ onToggle }>
 							{ __( 'Cloneable', 'meta-box-builder' ) }
 						</label>
 
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone' ) }` } value={ clone } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone' ) }` } value={ defaultValue.clone } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'sortable' ) }` } value={ sortable } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_default' ) }` } value={ clone_default } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_empty_start' ) }` } value={ clone_empty_start } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_empty_start' ) }` } value={ defaultValue.clone_empty_start } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_as_multiple' ) }` } value={ clone_as_multiple } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'min_clone' ) }` } value={ min_clone } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'max_clone' ) }` } value={ max_clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'add_button' ) }` } value={ add_button } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'add_button' ) }` } value={ defaultValue.add_button } />
 					</>
 				) }
 				renderContent={ ( { onToggle } ) => (
@@ -44,15 +45,15 @@ const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 
 						<Toggle
 							label={ __( 'Make the field cloneable', 'meta-box-builder' ) }
-							defaultValue={ clone }
+							defaultValue={ defaultValue.clone }
 							componentId={ `${ componentId }-clone` }
 							onChange={ toggleClone }
 						/>
 						<Toggle
-							label={ __( 'Start from no inputs', 'meta-box-builder' ) }
-							tooltip={ __( 'Start from no inputs except the "+ Add more" button', 'meta-box-builder' ) }
+							label={ __( 'Start with no inputs', 'meta-box-builder' ) }
+							tooltip={ __( 'Show no inputs at first except the "+ Add more" button', 'meta-box-builder' ) }
 							onChange={ toggleCloneEmptyStart }
-							defaultValue={ clone_empty_start }
+							defaultValue={ defaultValue.clone_empty_start }
 							componentId={ `${ componentId }-clone_empty_start` }
 						/>
 						<Toggle
@@ -99,7 +100,7 @@ const CloneSettings = ( { name, componentId, defaultValue, ...rest } ) => {
 							label={ __( 'Add more text', 'meta-box-builder' ) }
 							description={ __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ) }
 						>
-							<input type="text" id={ `${ componentId }-add_button` } defaultValue={ add_button } onChange={ e => setAddButton( e.target.value ) } />
+							<input type="text" id={ `${ componentId }-add_button` } value={ defaultValue.add_button } onChange={ updateAddButton } />
 						</DivRow>
 					</>
 				) }

@@ -1,4 +1,4 @@
-import { Button, Panel, PanelRow } from '@wordpress/components';
+import { Panel, PanelRow } from '@wordpress/components';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import useSettings from '../../hooks/useSettings';
@@ -13,6 +13,7 @@ import IncludeExclude from './FieldGroupSettings/IncludeExclude';
 import Location from './FieldGroupSettings/Location';
 import Post from './FieldGroupSettings/Post';
 import ShowHide from './FieldGroupSettings/ShowHide';
+import Summary from './FieldGroupSettings/Summary';
 import Tabs from './FieldGroupSettings/Tabs';
 
 const FieldGroupSettingsPanel = ( { show = false } ) => {
@@ -35,15 +36,11 @@ const FieldGroupSettingsPanel = ( { show = false } ) => {
 			<div className="mb-panel__inner" ref={ ref }>
 				<PersistentPanelBody
 					title={ __( 'Summary', 'meta-box-builder' ) }
-					className="summary"
+					className="mb-summary"
 					open={ activeTab === 'summary' }
 					onClick={ updateActiveTab( 'summary' ) }
 				>
-					<p className="status"><label>{ __( 'Status', 'meta-box-builder' ) }</label> { MbbApp.status }</p>
-					<p><label>{ __( 'Published', 'meta-box-builder' ) }</label> { MbbApp.published }</p>
-					{ MbbApp.modified && <p><label>{ __( 'Last modified', 'meta-box-builder' ) }</label> { MbbApp.modified }</p> }
-					<p><label>{ __( 'Author', 'meta-box-builder' ) }</label> { MbbApp.author }</p>
-					<p><Button href={ MbbApp.trash } isDestructive={ true } variant="secondary">{ __( 'Move to trash', 'meta-box-builder' ) }</Button></p>
+					<Summary />
 				</PersistentPanelBody>
 				<PersistentPanelBody
 					title={ __( 'Location', 'meta-box-builder' ) }

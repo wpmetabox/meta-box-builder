@@ -9,13 +9,13 @@ const SelectWithInput = ( {
 	name,
 	options,
 	defaultValue,
+	updateField,
 	...rest
 } ) => {
-	const [ value, setValue ] = useState( defaultValue );
 	const [ showOptions, setShowOptions ] = useState( false );
 	const ref = useRef();
 
-	const predefinedItem = Object.entries( options ).find( item => item[ 0 ] === value );
+	const predefinedItem = Object.entries( options ).find( item => item[ 0 ] === defaultValue );
 	const isPredefined = predefinedItem !== undefined;
 	const label = isPredefined ? predefinedItem[ 1 ] : '';
 
@@ -23,27 +23,29 @@ const SelectWithInput = ( {
 	const hide = () => setShowOptions( false );
 	const toggle = () => setShowOptions( prev => !prev );
 	const remove = e => {
-		setValue( '' );
+		updateField( name, '' );
 		ref.current.focus();
 		show();
 		e.stopPropagation(); // Do not trigger "toggle" event on the parent div
 	};
 	const select = e => {
 		hide();
-		setValue( e.target.dataset.value );
+		updateField( name, e.target.dataset.value );
 	};
+
+	const update = e => updateField( name, e.target.value );
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
 		<div className="og-select-with-input">
-			<input type="hidden" name={ name } defaultValue={ value } />
+			<input type="hidden" name={ name } defaultValue={ defaultValue } />
 			<input
 				ref={ ref }
 				type="text"
 				placeholder={ __( 'Please select or enter a value', 'meta-box-builder' ) }
 				id={ componentId }
 				onFocus={ show }
-				value={ value }
-				onChange={ e => setValue( e.target.value ) }
+				value={ defaultValue }
+				onChange={ update }
 			/>
 			<div className="og-select-with-input__icon" onClick={ toggle }><Icon icon={ chevronDown } /></div>
 			{
@@ -61,7 +63,7 @@ const SelectWithInput = ( {
 						Object.entries( options ).map( item => (
 							<div
 								key={ item[ 0 ] }
-								className={ `og-select-with-input__option ${ item[ 0 ] === value ? 'og-select-with-input__option--selected' : '' }` }
+								className={ `og-select-with-input__option ${ item[ 0 ] === defaultValue ? 'og-select-with-input__option--selected' : '' }` }
 								data-value={ item[ 0 ] }
 								onClick={ select }
 							>

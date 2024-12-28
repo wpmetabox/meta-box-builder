@@ -84,7 +84,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'clone_settings' ],
 					array_merge( $general_tab, [ 'options' ] ),
-					[ 'label_description', 'desc', 'size' ],
+					[ 'label_description', 'desc' ],
 					$validation_tab,
 					$advanced_tab
 				),
@@ -174,7 +174,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std', 'format', 'timestamp', 'save_format' ] ),
-					[ 'inline', 'label_description', 'desc', 'placeholder', 'size' ],
+					[ 'inline', 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					array_merge( ['js_options'], $advanced_tab )
 				),
@@ -186,7 +186,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std', 'format', 'timestamp', 'save_format' ] ),
-					[ 'inline', 'label_description', 'desc', 'placeholder', 'size' ],
+					[ 'inline', 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					array_merge( ['js_options'], $advanced_tab )
 				),
@@ -239,7 +239,7 @@ class Fields extends Base {
 				'category'    => 'upload',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'max_file_uploads', 'mime_type', 'max_status', 'force_delete' ] ),
+					array_merge( $general_tab, [ 'mime_type', 'max_file_uploads', 'max_status', 'force_delete' ] ),
 					$appearance_tab,
 					$validation_tab,
 					$advanced_tab
@@ -263,7 +263,7 @@ class Fields extends Base {
 				'category'    => 'upload',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'max_file_uploads', 'max_file_size', 'mime_type', 'max_status', 'force_delete' ] ),
+					array_merge( $general_tab, [ 'max_file_size', 'mime_type', 'max_file_uploads', 'max_status', 'force_delete' ] ),
 					$appearance_tab,
 					$validation_tab,
 					$advanced_tab
@@ -275,7 +275,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'address_field', 'language', 'region' ] ),
+					array_merge( $general_tab, [ 'api_key', 'address_field', 'std', 'language', 'region' ] ),
 					$appearance_tab,
 					$advanced_tab
 				),
@@ -304,7 +304,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					['required', 'clone_settings'],
-					array_merge( $general_tab, ['std', 'icon_set', 'icon_file', 'icon_dir', 'icon_css' ] ),
+					array_merge( $general_tab, [ 'icon_set', 'icon_file', 'icon_dir', 'icon_css', 'std' ] ),
 					[ 'label_description', 'desc', 'placeholder' ],
 					$advanced_tab
 				),
@@ -327,7 +327,7 @@ class Fields extends Base {
 				'category'    => 'upload',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'max_file_uploads', 'image_size', 'max_status', 'force_delete', 'add_to' ] ),
+					array_merge( $general_tab, [ 'image_size', 'max_file_uploads', 'max_status', 'force_delete', 'add_to' ] ),
 					$appearance_tab,
 					$validation_tab,
 					$advanced_tab
@@ -351,7 +351,7 @@ class Fields extends Base {
 				'category'    => 'upload',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'max_file_uploads', 'max_file_size', 'image_size', 'max_status', 'force_delete', 'add_to' ] ),
+					array_merge( $general_tab, [ 'max_file_size', 'image_size', 'max_file_uploads', 'max_status', 'force_delete', 'add_to' ] ),
 					$appearance_tab,
 					$validation_tab,
 					$advanced_tab
@@ -509,7 +509,7 @@ class Fields extends Base {
 					array_merge( $general_tab, [ 'std' ] ),
 					[ 'label_description', 'desc', 'prefix_suffix' ],
 					$validation_tab,
-					array_merge( ['js_options', $advanced_tab ] )
+					array_merge( [ 'js_options' ], $advanced_tab )
 				),
 				'description' => __( 'jQuery UI slider', 'meta-box-builder' ),
 			],
@@ -591,7 +591,7 @@ class Fields extends Base {
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
 					array_merge( $general_tab, [ 'std' ] ),
-					[ 'inline', 'label_description', 'desc', 'placeholder', 'size' ],
+					[ 'inline', 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					array_merge( ['js_options'], $advanced_tab )
 				),

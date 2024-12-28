@@ -3,25 +3,43 @@ import { __ } from "@wordpress/i18n";
 import { ErrorBoundary } from "react-error-boundary";
 import Header from './components/Header';
 import Main from './components/Main';
+import Nav from "./components/Nav";
 import Sidebar from './components/Sidebar';
+import useFieldSettingsPanel from "./hooks/useFieldSettingsPanel";
+import useSidebarPanel from "./hooks/useSidebarPanel";
 
-const Layout = ( { children } ) => (
-	<ErrorBoundary fallback={ <p>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</p> }>
-		<Header />
+const Layout = ( { children } ) => {
+	const { setSidebarPanel } = useSidebarPanel();
+	const { setActiveField } = useFieldSettingsPanel();
 
-		<div className="mb-body">
-			<div className="mb-body__inner">
-				{ children }
-			</div>
+	const hideSidebar = e => {
+		if ( !e.target.classList.contains( 'mb-body__inner' ) ) {
+			return;
+		}
+		setSidebarPanel( '' );
+		setActiveField( {} );
+	};
 
-			<Sidebar />
-		</div >
+	return (
+		<ErrorBoundary fallback={ <p>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</p> }>
+			<Header />
 
-		<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
-		<input type="hidden" name="messages" value="" />
-		<input type="hidden" name="mbb_nonce" value={ MbbApp.nonce_save } />
-	</ErrorBoundary>
-);
+			<div className="mb-body">
+				<Nav />
+
+				<div className="mb-body__inner" onClick={ hideSidebar }>
+					{ children }
+				</div>
+
+				<Sidebar />
+			</div >
+
+			<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
+			<input type="hidden" name="messages" value="" />
+			<input type="hidden" name="mbb_nonce" value={ MbbApp.nonce_save } />
+		</ErrorBoundary>
+	);
+};
 
 const App = () => (
 	<Layout>

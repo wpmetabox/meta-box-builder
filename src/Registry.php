@@ -254,8 +254,28 @@ class Registry {
 			], 'select_advanced' ),
 			Control::Toggle( 'add_new', __( 'Allow to create a new item', 'meta-box-builder' ) ),
 			Control::Toggle( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
-			Control::Toggle( 'multiple', __( 'Allow to select multiple choices', 'meta-box-builder' ) ),
+			Control::Toggle( 'multiple', __( 'Allow to select multiple items', 'meta-box-builder' ) ),
 			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ), false, 'appearance' ),
+			'select_all_none_post' => Control::Toggle( 'select_all_none', [
+				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
+				'dependency' => 'multiple:true',
+			], false, 'appearance' ),
+			'select_all_none_taxonomy' => Control::Toggle( 'select_all_none', [
+				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
+				'dependency' => 'multiple:true',
+			], false, 'appearance' ),
+			'select_all_none_taxonomy_advanced' => Control::Toggle( 'select_all_none', [
+				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
+				'dependency' => 'multiple:true',
+			], false, 'appearance' ),
+			'select_all_none_user' => Control::Toggle( 'select_all_none', [
+				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
+				'dependency' => 'multiple:true',
+			], false, 'appearance' ),
+			'select_all_none_select' => Control::Toggle( 'select_all_none', [
+				'label'      => __( 'Display "Select: All | None" button', 'meta-box-builder' ),
+				'dependency' => 'multiple:true',
+			], false, 'appearance' ),
 			'query_args_taxonomy'          => Control::KeyValue( 'query_args', [
 				'label'       => __( 'Query args', 'meta-box-builder' ),
 				// Translators: %s - URL to the get_terms() docs.
@@ -357,7 +377,7 @@ class Registry {
 			] ),
 
 			// Button.
-			'std_button'                   => Control::Input( 'std', __( 'Button text', 'meta-box-builder' ) ),
+			'std_button'                   => Control::Input( 'std', __( 'Button text', 'meta-box-builder' ), __( 'Click me', 'meta-box-builder' ) ),
 
 			// Button group.
 			'options_button_group'         => Control::Textarea( 'options', [
@@ -395,7 +415,7 @@ class Registry {
 			] ),
 
 			// Fieldset text.
-			'options_fieldset_text'        => Control::KeyValue( 'options', [
+			'options_fieldset_text'        => Control::ControlledKeyValue( 'options', [
 				'label'            => __( 'Inputs', 'meta-box-builder' ),
 				'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
 			] ),
@@ -408,8 +428,8 @@ class Registry {
 
 			// File advanced.
 			Control::Input( 'mime_type', [
-				'label'   => __( 'MIME types', 'meta-box-builder' ),
-				'tooltip' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload. Separate by commas.', 'meta-box-builder' ),
+				'label'       => __( 'MIME types', 'meta-box-builder' ),
+				'description' => __( 'Filters items in the Media Library popup. Does not restrict file types when upload. Separate by commas.', 'meta-box-builder' ),
 			] ),
 
 			// File upload.
@@ -417,9 +437,9 @@ class Registry {
 
 			// Map.
 			Control::Input( 'api_key', [
-				'label'    => '<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="noopenner noreferrer">' . __( 'Google Maps API key', 'meta-box-builder' ) . '</a>',
-				'tooltip'  => __( 'Your unique API Key for Google Maps Platform', 'meta-box-builder' ),
-				'required' => true,
+				'label'       => __( 'Google Maps API key', 'meta-box-builder' ),
+				'description' => sprintf( __( 'If you don\'t have one, <a href="%s" target="_blank">create one here</a>.', 'meta-box-builder' ), 'https://developers.google.com/maps/documentation/javascript/get-api-key' ),
+				'required'    => true,
 			] ),
 
 			// Heading.
@@ -430,6 +450,12 @@ class Registry {
 				'label'       => __( 'Description', 'meta-box-builder' ),
 				'description' => __( 'Display below the heading text.', 'meta-box-builder' ),
 			], '', 'general' ),
+
+			// Image select.
+			'options_image_select' => Control::Textarea( 'options', [
+				'label'       => __( 'Choices', 'meta-box-builder' ),
+				'description' => __( 'Enter each choice per line. Use <code>value: image URL</code> format or <code>callback: function_name</code> for a PHP callback (the function must exist).', 'meta-box-builder' ),
+			] ),
 
 			// Image advanced.
 			Control::Select( 'image_size', [

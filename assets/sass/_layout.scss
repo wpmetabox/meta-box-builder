@@ -24,6 +24,7 @@
 }
 
 .mb {
+	--nav-width: 350px;
 	--sidebar-width: 360px;
 
 	display: flex;
@@ -47,68 +48,50 @@
 	background: #fff;
 	z-index: 99;
 	border-bottom: 1px solid var(--color-light);
+	height: 61px;
+	padding-inline: 12px;
+	box-sizing: border-box;
 
-	// h1 {
-	// 	font-size: 20px;
-	// 	padding: 0;
+	// & &__logo {
+	// 	padding: 6px;
+	// 	min-width: fit-content;
 	// }
 
-	& &__logo {
-		padding: 6px;
-		min-width: fit-content;
-	}
+	// &__logo svg {
+	// 	width: 48px;
+	// 	height: 48px;
+	// 	display: block;
+	// }
 
-	&__logo svg {
-		width: 48px;
-		height: 48px;
-		display: block;
-	}
+	#post_title {
+		background: #f0f0f0;
+		border: none;
+		max-width: 450px;
+		text-align: center;
 
-	&__title input {
-		border-width: 0 0 1px 0;
-		border-color: var(--color-light);
-		border-radius: 0;
-		padding-inline: 0;
-
-		&:focus {
-			outline: none;
-			border-color: var(--color-gray);
-		}
-	}
-
-	&__badge {
-		&__name {
-			background: var(--color-light);
-			border-radius: 4px 0 0 4px;
-			padding: 2px 6px;
-		}
-
-		&__content {
-			background: var(--color-lighter);
-			border-radius: 0 4px 4px 0;
-		}
-
-		input {
-			border-width: 0 0 1px 0;
-			border-color: transparent;
-			border-radius: 0 4px 4px 0;
-			padding: 2px 6px;
-			background: var(--color-lighter);
-
-			&:focus {
-				outline: none;
-				border-bottom-color: var(--color-light);
-			}
+		&:focus,
+		&:hover {
+			box-shadow: none;
+			background: #e0e0e0;
 		}
 	}
 
 	&__actions {
-		padding-right: 12px;
-
 		svg {
 			width: auto;
 			height: auto;
 			fill: currentColor;
+		}
+	}
+
+	// Add button
+	&__add {
+		svg {
+			transition: all .25s;
+		}
+
+		&.is-pressed svg {
+			transform: rotate(45deg);
 		}
 	}
 }
@@ -139,14 +122,21 @@
 		position: absolute;
 		top: 0;
 		bottom: 0;
-		left: 0;
+		left: var(--nav-width);
 		right: var(--sidebar-width);
 		overflow-y: auto;
+
+		.mb-no-nav & {
+			left: 0;
+		}
+
+		.mb-no-sidebar & {
+			right: 0;
+		}
 	}
 }
 
 .mb-main {
-	// max-width: 900px;
 	margin-inline: auto;
 }
 
@@ -163,7 +153,7 @@
 }
 
 // Sidebar panel
-.mb-panel {
+.mb-sidebar .mb-panel {
 	position: fixed;
 	top: calc(32px + 60px + 1px); // Admin bar + header + border
 	bottom: 0;
@@ -195,5 +185,38 @@
 		.components-panel__header svg {
 			fill: var(--color-gray);
 		}
+	}
+}
+
+// Nav panel
+.mb-nav .mb-panel {
+	position: fixed;
+	top: calc(32px + 60px + 1px); // Admin bar + header + border
+	bottom: 0;
+	left: 160px; // WordPress menu
+	width: var(--nav-width);
+	z-index: 99;
+	transition: all .25s;
+	transform: translateX(calc(0px - var(--nav-width)));
+
+	margin-top: -1px; // Override to the header's border
+	border-left: 0;
+
+	.folded & {
+		left: 36px;
+	}
+
+	&--show {
+		transform: translateX(0);
+	}
+
+	// Only scroll inner content, keep the panel header sticky
+	&__inner {
+		position: absolute;
+		top: calc(48px - 1px); // 48px: header, -1px: margin top
+		bottom: 0;
+		left: 0;
+		width: var(--nav-width);
+		overflow-y: auto;
 	}
 }
