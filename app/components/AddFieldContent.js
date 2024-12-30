@@ -1,5 +1,6 @@
 import { Button, SearchControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { ReactSortable } from 'react-sortablejs';
 import { getFieldIcon } from '../functions';
 import useApi from "../hooks/useApi";
 
@@ -20,7 +21,7 @@ const AddFieldContent = ( { className = '', addField, onSelect } ) => {
 
 const Categories = ( { onSelect, addField } ) => {
 	const fieldCategories = useApi( 'field-categories', [] );
-	return fieldCategories.map( category => <Category key={ category.slug } category={ category } onSelect={ onSelect } addField={ addField } /> )
+	return fieldCategories.map( category => <Category key={ category.slug } category={ category } onSelect={ onSelect } addField={ addField } /> );
 };
 
 const Category = ( { category, onSelect, addField } ) => {
@@ -43,13 +44,28 @@ const SearchResult = ( { searchQuery, onSelect, addField } ) => {
 };
 
 const FieldList = ( { fields, onSelect, addField } ) => (
-	<div className="og-add-field__list">
+	<ReactSortable
+		className="og-add-field__list"
+		delay={ 0 }
+		delayOnTouchOnly={ false }
+		touchStartThreshold={ 0 }
+		group={ {
+			name: 'add',
+			pull: 'clone', // Ability to move from the list: give and keep a copy
+			put: false, // Do not allow to add from other lists
+		} }
+		sort={ false } // Do not sort
+		list={ Object.keys( fields ) }
+		setList={ () => {} } // Do nothing
+	>
 		{
 			fields.map( ( [ type, field ] ) =>
-				<FieldButton key={ type } type={ type } title={ field.title } onSelect={ onSelect } addField={ addField } />
+				<div key={ type } data-type={ type } className="og-add-field__item">
+					<FieldButton type={ type } title={ field.title } onSelect={ onSelect } addField={ addField } />
+				</div>
 			)
 		}
-	</div>
+	</ReactSortable>
 );
 
 const FieldButton = ( { type, title, onSelect, addField } ) => {

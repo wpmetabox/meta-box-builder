@@ -6,25 +6,40 @@ import Node from '../Node';
 
 const Group = ( { field, parent } ) => {
 	const { getForList } = useLists();
-	const { fields, setFields, ...fieldActions } = getForList( field._id );
+	const { fields, ...fieldActions } = getForList( field._id );
+
+	const handleAdd = e => {
+		// Only handle when drag from the Add Field panel.
+		// We need to add a field manually at the given position.
+		if ( e.from.classList.contains( 'og-add-field__list' ) ) {
+			fieldActions.addFieldAt( e.item.dataset.type, e.newDraggableIndex );
+		}
+	};
+
+	// If we drag a field type from the Add New panel, it won't have a proper format as a field object
+	// As we manually added the field with a correct format in the handleAdd() function above
+	// We need to remove the auto-added item by SortableJS.
+	const setList = list => fieldActions.setFields( [ ...list ].filter( f => f?._id !== undefined ) );
 
 	return (
 		<>
 			<CollapsibleElements field={ field } />
 
 			<ReactSortable
+				className="mb-field--group__fields"
+				delay={ 0 }
+				delayOnTouchOnly={ false }
+				touchStartThreshold={ 0 }
+				animation={ 200 }
+				invertSwap={ true }
 				group={ {
 					name: 'nested',
-					pull: true,
-					put: [ 'root', 'nested' ],
+					pull: true, // Allow to drag fields to other lists
+					put: true, // Allow to receive fields from other lists
 				} }
-				animation={ 200 }
-				delayOnTouchStart={ true }
-				delay={ 2 }
 				list={ fields }
-				setList={ setFields }
-				invertSwap={ true }
-				className="mb-field--group__fields"
+				setList={ setList }
+				onAdd={ handleAdd }
 			>
 				{
 					fields.map( f => <Node

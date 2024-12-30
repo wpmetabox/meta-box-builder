@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[7217],{7217:(e,l,a)=>{a.r(l),a.d(l,{default:()=>r});var s=a(1609),c=a(3344);const r=({field:e})=>(0,s.createElement)("textarea",{placeholder:e.placeholder,cols:e.cols,rows:e.rows,value:e.std||"",onChange:c.Zi})}}]);

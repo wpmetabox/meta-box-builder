@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[2927],{2927:(e,t,l)=>{l.r(t),l.d(t,{default:()=>c});var a=l(1609);const c=({field:e})=>(0,a.createElement)(a.Fragment,null,(0,a.createElement)("input",{type:"text",placeholder:e.placeholder_key}),(0,a.createElement)("input",{type:"text",placeholder:e.placeholder_value}))}}]);

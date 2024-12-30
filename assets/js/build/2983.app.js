@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[2983],{2983:(e,a,l)=>{l.r(a),l.d(a,{default:()=>t});var n=l(1609);const t=({field:e})=>(0,n.createElement)(n.Fragment,null,e.name&&(0,n.createElement)("h4",null,e.name),e.desc&&(0,n.createElement)("p",{className:"description"},e.desc))}}]);
