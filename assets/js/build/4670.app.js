@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[4670],{4670:(e,c,t)=>{t.r(c),t.d(c,{default:()=>l});var s=t(1609),a=t(3344);const l=({field:e})=>{let c=(0,s.createElement)("input",{type:"checkbox",checked:!!e.std,onChange:a.Zi});return e.desc&&(c=(0,s.createElement)("label",{className:"description"},c," ",e.desc)),c}}}]);
