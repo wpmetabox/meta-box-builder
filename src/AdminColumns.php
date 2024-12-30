@@ -211,8 +211,7 @@ class AdminColumns {
 									break;
 
 								case 'title':
-									echo esc_html( $data['local']['post_title'] );
-									;
+									echo esc_html( $data['local']['title'] );
 									break;
 
 								default:
@@ -359,7 +358,7 @@ class AdminColumns {
 			}
 		}
 
-		$sync_data = $json[ $mb_id ];
+		$sync_data = $json[ $mb_id ] ?? [];
 
 		// Empty sync data means no related json file.
 		if ( empty( $sync_data ) ) {
@@ -376,15 +375,15 @@ class AdminColumns {
 		?>
 		<strong><?php esc_html_e( $status_text ) ?></strong>
 		<?php if ( $sync_data['is_newer'] !== 0 ) { ?>
-		<div class="row-actions">
-			<span class="review">
-				<a href="javascript:;" role="button" onclick="return showDialog('<?= $mb_id ?>');">
-					<?= esc_html__( 'Review changes', 'meta-box-builder' ) ?>
-				</a>
-			</span>
-		</div>
+			<div class="row-actions">
+				<span class="review">
+					<a href="javascript:;" role="button" onclick="return showDialog('<?= $mb_id ?>');">
+						<?= esc_html__( 'Review changes', 'meta-box-builder' ) ?>
+					</a>
+				</span>
+			</div>
 		<?php } ?>
-		<?php
+	<?php
 	}
 
 	private function show_for( $data ) {
@@ -422,9 +421,14 @@ class AdminColumns {
 		}
 	}
 
-	private function show_location_sync( $post_id ) {
+	private function show_location_sync( string $meta_box_id ) {
 		$json = JsonService::get_json();
-		$json = $json[ $post_id ];
+
+		if ( ! isset( $json[ $meta_box_id ] ) ) {
+			return;
+		}
+
+		$json = $json[ $meta_box_id ] ?? null;
 
 		if ( is_array( $json ) && isset( $json['file'] ) ) {
 			echo $this->get_human_readable_file_location( $json['file'] );
