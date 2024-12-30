@@ -94,11 +94,13 @@ class Import {
 		}
 
 		// If import only one post.
-		if ( isset( $posts['post_type'] ) ) {
+		if (array_keys($posts) !== array_keys(array_keys($posts))) {
 			$posts = [ $posts ];
 		}
 
 		foreach ( $posts as $post ) {
+			$post = Normalizer::normalize( $post );
+
 			if ( isset( $post['settings']['id'] ) && ! isset( $post['post_name'] ) ) {
 				$post['post_name'] = $post['settings']['id'];
 			}

@@ -29,7 +29,7 @@ class JsonService {
 
 		[ $post_id, $remote ] = self::get_meta_box_by_meta_box_id( $mb_id );
 
-		$is_newer = version_compare( $local['version'], $remote['settings']['version'] ?? 'v0' );
+		$is_newer = version_compare( $local['settings']['version'], $remote['settings']['version'] ?? 'v0' );
 
 		$left = empty( $remote ) ? '' : wp_json_encode( $remote, JSON_PRETTY_PRINT );
 

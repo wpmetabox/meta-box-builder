@@ -1,6 +1,8 @@
 <?php
 namespace MBB;
 
+use MetaBox\Support\Arr;
+
 class Normalizer {
 	/**
 	 * Add missing keys from the data
@@ -8,23 +10,122 @@ class Normalizer {
 	public static function normalize( array $data ) {
 		// id
 		if ( ! isset( $data['id'] ) ) {
-			$data['id'] = ! empty( $data['title'] ) ? sanitize_title( $data['title'] ) : uniqid();
+			$data['id'] = self::lookup( [ 'id', 'post_name', 'title' ], $data, uniqid() );
+			$data['id'] = sanitize_title( $data['id'] );
 		}
 
 		// title
-		if ( ! isset( $data['title'] ) ) {
-			$data['title'] = ucwords( str_replace( '_', ' ', $data['id'] ) );
+		$data['title'] = self::lookup( [ 'title', 'post_title', 'post_name', 'id' ], $data );
+		$data['post_title'] = $data['title'];
+
+		// post_type
+		$data['post_type']    = 'meta-box';
+		$data['post_name']    = self::lookup( [ 'post_name', 'id' ], $data );
+		$data['post_date']    = self::lookup( [ 'post_date' ], $data, current_time( 'mysql' ) );
+		$data['post_status']  = self::lookup( [ 'post_status' ], $data, 'publish' );
+		$data['post_content'] = self::lookup( [ 'post_content' ], $data, '' );
+
+		$data['settings']                  = self::lookup( [ 'settings' ], $data, [] );
+		$data['settings']['object_type']   = self::lookup( [ 'settings.object_type' ], $data, 'post' );
+		$data['settings']['post_types']    = self::lookup( [ 'settings.post_types' ], $data, [ 'post' ] );
+		$data['settings']['context']       = self::lookup( [ 'settings.context' ], $data, [ 'normal' ] );
+		$data['settings']['priority']      = self::lookup( [ 'settings.priority' ], $data, 'high' );
+		$data['settings']['syle']          = self::lookup( [ 'settings.style' ], $data, 'default' );
+		$data['settings']['closed']        = self::lookup( [ 'settings.closed' ], $data, false );
+		$data['settings']['class']         = self::lookup( [ 'settings.class' ], $data, '' );
+		$data['settings']['prefix']        = self::lookup( [ 'settings.prefix' ], $data, '' );
+		$data['settings']['text_domain']   = self::lookup( [ 'settings.text_domain' ], $data, 'your-text-domain' );
+		$data['settings']['function_name'] = self::lookup( [ 'settings.function_name' ], $data, '' );
+		$data['settings']['version']       = self::lookup( [ 'settings.version' ], $data, 'v0' );
+		$data['data']                      = self::lookup( [ 'settings.data' ], $data, [] );
+
+		$data['fields'] = self::lookup( [ 'fields' ], $data, [] );
+
+		// Add _id for each field for the builder
+		$data['fields'] = self::generate__id( $data['fields'] );
+
+		$data['meta_box'] = self::lookup( [ 'meta_box' ], $data, [] );
+
+		$data['version'] = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
+
+		$meta_box = $data['meta_box'] ?? [];
+
+		if ( empty( $meta_box ) ) {	
+			$meta_box['title']         = self::lookup( [ 'title' ], $data );
+			$meta_box['id']            = self::lookup( [ 'id' ], $data );
+			$meta_box['closed']        = self::lookup( [ 'settings.closed' ], $data, false );
+			$meta_box['text_domain']   = self::lookup( [ 'settings.text_domain' ], $data, false );
+			$meta_box['function_name'] = self::lookup( [ 'settings.function_name' ], $data, false );
+			$meta_box['fields']        = self::lookup( [ 'fields' ], $data, false );
 		}
 
-		// version
-		if ( ! isset( $data['version'] ) ) {
-			$data['version'] = 'v0';
+		// Add all extra keys to settings and meta_box
+		$known_keys = self::get_known_keys();
+		foreach ( $data as $key => $value ) {
+			if ( in_array( $key, $known_keys, true ) ) {
+				continue;
+			}
+
+			$meta_box[ $key ] = $value;
+			$data['settings'][ $key ] = $value;
 		}
 
-		if ( !isset($data['settings']) || ! is_array( $data['settings'] ) ) {
-			$data['settings'] = [];
+		$data['meta_box'] = $meta_box;
+
+		// @todo: Normalize GEO Settings
+		// @todo: Normalize conditional logics
+		// @todo: Normalize options
+
+		return $data;
+	}
+
+	private static function get_known_keys() {
+		return [
+			'$schema',
+			'id',
+			'title',
+			'post_type',
+			'post_name',
+			'post_date',
+			'post_status',
+			'post_content',
+			'settings',
+			'meta_box',
+			'version',
+			'fields',
+			'data',
+		];
+	}
+
+	/**
+	 * Lookup from the data using keys, return the first key found or null
+	 * 
+	 * @param array $keys
+	 * @return mixed
+	 */
+	private static function lookup( array $keys, $data, $default = null ) {
+		foreach ( $keys as $key ) {
+			if ( Arr::get( $data, $key ) !== null ) {
+				return Arr::get( $data, $key );
+			}
 		}
 
-        return $data;
+		return $default;
+	}
+
+	private static function generate__id( array $fields ) {
+		foreach ( $fields as $index => $field ) {
+			if ( ! isset( $field['_id'] ) ) {
+				$field['_id'] = $field['id'];
+			}
+
+			if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
+				$field['fields'] = self::generate__id( $field['fields'] );
+			}
+
+			$fields[ $index ] = $field;
+		}
+
+		return $fields;
 	}
 }
