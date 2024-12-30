@@ -10,6 +10,11 @@ class Register {
 		add_filter( 'rwmb_meta_boxes', [ $this, 'register_meta_box' ] );
 	}
 
+	/**
+	 * @todo: Normalize the JSON data
+	 * 
+	 * @return array
+	 */
 	private function get_meta_boxes_from_json(): array {
 		// Register meta boxes from JSON files.
 		$paths = JsonService::get_paths();

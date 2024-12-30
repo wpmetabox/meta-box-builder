@@ -3,6 +3,11 @@ namespace MBB;
 
 use MetaBox\Support\Arr;
 
+/**
+ * Normalize import files for the builder
+ * 
+ * @package Meta Box Builder
+ */
 class Normalizer {
 	/**
 	 * Add missing keys from the data
@@ -42,7 +47,8 @@ class Normalizer {
 		$data['fields'] = self::lookup( [ 'fields' ], $data, [] );
 
 		// Add _id for each field for the builder
-		$data['fields'] = self::generate__id( $data['fields'] );
+		$fields = $data['fields'];
+		$data['fields'] = self::for_builder( $data['fields'] );
 
 		$data['meta_box'] = self::lookup( [ 'meta_box' ], $data, [] );
 
@@ -54,9 +60,7 @@ class Normalizer {
 			$meta_box['title']         = self::lookup( [ 'title' ], $data );
 			$meta_box['id']            = self::lookup( [ 'id' ], $data );
 			$meta_box['closed']        = self::lookup( [ 'settings.closed' ], $data, false );
-			$meta_box['text_domain']   = self::lookup( [ 'settings.text_domain' ], $data, false );
-			$meta_box['function_name'] = self::lookup( [ 'settings.function_name' ], $data, false );
-			$meta_box['fields']        = self::lookup( [ 'fields' ], $data, false );
+			$meta_box['fields']        = $fields;
 		}
 
 		// Add all extra keys to settings and meta_box
@@ -113,14 +117,30 @@ class Normalizer {
 		return $default;
 	}
 
-	private static function generate__id( array $fields ) {
+	/**
+	 * Add _id and make sure all fields has the required format for the builder
+	 * 
+	 * @param array $fields
+	 * @return array
+	 */
+	private static function for_builder( array $fields ) {
 		foreach ( $fields as $index => $field ) {
 			if ( ! isset( $field['_id'] ) ) {
 				$field['_id'] = $field['id'];
 			}
 
+			// Normalize options
+			if (isset($field['options']) && is_array($field['options'])) {
+				$options = [];
+				foreach ($field['options'] as $key => $value) {
+					$options[] = "{$key}:{$value}";
+				}
+				$options = implode("\r\n", $options);
+				$field['options'] = $options;
+			}
+
 			if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
-				$field['fields'] = self::generate__id( $field['fields'] );
+				$field['fields'] = self::for_builder( $field['fields'] );
 			}
 
 			$fields[ $index ] = $field;
