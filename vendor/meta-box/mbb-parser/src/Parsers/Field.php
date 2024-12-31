@@ -57,6 +57,23 @@ class Field extends Base {
 		$this->settings = apply_filters( "mbb_field_settings_{$this->type}", $this->settings );
 	}
 
+	/**
+	 * This is invert of parse method. While parse method converts to the minimal format, 
+	 * this method converts back to the original format.
+	 * 
+	 * Used when importing JSON to the builder.
+	 * 
+	 * @return void
+	 */
+	public function invert() {
+		$this->_id = $this->_id ?? $this->id;
+
+		$this->add_default( 'save_field', true )
+			->invert_boolean_values()
+			->invert_numeric_values()
+			->invert_choice_options();
+	}
+
 	private function parse_datalist() {
 		if ( empty( $this->settings['datalist_choices'] ) ) {
 			return $this;
@@ -136,6 +153,33 @@ class Field extends Base {
 				$options[ trim( $choice ) ] = trim( $choice );
 			}
 		}
+
+		$this->options = $options;
+
+		return $this;
+	}
+
+	/**
+	 * Inverse of parse_choice_options.
+	 * 
+	 * Convert options array to string.
+	 * 
+	 * @return static
+	 */
+	private function invert_choice_options() {
+		if ( ! in_array( $this->type, $this->choice_types ) ) {
+			return $this;
+		}
+
+		if ( empty( $this->options ) || ! is_array( $this->options ) ) {
+			return $this;
+		}
+
+		$options = [];
+		foreach ( $this->options as $key => $value ) {
+			$options[] = "{$key}:{$value}";
+		}
+		$options = implode( "\r\n", $options );
 
 		$this->options = $options;
 

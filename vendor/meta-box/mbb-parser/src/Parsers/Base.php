@@ -23,6 +23,11 @@ class Base {
 		return $this;
 	}
 
+	public function invert_boolean_values() {
+		array_walk_recursive( $this->settings, [ $this, 'convert_boolean_to_string' ] );
+		return $this;
+	}
+
 	protected function convert_string_to_boolean( &$value ) {
 		if ( $value === 'true' ) {
 			$value = true;
@@ -31,8 +36,19 @@ class Base {
 		}
 	}
 
+	protected function convert_boolean_to_string( &$value ) {
+		if ( is_bool( $value ) ) {
+			$value = $value ? 'true' : 'false';
+		}
+	}
+
 	public function parse_numeric_values() {
 		array_walk_recursive( $this->settings, [ $this, 'convert_string_to_number' ] );
+		return $this;
+	}
+
+	public function invert_numeric_values() {
+		array_walk_recursive( $this->settings, [ $this, 'convert_number_to_string' ] );
 		return $this;
 	}
 
@@ -45,10 +61,14 @@ class Base {
 		}
 	}
 
+	protected function convert_number_to_string( &$value ) {
+		$value = (string) $value;
+	}
+
 	protected function remove_empty_values() {
 		foreach ( $this->settings as $key => $value ) {
 			// Remove empty string in an array.
-			$value = ! is_array( $value ) ? $value : array_filter( $value, function( $v ) {
+			$value = ! is_array( $value ) ? $value : array_filter( $value, function ($v) {
 				return $v !== '';
 			} );
 
@@ -136,7 +156,7 @@ class Base {
 				$condition = null;
 				continue;
 			}
-			$condition = [
+			$condition = [ 
 				$condition['name'],
 				$condition['operator'],
 				$condition['value'],
@@ -146,7 +166,7 @@ class Base {
 
 		if ( ! empty( $data['when'] ) ) {
 			$this->{$data['type']} = array(
-				'when'     => array_values( $data['when'] ),
+				'when' => array_values( $data['when'] ),
 				'relation' => $data['relation'],
 			);
 		}
@@ -172,6 +192,20 @@ class Base {
 	protected function remove_default( $key, $value ) {
 		if ( $this->$key === $value ) {
 			unset( $this->$key );
+		}
+		return $this;
+	}
+
+	/**
+	 * Inverse of remove_default.
+	 * 
+	 * @param mixed $key
+	 * @param mixed $value
+	 * @return static
+	 */
+	protected function add_default( $key, $value ) {
+		if ( ! isset( $this->$key ) ) {
+			$this->$key = $value;
 		}
 		return $this;
 	}

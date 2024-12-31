@@ -25,11 +25,12 @@ class Register {
 				continue;
 			}
 			// List files under $path
-			$files = glob( $path . '/*.json' );
+			$files = glob( "$path/*.json" );
 
 			$json = [];
 			foreach ( $files as $file ) {
 				$mb = json_decode( file_get_contents( $file ), true );
+				$mb = Normalizer::normalize( $mb );
 
 				if ( isset( $mb['meta_box'] ) ) {
 					$json[] = $mb['meta_box'];

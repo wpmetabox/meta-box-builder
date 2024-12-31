@@ -6,8 +6,8 @@ use MetaBox\Support\Arr;
 class MetaBox extends Base {
 	protected $empty_keys = [ 'fields' ];
 	private $settings_parser;
-	private $validation = [
-		'rules'    => [],
+	private $validation = [ 
+		'rules' => [],
 		'messages' => [],
 	];
 
@@ -40,9 +40,9 @@ class MetaBox extends Base {
 	}
 
 	private function parse_settings() {
-		$settings = [
+		$settings = [ 
 			'title' => $this->post_title,
-			'id'    => $this->post_name,
+			'id' => $this->post_name,
 		];
 
 		if ( isset( $this->settings['settings'] ) ) {
@@ -58,6 +58,10 @@ class MetaBox extends Base {
 		$fields = array_values( array_filter( $fields ) ); // Make sure to remove empty (such as empty groups) or "tab" fields.
 	}
 
+	private function invert_fields( &$fields ) {
+		array_walk( $fields, [ $this, 'invert_field' ] );
+	}
+
 	private function parse_field( &$field ) {
 		$parser = new Field( $field );
 		$parser->parse();
@@ -71,6 +75,22 @@ class MetaBox extends Base {
 
 		if ( isset( $field['fields'] ) ) {
 			$this->parse_fields( $field['fields'] );
+		}
+	}
+
+	private function invert_field( &$field ) {
+		$parser = new Field( $field );
+		$parser->invert();
+		$field = $parser->get_settings();
+
+		if ( $this->settings_parser->prefix && isset( $field['id'] ) ) {
+			$field['id'] = $this->settings_parser->prefix . $field['id'];
+		}
+
+		$this->invert_field_validation( $field );
+
+		if ( isset( $field['fields'] ) ) {
+			$this->invert_fields( $field['fields'] );
 		}
 	}
 
@@ -108,5 +128,38 @@ class MetaBox extends Base {
 		}
 
 		unset( $field['validation'] );
+	}
+
+	/**
+	 * Inverse of parse_field_validation.
+	 * 
+	 * Convert validation rules from meta box to field validation.
+	 * 
+	 * @param mixed $field
+	 * @return void
+	 */
+	private function invert_field_validation( &$field ) {
+		if ( isset( $field['validation'] ) ) {
+			return;
+		}
+
+		if ( ! isset( $this->validation ) || ! is_array( $this->validation ) || ! array_key_exists( 'rules', $this->validation ) ) {
+			return;
+		}
+
+		$key = str_replace( $this->settings_parser->prefix, '', $field['id'] );
+
+		$rules    = $this->validation['rules'][ $key ];
+		$messages = $this->validation['messages'][ $key ];
+
+		$field['validation'] = [];
+
+		foreach ( $rules as $rule ) {
+			$field['validation'][] = [ 
+				'name' => $rule,
+				'value' => $rules[ $rule ],
+				'message' => $messages[ $rule ] ?? '',
+			];
+		}
 	}
 }
