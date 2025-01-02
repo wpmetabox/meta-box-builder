@@ -127,6 +127,22 @@ class Base {
 		return $this;
 	}
 
+	protected function invert_array_attributes( $key ) {
+		$value = $this->$key;
+		if ( ! is_array( $value ) ) {
+			return $this;
+		}
+
+		$tmp_array = [];
+		foreach ( $value as $k => $v ) {
+			$tmp_key = uniqid();
+			$tmp_array[$tmp_key] = [ 'id' => $tmp_key, 'key' => $k, 'value' => $v ];
+		}
+
+		$this->$key = $tmp_array;
+		return $this;
+	}
+
 	protected function parse_custom_settings() {
 		if ( ! isset( $this->custom_settings ) ) {
 			return $this;
@@ -138,6 +154,22 @@ class Base {
 		}
 
 		unset( $this->custom_settings );
+		return $this;
+	}
+
+	protected function invert_custom_settings() {
+		if ( ! isset( $this->custom_settings ) ) {
+			return $this;
+		}
+
+		$this->invert_array_attributes( 'custom_settings' );
+
+		foreach ( $this->custom_settings as $key => $value ) {
+			$this->$key = $value;
+		}
+
+		unset( $this->custom_settings );
+
 		return $this;
 	}
 
@@ -173,6 +205,16 @@ class Base {
 
 		unset( $this->conditional_logic );
 
+		return $this;
+	}
+
+	protected function invert_conditional_logic() {
+		if ( empty( $this->conditional_logic ) ) {
+			return $this;
+		}
+
+		$this->conditional_logic = (new \MB_Conditional_Logic())->parse_conditions( $this->conditional_logic );
+		
 		return $this;
 	}
 

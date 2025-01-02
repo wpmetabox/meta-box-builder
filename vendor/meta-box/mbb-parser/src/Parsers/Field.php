@@ -86,6 +86,16 @@ class Field extends Base {
 		return $this;
 	}
 
+	private function invert_datalist() {
+		if ( empty( $this->datalist ) ) {
+			return $this;
+		}
+
+		$this->settings['datalist_choices'] = implode( "\n", $this->datalist['options'] );
+
+		return $this;
+	}
+
 	private function parse_object_field() {
 		if ( ! in_array( $this->type, [ 'taxonomy', 'taxonomy_advanced', 'post', 'user' ], true ) ) {
 			return $this;
