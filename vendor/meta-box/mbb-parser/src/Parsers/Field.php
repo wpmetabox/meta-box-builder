@@ -68,10 +68,27 @@ class Field extends Base {
 	public function invert() {
 		$this->_id = $this->_id ?? $this->id;
 
-		$this->add_default( 'save_field', true )
+		$this
+			->add_default( '_id', $this->id )
+			->add_default( 'save_field', true )
 			->invert_boolean_values()
 			->invert_numeric_values()
-			->invert_choice_options();
+			->invert_datalist()
+			->invert_object_field()
+			->invert_choice_options()
+			->invert_choice_std()
+			->invert_array_attributes( 'options' )
+			->invert_array_attributes( 'js_options' )
+			->invert_array_attributes( 'query_args' )
+			->invert_array_attributes( 'attributes' )
+			->invert_text_limiter()
+			->invert_custom_settings()
+			->invert_conditional_logic();
+
+		$func = "invert_field_{$this->type}";
+		if ( method_exists( $this, $func ) ) {
+			$this->$func();
+		}
 	}
 
 	private function parse_datalist() {

@@ -47,18 +47,27 @@ class Export {
 
 		$data = [];
 		foreach ( $query->posts as $post ) {
-			$post_data = [
-				'post_type'    => $post->post_type,
-				'post_name'    => $post->post_name,
-				'post_title'   => $post->post_title,
-				'post_date'    => $post->post_date,
-				'post_status'  => $post->post_status,
-				'post_content' => $post->post_content,
-			];
+			$post_data = [];
+			if ( $post->post_type === 'meta-box' ) { 
+				$meta_box = get_post_meta( $post->ID, 'meta_box', true );
+				$settings = get_post_meta( $post->ID, 'settings', true );
 
-			$meta_keys = self::get_meta_keys( $post->post_type );
-			foreach ( $meta_keys as $meta_key ) {
-				$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
+				$post_data = array_merge( $post_data, $meta_box );
+				$post_data['version'] = $settings['version'] ?? 'v0';
+			} else {
+				$post_data = [
+					'post_type'    => $post->post_type,
+					'post_name'    => $post->post_name,
+					'post_title'   => $post->post_title,
+					'post_date'    => $post->post_date,
+					'post_status'  => $post->post_status,
+					'post_content' => $post->post_content,
+				];
+				$meta_keys = self::get_meta_keys( $post->post_type );
+		
+				foreach ( $meta_keys as $meta_key ) {
+					$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
+				}
 			}
 
 			$data[] = $post_data;

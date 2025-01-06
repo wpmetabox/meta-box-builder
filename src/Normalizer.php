@@ -125,20 +125,11 @@ class Normalizer {
 	 */
 	private static function for_builder( array $fields ) {
 		foreach ( $fields as $index => $field ) {
-			if ( ! isset( $field['_id'] ) ) {
-				$field['_id'] = $field['id'];
-			}
+			$fp = new \MBBParser\Parsers\Field( $field );
+			$fp->invert();
 
-			// Normalize options
-			if (isset($field['options']) && is_array($field['options'])) {
-				$options = [];
-				foreach ($field['options'] as $key => $value) {
-					$options[] = "{$key}:{$value}";
-				}
-				$options = implode("\r\n", $options);
-				$field['options'] = $options;
-			}
-
+			$field = $fp->get_settings();
+			
 			if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
 				$field['fields'] = self::for_builder( $field['fields'] );
 			}

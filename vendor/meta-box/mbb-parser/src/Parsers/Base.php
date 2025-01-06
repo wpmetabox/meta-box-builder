@@ -135,8 +135,8 @@ class Base {
 
 		$tmp_array = [];
 		foreach ( $value as $k => $v ) {
-			$tmp_key = uniqid();
-			$tmp_array[$tmp_key] = [ 'id' => $tmp_key, 'key' => $k, 'value' => $v ];
+			$tmp_key               = uniqid();
+			$tmp_array[ $tmp_key ] = [ 'id' => $tmp_key, 'key' => $k, 'value' => $v ];
 		}
 
 		$this->$key = $tmp_array;
@@ -209,12 +209,31 @@ class Base {
 	}
 
 	protected function invert_conditional_logic() {
-		if ( empty( $this->conditional_logic ) ) {
+		if ( empty( $this->visible ) && empty( $this->hidden ) ) {
 			return $this;
 		}
 
-		$this->conditional_logic = (new \MB_Conditional_Logic())->parse_conditions( $this->conditional_logic );
-		
+		$conditional_logic = ( new \MB_Conditional_Logic() )->parse_conditions( $this->settings );
+
+		$output = [];
+		foreach ( $conditional_logic as $action => $condition ) {
+			$output['type']     = $action;
+			$output['relation'] = $condition['relation'];
+			$output['when']     = [];
+
+			foreach ( $condition['when'] as $criteria ) {
+				$id = uniqid();
+
+				$output['when'][ $id ] = [ 
+					'id' => $id,
+					'name' => $criteria[0],
+					'operator' => $criteria[1],
+					'value' => $criteria[2],
+				];
+			}
+		}
+
+		$this->conditional_logic = $output;
 		return $this;
 	}
 
