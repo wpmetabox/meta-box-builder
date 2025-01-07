@@ -23,11 +23,6 @@ class Base {
 		return $this;
 	}
 
-	public function invert_boolean_values() {
-		array_walk_recursive( $this->settings, [ $this, 'convert_boolean_to_string' ] );
-		return $this;
-	}
-
 	protected function convert_string_to_boolean( &$value ) {
 		if ( $value === 'true' ) {
 			$value = true;
@@ -44,11 +39,6 @@ class Base {
 
 	public function parse_numeric_values() {
 		array_walk_recursive( $this->settings, [ $this, 'convert_string_to_number' ] );
-		return $this;
-	}
-
-	public function invert_numeric_values() {
-		array_walk_recursive( $this->settings, [ $this, 'convert_number_to_string' ] );
 		return $this;
 	}
 
@@ -127,22 +117,6 @@ class Base {
 		return $this;
 	}
 
-	protected function invert_array_attributes( $key ) {
-		$value = $this->$key;
-		if ( ! is_array( $value ) ) {
-			return $this;
-		}
-
-		$tmp_array = [];
-		foreach ( $value as $k => $v ) {
-			$tmp_key               = uniqid();
-			$tmp_array[ $tmp_key ] = [ 'id' => $tmp_key, 'key' => $k, 'value' => $v ];
-		}
-
-		$this->$key = $tmp_array;
-		return $this;
-	}
-
 	protected function parse_custom_settings() {
 		if ( ! isset( $this->custom_settings ) ) {
 			return $this;
@@ -154,22 +128,6 @@ class Base {
 		}
 
 		unset( $this->custom_settings );
-		return $this;
-	}
-
-	protected function invert_custom_settings() {
-		if ( ! isset( $this->custom_settings ) ) {
-			return $this;
-		}
-
-		$this->invert_array_attributes( 'custom_settings' );
-
-		foreach ( $this->custom_settings as $key => $value ) {
-			$this->$key = $value;
-		}
-
-		unset( $this->custom_settings );
-
 		return $this;
 	}
 
@@ -208,35 +166,6 @@ class Base {
 		return $this;
 	}
 
-	protected function invert_conditional_logic() {
-		if ( empty( $this->visible ) && empty( $this->hidden ) ) {
-			return $this;
-		}
-
-		$conditional_logic = ( new \MB_Conditional_Logic() )->parse_conditions( $this->settings );
-
-		$output = [];
-		foreach ( $conditional_logic as $action => $condition ) {
-			$output['type']     = $action;
-			$output['relation'] = $condition['relation'];
-			$output['when']     = [];
-
-			foreach ( $condition['when'] as $criteria ) {
-				$id = uniqid();
-
-				$output['when'][ $id ] = [ 
-					'id' => $id,
-					'name' => $criteria[0],
-					'operator' => $criteria[1],
-					'value' => $criteria[2],
-				];
-			}
-		}
-
-		$this->conditional_logic = $output;
-		return $this;
-	}
-
 	protected function parse_json_dot_notations( $array ) {
 		// Parse JSON notation.
 		foreach ( $array as &$value ) {
@@ -253,20 +182,6 @@ class Base {
 	protected function remove_default( $key, $value ) {
 		if ( $this->$key === $value ) {
 			unset( $this->$key );
-		}
-		return $this;
-	}
-
-	/**
-	 * Inverse of remove_default.
-	 * 
-	 * @param mixed $key
-	 * @param mixed $value
-	 * @return static
-	 */
-	protected function add_default( $key, $value ) {
-		if ( ! isset( $this->$key ) ) {
-			$this->$key = $value;
 		}
 		return $this;
 	}
