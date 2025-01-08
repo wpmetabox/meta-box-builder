@@ -13,26 +13,6 @@ class Import {
 
 		// Import from the Import selector.
 		add_action( 'admin_init', [ $this, 'import' ] );
-
-		// Import from the bulk action, we import from mb-json folder
-		add_action( 'admin_init', [ $this, 'bulk_action_import' ] );
-	}
-
-	public function bulk_action_import() {
-		$action = $_GET['action'] ?? $_GET['action2'] ?? ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-		if ( '' === $action ) {
-			return;
-		}
-
-		$ids = $_GET['post'] ?? []; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-		if ( empty( $ids ) ) {
-			return;
-		}
-
-
-
 	}
 
 	public function output_js_templates() {
@@ -46,17 +26,17 @@ class Import {
 			</div>
 		<?php endif; ?>
 
-		<script type="text/template" id="mbb-import-form">
-					<div class="mbb-import-form">
-						<p><?php esc_html_e( 'Choose an exported ".json" file from your computer:', 'meta-box-builder' ); ?></p>
-						<form enctype="multipart/form-data" method="post" action="">
-							<?php wp_nonce_field( 'import' ); ?>
-							<input type="file" name="mbb_file">
-							<input type="hidden" name="mbb_post_type" value="<?php echo esc_attr( get_current_screen()->post_type ) ?>">
-							<?php submit_button( esc_attr__( 'Import', 'meta-box-builder' ), 'secondary', 'submit', false, [ 'disabled' => true ] ); ?>
-						</form>
-					</div>
-				</script>
+		<template id="mbb-import-form">
+			<div class="mbb-import-form">
+				<p><?php esc_html_e( 'Choose an exported ".json" file from your computer:', 'meta-box-builder' ); ?></p>
+				<form enctype="multipart/form-data" method="post" action="">
+					<?php wp_nonce_field( 'import' ); ?>
+					<input type="file" name="mbb_file">
+					<input type="hidden" name="mbb_post_type" value="<?php echo esc_attr( get_current_screen()->post_type ) ?>">
+					<?php submit_button( esc_attr__( 'Import', 'meta-box-builder' ), 'secondary', 'submit', false, [ 'disabled' => true ] ); ?>
+				</form>
+			</div>
+		</template>
 		<?php
 	}
 

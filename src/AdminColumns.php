@@ -57,8 +57,8 @@ class AdminColumns {
 		];
 
 		if ( isset( $messages[ $custom_admin_notice ] ) ) { ?>
-			<div class="notice notice-<?= $messages[ $custom_admin_notice ]['status'] ?> is-dismissible">
-				<p><?= $messages[ $custom_admin_notice ]['message'] ?></p>
+			<div class="notice notice-<?php esc_attr_e( $messages[ $custom_admin_notice ]['status'] ) ?> is-dismissible">
+				<p><?php esc_html_e( $messages[ $custom_admin_notice ]['message'] ) ?></p>
 			</div>
 			<?php
 		}

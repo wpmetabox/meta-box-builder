@@ -48,23 +48,16 @@ class LocalJson {
 
 		$data = json_decode( file_get_contents( $file_path ), true );
 
+		$data = Normalizer::normalize( $data );
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
 
-		// Post fields is data except meta fields
-		$post_fields = array_diff( array_keys( $data ), $meta_fields );
-
-		$post_data = [];
-		foreach ( $post_fields as $field ) {
-			$post_data[ $field ] = $data[ $field ];
-		}
-
 		wp_update_post( [ 
-			'ID' => $post_id,
-			'post_name' => $post_data['post_name'],
-			'post_title' => $post_data['post_title'],
-			'post_date' => $post_data['post_date'],
-			'post_status' => $post_data['post_status'],
-			'post_content' => $post_data['post_content'],
+			'ID'           => $post_id,
+			'post_name'    => $data['post_name'],
+			'post_title'   => $data['post_title'],
+			'post_date'    => $data['post_date'],
+			'post_status'  => $data['post_status'],
+			'post_content' => $data['post_content'],
 		] );
 
 		foreach ( $meta_fields as $meta_key ) {
@@ -79,25 +72,13 @@ class LocalJson {
 			$post = get_post( $post );
 		}
 
-		$meta_keys = Export::get_meta_keys( $post->post_type );
-
-		$post_data = [ 
-			'post_type' => $post->post_type,
-			'post_name' => $post->post_name,
-			'post_title' => $post->post_title,
-			'post_date' => $post->post_date,
-			'post_status' => $post->post_status,
-			'post_content' => $post->post_content,
-		];
-
-		foreach ( $meta_keys as $meta_key ) {
-			$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
-		}
+		$meta_box = get_post_meta( $post->ID, 'meta_box', true );
+		$settings = get_post_meta( $post->ID, 'settings', true );
 
 		// Add version for the meta box
-		$post_data['settings']['version'] = $post_data['settings']['version'] ?? 'v' . time();
+		$meta_box['version'] = $settings['version'] ?? 'v' . time();
 
-		$output = wp_json_encode( $post_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
+		$output = wp_json_encode( $meta_box, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 		file_put_contents( $file_path, $output );
 
         return true;

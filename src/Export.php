@@ -14,7 +14,7 @@ class Export {
 			return $actions;
 		}
 
-		$url               = wp_nonce_url( add_query_arg( [
+		$url = wp_nonce_url( add_query_arg( [ 
 			'action'    => 'mbb-export',
 			'post_type' => $post->post_type,
 			'post[]'    => $post->ID,
@@ -37,35 +37,35 @@ class Export {
 		$post_ids  = wp_parse_id_list( wp_unslash( $_REQUEST['post'] ) );
 		$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
 
-		$query = new WP_Query( [
-			'post_type'              => $post_type,
-			'post__in'               => $post_ids,
-			'posts_per_page'         => count( $post_ids ),
-			'no_found_rows'          => true,
+		$query = new WP_Query( [ 
+			'post_type' => $post_type,
+			'post__in' => $post_ids,
+			'posts_per_page' => count( $post_ids ),
+			'no_found_rows' => true,
 			'update_post_term_cache' => false,
 		] );
 
 		$data = [];
 		foreach ( $query->posts as $post ) {
 			$post_data = [];
-			if ( $post->post_type === 'meta-box' ) { 
+			if ( $post->post_type === 'meta-box' ) {
 				$meta_box = get_post_meta( $post->ID, 'meta_box', true );
 				$settings = get_post_meta( $post->ID, 'settings', true );
 
-				$post_data = array_merge( $post_data, $meta_box );
+				$post_data            = array_merge( $post_data, $meta_box );
 				$post_data['version'] = $settings['version'] ?? 'v0';
 			} else {
 				// @todo: Check export for other post types
-				$post_data = [
-					'post_type'    => $post->post_type,
-					'post_name'    => $post->post_name,
-					'post_title'   => $post->post_title,
-					'post_date'    => $post->post_date,
-					'post_status'  => $post->post_status,
+				$post_data = [ 
+					'post_type' => $post->post_type,
+					'post_name' => $post->post_name,
+					'post_title' => $post->post_title,
+					'post_date' => $post->post_date,
+					'post_status' => $post->post_status,
 					'post_content' => $post->post_content,
 				];
 				$meta_keys = self::get_meta_keys( $post->post_type );
-		
+
 				foreach ( $meta_keys as $meta_key ) {
 					$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
 				}
@@ -95,12 +95,12 @@ class Export {
 	}
 
 	public static function get_meta_keys( $post_type ) {
-		$meta_keys = [
-			'meta-box' 			=> [ 'settings', 'fields', 'data', 'meta_box' ],
-			'mb-relationship' 	=> [ 'settings', 'relationship' ],
-			'mb-settings-page' 	=> [ 'settings', 'settings_page' ],
+		$meta_keys = [ 
+			'meta-box' => [ 'settings', 'fields', 'data', 'meta_box' ],
+			'mb-relationship' => [ 'settings', 'relationship' ],
+			'mb-settings-page' => [ 'settings', 'settings_page' ],
 		];
 
-		return $meta_keys[$post_type] ?? [];
+		return $meta_keys[ $post_type ] ?? [];
 	}
 }
