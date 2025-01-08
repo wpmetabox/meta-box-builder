@@ -15,6 +15,7 @@ class Field extends Base {
 		'image_upload' => [ 'max_status' ],
 		'video' => [ 'max_status' ],
 	];
+	
 	private $choice_types = [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ];
 
 	public function parse() {

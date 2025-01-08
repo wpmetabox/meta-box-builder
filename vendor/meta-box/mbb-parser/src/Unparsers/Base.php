@@ -15,11 +15,13 @@ class Base {
 
 	public function set_settings( $settings ) {
 		$this->settings = (array) $settings;
+
 		return $this;
 	}
 
 	public function unparse_boolean_values() {
 		array_walk_recursive( $this->settings, [ $this, 'convert_boolean_to_string' ] );
+		
 		return $this;
 	}
 

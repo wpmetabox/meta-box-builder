@@ -20,6 +20,7 @@ class Base {
 
 	public function parse_boolean_values() {
 		array_walk_recursive( $this->settings, [ $this, 'convert_string_to_boolean' ] );
+		
 		return $this;
 	}
 
@@ -28,12 +29,6 @@ class Base {
 			$value = true;
 		} elseif ( $value === 'false' ) {
 			$value = false;
-		}
-	}
-
-	protected function convert_boolean_to_string( &$value ) {
-		if ( is_bool( $value ) ) {
-			$value = $value ? 'true' : 'false';
 		}
 	}
 
@@ -67,7 +62,7 @@ class Base {
 				continue;
 			}
 
-			if ( $value === '' || $value === [] ) {
+			if ( empty( $value ) ) {
 				unset( $this->settings[ $key ] );
 			}
 		}

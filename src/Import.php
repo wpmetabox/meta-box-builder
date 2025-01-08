@@ -19,9 +19,9 @@ class Import {
 	}
 
 	public function bulk_action_import() {
-	 	$action = $_GET['action'] ?? $_GET['action2'] ?? ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$action = $_GET['action'] ?? $_GET['action2'] ?? ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-		if (''=== $action ) {
+		if ( '' === $action ) {
 			return;
 		}
 
@@ -31,7 +31,7 @@ class Import {
 			return;
 		}
 
-	
+
 
 	}
 
@@ -41,20 +41,22 @@ class Import {
 		}
 		?>
 		<?php if ( isset( $_GET['imported'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Field groups have been imported successfully!', 'meta-box-builder' ); ?></p></div>
+			<div class="notice notice-success is-dismissible">
+				<p><?php esc_html_e( 'Field groups have been imported successfully!', 'meta-box-builder' ); ?></p>
+			</div>
 		<?php endif; ?>
 
 		<script type="text/template" id="mbb-import-form">
-			<div class="mbb-import-form">
-				<p><?php esc_html_e( 'Choose an exported ".json" file from your computer:', 'meta-box-builder' ); ?></p>
-				<form enctype="multipart/form-data" method="post" action="">
-					<?php wp_nonce_field( 'import' ); ?>
-					<input type="file" name="mbb_file">
-					<input type="hidden" name="mbb_post_type" value="<?php echo esc_attr( get_current_screen()->post_type ) ?>">
-					<?php submit_button( esc_attr__( 'Import', 'meta-box-builder' ), 'secondary', 'submit', false, [ 'disabled' => true ] ); ?>
-				</form>
-			</div>
-		</script>
+					<div class="mbb-import-form">
+						<p><?php esc_html_e( 'Choose an exported ".json" file from your computer:', 'meta-box-builder' ); ?></p>
+						<form enctype="multipart/form-data" method="post" action="">
+							<?php wp_nonce_field( 'import' ); ?>
+							<input type="file" name="mbb_file">
+							<input type="hidden" name="mbb_post_type" value="<?php echo esc_attr( get_current_screen()->post_type ) ?>">
+							<?php submit_button( esc_attr__( 'Import', 'meta-box-builder' ), 'secondary', 'submit', false, [ 'disabled' => true ] ); ?>
+						</form>
+					</div>
+				</script>
 		<?php
 	}
 
@@ -94,24 +96,12 @@ class Import {
 		}
 
 		// If import only one post.
-		if (array_keys($posts) !== array_keys(array_keys($posts))) {
+		if ( array_keys( $posts ) !== array_keys( array_keys( $posts ) ) ) {
 			$posts = [ $posts ];
 		}
 
 		foreach ( $posts as $post ) {
 			$post = Normalizer::normalize( $post );
-
-			if ( isset( $post['settings']['id'] ) && ! isset( $post['post_name'] ) ) {
-				$post['post_name'] = $post['settings']['id'];
-			}
-
-			if ( isset( $post['relationship']['id'] ) && ! isset( $post['post_name'] ) ) {
-				$post['post_name'] = $post['relationship']['id'];
-			}
-
-			if ( isset( $post['meta_box']['id'] ) && ! isset( $post['post_name'] ) ) {
-				$post['post_name'] = $post['meta_box']['id'];
-			}
 
 			$post_id = wp_insert_post( $post );
 			if ( ! $post_id ) {

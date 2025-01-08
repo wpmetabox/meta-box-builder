@@ -55,6 +55,7 @@ class Export {
 				$post_data = array_merge( $post_data, $meta_box );
 				$post_data['version'] = $settings['version'] ?? 'v0';
 			} else {
+				// @todo: Check export for other post types
 				$post_data = [
 					'post_type'    => $post->post_type,
 					'post_name'    => $post->post_name,
@@ -89,7 +90,7 @@ class Export {
 		header( 'Pragma: public' );
 		header( 'Content-Length: ' . strlen( $output ) );
 
-		echo wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
+		echo $output;
 		die;
 	}
 

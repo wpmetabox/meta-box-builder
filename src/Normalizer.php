@@ -24,8 +24,8 @@ class Normalizer {
 		$data['post_title'] = $data['title'];
 
 		// post_type
-		$data['post_type']    = 'meta-box';
-		$data['post_name']    = self::lookup( [ 'post_name', 'id' ], $data );
+		$data['post_type']    = self::lookup( [ 'post_type' ], $data, 'meta-box' );
+		$data['post_name']    = self::lookup( [ 'post_name', 'settings.id', 'relationship.id', 'meta_box.id', 'id' ], $data );
 		$data['post_date']    = self::lookup( [ 'post_date' ], $data, current_time( 'mysql' ) );
 		$data['post_status']  = self::lookup( [ 'post_status' ], $data, 'publish' );
 		$data['post_content'] = self::lookup( [ 'post_content' ], $data, '' );
@@ -125,10 +125,10 @@ class Normalizer {
 	 */
 	private static function for_builder( array $fields ) {
 		foreach ( $fields as $index => $field ) {
-			$fp = new \MBBParser\Parsers\Field( $field );
-			$fp->invert();
+			$unparser = new \MBBParser\Unparsers\Field( $field );
+			$unparser->unparse();
 
-			$field = $fp->get_settings();
+			$field = $unparser->get_settings();
 			
 			if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
 				$field['fields'] = self::for_builder( $field['fields'] );
