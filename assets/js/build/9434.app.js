@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[9429,9434],{9429:(e,s,a)=>{a.r(s),a.d(s,{default:()=>l});var t=a(1609);const l=({field:e})=>(0,t.createElement)("img",{src:`${MbbApp.assetsBaseUrl}/img/${e.type}.png`})},9434:(e,s,a)=>{a.r(s),a.d(s,{default:()=>t.default});var t=a(9429)}}]);
