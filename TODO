@@ -1,40 +1,14 @@
-[x] Check edit slug/id của field group
-[x] Fix toggle field settings lag.
-[x] Check if we need to store field._expand and use toggle from useFields.
-	Đã bỏ, do không còn cần expand field nữa
 [ ] Chuyển settings của field group sang sidebar
-	[x] Check lại xem khi nào chỉ cần dùng getSettings() (VD: truyền biến qua URL), khi nào chỉ cần lấy trực tiếp qua MbbApp. Với 2 case này thì nên dùng chung 1 code (qua getSettings()). Lưu ý chỉ dùng cho stateless.
-	[x] Check lại xem khi nào dùng settings context và các giá trị dạng stateful (object type, ...)
 	[ ] Kiểm tra khi settings có thì open panel: Tạm thời để sau...
-	[x] Fix nếu sidebar ko mở thì có lưu được dữ liệu hay không
 [ ] Chuyển settings của fields sang sidebar
-	[x] Làm 2 nút trên sidebar cho: add field, edit field group settings
-	[x] Toogle 2 panel đó mượt mà
-	[x] Cho phép thêm được field
-	[x] Style add field panel
-	[x] Làm 1 portal cho edit field settings
-	[x] Khi click vào 1 field thì show panel edit field settings
-	[x] Check xem tại sao admin columns, clone vẫn hiện các subfields khi các checkbox ban đầu ko enable
 	[ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
-	[x] Highlight field đang được edit
-[x] Click add new field thì ra modal chọn field, các field có icon kèm theo
-[x] Làm dropdown menu, insert field before/after, duplicate, delete, ...
-[x] Làm context menu, khi click chuột phải cũng ra menu để thêm field, insert field before, after, duplicate, delete, ...
-[x] Kéo thả nút add field vào danh sách field
 
 Preview:
 
-[x] Clone empty start
-[x] Fix css khi input có size thì nút clone bị đẩy cùng dòng
-[x] Tooltip
 [ ] Column
 
-[x] Background
 [ ] Switch to field khi có trường required chưa điền
-[x] Auto expand cho textarea
-[x] Click vào vùng trống thì close sidebar
 [ ] Object field, chuyển chọn field type thành icon
-[x] Toolbar: khi di chuyển field thì toolbar di chuyển theo
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
@@ -43,12 +17,7 @@ Preview:
 
 Feedback:
 
-[x] Add subfield cho group khó tìm
-[x] Kéo 1 field vào thành subfield của group
 [ ] Thay đổi field type
-[x] Duplicate cả group
-[x] Conditional logic hiện thêm ID
-[x] Nút add field ở vị trí khó nhìn
 [ ] icon mở sidebar setting của field group cũng khó nhìn
 
 ## Settings của field group:
