@@ -81,6 +81,12 @@ class Export {
 			$file_name = $post->post_name ?: sanitize_key( $post->post_title );
 		}
 
+		// Sort keys alphabetically so we have a consistent order
+		ksort( $data );
+
+		// Add $schema to the exported data
+		$data = array_merge(['$schema' => 'https://schemas.metabox.io/field-group.json'], $data);
+
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
 		header( 'Content-Type: application/octet-stream' );
