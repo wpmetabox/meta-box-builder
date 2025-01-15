@@ -6,6 +6,8 @@ use MetaBox\Support\Arr;
 /**
  * Normalize import files for the builder
  * 
+ * @todo: Use unparser to normalize the data instead of this file
+ * 
  * @package Meta Box Builder
  */
 class Normalizer {
@@ -75,10 +77,6 @@ class Normalizer {
 		}
 
 		$data['meta_box'] = $meta_box;
-
-		// @todo: Normalize GEO Settings
-		// @todo: Normalize conditional logics
-		// @todo: Normalize options
 
 		return $data;
 	}

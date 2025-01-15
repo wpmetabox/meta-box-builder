@@ -32,9 +32,7 @@ class Register {
 				$mb = json_decode( file_get_contents( $file ), true );
 				$mb = Normalizer::normalize( $mb );
 
-				if ( isset( $mb['meta_box'] ) ) {
-					$json[] = $mb['meta_box'];
-				}
+				$json[$mb['id']] = $mb;
 			}
 		}
 
@@ -43,37 +41,36 @@ class Register {
 
 	public function register_meta_box( $meta_boxes ) {
 		$json_meta_boxes = $this->get_meta_boxes_from_json();
+		
+		$query = new \WP_Query( [ 
+			'post_type'              => 'meta-box',
+			'post_status'            => 'publish',
+			'posts_per_page'         => -1,
+			'no_found_rows'          => true,
+			'fields'                 => 'ids',
+			'update_post_term_cache' => false,
+		] );
 
-		if ( ! empty( $json_meta_boxes ) ) {
-			foreach ( $json_meta_boxes as $meta_box ) {
-				$meta_boxes[] = $meta_box;
+		foreach ( $query->posts as $post_id ) {
+			$meta_box = get_post_meta( $post_id, 'meta_box', true );
+			if ( empty( $meta_box ) ) {
+				continue;
 			}
-		} else {
-			$query = new \WP_Query( [ 
-				'post_type' => 'meta-box',
-				'post_status' => 'publish',
-				'posts_per_page' => -1,
-				'no_found_rows' => true,
-				'fields' => 'ids',
-				'update_post_term_cache' => false,
-			] );
 
-			foreach ( $query->posts as $post_id ) {
-				$meta_box = get_post_meta( $post_id, 'meta_box', true );
-				if ( empty( $meta_box ) ) {
-					continue;
-				}
+			$this->transform_for_block( $meta_box );
+			$this->create_custom_table( $meta_box, $post_id );
 
-				$this->transform_for_block( $meta_box );
-				$this->create_custom_table( $meta_box, $post_id );
-				$meta_boxes[] = $meta_box;
-
-				// Get list of meta box ID and meta box post ID to show the edit settings icon on the edit screen.
-				$settings = get_post_meta( $post_id, 'settings', true );
-				if ( 'post' === Arr::get( $settings, 'object_type', 'post' ) ) {
-					$this->meta_box_post_ids[ $meta_box['id'] ] = $post_id;
-				}
+			// Get list of meta box ID and meta box post ID to show the edit settings icon on the edit screen.
+			$settings = get_post_meta( $post_id, 'settings', true );
+			if ( 'post' === Arr::get( $settings, 'object_type', 'post' ) ) {
+				$this->meta_box_post_ids[ $meta_box['id'] ] = $post_id;
 			}
+
+			// Get meta box from json file, which has newer version will be used.
+			$json_meta_box = $json_meta_boxes[$meta_box['id']] ?? [];
+			$is_newer = version_compare( $json_meta_box['version'], $settings['version'] ?? 'v0', '>' );
+
+			$meta_boxes[] = $is_newer ? $json_meta_box['meta_box'] : $meta_box;
 		}
 
 		if ( ! empty( $this->meta_box_post_ids ) ) {
