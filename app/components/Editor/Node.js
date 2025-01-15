@@ -59,6 +59,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				mb-field--${ field.type }
 				${ isActive ? 'mb-field--active' : '' }
 			` }
+			id={ `mb-field-${ field._id }` }
 			onClick={ toggleSettings }
 			onContextMenu={ openContextMenu }
 			title={ __( 'Click to toggle field settings. Drag and drop to reoder fields.', 'meta-box-builder' ) }
