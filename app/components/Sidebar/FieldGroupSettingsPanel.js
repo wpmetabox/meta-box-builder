@@ -34,14 +34,7 @@ const FieldGroupSettingsPanel = ( { show = false } ) => {
 	return (
 		<Panel header={ __( 'Edit field group settings', 'meta-box-builder' ) } className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` }>
 			<div className="mb-panel__inner" ref={ ref }>
-				<PersistentPanelBody
-					title={ __( 'Summary', 'meta-box-builder' ) }
-					className="mb-summary"
-					open={ activeTab === 'summary' }
-					onClick={ updateActiveTab( 'summary' ) }
-				>
-					<Summary />
-				</PersistentPanelBody>
+				<Summary />
 				<PersistentPanelBody
 					title={ __( 'Location', 'meta-box-builder' ) }
 					open={ activeTab === 'location' }
