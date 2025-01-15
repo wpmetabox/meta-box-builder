@@ -28,7 +28,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		// If the field is already active, close it.
 		if ( isActive ) {
 			setActiveField( {} );
-			setSidebarPanel( '' );
+			setSidebarPanel( 'field_group_settings' );
 			return;
 		}
 

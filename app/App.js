@@ -16,7 +16,7 @@ const Layout = ( { children } ) => {
 		if ( !e.target.classList.contains( 'mb-body__inner' ) ) {
 			return;
 		}
-		setSidebarPanel( '' );
+		setSidebarPanel( 'field_group_settings' );
 		setActiveField( {} );
 	};
 

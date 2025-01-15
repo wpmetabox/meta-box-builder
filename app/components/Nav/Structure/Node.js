@@ -18,7 +18,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		}
 
 		setActiveField( activeField._id === field._id ? {} : field );
-		setSidebarPanel( activeField._id === field._id ? '' : 'field_settings' );
+		setSidebarPanel( activeField._id === field._id ? 'field_group_settings' : 'field_settings' );
 	};
 
 	return field.type && (

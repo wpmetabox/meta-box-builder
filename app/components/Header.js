@@ -1,15 +1,12 @@
 import { Button, Flex } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import { drawerRight, listView, plus } from "@wordpress/icons";
+import { listView, plus } from "@wordpress/icons";
 import useNav from '../hooks/useNav';
-import useSidebarPanel from '../hooks/useSidebarPanel';
 // import { ReactComponent as Logo } from './logo.svg';
 
 const Header = () => {
-	const { sidebarPanel, setSidebarPanel } = useSidebarPanel();
 	const { navPanel, setNavPanel } = useNav();
 
-	const updateSidebarPanel = key => () => setSidebarPanel( key === sidebarPanel ? '' : key );
 	const updateNavPanel = key => () => setNavPanel( key === navPanel ? '' : key );
 
 	return (
@@ -52,14 +49,6 @@ const Header = () => {
 					data-status="draft"
 					className="components-button is-compact is-tertiary"
 					value={ MbbApp.status == 'publish' ? __( 'Switch to draft', 'meta-box-builder' ) : __( 'Save draft', 'meta-box-builder' ) }
-				/>
-				<Button
-					icon={ drawerRight }
-					size="compact"
-					label={ __( 'Edit field group settings', 'meta-box-builder' ) }
-					showTooltip={ true }
-					onClick={ updateSidebarPanel( 'field_group_settings' ) }
-					isPressed={ sidebarPanel === 'field_group_settings' }
 				/>
 				<input
 					type="submit"
