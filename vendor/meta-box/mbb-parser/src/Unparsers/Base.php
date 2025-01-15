@@ -21,7 +21,7 @@ class Base {
 
 	public function unparse_boolean_values() {
 		array_walk_recursive( $this->settings, [ $this, 'convert_boolean_to_string' ] );
-		
+
 		return $this;
 	}
 
@@ -104,7 +104,7 @@ class Base {
 		}
 
 		$this->conditional_logic = $output;
-		
+
 		return $this;
 	}
 
@@ -119,7 +119,7 @@ class Base {
 		if ( ! isset( $this->$key ) ) {
 			$this->$key = $value;
 		}
-		
+
 		return $this;
 	}
 }

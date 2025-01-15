@@ -62,7 +62,7 @@ class Base {
 				continue;
 			}
 
-			if ( empty( $value ) ) {
+			if ( $value === '' || $value === [] ) {
 				unset( $this->settings[ $key ] );
 			}
 		}

@@ -23,14 +23,17 @@ class JsonService {
 	}
 
 	private static function get_sync_status( $file ) {
-		$local = json_decode( file_get_contents( $file ), true );
+		$local            = json_decode( file_get_contents( $file ), true );
 		$local_normalized = Normalizer::normalize( $local );
-		$mb_id = $local_normalized['id'] ?? sanitize_title( $local_normalized['title'] );
+		$mb_id            = $local_normalized['id'] ?? sanitize_title( $local_normalized['title'] );
 
 		[ $post_id, $remote ] = self::get_meta_box_by_meta_box_id( $mb_id );
 
 		$is_newer = version_compare( $local_normalized['version'], $remote['version'] ?? 'v0' );
-
+		if ( empty( $remote ) ) {
+			$is_newer = true;
+		}
+		
 		$left = empty( $remote ) ? '' : wp_json_encode( $remote, JSON_PRETTY_PRINT );
 
 		$sync_json_to_db_text = __( 'Sync JSON to DB', 'meta-box-builder' );
