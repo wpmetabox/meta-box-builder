@@ -32,7 +32,7 @@ class Normalizer {
 
 		$data['settings']                  = self::lookup( [ 'settings' ], $data, [] );
 		$data['settings']['object_type']   = self::lookup( [ 'settings.object_type' ], $data, 'post' );
-		$data['settings']['post_types']    = self::lookup( [ 'settings.post_types' ], $data, [ 'post' ] );
+		$data['settings']['post_types']    = self::lookup( [ 'post_types', 'settings.post_types' ], $data, [ 'post' ] );
 		$data['settings']['context']       = self::lookup( [ 'settings.context' ], $data, [ 'normal' ] );
 		$data['settings']['priority']      = self::lookup( [ 'settings.priority' ], $data, 'high' );
 		$data['settings']['syle']          = self::lookup( [ 'settings.style' ], $data, 'default' );

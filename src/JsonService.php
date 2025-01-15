@@ -47,12 +47,17 @@ class JsonService {
 		] );
 
 		$diff = wp_text_diff( $left, wp_json_encode( $local, JSON_PRETTY_PRINT ), [ 
-			'title_left' => "<h3><a href=\"$sync_json_to_db_url\" class=\"button button-secondary\">$sync_json_to_db_text</a></h3>",
-			'title_right' => "<h3><a href=\"$sync_db_to_json_url\" class=\"button button-secondary\">$sync_db_to_json_text</a></h3>",
+			'title_left' => "<h3>
+				<strong>Database Version</strong> <br />
+				<a href=\"$sync_json_to_db_url\" class=\"button button-secondary\">$sync_json_to_db_text</a>
+			</h3>",
+			'title_right' => "<h3>
+			<strong>JSON File Version</strong> <br />
+			<a href=\"$sync_db_to_json_url\" class=\"button button-secondary\">$sync_db_to_json_text</a></h3>",
 			'show_split_view' => ! empty( $remote ),
 		] );
 
-		return compact( 'is_newer', 'local', 'remote', 'diff', 'post_id', 'file', 'mb_id' );
+		return compact( 'is_newer', 'local', 'local_normalized', 'remote', 'diff', 'post_id', 'file', 'mb_id' );
 	}
 
 	public static function get_json(): ?array {

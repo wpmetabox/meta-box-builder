@@ -211,7 +211,7 @@ class AdminColumns {
 									break;
 
 								case 'title':
-									echo esc_html( $data['local']['title'] );
+									echo esc_html( $data['local_normalized']['title'] );
 									break;
 
 								default:
