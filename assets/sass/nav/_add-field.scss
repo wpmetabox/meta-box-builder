@@ -39,5 +39,22 @@
 		&:hover {
 			color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
 		}
+
+
+	}
+
+	// Inside add field panel
+	.mb-panel--add & {
+		&__list {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 12px;
+		}
+
+		.components-button.has-text {
+			flex-direction: row;
+			padding-block: 8px;
+			background: var(--color-lightest);
+			gap: 4px;
+		}
 	}
 }
