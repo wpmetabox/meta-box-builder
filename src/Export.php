@@ -14,10 +14,10 @@ class Export {
 			return $actions;
 		}
 
-		$url = wp_nonce_url( add_query_arg( [ 
-			'action'    => 'mbb-export',
+		$url               = wp_nonce_url( add_query_arg( [ 
+			'action' => 'mbb-export',
 			'post_type' => $post->post_type,
-			'post[]'    => $post->ID,
+			'post[]' => $post->ID,
 		] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
 		$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'meta-box-builder' ) . '</a>';
 
@@ -44,6 +44,10 @@ class Export {
 			'no_found_rows' => true,
 			'update_post_term_cache' => false,
 		] );
+
+		if ( empty( $query->posts ) || empty( $query->posts[0] ) ) {
+			return;
+		}
 
 		$data = [];
 		foreach ( $query->posts as $post ) {
@@ -85,7 +89,7 @@ class Export {
 		ksort( $data );
 
 		// Add $schema to the exported data
-		$data = array_merge(['$schema' => 'https://schemas.metabox.io/field-group.json'], $data);
+		$data = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $data );
 
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
