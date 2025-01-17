@@ -286,8 +286,8 @@ class AdminColumns {
 			return;
 		}
 
-		wp_enqueue_style( 'mbb-list', MBB_URL . 'assets/css/list.css', [], MBB_VER );
-		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], MBB_VER, true );
+		wp_enqueue_style( 'mbb-list', MBB_URL . 'assets/css/list.css', [], time() );
+		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], time(), true );
 		wp_localize_script( 'mbb-list', 'MBB', [ 
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
@@ -365,15 +365,19 @@ class AdminColumns {
 			return;
 		}
 
-		$status_text = empty( $sync_data['post_id'] ) ?
-			__( 'Not Imported', 'meta-box-builder' ) :
-			__( 'Changes detected', 'meta-box-builder' );
+		$available_statuses = [
+			'not_imported' => __( 'Not Imported', 'meta-box-builder' ),
+			'changes_detected' => __( 'Changes detected', 'meta-box-builder' ),
+			'synced' => __( 'Synced', 'meta-box-builder' ),
+		];
+
+		$status = empty( $sync_data['post_id'] ) ? 'not_imported' : 'changes_detected';
 
 		if ( $sync_data['is_newer'] === 0 ) {
-			$status_text = __( 'Synced', 'meta-box-builder' );
+			$status = 'synced';
 		}
 		?>
-		<strong><?php esc_html_e( $status_text ) ?></strong>
+		<span class="mbb-label label-<?= esc_attr( $status ) ?>"><?php esc_html_e( $available_statuses[$status] ) ?></sp>
 		<?php if ( $sync_data['is_newer'] !== 0 ) { ?>
 			<div class="row-actions">
 				<span class="review">

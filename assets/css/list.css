@@ -115,3 +115,21 @@
 	font-size: 2em;
 	text-decoration: none;
 }
+
+.mbb-label {
+	padding: 4px 8px;
+	border-radius: 5px;
+}
+.mbb-label.label-synced {
+	background: #D6F1DF;
+	color: #218358;
+}
+
+.mbb-label.label-changes_detected {
+	background: #FFDFB5;
+	color: #CC4E00;
+}
+.mbb-label.label-not_imported {
+	background: #F0F0F0;
+	color: #646464;
+}
