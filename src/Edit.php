@@ -7,39 +7,24 @@ use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
 class Edit extends BaseEditPage {
-	public function add_meta_boxes( $meta_boxes ) {
-		$meta_boxes = parent::add_meta_boxes( $meta_boxes );
-
-		$meta_boxes[] = [
-			'title'      => esc_html__( 'Documentation', 'meta-box-builder' ),
-			'id'         => 'mbb-documentation',
-			'post_types' => [ $this->post_type ],
-			'context'    => 'side',
-			'priority'   => 'low',
-			'fields'     => [
-				[
-					'type' => 'custom_html',
-					'std'  => '<ul>
-						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-					</ul>',
-				],
-			],
-		];
-
-		return $meta_boxes;
-	}
-
 	public function enqueue() {
+		Assets::enqueue();
+
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
+		wp_enqueue_style( 'wp-edit-post' );
 
 		wp_enqueue_style( 'rwmb-modal', RWMB_CSS_URL . 'modal.css', [], RWMB_VER );
 		wp_style_add_data( 'rwmb-modal', 'path', RWMB_CSS_DIR . 'modal.css' );
 		wp_enqueue_script( 'rwmb-modal', RWMB_JS_URL . 'modal.js', [ 'jquery' ], RWMB_VER, true );
 
-		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], MBB_VER );
-		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', [ 'jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard', 'wp-color-picker', 'code-editor' ], MBB_VER, true );
+		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], filemtime( MBB_DIR . 'assets/css/style.css' ) );
+
+		$asset = require MBB_DIR . "/assets/js/build/app.asset.php";
+
+		// Add extra JS libs for copy code to clipboard & block color picker.
+		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'wp-color-picker', 'code-editor' ] );
+
+		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/build/app.js', $asset['dependencies'], $asset['version'], true );
 
 		$fields = get_post_meta( get_the_ID(), 'fields', true ) ?: [];
 		$fields = array_values( $fields );
@@ -50,13 +35,26 @@ class Edit extends BaseEditPage {
 			return $field;
 		}, $fields );
 
+		$post = get_post();
+
 		$data = [
+			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
+			'status'        => $post->post_status,
+			'title'         => $post->post_title,
+			'slug'          => $post->post_name,
+			'author'        => get_the_author_meta( 'display_name', (int) $post->post_author ),
+			'trash'         => get_delete_post_link(),
+			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
+			'modified'      => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
+			'saving'        => __( 'Saving...', 'meta-box-builder' ),
+
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
 			'data'          => get_post_meta( get_the_ID(), 'data', true ),
 
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'nonce_save'    => wp_create_nonce( 'mbb-save' ),
 
 			'postTypes'     => Data::get_post_types(),
 			'taxonomies'    => Data::get_taxonomies(),
@@ -82,6 +80,8 @@ class Edit extends BaseEditPage {
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
 				'views'              => Data::is_extension_active( 'mb-views' ),
 			],
+
+			'assetsBaseUrl' => MBB_URL . 'assets',
 		];
 
 		$data = apply_filters( 'mbb_app_data', $data );

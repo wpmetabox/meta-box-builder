@@ -26,10 +26,14 @@ abstract class BaseEditPage {
 		}
 	}
 
-	public function enqueue_wrapper() {
+	public function enqueue_wrapper(): void {
 		if ( ! $this->is_screen() ) {
 			return;
 		}
+
+		// Remove admin footer, which causes CSS issues.
+		add_filter('admin_footer_text', '__return_empty_string' );
+		remove_filter( 'update_footer', 'core_update_footer' );
 
 		$this->enqueue();
 	}
