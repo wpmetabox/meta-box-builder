@@ -1,5 +1,5 @@
 <?php
-namespace MBBParser\Parsers;
+namespace MBBParser\Unparsers;
 
 use MetaBox\Support\Arr;
 
@@ -53,60 +53,56 @@ class MetaBox extends Base {
 		$this->settings_parser->parse();
 	}
 
-	private function parse_fields( &$fields ) {
-		array_walk( $fields, [ $this, 'parse_field' ] );
-		$fields = array_values( array_filter( $fields ) ); // Make sure to remove empty (such as empty groups) or "tab" fields.
+	private function unparse_fields( &$fields ) {
+		array_walk( $fields, [ $this, 'unparse_field' ] );
 	}
 
-	private function parse_field( &$field ) {
+	private function unparse_field( &$field ) {
 		$parser = new Field( $field );
-		$parser->parse();
+		$parser->unparse();
 		$field = $parser->get_settings();
 
 		if ( $this->settings_parser->prefix && isset( $field['id'] ) ) {
 			$field['id'] = $this->settings_parser->prefix . $field['id'];
 		}
 
-		$this->parse_field_validation( $field );
+		$this->unparse_field_validation( $field );
 
 		if ( isset( $field['fields'] ) ) {
-			$this->parse_fields( $field['fields'] );
+			$this->unparse_fields( $field['fields'] );
 		}
 	}
 
-	private function parse_field_validation( &$field ) {
-		if ( empty( $field['validation'] ) ) {
+	/**
+	 * Inverse of parse_field_validation.
+	 * 
+	 * Convert validation rules from meta box to field validation.
+	 * 
+	 * @param mixed $field
+	 * @return void
+	 */
+	private function unparse_field_validation( &$field ) {
+		if ( isset( $field['validation'] ) ) {
 			return;
 		}
 
-		$rules    = &$this->validation['rules'];
-		$messages = &$this->validation['messages'];
-
-		$key              = str_replace( $this->settings_parser->prefix, '', $field['id'] );
-		$rules[ $key ]    = [];
-		$messages[ $key ] = [];
-
-		foreach ( $field['validation'] as $rule ) {
-			$name  = $rule['name'];
-			$value = $rule['value'];
-			if ( in_array( $name, [ 'rangelength', 'range' ], true ) ) {
-				$value = array_map( 'intval', Arr::from_csv( $value ) );
-			}
-
-			$rules[ $key ][ $name ] = $value;
-			if ( ! empty( $rule['message'] ) ) {
-				$messages[ $key ][ $name ] = $rule['message'];
-			}
+		if ( ! isset( $this->validation ) || ! is_array( $this->validation ) || ! array_key_exists( 'rules', $this->validation ) ) {
+			return;
 		}
 
-		if ( empty( $rules[ $key ] ) ) {
-			unset( $rules[ $key ] );
-			unset( $messages[ $key ] );
-		}
-		if ( empty( $messages[ $key ] ) ) {
-			unset( $messages[ $key ] );
-		}
+		$key = str_replace( $this->settings_parser->prefix, '', $field['id'] );
 
-		unset( $field['validation'] );
+		$rules    = $this->validation['rules'][ $key ];
+		$messages = $this->validation['messages'][ $key ];
+
+		$field['validation'] = [];
+
+		foreach ( $rules as $rule ) {
+			$field['validation'][] = [ 
+				'name' => $rule,
+				'value' => $rules[ $rule ],
+				'message' => $messages[ $rule ] ?? '',
+			];
+		}
 	}
 }
