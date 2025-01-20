@@ -1,11 +1,15 @@
+import { Flex, FlexBlock, Icon } from "@wordpress/components";
 import { createPortal, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { getFieldIcon, ucwords } from "../../../functions";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
+import useFieldSettingsPortal from '../../../hooks/useFieldSettingsPortal';
 import PersistentPanelBody from '../../PersistentPanelBody';
 import Tab from './Tab';
 
 const FieldSettings = ( { controls, field, ...rest } ) => {
-	const { activeField, portalElement } = useFieldSettingsPanel();
+	const { activeField } = useFieldSettingsPanel();
+	const { portalElement } = useFieldSettingsPortal();
 
 	// Extract controls displayed in the panel header.
 	const headerSettings = [ 'required', 'clone_settings' ];
@@ -56,9 +60,16 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 
 	return portalElement && createPortal(
 		<div className={ `og-field-settings ${ field._id === activeField._id ? 'og-field-settings--show' : '' }` }>
-			<div className="og-field-settings__header">
+			<Flex className="og-field-settings__header">
+				<FlexBlock>
+					<Flex align="center" justify="flex-start" expanded={ false } gap={ 1 }>
+						{ activeField.type && <Icon icon={ getFieldIcon( activeField.type ) } /> }
+						{ ucwords( activeField.type || '', '_' ) }
+					</Flex>
+				</FlexBlock>
+
 				<Tab controls={ headerControls } field={ field } { ...rest } />
-			</div>
+			</Flex>
 
 			{
 				tabs.map( tab => tab.controls.length > 0 && (

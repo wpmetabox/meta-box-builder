@@ -1,9 +1,10 @@
 &-field-settings__header {
 	position: fixed;
-	right: 16px;
 	top: 12px;
-	display: flex;
-	gap: 8px;
+	left: 0;
+	right: 0;
+	padding-inline: 16px;
+	box-sizing: border-box;
 }
 
 &-clone {
