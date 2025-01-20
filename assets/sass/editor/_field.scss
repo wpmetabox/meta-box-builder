@@ -7,8 +7,11 @@
 	position: relative;
 	cursor: grab;
 
-	&:not(:has(.mb-field:hover)):hover,
 	&--active {
+		background: var(--color-lightest);
+	}
+	
+	&:not(:has(.mb-field:hover)):hover {
 		outline: 1px solid var(--color-primary);
 		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
 	}
