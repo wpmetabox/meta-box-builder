@@ -90,6 +90,9 @@ class JsonService {
 			if ( $post->post_type === 'meta-box' ) {
 				$meta_box = get_post_meta( $post->ID, 'meta_box', true );
 				$settings = get_post_meta( $post->ID, 'settings', true );
+				if ( ! is_array( $settings )  || !is_array( $meta_box ) ) {
+					continue;
+				}
 
 				$post_data            = array_merge( $post_data, $meta_box );
 				$post_data['version'] = $settings['version'] ?? 'v0';

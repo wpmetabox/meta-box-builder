@@ -165,7 +165,7 @@ class AdminColumns {
 		if ( $target === 'to-json' ) {
 			$res     = LocalJson::update_local( $data['post_id'], $file_path );
 			$message = $res ? 'local-updated' : 'local-update-failed';
-			wp_safe_redirect( admin_url( 'edit.php?post_type=meta-box&message=' . $message ) );
+			wp_safe_redirect( admin_url( "edit.php?post_type=meta-box&message=$message" ) );
 			exit;
 		}
 	}
@@ -227,7 +227,7 @@ class AdminColumns {
 		</template>
 
 		<script>
-			document.addEventListener( 'DOMContentLoaded', function () {
+			document.addEventListener( 'DOMContentLoaded', () => {
 				const template = document.querySelector( '#mb-sync-list' );
 				const tbody = template.content.querySelector( 'tbody' );
 				document.querySelector( '.wp-list-table tbody' ).replaceWith( tbody );

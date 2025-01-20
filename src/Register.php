@@ -68,7 +68,7 @@ class Register {
 
 			// Get meta box from json file, which has newer version will be used.
 			$json_meta_box = $json_meta_boxes[$meta_box['id']] ?? [];
-			$is_newer = version_compare( $json_meta_box['version'], $settings['version'] ?? 'v0', '>' );
+			$is_newer = version_compare( $json_meta_box['version'] ?? 'v0', $settings['version'] ?? 'v0', '>' );
 
 			$meta_boxes[] = $is_newer ? $json_meta_box['meta_box'] : $meta_box;
 		}
