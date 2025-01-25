@@ -4,3 +4,4 @@ node_modules
 *.zip
 *.LICENSE.txt
 composer.lock
+.phpunit.cache

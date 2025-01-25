@@ -377,11 +377,17 @@ class AdminColumns {
 			$status = 'synced';
 		}
 		?>
-		<span class="mbb-label label-<?= esc_attr( $status ) ?>"><?php esc_html_e( $available_statuses[$status] ) ?></sp>
+		<span class="mbb-label label-<?php esc_attr_e( $status ) ?>">
+			<?php esc_html_e( $available_statuses[$status] ) ?>
+		</span>
+		
 		<?php if ( $sync_data['is_newer'] !== 0 ) { ?>
 			<div class="row-actions">
 				<span class="review">
-					<a href="javascript:;" role="button" onclick="return showDialog('<?= $mb_id ?>');">
+					<a href="javascript:;" 
+						role="button" 
+						onclick="return showDialog('<?= $mb_id ?>');"
+					>
 						<?= esc_html__( 'Review changes', 'meta-box-builder' ) ?>
 					</a>
 				</span>
@@ -402,9 +408,7 @@ class AdminColumns {
 			'block' => __( 'Blocks', 'meta-box-builder' ),
 		];
 
-		if ( isset( $labels[ $object_type ] ) ) {
-			esc_html_e( $labels[ $object_type ] );
-		}
+		esc_html_e( $labels[ $object_type ] ?? '' );		
 	}
 
 	private function get_human_readable_file_location( $file ) {
@@ -413,15 +417,15 @@ class AdminColumns {
 		$plugins_path = WP_PLUGIN_DIR;
 
 		if ( str_contains( $file, $active_theme ) ) {
-			return sprintf( __( 'Active theme: %s', 'meta-box-builder' ), str_replace( $active_theme, '', $file ) );
+			return '<span class="dashicons dashicons-admin-appearance"></span> ' . str_replace( $active_theme, '', $file );
 		}
 
 		if ( str_contains( $file, $plugins_path ) ) {
-			return sprintf( __( 'Plugin: %s', 'meta-box-builder' ), str_replace( $plugins_path, '', $file ) );
+			return '<span class="dashicons dashicons-admin-plugins"></span> ' . str_replace( $plugins_path, '', $file );
 		}
 
 		if ( str_contains( $file, ABSPATH ) ) {
-			return sprintf( __( 'Path: %s', 'meta-box-builder' ), str_replace( ABSPATH, '', $file ) );
+			return '<span class="dashicons dashicons-wordpress"></span> ' . str_replace( ABSPATH, '', $file );
 		}
 	}
 
@@ -434,9 +438,11 @@ class AdminColumns {
 
 		$json = $json[ $meta_box_id ] ?? null;
 
-		if ( is_array( $json ) && isset( $json['file'] ) ) {
-			echo $this->get_human_readable_file_location( $json['file'] );
+		if ( ! is_array( $json ) || ! isset( $json['file'] ) ) {
+			return;
 		}
+
+		echo $this->get_human_readable_file_location( $json['file'] );
 	}
 
 	private function show_location( $data ) {
@@ -477,6 +483,7 @@ class AdminColumns {
 
 	private function show_shortcode() {
 		global $post;
+		
 		$shortcode = "[mb_frontend_form id='{$post->post_name}' post_fields='title,content']";
 		echo '<input type="text" readonly value="' . esc_attr( $shortcode ) . '" onclick="this.select()">';
 	}

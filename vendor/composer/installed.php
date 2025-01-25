@@ -3,11 +3,11 @@
         'name' => 'meta-box/meta-box-builder',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '103e29df0ecd33b96200e1ba8bb95b11f158eda9',
+        'reference' => '909b313af5989c9b8b49dc96a82c56e6fe4f634a',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'dev' => true,
+        'dev' => false,
     ),
     'versions' => array(
         'elightup/twig' => array(
@@ -35,7 +35,7 @@
         'meta-box/meta-box-builder' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '103e29df0ecd33b96200e1ba8bb95b11f158eda9',
+            'reference' => '909b313af5989c9b8b49dc96a82c56e6fe4f634a',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -44,7 +44,7 @@
         'meta-box/support' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '99607eb4d8c8c96a7c882fc5a7c69cf3534d95bd',
+            'reference' => '2f482c905c05ed4fdfcefadd749b13a13ff4daac',
             'type' => 'library',
             'install_path' => __DIR__ . '/../meta-box/support',
             'aliases' => array(

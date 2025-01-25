@@ -31,6 +31,9 @@
 		"meta-box/mbb-parser": "dev-master",
 		"elightup/twig": "dev-master"
 	},
+	"require-dev": {
+		"phpunit/phpunit": "^11.3"
+	},
 	"scripts": {
 		"post-update-cmd": [
 			"echo Deleting .git dirs...",

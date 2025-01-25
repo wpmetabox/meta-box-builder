@@ -34,6 +34,15 @@ class JsonService {
 			$is_newer = true;
 		}
 		
+		// Add schema to remote to compare
+		if ( ! empty( $remote ) ) {
+			// Sort keys alphabetically so we have a consistent order
+			ksort( $remote );
+
+			// Add $schema to the beginning of $remote
+			$remote = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $remote );
+		}
+
 		$left = empty( $remote ) ? '' : wp_json_encode( $remote, JSON_PRETTY_PRINT );
 
 		$sync_json_to_db_text = __( 'Sync JSON to DB', 'meta-box-builder' );
@@ -49,6 +58,7 @@ class JsonService {
 			'id' => $mb_id,
 		] );
 
+		ksort( $local );
 		$diff = wp_text_diff( $left, wp_json_encode( $local, JSON_PRETTY_PRINT ), [ 
 			'title_left' => "<h3>
 				<strong>Database Version</strong> <br />

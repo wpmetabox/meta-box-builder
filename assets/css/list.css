@@ -119,7 +119,9 @@
 .mbb-label {
 	padding: 4px 8px;
 	border-radius: 5px;
+	display: inline-block;
 }
+
 .mbb-label.label-synced {
 	background: #D6F1DF;
 	color: #218358;

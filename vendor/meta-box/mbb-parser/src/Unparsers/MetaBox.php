@@ -5,7 +5,9 @@ use MetaBox\Support\Arr;
 
 class MetaBox extends Base {
 	protected $empty_keys = [ 'fields' ];
+	
 	private $settings_parser;
+
 	private $validation = [ 
 		'rules' => [],
 		'messages' => [],
