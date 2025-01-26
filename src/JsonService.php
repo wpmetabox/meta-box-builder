@@ -70,7 +70,16 @@ class JsonService {
 			'show_split_view' => ! empty( $remote ),
 		] );
 
-		return compact( 'is_newer', 'local', 'local_normalized', 'remote', 'diff', 'post_id', 'file', 'mb_id' );
+		return compact( 
+			'is_newer', 
+			'local', 
+			'local_normalized', 
+			'remote', 
+			'diff', 
+			'post_id', 
+			'file', 
+			'mb_id' 
+		);
 	}
 
 	public static function get_json(): ?array {
@@ -79,7 +88,8 @@ class JsonService {
 		$json = [];
 		foreach ( $files as $file ) {
 			$mid          = rtrim( basename( $file ), '.json' );
-			$json[ $mid ] = self::get_sync_status( $file );
+			$sync_status  = self::get_sync_status( $file );
+			$json[ $sync_status['local']['id'] ] = $sync_status;
 		}
 
 		return $json;

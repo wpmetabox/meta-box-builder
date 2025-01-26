@@ -411,22 +411,28 @@ class AdminColumns {
 		esc_html_e( $labels[ $object_type ] ?? '' );		
 	}
 
-	private function get_human_readable_file_location( $file ) {
+	private function get_human_readable_file_location( string $file ): string {
 		// Get the relative path of the file.
 		$active_theme = get_template_directory();
 		$plugins_path = WP_PLUGIN_DIR;
 
+		$icon = 'wordpress';
+		$sub_path = str_replace( ABSPATH, '', $file );
+
 		if ( str_contains( $file, $active_theme ) ) {
-			return '<span class="dashicons dashicons-admin-appearance"></span> ' . str_replace( $active_theme, '', $file );
+			$icon = 'admin-appearance';
+			$sub_path = str_replace( $active_theme, '', $file );
 		}
 
 		if ( str_contains( $file, $plugins_path ) ) {
-			return '<span class="dashicons dashicons-admin-plugins"></span> ' . str_replace( $plugins_path, '', $file );
+			$icon = 'admin-plugins';
+			$sub_path = str_replace( $plugins_path, '', $file );
 		}
 
-		if ( str_contains( $file, ABSPATH ) ) {
-			return '<span class="dashicons dashicons-wordpress"></span> ' . str_replace( ABSPATH, '', $file );
-		}
+		$icon = esc_attr( $icon );
+		$sub_path = esc_html( $sub_path );
+
+		return "<span class=\"dashicons dashicons-{$icon}\"></span> <span class=\"mbb-sub-path\">{$sub_path}</span>"; 
 	}
 
 	private function show_location_sync( string $meta_box_id ) {

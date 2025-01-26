@@ -121,6 +121,9 @@
 	border-radius: 5px;
 	display: inline-block;
 }
+.mbb-sub-path {
+	color: #999;
+}
 
 .mbb-label.label-synced {
 	background: #D6F1DF;
