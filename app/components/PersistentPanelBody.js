@@ -1,9 +1,12 @@
 import { Icon, chevronDown, chevronUp } from '@wordpress/icons';
+import { useReducer } from '@wordpress/element';
 
-const PersistentPanelBody = ( { title, open, onClick, className = '', children } ) => {
+const PersistentPanelBody = ( { title, className = '', children } ) => {
+	const [ open, toggleOpen ] = useReducer( on => !on, true );
+
 	return (
 		<>
-			<button type="button" className={ `og-panel__header ${ open ? 'og-panel__header--open' : '' }` } onClick={ onClick }>
+			<button type="button" className={ `og-panel__header ${ open ? 'og-panel__header--open' : '' }` } onClick={ toggleOpen }>
 				{ title }
 				<Icon icon={ open ? chevronDown : chevronUp } />
 			</button>
