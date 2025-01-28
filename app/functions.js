@@ -1,10 +1,11 @@
 import { lazy } from "@wordpress/element";
+import { archive, atSymbol, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
 import dotProp from 'dot-prop';
 import slugify from "slugify";
 
 export const htmlDecode = innerHTML => Object.assign( document.createElement( 'textarea' ), { innerHTML } ).value;
 
-const ucfirst = string => string[ 0 ].toUpperCase() + string.slice( 1 );
+const ucfirst = string => string.length > 0 ? string[ 0 ].toUpperCase() + string.slice( 1 ) : string;
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
@@ -38,14 +39,7 @@ export const ensureArray = arr => {
 	return typeof arr === 'object' ? Object.values( arr ) : [ arr ];
 };
 
-export const getSettings = () => {
-	const urlParams = parseQueryString( window.location.search );
-	const settings = MbbApp.settings || {};
-
-	return { ...settings, ...urlParams.settings };
-};
-
-const parseQueryString = queryString => {
+export const parseQueryString = queryString => {
 	const params = new URLSearchParams( queryString );
 	return convert( params );
 };
@@ -100,10 +94,30 @@ export const getControlParams = ( control, objectValue, importFallback, checkNew
 		defaultFallbackValue = getDefaultControlValue( control.name );
 	}
 
-	const key = bracketsToDots( name );
-	const defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
+	let key = bracketsToDots( name );
+	let defaultValue = dotProp.get( objectValue, key, defaultFallbackValue );
+
+	if ( control.name === 'CloneSettings' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'clone_settings', [ 'clone', 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ] );
+	}
+	if ( control.name === 'InputAttributes' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, 'input_attributes', [ 'disabled', 'readonly' ], false );
+	}
+	if ( control.name === 'InputGroup' ) {
+		defaultValue = getFieldValueForCombinedControl( objectValue, name, control.setting, [ control.props.key1, control.props.key2 ], '' );
+	}
 
 	return [ Control, input, defaultValue ];
+};
+
+const getFieldValueForCombinedControl = ( objectValue, name, inputName, params, defaultFallbackValue ) => {
+	let defaultValue = {};
+	params.forEach( param => {
+		const key = bracketsToDots( name.replace( inputName, param ) );
+		defaultValue[ param ] = dotProp.get( objectValue, key, defaultFallbackValue );
+	} );
+
+	return defaultValue;
 };
 
 const getDefaultControlValue = name => {
@@ -129,3 +143,87 @@ export const sanitizeId = text => slugify( text, { lower: true } )
 	;
 
 export const inside = ( el, selectors ) => el.matches( selectors ) || el.closest( selectors ) !== null;
+
+export const getFieldIcon = type => {
+	const iconMap = {
+		autocomplete: lineDotted,
+		background: brush,
+		button: button,
+		button_group: buttons,
+		checkbox: check,
+		checkbox_list: formatListBullets,
+		color: color,
+		custom_html: code,
+		date: postDate,
+		datetime: calendar,
+		divider: separator,
+		email: atSymbol,
+		fieldset_text: grid,
+		file: page,
+		file_advanced: pages,
+		file_input: flipHorizontal,
+		file_upload: cloudUpload,
+		map: mapMarker,
+		heading: heading,
+		hidden: unseen,
+		icon: starEmpty,
+		image: image,
+		image_advanced: gallery,
+		image_select: fullscreen,
+		image_upload: cloudUpload,
+		key_value: category,
+		number: chevronUpDown,
+		oembed: video,
+		osm: mapMarker,
+		password: shield,
+		post: postFeaturedImage,
+		radio: border,
+		range: queryPaginationNumbers,
+		select: chevronUpDown,
+		select_advanced: chevronUpDown,
+		sidebar: drawerRight,
+		single_image: image,
+		slider: queryPaginationNumbers,
+		switch: border,
+		taxonomy: tag,
+		taxonomy_advanced: tag,
+		text: textColor,
+		text_list: table,
+		textarea: paragraph,
+		time: backup,
+		user: commentAuthorAvatar,
+		url: link,
+		video: captureVideo,
+		wysiwyg: typography,
+		group: group,
+		tab: archive,
+	};
+
+	if ( iconMap[ type ] ) {
+		return iconMap[ type ];
+	}
+};
+
+export const isPositiveInteger = value => {
+	const number = Number( value );
+	return Number.isInteger( number ) && number > 0;
+};
+
+export const getOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
+	if ( !option.includes( ':' ) ) {
+		return option.trim();
+	}
+	const [ value, label ] = option.split( ':' );
+	return label.trim();
+} );
+
+export const getFullOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
+	if ( !option.includes( ':' ) ) {
+		return { value: option.trim(), label: option.trim() };
+	}
+	const parts = option.split( ':' );
+	return { value: parts[ 0 ].trim(), label: parts.slice( 1 ).join( ":" ).trim() };
+} );
+
+// Do nothing callback function for field preview inputs
+export const doNothing = () => {};
