@@ -1,5 +1,6 @@
 import { Flex, Icon } from '@wordpress/components';
-import { memo } from "@wordpress/element";
+import { useCopyToClipboard } from "@wordpress/compose";
+import { memo, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { getFieldIcon, inside } from "../../../functions";
@@ -11,15 +12,21 @@ import Group from './Group';
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
 	const { setSidebarPanel } = useSidebarPanel();
+	const [ copied, setCopied ] = useState( false );
 
 	const toggleSettings = e => {
-		if ( inside( e.target, '.components-button' ) ) {
+		if ( inside( e.target, '.components-button,.og-item__id' ) ) {
 			return;
 		}
 
 		setActiveField( activeField._id === field._id ? {} : field );
 		setSidebarPanel( activeField._id === field._id ? 'field_group_settings' : 'field_settings' );
 	};
+
+	const copyRef = useCopyToClipboard( field.id, () => {
+		setCopied( true );
+		setTimeout( () => setCopied( false ), 2000 );
+	} );
 
 	return field.type && (
 		<div className={ `og-item og-item--${ field.type } ${ field._id === activeField._id ? 'og-item--active' : '' }` }>
@@ -32,6 +39,9 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			>
 				<Icon size={ 16 } icon={ getFieldIcon( field.type ) } className="og-item__icon" />
 				<div className="og-item__label">{ getFieldLabel( field ) }</div>
+				<div className="og-item__id" data-tooltip={ copied ? __( 'Copied!', 'meta-box-builder' ) : __( 'Click to copy', 'meta-box-builder' ) }>
+					<span className="og-item__id__inner" ref={ copyRef }>{ field.id }</span>
+				</div>
 				<Actions field={ field } { ...fieldActions } />
 			</Flex>
 			{
