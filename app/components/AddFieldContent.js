@@ -10,37 +10,25 @@ const AddFieldContent = ( { className = '', addField, onSelect } ) => {
 	return (
 		<div className={ `og-add-field ${ className }` }>
 			<SearchControl value={ searchQuery } onChange={ setSearchQuery } __nextHasNoMarginBottom />
-			{
-				searchQuery ?
-					<SearchResult searchQuery={ searchQuery } onSelect={ onSelect } addField={ addField } />
-					: <Categories onSelect={ onSelect } addField={ addField } />
-			}
+			<Categories searchQuery={ searchQuery } onSelect={ onSelect } addField={ addField } />
 		</div>
 	);
 };
 
-const Categories = ( { onSelect, addField } ) => {
+const Categories = props => {
 	const fieldCategories = useApi( 'field-categories', [] );
-	return fieldCategories.map( category => <Category key={ category.slug } category={ category } onSelect={ onSelect } addField={ addField } /> );
+	return fieldCategories.map( category => <Category key={ category.slug } category={ category } { ...props } /> );
 };
 
-const Category = ( { category, onSelect, addField } ) => {
+const Category = ( { category, searchQuery, onSelect, addField } ) => {
 	const fieldTypes = useApi( 'field-types', {} );
-	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug );
+	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( searchQuery.toLowerCase() ) );
 
-	return (
+	return fields.length &&
 		<>
 			<div className="og-add-field__title">{ category.title }</div>
 			<FieldList fields={ fields } onSelect={ onSelect } addField={ addField } />
-		</>
-	);
-};
-
-const SearchResult = ( { searchQuery, onSelect, addField } ) => {
-	const fieldTypes = useApi( 'field-types', {} );
-	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.title.toLowerCase().includes( searchQuery.toLowerCase() ) );
-
-	return <FieldList fields={ fields } onSelect={ onSelect } addField={ addField } />;
+		</>;
 };
 
 const FieldList = ( { fields, onSelect, addField } ) => (
