@@ -76,7 +76,10 @@ class LocalJson {
 		$settings = get_post_meta( $post->ID, 'settings', true );
 
 		// Add version for the meta box
-		$meta_box['version'] = $settings['version'] ?? 'v' . time();
+		$meta_box['version'] = $settings['version'] ?? 'v0';
+
+		// Add schema, and it should be the first item
+		$meta_box = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $meta_box );
 
 		$output = wp_json_encode( $meta_box, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 		file_put_contents( $file_path, $output );
