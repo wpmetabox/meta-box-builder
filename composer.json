@@ -1,6 +1,5 @@
 {
 	"name": "meta-box/meta-box-builder",
-	"description": "Meta Box Builder extension for Meta Box",
 	"type": "wordpress-plugin",
 	"config": {
 		"prepend-autoloader": false

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Meta Box Builder
+ * Plugin Name: MB Builder
  * Plugin URI:  https://metabox.io/plugins/meta-box-builder/
  * Description: Drag and drop UI for creating custom meta boxes and custom fields.
  * Version:     4.9.8
