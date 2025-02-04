@@ -7,15 +7,18 @@
 	width: 16px;
 	height: 16px;
 }
+
 .mbb-tooltip .dashicons {
 	font-size: 14px;
 	width: 16px;
 	height: 16px;
 	margin-top: 2px;
 }
+
 .tippy-tooltip {
 	text-align: left;
 }
+
 .column-shortcode input {
 	max-width: 100%;
 }
@@ -25,6 +28,7 @@
 	display: none;
 	padding: 50px 0;
 }
+
 .mbb-import-form p {
 	color: #555d66;
 	font-size: 18px;
@@ -33,6 +37,7 @@
 	padding: 0;
 	text-align: center;
 }
+
 .mbb-import-form form {
 	background: #fafafa;
 	border: 1px solid #e5e5e5;
@@ -55,7 +60,6 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	border-bottom: 1px solid #ccd0d4;
 	padding-bottom: 10px;
 	margin-bottom: 20px;
 }
@@ -63,6 +67,20 @@
 #mbb-diff-dialog header h2 {
 	margin: 0;
 	font-size: 1.5em;
+}
+
+#mbb-diff-dialog .mbb-diff-dialog-button-group {
+	width: 100%;
+	display: flex;
+	gap: 10px;
+	margin: 40px 0;
+}
+
+#mbb-diff-dialog .mbb-diff-dialog-button-group>div {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 #mbb-diff-dialog header button {
@@ -79,6 +97,43 @@
 .mbb-diff-dialog-content {
 	display: flex;
 	justify-content: space-between;
+	background: #fafafa;
+	border-radius: 10px;
+}
+
+.button-sync {
+	background: #0073aa;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.button-sync:hover {
+	background: #005177;
+}
+
+.sync-success-content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	background: #D6F1DF;
+	color: #218358;
+	animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .mbb-diff-dialog-content>div {
@@ -102,7 +157,6 @@
 #mbb-diff-dialog footer {
 	display: flex;
 	justify-content: flex-end;
-	border-top: 1px solid #ccd0d4;
 	padding-top: 10px;
 	margin-top: 20px;
 }
@@ -121,20 +175,22 @@
 	border-radius: 5px;
 	display: inline-block;
 }
+
 .mbb-sub-path {
 	color: #999;
 }
 
-.mbb-label.label-synced {
+.mbb-label[data-status="synced"] {
 	background: #D6F1DF;
 	color: #218358;
 }
 
-.mbb-label.label-changes_detected {
+.mbb-label[data-status="changes_detected"] {
 	background: #FFDFB5;
 	color: #CC4E00;
 }
-.mbb-label.label-not_imported {
+
+.mbb-label[data-status="not_imported"] {
 	background: #F0F0F0;
 	color: #646464;
 }

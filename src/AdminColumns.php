@@ -33,27 +33,7 @@ class AdminColumns {
 			'import-failed' => [ 
 				'status' => 'error',
 				'message' => __( 'Import failed', 'meta-box-builder' ),
-			],
-
-			'remote-updated' => [ 
-				'status' => 'success',
-				'message' => __( 'Imported to DB successfully', 'meta-box-builder' ),
-			],
-
-			'remote-update-failed' => [ 
-				'status' => 'error',
-				'message' => __( 'Import to DB failed', 'meta-box-builder' ),
-			],
-
-			'local-updated' => [ 
-				'status' => 'success',
-				'message' => __( 'Export to JSON successfully', 'meta-box-builder' ),
-			],
-
-			'local-update-failed' => [ 
-				'status' => 'error',
-				'message' => __( 'Error during exporting to JSON', 'meta-box-builder' ),
-			],
+			]
 		];
 
 		if ( isset( $messages[ $custom_admin_notice ] ) ) { ?>
@@ -72,7 +52,30 @@ class AdminColumns {
 				<button id="mbb-diff-dialog-close" class="button-link">&times;</button>
 			</header>
 
+			<div class="mbb-diff-dialog-button-group" data-split-views="true">
+				<div>
+					<h3><?php echo esc_html__( 'Database Version', 'meta-box-builder' ) ?></h3>
+					<button type="button" role="button" class="button-sync" data-use="database">
+						<?php echo esc_html__( 'Use Database', 'meta-box-builder' ) ?>
+					</button>
+				</div>
+
+				<div>
+					<h3><?php echo esc_html__( 'JSON File Version', 'meta-box-builder' ) ?></h3>
+					<button type="button" role="button" class="button-sync" data-use="json">
+						<?php echo esc_html__( 'Use JSON File', 'meta-box-builder' ) ?>
+					</button>
+				</div>
+			</div>
+
 			<div class="mbb-diff-dialog-content"></div>
+			<template id="sync-success">
+				<div class="sync-success-wrapper">
+					<div class="sync-success-content">
+						<p><?php echo esc_html__( 'All changes synced!', 'meta-box-builder' ) ?></p>
+					</div>
+				</div>
+			</template>
 
 			<footer>
 				<button id="mbb-diff-dialog-close-btn" class="button button-secondary">
@@ -86,6 +89,7 @@ class AdminColumns {
 			const showDialog = ( mbbId ) => {
 				const dialog = document.getElementById( 'mbb-diff-dialog' );
 				dialog.querySelector( '.mbb-diff-dialog-content' ).innerHTML = syncData[ mbbId ].diff;
+				dialog.querySelector( '.button-sync' ).dataset.id = mbbId;
 				dialog.showModal();
 			};
 		</script>
@@ -119,9 +123,9 @@ class AdminColumns {
 			wp_die( __( 'Not allowed', 'meta-box-builder' ) );
 		}
 
-		$mb_id = $_GET['id'] ?? $_GET['post'] ?? ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
+		$id = $_GET['id'] ?? $_GET['post'] ?? ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
 
-		if ( empty( $mb_id ) ) {
+		if ( empty( $id ) ) {
 			wp_die( __( 'Not found', 'meta-box-builder' ) );
 		}
 
@@ -130,7 +134,7 @@ class AdminColumns {
 		$json = JsonService::get_json();
 
 		// Bulk actions
-		if ( is_array( $mb_id ) ) {
+		if ( is_array( $id ) ) {
 			$file_paths = [];
 
 			foreach ( $json as $id => $data ) {
@@ -144,7 +148,7 @@ class AdminColumns {
 			exit;
 		}
 
-		$data      = $json[ $mb_id ];
+		$data      = $json[ $id ];
 		$file_path = $data['file'];
 
 		// No post found, import the json file.
@@ -152,20 +156,6 @@ class AdminColumns {
 			$res     = LocalJson::import( $file_path );
 			$message = $res ? 'imported' : 'import-failed';
 			wp_safe_redirect( admin_url( 'edit.php?post_type=meta-box&message=' . $message ) );
-			exit;
-		}
-
-		if ( $target === 'to-db' ) {
-			$res     = LocalJson::update_remote( $data['post_id'], $file_path );
-			$message = $res ? 'remoted-updated' : 'remoted-update-failed';
-			wp_safe_redirect( admin_url( 'edit.php?post_type=meta-box&message=' . $message ) );
-			exit;
-		}
-
-		if ( $target === 'to-json' ) {
-			$res     = LocalJson::update_local( $data['post_id'], $file_path );
-			$message = $res ? 'local-updated' : 'local-update-failed';
-			wp_safe_redirect( admin_url( "edit.php?post_type=meta-box&message=$message" ) );
 			exit;
 		}
 	}
@@ -287,7 +277,7 @@ class AdminColumns {
 		}
 
 		wp_enqueue_style( 'mbb-list', MBB_URL . 'assets/css/list.css', [], time() );
-		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], time(), true );
+		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery', 'wp-api-fetch' ], time(), true );
 		wp_localize_script( 'mbb-list', 'MBB', [ 
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
@@ -347,25 +337,25 @@ class AdminColumns {
 		$this->{"show_$column"}( $data );
 	}
 
-	private function show_sync_status( string $mb_id ) {
+	private function show_sync_status( string $id ) {
 		$json = JsonService::get_json();
 		if ( ! $this->is_status( 'sync' ) ) {
-			foreach ( $json as $json_mb_id => $data ) {
-				if ( isset( $data['post_id'] ) && $data['post_id'] == $mb_id ) {
-					$mb_id = $json_mb_id;
+			foreach ( $json as $json_id => $data ) {
+				if ( isset( $data['post_id'] ) && $data['post_id'] == $id ) {
+					$id = $json_id;
 					break;
 				}
 			}
 		}
 
-		$sync_data = $json[ $mb_id ] ?? [];
+		$sync_data = $json[ $id ] ?? [];
 
 		// Empty sync data means no related json file.
 		if ( empty( $sync_data ) ) {
 			return;
 		}
 
-		$available_statuses = [
+		$available_statuses = [ 
 			'not_imported' => __( 'Not Imported', 'meta-box-builder' ),
 			'changes_detected' => __( 'Changes detected', 'meta-box-builder' ),
 			'synced' => __( 'Synced', 'meta-box-builder' ),
@@ -377,17 +367,14 @@ class AdminColumns {
 			$status = 'synced';
 		}
 		?>
-		<span class="mbb-label label-<?php esc_attr_e( $status ) ?>">
-			<?php esc_html_e( $available_statuses[$status] ) ?>
+		<span class="mbb-label" data-status="<?php esc_attr_e( $status ) ?>" data-for-id="<?php esc_attr_e( $id ) ?>">
+			<?php esc_html_e( $available_statuses[ $status ] ) ?>
 		</span>
-		
+
 		<?php if ( $sync_data['is_newer'] !== 0 ) { ?>
 			<div class="row-actions">
 				<span class="review">
-					<a href="javascript:;" 
-						role="button" 
-						onclick="return showDialog('<?= $mb_id ?>');"
-					>
+					<a href="javascript:;" role="button" onclick="return showDialog('<?= $id ?>');">
 						<?= esc_html__( 'Review changes', 'meta-box-builder' ) ?>
 					</a>
 				</span>
@@ -408,7 +395,7 @@ class AdminColumns {
 			'block' => __( 'Blocks', 'meta-box-builder' ),
 		];
 
-		esc_html_e( $labels[ $object_type ] ?? '' );		
+		esc_html_e( $labels[ $object_type ] ?? '' );
 	}
 
 	private function get_human_readable_file_location( string $file ): string {
@@ -416,23 +403,23 @@ class AdminColumns {
 		$active_theme = get_template_directory();
 		$plugins_path = WP_PLUGIN_DIR;
 
-		$icon = 'wordpress';
+		$icon     = 'wordpress';
 		$sub_path = str_replace( ABSPATH, '', $file );
 
 		if ( str_contains( $file, $active_theme ) ) {
-			$icon = 'admin-appearance';
+			$icon     = 'admin-appearance';
 			$sub_path = str_replace( $active_theme, '', $file );
 		}
 
 		if ( str_contains( $file, $plugins_path ) ) {
-			$icon = 'admin-plugins';
+			$icon     = 'admin-plugins';
 			$sub_path = str_replace( $plugins_path, '', $file );
 		}
 
-		$icon = esc_attr( $icon );
+		$icon     = esc_attr( $icon );
 		$sub_path = esc_html( $sub_path );
 
-		return "<span class=\"dashicons dashicons-{$icon}\"></span> <span class=\"mbb-sub-path\">{$sub_path}</span>"; 
+		return "<span class=\"dashicons dashicons-{$icon}\"></span> <span class=\"mbb-sub-path\">{$sub_path}</span>";
 	}
 
 	private function show_location_sync( string $meta_box_id ) {
@@ -489,7 +476,7 @@ class AdminColumns {
 
 	private function show_shortcode() {
 		global $post;
-		
+
 		$shortcode = "[mb_frontend_form id='{$post->post_name}' post_fields='title,content']";
 		echo '<input type="text" readonly value="' . esc_attr( $shortcode ) . '" onclick="this.select()">';
 	}

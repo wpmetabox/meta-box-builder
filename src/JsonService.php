@@ -25,15 +25,15 @@ class JsonService {
 	private static function get_sync_status( $file ) {
 		$local            = json_decode( file_get_contents( $file ), true );
 		$local_normalized = Normalizer::normalize( $local );
-		$mb_id            = $local_normalized['id'] ?? sanitize_title( $local_normalized['title'] );
+		$id               = $local_normalized['id'] ?? sanitize_title( $local_normalized['title'] );
 
-		[ $post_id, $remote ] = self::get_meta_box_by_meta_box_id( $mb_id );
+		[ $post_id, $remote ] = self::get_meta_box_by_meta_box_id( $id );
 
 		$is_newer = version_compare( $local_normalized['version'], $remote['version'] ?? 'v0' );
 		if ( empty( $remote ) ) {
 			$is_newer = true;
 		}
-		
+
 		// Add schema to remote to compare
 		if ( ! empty( $remote ) ) {
 			// Sort keys alphabetically so we have a consistent order
@@ -43,56 +43,69 @@ class JsonService {
 			$remote = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $remote );
 		}
 
-		$left = empty( $remote ) ? '' : wp_json_encode( $remote, JSON_PRETTY_PRINT );
+		$left = empty( $remote ) ? '' : wp_json_encode( $remote, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
-		$sync_json_to_db_text = __( 'Sync JSON to DB', 'meta-box-builder' );
-		$sync_db_to_json_text = __( 'Sync DB to JSON', 'meta-box-builder' );
-		$sync_json_to_db_url  = add_query_arg( [ 
-			'action' => 'mbb-sync',
-			'target' => 'to-db',
-			'id' => $mb_id,
-		] );
-		$sync_db_to_json_url  = add_query_arg( [ 
-			'action' => 'mbb-sync',
-			'target' => 'to-json',
-			'id' => $mb_id,
-		] );
+		ksort( $local_normalized );
 
-		ksort( $local );
-		$diff = wp_text_diff( $left, wp_json_encode( $local, JSON_PRETTY_PRINT ), [ 
-			'title_left' => "<h3>
-				<strong>Database Version</strong> <br />
-				<a href=\"$sync_json_to_db_url\" class=\"button button-secondary\">$sync_json_to_db_text</a>
-			</h3>",
-			'title_right' => "<h3>
-			<strong>JSON File Version</strong> <br />
-			<a href=\"$sync_db_to_json_url\" class=\"button button-secondary\">$sync_db_to_json_text</a></h3>",
+		$diff = wp_text_diff( $left, wp_json_encode( $local_normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
 			'show_split_view' => ! empty( $remote ),
 		] );
 
-		return compact( 
-			'is_newer', 
-			'local', 
-			'local_normalized', 
-			'remote', 
-			'diff', 
-			'post_id', 
-			'file', 
-			'mb_id' 
+		return compact(
+			'is_newer',
+			'local',
+			'local_normalized',
+			'remote',
+			'diff',
+			'post_id',
+			'file',
+			'id'
 		);
 	}
 
-	public static function get_json(): ?array {
+	/**
+	 * @todo: Check case where db exists but local doesn't
+	 * @param array $params
+	 * @return array[]
+	 */
+	public static function get_json( array $params = [] ): ?array {
 		$files = self::get_files();
 
 		$json = [];
+
 		foreach ( $files as $file ) {
-			$mid          = rtrim( basename( $file ), '.json' );
-			$sync_status  = self::get_sync_status( $file );
+			$sync_status = self::get_sync_status( $file );
+
+			if ( ! isset( $sync_status['local'] ) || ! isset( $sync_status['local']['id'] ) ) {
+				continue;
+			}
+
 			$json[ $sync_status['local']['id'] ] = $sync_status;
 		}
 
-		return $json;
+		if ( empty( $params ) ) {
+			return $json;
+		}
+
+		$items = [];
+		// Filter by params
+		if ( isset( $params['id'] ) ) {
+			$items = array_filter( $json, function ($item) use ($params) {
+				return $item['id'] === $params['id'];
+			} );
+		}
+
+		foreach ( ['is_newer', 'post_id', 'file' ] as $key ) {
+			if ( isset( $params[ $key ] ) ) {
+				foreach ( $json as $item ) {
+					if ( $item[ $key ] == $params[ $key ] ) {
+						$items[] = $item;
+					}
+				}	
+			}
+		}
+
+		return $items;
 	}
 
 	public static function get_meta_boxes(): array {
@@ -110,11 +123,12 @@ class JsonService {
 			if ( $post->post_type === 'meta-box' ) {
 				$meta_box = get_post_meta( $post->ID, 'meta_box', true );
 				$settings = get_post_meta( $post->ID, 'settings', true );
-				if ( ! is_array( $settings )  || !is_array( $meta_box ) ) {
+				if ( ! is_array( $settings ) || ! is_array( $meta_box ) ) {
 					continue;
 				}
 
 				$post_data            = array_merge( $post_data, $meta_box );
+				$post_data            = Normalizer::normalize( $post_data );
 				$post_data['version'] = $settings['version'] ?? 'v0';
 			} else {
 				// @todo: Check export for other post types

@@ -15,6 +15,8 @@ class Normalizer {
 	 * Add missing keys from the data
 	 **/
 	public static function normalize( array $data ) {
+		$data['$schema'] = 'https://schemas.metabox.io/field-group.json';
+		
 		// id
 		if ( ! isset( $data['id'] ) ) {
 			$data['id'] = self::lookup( [ 'id', 'post_name', 'title' ], $data, uniqid() );

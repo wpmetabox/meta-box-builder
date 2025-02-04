@@ -23,6 +23,7 @@ jQuery( $ => {
 		$submit.prop( 'disabled', ! $input.val() );
 	} );
 
+	// Dialog for diff
 	document.getElementById( 'mbb-diff-dialog-close' ).addEventListener( 'click', () => {
 		document.getElementById( 'mbb-diff-dialog' ).close();
 	} );
@@ -43,4 +44,45 @@ jQuery( $ => {
 			document.getElementById( 'mbb-diff-dialog' ).close();
 		}
 	} );
+
+	// AJAX action to run sync
+	document.querySelectorAll( '.button-sync' ).forEach( buttonSync => {
+		buttonSync.addEventListener( 'click', async (e) => {
+			e.preventDefault();
+			const previousText = buttonSync.textContent;
+
+			// Set the button to loading state
+			buttonSync.classList.add( 'loading' );
+			buttonSync.disabled = true;
+			buttonSync.textContent = 'Syncing...';
+
+			const data = await wp.apiFetch( { 
+				path: '/mbb/set-json-data',
+				method: 'PUT',
+				data: {
+					id: buttonSync.dataset.id,
+					use: buttonSync.dataset.use,
+				}
+			} );
+
+			if ( data.success ) {
+				const templateSyncSuccess = document.querySelector('#sync-success').content.cloneNode(true);
+
+				// Update the diff section
+				document.querySelector('.mbb-diff-dialog-content').innerHTML = templateSyncSuccess.querySelector('div').innerHTML;
+				
+				// Update status of current row sync to synced
+				const label = document.querySelector(`.mbb-label[data-for-id="${buttonSync.dataset.id}"]`);
+				label.textContent = 'Synced';
+				label.dataset.status = 'synced';
+			}
+			// Run the sync
+
+			// Reset the button
+			buttonSync.classList.remove( 'loading' );
+			buttonSync.disabled = false;
+			buttonSync.textContent = previousText;
+		} );
+	} );
+
 } );

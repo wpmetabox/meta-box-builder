@@ -7,12 +7,12 @@ class LocalJson {
 	}
 
 	public function generate_local_json( $parser, $post_id, $raw_data ) {
-		$post         = get_post( $post_id );
-		$file_name    = $post->post_name ?: sanitize_key( $post->post_title );
-		$mb_json_path = get_template_directory() . '/mb-json';
-		$file_path    = "$mb_json_path/$file_name.json";
+		// $post         = get_post( $post_id );
+		// $file_name    = $post->post_name ?: sanitize_key( $post->post_title );
+		// $mb_json_path = get_template_directory() . '/mb-json';
+		// $file_path    = "$mb_json_path/$file_name.json";
 
-		return self::update_local( $post, $file_path );
+		return self::use_database( $post_id );
 	}
 
 	/**
@@ -41,14 +41,21 @@ class LocalJson {
 		}
 	}
 
-	public static function update_remote( int $post_id, string $file_path ) {
-		if ( ! file_exists( $file_path ) ) {
-			return new \WP_Error( 'file_not_found', __( 'File not found!', 'meta-box-builder' ) );
+	/**
+	 * Use local json file and override database
+	 * 
+	 * @param int $post_id
+	 * @return bool
+	 */
+	public static function use_json( int $post_id ) {
+		$json = JsonService::get_json( [ 'post_id' => $post_id ] );
+		if ( ! $json || ! is_array(	$json ) ) {
+			return false;
 		}
 
-		$data = json_decode( file_get_contents( $file_path ), true );
-
-		$data = Normalizer::normalize( $data );
+		$json = reset( $json );
+		$data = $json['local_normalized'];
+		
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
 
 		wp_update_post( [ 
@@ -67,13 +74,30 @@ class LocalJson {
 		return true;
 	}
 
-	public static function update_local( $post, string $file_path ) {
-		if ( ! is_object( $post ) ) {
-			$post = get_post( $post );
+	/**
+	 * Use database and override local json file
+	 * 
+	 * @param mixed $post
+	 * @param string $file_path
+	 * @return bool
+	 */
+	public static function use_database( $meta_box_id ) {
+		$json = JsonService::get_json( [ 'id' => $meta_box_id ] );
+		if ( ! $json || ! is_array(	$json ) ) {
+			return false;
 		}
 
-		$meta_box = get_post_meta( $post->ID, 'meta_box', true );
-		$settings = get_post_meta( $post->ID, 'settings', true );
+		$json = reset( $json );
+
+		$post_id = $json['post_id'];
+		$file_path = $json['file'];
+
+		if ( ! $post_id ) {
+			return false;
+		}
+
+		$meta_box = get_post_meta( $post_id, 'meta_box', true );
+		$settings = get_post_meta( $post_id, 'settings', true );
 
 		// Add version for the meta box
 		$meta_box['version'] = $settings['version'] ?? 'v0';
