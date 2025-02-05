@@ -20,6 +20,7 @@ class Base {
 
 	public function parse_boolean_values() {
 		array_walk_recursive( $this->settings, [ $this, 'convert_string_to_boolean' ] );
+		
 		return $this;
 	}
 
@@ -45,10 +46,14 @@ class Base {
 		}
 	}
 
+	protected function convert_number_to_string( &$value ) {
+		$value = (string) $value;
+	}
+
 	protected function remove_empty_values() {
 		foreach ( $this->settings as $key => $value ) {
 			// Remove empty string in an array.
-			$value = ! is_array( $value ) ? $value : array_filter( $value, function( $v ) {
+			$value = ! is_array( $value ) ? $value : array_filter( $value, function ($v) {
 				return $v !== '';
 			} );
 
@@ -136,7 +141,7 @@ class Base {
 				$condition = null;
 				continue;
 			}
-			$condition = [
+			$condition = [ 
 				$condition['name'],
 				$condition['operator'],
 				$condition['value'],
@@ -146,7 +151,7 @@ class Base {
 
 		if ( ! empty( $data['when'] ) ) {
 			$this->{$data['type']} = array(
-				'when'     => array_values( $data['when'] ),
+				'when' => array_values( $data['when'] ),
 				'relation' => $data['relation'],
 			);
 		}

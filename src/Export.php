@@ -14,10 +14,10 @@ class Export {
 			return $actions;
 		}
 
-		$url               = wp_nonce_url( add_query_arg( [
-			'action'    => 'mbb-export',
+		$url               = wp_nonce_url( add_query_arg( [ 
+			'action' => 'mbb-export',
 			'post_type' => $post->post_type,
-			'post[]'    => $post->ID,
+			'post[]' => $post->ID,
 		] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
 		$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'meta-box-builder' ) . '</a>';
 
@@ -37,28 +37,42 @@ class Export {
 		$post_ids  = wp_parse_id_list( wp_unslash( $_REQUEST['post'] ) );
 		$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
 
-		$query = new WP_Query( [
-			'post_type'              => $post_type,
-			'post__in'               => $post_ids,
-			'posts_per_page'         => count( $post_ids ),
-			'no_found_rows'          => true,
+		$query = new WP_Query( [ 
+			'post_type' => $post_type,
+			'post__in' => $post_ids,
+			'posts_per_page' => count( $post_ids ),
+			'no_found_rows' => true,
 			'update_post_term_cache' => false,
 		] );
 
+		if ( empty( $query->posts ) || empty( $query->posts[0] ) ) {
+			return;
+		}
+
 		$data = [];
 		foreach ( $query->posts as $post ) {
-			$post_data = [
-				'post_type'    => $post->post_type,
-				'post_name'    => $post->post_name,
-				'post_title'   => $post->post_title,
-				'post_date'    => $post->post_date,
-				'post_status'  => $post->post_status,
-				'post_content' => $post->post_content,
-			];
+			$post_data = [];
+			if ( $post->post_type === 'meta-box' ) {
+				$meta_box = get_post_meta( $post->ID, 'meta_box', true );
+				$settings = get_post_meta( $post->ID, 'settings', true );
 
-			$meta_keys = $this->get_meta_keys( $post->post_type );
-			foreach ( $meta_keys as $meta_key ) {
-				$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
+				$post_data            = array_merge( $post_data, $meta_box );
+				$post_data['version'] = $settings['version'] ?? 'v0';
+			} else {
+				// @todo: Check export for other post types
+				$post_data = [ 
+					'post_type'    => $post->post_type,
+					'post_name'    => $post->post_name,
+					'post_title'   => $post->post_title,
+					'post_date'    => $post->post_date,
+					'post_status'  => $post->post_status,
+					'post_content' => $post->post_content,
+				];
+				$meta_keys = self::get_meta_keys( $post->post_type );
+
+				foreach ( $meta_keys as $meta_key ) {
+					$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
+				}
 			}
 
 			$data[] = $post_data;
@@ -71,6 +85,12 @@ class Export {
 			$file_name = $post->post_name ?: sanitize_key( $post->post_title );
 		}
 
+		// Sort keys alphabetically so we have a consistent order
+		ksort( $data );
+
+		// Add $schema to the exported data
+		$data = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $data );
+
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
 		header( 'Content-Type: application/octet-stream' );
@@ -80,20 +100,17 @@ class Export {
 		header( 'Pragma: public' );
 		header( 'Content-Length: ' . strlen( $output ) );
 
-		echo wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
+		echo $output;
 		die;
 	}
 
-	private function get_meta_keys( $post_type ) {
-		switch ( $post_type ) {
-			case 'meta-box':
-				return [ 'settings', 'fields', 'data', 'meta_box' ];
-			case 'mb-relationship':
-				return [ 'settings', 'relationship' ];
-			case 'mb-settings-page':
-				return [ 'settings', 'settings_page' ];
-			default:
-				return [];
-		}
+	public static function get_meta_keys( $post_type ) {
+		$meta_keys = [ 
+			'meta-box' => [ 'settings', 'fields', 'data', 'meta_box' ],
+			'mb-relationship' => [ 'settings', 'relationship' ],
+			'mb-settings-page' => [ 'settings', 'settings_page' ],
+		];
+
+		return $meta_keys[ $post_type ] ?? [];
 	}
 }
