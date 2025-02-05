@@ -115,6 +115,12 @@
 	background: #005177;
 }
 
+.button-sync:disabled {
+	background: #0073aa;
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
 .sync-success-content {
 	display: flex;
 	align-items: center;

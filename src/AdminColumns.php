@@ -25,6 +25,7 @@ class AdminColumns {
 
 	public function admin_notices() {
 		$custom_admin_notice = $_GET['status'] ?? '';
+
 		$messages            = [ 
 			'imported' => [ 
 				'status' => 'success',
@@ -33,15 +34,17 @@ class AdminColumns {
 			'import-failed' => [ 
 				'status' => 'error',
 				'message' => __( 'Import failed', 'meta-box-builder' ),
-			]
+			],
 		];
 
-		if ( isset( $messages[ $custom_admin_notice ] ) ) { ?>
-			<div class="notice notice-<?php esc_attr_e( $messages[ $custom_admin_notice ]['status'] ) ?> is-dismissible">
-				<p><?php esc_html_e( $messages[ $custom_admin_notice ]['message'] ) ?></p>
-			</div>
-			<?php
-		}
+		if ( ! isset( $messages[ $custom_admin_notice ] ) ) {
+			return;
+		} 
+		?>
+		<div class="notice notice-<?php esc_attr_e( $messages[ $custom_admin_notice ]['status'] ) ?> is-dismissible">
+			<p><?php esc_html_e( $messages[ $custom_admin_notice ]['message'] ) ?></p>
+		</div>
+		<?php
 	}
 
 	public function render_diff_dialog() {
@@ -69,23 +72,24 @@ class AdminColumns {
 			</div>
 
 			<div class="mbb-diff-dialog-content"></div>
+
 			<template id="sync-success">
 				<div class="sync-success-wrapper">
 					<div class="sync-success-content">
-						<p><?php echo esc_html__( 'All changes synced!', 'meta-box-builder' ) ?></p>
+						<p><?= esc_html__( 'All changes synced!', 'meta-box-builder' ) ?></p>
 					</div>
 				</div>
 			</template>
 
 			<footer>
 				<button id="mbb-diff-dialog-close-btn" class="button button-secondary">
-					<?php echo esc_html__( 'Close', 'meta-box-builder' ) ?>
+					<?= esc_html__( 'Close', 'meta-box-builder' ) ?>
 				</button>
 			</footer>
 		</dialog>
 
 		<script>
-			const syncData = <?php echo json_encode( JsonService::get_json() ) ?>;
+			const syncData = <?= json_encode( JsonService::get_json() ) ?>;
 			const showDialog = ( mbbId ) => {
 				const dialog = document.getElementById( 'mbb-diff-dialog' );
 				dialog.querySelector( '.mbb-diff-dialog-content' ).innerHTML = syncData[ mbbId ].diff;
@@ -151,6 +155,7 @@ class AdminColumns {
 		$data      = $json[ $id ];
 		$file_path = $data['file'];
 
+		// @todo: check this
 		// No post found, import the json file.
 		if ( ! $data['post_id'] && $target === 'to-db' ) {
 			$res     = LocalJson::import( $file_path );
@@ -281,6 +286,10 @@ class AdminColumns {
 		wp_localize_script( 'mbb-list', 'MBB', [ 
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
+			'not_imported' => esc_html__( 'Not Imported', 'meta-box-builder' ),
+			'synced' => esc_html__( 'Synced', 'meta-box-builder' ),
+			'syncing' => esc_html__( 'Syncing...', 'meta-box-builder' ),
+			'changes_detected' => esc_html__( 'Changes detected', 'meta-box-builder' ),
 		] );
 
 		if ( Data::is_extension_active( 'mb-frontend-submission' ) ) {
@@ -337,18 +346,16 @@ class AdminColumns {
 		$this->{"show_$column"}( $data );
 	}
 
-	private function show_sync_status( string $id ) {
-		$json = JsonService::get_json();
-		if ( ! $this->is_status( 'sync' ) ) {
-			foreach ( $json as $json_id => $data ) {
-				if ( isset( $data['post_id'] ) && $data['post_id'] == $id ) {
-					$id = $json_id;
-					break;
-				}
-			}
+	private function show_sync_status( int $post_id ) {
+		$json = JsonService::get_json( [ 
+			'post_id' => $post_id,
+		] );
+
+		if ( empty( $json ) || ! is_array( $json ) ) {
+			return;
 		}
 
-		$sync_data = $json[ $id ] ?? [];
+		$sync_data = $json[0] ?? [];
 
 		// Empty sync data means no related json file.
 		if ( empty( $sync_data ) ) {
@@ -367,14 +374,14 @@ class AdminColumns {
 			$status = 'synced';
 		}
 		?>
-		<span class="mbb-label" data-status="<?php esc_attr_e( $status ) ?>" data-for-id="<?php esc_attr_e( $id ) ?>">
+		<span class="mbb-label" data-status="<?php esc_attr_e( $status ) ?>" data-for-id="<?php esc_attr_e( $post_id ) ?>">
 			<?php esc_html_e( $available_statuses[ $status ] ) ?>
 		</span>
 
 		<?php if ( $sync_data['is_newer'] !== 0 ) { ?>
 			<div class="row-actions">
 				<span class="review">
-					<a href="javascript:;" role="button" onclick="return showDialog('<?= $id ?>');">
+					<a href="javascript:;" role="button" onclick="return showDialog('<?= $post_id ?>');">
 						<?= esc_html__( 'Review changes', 'meta-box-builder' ) ?>
 					</a>
 				</span>

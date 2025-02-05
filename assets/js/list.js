@@ -54,7 +54,7 @@ jQuery( $ => {
 			// Set the button to loading state
 			buttonSync.classList.add( 'loading' );
 			buttonSync.disabled = true;
-			buttonSync.textContent = 'Syncing...';
+			buttonSync.textContent = MBB.syncing;
 
 			const data = await wp.apiFetch( { 
 				path: '/mbb/set-json-data',
@@ -73,9 +73,10 @@ jQuery( $ => {
 				
 				// Update status of current row sync to synced
 				const label = document.querySelector(`.mbb-label[data-for-id="${buttonSync.dataset.id}"]`);
-				label.textContent = 'Synced';
+				label.textContent = MBB.synced;
 				label.dataset.status = 'synced';
 			}
+
 			// Run the sync
 
 			// Reset the button
