@@ -7,7 +7,7 @@ class JsonService {
 
 		// Filter by meta box id
 		$meta_box = array_filter( $meta_boxes, function ($meta_box) use ($meta_box_id) {
-			return $meta_box['id'] === $meta_box_id;
+			return $meta_box['id'] == $meta_box_id;
 		} );
 
 		// Get the first key of array
@@ -23,7 +23,17 @@ class JsonService {
 	}
 
 	private static function get_sync_status( $file ) {
-		$local            = json_decode( file_get_contents( $file ), true );
+		$data  = LocalJson::read_file( $file );
+		$local = json_decode( $data, true );
+
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			return [];
+		}
+
+		if ( empty( $local ) ) {
+			return [];
+		}
+
 		$local_normalized = Normalizer::normalize( $local );
 		$id               = $local_normalized['id'] ?? sanitize_title( $local_normalized['title'] );
 
@@ -95,13 +105,13 @@ class JsonService {
 			} );
 		}
 
-		foreach ( ['is_newer', 'post_id', 'file' ] as $key ) {
+		foreach ( [ 'is_newer', 'post_id', 'file' ] as $key ) {
 			if ( isset( $params[ $key ] ) ) {
 				foreach ( $json as $item ) {
 					if ( $item[ $key ] == $params[ $key ] ) {
 						$items[] = $item;
 					}
-				}	
+				}
 			}
 		}
 
@@ -153,6 +163,11 @@ class JsonService {
 		return $meta_boxes;
 	}
 
+	/**
+	 * Get all meta box .json files
+	 * 
+	 * @return string[]
+	 */
 	public static function get_files(): array {
 		$paths = self::get_paths();
 
@@ -181,7 +196,7 @@ class JsonService {
 
 		// @todo: Should we create the directory if it doesn't exist?
 		// if ( ! is_dir( $mb_json_path ) ) {
-		// 	mkdir( $mb_json_path );
+		// 	wp_mkdir_p( $mb_json_path );
 		// }
 
 		return $mb_json_paths;

@@ -26,7 +26,7 @@ class AdminColumns {
 	public function admin_notices() {
 		$custom_admin_notice = $_GET['status'] ?? '';
 
-		$messages            = [ 
+		$messages = [ 
 			'imported' => [ 
 				'status' => 'success',
 				'message' => __( 'Imported successfully', 'meta-box-builder' ),
@@ -39,7 +39,7 @@ class AdminColumns {
 
 		if ( ! isset( $messages[ $custom_admin_notice ] ) ) {
 			return;
-		} 
+		}
 		?>
 		<div class="notice notice-<?php esc_attr_e( $messages[ $custom_admin_notice ]['status'] ) ?> is-dismissible">
 			<p><?php esc_html_e( $messages[ $custom_admin_notice ]['message'] ) ?></p>
@@ -152,7 +152,7 @@ class AdminColumns {
 			exit;
 		}
 
-		$data      = $json[ $id ];
+		$data      = $json[ $id ] ?? [];
 		$file_path = $data['file'];
 
 		// @todo: check this
@@ -246,9 +246,7 @@ class AdminColumns {
 	public function admin_table_views( $views ) {
 		global $wp_list_table, $wp_query;
 
-		$count = count( array_filter( JsonService::get_json(), function ($json) {
-			return $json['is_newer'] > 0;
-		} ) );
+		$count = count( JsonService::get_json( [ 'is_newer' => 1 ] ) );
 
 		if ( $count ) {
 			$url = add_query_arg( [ 
@@ -405,7 +403,7 @@ class AdminColumns {
 		esc_html_e( $labels[ $object_type ] ?? '' );
 	}
 
-	private function get_human_readable_file_location( string $file ): string {
+	private function format_file_location( string $file ): string {
 		// Get the relative path of the file.
 		$active_theme = get_template_directory();
 		$plugins_path = WP_PLUGIN_DIR;
@@ -430,19 +428,15 @@ class AdminColumns {
 	}
 
 	private function show_location_sync( string $meta_box_id ) {
-		$json = JsonService::get_json();
+		$json = JsonService::get_json( [ 
+			'id' => $meta_box_id,
+		] );
 
-		if ( ! isset( $json[ $meta_box_id ] ) ) {
+		if ( ! is_array( $json ) || ! isset( $json[0] ) || ! isset( $json[0]['file'] ) ) {
 			return;
 		}
 
-		$json = $json[ $meta_box_id ] ?? null;
-
-		if ( ! is_array( $json ) || ! isset( $json['file'] ) ) {
-			return;
-		}
-
-		echo $this->get_human_readable_file_location( $json['file'] );
+		echo $this->format_file_location( $json['file'] );
 	}
 
 	private function show_location( $data ) {

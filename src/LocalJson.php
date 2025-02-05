@@ -15,6 +15,20 @@ class LocalJson {
 		return self::use_database( $post_id );
 	}
 
+	public static function read_file( string $file_path ) {
+		if ( ! file_exists( $file_path ) ) {
+			return new \WP_Error( 'file_not_found', __( 'File not found!', 'meta-box-builder' ) );
+		}
+
+		if ( ! is_readable( $file_path ) ) {
+			return new \WP_Error( 'file_not_readable', __( 'File not readable!', 'meta-box-builder' ) );
+		}
+
+		$data = file_get_contents( $file_path );
+
+		return $data;
+	}
+
 	/**
 	 * Import from .json file
 	 * @param string $file_path
@@ -22,21 +36,13 @@ class LocalJson {
 	 * @return \WP_Error|boolean
 	 */
 	public static function import( string $file_path ) {
-		if ( ! file_exists( $file_path ) ) {
-			return new \WP_Error( 'file_not_found', __( 'File not found!', 'meta-box-builder' ) );
-		}
-
-		$data = file_get_contents( $file_path );
+		$data = self::read_file( $file_path );
 
 		return Import::import_json( $data );
 	}
 
 	public static function import_many( array $file_paths ) {
 		foreach ( $file_paths as $file_path ) {
-			if ( ! file_exists( $file_path ) ) {
-				continue;
-			}
-			
 			self::import( $file_path );
 		}
 	}
