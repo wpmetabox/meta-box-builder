@@ -2,77 +2,6 @@
 namespace MBB;
 
 class JsonService {
-	private static function get_meta_box_by_meta_box_id( string $meta_box_id ): array {
-		$meta_boxes = self::get_meta_boxes();
-
-		// Filter by meta box id
-		$meta_box = array_filter( $meta_boxes, function ($meta_box) use ($meta_box_id) {
-			return $meta_box['id'] == $meta_box_id;
-		} );
-
-		// Get the first key of array
-		$keys = array_keys( $meta_box );
-
-		// No posts found, return empty array
-		if ( empty( $keys ) ) {
-			return [ null, [] ];
-		}
-
-		// [post_id, meta_box]
-		return [ $keys[0], $meta_box[ $keys[0] ] ];
-	}
-
-	private static function get_sync_status( $file ) {
-		$data  = LocalJson::read_file( $file );
-		$local = json_decode( $data, true );
-
-		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			return [];
-		}
-
-		if ( empty( $local ) ) {
-			return [];
-		}
-
-		$local_normalized = Normalizer::normalize( $local );
-		$id               = $local_normalized['id'] ?? sanitize_title( $local_normalized['title'] );
-
-		[ $post_id, $remote ] = self::get_meta_box_by_meta_box_id( $id );
-
-		$is_newer = version_compare( $local_normalized['version'], $remote['version'] ?? 'v0' );
-		if ( empty( $remote ) ) {
-			$is_newer = true;
-		}
-
-		// Add schema to remote to compare
-		if ( ! empty( $remote ) ) {
-			// Sort keys alphabetically so we have a consistent order
-			ksort( $remote );
-
-			// Add $schema to the beginning of $remote
-			$remote = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $remote );
-		}
-
-		$left = empty( $remote ) ? '' : wp_json_encode( $remote, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
-
-		ksort( $local_normalized );
-
-		$diff = wp_text_diff( $left, wp_json_encode( $local_normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
-			'show_split_view' => ! empty( $remote ),
-		] );
-
-		return compact(
-			'is_newer',
-			'local',
-			'local_normalized',
-			'remote',
-			'diff',
-			'post_id',
-			'file',
-			'id'
-		);
-	}
-
 	/**
 	 * @todo: Check case where db exists but local doesn't
 	 * @param array $params
@@ -80,35 +9,93 @@ class JsonService {
 	 */
 	public static function get_json( array $params = [] ): ?array {
 		$files = self::get_files();
-
-		$json = [];
-
+		// key by meta box id
+		$items = [];
 		foreach ( $files as $file ) {
-			$sync_status = self::get_sync_status( $file );
+			$data = LocalJson::read_file( $file );
 
-			if ( ! isset( $sync_status['local'] ) || ! isset( $sync_status['local']['id'] ) ) {
+			if ( $data instanceof \WP_Error ) {
 				continue;
 			}
 
-			$json[ $sync_status['local']['id'] ] = $sync_status;
+			$json = json_decode( $data, true );
+
+			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $json ) ) {
+				continue;
+			}
+
+			$local_normalized = Normalizer::normalize( $json );
+			ksort( $local_normalized );
+
+			$items[ $json['id'] ] = [ 
+				'file' => $file,
+				'local' => $json,
+				'local_normalized' => $local_normalized,
+				'is_newer' => false,
+				'post_id' => null,
+				'id' => $json['id'],
+				'remote' => null,
+				'diff' => null,
+			];
 		}
 
-		if ( empty( $params ) ) {
-			return $json;
+		$meta_boxes = self::get_meta_boxes();
+		foreach ( $meta_boxes as $meta_box ) {
+			ksort( $meta_box );
+			$id = $meta_box['id'];
+
+			// No file found
+			if ( ! isset( $items[ $id ] ) ) {
+				$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+
+				$diff = wp_text_diff( $left, '', [ 
+					'show_split_view' => true,
+				] );
+
+				$items[ $id ] = [ 
+					'id' => $id,
+					'is_newer' => false,
+					'diff' => $diff,
+					'local' => null,
+					'local_normalized' => null,
+					'post_id' => $meta_box['post_id'],
+					'remote' => $meta_box,
+				];
+
+				continue;
+			}
+
+			$is_newer = version_compare( $items[ $id ]['local_normalized']['version'], $meta_box['version'] ?? 'v0' );
+			if ( empty( $meta_box ) ) {
+				$is_newer = true;
+			}
+
+			$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+
+			$diff = wp_text_diff( $left, wp_json_encode( $items[ $id ]['local_normalized'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
+				'show_split_view' => true,
+			] );
+
+			$items[ $id ] = array_merge( $items[ $id ], [ 
+				'id' => $id,
+				'is_newer' => $is_newer,
+				'remote' => $meta_box,
+				'diff' => $diff,
+				'post_id' => $meta_box['post_id'],
+			] );
 		}
 
-		$items = [];
 		// Filter by params
 		if ( isset( $params['id'] ) ) {
-			$items = array_filter( $json, function ($item) use ($params) {
-				return $item['id'] === $params['id'];
+			$items = array_filter( $items, function ($item) use ($params) {
+				return $item['id'] == $params['id'];
 			} );
 		}
 
 		foreach ( [ 'is_newer', 'post_id', 'file' ] as $key ) {
 			if ( isset( $params[ $key ] ) ) {
-				foreach ( $json as $item ) {
-					if ( $item[ $key ] == $params[ $key ] ) {
+				foreach ( $items as $item ) {
+					if ( isset( $item[ $key ] ) && $item[ $key ] == $params[ $key ] ) {
 						$items[] = $item;
 					}
 				}
@@ -140,6 +127,9 @@ class JsonService {
 				$post_data            = array_merge( $post_data, $meta_box );
 				$post_data            = Normalizer::normalize( $post_data );
 				$post_data['version'] = $settings['version'] ?? 'v0';
+
+				// Extra post id for filtering
+				$post_data['post_id'] = $post->ID;
 			} else {
 				// @todo: Check export for other post types
 				$post_data = [ 

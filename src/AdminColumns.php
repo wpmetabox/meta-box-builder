@@ -90,6 +90,7 @@ class AdminColumns {
 
 		<script>
 			const syncData = <?= json_encode( JsonService::get_json() ) ?>;
+
 			const showDialog = ( mbbId ) => {
 				const dialog = document.getElementById( 'mbb-diff-dialog' );
 				dialog.querySelector( '.mbb-diff-dialog-content' ).innerHTML = syncData[ mbbId ].diff;
@@ -172,6 +173,11 @@ class AdminColumns {
 		$columns = $wp_list_table->get_columns();
 		$hidden  = get_hidden_columns( $wp_list_table->screen );
 		$json    = JsonService::get_json();
+
+		// Filter where local is not null
+		$json = array_filter( $json, function ( $item ) {
+			return ! empty( $item['local'] );
+		} );
 		?>
 		<template id="mb-sync-list">
 			<tbody>
@@ -246,7 +252,14 @@ class AdminColumns {
 	public function admin_table_views( $views ) {
 		global $wp_list_table, $wp_query;
 
-		$count = count( JsonService::get_json( [ 'is_newer' => 1 ] ) );
+		$json    = JsonService::get_json();
+
+		// Filter where local is not null
+		$json = array_filter( $json, function ( $item ) {
+			return ! empty( $item['local'] );
+		} );
+
+		$count = count( $json );
 
 		if ( $count ) {
 			$url = add_query_arg( [ 
@@ -285,6 +298,7 @@ class AdminColumns {
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
 			'not_imported' => esc_html__( 'Not Imported', 'meta-box-builder' ),
+			'error_file_permission' => esc_html__( 'Error: File permission', 'meta-box-builder' ),
 			'synced' => esc_html__( 'Synced', 'meta-box-builder' ),
 			'syncing' => esc_html__( 'Syncing...', 'meta-box-builder' ),
 			'changes_detected' => esc_html__( 'Changes detected', 'meta-box-builder' ),
@@ -323,8 +337,14 @@ class AdminColumns {
 			return;
 		}
 
+		$post_name = $post_id;
 		if ( $column === 'sync_status' ) {
-			$this->show_sync_status( $post_id );
+			if (is_numeric($post_id)) {
+				$post = get_post( $post_id );
+				$post_name = $post->post_name;
+			}
+
+			$this->show_sync_status( $post_name );
 			return;
 		}
 
@@ -344,23 +364,28 @@ class AdminColumns {
 		$this->{"show_$column"}( $data );
 	}
 
-	private function show_sync_status( int $post_id ) {
+	private function show_sync_status( $meta_box_id ) {
+		if (is_null($meta_box_id)) {
+			return;
+		}
+
 		$json = JsonService::get_json( [ 
-			'post_id' => $post_id,
+			'id' => $meta_box_id,
 		] );
 
 		if ( empty( $json ) || ! is_array( $json ) ) {
 			return;
 		}
 
-		$sync_data = $json[0] ?? [];
-
+		$sync_data = $json[$meta_box_id];
+		
 		// Empty sync data means no related json file.
 		if ( empty( $sync_data ) ) {
 			return;
 		}
 
 		$available_statuses = [ 
+			'error_file_permission' => __( 'Error: File permission', 'meta-box-builder' ),
 			'not_imported' => __( 'Not Imported', 'meta-box-builder' ),
 			'changes_detected' => __( 'Changes detected', 'meta-box-builder' ),
 			'synced' => __( 'Synced', 'meta-box-builder' ),
@@ -372,19 +397,17 @@ class AdminColumns {
 			$status = 'synced';
 		}
 		?>
-		<span class="mbb-label" data-status="<?php esc_attr_e( $status ) ?>" data-for-id="<?php esc_attr_e( $post_id ) ?>">
+		<span class="mbb-label" data-status="<?php esc_attr_e( $status ) ?>" data-for-id="<?php esc_attr_e( $meta_box_id ) ?>">
 			<?php esc_html_e( $available_statuses[ $status ] ) ?>
 		</span>
 
-		<?php if ( $sync_data['is_newer'] !== 0 ) { ?>
-			<div class="row-actions">
-				<span class="review">
-					<a href="javascript:;" role="button" onclick="return showDialog('<?= $post_id ?>');">
-						<?= esc_html__( 'Review changes', 'meta-box-builder' ) ?>
-					</a>
-				</span>
-			</div>
-		<?php } ?>
+		<div class="row-actions">
+			<span class="review">
+				<a href="javascript:;" role="button" onclick="return showDialog('<?= $meta_box_id ?>');">
+					<?= esc_html__( 'Review changes', 'meta-box-builder' ) ?>
+				</a>
+			</span>
+		</div>
 	<?php
 	}
 
