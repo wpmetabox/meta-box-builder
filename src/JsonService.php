@@ -3,7 +3,6 @@ namespace MBB;
 
 class JsonService {
 	/**
-	 * @todo: Check case where db exists but local doesn't
 	 * @param array $params
 	 * @return array[]
 	 */
@@ -54,7 +53,7 @@ class JsonService {
 
 				$items[ $id ] = [ 
 					'id' => $id,
-					'is_newer' => false,
+					'is_newer' => -1,
 					'diff' => $diff,
 					'local' => null,
 					'local_normalized' => null,
@@ -66,9 +65,6 @@ class JsonService {
 			}
 
 			$is_newer = version_compare( $items[ $id ]['local_normalized']['version'], $meta_box['version'] ?? 'v0' );
-			if ( empty( $meta_box ) ) {
-				$is_newer = true;
-			}
 
 			$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
