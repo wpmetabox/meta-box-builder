@@ -94,7 +94,9 @@ class AdminColumns {
 			const showDialog = ( mbbId ) => {
 				const dialog = document.getElementById( 'mbb-diff-dialog' );
 				dialog.querySelector( '.mbb-diff-dialog-content' ).innerHTML = syncData[ mbbId ].diff;
-				dialog.querySelector( '.button-sync' ).dataset.id = mbbId;
+				dialog.querySelectorAll( '.button-sync' ).forEach(btnSync => {
+					btnSync.dataset.id = mbbId;
+				});
 				dialog.showModal();
 			};
 		</script>
@@ -175,7 +177,7 @@ class AdminColumns {
 		$json    = JsonService::get_json();
 
 		// Filter where local is not null
-		$json = array_filter( $json, function ( $item ) {
+		$json = array_filter( $json, function ($item) {
 			return ! empty( $item['local'] );
 		} );
 		?>
@@ -252,10 +254,10 @@ class AdminColumns {
 	public function admin_table_views( $views ) {
 		global $wp_list_table, $wp_query;
 
-		$json    = JsonService::get_json();
+		$json = JsonService::get_json();
 
 		// Filter where local is not null
-		$json = array_filter( $json, function ( $item ) {
+		$json = array_filter( $json, function ($item) {
 			return ! empty( $item['local'] );
 		} );
 
@@ -339,8 +341,8 @@ class AdminColumns {
 
 		$post_name = $post_id;
 		if ( $column === 'sync_status' ) {
-			if (is_numeric($post_id)) {
-				$post = get_post( $post_id );
+			if ( is_numeric( $post_id ) ) {
+				$post      = get_post( $post_id );
 				$post_name = $post->post_name;
 			}
 
@@ -365,7 +367,7 @@ class AdminColumns {
 	}
 
 	private function show_sync_status( $meta_box_id ) {
-		if (is_null($meta_box_id)) {
+		if ( $meta_box_id === null ) {
 			return;
 		}
 
@@ -377,8 +379,8 @@ class AdminColumns {
 			return;
 		}
 
-		$sync_data = $json[$meta_box_id];
-		
+		$sync_data = $json[ $meta_box_id ];
+
 		// Empty sync data means no related json file.
 		if ( empty( $sync_data ) ) {
 			return;
@@ -408,7 +410,7 @@ class AdminColumns {
 				</a>
 			</span>
 		</div>
-	<?php
+		<?php
 	}
 
 	private function show_for( $data ) {

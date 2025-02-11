@@ -26,15 +26,19 @@ class JsonService {
 			$local_normalized = Normalizer::normalize( $json );
 			ksort( $local_normalized );
 
+			$diff = wp_text_diff( '', wp_json_encode( $local_normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
+				'show_split_view' => true,
+			] );
+
 			$items[ $json['id'] ] = [ 
 				'file' => $file,
 				'local' => $json,
 				'local_normalized' => $local_normalized,
-				'is_newer' => false,
+				'is_newer' => true,
 				'post_id' => null,
 				'id' => $json['id'],
 				'remote' => null,
-				'diff' => null,
+				'diff' => $diff,
 			];
 		}
 
@@ -45,10 +49,10 @@ class JsonService {
 			$post_id = $meta_box['post_id'];
 			// Remove post_id to avoid diff
 			unset( $meta_box['post_id'] );
+			
 
 			// No file found
 			if ( ! isset( $items[ $id ] ) ) {
-				
 				
 				$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 

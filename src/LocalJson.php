@@ -64,11 +64,23 @@ class LocalJson {
 	/**
 	 * Use local json file and override database
 	 * 
-	 * @param int $post_id
+	 * @param array $args
 	 * @return bool
 	 */
-	public static function use_json( int $post_id ) {
-		$json = JsonService::get_json( [ 'post_id' => $post_id ] );
+	public static function use_json( array $args ) {
+		$post_name = $args['post_name'];
+		// @todo: fix hardcode meta-box post type to support other post types
+		$post       = get_page_by_path( $post_name, OBJECT, 'meta-box' );
+		$post_array = [];
+
+		if ( $post ) {
+			$post_array = [ 'ID' => $post->ID ];
+		}
+
+		$json = JsonService::get_json( [ 
+			'id' => $args['post_name'],
+		] );
+
 		if ( ! $json || ! is_array( $json ) ) {
 			return false;
 		}
@@ -77,9 +89,8 @@ class LocalJson {
 		$data = $json['local_normalized'];
 
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
-
-		wp_update_post( [ 
-			'ID' => $post_id,
+		$post_array  = array_merge( $post_array, [ 
+			'post_type' => $data['post_type'],
 			'post_name' => $data['post_name'],
 			'post_title' => $data['post_title'],
 			'post_date' => $data['post_date'],
@@ -87,7 +98,14 @@ class LocalJson {
 			'post_content' => $data['post_content'],
 		] );
 
+		// wp_insert_post actually upserts the post based on the ID
+		$post_id = wp_insert_post( $post_array );
+
 		foreach ( $meta_fields as $meta_key ) {
+			if ( ! isset( $data[ $meta_key ] ) ) {
+				continue;
+			}
+
 			update_post_meta( $post_id, $meta_key, $data[ $meta_key ] );
 		}
 
