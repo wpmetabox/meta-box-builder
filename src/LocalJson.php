@@ -12,7 +12,7 @@ class LocalJson {
 		// $mb_json_path = get_template_directory() . '/mb-json';
 		// $file_path    = "$mb_json_path/$file_name.json";
 
-		return self::use_database( $post_id );
+		return self::use_database( compact( 'post_id' ) );
 	}
 
 	public static function read_file( string $file_path ) {
@@ -97,13 +97,18 @@ class LocalJson {
 	/**
 	 * Use database and override local json file
 	 * 
-	 * @param mixed $post
-	 * @param string $file_path
+	 * @param int|string $post_id
 	 * @return bool
 	 */
-	public static function use_database( int $post_id ) {
-		$post = get_post( $post_id );
-		
+	public static function use_database( array $args = [] ) {
+		if ( isset( $args['post_id'] ) ) {
+			$post = get_post( $args['post_id'] );
+		} elseif ( isset( $args['post_name'] ) ) {
+			$post = get_page_by_path( $args['post_name'], OBJECT, 'meta-box' );
+		} else {
+			return false;
+		}
+
 		if ( ! $post ) {
 			return false;
 		}
@@ -112,8 +117,8 @@ class LocalJson {
 		$mb_json_path = JsonService::get_paths()[0];
 		$file_path    = "$mb_json_path/$file_name.json";
 
-		$meta_box = get_post_meta( $post_id, 'meta_box', true );
-		$settings = get_post_meta( $post_id, 'settings', true );
+		$meta_box = get_post_meta( $post->ID, 'meta_box', true );
+		$settings = get_post_meta( $post->ID, 'settings', true );
 
 		// Add version for the meta box
 		$meta_box['version'] = $settings['version'] ?? 'v' . time();
@@ -125,7 +130,7 @@ class LocalJson {
 
 		if ( is_wp_error( $success ) ) {
 			// Return an error message.
-			$data = get_post_meta( $post_id, 'data', true );
+			$data = get_post_meta( $post->ID, 'data', true );
 
 			if ( ! is_array( $data ) ) {
 				$data = [];
@@ -133,7 +138,7 @@ class LocalJson {
 
 			$data['json_path_error'] = __( 'JSON path is not writable. Please check the folder permission.', 'meta-box-builder' );
 
-			update_post_meta( $post_id, 'data', $data );
+			update_post_meta( $post->ID, 'data', $data );
 
 			return false;
 		}

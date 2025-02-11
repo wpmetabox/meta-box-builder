@@ -174,21 +174,21 @@ class Base {
 	public function set_json_data( \WP_REST_Request $request ): \WP_REST_Response {
 		$params = $request->get_params();
 
-		foreach ( ['id', 'use'] as $param ) {
-			if ( ! isset( $params[$param] ) ) {
+		foreach ( [ 'id', 'use' ] as $param ) {
+			if ( ! isset( $params[ $param ] ) ) {
 				return new \WP_REST_Response( [ 
 					'success' => false,
-					'message' => ucfirst($param) . ' is required',
+					'message' => ucfirst( $param ) . ' is required',
 				], 400 );
 			}
 		}
 
 		$use = $params['use'];
 
-		$res = call_user_func( [ LocalJson::class, 'use_' . $use ], $params['id'] );
+		$res = call_user_func( [ LocalJson::class, 'use_' . $use ], [ 'post_name' => $params['id'] ] );
 
 		return new \WP_REST_Response( [ 
-			'success' => true,
+			'success' => (bool) $res,
 		], 200 );
 	}
 }
