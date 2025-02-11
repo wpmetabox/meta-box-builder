@@ -46,7 +46,8 @@ class Normalizer {
 		$data['settings']['text_domain']   = self::lookup( [ 'settings.text_domain' ], $data, 'your-text-domain' );
 		$data['settings']['function_name'] = self::lookup( [ 'settings.function_name' ], $data, '' );
 		$data['settings']['version']       = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
-		$data['data']                      = self::lookup( [ 'settings.data' ], $data, [] );
+		
+		unset($data['data']);
 
 		$data['fields'] = self::lookup( [ 'fields' ], $data, [] );
 

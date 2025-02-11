@@ -42,9 +42,14 @@ class JsonService {
 		foreach ( $meta_boxes as $meta_box ) {
 			ksort( $meta_box );
 			$id = $meta_box['id'];
+			$post_id = $meta_box['post_id'];
+			// Remove post_id to avoid diff
+			unset( $meta_box['post_id'] );
 
 			// No file found
 			if ( ! isset( $items[ $id ] ) ) {
+				
+				
 				$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
 				$diff = wp_text_diff( $left, '', [ 
@@ -57,7 +62,7 @@ class JsonService {
 					'diff' => $diff,
 					'local' => null,
 					'local_normalized' => null,
-					'post_id' => $meta_box['post_id'],
+					'post_id' => $post_id,
 					'remote' => $meta_box,
 				];
 
@@ -77,7 +82,7 @@ class JsonService {
 				'is_newer' => $is_newer,
 				'remote' => $meta_box,
 				'diff' => $diff,
-				'post_id' => $meta_box['post_id'],
+				'post_id' => $post_id,
 			] );
 		}
 
@@ -124,8 +129,7 @@ class JsonService {
 				$post_data            = Normalizer::normalize( $post_data );
 				$post_data['version'] = $settings['version'] ?? 'v0';
 
-				// Extra post id for filtering
-				$post_data['post_id'] = $post->ID;
+				
 			} else {
 				// @todo: Check export for other post types
 				$post_data = [ 
@@ -142,6 +146,9 @@ class JsonService {
 					$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
 				}
 			}
+
+			// Extra post id for filtering
+			$post_data['post_id'] = $post->ID;
 
 			$meta_boxes[ $post->ID ] = $post_data;
 		}
