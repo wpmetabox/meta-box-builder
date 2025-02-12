@@ -52,7 +52,7 @@ class AdminColumns {
 		<dialog id="mbb-diff-dialog">
 			<header>
 				<h2><?php echo esc_html__( 'Review changes', 'meta-box-builder' ) ?></h2>
-				<button id="mbb-diff-dialog-close" class="button-link">&times;</button>
+				<button id="mbb-diff-dialog-close" class="button-link" role="button">&times;</button>
 			</header>
 
 			<div class="mbb-diff-dialog-button-group" data-split-views="true">

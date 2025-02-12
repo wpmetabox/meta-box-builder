@@ -130,18 +130,11 @@ class LocalJson {
 			return false;
 		}
 
-		$file_name    = $post->post_name ?: sanitize_key( $post->post_title );
-		$mb_json_path = JsonService::get_paths()[0];
-		$file_path    = "$mb_json_path/$file_name.json";
+		$data = JsonService::get_json( [ 'id' => $post->post_name ] );
+		$data = reset( $data );
 
-		$meta_box = get_post_meta( $post->ID, 'meta_box', true );
-		$settings = get_post_meta( $post->ID, 'settings', true );
-
-		// Add version for the meta box
-		$meta_box['version'] = $settings['version'] ?? 'v' . time();
-
-		// Add schema, and it should be the first item
-		$meta_box = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $meta_box );
+		$meta_box = $data['remote'];
+		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 
 		$success = self::write_file( $file_path, $meta_box );
 

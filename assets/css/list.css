@@ -102,21 +102,23 @@
 }
 
 .button-sync {
-	background: #0073aa;
-	color: #fff;
-	border: none;
+	background: none;
+	color: #0073aa;
+	border: 1px solid #0073aa;
 	border-radius: 4px;
 	padding: 10px 20px;
 	cursor: pointer;
-	transition: background-color 0.3s ease;
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .button-sync:hover {
-	background: #005177;
+	background: #0073aa;
+	color: #fff;
 }
 
 .button-sync:disabled {
-	background: #0073aa;
+	background: none;
+	color: #0073aa;
 	opacity: 0.5;
 	cursor: not-allowed;
 }
@@ -140,6 +142,16 @@
 		opacity: 1;
 		transform: translateY(0);
 	}
+}
+
+#mbb-diff-dialog {
+	max-height: 80vh;
+	overflow: hidden;
+}
+
+.mbb-diff-dialog-content {
+	max-height: 600px;
+	overflow: auto;
 }
 
 .mbb-diff-dialog-content>div {
