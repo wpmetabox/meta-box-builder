@@ -98,7 +98,6 @@ class LocalJson {
 			'post_content' => $data['post_content'],
 		] );
 
-		// wp_insert_post actually upserts the post based on the ID
 		$post_id = wp_insert_post( $post_array );
 
 		foreach ( $meta_fields as $meta_key ) {

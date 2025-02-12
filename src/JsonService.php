@@ -129,11 +129,9 @@ class JsonService {
 					continue;
 				}
 
-				$post_data            = array_merge( $post_data, $meta_box );
-				$post_data            = Normalizer::normalize( $post_data );
+				$post_data            = $meta_box;
 				$post_data['version'] = $settings['version'] ?? 'v0';
-
-				
+				$post_data            = Normalizer::normalize( $post_data );
 			} else {
 				// @todo: Check export for other post types
 				$post_data = [ 
