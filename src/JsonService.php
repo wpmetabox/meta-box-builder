@@ -149,7 +149,7 @@ class JsonService {
 				}
 			}
 
-			// Extra post id for filtering
+			// Extra post id for filtering, check this line carefully if you want to change it
 			$post_data['post_id'] = $post->ID;
 
 			$meta_boxes[ $post->ID ] = $post_data;

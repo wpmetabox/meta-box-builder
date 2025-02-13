@@ -133,7 +133,10 @@ class LocalJson {
 		$data = JsonService::get_json( [ 'id' => $post->post_name ] );
 		$data = reset( $data );
 
-		$meta_box = $data['remote'];
+		$meta_box = $data['remote']['meta_box'];
+		// Add schema to the meta box
+		$meta_box = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $meta_box );
+
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 
 		$success = self::write_file( $file_path, $meta_box );

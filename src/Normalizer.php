@@ -30,7 +30,7 @@ class Normalizer {
 		// post_type
 		$data['post_type']    = self::lookup( [ 'post_type' ], $data, 'meta-box' );
 		$data['post_name']    = self::lookup( [ 'post_name', 'settings.id', 'relationship.id', 'meta_box.id', 'id' ], $data );
-		$data['post_date']    = self::lookup( [ 'post_date' ], $data, current_time( 'mysql' ) );
+		$data['post_date']    = self::lookup( [ 'post_date' ], $data );
 		$data['post_status']  = self::lookup( [ 'post_status' ], $data, 'publish' );
 		$data['post_content'] = self::lookup( [ 'post_content' ], $data, '' );
 
