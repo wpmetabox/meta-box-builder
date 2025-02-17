@@ -20,7 +20,7 @@ class Base {
 
 	public function parse_boolean_values() {
 		array_walk_recursive( $this->settings, [ $this, 'convert_string_to_boolean' ] );
-		
+
 		return $this;
 	}
 
@@ -70,7 +70,7 @@ class Base {
 				if ( ! isset( $this->keep_false ) || ! is_array( $this->keep_false ) ) {
 					unset( $this->settings[ $key ] );
 					continue;
-				} 
+				}
 
 				if ( ! in_array( $key, $this->keep_false ) ) {
 					unset( $this->settings[ $key ] );
@@ -160,11 +160,26 @@ class Base {
 		}
 		$data['when'] = array_filter( $data['when'] );
 
+		$minimal_condition = $data;
+
+		// Remove relation if the value is AND
+		if ( 'and' === $data['relation'] ) {
+			unset( $minimal_condition['relation'] );
+		}
+
+		// If array contains only one item, convert it to a single array.
+		if ( count( $data['when'] ) === 1 ) {
+			$minimal_condition = reset( $data['when'] );
+			if ( $minimal_condition[1] === '=' ) {
+				$minimal_condition = [
+					$minimal_condition[0],
+					$minimal_condition[2],
+				];
+			}
+		}
+
 		if ( ! empty( $data['when'] ) ) {
-			$this->{$data['type']} = array(
-				'when' => array_values( $data['when'] ),
-				'relation' => $data['relation'],
-			);
+			$this->{$data['type']} = $minimal_condition;
 		}
 
 		unset( $this->conditional_logic );
