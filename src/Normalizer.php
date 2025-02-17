@@ -141,6 +141,10 @@ class Normalizer {
 			'settings',
 			'meta_box',
 			'data',
+			'function_name',
+			'text_domain',
+			'post_type',
+			'post_title'
 		];
 	}
 

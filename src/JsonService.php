@@ -148,8 +148,7 @@ class JsonService {
 			}
 
 			// Extra post id for filtering, check this line carefully if you want to change it
-			$post_data['post_id'] = $post->ID;
-
+			$post_data['post_id']    = $post->ID;
 			$meta_boxes[ $post->ID ] = $post_data;
 		}
 
@@ -164,15 +163,11 @@ class JsonService {
 	public static function get_files(): array {
 		$paths = self::get_paths();
 
-		$all_files = [];
+		$all_files = array_merge( ...array_map( function ($path) {
+			return glob( "$path/*.json" );
+		}, $paths ) );
 
-		foreach ( $paths as $path ) {
-			$files = glob( "$path/*.json" );
-
-			foreach ( $files as $file ) {
-				$all_files[] = $file;
-			}
-		}
+		$all_files = apply_filters( 'mbb_json_files', $all_files );
 
 		return $all_files;
 	}

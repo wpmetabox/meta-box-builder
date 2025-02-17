@@ -16,6 +16,13 @@ class Field extends Base {
 		'video' => [ 'max_status' ],
 	];
 	
+	/**
+	 * Keep these settings even if they're false. Other false settings will be removed.
+	 * 
+	 * @var array
+	 */
+	protected $keep_false = [ 'inline', 'max_status' ];
+
 	private $choice_types = [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ];
 
 	public function parse() {

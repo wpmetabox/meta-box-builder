@@ -92,7 +92,8 @@ class LocalJson {
 		}
 
 		$json = reset( $json );
-		$data = $json['local_minimized'];
+		$data = $json['local'];
+		$data = Normalizer::normalize( $data );
 
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
 		$post_array  = array_merge( $post_array, [ 
