@@ -11,9 +11,9 @@ class JsonService {
 		// key by meta box id
 		$items = [];
 		foreach ( $files as $file ) {
-			$data = LocalJson::read_file( $file );
+			[ $data, $error ] = LocalJson::read_file( $file );
 
-			if ( $data instanceof \WP_Error ) {
+			if ( $data === null ) {
 				continue;
 			}
 
@@ -45,11 +45,11 @@ class JsonService {
 		$meta_boxes = self::get_meta_boxes();
 		foreach ( $meta_boxes as $meta_box ) {
 			ksort( $meta_box );
-			$id = $meta_box['id'];
+			$id      = $meta_box['id'];
 			$post_id = $meta_box['post_id'];
 			// Remove post_id to avoid diff
 			unset( $meta_box['post_id'] );
-			
+
 			// No file found
 			if ( ! isset( $items[ $id ] ) ) {
 				$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );

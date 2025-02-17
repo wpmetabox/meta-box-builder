@@ -15,18 +15,24 @@ class LocalJson {
 		return self::use_database( compact( 'post_id' ) );
 	}
 
+	/**
+	 * Get data from a .json file
+	 * 
+	 * @param string $file_path
+	 * @return array[ $data, $error ]
+	 */
 	public static function read_file( string $file_path ) {
 		if ( ! file_exists( $file_path ) ) {
-			return new \WP_Error( 'file_not_found', __( 'File not found!', 'meta-box-builder' ) );
+			return [ null, new \WP_Error( 'file_not_found', __( 'File not found!', 'meta-box-builder' ) ) ];
 		}
 
 		if ( ! is_readable( $file_path ) ) {
-			return new \WP_Error( 'file_not_readable', __( 'File not readable!', 'meta-box-builder' ) );
+			return [ null, new \WP_Error( 'file_not_readable', __( 'File not readable!', 'meta-box-builder' ) ) ];
 		}
 
 		$data = file_get_contents( $file_path );
 
-		return $data;
+		return [ $data, null ];
 	}
 
 	public static function write_file( string $file_path, array $data ) {
@@ -49,8 +55,8 @@ class LocalJson {
 	 * 
 	 * @return \WP_Error|boolean
 	 */
-	public static function import( string $file_path ) {
-		$data = self::read_file( $file_path );
+	public static function import( string $file_path ): bool {
+		[ $data, $error ] = self::read_file( $file_path );
 
 		return Import::import_json( $data );
 	}
@@ -133,10 +139,7 @@ class LocalJson {
 		$data = JsonService::get_json( [ 'id' => $post->post_name ] );
 		$data = reset( $data );
 
-		$meta_box = $data['remote']['meta_box'];
-		// Add schema to the meta box
-		$meta_box = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $meta_box );
-
+		$meta_box  = $data['remote'];
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 
 		$success = self::write_file( $file_path, $meta_box );
