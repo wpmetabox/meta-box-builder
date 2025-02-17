@@ -14,11 +14,11 @@ class Register {
 		$json = JsonService::get_json();
 	
 		foreach ( $json as $data ) {
-			$local  = $data['local_normalized'];
+			$local  = $data['local_minimized'];
 			$remote = $data['remote'];
 
 			$meta_box_normalized = $data['is_newer'] >= 0 ? $local : $remote;
-			$meta_box            = $meta_box_normalized['meta_box'];
+			$meta_box            = $meta_box_normalized;
 
 			if ( empty( $meta_box ) ) {
 				continue;

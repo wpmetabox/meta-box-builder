@@ -55,7 +55,7 @@ class LocalJson {
 		return Import::import_json( $data );
 	}
 
-	public static function import_many( array $file_paths ) {
+	public static function import_many( array $file_paths ): void {
 		foreach ( $file_paths as $file_path ) {
 			self::import( $file_path );
 		}
@@ -65,9 +65,9 @@ class LocalJson {
 	 * Use local json file and override database
 	 * 
 	 * @param array $args
-	 * @return bool
+	 * @return bool Success or not
 	 */
-	public static function use_json( array $args ) {
+	public static function use_json( array $args ): bool {
 		$post_name = $args['post_name'];
 		// @todo: fix hardcode meta-box post type to support other post types
 		$post       = get_page_by_path( $post_name, OBJECT, 'meta-box' );
@@ -86,7 +86,7 @@ class LocalJson {
 		}
 
 		$json = reset( $json );
-		$data = $json['local_normalized'];
+		$data = $json['local_minimized'];
 
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
 		$post_array  = array_merge( $post_array, [ 
@@ -115,9 +115,9 @@ class LocalJson {
 	 * Use database and override local json file
 	 * 
 	 * @param int|string $post_id
-	 * @return bool
+	 * @return bool Success or not
 	 */
-	public static function use_database( array $args = [] ) {
+	public static function use_database( array $args = [] ): bool {
 		if ( isset( $args['post_id'] ) ) {
 			$post = get_post( $args['post_id'] );
 		} elseif ( isset( $args['post_name'] ) ) {

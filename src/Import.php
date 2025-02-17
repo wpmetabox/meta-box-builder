@@ -69,7 +69,7 @@ class Import {
 	/**
 	 * Import .json from v4.
 	 */
-	public static function import_json( $data ) {
+	public static function import_json( $data ): bool {
 		$posts = json_decode( $data, true );
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
 			return false;

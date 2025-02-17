@@ -103,7 +103,7 @@ class Export {
 		die;
 	}
 
-	public static function get_meta_keys( $post_type ) {
+	public static function get_meta_keys( $post_type ): array {
 		$meta_keys = [ 
 			'meta-box' => [ 'settings', 'fields', 'data', 'meta_box' ],
 			'mb-relationship' => [ 'settings', 'relationship' ],

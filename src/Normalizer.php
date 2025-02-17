@@ -12,7 +12,9 @@ use MetaBox\Support\Arr;
  */
 class Normalizer {
 	/**
-	 * Add missing keys from the data
+	 * Normalize method lets users to get the full data of a field group
+	 * This method adds missings keys by looking up from the data
+	 * The purpose of this method is to backward compatibility with the old format 
 	 **/
 	public static function normalize( array $data ) {
 		$data['$schema'] = 'https://schemas.metabox.io/field-group.json';
@@ -82,7 +84,32 @@ class Normalizer {
 		return $data;
 	}
 
-	private static function get_known_keys() {
+	/**
+	 * This method is to minimize the data for exporting the latest format (5.0)
+	 * 
+	 * By minimizing the data, we can remove all the unnecessary keys, making the file smaller
+	 * easier to read and maintain
+	 * 
+	 * @param array $data
+	 * @return array
+	 */
+	public static function minimize( array $data ) {
+		$data 			= self::normalize( $data );
+		$unneeded_keys  = self::get_unneeded_keys();
+
+		// Move all keys from meta_box to the root
+		foreach ( $data['meta_box'] as $key => $value ) {
+			$data[ $key ] = $value;
+		}
+
+		foreach ( $unneeded_keys as $key ) {
+			unset( $data[ $key ] );
+		}
+
+		return $data;
+	}
+
+	private static function get_known_keys(): array {
 		return [
 			'$schema',
 			'id',
@@ -96,6 +123,23 @@ class Normalizer {
 			'meta_box',
 			'version',
 			'fields',
+			'data',
+		];
+	}
+
+	/**
+	 * These keys are only useful for the builder, we don't need them in the minimized data
+	 * 
+	 * @return string[]
+	 */
+	private static function get_unneeded_keys(): array {
+		return [
+			'post_name',
+			'post_date',
+			'post_status',
+			'post_content',
+			'settings',
+			'meta_box',
 			'data',
 		];
 	}
@@ -122,7 +166,7 @@ class Normalizer {
 	 * @param array $fields
 	 * @return array
 	 */
-	private static function for_builder( array $fields ) {
+	private static function for_builder( array $fields ): array {
 		foreach ( $fields as $index => $field ) {
 			$unparser = new \MBBParser\Unparsers\Field( $field );
 			$unparser->unparse();

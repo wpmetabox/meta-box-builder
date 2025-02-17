@@ -23,17 +23,17 @@ class JsonService {
 				continue;
 			}
 
-			$local_normalized = Normalizer::normalize( $json );
-			ksort( $local_normalized );
+			$local_minimized = Normalizer::minimize( $json );
+			ksort( $local_minimized );
 
-			$diff = wp_text_diff( '', wp_json_encode( $local_normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
+			$diff = wp_text_diff( '', wp_json_encode( $local_minimized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
 				'show_split_view' => true,
 			] );
 
 			$items[ $json['id'] ] = [ 
 				'file' => $file,
 				'local' => $json,
-				'local_normalized' => $local_normalized,
+				'local_minimized' => $local_minimized,
 				'is_newer' => true,
 				'post_id' => null,
 				'id' => $json['id'],
@@ -50,10 +50,8 @@ class JsonService {
 			// Remove post_id to avoid diff
 			unset( $meta_box['post_id'] );
 			
-
 			// No file found
 			if ( ! isset( $items[ $id ] ) ) {
-				
 				$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
 				$diff = wp_text_diff( $left, '', [ 
@@ -65,7 +63,7 @@ class JsonService {
 					'is_newer' => -1,
 					'diff' => $diff,
 					'local' => null,
-					'local_normalized' => null,
+					'local_minimized' => null,
 					'post_id' => $post_id,
 					'remote' => $meta_box,
 				];
@@ -73,11 +71,11 @@ class JsonService {
 				continue;
 			}
 
-			$is_newer = version_compare( $items[ $id ]['local_normalized']['version'], $meta_box['version'] ?? 'v0' );
+			$is_newer = version_compare( $items[ $id ]['local_minimized']['version'], $meta_box['version'] ?? 'v0' );
 
 			$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
-			$diff = wp_text_diff( $left, wp_json_encode( $items[ $id ]['local_normalized'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
+			$diff = wp_text_diff( $left, wp_json_encode( $items[ $id ]['local_minimized'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
 				'show_split_view' => true,
 			] );
 
@@ -131,7 +129,7 @@ class JsonService {
 
 				$post_data            = $meta_box;
 				$post_data['version'] = $settings['version'] ?? 'v0';
-				$post_data            = Normalizer::normalize( $post_data );
+				$post_data            = Normalizer::minimize( $post_data );
 			} else {
 				// @todo: Check export for other post types
 				$post_data = [ 
