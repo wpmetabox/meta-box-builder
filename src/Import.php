@@ -74,9 +74,8 @@ class Import {
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
 			return false;
 		}
-
 		// If import only one post.
-		if ( array_keys( $posts ) !== array_keys( array_keys( $posts ) ) ) {
+		if ( isset( $posts['fields'] ) ) {
 			$posts = [ $posts ];
 		}
 
