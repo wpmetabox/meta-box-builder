@@ -54,10 +54,7 @@ class Export {
 			$post_data = [];
 			if ( $post->post_type === 'meta-box' ) {
 				$meta_box = get_post_meta( $post->ID, 'meta_box', true );
-				$settings = get_post_meta( $post->ID, 'settings', true );
-
 				$post_data            = array_merge( $post_data, $meta_box );
-				$post_data['version'] = $settings['version'] ?? 'v0';
 			} else {
 				// @todo: Check export for other post types
 				$post_data = [ 

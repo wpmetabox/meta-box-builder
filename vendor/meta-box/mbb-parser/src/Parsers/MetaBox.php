@@ -43,6 +43,7 @@ class MetaBox extends Base {
 		$settings = [ 
 			'title' => $this->post_title,
 			'id' => $this->post_name,
+			'version' => $this->version ?? 'v' . time(),
 		];
 
 		if ( isset( $this->settings['settings'] ) ) {

@@ -128,7 +128,6 @@ class JsonService {
 				}
 
 				$post_data            = $meta_box;
-				$post_data['version'] = $settings['version'] ?? 'v0';
 				$post_data            = Normalizer::minimize( $post_data );
 			} else {
 				// @todo: Check export for other post types
@@ -172,7 +171,12 @@ class JsonService {
 		return $all_files;
 	}
 
-	public static function get_paths() {
+	/**
+	 * Get all paths to search for .json files
+	 * 
+	 * @return string[]
+	 */
+	public static function get_paths(): array {
 		$theme_path    = get_template_directory();
 		$mb_json_paths = [];
 
