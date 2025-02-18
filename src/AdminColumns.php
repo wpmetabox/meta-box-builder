@@ -186,7 +186,6 @@ class AdminColumns {
 
 	public function render_sync_template() {
 		global $wp_list_table;
-
 		// Get table columns.
 		$columns = $wp_list_table->get_columns();
 		$hidden  = get_hidden_columns( $wp_list_table->screen );
@@ -224,7 +223,7 @@ class AdminColumns {
 								case 'cb':
 									echo '<label for="cb-select-' . esc_attr( $id ) . '" class="screen-reader-text">';
 									/* translators: %s: field group title */
-									echo esc_html( sprintf( __( 'Select %s', 'acf' ), $data['local']['title'] ?? '' ) );
+									echo esc_html( sprintf( __( 'Select %s', 'meta-box-builder' ), $data['local']['title'] ?? '' ) );
 									echo '</label>';
 									echo '<input id="cb-select-' . esc_attr( $id ) . '" type="checkbox" value="' . esc_attr( $id ) . '" name="post[]">';
 									break;
@@ -232,9 +231,17 @@ class AdminColumns {
 								case 'title':
 									echo esc_html( $data['local_minimized']['title'] );
 									break;
+								
+								case 'for':
+									$this->show_for( $data['local_minimized'] );
+								break;
 
-								default:
-									$this->show_column( $name, $id );
+								case 'location':
+									$this->show_location_sync( $id );
+									break;
+								
+								case 'sync_status':
+									$this->show_sync_status( $id );
 									break;
 							}
 
@@ -368,18 +375,6 @@ class AdminColumns {
 			return;
 		}
 
-		// In sync view, we don't have post_id and related data because we read from json files.
-		// so we need to handle it differently.
-		if ( $this->is_status( 'sync' ) && LocalJson::is_enabled() ) {
-			if ( method_exists( $this, "show_{$column}_sync" ) ) {
-				$this->{"show_{$column}_sync"}( $post_id );
-				return;
-			}
-
-			$this->{"show_{$column}"}( $post_id );
-			return;
-		}
-
 		$data = get_post_meta( get_the_ID(), 'settings', true );
 		$this->{"show_$column"}( $data );
 	}
@@ -474,16 +469,18 @@ class AdminColumns {
 		return "<span class=\"dashicons dashicons-{$icon}\"></span> <span class=\"mbb-sub-path\">{$sub_path}</span>";
 	}
 
-	private function show_location_sync( string $meta_box_id ) {
+	public function show_location_sync( string $meta_box_id ) {
 		$json = JsonService::get_json( [ 
-			'id' => $meta_box_id,
+			'id' => $meta_box_id
 		] );
 
-		if ( ! is_array( $json ) || ! isset( $json[0] ) || ! isset( $json[0]['file'] ) ) {
+		$data = reset( $json );
+		
+		if ( ! is_array( $data ) || ! isset( $data['file'] ) ) {
 			return;
 		}
 
-		echo $this->format_file_location( $json['file'] );
+		echo $this->format_file_location( $data['file'] );
 	}
 
 	private function show_location( $data ) {
