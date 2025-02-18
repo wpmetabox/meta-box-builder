@@ -7,14 +7,12 @@ class LocalJson {
 	}
 
 	public function generate_local_json( $parser, $post_id, $raw_data ) {
-		// $post         = get_post( $post_id );
-		// $file_name    = $post->post_name ?: sanitize_key( $post->post_title );
-		// $mb_json_path = get_template_directory() . '/mb-json';
-		// $file_path    = "$mb_json_path/$file_name.json";
-
 		return self::use_database( compact( 'post_id' ) );
 	}
 
+	public static function is_enabled() {
+		return ! empty( JsonService::get_paths() );
+	}
 	/**
 	 * Get data from a .json file
 	 * 
@@ -123,15 +121,15 @@ class LocalJson {
 	 */
 	public static function sync_json( array $data ): bool {
 		$required_keys = [ 'post_id', 'local' ];
-		
+
 		foreach ( $required_keys as $key ) {
 			if ( ! array_key_exists( $key, $data ) ) {
 				return false;
 			}
 		}
-		$post_array = [ 'ID' => $data['post_id'] ];
-		$data = $data['local'];
-		$data = Normalizer::normalize( $data );
+		$post_array  = [ 'ID' => $data['post_id'] ];
+		$data        = $data['local'];
+		$data        = Normalizer::normalize( $data );
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
 		$post_array  = array_merge( $post_array, [ 
 			'post_type' => $data['post_type'],
@@ -177,9 +175,13 @@ class LocalJson {
 		$data = JsonService::get_json( [ 'id' => $post->post_name ] );
 		$data = reset( $data );
 
-		$meta_box  = $data['remote'];
-		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
+		$meta_box = $data['remote'];
 
+		if ( ! self::is_enabled() ) {
+			return false;
+		}
+
+		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 		$success = self::write_file( $file_path, $meta_box );
 
 		if ( is_wp_error( $success ) ) {

@@ -75,6 +75,15 @@ jQuery( $ => {
 				const label = document.querySelector(`.mbb-label[data-for-id="${buttonSync.dataset.id}"]`);
 				label.textContent = MBB.synced;
 				label.dataset.status = 'synced';
+			} else {
+				const templateSyncError = document.querySelector('#sync-error').content.cloneNode(true);
+
+				// Update the diff section
+				document.querySelector('.mbb-diff-dialog-content').innerHTML = templateSyncError.querySelector('div').innerHTML;
+				// Update status of current row sync to error
+				const label = document.querySelector(`.mbb-label[data-for-id="${buttonSync.dataset.id}"]`);
+				label.textContent = MBB.error;
+				label.dataset.status = 'error';
 			}
 
 			// Run the sync

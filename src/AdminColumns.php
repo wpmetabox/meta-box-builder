@@ -24,6 +24,10 @@ class AdminColumns {
 	}
 
 	public function admin_notices() {
+		if ( ! LocalJson::is_enabled() ) {
+			return;
+		}
+
 		$custom_admin_notice = $_GET['status'] ?? '';
 
 		$messages = [ 
@@ -48,6 +52,9 @@ class AdminColumns {
 	}
 
 	public function render_diff_dialog() {
+		if ( ! LocalJson::is_enabled() ) {
+			return;
+		}
 		?>
 		<dialog id="mbb-diff-dialog">
 			<header>
@@ -81,6 +88,14 @@ class AdminColumns {
 				</div>
 			</template>
 
+			<template id="sync-error">
+				<div class="sync-error-wrapper">
+					<div class="sync-error-content">
+						<p><?= esc_html__( 'Error during syncing data, please check folder permission or file format!', 'meta-box-builder' ) ?></p>
+					</div>
+				</div>
+			</template>
+
 			<template id="no-changes">
 				<section class="no-changes-content">
 					<p><?= esc_html__( 'No changes detected.', 'meta-box-builder' ) ?></p>
@@ -101,14 +116,14 @@ class AdminColumns {
 				const dialog = document.getElementById( 'mbb-diff-dialog' );
 				dialog.querySelector( '.mbb-diff-dialog-content' ).innerHTML = syncData[ mbbId ].diff;
 
-				if (syncData[ mbbId ].diff === '') {
+				if ( syncData[ mbbId ].diff === '' ) {
 					dialog.querySelector( '.mbb-diff-dialog-content' )
-							.appendChild( document.getElementById( 'no-changes' ).content.cloneNode( true ) );
+						.appendChild( document.getElementById( 'no-changes' ).content.cloneNode( true ) );
 				}
 
-				dialog.querySelectorAll( '.button-sync' ).forEach(btnSync => {
+				dialog.querySelectorAll( '.button-sync' ).forEach( btnSync => {
 					btnSync.dataset.id = mbbId;
-				});
+				} );
 				dialog.showModal();
 			};
 		</script>
@@ -116,6 +131,9 @@ class AdminColumns {
 	}
 
 	public function current_screen() {
+		if ( ! LocalJson::is_enabled() ) {
+			return;
+		}
 		$screen = get_current_screen();
 
 		if ( $screen->id !== 'edit-meta-box' ) {
@@ -132,6 +150,9 @@ class AdminColumns {
 	}
 
 	public function check_sync() {
+		if ( ! LocalJson::is_enabled() ) {
+			return;
+		}
 		$action = $_GET['action'] ?? ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
 
 		if ( $action !== 'mbb-sync' ) {
@@ -152,7 +173,7 @@ class AdminColumns {
 
 		// Bulk actions
 		if ( is_array( $id ) ) {
-			$json = array_filter( $json, function ($item, $key) use ( $id ) {
+			$json = array_filter( $json, function ($item, $key) use ($id) {
 				return in_array( $key, $id, true );
 			}, ARRAY_FILTER_USE_BOTH );
 
@@ -295,7 +316,7 @@ class AdminColumns {
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
 			'not_imported' => esc_html__( 'Not Imported', 'meta-box-builder' ),
-			'error_file_permission' => esc_html__( 'Error: File permission', 'meta-box-builder' ),
+			'error' => esc_html__( '!Error', 'meta-box-builder' ),
 			'synced' => esc_html__( 'Synced', 'meta-box-builder' ),
 			'syncing' => esc_html__( 'Syncing...', 'meta-box-builder' ),
 			'changes_detected' => esc_html__( 'Changes detected', 'meta-box-builder' ),
@@ -318,7 +339,9 @@ class AdminColumns {
 			$new_columns['shortcode'] = __( 'Shortcode', 'meta-box-builder' ) . Data::tooltip( __( 'Embed the field group in the front end for users to submit posts.', 'meta-box-builder' ) );
 		}
 
-		$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' );
+		if ( LocalJson::is_enabled() ) {
+			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' );
+		}
 
 		$columns = array_slice( $columns, 0, 2, true ) + $new_columns + array_slice( $columns, 2, null, true );
 
@@ -335,7 +358,7 @@ class AdminColumns {
 		}
 
 		$post_name = $post_id;
-		if ( $column === 'sync_status' ) {
+		if ( $column === 'sync_status' && LocalJson::is_enabled() ) {
 			if ( is_numeric( $post_id ) ) {
 				$post      = get_post( $post_id );
 				$post_name = $post->post_name;
@@ -347,7 +370,7 @@ class AdminColumns {
 
 		// In sync view, we don't have post_id and related data because we read from json files.
 		// so we need to handle it differently.
-		if ( $this->is_status( 'sync' ) ) {
+		if ( $this->is_status( 'sync' ) && LocalJson::is_enabled() ) {
 			if ( method_exists( $this, "show_{$column}_sync" ) ) {
 				$this->{"show_{$column}_sync"}( $post_id );
 				return;
@@ -362,6 +385,10 @@ class AdminColumns {
 	}
 
 	private function show_sync_status( $meta_box_id ) {
+		if ( ! LocalJson::is_enabled() ) {
+			return;
+		}
+
 		if ( $meta_box_id === null ) {
 			return;
 		}

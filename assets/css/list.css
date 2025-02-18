@@ -132,6 +132,17 @@
 	color: #218358;
 	animation: fadeIn 0.5s ease-in-out;
 }
+
+.sync-error-content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	background: #FFF7F8;
+	color: #CA244D;
+	animation: fadeIn 0.5s ease-in-out;
+}
+
 .no-changes-content {
 	display: flex;
 	align-items: center;
@@ -212,6 +223,11 @@
 .mbb-label[data-status="changes_detected"] {
 	background: #FFDFB5;
 	color: #CC4E00;
+}
+
+.mbb-label[data-status="error"] {
+	background: #FFF7F8;
+	color: #CA244D;
 }
 
 .mbb-label[data-status="not_imported"] {
