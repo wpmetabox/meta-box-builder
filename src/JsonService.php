@@ -42,7 +42,9 @@ class JsonService {
 			];
 		}
 
-		$meta_boxes = self::get_meta_boxes();
+		$post_type = $params['post_type'] ?? 'meta-box';
+		$meta_boxes = self::get_meta_boxes( $post_type );
+
 		foreach ( $meta_boxes as $meta_box ) {
 			ksort( $meta_box );
 			$id      = $meta_box['id'];
@@ -108,9 +110,9 @@ class JsonService {
 		return $items;
 	}
 
-	public static function get_meta_boxes(): array {
+	public static function get_meta_boxes( string $post_type = 'meta-box' ): array {
 		$query = new \WP_Query( [ 
-			'post_type' => 'meta-box',
+			'post_type' => $post_type,
 			'posts_per_page' => -1,
 			'no_found_rows' => true,
 			'update_post_term_cache' => false,

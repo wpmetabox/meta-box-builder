@@ -37,55 +37,26 @@ class Export {
 		$post_ids  = wp_parse_id_list( wp_unslash( $_REQUEST['post'] ) );
 		$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
 
-		$query = new WP_Query( [ 
-			'post_type' => $post_type,
-			'post__in' => $post_ids,
-			'posts_per_page' => count( $post_ids ),
-			'no_found_rows' => true,
-			'update_post_term_cache' => false,
-		] );
+		$meta_boxes = JsonService::get_meta_boxes( $post_type );
+		
+		$data = array_filter( $meta_boxes, function ( $meta_box ) use ( $post_ids ) {
+			return in_array( $meta_box['post_id'], $post_ids, true );
+		} );
 
-		if ( empty( $query->posts ) || empty( $query->posts[0] ) ) {
-			return;
-		}
-
-		$data = [];
-		foreach ( $query->posts as $post ) {
-			$post_data = [];
-			if ( $post->post_type === 'meta-box' ) {
-				$meta_box = get_post_meta( $post->ID, 'meta_box', true );
-				$post_data            = array_merge( $post_data, $meta_box );
-			} else {
-				// @todo: Check export for other post types
-				$post_data = [ 
-					'post_type'    => $post->post_type,
-					'post_name'    => $post->post_name,
-					'post_title'   => $post->post_title,
-					'post_status'  => $post->post_status,
-					'post_content' => $post->post_content,
-				];
-				$meta_keys = self::get_meta_keys( $post->post_type );
-
-				foreach ( $meta_keys as $meta_key ) {
-					$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
-				}
-			}
-
-			$data[] = $post_data;
-		}
+		// Remove post_id from the data
+		$data = array_map( function ( $item ) {
+			unset( $item['post_id'] );
+			return $item;
+		}, $data );
 
 		$file_name = str_replace( 'mb-', '', $post_type ) . '-export';
 		if ( count( $post_ids ) === 1 ) {
 			$data      = reset( $data );
-			$post      = $query->posts[0];
-			$file_name = $post->post_name ?: sanitize_key( $post->post_title );
+			$file_name = $data['id'] ?? $file_name;
 		}
 
 		// Sort keys alphabetically so we have a consistent order
 		ksort( $data );
-
-		// Add $schema to the exported data
-		$data = array_merge( [ '$schema' => 'https://schemas.metabox.io/field-group.json' ], $data );
 
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
