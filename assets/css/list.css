@@ -132,7 +132,13 @@
 	color: #218358;
 	animation: fadeIn 0.5s ease-in-out;
 }
-
+.no-changes-content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	animation: fadeIn 0.5s ease-in-out;
+}
 @keyframes fadeIn {
 	from {
 		opacity: 0;

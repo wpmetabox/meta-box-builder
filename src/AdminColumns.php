@@ -81,6 +81,12 @@ class AdminColumns {
 				</div>
 			</template>
 
+			<template id="no-changes">
+				<section class="no-changes-content">
+					<p><?= esc_html__( 'No changes detected.', 'meta-box-builder' ) ?></p>
+				</section>
+			</template>
+
 			<footer>
 				<button id="mbb-diff-dialog-close-btn" class="button button-secondary">
 					<?= esc_html__( 'Close', 'meta-box-builder' ) ?>
@@ -94,6 +100,12 @@ class AdminColumns {
 			const showDialog = ( mbbId ) => {
 				const dialog = document.getElementById( 'mbb-diff-dialog' );
 				dialog.querySelector( '.mbb-diff-dialog-content' ).innerHTML = syncData[ mbbId ].diff;
+
+				if (syncData[ mbbId ].diff === '') {
+					dialog.querySelector( '.mbb-diff-dialog-content' )
+							.appendChild( document.getElementById( 'no-changes' ).content.cloneNode( true ) );
+				}
+
 				dialog.querySelectorAll( '.button-sync' ).forEach(btnSync => {
 					btnSync.dataset.id = mbbId;
 				});
