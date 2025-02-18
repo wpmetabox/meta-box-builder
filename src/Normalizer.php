@@ -66,6 +66,7 @@ class Normalizer {
 			$meta_box['id']            = self::lookup( [ 'id' ], $data );
 			$meta_box['closed']        = self::lookup( [ 'settings.closed' ], $data, false );
 			$meta_box['fields']        = $fields;
+			$meta_box['version'] 	   = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
 		}
 
 		// Add all extra keys to settings and meta_box

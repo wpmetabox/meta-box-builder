@@ -82,7 +82,6 @@ class Import {
 
 		foreach ( $posts as $post ) {
 			$post = Normalizer::normalize( $post );
-
 			$post_id = wp_insert_post( $post );
 			if ( ! $post_id ) {
 				wp_die( wp_kses_post( sprintf(

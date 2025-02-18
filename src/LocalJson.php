@@ -51,19 +51,16 @@ class LocalJson {
 
 	/**
 	 * Import from .json file
-	 * @param string $file_path
 	 * 
 	 * @return \WP_Error|boolean
 	 */
-	public static function import( string $file_path ): bool {
-		[ $data, $error ] = self::read_file( $file_path );
-
-		return Import::import_json( $data );
+	public static function import( array $data ): bool {
+		return self::sync_json( $data );
 	}
 
-	public static function import_many( array $file_paths ): void {
-		foreach ( $file_paths as $file_path ) {
-			self::import( $file_path );
+	public static function import_many( array $json ): void {
+		foreach ( $json as $data ) {
+			self::import( $data );
 		}
 	}
 
@@ -95,6 +92,46 @@ class LocalJson {
 		$data = $json['local'];
 		$data = Normalizer::normalize( $data );
 
+		$meta_fields = Export::get_meta_keys( $data['post_type'] );
+		$post_array  = array_merge( $post_array, [ 
+			'post_type' => $data['post_type'],
+			'post_name' => $data['post_name'],
+			'post_title' => $data['post_title'],
+			'post_date' => $data['post_date'],
+			'post_status' => $data['post_status'],
+			'post_content' => $data['post_content'],
+		] );
+
+		$post_id = wp_insert_post( $post_array );
+
+		foreach ( $meta_fields as $meta_key ) {
+			if ( ! isset( $data[ $meta_key ] ) ) {
+				continue;
+			}
+
+			update_post_meta( $post_id, $meta_key, $data[ $meta_key ] );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Sync json file with database
+	 * 
+	 * @param array $data
+	 * @return bool Success or not
+	 */
+	public static function sync_json( array $data ): bool {
+		$required_keys = [ 'post_id', 'local' ];
+		
+		foreach ( $required_keys as $key ) {
+			if ( ! array_key_exists( $key, $data ) ) {
+				return false;
+			}
+		}
+		$post_array = [ 'ID' => $data['post_id'] ];
+		$data = $data['local'];
+		$data = Normalizer::normalize( $data );
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
 		$post_array  = array_merge( $post_array, [ 
 			'post_type' => $data['post_type'],

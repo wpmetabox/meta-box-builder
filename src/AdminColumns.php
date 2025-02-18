@@ -136,34 +136,17 @@ class AdminColumns {
 			wp_die( __( 'Not found', 'meta-box-builder' ) );
 		}
 
-		$target = in_array( $_GET['target'], [ 'to-db', 'to-json' ] ) ? $_GET['target'] : 'to-db'; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
-
 		$json = JsonService::get_json();
 
 		// Bulk actions
 		if ( is_array( $id ) ) {
-			$file_paths = [];
+			$json = array_filter( $json, function ($item, $key) use ( $id ) {
+				return in_array( $key, $id, true );
+			}, ARRAY_FILTER_USE_BOTH );
 
-			foreach ( $json as $id => $data ) {
-				$file_paths[] = $data['file'];
-			}
-
-			$file_paths = array_unique( $file_paths );
-			LocalJson::import_many( $file_paths );
+			LocalJson::import_many( $json );
 
 			wp_safe_redirect( admin_url( 'edit.php?post_type=meta-box&message=import-success' ) );
-			exit;
-		}
-
-		$data      = $json[ $id ] ?? [];
-		$file_path = $data['file'];
-
-		// @todo: check this
-		// No post found, import the json file.
-		if ( ! $data['post_id'] && $target === 'to-db' ) {
-			$res     = LocalJson::import( $file_path );
-			$message = $res ? 'imported' : 'import-failed';
-			wp_safe_redirect( admin_url( 'edit.php?post_type=meta-box&message=' . $message ) );
 			exit;
 		}
 	}
