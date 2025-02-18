@@ -92,6 +92,11 @@ jQuery( $ => {
 			buttonSync.classList.remove( 'loading' );
 			buttonSync.disabled = false;
 			buttonSync.textContent = previousText;
+
+			// Refresh in 1 seconds
+			setTimeout(() => {
+				location.reload();
+			}, 1000);
 		} );
 	} );
 
