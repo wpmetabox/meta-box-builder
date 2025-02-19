@@ -176,7 +176,6 @@ class LocalJson {
 		$data = reset( $data );
 
 		$meta_box = $data['remote'];
-
 		if ( ! self::is_enabled() ) {
 			return false;
 		}

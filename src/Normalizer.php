@@ -142,6 +142,7 @@ class Normalizer {
 			'settings',
 			'meta_box',
 			'data',
+			'closed',
 			'function_name',
 			'text_domain',
 			'post_type',

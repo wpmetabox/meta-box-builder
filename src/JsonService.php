@@ -44,7 +44,6 @@ class JsonService {
 
 		$post_type = $params['post_type'] ?? 'meta-box';
 		$meta_boxes = self::get_meta_boxes( $post_type );
-
 		foreach ( $meta_boxes as $meta_box ) {
 			ksort( $meta_box );
 			$id      = $meta_box['id'];

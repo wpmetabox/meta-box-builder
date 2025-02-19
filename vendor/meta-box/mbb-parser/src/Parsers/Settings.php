@@ -104,7 +104,7 @@ class Settings extends Base {
 				'render_with',
 				'render_template',
 				'render_callback',
-                		'render_view',
+                'render_view',
 				'render_code',
 				'enqueue_style',
 				'enqueue_script',
