@@ -69,17 +69,20 @@ class LocalJson {
 	 * @return bool Success or not
 	 */
 	public static function use_json( array $args ): bool {
-		$post_name = $args['post_name'];
-		// @todo: fix hardcode meta-box post type to support other post types
-		$post       = get_page_by_path( $post_name, OBJECT, 'meta-box' );
+		$post_name  = $args['post_name'];
+		$post       = get_page_by_path( $post_name, OBJECT, $args['post_type'] );
 		$post_array = [];
 
 		if ( $post ) {
-			$post_array = [ 'ID' => $post->ID ];
+			$post_array = [ 
+				'ID' => $post->ID,
+				'post_type' => $post->post_type,
+			];
 		}
 
 		$json = JsonService::get_json( [ 
 			'id' => $args['post_name'],
+			'post_type' => $args['post_type'],
 		] );
 
 		if ( ! $json || ! is_array( $json ) ) {
@@ -181,7 +184,7 @@ class LocalJson {
 		}
 
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
-		$success = self::write_file( $file_path, $meta_box );
+		$success   = self::write_file( $file_path, $meta_box );
 
 		if ( is_wp_error( $success ) ) {
 			// Return an error message.

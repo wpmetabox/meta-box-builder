@@ -185,7 +185,13 @@ class Base {
 
 		$use = $params['use'];
 
-		$res = call_user_func( [ LocalJson::class, 'use_' . $use ], [ 'post_name' => $params['id'] ] );
+		$res = call_user_func( 
+			[ LocalJson::class, 'use_' . $use ], 
+			[ 
+				'post_name' => $params['id'], 
+				'post_type' => $params['post_type'] ?? 'meta-box'
+			] 
+		);
 
 		return new \WP_REST_Response( [ 
 			'success' => (bool) $res,

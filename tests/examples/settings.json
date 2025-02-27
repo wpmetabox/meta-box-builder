@@ -1,0 +1,13 @@
+{
+    "$schema": "https://schemas.metabox.io/field-group.json",
+    "fields": [
+        {
+            "name": "Name2",
+            "id": "name",
+            "type": "text"
+        }
+    ],
+    "id": "settings",
+    "title": "Settings Page",
+    "settings_page": "mbb-settings"
+}

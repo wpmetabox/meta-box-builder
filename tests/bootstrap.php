@@ -2,6 +2,8 @@
 // Steps to run this test:
 // 1. composer install --dev
 // 2. ./vendor/bin/phpunit
+// Filter failing tests
+// 1. ./vendor/bin/phpunit --group failing
 
 $base_dir    = dirname( __DIR__ );
 $plugins_dir = dirname( $base_dir );

@@ -42,7 +42,7 @@ class JsonService {
 			];
 		}
 
-		$post_type = $params['post_type'] ?? 'meta-box';
+		$post_type  = $params['post_type'] ?? 'meta-box';
 		$meta_boxes = self::get_meta_boxes( $post_type );
 		foreach ( $meta_boxes as $meta_box ) {
 			ksort( $meta_box );
@@ -95,18 +95,31 @@ class JsonService {
 				return $item['id'] == $params['id'];
 			} );
 		}
-
+		
 		foreach ( [ 'is_newer', 'post_id', 'file' ] as $key ) {
 			if ( isset( $params[ $key ] ) ) {
-				foreach ( $items as $item ) {
-					if ( isset( $item[ $key ] ) && $item[ $key ] == $params[ $key ] ) {
-						$items[] = $item;
-					}
-				}
+				$items = array_filter( $items, function ($item) use ($key, $params) {
+					return isset( $item[ $key ] ) && $item[ $key ] == $params[ $key ];
+				} );
 			}
 		}
 
 		return $items;
+	}
+
+	/**
+	 * Bare minimum keys needed in the json file
+	 * 
+	 * @param string $post_type
+	 * @return string[]
+	 */
+	private static function get_minimal_meta_keys( string $post_type ): array {
+		$meta_keys = [ 
+			'meta-box' => [ 'meta_box' ],
+			'mb-relationship' => [ 'relationship' ],
+			'mb-settings-page' => [ 'settings_page' ],
+		];
+
 	}
 
 	public static function get_meta_boxes( string $post_type = 'meta-box' ): array {
@@ -120,31 +133,12 @@ class JsonService {
 		$meta_boxes = [];
 		foreach ( $query->posts as $post ) {
 			$post_data = [];
+			$meta_keys = self::get_minimal_meta_keys( $post_type );
 
-			if ( $post->post_type === 'meta-box' ) {
-				$meta_box = get_post_meta( $post->ID, 'meta_box', true );
-				$settings = get_post_meta( $post->ID, 'settings', true );
-				if ( ! is_array( $settings ) || ! is_array( $meta_box ) ) {
-					continue;
-				}
-
-				$post_data            = $meta_box;
-				$post_data            = Normalizer::minimize( $post_data );
-			} else {
-				// @todo: Check export for other post types
-				$post_data = [ 
-					'post_type' => $post->post_type,
-					'post_name' => $post->post_name,
-					'post_title' => $post->post_title,
-					'post_date' => $post->post_date,
-					'post_status' => $post->post_status,
-					'post_content' => $post->post_content,
-				];
-				$meta_keys = Export::get_meta_keys( $post->post_type );
-
-				foreach ( $meta_keys as $meta_key ) {
-					$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
-				}
+			foreach ( $meta_keys as $meta_key ) {
+				$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
+				$post_data              = Normalizer::minimize( $post_data, $meta_key );
+				$post_data['post_id']   = $post->ID;
 			}
 
 			// Extra post id for filtering, check this line carefully if you want to change it
@@ -186,11 +180,6 @@ class JsonService {
 		}
 
 		$mb_json_paths = apply_filters( 'mb_json_paths', $mb_json_paths );
-
-		// @todo: Should we create the directory if it doesn't exist?
-		// if ( ! is_dir( $mb_json_path ) ) {
-		// 	wp_mkdir_p( $mb_json_path );
-		// }
 
 		return $mb_json_paths;
 	}
