@@ -9,13 +9,13 @@ use MetaBox\Support\Arr;
  * @package Meta Box Builder
  */
 class Normalizer {
-	protected static $schemas = [ 
-		'meta_box' => 'https://schemas.metabox.io/field-group.json',
-		'relationship' => 'https://schemas.metabox.io/relationship.json',
-		'settings_page' => 'https://schemas.metabox.io/settings-page.json',
+	protected const SCHEMAS = [ 
+		'meta-box' => 'https://schemas.metabox.io/field-group.json',
+		'mb-relationship' => 'https://schemas.metabox.io/relationship.json',
+		'mb-settings-page' => 'https://schemas.metabox.io/settings-page.json',
 	];
 
-	protected static $meta_keys = [ 
+	protected const TYPE_META = [ 
 		'meta-box' => 'meta_box',
 		'mb-relationship' => 'relationship',
 		'mb-settings-page' => 'settings_page',
@@ -26,9 +26,11 @@ class Normalizer {
 	 * This method adds missings keys by looking up from the data
 	 * The purpose of this method is to backward compatibility with the old format 
 	 **/
-	public static function normalize( array $data, string $post_type = 'meta-box' ): array {
-		$meta_key = self::$meta_keys[ $post_type ] ?? 'meta_box';
+	public static function normalize( array $data, string $post_type = null ): array {
+		$post_type = $post_type ?? self::detect_post_type( $data );
+		$meta_key  = self::TYPE_META[ $post_type ] ?? 'meta_box';
 
+		$data['$schema'] = self::SCHEMAS[ $post_type ] ?? '';
 		// id
 		if ( ! isset( $data['id'] ) ) {
 			$data['id'] = self::lookup( [ 'id', 'post_name', 'title' ], $data, uniqid() );
@@ -95,11 +97,11 @@ class Normalizer {
 				continue;
 			}
 
-			$post_data[ $key ]        = $value;
+			$main_meta[ $key ]        = $value;
 			$data['settings'][ $key ] = $value;
 		}
 
-		$data[ $meta_key ] = $post_data;
+		$data[ $meta_key ] = $main_meta;
 		$data['data']      = [];
 
 		$data['version'] = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
@@ -119,20 +121,15 @@ class Normalizer {
 	public static function minimize( array $data, string $post_type = null ): array {
 		// Try to get the post type from the data
 		if ( ! $post_type ) {
-			$post_type = $data['post_type'] ?? null;
+			$post_type = self::detect_post_type( $data );
 		}
-
-		// Try to get post type from the schema
-		if ( ! $post_type ) {
-			$schema    = $data['$schema'];
-			$post_type = array_search( $schema, self::$schemas );
-		}
+		$meta_key = self::TYPE_META[ $post_type ] ?? 'meta_box';
 
 		$data          = self::normalize( $data, $post_type );
 		$unneeded_keys = self::get_unneeded_keys( $post_type );
 
 		// Move all keys from the desired field to the root
-		foreach ( $data[ $post_type ] as $key => $value ) {
+		foreach ( $data[ $meta_key ] as $key => $value ) {
 			$data[ $key ] = $value;
 		}
 
@@ -175,6 +172,7 @@ class Normalizer {
 	 */
 	private static function get_unneeded_keys( string $post_type = 'meta-box' ): array {
 		$default = [ 
+			'ID',
 			'post_name',
 			'post_date',
 			'post_status',
@@ -188,6 +186,24 @@ class Normalizer {
 			'post_type',
 			'post_title',
 			'settings_page',
+			"menu_order",
+			"ping_status",
+			"pinged",
+			"post_author",
+			"post_content_filtered",
+			"post_date_gmt",
+			"post_excerpt",
+			"post_mime_type",
+			"post_modified",
+			"post_modified_gmt",
+			"post_parent",
+			"post_password",
+			"to_ping",
+			"comment_count",
+			"comment_status",
+			"filter",
+			"guid",
+			"revision",
 		];
 
 		// Add extra keys for other post types
@@ -238,5 +254,34 @@ class Normalizer {
 		}
 
 		return $fields;
+	}
+
+	/**
+	 * Detect post type from the data
+	 * 
+	 * @param array $data
+	 * @return string
+	 */
+	private static function detect_post_type( array $data ): string {
+		// Detect post type from the schema (new format)
+		if ( isset( $data['$schema'] ) ) {
+			$schema    = $data['$schema'];
+			$post_type = array_search( $schema, self::SCHEMAS, true );
+			if ( $post_type ) {
+				return $post_type;
+			}
+		}
+
+		// If no schema (old format), check keys exist
+		// - meta_box it's a meta box
+		// - relationship it's a relationship
+		// - settings_page it's a settings page
+		foreach ( self::TYPE_META as $type => $meta_key ) {
+			if ( isset( $data[ $type ] ) ) {
+				return $type;
+			}
+		}
+
+		return 'meta-box';
 	}
 }

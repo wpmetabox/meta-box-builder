@@ -190,7 +190,6 @@ class AdminColumns {
 		$columns = $wp_list_table->get_columns();
 		$hidden  = get_hidden_columns( $wp_list_table->screen );
 		$json    = JsonService::get_json();
-
 		// Filter where local is not null
 		$json = array_filter( $json, function ($item) {
 			return ! empty( $item['local'] );

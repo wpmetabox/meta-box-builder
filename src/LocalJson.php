@@ -6,13 +6,19 @@ class LocalJson {
 		add_action( 'mbb_after_save', [ $this, 'generate_local_json' ], 10, 3 );
 	}
 
-	public function generate_local_json( $parser, $post_id, $raw_data ) {
+	public function generate_local_json( $parser, $post_id, $raw_data ): bool {
 		return self::use_database( compact( 'post_id' ) );
 	}
 
-	public static function is_enabled() {
+	/**
+	 * Check if the local JSON feature is enabled
+	 * 
+	 * @return bool
+	 */
+	public static function is_enabled(): bool {
 		return ! empty( JsonService::get_paths() );
 	}
+
 	/**
 	 * Get data from a .json file
 	 * 

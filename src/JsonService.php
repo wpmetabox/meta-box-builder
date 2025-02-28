@@ -2,6 +2,7 @@
 namespace MBB;
 
 class JsonService {
+
 	/**
 	 * @param array $params
 	 * @return array[]
@@ -13,7 +14,7 @@ class JsonService {
 		foreach ( $files as $file ) {
 			[ $data, $error ] = LocalJson::read_file( $file );
 
-			if ( $data === null ) {
+			if ( $data === null || $error !== null ) {
 				continue;
 			}
 
@@ -95,7 +96,7 @@ class JsonService {
 				return $item['id'] == $params['id'];
 			} );
 		}
-		
+
 		foreach ( [ 'is_newer', 'post_id', 'file' ] as $key ) {
 			if ( isset( $params[ $key ] ) ) {
 				$items = array_filter( $items, function ($item) use ($key, $params) {
@@ -120,6 +121,7 @@ class JsonService {
 			'mb-settings-page' => [ 'settings_page' ],
 		];
 
+		return $meta_keys[ $post_type ] ?? [];
 	}
 
 	public static function get_meta_boxes( string $post_type = 'meta-box' ): array {
@@ -132,12 +134,12 @@ class JsonService {
 
 		$meta_boxes = [];
 		foreach ( $query->posts as $post ) {
-			$post_data = [];
+			$post_data = (array) $post;
 			$meta_keys = self::get_minimal_meta_keys( $post_type );
 
 			foreach ( $meta_keys as $meta_key ) {
 				$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
-				$post_data              = Normalizer::minimize( $post_data, $meta_key );
+				$post_data              = Normalizer::minimize( $post_data, $post_type );
 				$post_data['post_id']   = $post->ID;
 			}
 
