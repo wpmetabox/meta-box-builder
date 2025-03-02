@@ -12,6 +12,8 @@ class AdminColumns {
 	 */
 	protected $view;
 
+	protected $post_type = 'meta-box';
+
 	public function __construct() {
 		add_action( 'admin_print_styles-edit.php', [ $this, 'enqueue' ] );
 		add_filter( 'manage_meta-box_posts_columns', [ $this, 'add_columns' ] );
@@ -21,6 +23,49 @@ class AdminColumns {
 		add_action( 'current_screen', [ $this, 'current_screen' ] );
 		add_action( 'admin_footer', [ $this, 'render_diff_dialog' ] );
 		add_action( 'admin_notices', [ $this, 'admin_notices' ] );
+		
+		// Delete posts should delete the json file as well.
+		add_action( 'wp_trash_post', [ $this, 'delete_json' ], 10, 1);
+		add_action( 'before_delete_post', [ $this, 'delete_json' ], 10, 1);
+
+		// Restore posts should restore the json file as well.
+		add_action( 'untrash_post', [ $this, 'restore_json' ], 10, 1);
+	}
+
+	public function delete_json( $post_id ) {
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return;
+		}
+
+		$json = JsonService::get_json([
+			'post_id' => $post_id,
+		]);
+		
+		if ( empty( $json ) ) {
+			return;
+		}
+
+		$meta_box_id = array_key_first( $json );
+		$file_path = $json[ $meta_box_id ]['file'];
+
+		if ( ! file_exists( $file_path ) ) {
+			return;
+		}
+
+		unlink( $file_path );
+	}
+
+	public function restore_json( $post_id ): bool {
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return false;
+		}
+
+		return LocalJson::use_database( [
+			'post_id' => $post_id,
+			'post_status' => 'trashed'
+		] );
 	}
 
 	public function admin_notices() {
@@ -142,6 +187,7 @@ class AdminColumns {
 		}
 
 		$this->view = $_GET['post_status'] ?? ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
+		$this->post_type = $_GET['post_type'] ?? 'meta-box'; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
 
 		$this->check_sync();
 
@@ -173,12 +219,12 @@ class AdminColumns {
 		}
 
 		// Bulk actions
-		if ( !is_array( $id ) ) {
+		if ( ! is_array( $id ) ) {
 			return;
 		}
 
 		$json = JsonService::get_json();
-		
+
 		$json = array_filter( $json, function ($item, $key) use ($id) {
 			return in_array( $key, $id, true );
 		}, ARRAY_FILTER_USE_BOTH );
@@ -196,10 +242,9 @@ class AdminColumns {
 		$hidden  = get_hidden_columns( $wp_list_table->screen );
 		$json    = JsonService::get_json();
 		// Filter where local is not null
-		$post_type = $_GET['post_type'] ?? 'meta-box'; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
-		
-		$json = array_filter( $json, function ($item) use ($post_type) {
-			return ! empty( $item['local'] && $item['post_type'] === $post_type );
+
+		$json = array_filter( $json, function ($item) {
+			return ! empty( $item['local'] && $item['post_type'] === $this->post_type );
 		} );
 		?>
 		<template id="mb-sync-list">
@@ -385,7 +430,7 @@ class AdminColumns {
 		$this->{"show_$column"}( $data );
 	}
 
-	private function show_sync_status( $meta_box_id ) {
+	private function show_sync_status( string $meta_box_id ) {
 		if ( ! LocalJson::is_enabled() ) {
 			return;
 		}
@@ -436,7 +481,7 @@ class AdminColumns {
 		<?php
 	}
 
-	private function show_for( $data ) {
+	private function show_for( $data ): void {
 		$object_type = Arr::get( $data, 'object_type', 'post' );
 
 		$labels = [ 
@@ -451,6 +496,12 @@ class AdminColumns {
 		esc_html_e( $labels[ $object_type ] ?? '' );
 	}
 
+	/**
+	 * Display human friendly file location to display in the column.
+	 * 
+	 * @param string $file
+	 * @return string
+	 */
 	private function format_file_location( string $file ): string {
 		// Get the relative path of the file.
 		$active_theme = get_template_directory();
@@ -475,9 +526,10 @@ class AdminColumns {
 		return "<span class=\"dashicons dashicons-{$icon}\"></span> <span class=\"mbb-sub-path\">{$sub_path}</span>";
 	}
 
-	public function show_location_sync( string $meta_box_id ) {
+	public function show_location_sync( string $meta_box_id ): void {
 		$json = JsonService::get_json( [ 
 			'id' => $meta_box_id,
+			'post_type' => $this->post_type,
 		] );
 
 		$data = reset( $json );
@@ -489,8 +541,9 @@ class AdminColumns {
 		echo $this->format_file_location( $data['file'] );
 	}
 
-	private function show_location( $data ) {
+	private function show_location( array $data ): void {
 		$object_type = Arr::get( $data, 'object_type', 'post' );
+
 		switch ( $object_type ) {
 			case 'user':
 				esc_html_e( 'All Users', 'meta-box-builder' );
@@ -525,7 +578,7 @@ class AdminColumns {
 		}
 	}
 
-	private function show_shortcode() {
+	private function show_shortcode(): void {
 		global $post;
 
 		$shortcode = "[mb_frontend_form id='{$post->post_name}' post_fields='title,content']";

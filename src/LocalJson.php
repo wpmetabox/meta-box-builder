@@ -165,14 +165,15 @@ class LocalJson {
 	/**
 	 * Use database and override local json file
 	 * 
-	 * @param int|string $post_id
+	 * @param array $args
 	 * @return bool Success or not
 	 */
 	public static function use_database( array $args = [] ): bool {
 		if ( isset( $args['post_id'] ) ) {
 			$post = get_post( $args['post_id'] );
 		} elseif ( isset( $args['post_name'] ) ) {
-			$post = get_page_by_path( $args['post_name'], OBJECT, 'meta-box' );
+			$post_type = $args['post_type'] ?? 'meta-box';
+			$post = get_page_by_path( $args['post_name'], OBJECT, $post_type );
 		} else {
 			return false;
 		}
@@ -181,8 +182,12 @@ class LocalJson {
 			return false;
 		}
 
-		$data = JsonService::get_json( [ 'id' => $post->post_name ] );
+		$data = JsonService::get_json( [ 'post_id' => $post->ID ] );
 		$data = reset( $data );
+
+		if ( ! $data || ! is_array( $data ) || ! isset( $data['remote'] ) ) {
+			return false;
+		}
 
 		$meta_box = $data['remote'];
 		if ( ! self::is_enabled() ) {

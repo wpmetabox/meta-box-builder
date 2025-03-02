@@ -10,7 +10,7 @@ class Register {
 		add_filter( 'rwmb_meta_boxes', [ $this, 'register_meta_box' ] );
 	}
 
-	public function register_meta_box( $meta_boxes ) {
+	public function register_meta_box( $meta_boxes ): array {
 		$json = JsonService::get_json();
 	
 		foreach ( $json as $data ) {
@@ -108,7 +108,7 @@ class Register {
 		set_transient( $cache_key, 1, MONTH_IN_SECONDS );
 	}
 
-	public function enqueue_assets() {
+	public function enqueue_assets(): void {
 		wp_enqueue_style( 'mbb-post', MBB_URL . 'assets/css/post.css', [], MBB_VER );
 		wp_enqueue_script( 'mbb-post', MBB_URL . 'assets/js/post.js', [], MBB_VER, true );
 		\RWMB_Helpers_Field::localize_script_once( 'mbb-post', 'MBB', [ 
@@ -118,7 +118,7 @@ class Register {
 		] );
 	}
 
-	private function has_value( $field ) {
+	private function has_value( $field ): bool {
 		return ! empty( $field['id'] ) && ! in_array( $field['type'], [ 'heading', 'divider', 'button', 'custom_html', 'tab' ], true );
 	}
 }

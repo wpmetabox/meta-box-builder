@@ -4,17 +4,28 @@ namespace MBB;
 use MetaBox\Support\Arr;
 
 /**
- * Normalize import files for the builder
+ * This class does the normalization of the data, basically, it adds missing keys to the data
+ * The purpose is, make sure both old and new versions of the data will have the same format.
  * 
  * @package Meta Box Builder
  */
 class Normalizer {
+	/**
+	 * The schemas for each post type
+	 * 
+	 * @var array
+	 */
 	protected const SCHEMAS = [ 
 		'meta-box' => 'https://schemas.metabox.io/field-group.json',
 		'mb-relationship' => 'https://schemas.metabox.io/relationship.json',
 		'mb-settings-page' => 'https://schemas.metabox.io/settings-page.json',
 	];
 
+	/**
+	 * Match the post type with the meta key which is used to register the object
+	 * 
+	 * @var array
+	 */
 	protected const TYPE_META = [ 
 		'meta-box' => 'meta_box',
 		'mb-relationship' => 'relationship',
@@ -62,6 +73,7 @@ class Normalizer {
 		$data['settings']['version']       = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
 
 		$data['settings']['settings_page'] = self::lookup( [ 'settings.settings_page', 'settings_page' ], $data );
+		
 		// settings_page is string but old version needs array
 		if ( is_string( $data['settings']['settings_page'] ) ) {
 			$data['settings']['settings_page'] = [ $data['settings']['settings_page'] ];

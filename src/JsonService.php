@@ -45,7 +45,9 @@ class JsonService {
 		}
 
 		$post_type  = $params['post_type'] ?? 'meta-box';
-		$meta_boxes = self::get_meta_boxes( $post_type );
+		$post_status = $params['post_status'] ?? 'publish';
+		
+		$meta_boxes = self::get_meta_boxes( compact( 'post_type', 'post_status' ) );
 		foreach ( $meta_boxes as $meta_box ) {
 			ksort( $meta_box );
 			$id      = $meta_box['id'];
@@ -130,28 +132,31 @@ class JsonService {
 		return $meta_keys[ $post_type ] ?? [];
 	}
 
-	public static function get_meta_boxes( string $post_type = 'meta-box' ): array {
-		$query = new \WP_Query( [ 
-			'post_type' => $post_type,
+	public static function get_meta_boxes( array $query_params = [] ): array {
+		$defaults = [ 
+			'post_type' => 'meta-box',
+			'post_status' => 'publish',
 			'posts_per_page' => -1,
 			'no_found_rows' => true,
 			'update_post_term_cache' => false,
-		] );
-
+		];
+		$query_params = wp_parse_args( $query_params, $defaults );
+		$query = new \WP_Query( $query_params );
+		
 		$meta_boxes = [];
 		foreach ( $query->posts as $post ) {
 			$post_data = (array) $post;
-			$meta_keys = self::get_minimal_meta_keys( $post_type );
+			$meta_keys = self::get_minimal_meta_keys( $query_params['post_type'] );
 
 			foreach ( $meta_keys as $meta_key ) {
 				$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
-				$post_data              = Normalizer::minimize( $post_data, $post_type );
+				$post_data              = Normalizer::minimize( $post_data, $query_params['post_type'] );
 				$post_data['post_id']   = $post->ID;
 			}
 
 			// Extra post_id, post_type for filtering, check this line carefully if you want to change it
 			$post_data['post_id']    = $post->ID;
-			$post_data['post_type']  = $post_type;
+			$post_data['post_type']  = $query_params['post_type'];
 			
 			$meta_boxes[ $post->ID ] = $post_data;
 		}
