@@ -37,6 +37,7 @@ class JsonService {
 				'local_minimized' => $local_minimized,
 				'is_newer' => true,
 				'post_id' => null,
+				'post_type' => Normalizer::detect_post_type( $json ),
 				'id' => $json['id'],
 				'remote' => null,
 				'diff' => $diff,
@@ -49,8 +50,11 @@ class JsonService {
 			ksort( $meta_box );
 			$id      = $meta_box['id'];
 			$post_id = $meta_box['post_id'];
-			// Remove post_id to avoid diff
+			$post_type = $meta_box['post_type'];
+
+			// Remove post_id, post_type to avoid diff
 			unset( $meta_box['post_id'] );
+			unset( $meta_box['post_type'] );
 
 			// No file found
 			if ( ! isset( $items[ $id ] ) ) {
@@ -67,6 +71,7 @@ class JsonService {
 					'local' => null,
 					'local_minimized' => null,
 					'post_id' => $post_id,
+					'post_type' => $post_type,
 					'remote' => $meta_box,
 				];
 
@@ -87,6 +92,7 @@ class JsonService {
 				'remote' => $meta_box,
 				'diff' => $diff,
 				'post_id' => $post_id,
+				'post_type' => $post_type,
 			] );
 		}
 
@@ -143,8 +149,10 @@ class JsonService {
 				$post_data['post_id']   = $post->ID;
 			}
 
-			// Extra post id for filtering, check this line carefully if you want to change it
+			// Extra post_id, post_type for filtering, check this line carefully if you want to change it
 			$post_data['post_id']    = $post->ID;
+			$post_data['post_type']  = $post_type;
+			
 			$meta_boxes[ $post->ID ] = $post_data;
 		}
 

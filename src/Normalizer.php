@@ -262,7 +262,7 @@ class Normalizer {
 	 * @param array $data
 	 * @return string
 	 */
-	private static function detect_post_type( array $data ): string {
+	public static function detect_post_type( array $data ): string {
 		// Detect post type from the schema (new format)
 		if ( isset( $data['$schema'] ) ) {
 			$schema    = $data['$schema'];

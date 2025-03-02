@@ -91,7 +91,8 @@ class AdminColumns {
 			<template id="sync-error">
 				<div class="sync-error-wrapper">
 					<div class="sync-error-content">
-						<p><?= esc_html__( 'Error during syncing data, please check folder permission or file format!', 'meta-box-builder' ) ?></p>
+						<p><?= esc_html__( 'Error during syncing data, please check folder permission or file format!', 'meta-box-builder' ) ?>
+						</p>
 					</div>
 				</div>
 			</template>
@@ -144,9 +145,11 @@ class AdminColumns {
 
 		$this->check_sync();
 
-		if ( $this->is_status( 'sync' ) ) {
-			add_action( 'admin_footer', [ $this, 'render_sync_template' ], 1 );
+		if ( ! $this->is_status( 'sync' ) ) {
+			return;
 		}
+
+		add_action( 'admin_footer', [ $this, 'render_sync_template' ], 1 );
 	}
 
 	public function check_sync() {
@@ -169,19 +172,21 @@ class AdminColumns {
 			wp_die( __( 'Not found', 'meta-box-builder' ) );
 		}
 
-		$json = JsonService::get_json();
-
 		// Bulk actions
-		if ( is_array( $id ) ) {
-			$json = array_filter( $json, function ($item, $key) use ($id) {
-				return in_array( $key, $id, true );
-			}, ARRAY_FILTER_USE_BOTH );
-
-			LocalJson::import_many( $json );
-
-			wp_safe_redirect( admin_url( 'edit.php?post_type=meta-box&message=import-success' ) );
-			exit;
+		if ( !is_array( $id ) ) {
+			return;
 		}
+
+		$json = JsonService::get_json();
+		
+		$json = array_filter( $json, function ($item, $key) use ($id) {
+			return in_array( $key, $id, true );
+		}, ARRAY_FILTER_USE_BOTH );
+
+		LocalJson::import_many( $json );
+
+		wp_safe_redirect( admin_url( 'edit.php?post_type=meta-box&message=import-success' ) );
+		exit;
 	}
 
 	public function render_sync_template() {
@@ -191,8 +196,10 @@ class AdminColumns {
 		$hidden  = get_hidden_columns( $wp_list_table->screen );
 		$json    = JsonService::get_json();
 		// Filter where local is not null
-		$json = array_filter( $json, function ($item) {
-			return ! empty( $item['local'] );
+		$post_type = $_GET['post_type'] ?? 'meta-box'; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
+		
+		$json = array_filter( $json, function ($item) use ($post_type) {
+			return ! empty( $item['local'] && $item['post_type'] === $post_type );
 		} );
 		?>
 		<template id="mb-sync-list">
@@ -230,15 +237,15 @@ class AdminColumns {
 								case 'title':
 									echo esc_html( $data['local_minimized']['title'] );
 									break;
-								
+
 								case 'for':
 									$this->show_for( $data['local_minimized'] );
-								break;
+									break;
 
 								case 'location':
 									$this->show_location_sync( $id );
 									break;
-								
+
 								case 'sync_status':
 									$this->show_sync_status( $id );
 									break;
@@ -470,11 +477,11 @@ class AdminColumns {
 
 	public function show_location_sync( string $meta_box_id ) {
 		$json = JsonService::get_json( [ 
-			'id' => $meta_box_id
+			'id' => $meta_box_id,
 		] );
 
 		$data = reset( $json );
-		
+
 		if ( ! is_array( $data ) || ! isset( $data['file'] ) ) {
 			return;
 		}
