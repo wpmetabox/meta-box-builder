@@ -24,9 +24,9 @@ class Field extends Base {
 			->unparse_boolean_values()
 			->unparse_numeric_values()
 			->unparse_datalist()
-			->unparse_object_field()
 			->unparse_choice_options()
 			->unparse_choice_std()
+			->unparse_clone()
 			->unparse_array_attributes( 'options' )
 			->unparse_array_attributes( 'js_options' )
 			->unparse_array_attributes( 'query_args' )
@@ -48,15 +48,6 @@ class Field extends Base {
 
 		$this->settings['datalist_choices'] = implode( "\n", $this->datalist['options'] );
 
-		return $this;
-	}
-
-	private function unparse_object_field() {
-		if ( ! in_array( $this->type, [ 'taxonomy', 'taxonomy_advanced', 'post', 'user' ], true ) ) {
-			return $this;
-		}
-
-		// @todo check set terms, inline, multiple, select_all_none
 		return $this;
 	}
 
@@ -97,31 +88,49 @@ class Field extends Base {
 		return $this;
 	}
 
-	private function parse_field_key_value() {
-		$placeholder = [];
-		if ( $this->placeholder_key ) {
-			$placeholder['key'] = $this->placeholder_key;
+	private function unparse_clone() {
+		if ( ! $this->clone ) {
+			return $this;
 		}
-		if ( $this->placeholder_value ) {
-			$placeholder['value'] = $this->placeholder_value;
+
+		$keys = [ 'sort_clone', 'clone_default', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ];
+		
+		foreach ( $keys as $key ) {
+			if ( isset( $this->$key ) ) {
+				continue;
+			}
+
+			$numerics = [ 'min_clone', 'max_clone' ];
+			if ( in_array( $key, $numerics, true ) ) {
+				$this->$key = 0;
+			} else {
+				$this->$key = false;
+			}
 		}
-		$placeholder = array_filter( $placeholder );
-		if ( $placeholder ) {
-			$this->placeholder = $placeholder;
-		}
-		unset( $this->placeholder_key, $this->placeholder_value );
+
 		return $this;
 	}
 
 	private function unparse_field_key_value() {
-		// @todo: implement this
+		$placeholder = $this->placeholder;
+		if ( empty( $placeholder ) ) {
+			return $this;
+		}
 
+		$this->placeholder_key = $placeholder['key'] ?? '';
+		$this->placeholder_value = $placeholder['value'] ?? '';
 
 		return $this;
 	}
 
 	private function unparse_field_group() {
-		// @todo: Implement this and test
+		$this->default_state = 'expanded';
+
+		$keys = [ 'default_state', 'save_state', 'group_title' ];
+
+		foreach ( $keys as $key ) {
+			$this->$key = $this->$key ?? '';
+		}
 
 		return $this;
 	}

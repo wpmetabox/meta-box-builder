@@ -149,14 +149,14 @@ class Settings extends Base {
 			unset( $this->render_callback );
 		}
         
-	        if ( 'view' === $this->render_with  ) {
-	            if ( ! empty( $this->render_view ) ) {
-	                $this->render_callback = 'view:' . $this->render_view;
-	            }
-	            
-	            unset( $this->render_template );
-	            unset( $this->render_view );
-	        }
+		if ( 'view' === $this->render_with  ) {
+			if ( ! empty( $this->render_view ) ) {
+				$this->render_callback = 'view:' . $this->render_view;
+			}
+			
+			unset( $this->render_template );
+			unset( $this->render_view );
+		}
 
 		$this->enqueue_style  = $this->replace_variables( $this->enqueue_style );
 		$this->enqueue_script = $this->replace_variables( $this->enqueue_script );

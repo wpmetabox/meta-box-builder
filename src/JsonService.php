@@ -46,7 +46,7 @@ class JsonService {
 
 		$post_type  = $params['post_type'] ?? 'meta-box';
 		$post_status = $params['post_status'] ?? 'publish';
-		
+
 		$meta_boxes = self::get_meta_boxes( compact( 'post_type', 'post_status' ) );
 		foreach ( $meta_boxes as $meta_box ) {
 			ksort( $meta_box );
@@ -135,7 +135,7 @@ class JsonService {
 	public static function get_meta_boxes( array $query_params = [] ): array {
 		$defaults = [ 
 			'post_type' => 'meta-box',
-			'post_status' => 'publish',
+			'post_status' => 'any',
 			'posts_per_page' => -1,
 			'no_found_rows' => true,
 			'update_post_term_cache' => false,
@@ -171,10 +171,10 @@ class JsonService {
 	 */
 	public static function get_files(): array {
 		$paths = self::get_paths();
-
-		$all_files = array_merge( ...array_map( function ($path) {
-			return glob( "$path/*.json" );
-		}, $paths ) );
+		$all_files = [];
+		foreach ( $paths as $path ) {
+			$all_files = array_merge( $all_files, glob( "$path/*.json" ) );
+		}
 
 		$all_files = apply_filters( 'mbb_json_files', $all_files );
 

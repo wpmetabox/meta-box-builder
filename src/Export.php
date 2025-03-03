@@ -42,7 +42,7 @@ class Export {
 		$post_ids  = wp_parse_id_list( wp_unslash( $_REQUEST['post'] ) );
 		$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
 		
-		$meta_boxes = JsonService::get_meta_boxes( compact('post_type') );
+		$meta_boxes = JsonService::get_meta_boxes( compact( 'post_type' ) );
 
 		$data = array_filter( $meta_boxes, function ($meta_box) use ($post_ids) {
 			return in_array( $meta_box['post_id'], $post_ids, true );
@@ -51,7 +51,8 @@ class Export {
 		// Remove post_id from the data
 		$data = array_map( function ($item) {
 			unset( $item['post_id'] );
-			
+			unset( $item['post_type'] );
+				
 			return $item;
 		}, $data );
 
