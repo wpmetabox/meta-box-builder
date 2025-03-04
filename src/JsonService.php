@@ -136,7 +136,7 @@ class JsonService {
 	public static function get_meta_boxes( array $query_params = [] ): array {
 		$defaults = [ 
 			'post_type' => 'meta-box',
-			'post_status' => 'any',
+			'post_status' => get_post_stati(),
 			'posts_per_page' => -1,
 			'no_found_rows' => true,
 			'update_post_term_cache' => false,

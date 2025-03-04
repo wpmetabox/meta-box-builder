@@ -85,6 +85,9 @@ class Normalizer {
 
 			// Add _id for each field for the builder
 			$fields         = $data['fields'];
+			// @todo: parse meta box validation. We can move this normalizer to the Unparser class
+			$validation     = self::lookup( [ 'validation' ], $data, [] );
+			
 			$data['fields'] = self::for_builder( $data['fields'] );
 		}
 

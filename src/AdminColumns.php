@@ -23,13 +23,13 @@ class AdminColumns {
 		add_action( 'current_screen', [ $this, 'current_screen' ] );
 		add_action( 'admin_footer', [ $this, 'render_diff_dialog' ] );
 		add_action( 'admin_notices', [ $this, 'admin_notices' ] );
-		
+
 		// Delete posts should delete the json file as well.
-		add_action( 'wp_trash_post', [ $this, 'delete_json' ], 10, 1);
-		add_action( 'before_delete_post', [ $this, 'delete_json' ], 10, 1);
+		add_action( 'wp_trash_post', [ $this, 'delete_json' ], 10, 1 );
+		add_action( 'before_delete_post', [ $this, 'delete_json' ], 10, 1 );
 
 		// Restore posts should restore the json file as well.
-		add_action( 'untrash_post', [ $this, 'restore_json' ], 10, 1);
+		add_action( 'untrash_post', [ $this, 'restore_json' ], 10, 1 );
 	}
 
 	public function delete_json( $post_id ) {
@@ -38,16 +38,16 @@ class AdminColumns {
 			return;
 		}
 
-		$json = JsonService::get_json([
+		$json = JsonService::get_json( [ 
 			'post_id' => $post_id,
-		]);
-		
+		] );
+
 		if ( empty( $json ) ) {
 			return;
 		}
 
 		$meta_box_id = array_key_first( $json );
-		$file_path = $json[ $meta_box_id ]['file'];
+		$file_path   = $json[ $meta_box_id ]['file'];
 
 		if ( ! file_exists( $file_path ) ) {
 			return;
@@ -62,9 +62,9 @@ class AdminColumns {
 			return false;
 		}
 
-		return LocalJson::use_database( [
+		return LocalJson::use_database( [ 
 			'post_id' => $post_id,
-			'post_status' => 'trashed'
+			'post_status' => 'trashed',
 		] );
 	}
 
@@ -168,6 +168,15 @@ class AdminColumns {
 				}
 
 				dialog.querySelectorAll( '.button-sync' ).forEach( btnSync => {
+					const use = btnSync.dataset.use;
+					if ( use === 'database' && syncData[ mbbId ].remote === null ) {
+						btnSync.disabled = true;
+					}
+
+					if ( use === 'json' && syncData[ mbbId ].local === null ) {
+						btnSync.disabled = true;
+					}
+
 					btnSync.dataset.id = mbbId;
 				} );
 				dialog.showModal();
@@ -186,7 +195,7 @@ class AdminColumns {
 			return;
 		}
 
-		$this->view = $_GET['post_status'] ?? ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
+		$this->view      = $_GET['post_status'] ?? ''; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
 		$this->post_type = $_GET['post_type'] ?? 'meta-box'; //phpcs:ignore WordPress.Security.NonceVerification.Recommended -- used as intval to return a page.
 
 		$this->check_sync();

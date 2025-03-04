@@ -15,6 +15,7 @@ class Base {
 
 	public function set_settings( $settings ) {
 		$this->settings = (array) $settings;
+		
 		return $this;
 	}
 
