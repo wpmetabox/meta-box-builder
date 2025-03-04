@@ -81,7 +81,7 @@ class Normalizer {
 
 		// Fields only for meta box
 		if ( 'meta_box' === $meta_key ) {
-			$data['fields'] = self::lookup( [ 'fields' ], $data, [] );
+			$data['fields'] = self::lookup( [ 'meta_box.fields', 'fields' ], $data, [] );
 
 			// Add _id for each field for the builder
 			$fields         = $data['fields'];
@@ -89,37 +89,31 @@ class Normalizer {
 		}
 
 		$data[ $meta_key ] = self::lookup( [ $meta_key ], $data, [] );
-		$main_meta         = $data[ $meta_key ] ?? [];
+		$root         = $data[ $meta_key ] ?? [];
 
-		if ( empty( $main_meta ) ) {
-			$main_meta['title']  = self::lookup( [ 'title' ], $data );
-			$main_meta['id']     = self::lookup( [ 'id' ], $data );
-			$main_meta['closed'] = self::lookup( [ 'settings.closed' ], $data, false );
+		if ( empty( $root ) ) {
+			$root['title']  = self::lookup( [ 'title' ], $data );
+			$root['id']     = self::lookup( [ 'id' ], $data );
+			$root['closed'] = self::lookup( [ 'settings.closed' ], $data, false );
 			if ( $meta_key === 'meta_box' ) {
-				$main_meta['fields'] = $fields;
+				$root['fields'] = $fields;
 			}
 
-			$main_meta['version'] = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
+			$root['version'] = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
 		}
 
-		/** @todo */
-		// Normalizer currently doesn't support relationships and settings page
-		// because $main_meta is taken from is currently only for meta box
-
-
-
-		// Add all extra keys to settings and $main_meta
+		// Add all extra keys to settings and $root except known keys
 		$known_keys = self::get_known_keys( $meta_key );
 		foreach ( $data as $key => $value ) {
 			if ( in_array( $key, $known_keys, true ) ) {
 				continue;
 			}
 
-			$main_meta[ $key ]        = $value;
+			$root[ $key ]        = $value;
 			$data['settings'][ $key ] = $value;
 		}
 
-		$data[ $meta_key ] = $main_meta;
+		$data[ $meta_key ] = $root;
 		$data['data']      = [];
 
 		$data['version'] = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
@@ -158,6 +152,15 @@ class Normalizer {
 		return $data;
 	}
 
+	/**
+	 * By default, we will add all the keys in the root node to the settings
+	 * and the desired field (eg. meta_box, relationship, settings_page)
+	 * 
+	 * However, some keys should be added to the root only, this method will return those keys
+	 * 
+	 * @param string $post_type
+	 * @return string[]
+	 */
 	private static function get_known_keys( string $post_type ): array {
 		$keys = [ 
 			'$schema',
@@ -175,7 +178,7 @@ class Normalizer {
 
 		// Add extra keys for other post types
 		$extras = [ 
-			'meta_box' => [ 'fields' ],
+			'meta_box' => [ 'fields', 'meta_box' ],
 			'relationships' => [ 'relationship' ],
 			'settings_page' => [ 'settings_page' ],
 		];

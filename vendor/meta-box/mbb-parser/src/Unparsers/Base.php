@@ -20,14 +20,16 @@ class Base {
 	}
 
 	public function unparse_boolean_values() {
-		array_walk_recursive( $this->settings, [ $this, 'convert_boolean_to_string' ] );
+		array_walk_recursive( $this->settings, [ $this, 'convert_string_to_boolean' ] );
 
 		return $this;
 	}
 
-	protected function convert_boolean_to_string( &$value ) {
-		if ( is_bool( $value ) ) {
-			$value = $value ? 'true' : 'false';
+	protected function convert_string_to_boolean( &$value ) {
+		if ('true' === $value) {
+			$value = true;
+		} elseif ('false' === $value) {
+			$value = false;
 		}
 	}
 

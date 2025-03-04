@@ -60,6 +60,7 @@ class UnparserTest extends TestCase {
 	/**
 	 * 
 	 * All fields should have id, _id, name, and type
+	 * 
 	 * @return void
 	 */
 	public function testFieldShouldHaveRequiredFields() {
@@ -171,7 +172,6 @@ class UnparserTest extends TestCase {
 	public function testTooltipProperty() {
 		$normalized = Normalizer::normalize( $this->json );
 		$fields     = $normalized['fields'];
-
 		$tooltipField = $fields['tooltip'];
 
 		$this->assertArrayHasKey( 'tooltip', $tooltipField );
