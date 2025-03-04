@@ -1,0 +1,20 @@
+{
+    "$schema": "https://schemas.metabox.io/field-group.json",
+    "fields": [
+        {
+            "name": "Group",
+            "id": "group",
+            "type": "group",
+            "fields": [
+                {
+                    "name": "Text",
+                    "id": "text_u13p7cn175",
+                    "type": "text"
+                }
+            ]
+        }
+    ],
+    "id": "group-test",
+    "title": "Group Test",
+    "version": "v1740112037"
+}

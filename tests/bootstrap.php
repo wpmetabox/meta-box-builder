@@ -2,7 +2,11 @@
 // Steps to run this test:
 // 1. composer install --dev
 // 2. ./vendor/bin/phpunit
+
+
 // Filter failing tests
+// 0. Add `use PHPUnit\Framework\Attributes\Group;`
+// 0. Add attribute `#[Group('failing')]` to the method
 // 1. ./vendor/bin/phpunit --group failing
 
 $base_dir    = dirname( __DIR__ );

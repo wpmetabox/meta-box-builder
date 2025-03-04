@@ -15,13 +15,11 @@ class UnparserSettingsPageTest extends TestCase {
 	}
 
 	public function testSettingsPageProperty() {
-		$settings = $this->normalized['settings'];
-		
-		$this->assertArrayHasKey( 'settings_page', $settings );
-		$this->assertIsArray( $settings['settings_page'] );
+		$this->assertArrayHasKey( 'settings_page', $this->normalized );
+		$this->assertIsArray( $this->normalized['settings_page'] );
 
-		$settings_page = $settings['settings_page'];
+		$settings_page = $this->normalized['settings_page'];
 
-		// @todo: Test setting page should have required fields
+		$this->assertArrayHasKey( 'id', $settings_page );
 	}
 }

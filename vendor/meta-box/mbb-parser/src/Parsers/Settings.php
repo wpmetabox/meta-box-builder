@@ -65,7 +65,7 @@ class Settings extends Base {
 		}
 		$type = $data['type'];
 
-		$this->$type = array_merge( [
+		$this->$type = array_merge( [ 
 			'relation' => $data['relation'],
 		], $rules );
 
@@ -90,7 +90,7 @@ class Settings extends Base {
 	private function parse_block() {
 		// Remove block settings.
 		if ( 'block' !== $this->object_type ) {
-			$params = [
+			$params = [ 
 				'description',
 				'category',
 				'keywords',
@@ -104,7 +104,7 @@ class Settings extends Base {
 				'render_with',
 				'render_template',
 				'render_callback',
-                'render_view',
+				'render_view',
 				'render_code',
 				'enqueue_style',
 				'enqueue_script',
@@ -121,10 +121,10 @@ class Settings extends Base {
 		// Icon.
 		if ( 'dashicons' === $this->icon_type ) {
 			if ( $this->icon_background || $this->icon_foreground ) {
-				$this->icon = [
+				$this->icon = [ 
 					'background' => $this->icon_background,
 					'foreground' => $this->icon_foreground,
-					'src'        => $this->icon,
+					'src' => $this->icon,
 				];
 			}
 		}
@@ -148,12 +148,12 @@ class Settings extends Base {
 			unset( $this->render_template );
 			unset( $this->render_callback );
 		}
-        
-		if ( 'view' === $this->render_with  ) {
+
+		if ( 'view' === $this->render_with ) {
 			if ( ! empty( $this->render_view ) ) {
 				$this->render_callback = 'view:' . $this->render_view;
 			}
-			
+
 			unset( $this->render_template );
 			unset( $this->render_view );
 		}
@@ -180,12 +180,12 @@ class Settings extends Base {
 		if ( empty( $string ) ) {
 			return $string;
 		}
-		
-		return strtr( $string, [
-			'{{ site.path }}'  => wp_normalize_path( ABSPATH ),
-			'{{ site.url }}'   => untrailingslashit( home_url( '/' ) ),
+
+		return strtr( $string, [ 
+			'{{ site.path }}' => wp_normalize_path( ABSPATH ),
+			'{{ site.url }}' => untrailingslashit( home_url( '/' ) ),
 			'{{ theme.path }}' => wp_normalize_path( get_stylesheet_directory() ),
-			'{{ theme.url }}'  => get_stylesheet_directory_uri(),
+			'{{ theme.url }}' => get_stylesheet_directory_uri(),
 		] );
 	}
 }

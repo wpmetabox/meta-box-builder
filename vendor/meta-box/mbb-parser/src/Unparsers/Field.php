@@ -33,7 +33,9 @@ class Field extends Base {
 			->unparse_array_attributes( 'attributes' )
 			->unparse_text_limiter()
 			->unparse_custom_settings()
-			->unparse_conditional_logic();
+			->unparse_conditional_logic()
+			->unparse_tooltip()
+			->unparse_admin_columns();
 
 		$func = "unparse_field_{$this->type}";
 		if ( method_exists( $this, $func ) ) {
@@ -143,6 +145,59 @@ class Field extends Base {
 		$this->text_limiter = [ 
 			'limit' => $this->limit,
 			'limit_type' => $this->limit_type ?? 'word',
+		];
+
+		return $this;
+	}
+
+	private function unparse_tooltip() {
+		if ( ! isset( $this->tooltip ) ) {
+			return $this;
+		}
+
+		if ( is_array( $this->tooltip ) ) {
+			if ( ! isset( $this->tooltip['enable'] ) ) {
+				$this->tooltip = array_merge( $this->tooltip, [ 'enable' => true ] );
+			}
+
+			return $this;
+		}
+
+		$this->tooltip = [ 
+			'text' => $this->tooltip,
+			'icon' => 'info',
+			'position' => 'top',
+			'content' => '',
+			'allow_html' => true,
+			'enable' => true,
+		];
+
+		return $this;
+	}
+
+	private function unparse_admin_columns() {
+		if ( ! isset( $this->admin_columns ) ) {
+			return $this;
+		}
+
+		if ( is_array( $this->admin_columns ) ) {
+			if ( ! isset( $this->admin_columns['enable'] ) ) {
+				$this->admin_columns = array_merge( $this->admin_columns, [ 'enable' => true ] );
+			}
+
+			return $this;
+		}
+
+		$this->admin_columns = [ 
+			'enable' => true,
+			'position' => [ 'type' => 'after', 'column' => 'title' ],
+			'title' => '',
+			'before' => '',
+			'after' => '',
+			'sort' => false,
+			'searchable' => false,
+			'filterable' => false,
+			'link' => false,
 		];
 
 		return $this;

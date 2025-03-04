@@ -12,7 +12,7 @@ class Register {
 
 	public function register_meta_box( $meta_boxes ): array {
 		$json = JsonService::get_json();
-	
+		
 		foreach ( $json as $data ) {
 			$local  = $data['local_minimized'];
 			$remote = $data['remote'];

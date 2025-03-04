@@ -9,15 +9,15 @@ class UnparserRelationshipTest extends TestCase {
 	protected $normalized;
 
 	protected function setUp(): void {
-		$json             = file_get_contents( dirname( __DIR__ ) . '/examples/settings.json' );
+		$json             = file_get_contents( dirname( __DIR__ ) . '/examples/relationships.json' );
 		$this->json       = json_decode( $json, true );
 		$this->normalized = Normalizer::normalize( $this->json );
 	}
 
 	public function testRelationshipProperty() {
-		$settings = $this->normalized['settings'];
+		$relationships = $this->normalized['relationship'];
 		
-		$this->assertArrayHasKey( 'relationship', $settings );
-		$this->assertIsArray( $settings['relationship'] );
+		$this->assertArrayHasKey( 'relationship', $this->normalized );
+		$this->assertIsArray( $relationships );
 	}
 }

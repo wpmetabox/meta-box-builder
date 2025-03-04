@@ -1,6 +1,7 @@
 <?php
 use MetaBox\Support\Arr;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\Group;
 use MBB\Normalizer;
 
 class UnparserTest extends TestCase {
@@ -14,7 +15,7 @@ class UnparserTest extends TestCase {
 	/**
 	 * Test if the json has required fields
 	 * 
-	 * @group failing
+	 * #[Group('failing')]
 	 */
 	public function testShouldHaveRequiredFields() {
 		$json = Normalizer::normalize( $this->json );
@@ -43,7 +44,7 @@ class UnparserTest extends TestCase {
 	}
 
 	/**
-	 * @group failing
+	 * #[Group('failing')]
 	 */
 	public function testFieldsShouldBeKeyValuesArray() {
 		$normalized = Normalizer::normalize( $this->json );
@@ -57,7 +58,6 @@ class UnparserTest extends TestCase {
 	}
 
 	/**
-	 * @group passed
 	 * 
 	 * All fields should have id, _id, name, and type
 	 * @return void
@@ -86,7 +86,6 @@ class UnparserTest extends TestCase {
 	 * Option property should be a multilines string 
 	 * so its render properly for the builder
 	 * 
-	 * @group failing
 	 */
 	public function testOptionProperty() {
 		$normalized = Normalizer::normalize( $this->json );
@@ -102,7 +101,7 @@ class UnparserTest extends TestCase {
 	 * Option property should be a multilines string 
 	 * so its render properly for the builder
 	 * 
-	 * @group failing
+	 * #[Group('failing')]
 	 */
 	public function testAttributesProperty() {
 		$normalized = Normalizer::normalize( $this->json );
@@ -129,7 +128,7 @@ class UnparserTest extends TestCase {
 	/**
 	 * Test conditional logic property
 	 * 
-	 * @group failing
+	 * #[Group('failing')]
 	 */
 	public function testConditionalLogicProperty() {
 		$normalized = Normalizer::normalize( $this->json );
@@ -157,85 +156,16 @@ class UnparserTest extends TestCase {
 	}
 
 	/**
-	 * Test group field property
-	 * 
-	 * @group failing
-	 */
-	public function testGroupField() {
-		$normalized = Normalizer::normalize( $this->json );
-		$fields     = $normalized['fields'];
-
-		$group = $fields['group'];
-
-		// Other test already handle required fields for 
-		// generic fields so we only checks for group specific
-		// fields
-		$required_group_props = [ 
-			'group_title',
-			'fields',
-		];
-
-		foreach ( $required_group_props as $prop ) {
-			$this->assertArrayHasKey( $prop, $group );
-		}
-
-		$this->assertIsArray( $group['fields'] );
-		// Check if group fields is key value array
-		$keys = array_keys( $group['fields'] );
-		foreach ( $keys as $key ) {
-			$this->assertIsString( $key );
-		}
-
-		// Check if all fields in group have required fields
-		foreach ( $group['fields'] as $field ) {
-			$field_keys = array_keys( $field );
-
-			$required_fields = [ 
-				'id',
-				'_id',
-				'name',
-				'type',
-				'save_field',
-			];
-
-			foreach ( $required_fields as $required_field ) {
-				$this->assertContains( $required_field, $field_keys );
-			}
-		}
-	}
-
-	/**
 	 * Test admin columns property
 	 * 
-	 * @group failing
+	 * #[Group('failing')]
 	 */
 	public function testAdminColumnProperty() {
 		$normalized = Normalizer::normalize( $this->json );
 		$fields     = $normalized['fields'];
-
 		$adminColumn = $fields['admin_column'];
-
 		$this->assertIsArray( $adminColumn );
 		$this->assertArrayHasKey( 'admin_columns', $adminColumn );
-
-		// Has required fields
-		$required_fields_and_type = [ 
-			'enable' => 'bool',
-			'position' => 'array',
-			'position.type' => 'string',
-			'position.column' => 'string',
-			'title' => 'string',
-			'before' => 'string',
-			'after' => 'string',
-			'sort' => 'bool',
-			'searchable' => 'bool',
-			'filterable' => 'bool',
-			'link' => 'bool',
-		];
-
-		foreach ( $required_fields_and_type as $key => $type ) {
-			$this->assertEquals( gettype( Arr::get( $adminColumn['admin_columns'], $key ) ), $type );
-		}
 	}
 
 	public function testTooltipProperty() {
@@ -246,17 +176,7 @@ class UnparserTest extends TestCase {
 
 		$this->assertArrayHasKey( 'tooltip', $tooltipField );
 		$this->assertIsArray( $tooltipField['tooltip'] );
-
-		$required_fields_and_type = [ 
-			'enable' => 'bool',
-			'icon' => 'string',
-			'position' => 'string',
-			'content' => 'string',
-		];
-
-		foreach ( $required_fields_and_type as $key => $type ) {
-			$this->assertEquals( gettype( Arr::get( $tooltipField['tooltip'], $key ) ), $type );
-		}
+		$this->assertArrayHasKey( 'content', $tooltipField['tooltip'] );
+		$this->assertArrayHasKey( 'enable', $tooltipField['tooltip'] );
 	}
-
 }

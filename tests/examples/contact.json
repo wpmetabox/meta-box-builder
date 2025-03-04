@@ -31,6 +31,27 @@
                 "gender",
                 "female"
             ]
+        },
+        {
+            "name": "Admin Column",
+            "id": "admin_column",
+            "type": "text",
+            "admin_columns": {
+                "position": "after title",
+                "title": "alternate",
+                "sort": true
+            }
+        },
+        {
+            "name": "Tooltip",
+            "id": "tooltip",
+            "type": "text",
+            "tooltip": {
+                "enable": true,
+                "content": "This is a tooltip",
+                "icon": "dashicons-editor-help",
+                "position": "top"
+            }
         }
     ],
     "id": "contact",

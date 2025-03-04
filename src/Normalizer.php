@@ -17,7 +17,7 @@ class Normalizer {
 	 */
 	protected const SCHEMAS = [ 
 		'meta-box' => 'https://schemas.metabox.io/field-group.json',
-		'mb-relationship' => 'https://schemas.metabox.io/relationship.json',
+		'mb-relationship' => 'https://schemas.metabox.io/relationships.json',
 		'mb-settings-page' => 'https://schemas.metabox.io/settings-page.json',
 	];
 
@@ -73,7 +73,7 @@ class Normalizer {
 		$data['settings']['version']       = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
 
 		$data['settings']['settings_page'] = self::lookup( [ 'settings.settings_page', 'settings_page' ], $data );
-		
+
 		// settings_page is string but old version needs array
 		if ( is_string( $data['settings']['settings_page'] ) ) {
 			$data['settings']['settings_page'] = [ $data['settings']['settings_page'] ];
@@ -101,6 +101,12 @@ class Normalizer {
 
 			$main_meta['version'] = self::lookup( [ 'version', 'settings.version' ], $data, 'v0' );
 		}
+
+		/** @todo */
+		// Normalizer currently doesn't support relationships and settings page
+		// because $main_meta is taken from is currently only for meta box
+
+
 
 		// Add all extra keys to settings and $main_meta
 		$known_keys = self::get_known_keys( $meta_key );
@@ -220,9 +226,9 @@ class Normalizer {
 
 		// Add extra keys for other post types
 		$extras = [ 
-			'meta_box' => [ 'relationship' ],
-			'relationship' => [ 'fields', 'settings_page' ],
-			'settings_page' => [ 'fields', 'relationship' ],
+			'meta-box' => [ 'relationship' ],
+			'mb-relationship' => [ 'fields', 'settings_page', 'relationship' ],
+			'mb-settings-page' => [ 'fields', 'settings_page', 'relationship' ],
 		];
 
 		return array_merge( $default, $extras[ $post_type ] ?? [] );
