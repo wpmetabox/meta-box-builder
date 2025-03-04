@@ -80,7 +80,8 @@ class JsonService {
 				continue;
 			}
 
-			$is_newer = version_compare( $items[ $id ]['local_minimized']['version'], $meta_box['version'] ?? 'v0' );
+			$local_version = $items[ $id ]['local']['version'] ?? 'v0';
+			$is_newer = version_compare( $local_version, $meta_box['version'] ?? 'v0' );
 
 			$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
