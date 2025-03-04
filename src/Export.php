@@ -48,6 +48,8 @@ class Export {
 			return in_array( $meta_box['post_id'], $post_ids, true );
 		} );
 		
+		$data = array_values( $data );
+		
 		// Remove post_id from the data
 		$data = array_map( function ($item) {
 			unset( $item['post_id'] );
