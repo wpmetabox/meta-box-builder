@@ -53,6 +53,9 @@ class MetaBox extends Base {
 		$this->unparse_validation();
 		$this->unparse_geo_location();
 		$this->unparse_columns();
+		$this->unparse_conditional_logic();
+		$this->unparse_include_exclude();
+		$this->unparse_show_hide();
 	}
 
 	public function unparse_tabs() {
@@ -275,8 +278,8 @@ class MetaBox extends Base {
 
 		$custom_settings = $this->lookup( [ 'settings.custom_settings' ], [] );
 
-		$id = uniqid();
-		$custom_settings[$id] = [
+		$id                                            = uniqid();
+		$custom_settings[ $id ]                          = [ 
 			'id' => $id,
 			'key' => 'geo',
 			'value' => is_array( $geo ) ? wp_json_encode( $geo ) : $geo
@@ -295,8 +298,8 @@ class MetaBox extends Base {
 
 		$custom_settings = $this->lookup( [ 'settings.custom_settings' ], [] );
 
-		$id = uniqid();
-		$custom_settings[$id] = [
+		$id                                            = uniqid();
+		$custom_settings[ $id ]                          = [ 
 			'id' => $id,
 			'key' => 'columns',
 			'value' => is_array( $columns ) ? wp_json_encode( $columns ) : $columns
@@ -305,4 +308,83 @@ class MetaBox extends Base {
 
 		return $this;
 	}
+
+	public function unparse_include_exclude() {
+		$keywords        = [ 'include', 'exclude' ];
+		$include_exclude = $this->lookup( [ 'settings.include_exclude' ], [] );
+
+		foreach ( $keywords as $keyword ) {
+			$data = $this->lookup( [ $keyword ], [] );
+
+			if ( empty( $data ) ) {
+				continue;
+			}
+
+			$setting_include_exclude = [ 
+				'type' => $keyword,
+				'relation' => $include_exclude['relation'] ?? 'OR',
+				'rules' => [],
+			];
+
+			foreach ( $data as $rule_id => $rule ) {
+				$id = uniqid();
+				if ( $rule_id === 'relation' ) {
+					continue;
+				}
+				$setting_include_exclude['rules'][ $id ] = [ 
+					'id' => $id,
+					'name' => $rule_id,
+					'value' => $rule,
+				];
+			}
+		}
+
+		if (empty($setting_include_exclude['rules'])) {
+			return $this;
+		}
+		
+		$this->settings['settings']['include_exclude'] = $setting_include_exclude;
+
+		return $this;
+	}
+
+	public function unparse_show_hide() {
+		$keywords        = [ 'show', 'hide' ];
+		$show_hide = $this->lookup( [ 'settings.show_hide' ], [] );
+
+		foreach ( $keywords as $keyword ) {
+			$data = $this->lookup( [ $keyword ], [] );
+
+			if ( empty( $data ) ) {
+				continue;
+			}
+
+			$setting_show_hide = [ 
+				'type' => $keyword,
+				'relation' => $show_hide['relation'] ?? 'OR',
+				'rules' => [],
+			];
+
+			foreach ( $data as $rule_id => $rule ) {
+				$id = uniqid();
+				if ( $rule_id === 'relation' ) {
+					continue;
+				}
+				$setting_show_hide['rules'][ $id ] = [ 
+					'id' => $id,
+					'name' => $rule_id,
+					'value' => $rule,
+				];
+			}
+		}
+
+		if ( empty( $setting_show_hide['rules'] ) ) {
+			return $this;
+		}
+
+		$this->settings['settings']['show_hide'] = $setting_show_hide;
+
+		return $this;
+	}
+
 }
