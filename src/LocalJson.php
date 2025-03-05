@@ -69,7 +69,9 @@ class LocalJson {
 	}
 
 	/**
-	 * Use local json file and override database
+	 * Use local json file and override database. Currently, its using by REST API
+	 * 
+	 * @todo: Remove this function and use sync_json() instead.
 	 * 
 	 * @param array $args
 	 * @return bool Success or not

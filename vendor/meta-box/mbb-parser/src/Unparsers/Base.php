@@ -60,22 +60,6 @@ class Base {
 		return $this;
 	}
 
-	protected function unparse_custom_settings() {
-		if ( ! isset( $this->custom_settings ) ) {
-			return $this;
-		}
-
-		$this->unparse_array_attributes( 'custom_settings' );
-
-		foreach ( $this->custom_settings as $key => $value ) {
-			$this->$key = $value;
-		}
-
-		unset( $this->custom_settings );
-
-		return $this;
-	}
-
 	protected function unparse_conditional_logic() {
 		if ( empty( $this->visible ) && empty( $this->hidden ) ) {
 			return $this;
@@ -104,6 +88,7 @@ class Base {
 				];
 			}
 		}
+		unset( $this->visible, $this->hidden );
 
 		$this->conditional_logic = $output;
 

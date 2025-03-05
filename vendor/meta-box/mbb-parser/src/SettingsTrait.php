@@ -1,6 +1,7 @@
 <?php
 namespace MBBParser;
 
+use MetaBox\Support\Arr;
 /**
  * Use overloading magic methods for short syntax.
  */
@@ -25,5 +26,21 @@ trait SettingsTrait {
 
 	public function __unset( string $key ): void {
 		unset( $this->settings[ $key ] );
+	}
+
+		/**
+	 * Lookup from the data using keys, return the first key found or null
+	 * 
+	 * @param array $keys
+	 * @return mixed
+	 */
+	public function lookup( array $keys, $default = null ) {
+		foreach ( $keys as $key ) {
+			if ( Arr::get( $this->settings, $key ) !== null ) {
+				return Arr::get( $this->settings, $key );
+			}
+		}
+
+		return $default;
 	}
 }

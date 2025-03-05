@@ -1,5 +1,5 @@
 <?php
-namespace MBBParser\Parsers;
+namespace MBBParser\Unparsers;
 
 use MetaBox\Support\Arr;
 
@@ -7,39 +7,20 @@ class Settings extends Base {
 	// Allow these settings to be empty.
 	protected $empty_keys = [ 'post_types', 'taxonomies', 'settings_pages' ];
 
-	public function parse() {
-		$this->remove_default( 'context', 'normal' )
-			->parse_boolean_values()
-			->parse_numeric_values()
-			->parse_location()
-			->parse_location_rules( 'show_hide' )
-			->parse_location_rules( 'include_exclude' )
-			->parse_conditional_logic()
-			->parse_custom_table()
-			->parse_block()
-			->parse_custom_settings()
-			->remove_empty_values();
+	public function unparse() {
+		$this->add_default( 'context', 'normal' )
+			->unparse_boolean_values()
+			->unparse_numeric_values()
+			->unparse_location()
+			->unparse_location_rules( 'show_hide' )
+			->unparse_location_rules( 'include_exclude' )
+			->unparse_conditional_logic()
+			->unparse_block();
 
 		unset( $this->object_type );
 	}
 
-	private function parse_location() {
-		$object_type = $this->object_type ?: 'post';
-
-		if ( in_array( $object_type, [ 'user', 'comment', 'block' ], true ) ) {
-			unset( $this->$object_type );
-			$this->type = $object_type;
-		}
-
-		if ( 'post' !== $object_type ) {
-			return $this;
-		}
-
-		$this->remove_default( 'post_types', [ 'post' ] );
-		$this->remove_default( 'priority', 'high' );
-		$this->remove_default( 'style', 'default' );
-		$this->remove_default( 'position', 'normal' );
-
+	private function unparse_location() {
 		if ( isset( $this->post_types ) ) {
 			$this->post_types = array_filter( (array) $this->post_types );
 		}
@@ -47,132 +28,18 @@ class Settings extends Base {
 		return $this;
 	}
 
-	private function parse_location_rules( $key ) {
-		if ( ! isset( $this->$key ) ) {
-			return $this;
-		}
-
-		$data = $this->$key;
-		unset( $this->$key );
-
-		$rules = [];
-		foreach ( $data['rules'] as $rule ) {
-			$value = $rule['value'];
-			if ( 'input_value' === $rule['name'] ) {
-				$value = wp_list_pluck( $value, 'value', 'key' );
-			}
-			$rules[ $rule['name'] ] = $value;
-		}
-		$type = $data['type'];
-
-		$this->$type = array_merge( [ 
-			'relation' => $data['relation'],
-		], $rules );
-
+	/**
+	 * @todo: Implement this
+	 * 
+	 * @param mixed $key
+	 * @return void
+	 */
+	private function unparse_location_rules( $key ) {
 		return $this;
 	}
 
-	private function parse_custom_table() {
-		$enable = Arr::get( $this->settings, 'custom_table.enable', false );
-		$name   = Arr::get( $this->settings, 'custom_table.name', '' );
-		if ( $enable && $name ) {
-			$this->storage_type = 'custom_table';
-
-			global $wpdb;
-			$prefix      = Arr::get( $this->settings, 'custom_table.prefix', false );
-			$this->table = ( $prefix ? $wpdb->prefix : '' ) . $name;
-		}
-
-		unset( $this->custom_table );
-		return $this;
-	}
-
-	private function parse_block() {
-		// Remove block settings.
-		if ( 'block' !== $this->object_type ) {
-			$params = [ 
-				'description',
-				'category',
-				'keywords',
-				'supports',
-				'block_context',
-				'icon',
-				'icon_type',
-				'icon_svg',
-				'icon_background',
-				'icon_foreground',
-				'render_with',
-				'render_template',
-				'render_callback',
-				'render_view',
-				'render_code',
-				'enqueue_style',
-				'enqueue_script',
-				'enqueue_assets',
-			];
-			foreach ( $params as $param ) {
-				unset( $this->{$param} );
-			}
-			return $this;
-		}
-
-		$this->keywords = Arr::from_csv( $this->keywords );
-
-		// Icon.
-		if ( 'dashicons' === $this->icon_type ) {
-			if ( $this->icon_background || $this->icon_foreground ) {
-				$this->icon = [ 
-					'background' => $this->icon_background,
-					'foreground' => $this->icon_foreground,
-					'src' => $this->icon,
-				];
-			}
-		}
-		if ( 'svg' === $this->icon_type ) {
-			$this->icon = $this->icon_svg;
-		}
-		unset( $this->icon_svg );
-		unset( $this->icon_background );
-		unset( $this->icon_foreground );
-		unset( $this->icon_type );
-
-		// Render options.
-		if ( 'callback' === $this->render_with ) {
-			unset( $this->render_template );
-		}
-		if ( 'template' === $this->render_with ) {
-			unset( $this->render_callback );
-			$this->render_template = $this->replace_variables( $this->render_template );
-		}
-		if ( 'code' === $this->render_with ) {
-			unset( $this->render_template );
-			unset( $this->render_callback );
-		}
-
-		if ( 'view' === $this->render_with ) {
-			if ( ! empty( $this->render_view ) ) {
-				$this->render_callback = 'view:' . $this->render_view;
-			}
-
-			unset( $this->render_template );
-			unset( $this->render_view );
-		}
-
-		$this->enqueue_style  = $this->replace_variables( $this->enqueue_style );
-		$this->enqueue_script = $this->replace_variables( $this->enqueue_script );
-
-		if ( isset( $this->settings['block_json'] ) && $this->settings['block_json']['enable'] ) {
-			if ( ! empty( $this->settings['block_json']['path'] ) ) {
-				$this->settings['block_json']['path'] = $this->replace_variables( $this->settings['block_json']['path'] );
-			}
-		}
-
-		unset( $this->render_with );
-
-		// Context.
-		$this->context = $this->block_context;
-		unset( $this->block_context );
-
+	private function unparse_block() {
+		// @todo: Implement this
 		return $this;
 	}
 

@@ -3,6 +3,7 @@ use MetaBox\Support\Arr;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Group;
 use MBB\Normalizer;
+use MBBParser\Unparsers\MetaBox;
 
 class UnparserTest extends TestCase {
 	protected $json;
@@ -12,6 +13,13 @@ class UnparserTest extends TestCase {
 		$this->json = json_decode( $json, true );
 	}
 
+	protected function testShouldHaveEmptyData() {
+		$unparser = new MetaBox( $this->json );
+		$unparser->unparse();
+
+		$this->assertArrayHasKey( 'data', $unparser->get_settings() );
+		$this->assertEmpty( $unparser->get_settings()['data'] );
+	}
 	/**
 	 * Test if the json has required fields
 	 * 

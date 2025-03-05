@@ -103,22 +103,22 @@ class AdminColumns {
 		?>
 		<dialog id="mbb-diff-dialog">
 			<header>
-				<h2><?php echo esc_html__( 'Review changes', 'meta-box-builder' ) ?></h2>
+				<h2 tabindex="0"><?php esc_html_e( 'Review changes', 'meta-box-builder' ) ?></h2>
 				<button id="mbb-diff-dialog-close" class="button-link" role="button">&times;</button>
 			</header>
 
 			<div class="mbb-diff-dialog-button-group" data-split-views="true">
 				<div>
-					<h3><?php echo esc_html__( 'Database Version', 'meta-box-builder' ) ?></h3>
+					<h3><?php esc_html_e( 'Database Version', 'meta-box-builder' ) ?></h3>
 					<button type="button" role="button" class="button-sync" data-use="database">
-						<?php echo esc_html__( 'Use Database', 'meta-box-builder' ) ?>
+						<?php esc_html_e( 'Use Database', 'meta-box-builder' ) ?>
 					</button>
 				</div>
 
 				<div>
-					<h3><?php echo esc_html__( 'JSON File Version', 'meta-box-builder' ) ?></h3>
+					<h3><?php esc_html_e( 'JSON File Version', 'meta-box-builder' ) ?></h3>
 					<button type="button" role="button" class="button-sync" data-use="json">
-						<?php echo esc_html__( 'Use JSON File', 'meta-box-builder' ) ?>
+						<?php esc_html_e( 'Use JSON File', 'meta-box-builder' ) ?>
 					</button>
 				</div>
 			</div>
