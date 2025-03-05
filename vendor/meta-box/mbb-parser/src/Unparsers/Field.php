@@ -16,11 +16,7 @@ class Field extends Base {
 	 * @return void
 	 */
 	public function unparse() {
-		$this->_id = $this->_id ?? $this->id;
-
-		$this
-			->add_default( '_id', $this->id )
-			->add_default( 'save_field', true )
+		$this->unparse_default_values()
 			->unparse_boolean_values()
 			->unparse_numeric_values()
 			->unparse_datalist()
@@ -94,16 +90,19 @@ class Field extends Base {
 			return $this;
 		}
 
-		$keys = [ 'sort_clone', 'clone_default', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ];
-		
+		$keys = [ 'sort_clone', 'clone_default', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button', 'clone_empty_start' ];
+
 		foreach ( $keys as $key ) {
 			if ( isset( $this->$key ) ) {
 				continue;
 			}
 
 			$numerics = [ 'min_clone', 'max_clone' ];
+			$strings  = [ 'add_button' ];
 			if ( in_array( $key, $numerics, true ) ) {
 				$this->$key = 0;
+			} elseif ( in_array( $key, $strings, true ) ) {
+				$this->$key = '';
 			} else {
 				$this->$key = false;
 			}
@@ -118,7 +117,7 @@ class Field extends Base {
 			return $this;
 		}
 
-		$this->placeholder_key = $placeholder['key'] ?? '';
+		$this->placeholder_key   = $placeholder['key'] ?? '';
 		$this->placeholder_value = $placeholder['value'] ?? '';
 
 		return $this;
@@ -198,6 +197,31 @@ class Field extends Base {
 			'filterable' => false,
 			'link' => false,
 		];
+
+		return $this;
+	}
+
+	public function unparse_default_values() {
+		$this->_id = $this->_id ?? $this->id;
+
+		$key_defaults = [ 
+			'_id' => $this->id,
+			'save_field' => true,
+			'label_description' => '',
+			'desc' => '',
+			'size' => '',
+			'columns' => '',
+			'hide_from_rest' => false,
+			'hide_from_front' => false,
+			'before' => '',
+			'after' => '',
+			'class' => '',
+			'sanitize_callback' => '',
+		];
+
+		foreach ( $key_defaults as $key => $default ) {
+			$this->add_default( $key, $default );
+		}
 
 		return $this;
 	}
