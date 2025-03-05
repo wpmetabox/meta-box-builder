@@ -217,6 +217,11 @@ class Field extends Base {
 			'after' => '',
 			'class' => '',
 			'sanitize_callback' => '',
+			'required' => false,
+			'disabled' => false,
+			'readonly' => false,
+			'prepend' => "",
+			'append' => "",
 		];
 
 		foreach ( $key_defaults as $key => $default ) {

@@ -50,6 +50,7 @@ class MetaBox extends Base {
 		$this->unparse_version();
 		$this->unparse_custom_table();
 		$this->unparse_tabs();
+		$this->unparse_validation();
 	}
 
 	public function unparse_tabs()
@@ -219,8 +220,6 @@ class MetaBox extends Base {
 
 			$field = $unparser->get_settings();
 
-			//$this->unparse_field_validation( $field );
-
 			if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
 				$this->unparse_fields( $field['fields'] );
 			}
@@ -232,31 +231,37 @@ class MetaBox extends Base {
 		return $this;
 	}
 
-	/**
-	 * @todo: Implement this method
-	 */
-	private function unparse_field_validation( &$field ) {
-		if ( isset( $field['validation'] ) ) {
-			return;
+	private function unparse_validation() {
+		$validation = $this->settings['validation'] ?? [];
+
+		if ( empty( $validation ) || ! array_key_exists( 'rules', $validation ) ) {
+			return $this;
 		}
 
-		if ( ! isset( $this->validation ) || ! is_array( $this->validation ) || ! array_key_exists( 'rules', $this->validation ) ) {
-			return;
+		$fields = $this->fields;
+		foreach ( $validation['rules'] as $field_id => $rules ) {
+			foreach ( $fields as $fid => $field ) {
+				if ( $field['id'] !== $field_id ) {
+					continue;
+				}
+
+				$field['validation'] = [];
+				foreach ( $rules as $rule_name => $rule_value ) {
+					$id = uniqid();
+
+					$field['validation'][$id] = [
+						'id' => $id,
+						'name' => $rule_name,
+						'value' => $rule_value,
+						'message' => $validation['messages'][$field_id][$rule_name] ?? '',
+					];
+				}
+			
+				$fields[$field['id']] = $field;
+			}
 		}
+		$this->fields = $fields;
 
-		$key = str_replace( $this->settings_parser->prefix, '', $field['id'] );
-
-		$rules    = $this->validation['rules'][ $key ];
-		$messages = $this->validation['messages'][ $key ];
-
-		$field['validation'] = [];
-
-		foreach ( $rules as $rule ) {
-			$field['validation'][] = [ 
-				'name' => $rule,
-				'value' => $rules[ $rule ],
-				'message' => $messages[ $rule ] ?? '',
-			];
-		}
+		return $this;
 	}
 }
