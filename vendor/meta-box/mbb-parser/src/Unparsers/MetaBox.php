@@ -51,15 +51,16 @@ class MetaBox extends Base {
 		$this->unparse_custom_table();
 		$this->unparse_tabs();
 		$this->unparse_validation();
+		$this->unparse_geo_location();
+		$this->unparse_columns();
 	}
 
-	public function unparse_tabs()
-	{
-		$tab_style = $this->lookup( [ 'settings.tab_style', 'tab_style' ], '' );
+	public function unparse_tabs() {
+		$tab_style          = $this->lookup( [ 'settings.tab_style', 'tab_style' ], '' );
 		$tab_default_active = $this->lookup( [ 'settings.tab_default_active', 'tab_default_active' ], '' );
 		$tab_default_active = $this->lookup( [ 'settings.tab_remember', 'tab_remember' ], '' );
 
-		$this->settings['settings']['tab_style'] = $tab_style;
+		$this->settings['settings']['tab_style']          = $tab_style;
 		$this->settings['settings']['tab_default_active'] = $tab_default_active;
 
 		// Inject tabs into fields
@@ -72,21 +73,21 @@ class MetaBox extends Base {
 			}
 
 			$tab_id = $field['tab'];
-			if (array_key_exists($tab_id, $added_tabs)) {
+			if ( array_key_exists( $tab_id, $added_tabs ) ) {
 				continue;
 			}
-			$this->fields[$tab_id] = [
+			$this->fields[ $tab_id ] = [ 
 				'id' => $tab_id,
 				'_id' => $tab_id,
 				'type' => 'tab',
-				'name' => $tabs[$tab_id]['name'],
+				'name' => $tabs[ $tab_id ]['name'],
 				'icon_type' => '',
 				'icon' => '',
 				'icon_fa' => '',
 				'icon_url' => '',
 			];
 		}
-		
+
 		return $this;
 	}
 
@@ -95,7 +96,7 @@ class MetaBox extends Base {
 			return $this;
 		}
 
-		$default_custom_table = [
+		$default_custom_table = [ 
 			'enable' => false,
 			'name' => '',
 			'prefix' => false,
@@ -104,11 +105,11 @@ class MetaBox extends Base {
 
 		if ( ! isset( $this->table ) || ( ! isset( $this->storage_type ) && $this->storage_type !== 'custom_table' ) ) {
 			$this->settings['settings']['custom_table'] = $default_custom_table;
-			
+
 			return $this;
 		}
 
-		$this->settings['settings']['custom_table'] = [
+		$this->settings['settings']['custom_table'] = [ 
 			'enable' => true,
 			'name' => $this->table,
 			'prefix' => false,
@@ -231,7 +232,7 @@ class MetaBox extends Base {
 		return $this;
 	}
 
-	private function unparse_validation() {
+	public function unparse_validation() {
 		$validation = $this->settings['validation'] ?? [];
 
 		if ( empty( $validation ) || ! array_key_exists( 'rules', $validation ) ) {
@@ -249,18 +250,58 @@ class MetaBox extends Base {
 				foreach ( $rules as $rule_name => $rule_value ) {
 					$id = uniqid();
 
-					$field['validation'][$id] = [
+					$field['validation'][ $id ] = [ 
 						'id' => $id,
 						'name' => $rule_name,
 						'value' => $rule_value,
-						'message' => $validation['messages'][$field_id][$rule_name] ?? '',
+						'message' => $validation['messages'][ $field_id ][ $rule_name ] ?? '',
 					];
 				}
-			
-				$fields[$field['id']] = $field;
+
+				$fields[ $field['id'] ] = $field;
 			}
 		}
 		$this->fields = $fields;
+
+		return $this;
+	}
+
+	public function unparse_geo_location() {
+		$geo = $this->lookup( [ 'geo' ], [] );
+
+		if ( empty( $geo ) ) {
+			return $this;
+		}
+
+		$custom_settings = $this->lookup( [ 'settings.custom_settings' ], [] );
+
+		$id = uniqid();
+		$custom_settings[$id] = [
+			'id' => $id,
+			'key' => 'geo',
+			'value' => is_array( $geo ) ? wp_json_encode( $geo ) : $geo
+		];
+		$this->settings['settings']['custom_settings'] = $custom_settings;
+
+		return $this;
+	}
+
+	public function unparse_columns() {
+		$columns = $this->lookup( [ 'columns' ], [] );
+
+		if ( empty( $columns ) ) {
+			return $this;
+		}
+
+		$custom_settings = $this->lookup( [ 'settings.custom_settings' ], [] );
+
+		$id = uniqid();
+		$custom_settings[$id] = [
+			'id' => $id,
+			'key' => 'columns',
+			'value' => is_array( $columns ) ? wp_json_encode( $columns ) : $columns
+		];
+		$this->settings['settings']['custom_settings'] = $custom_settings;
 
 		return $this;
 	}
