@@ -79,16 +79,19 @@ class MetaBox extends Base {
 			if ( array_key_exists( $tab_id, $added_tabs ) ) {
 				continue;
 			}
-			$this->fields[ $tab_id ] = [ 
+			$field = [ 
 				'id' => $tab_id,
 				'_id' => $tab_id,
 				'type' => 'tab',
-				'name' => $tabs[ $tab_id ]['name'],
+				'name' => $tabs[ $tab_id ]['label'],
 				'icon_type' => '',
 				'icon' => '',
 				'icon_fa' => '',
 				'icon_url' => '',
 			];
+			$added_tabs[ $tab_id ] = $field;
+
+			$this->settings['fields'][] = $field;
 		}
 
 		return $this;

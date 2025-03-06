@@ -81,7 +81,9 @@ class Import {
 		}
 
 		foreach ( $posts as $post ) {
-			$post = Normalizer::normalize( $post, $post_type );
+			$unparser = new \MBBParser\Unparsers\MetaBox( $post );
+			$unparser->unparse();
+			
 			$post_id = wp_insert_post( $post );
 			if ( ! $post_id ) {
 				wp_die( wp_kses_post( sprintf(

@@ -24,6 +24,9 @@ class JsonService {
 				continue;
 			}
 
+			$unparser = new \MBBParser\Unparsers\MetaBox( $json );
+			$unparser->unparse();
+			$json = $unparser->get_settings();
 			$local_minimized = Normalizer::minimize( $json );
 			ksort( $local_minimized );
 

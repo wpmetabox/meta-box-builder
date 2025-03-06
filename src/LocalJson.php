@@ -99,7 +99,9 @@ class LocalJson {
 
 		$json = reset( $json );
 		$data = $json['local'];
-		$data = Normalizer::normalize( $data );
+		$unparser = new \MBBParser\Unparsers\MetaBox( $data );
+		$unparser->unparse();
+		$data = $unparser->get_settings();
 
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
 		$post_array  = array_merge( $post_array, [ 
@@ -140,7 +142,9 @@ class LocalJson {
 		}
 		$post_array  = [ 'ID' => $data['post_id'] ];
 		$data        = $data['local'];
-		$data        = Normalizer::normalize( $data );
+		$unparser    = new \MBBParser\Unparsers\MetaBox( $data );
+		$unparser->unparse();
+		$data        = $unparser->get_settings();
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
 		$post_array  = array_merge( $post_array, [ 
 			'post_type' => $data['post_type'],
