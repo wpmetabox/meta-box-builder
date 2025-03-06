@@ -173,7 +173,19 @@ class MetaBox extends Base {
 			'text_domain' => $this->text_domain ?? 'your-text-domain',
 			'function_name' => $this->function_name ?? '',
 			'settings_page' => $this->settings_page ?? [],
-		];
+		];		
+
+		$known_keys = $this->get_known_keys();
+		foreach ( $settings as $key => $value ) {
+			if ( in_array( $key, $known_keys, true ) ) {
+				continue;
+			}
+
+			$this->settings[ $key ] = $value;
+			$this->settings['settings'][ $key ] = $value;
+		}
+
+		$settings = array_merge( (array) $this->settings, $settings );
 
 		$this->settings_parser = new Settings( $settings );
 		$this->settings_parser->unparse();
@@ -279,7 +291,7 @@ class MetaBox extends Base {
 		$custom_settings = $this->lookup( [ 'settings.custom_settings' ], [] );
 
 		$id                                            = uniqid();
-		$custom_settings[ $id ]                          = [ 
+		$custom_settings[ $id ]                        = [ 
 			'id' => $id,
 			'key' => 'geo',
 			'value' => is_array( $geo ) ? wp_json_encode( $geo ) : $geo
@@ -299,7 +311,7 @@ class MetaBox extends Base {
 		$custom_settings = $this->lookup( [ 'settings.custom_settings' ], [] );
 
 		$id                                            = uniqid();
-		$custom_settings[ $id ]                          = [ 
+		$custom_settings[ $id ]                        = [ 
 			'id' => $id,
 			'key' => 'columns',
 			'value' => is_array( $columns ) ? wp_json_encode( $columns ) : $columns
@@ -339,17 +351,17 @@ class MetaBox extends Base {
 			}
 		}
 
-		if (empty($setting_include_exclude['rules'])) {
+		if ( empty( $setting_include_exclude['rules'] ) ) {
 			return $this;
 		}
-		
+
 		$this->settings['settings']['include_exclude'] = $setting_include_exclude;
 
 		return $this;
 	}
 
 	public function unparse_show_hide() {
-		$keywords        = [ 'show', 'hide' ];
+		$keywords  = [ 'show', 'hide' ];
 		$show_hide = $this->lookup( [ 'settings.show_hide' ], [] );
 
 		foreach ( $keywords as $keyword ) {
@@ -387,4 +399,78 @@ class MetaBox extends Base {
 		return $this;
 	}
 
+	private function get_known_keys(): array {
+		$keys = [ 
+			'$schema',
+			'id',
+			'title',
+			'post_type',
+			'post_name',
+			'post_date',
+			'post_status',
+			'post_content',
+			'settings',
+			'version',
+			'data',
+		];
+
+		// Add extra keys for other post types
+		$extras = [ 
+			'meta_box' => [ 'fields', 'meta_box' ],
+			'relationships' => [ 'relationship' ],
+			'settings_page' => [ 'settings_page' ],
+		];
+		
+		$post_type = $this->post_type ?? 'meta-box';
+
+		return array_merge( $keys, $extras[ $post_type ] ?? [] );
+	}
+
+	private function get_unneeded_keys(): array {
+		$default = [ 
+			'ID',
+			'post_name',
+			'post_date',
+			'post_status',
+			'post_content',
+			'settings',
+			'meta_box',
+			'data',
+			'closed',
+			'function_name',
+			'text_domain',
+			'post_type',
+			'post_title',
+			'settings_page',
+			"menu_order",
+			"ping_status",
+			"pinged",
+			"post_author",
+			"post_content_filtered",
+			"post_date_gmt",
+			"post_excerpt",
+			"post_mime_type",
+			"post_modified",
+			"post_modified_gmt",
+			"post_parent",
+			"post_password",
+			"to_ping",
+			"comment_count",
+			"comment_status",
+			"filter",
+			"guid",
+			"revision",
+		];
+
+		$post_type = $this->post_type ?? 'meta-box';
+
+		// Add extra keys for other post types
+		$extras = [ 
+			'meta-box' => [ 'relationship' ],
+			'mb-relationship' => [ 'fields', 'settings_page', 'relationship' ],
+			'mb-settings-page' => [ 'fields', 'settings_page', 'relationship' ],
+		];
+
+		return array_merge( $default, $extras[ $post_type ] ?? [] );
+	}
 }

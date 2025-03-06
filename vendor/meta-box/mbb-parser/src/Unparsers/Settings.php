@@ -12,10 +12,7 @@ class Settings extends Base {
 			->unparse_boolean_values()
 			->unparse_numeric_values()
 			->unparse_location()
-			->unparse_location_rules( 'show_hide' )
-			->unparse_location_rules( 'include_exclude' )
-			->unparse_conditional_logic()
-			->unparse_block();
+			->unparse_conditional_logic();
 
 		unset( $this->object_type );
 	}
@@ -25,21 +22,6 @@ class Settings extends Base {
 			$this->post_types = array_filter( (array) $this->post_types );
 		}
 
-		return $this;
-	}
-
-	/**
-	 * @todo: Implement this
-	 * 
-	 * @param mixed $key
-	 * @return void
-	 */
-	private function unparse_location_rules( $key ) {
-		return $this;
-	}
-
-	private function unparse_block() {
-		// @todo: Implement this
 		return $this;
 	}
 
