@@ -299,8 +299,8 @@ class AdminColumns {
 									$this->show_for( $data['local_minimized'] );
 									break;
 
-								case 'location':
-									$this->show_location_sync( $id );
+								case 'path':
+									$this->show_path( $id );
 									break;
 
 								case 'sync_status':
@@ -410,12 +410,18 @@ class AdminColumns {
 		}
 
 		if ( LocalJson::is_enabled() ) {
+			if ( $this->is_status( 'sync' ) ) {
+				unset( $new_columns['location'] );
+				$new_columns['path']        = __( 'Path', 'meta-box-builder' );
+			}
+
 			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' );
 		}
 
 		$columns = array_slice( $columns, 0, 2, true ) + $new_columns + array_slice( $columns, 2, null, true );
 
 		if ( $this->is_status( 'sync' ) ) {
+			unset( $columns['location'] );
 			unset( $columns['date'] );
 		}
 
@@ -543,7 +549,7 @@ class AdminColumns {
 		return "<span class=\"dashicons dashicons-{$icon}\"></span> <span class=\"mbb-sub-path\">{$sub_path}</span>";
 	}
 
-	public function show_location_sync( string $meta_box_id ): void {
+	public function show_path( string $meta_box_id ): void {
 		$json = JsonService::get_json( [ 
 			'id' => $meta_box_id,
 			'post_type' => $this->post_type,
