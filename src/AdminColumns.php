@@ -436,6 +436,11 @@ class AdminColumns {
 		}
 
 		$data = get_post_meta( get_the_ID(), 'settings', true );
+		
+		if ( ! is_array( $data ) ) {
+			return;
+		}
+
 		$this->{"show_$column"}( $data );
 	}
 
