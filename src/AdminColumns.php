@@ -331,7 +331,7 @@ class AdminColumns {
 
 	public function admin_table_bulk_actions( $actions ) {
 		if ( $this->is_status( 'sync' ) ) {
-			$actions['mbb-sync'] = __( 'Sync JSON to DB', 'meta-box-builder' );
+			$actions['mbb-sync'] = __( 'Sync changes', 'meta-box-builder' );
 		}
 
 		return $actions;
@@ -412,7 +412,7 @@ class AdminColumns {
 		if ( LocalJson::is_enabled() ) {
 			if ( $this->is_status( 'sync' ) ) {
 				unset( $new_columns['location'] );
-				$new_columns['path']        = __( 'Path', 'meta-box-builder' );
+				$new_columns['path'] = __( 'Path', 'meta-box-builder' );
 			}
 
 			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' );
@@ -496,8 +496,8 @@ class AdminColumns {
 
 		<div class="row-actions">
 			<span class="review">
-				<a href="javascript:;" role="button" onclick="return showDialog('<?= $meta_box_id ?>');">
-					<?= esc_html__( 'Review changes', 'meta-box-builder' ) ?>
+				<a href="javascript:;" role="button" onclick="return showDialog('<?php esc_attr_e( $meta_box_id ) ?>');">
+					<?= esc_html__( 'Review', 'meta-box-builder' ) ?>
 				</a>
 			</span>
 		</div>

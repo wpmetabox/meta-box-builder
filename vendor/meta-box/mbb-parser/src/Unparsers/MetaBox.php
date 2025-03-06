@@ -79,16 +79,28 @@ class MetaBox extends Base {
 			if ( array_key_exists( $tab_id, $added_tabs ) ) {
 				continue;
 			}
+
+			$icon = $tabs[ $tab_id ]['icon'] ?? '';
+			$icon_type = 'dashicon';
+			if ( strpos( $icon, 'fa-' ) === 0 ) {
+				$icon_type = 'fontawesome';
+			}
+
+			if ( strpos( $icon, 'http' ) === 0 ) {
+				$icon_type = 'url';
+			}
+
 			$field = [ 
 				'id' => $tab_id,
 				'_id' => $tab_id,
 				'type' => 'tab',
-				'name' => $tabs[ $tab_id ]['label'],
-				'icon_type' => '',
-				'icon' => '',
-				'icon_fa' => '',
-				'icon_url' => '',
+				'name' => $tabs[ $tab_id ]['label'] ?? '',
+				'icon_type' => $icon_type,
+				'icon' => $tabs[ $tab_id ]['icon'] ?? '',
+				'icon_fa' => $tabs[ $tab_id ]['icon'] ?? '',
+				'icon_url' => $tabs[ $tab_id ]['icon'] ?? '',
 			];
+
 			$added_tabs[ $tab_id ] = $field;
 
 			$this->settings['fields'][] = $field;

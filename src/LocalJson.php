@@ -25,7 +25,7 @@ class LocalJson {
 	 * @param string $file_path
 	 * @return array[ $data, $error ]
 	 */
-	public static function read_file( string $file_path ) {
+	public static function read_file( string $file_path ): array {
 		if ( ! file_exists( $file_path ) ) {
 			return [ null, new \WP_Error( 'file_not_found', __( 'File not found!', 'meta-box-builder' ) ) ];
 		}

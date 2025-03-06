@@ -11,14 +11,17 @@ class Register {
 	}
 
 	public function register_meta_box( $meta_boxes ): array {
-		$json = JsonService::get_json();
-		
-		foreach ( $json as $data ) {
-			$local  = $data['local_minimized'];
-			$remote = $data['remote'];
+		$files = JsonService::get_files();
 
-			$meta_box_normalized = $data['is_newer'] >= 0 ? $local : $remote;
-			$meta_box            = $meta_box_normalized;
+		foreach ( $files as $file ) {
+			[ $data, $error ] = LocalJson::read_file( $file );
+
+			if ( $data === null || $error !== null ) {
+				continue;
+			}
+
+			$json     = json_decode( $data, true );
+			$meta_box = $json;
 
 			if ( empty( $meta_box ) ) {
 				continue;
@@ -26,6 +29,11 @@ class Register {
 
 			$this->transform_for_block( $meta_box );
 
+			// @todo: since we load from files, these fields are not available,
+			// we need to find the alternative way to get the post_id
+			// ideally, we move create custom table to the save hook
+			// and we use post_name instead of post_id 
+			// and redirect to the edit screen by post_name
 			if ( isset( $data['post_id'] ) ) {
 				$post_id = $data['post_id'];
 				$this->create_custom_table( $meta_box, $post_id );

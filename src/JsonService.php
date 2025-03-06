@@ -176,6 +176,7 @@ class JsonService {
 	public static function get_files(): array {
 		$paths = self::get_paths();
 		$all_files = [];
+		
 		foreach ( $paths as $path ) {
 			$all_files = array_merge( $all_files, glob( "$path/*.json" ) );
 		}
