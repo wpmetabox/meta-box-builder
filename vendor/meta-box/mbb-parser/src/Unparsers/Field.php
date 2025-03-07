@@ -150,55 +150,51 @@ class Field extends Base {
 	}
 
 	private function unparse_tooltip() {
-		if ( ! isset( $this->tooltip ) ) {
+		if (!isset($this->tooltip)) {
 			return $this;
 		}
-
-		if ( is_array( $this->tooltip ) ) {
-			if ( ! isset( $this->tooltip['enable'] ) ) {
-				$this->tooltip = array_merge( $this->tooltip, [ 'enable' => true ] );
-			}
-
-			return $this;
-		}
-
-		$this->tooltip = [ 
-			'text' => $this->tooltip,
+	
+		$defaults = [
+			'enable' => true,
 			'icon' => 'info',
 			'position' => 'top',
 			'content' => '',
-			'allow_html' => true,
-			'enable' => true,
+			'allow_html' => true
 		];
-
+	
+		if (is_string($this->tooltip)) {
+			$this->tooltip = ['content' => $this->tooltip];
+		}
+	
+		$this->tooltip = array_merge($defaults, $this->tooltip);
+		
 		return $this;
 	}
 
 	private function unparse_admin_columns() {
-		if ( ! isset( $this->admin_columns ) ) {
+		if (!isset($this->admin_columns)) {
 			return $this;
 		}
-
-		if ( is_array( $this->admin_columns ) ) {
-			if ( ! isset( $this->admin_columns['enable'] ) ) {
-				$this->admin_columns = array_merge( $this->admin_columns, [ 'enable' => true ] );
-			}
-
-			return $this;
-		}
-
-		$this->admin_columns = [ 
+	
+		$defaults = [
 			'enable' => true,
-			'position' => [ 'type' => 'after', 'column' => 'title' ],
+			'position' => 'after title',
 			'title' => '',
 			'before' => '',
 			'after' => '',
 			'sort' => false,
 			'searchable' => false,
 			'filterable' => false,
-			'link' => false,
+			'link' => false
 		];
-
+	
+		if (is_bool($this->admin_columns)) {
+			$this->admin_columns = ['enable' => $this->admin_columns];
+		} elseif (is_string($this->admin_columns)) {
+			$this->admin_columns = ['enable' => true, 'position' => $this->admin_columns];
+		}
+	
+		$this->admin_columns = array_merge($defaults, $this->admin_columns);
 		return $this;
 	}
 

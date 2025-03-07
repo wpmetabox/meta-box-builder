@@ -60,6 +60,10 @@ class MetaBox extends Base {
 	}
 
 	public function unparse_tabs() {
+		if ( empty( $this->meta_box['fields'] ) ) {
+			return $this;
+		}
+
 		$tab_style          = $this->lookup( [ 'settings.tab_style', 'tab_style' ], '' );
 		$tab_default_active = $this->lookup( [ 'settings.tab_default_active', 'tab_default_active' ], '' );
 		$tab_default_active = $this->lookup( [ 'settings.tab_remember', 'tab_remember' ], '' );
@@ -71,6 +75,7 @@ class MetaBox extends Base {
 		$tabs = $this->lookup( [ 'tabs' ], [] );
 
 		$added_tabs = [];
+
 		foreach ( $this->meta_box['fields'] as $field ) {
 			if ( ! isset( $field['tab'] ) ) {
 				continue;
@@ -202,8 +207,8 @@ class MetaBox extends Base {
 		}
 
 		// Merge custom settings
-		$custom_settings = $this->lookup( [ 'custom_settings' ], [] );
-		$settings = array_merge( (array) $this->settings['settings'], $settings );
+		$custom_settings             = $this->lookup( [ 'custom_settings' ], [] );
+		$settings                    = array_merge( (array) $this->settings['settings'], $settings );
 		$settings['custom_settings'] = $custom_settings;
 
 		$this->settings_parser = new Settings( $settings );
@@ -302,120 +307,97 @@ class MetaBox extends Base {
 	}
 
 	public function unparse_geo_location() {
-		$geo = $this->lookup( [ 'geo' ], [] );
-
-		if ( empty( $geo ) ) {
+		$geo = $this->lookup( [ 'geo', 'meta_box.geo' ], [] );
+		if ( empty( $geo ) && $geo !== false ) { // Allow false as a valid value
 			return $this;
 		}
-
 		$custom_settings = $this->lookup( [ 'settings.custom_settings' ], [] );
 
-		$id                                            = uniqid();
-		$custom_settings[ $id ]                        = [ 
-			'id' => $id,
+		$custom_settings['geo']                        = [ 
+			'id' => 'geo',
 			'key' => 'geo',
-			'value' => is_array( $geo ) ? wp_json_encode( $geo ) : $geo
+			'value' => is_array( $geo ) ? wp_json_encode( $geo ) : $geo // Keep booleans as-is
 		];
 		$this->settings['settings']['custom_settings'] = $custom_settings;
-
 		return $this;
 	}
 
 	public function unparse_columns() {
-		$columns = $this->lookup( [ 'columns' ], [] );
-
+		$columns = $this->lookup( [ 'columns', 'meta_box.columns' ], [] );
 		if ( empty( $columns ) ) {
 			return $this;
 		}
-
-		$custom_settings = $this->lookup( [ 'settings.custom_settings' ], [] );
-
+		$custom_settings                               = $this->lookup( [ 'settings.custom_settings' ], [] );
 		$id                                            = uniqid();
-		$custom_settings[ $id ]                        = [ 
+		$custom_settings[ $id ]                          = [ 
 			'id' => $id,
 			'key' => 'columns',
 			'value' => is_array( $columns ) ? wp_json_encode( $columns ) : $columns
 		];
 		$this->settings['settings']['custom_settings'] = $custom_settings;
-
 		return $this;
 	}
 
 	public function unparse_include_exclude() {
 		$keywords        = [ 'include', 'exclude' ];
 		$include_exclude = $this->lookup( [ 'settings.include_exclude' ], [] );
-
 		foreach ( $keywords as $keyword ) {
-			$data = $this->lookup( [ $keyword ], [] );
-
+			$data = $this->lookup( [ $keyword, "meta_box.$keyword" ], [] );
 			if ( empty( $data ) ) {
 				continue;
 			}
-
 			$setting_include_exclude = [ 
 				'type' => $keyword,
 				'relation' => $include_exclude['relation'] ?? 'OR',
 				'rules' => [],
 			];
-
-			foreach ( $data as $rule_id => $rule ) {
-				$id = uniqid();
-				if ( $rule_id === 'relation' ) {
+			foreach ( $data as $rule_name => $rule_value ) {
+				if ( $rule_name === 'relation' ) {
+					$setting_include_exclude['relation'] = $rule_value;
 					continue;
 				}
-				$setting_include_exclude['rules'][ $id ] = [ 
-					'id' => $id,
-					'name' => $rule_id,
-					'value' => $rule,
+				$setting_include_exclude['rules'][ $rule_name ] = [ 
+					'id' => $rule_name,
+					'name' => $rule_name,
+					'value' => $rule_value,
 				];
 			}
+			if ( ! empty( $setting_include_exclude['rules'] ) ) {
+				$this->settings['settings']['include_exclude'] = $setting_include_exclude;
+			}
 		}
-
-		if ( empty( $setting_include_exclude['rules'] ) ) {
-			return $this;
-		}
-
-		$this->settings['settings']['include_exclude'] = $setting_include_exclude;
-
 		return $this;
 	}
 
 	public function unparse_show_hide() {
-		$keywords  = [ 'show', 'hide' ];
+		$keywords  = [ 'include', 'exclude' ];
 		$show_hide = $this->lookup( [ 'settings.show_hide' ], [] );
 
 		foreach ( $keywords as $keyword ) {
-			$data = $this->lookup( [ $keyword ], [] );
-
+			$data = $this->lookup( [ $keyword, "meta_box.$keyword" ], [] );
 			if ( empty( $data ) ) {
 				continue;
 			}
-
 			$setting_show_hide = [ 
 				'type' => $keyword,
 				'relation' => $show_hide['relation'] ?? 'OR',
 				'rules' => [],
 			];
-
-			foreach ( $data as $rule_id => $rule ) {
-				$id = uniqid();
-				if ( $rule_id === 'relation' ) {
+			foreach ( $data as $rule_name => $rule_value ) {
+				if ( $rule_name === 'relation' ) {
+					$setting_show_hide['relation'] = $rule_value;
 					continue;
 				}
-				$setting_show_hide['rules'][ $id ] = [ 
-					'id' => $id,
-					'name' => $rule_id,
-					'value' => $rule,
+				$setting_show_hide['rules'][ $rule_name ] = [ 
+					'id' => $rule_name,
+					'name' => $rule_name,
+					'value' => $rule_value,
 				];
 			}
+			if ( ! empty( $setting_show_hide['rules'] ) ) {
+				$this->settings['settings']['show_hide'] = $setting_show_hide;
+			}
 		}
-
-		if ( empty( $setting_show_hide['rules'] ) ) {
-			return $this;
-		}
-
-		$this->settings['settings']['show_hide'] = $setting_show_hide;
-
 		return $this;
 	}
 
