@@ -28,7 +28,7 @@ trait SettingsTrait {
 		unset( $this->settings[ $key ] );
 	}
 
-		/**
+	/**
 	 * Lookup from the data using keys, return the first key found or null
 	 * 
 	 * @param array $keys

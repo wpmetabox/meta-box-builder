@@ -30,7 +30,8 @@ class Field extends Base {
 			->unparse_text_limiter()
 			->unparse_conditional_logic()
 			->unparse_tooltip()
-			->unparse_admin_columns();
+			->unparse_admin_columns()
+			->ensure_boolean('save_field');
 
 		$func = "unparse_field_{$this->type}";
 		if ( method_exists( $this, $func ) ) {
@@ -228,6 +229,13 @@ class Field extends Base {
 			$this->add_default( $key, $default );
 		}
 
+		return $this;
+	}
+
+	protected function ensure_boolean($key) {
+		if (isset($this->$key)) {
+			$this->$key = (bool) $this->$key;
+		}
 		return $this;
 	}
 }

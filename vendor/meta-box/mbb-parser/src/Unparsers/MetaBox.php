@@ -44,8 +44,9 @@ class MetaBox extends Base {
 	public function unparse() {
 		$this->unparse_meta_box();
 		$this->unparse_data();
-		$this->unparse_settings();
 		$this->unparse_post_fields();
+		$this->unparse_modified();
+		$this->unparse_settings();
 		$this->unparse_fields( $this->settings['fields'] );
 		$this->unparse_version();
 		$this->unparse_custom_table();
@@ -80,7 +81,7 @@ class MetaBox extends Base {
 				continue;
 			}
 
-			$icon = $tabs[ $tab_id ]['icon'] ?? '';
+			$icon      = $tabs[ $tab_id ]['icon'] ?? '';
 			$icon_type = 'dashicon';
 			if ( strpos( $icon, 'fa-' ) === 0 ) {
 				$icon_type = 'fontawesome';
@@ -171,7 +172,7 @@ class MetaBox extends Base {
 		}
 
 		$id    = $this->id ?? uniqid();
-		$title = $this->title ?? $this->post_title ?? $id;
+		$title = $this->lookup( [ 'post_title', 'title' ], $id );
 
 		// Basic settings.
 		$settings = [ 
@@ -188,7 +189,7 @@ class MetaBox extends Base {
 			'text_domain' => $this->text_domain ?? 'your-text-domain',
 			'function_name' => $this->function_name ?? '',
 			'settings_page' => $this->settings_page ?? [],
-		];		
+		];
 
 		$known_keys = $this->get_known_keys();
 		foreach ( $settings as $key => $value ) {
@@ -196,11 +197,14 @@ class MetaBox extends Base {
 				continue;
 			}
 
-			$this->settings[ $key ] = $value;
+			$this->settings[ $key ]             = $value;
 			$this->settings['settings'][ $key ] = $value;
 		}
 
-		$settings = array_merge( (array) $this->settings, $settings );
+		// Merge custom settings
+		$custom_settings = $this->lookup( [ 'custom_settings' ], [] );
+		$settings = array_merge( (array) $this->settings['settings'], $settings );
+		$settings['custom_settings'] = $custom_settings;
 
 		$this->settings_parser = new Settings( $settings );
 		$this->settings_parser->unparse();
@@ -209,7 +213,8 @@ class MetaBox extends Base {
 	}
 
 	public function unparse_post_fields() {
-		$this->post_title = $this->title;
+		// Only set post_title from title if post_title isn't already set
+		$this->post_title = $this->lookup( [ 'post_title', 'title' ], $this->id ?? uniqid() );
 		$post_type        = $this->post_type ?? $this->detect_post_type();
 
 		$this->post_type    = $post_type;
@@ -435,7 +440,7 @@ class MetaBox extends Base {
 			'relationships' => [ 'relationship' ],
 			'settings_page' => [ 'settings_page' ],
 		];
-		
+
 		$post_type = $this->post_type ?? 'meta-box';
 
 		return array_merge( $keys, $extras[ $post_type ] ?? [] );
@@ -487,5 +492,14 @@ class MetaBox extends Base {
 		];
 
 		return array_merge( $default, $extras[ $post_type ] ?? [] );
+	}
+
+	public function unparse_modified() {
+		// Look for modified in root, meta_box, or settings; default to current timestamp
+		$modified                               = $this->lookup( [ 'modified', 'meta_box.modified' ], time() );
+		$this->modified                         = $modified;
+		$this->settings['meta_box']['modified'] = $modified;
+
+		return $this;
 	}
 }

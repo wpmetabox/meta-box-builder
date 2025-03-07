@@ -39,7 +39,9 @@ class Base {
 	}
 
 	protected function convert_number_to_string( &$value ) {
-		$value = (string) $value;
+		if (is_numeric($value) && !is_bool($value)) {
+            $value = (string) $value;
+        }
 	}
 
 	protected function unparse_array_attributes( $key ) {
@@ -78,11 +80,11 @@ class Base {
 			$output['when']     = [];
 
 			foreach ( $condition['when'] as $criteria ) {
-				$id = uniqid();
+				$name = $criteria[0]; // Use field name as key
 
-				$output['when'][ $id ] = [ 
-					'id' => $id,
-					'name' => $criteria[0],
+				$output['when'][ $name ] = [ 
+					'id' => $name,
+					'name' => $name,
 					'operator' => $criteria[1],
 					'value' => $criteria[2],
 				];
