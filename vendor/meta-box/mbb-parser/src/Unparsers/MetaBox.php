@@ -10,7 +10,7 @@ use MetaBox\Support\Arr;
  */
 class MetaBox extends Base {
 	// Allows these keys to be empty as they are required to be compatible with the builder.
-	protected $empty_keys = [ 'fields', 'meta_box', 'settings', 'data', 'version' ];
+	protected $empty_keys = [ 'fields', 'meta_box', 'settings', 'data', 'modified' ];
 
 	private $settings_parser;
 
@@ -49,7 +49,7 @@ class MetaBox extends Base {
 		$this->unparse_modified();
 		$this->unparse_settings();
 		$this->unparse_fields( $this->settings['fields'] );
-		$this->unparse_version();
+		$this->unparse_modified();
 		$this->unparse_custom_table();
 		$this->unparse_tabs();
 		$this->unparse_validation();
@@ -162,8 +162,8 @@ class MetaBox extends Base {
 		return $this;
 	}
 
-	public function unparse_version() {
-		$this->version = $this->lookup( [ 'version', 'settings.version' ], 'v0' );
+	public function unparse_modified() {
+		$this->modified = $this->lookup( [ 'modified', 'settings.modified' ], 0 );
 	}
 
 	public function unparse_meta_box() {
@@ -178,6 +178,11 @@ class MetaBox extends Base {
 		}
 
 		$meta_box       = $this->get_settings();
+
+		foreach ( $this->get_unneeded_keys() as $key ) {
+			unset( $meta_box[ $key ] );
+		}
+
 		$this->meta_box = $meta_box;
 		$this->data     = [];
 
@@ -196,12 +201,13 @@ class MetaBox extends Base {
 		}
 
 		$settings_page       = $this->get_settings();
-		$this->settings_page = $settings_page;
-		unset( $this->meta_box );
-		unset( $this->fields );
-		unset( $this->data );
-		unset( $this->settings['settings'] );
 
+		foreach ( $this->get_unneeded_keys() as $key ) {
+			unset( $settings_page[ $key ] );
+		}
+
+		$this->settings_page = $settings_page;
+		
 		return $this;
 	}
 
@@ -210,19 +216,17 @@ class MetaBox extends Base {
 		if ( $this->detect_post_type() !== 'mb-relationship' ) {
 			return $this;
 		}
-
 		// If already parsed, return
 		if ( isset( $this->relationship ) ) {
 			return $this;
 		}
 
 		$relationship       = $this->get_settings();
+
+		foreach ( $this->get_unneeded_keys() as $key ) {
+			unset( $relationship[ $key ] );
+		}
 		$this->relationship = $relationship;
-		unset( $this->meta_box );
-		unset( $this->fields );
-		unset( $this->data );
-		unset( $this->settings['settings'] );
-		unset( $this->settings_page );
 
 		return $this;
 	}
@@ -242,7 +246,6 @@ class MetaBox extends Base {
 			'post_title' => $title,
 			'post_name' => $id,
 			'post_type' => $this->post_type ?? [ 'post' ],
-			'version' => $this->version ?? 'v' . time(),
 			'priority' => $this->priority ?? 'high',
 			'style' => $this->style ?? 'default',
 			'closed' => $this->closed ?? false,
@@ -253,7 +256,6 @@ class MetaBox extends Base {
 			'function_name' => $this->function_name ?? '',
 			'settings_page' => $this->settings_page ?? [],
 		];
-
 
 		// Merge custom settings
 		$custom_settings             = $this->lookup( [ 'custom_settings' ], [] );
@@ -295,7 +297,7 @@ class MetaBox extends Base {
 		// - relationship it's a relationship
 		// - settings_page it's a settings page
 		foreach ( self::TYPE_META as $type => $meta_key ) {
-			if ( isset( $this->settings[ $type ] ) ) {
+			if ( isset( $this->settings[ $meta_key ] ) ) {
 				return $type;
 			}
 		}
@@ -465,7 +467,7 @@ class MetaBox extends Base {
 			'post_status',
 			'post_content',
 			'settings',
-			'version',
+			'modified',
 			'data',
 		];
 
@@ -517,24 +519,15 @@ class MetaBox extends Base {
 			"revision",
 		];
 
-		$post_type = $this->post_type ?? 'meta-box';
+		$post_type = $this->detect_post_type() ?? 'meta-box';
 
 		// Add extra keys for other post types
 		$extras = [ 
 			'meta-box' => [ 'relationship' ],
-			'mb-relationship' => [ 'fields', 'settings_page', 'relationship' ],
-			'mb-settings-page' => [ 'fields', 'settings_page', 'relationship' ],
+			'mb-relationship' => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data' ],
+			'mb-settings-page' => [  'fields', 'settings_page', 'relationship', 'meta_box', 'data' ],
 		];
 
 		return array_merge( $default, $extras[ $post_type ] ?? [] );
-	}
-
-	public function unparse_modified() {
-		// Look for modified in root, meta_box, or settings; default to current timestamp
-		$modified                               = $this->lookup( [ 'modified', 'meta_box.modified' ], time() );
-		$this->modified                         = $modified;
-		$this->settings['meta_box']['modified'] = $modified;
-
-		return $this;
 	}
 }

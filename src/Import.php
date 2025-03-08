@@ -84,7 +84,6 @@ class Import {
 			$unparser = new \MBBParser\Unparsers\MetaBox( $post );
 			$unparser->unparse();
 			$post = $unparser->get_settings();
-
 			$post_id = wp_insert_post( $post );
 			if ( ! $post_id ) {
 				wp_die( wp_kses_post( sprintf(
