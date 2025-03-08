@@ -4,47 +4,6 @@ use MBBParser\Unparsers\MetaBox;
 use PHPUnit\Framework\TestCase;
 
 class ConditionalLogicTest extends TestCase {
-    protected function setUp(): void {
-        if (!class_exists('MB_Conditional_Logic')) {
-            eval('class MB_Conditional_Logic {
-                public function parse_conditions($settings) {
-                    $output = [];
-                    foreach (["visible", "hidden"] as $key) {
-                        if (!empty($settings[$key])) {
-                            $conditions = $this->normalize_conditions($settings[$key]);
-                            $output[$key] = [
-                                "relation" => $conditions["relation"] ?? "and",
-                                "when" => $conditions["when"]
-                            ];
-                        }
-                    }
-                    return $output;
-                }
-                private function normalize_conditions($condition) {
-                    if (!is_array($condition)) {
-                        return ["when" => [], "relation" => "and"];
-                    }
-                    if (isset($condition["when"])) {
-                        return [
-                            "when" => array_map([$this, "normalize_single_condition"], $condition["when"]),
-                            "relation" => $condition["relation"] ?? "and"
-                        ];
-                    }
-                    if (isset($condition[0]) && !isset($condition[0][0])) {
-                        return ["when" => [$this->normalize_single_condition($condition)]];
-                    }
-                    return ["when" => array_map([$this, "normalize_single_condition"], $condition)];
-                }
-                private function normalize_single_condition($cond) {
-                    if (!isset($cond[1])) {
-                        return [$cond[0], "=", $cond[1]];
-                    }
-                    return [$cond[0], $cond[1], $cond[2] ?? null];
-                }
-            }');
-        }
-    }
-
     public function testConditionalLogicNormalization() {
         $testCases = [
             'dead_simple' => [
