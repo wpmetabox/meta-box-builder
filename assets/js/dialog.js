@@ -5,7 +5,7 @@ const formatDate = ( timestamp ) => {
     // Convert to a human-readable format
     const date = new Date( timestamp * 1000 ); // Multiply by 1000 for JavaScript's milliseconds
     const options = { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
-    
+
     return date.toLocaleString( 'en-US', options );
 };
 
@@ -23,8 +23,8 @@ const showDialog = async ( mbbId ) => {
             .appendChild( document.getElementById( 'no-changes' ).content.cloneNode( true ) );
     }
 
-    const localModified = syncData[ mbbId ].local.modified ?? 0;
-    const remoteModified = syncData[ mbbId ].remote.modified ?? 0;
+    const localModified = syncData[ mbbId ]?.local?.modified ?? 0;
+    const remoteModified = syncData[ mbbId ]?.remote?.modified ?? 0;
 
     dialog.querySelectorAll( '[data-bind]' ).forEach( el => {
         const bind = el.dataset.bind;
@@ -36,11 +36,11 @@ const showDialog = async ( mbbId ) => {
             el.innerHTML = formatDate( remoteModified );
         }
 
-        if ( bind === 'local.newer') {
-            el.innerHTML = localModified >= remoteModified ? MBB.newer : ''; 
+        if ( bind === 'local.newer' ) {
+            el.innerHTML = localModified >= remoteModified ? MBB.newer : '';
         }
-        if ( bind === 'remote.newer') {
-            el.innerHTML = localModified < remoteModified ? MBB.newer : ''; 
+        if ( bind === 'remote.newer' ) {
+            el.innerHTML = localModified < remoteModified ? MBB.newer : '';
         }
     } );
 
@@ -59,82 +59,87 @@ const showDialog = async ( mbbId ) => {
     dialog.showModal();
 };
 
-document.querySelectorAll( '[data-dialog]' ).forEach( button => {
-    button.addEventListener( 'click', async () => {
-        await showDialog( button.dataset.dialog );
-    } );
-} );
 
-// Dialog for diff
-document.querySelector( '#mbb-diff-dialog-close' ).addEventListener( 'click', () => {
-    document.querySelector( '#mbb-diff-dialog' ).close();
-} );
+document.addEventListener( 'DOMContentLoaded', () => {
 
-// Escape key to close dialog
-document.addEventListener( 'keydown', ( e ) => {
-    if ( e.key === 'Escape' ) {
-        document.querySelector( '#mbb-diff-dialog' ).close();
-    }
-} );
-
-// Click outside to close dialog
-document.querySelector( '#mbb-diff-dialog' ).addEventListener( 'click', ( e ) => {
-    if ( e.target === document.querySelector( '#mbb-diff-dialog' ) ) {
-        document.querySelector( '#mbb-diff-dialog' ).close();
-    }
-} );
-
-// AJAX action to run sync
-document.querySelectorAll( '.button-sync' ).forEach( buttonSync => {
-    buttonSync.addEventListener( 'click', async ( e ) => {
-        e.preventDefault();
-        const previousText = buttonSync.textContent;
-
-        // Set the button to loading state
-        buttonSync.classList.add( 'loading' );
-        buttonSync.disabled = true;
-        buttonSync.textContent = MBB.syncing;
-
-        const data = await wp.apiFetch( {
-            path: '/mbb/set-json-data',
-            method: 'PUT',
-            data: {
-                id: buttonSync.dataset.id,
-                use: buttonSync.dataset.use,
-            }
+    document.querySelectorAll( '[data-dialog]' ).forEach( button => {
+        button.addEventListener( 'click', async () => {
+            await showDialog( button.dataset.dialog );
         } );
+    } );
 
-        if ( data.success ) {
-            const templateSyncSuccess = document.querySelector( '#sync-success' ).content.cloneNode( true );
+    // Dialog for diff
+    document.querySelector( '#mbb-diff-dialog-close' ).addEventListener( 'click', () => {
+        document.querySelector( '#mbb-diff-dialog' ).close();
+    } );
 
-            // Update the diff section
-            document.querySelector( '.mbb-diff-dialog-content' ).innerHTML = templateSyncSuccess.querySelector( 'div' ).innerHTML;
-
-            // Update status of current row sync to synced
-            const label = document.querySelector( `.mbb-label[data-for-id="${ buttonSync.dataset.id }"]` );
-            if (label !== null) {
-                label.textContent = MBB.synced;
-                label.dataset.status = 'synced';
-            }
-        } else {
-            const templateSyncError = document.querySelector( '#sync-error' ).content.cloneNode( true );
-
-            // Update the diff section
-            document.querySelector( '.mbb-diff-dialog-content' ).innerHTML = templateSyncError.querySelector( 'div' ).innerHTML;
-            // Update status of current row sync to error
-            const label = document.querySelector( `.mbb-label[data-for-id="${ buttonSync.dataset.id }"]` );
-            label.textContent = MBB.error;
-            label.dataset.status = 'error';
+    // Escape key to close dialog
+    document.addEventListener( 'keydown', ( e ) => {
+        if ( e.key === 'Escape' ) {
+            document.querySelector( '#mbb-diff-dialog' ).close();
         }
+    } );
 
-        // Reset the button
-        buttonSync.classList.remove( 'loading' );
-        buttonSync.disabled = false;
-        buttonSync.textContent = previousText;
+    // Click outside to close dialog
+    document.querySelector( '#mbb-diff-dialog' ).addEventListener( 'click', ( e ) => {
+        if ( e.target === document.querySelector( '#mbb-diff-dialog' ) ) {
+            document.querySelector( '#mbb-diff-dialog' ).close();
+        }
+    } );
 
-        // Refresh in 1 seconds
-        setTimeout( () => {
-            location.reload();
-        }, 1000 );
+    // AJAX action to run sync
+    document.querySelectorAll( '.button-sync' ).forEach( buttonSync => {
+        buttonSync.addEventListener( 'click', async ( e ) => {
+            e.preventDefault();
+            const previousText = buttonSync.textContent;
+
+            // Set the button to loading state
+            buttonSync.classList.add( 'loading' );
+            buttonSync.disabled = true;
+            buttonSync.textContent = MBB.syncing;
+
+            const data = await wp.apiFetch( {
+                path: '/mbb/set-json-data',
+                method: 'PUT',
+                data: {
+                    id: buttonSync.dataset.id,
+                    use: buttonSync.dataset.use,
+                }
+            } );
+
+            if ( data.success ) {
+                const templateSyncSuccess = document.querySelector( '#sync-success' ).content.cloneNode( true );
+
+                // Update the diff section
+                document.querySelector( '.mbb-diff-dialog-content' ).innerHTML = templateSyncSuccess.querySelector( 'div' ).innerHTML;
+
+                // Update status of current row sync to synced
+                const label = document.querySelector( `.mbb-label[data-for-id="${ buttonSync.dataset.id }"]` );
+                if ( label !== null ) {
+                    label.textContent = MBB.synced;
+                    label.dataset.status = 'synced';
+                }
+            } else {
+                const templateSyncError = document.querySelector( '#sync-error' ).content.cloneNode( true );
+
+                // Update the diff section
+                document.querySelector( '.mbb-diff-dialog-content' ).innerHTML = templateSyncError.querySelector( 'div' ).innerHTML;
+                // Update status of current row sync to error
+                const label = document.querySelector( `.mbb-label[data-for-id="${ buttonSync.dataset.id }"]` );
+                label.textContent = MBB.error;
+                label.dataset.status = 'error';
+            }
+
+            // Reset the button
+            buttonSync.classList.remove( 'loading' );
+            buttonSync.disabled = false;
+            buttonSync.textContent = previousText;
+
+            // Refresh in 1 seconds
+            setTimeout( () => {
+                location.reload();
+            }, 1000 );
+        } );
     } );
 } );
+

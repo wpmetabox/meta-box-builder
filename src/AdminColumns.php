@@ -29,8 +29,22 @@ class AdminColumns {
 		add_action( 'wp_trash_post', [ $this, 'delete_json' ], 10, 1 );
 		add_action( 'before_delete_post', [ $this, 'delete_json' ], 10, 1 );
 
+		add_filter( 'wp_untrash_post_status', [ $this, 'set_post_status' ], 10, 1 );
 		// Restore posts should restore the json file as well.
-		add_action( 'untrash_post', [ $this, 'restore_json' ], 10, 1 );
+		add_action( 'untrashed_post', [ $this, 'restore_json' ], 10, 1 );
+	}
+
+	public function set_post_status( $status ) {
+		// Bail if LocalJson is not enabled.
+		if ( ! LocalJson::is_enabled() ) {
+			return $status;
+		}
+		
+		if ( $status === 'draft' ) {
+			return 'publish';
+		}
+
+		return $status;
 	}
 
 	public function delete_json( $post_id ) {
@@ -65,7 +79,6 @@ class AdminColumns {
 
 		return LocalJson::use_database( [ 
 			'post_id' => $post_id,
-			'post_status' => 'trashed',
 		] );
 	}
 
@@ -412,7 +425,8 @@ class AdminColumns {
 		?>
 		<div class="row-actions">
 			<span class="sync">
-				<a class="button-sync" data-use="json" data-id="<?php esc_html_e( $meta_box_id ) ?>" href="javascript:;" role="button">
+				<a class="button-sync" data-use="json" data-id="<?php esc_html_e( $meta_box_id ) ?>" href="javascript:;"
+					role="button">
 					<?= esc_html__( 'Sync', 'meta-box-builder' ) ?>
 				</a>
 			</span>
