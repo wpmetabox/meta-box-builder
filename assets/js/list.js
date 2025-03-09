@@ -87,8 +87,6 @@ jQuery( $ => {
 				label.dataset.status = 'error';
 			}
 
-			// Run the sync
-
 			// Reset the button
 			buttonSync.classList.remove( 'loading' );
 			buttonSync.disabled = false;

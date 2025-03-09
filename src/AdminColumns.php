@@ -343,8 +343,9 @@ class AdminColumns {
 		$json = JsonService::get_json();
 
 		// Filter where local is not null
+		// and its should not imported yet.
 		$json = array_filter( $json, function ($item) {
-			return ! empty( $item['local'] );
+			return ! empty( $item['local'] ) && empty( $item['remote'] );
 		} );
 
 		$count = count( $json );
@@ -415,7 +416,7 @@ class AdminColumns {
 				$new_columns['path'] = __( 'Path', 'meta-box-builder' );
 			}
 
-			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' );
+			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' ) . Data::tooltip( __( 'You must set the modified time to a Unix timestamp for it to display correctly.', 'meta-box-builder' ) );
 		}
 
 		$columns = array_slice( $columns, 0, 2, true ) + $new_columns + array_slice( $columns, 2, null, true );
@@ -479,12 +480,11 @@ class AdminColumns {
 
 		$available_statuses = [ 
 			'error_file_permission' => __( 'Error: File permission', 'meta-box-builder' ),
-			'not_imported' => __( 'Not Imported', 'meta-box-builder' ),
-			'changes_detected' => __( 'Changes detected', 'meta-box-builder' ),
+			'sync_available' => __( 'Sync available', 'meta-box-builder' ),
 			'synced' => __( 'Synced', 'meta-box-builder' ),
 		];
 
-		$status = empty( $sync_data['post_id'] ) ? 'not_imported' : 'changes_detected';
+		$status = 'sync_available';
 
 		if ( $sync_data['is_newer'] === 0 ) {
 			$status = 'synced';
@@ -495,6 +495,12 @@ class AdminColumns {
 		</span>
 
 		<div class="row-actions">
+			<span class="sync">
+				<a class="button-sync" data-use="json" data-id="<?php esc_html_e( $meta_box_id ) ?>" href="javascript:;" role="button">
+					<?= esc_html__( 'Sync', 'meta-box-builder' ) ?>
+				</a>
+			</span>
+			|
 			<span class="review">
 				<a href="javascript:;" role="button" onclick="return showDialog('<?php esc_attr_e( $meta_box_id ) ?>');">
 					<?= esc_html__( 'Review', 'meta-box-builder' ) ?>

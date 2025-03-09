@@ -111,7 +111,7 @@
 	border-radius: 10px;
 }
 
-.button-sync {
+#mbb-diff-dialog .button-sync {
 	background: none;
 	color: #0073aa;
 	border: 1px solid #0073aa;
@@ -121,12 +121,12 @@
 	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.button-sync:hover {
+#mbb-diff-dialog .button-sync:hover {
 	background: #0073aa;
 	color: #fff;
 }
 
-.button-sync:disabled {
+#mbb-diff-dialog .button-sync:disabled {
 	background: none;
 	color: #0073aa;
 	opacity: 0.5;
@@ -230,17 +230,12 @@
 	color: #218358;
 }
 
-.mbb-label[data-status="changes_detected"] {
-	background: #FFDFB5;
-	color: #CC4E00;
-}
-
 .mbb-label[data-status="error"] {
 	background: #FFF7F8;
 	color: #CA244D;
 }
 
-.mbb-label[data-status="not_imported"] {
+.mbb-label[data-status="sync_available"] {
 	background: #F0F0F0;
 	color: #646464;
 }

@@ -183,14 +183,14 @@ class Base {
 			}
 		}
 
-		$use = $params['use'];
+		$target = $params['use'];
 
-		$res = call_user_func( 
-			[ LocalJson::class, 'use_' . $use ], 
+		$res = call_user_func(
+			[ LocalJson::class, "use_$target" ],
 			[ 
-				'post_name' => $params['id'], 
+				'post_name' => $params['id'],
 				'post_type' => $params['post_type'] ?? 'meta-box'
-			] 
+			]
 		);
 
 		return new \WP_REST_Response( [ 

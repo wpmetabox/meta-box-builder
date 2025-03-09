@@ -25,6 +25,11 @@ class JsonService {
 				continue;
 			}
 
+			$private = $json['private'] ?? false;
+			if ( $private ) {
+				continue;
+			}
+
 			$unparser = new \MBBParser\Unparsers\MetaBox( $json );
 			$unparser->unparse();
 			$json = $unparser->get_settings();
