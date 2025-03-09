@@ -112,8 +112,10 @@ document.querySelectorAll( '.button-sync' ).forEach( buttonSync => {
 
             // Update status of current row sync to synced
             const label = document.querySelector( `.mbb-label[data-for-id="${ buttonSync.dataset.id }"]` );
-            label.textContent = MBB.synced;
-            label.dataset.status = 'synced';
+            if (label !== null) {
+                label.textContent = MBB.synced;
+                label.dataset.status = 'synced';
+            }
         } else {
             const templateSyncError = document.querySelector( '#sync-error' ).content.cloneNode( true );
 
