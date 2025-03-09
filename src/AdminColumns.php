@@ -157,34 +157,6 @@ class AdminColumns {
 				</footer>
 			</div>
 		</dialog>
-
-		<script>
-			const syncData = <?= json_encode( JsonService::get_json() ) ?>;
-
-			const showDialog = ( mbbId ) => {
-				const dialog = document.getElementById( 'mbb-diff-dialog' );
-				dialog.querySelector( '.mbb-diff-dialog-content' ).innerHTML = syncData[ mbbId ].diff;
-
-				if ( syncData[ mbbId ].diff === '' ) {
-					dialog.querySelector( '.mbb-diff-dialog-content' )
-						.appendChild( document.getElementById( 'no-changes' ).content.cloneNode( true ) );
-				}
-
-				dialog.querySelectorAll( '.button-sync' ).forEach( btnSync => {
-					const use = btnSync.dataset.use;
-					if ( use === 'database' && syncData[ mbbId ].remote === null ) {
-						btnSync.disabled = true;
-					}
-
-					if ( use === 'json' && syncData[ mbbId ].local === null ) {
-						btnSync.disabled = true;
-					}
-
-					btnSync.dataset.id = mbbId;
-				} );
-				dialog.showModal();
-			};
-		</script>
 		<?php
 	}
 
@@ -382,7 +354,8 @@ class AdminColumns {
 		}
 
 		wp_enqueue_style( 'mbb-list', MBB_URL . 'assets/css/list.css', [], time() );
-		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery', 'wp-api-fetch' ], time(), true );
+		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], time(), true );
+		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], time(), true );
 		wp_localize_script( 'mbb-list', 'MBB', [ 
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
@@ -502,7 +475,7 @@ class AdminColumns {
 			</span>
 			|
 			<span class="review">
-				<a href="javascript:;" role="button" onclick="return showDialog('<?php esc_attr_e( $meta_box_id ) ?>');">
+				<a href="javascript:;" role="button" data-dialog="<?php esc_attr_e( $meta_box_id ) ?>">
 					<?= esc_html__( 'Review', 'meta-box-builder' ) ?>
 				</a>
 			</span>

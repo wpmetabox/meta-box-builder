@@ -7,19 +7,70 @@ use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
 class Edit extends BaseEditPage {
+	public function __construct( $post_type, $slug_meta_box_title ) {
+		parent::__construct( $post_type, $slug_meta_box_title );
+
+		// Add notice if builder version is lower than json version.
+		add_action( 'admin_notices', [ $this, 'version_notice' ] );
+	}
+
+	public function version_notice() {
+		// Only show the notice in the edit screen.
+		if ( get_current_screen()->id !== $this->post_type ) {
+			return;
+		}
+		$action = $_GET['action'] ?? '';
+		if ( 'edit' !== $action ) {
+			return;
+		}
+
+		$data = JsonService::get_json( [ 
+			'post_id' => get_the_ID(),
+		] );
+
+		if ( empty( $data ) || empty( $data['local'] ) ) {
+			return;
+		}
+
+		$data     = reset( $data );
+		$is_newer = $data['is_newer'] ?? false;
+
+		$builder_version = $data['remote']['modified'] ?? 0;
+		$json_version    = $data['local']['modified'] ?? 0;
+
+		if ( $is_newer > 0 ) {
+			?>
+			<div class="notice notice-warning">
+				<p>
+					<?php
+					printf(
+						/* translators: 1: database version, 2: JSON version */
+						esc_html__( 'Your database version (%1$s) is lower than the JSON version (%2$s).
+						Any changes will override the JSON file. Please sync before making any changes to avoid losing data.',
+							'meta-box-builder' ),
+						$builder_version,
+						$json_version
+					);
+					?>
+				</p>
+			</div>
+			<?php
+		}
+	}
+
 	public function add_meta_boxes( $meta_boxes ) {
 		$meta_boxes = parent::add_meta_boxes( $meta_boxes );
 
-		$meta_boxes[] = [
-			'title'      => esc_html__( 'Documentation', 'meta-box-builder' ),
-			'id'         => 'mbb-documentation',
+		$meta_boxes[] = [ 
+			'title' => esc_html__( 'Documentation', 'meta-box-builder' ),
+			'id' => 'mbb-documentation',
 			'post_types' => [ $this->post_type ],
-			'context'    => 'side',
-			'priority'   => 'low',
-			'fields'     => [
-				[
+			'context' => 'side',
+			'priority' => 'low',
+			'fields' => [ 
+				[ 
 					'type' => 'custom_html',
-					'std'  => '<ul>
+					'std' => '<ul>
 						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
 						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
 						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
@@ -45,42 +96,42 @@ class Edit extends BaseEditPage {
 		$fields = array_values( $fields );
 
 		// All other fields are false by default, but save_field need to be true by default.
-		$fields = array_map( function ( $field ) {
+		$fields = array_map( function ($field) {
 			$field['save_field'] = $field['save_field'] ?? true;
 			return $field;
 		}, $fields );
 
-		$data = [
-			'fields'        => $fields,
-			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
-			'data'          => get_post_meta( get_the_ID(), 'data', true ),
+		$data = [ 
+			'fields' => $fields,
+			'settings' => get_post_meta( get_the_ID(), 'settings', true ),
+			'data' => get_post_meta( get_the_ID(), 'data', true ),
 
-			'rest'          => untrailingslashit( rest_url() ),
-			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'rest' => untrailingslashit( rest_url() ),
+			'nonce' => wp_create_nonce( 'wp_rest' ),
 
-			'postTypes'     => Data::get_post_types(),
-			'taxonomies'    => Data::get_taxonomies(),
+			'postTypes' => Data::get_post_types(),
+			'taxonomies' => Data::get_taxonomies(),
 			'settingsPages' => Data::get_setting_pages(),
-			'templates'     => Data::get_templates(),
-			'icons'         => DataHelper::get_dashicons(),
+			'templates' => Data::get_templates(),
+			'icons' => DataHelper::get_dashicons(),
 
 			// Extensions check.
-			'extensions'    => [
-				'blocks'             => Data::is_extension_active( 'mb-blocks' ),
-				'columns'            => Data::is_extension_active( 'meta-box-columns' ),
-				'commentMeta'        => Data::is_extension_active( 'mb-comment-meta' ),
-				'conditionalLogic'   => Data::is_extension_active( 'meta-box-conditional-logic' ),
-				'customTable'        => Data::is_extension_active( 'mb-custom-table' ),
+			'extensions' => [ 
+				'blocks' => Data::is_extension_active( 'mb-blocks' ),
+				'columns' => Data::is_extension_active( 'meta-box-columns' ),
+				'commentMeta' => Data::is_extension_active( 'mb-comment-meta' ),
+				'conditionalLogic' => Data::is_extension_active( 'meta-box-conditional-logic' ),
+				'customTable' => Data::is_extension_active( 'mb-custom-table' ),
 				'frontendSubmission' => Data::is_extension_active( 'mb-frontend-submission' ),
-				'group'              => Data::is_extension_active( 'meta-box-group' ),
-				'includeExclude'     => Data::is_extension_active( 'meta-box-include-exclude' ),
-				'settingsPage'       => Data::is_extension_active( 'mb-settings-page' ),
-				'showHide'           => Data::is_extension_active( 'meta-box-show-hide' ),
-				'tabs'               => Data::is_extension_active( 'meta-box-tabs' ),
-				'termMeta'           => Data::is_extension_active( 'mb-term-meta' ),
-				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
-				'revision'           => Data::is_extension_active( 'mb-revision' ),
-				'views'              => Data::is_extension_active( 'mb-views' ),
+				'group' => Data::is_extension_active( 'meta-box-group' ),
+				'includeExclude' => Data::is_extension_active( 'meta-box-include-exclude' ),
+				'settingsPage' => Data::is_extension_active( 'mb-settings-page' ),
+				'showHide' => Data::is_extension_active( 'meta-box-show-hide' ),
+				'tabs' => Data::is_extension_active( 'meta-box-tabs' ),
+				'termMeta' => Data::is_extension_active( 'mb-term-meta' ),
+				'userMeta' => Data::is_extension_active( 'mb-user-meta' ),
+				'revision' => Data::is_extension_active( 'mb-revision' ),
+				'views' => Data::is_extension_active( 'mb-views' ),
 			],
 		];
 
