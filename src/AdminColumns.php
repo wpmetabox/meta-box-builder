@@ -2,6 +2,7 @@
 namespace MBB;
 
 use MBB\Helpers\Data;
+use MBB\Helpers\Template;
 use MetaBox\Support\Arr;
 
 class AdminColumns {
@@ -21,7 +22,7 @@ class AdminColumns {
 		add_filter( "views_edit-meta-box", [ $this, 'admin_table_views' ], 10, 1 );
 		add_filter( "bulk_actions-edit-meta-box", [ $this, 'admin_table_bulk_actions' ], 10, 1 );
 		add_action( 'current_screen', [ $this, 'current_screen' ] );
-		add_action( 'admin_footer', [ $this, 'render_diff_dialog' ] );
+		add_action( 'admin_footer', [ Template::class, 'render_diff_dialog' ] );
 		add_action( 'admin_notices', [ $this, 'admin_notices' ] );
 
 		// Delete posts should delete the json file as well.
@@ -93,70 +94,6 @@ class AdminColumns {
 		<div class="notice notice-<?php esc_attr_e( $messages[ $custom_admin_notice ]['status'] ) ?> is-dismissible">
 			<p><?php esc_html_e( $messages[ $custom_admin_notice ]['message'] ) ?></p>
 		</div>
-		<?php
-	}
-
-	public function render_diff_dialog() {
-		if ( ! LocalJson::is_enabled() ) {
-			return;
-		}
-		?>
-		<dialog id="mbb-diff-dialog">
-			<div class="mbb-diff-dialog-wrapper">
-				<header>
-					<h2 tabindex="0"><?php esc_html_e( 'Review changes', 'meta-box-builder' ) ?></h2>
-					<button id="mbb-diff-dialog-close" class="button-link" role="button">&times;</button>
-				</header>
-
-				<div class="mbb-diff-dialog-main">
-					<div class="mbb-diff-dialog-button-group" data-split-views="true">
-						<div>
-							<h3><?php esc_html_e( 'Database Version', 'meta-box-builder' ) ?></h3>
-							<button type="button" role="button" class="button-sync" data-use="database">
-								<?php esc_html_e( 'Use Database', 'meta-box-builder' ) ?>
-							</button>
-						</div>
-
-						<div>
-							<h3><?php esc_html_e( 'JSON File Version', 'meta-box-builder' ) ?></h3>
-							<button type="button" role="button" class="button-sync" data-use="json">
-								<?php esc_html_e( 'Use JSON File', 'meta-box-builder' ) ?>
-							</button>
-						</div>
-					</div>
-
-					<div class="mbb-diff-dialog-content"></div>
-
-					<template id="sync-success">
-						<div class="sync-success-wrapper">
-							<div class="sync-success-content">
-								<p><?= esc_html__( 'All changes synced!', 'meta-box-builder' ) ?></p>
-							</div>
-						</div>
-					</template>
-
-					<template id="sync-error">
-						<div class="sync-error-wrapper">
-							<div class="sync-error-content">
-								<p><?= esc_html__( 'Error during syncing data, please check folder permission or file format!', 'meta-box-builder' ) ?>
-								</p>
-							</div>
-						</div>
-					</template>
-
-					<template id="no-changes">
-						<section class="no-changes-content">
-							<p><?= esc_html__( 'No changes detected.', 'meta-box-builder' ) ?></p>
-						</section>
-					</template>
-				</div>
-				<footer>
-					<button id="mbb-diff-dialog-close-btn" class="button button-secondary">
-						<?= esc_html__( 'Close', 'meta-box-builder' ) ?>
-					</button>
-				</footer>
-			</div>
-		</dialog>
 		<?php
 	}
 
@@ -356,6 +293,7 @@ class AdminColumns {
 		wp_enqueue_style( 'mbb-list', MBB_URL . 'assets/css/list.css', [], time() );
 		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], time(), true );
 		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], time(), true );
+		wp_enqueue_style( 'mbb-dialog', MBB_URL . 'assets/css/dialog.css', [], time() );
 		wp_localize_script( 'mbb-list', 'MBB', [ 
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),

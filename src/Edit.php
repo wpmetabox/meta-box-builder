@@ -1,6 +1,7 @@
 <?php
 namespace MBB;
 
+use MBB\Helpers\Template;
 use MBBParser\Parsers\Base as BaseParser;
 use MBBParser\Parsers\MetaBox as Parser;
 use MetaBox\Support\Data as DataHelper;
@@ -12,6 +13,7 @@ class Edit extends BaseEditPage {
 
 		// Add notice if builder version is lower than json version.
 		add_action( 'admin_notices', [ $this, 'version_notice' ] );
+		add_action( 'admin_footer', [ Template::class, 'render_diff_dialog' ] );
 	}
 
 	public function version_notice() {
@@ -28,11 +30,16 @@ class Edit extends BaseEditPage {
 			'post_id' => get_the_ID(),
 		] );
 
-		if ( empty( $data ) || empty( $data['local'] ) ) {
+		if ( empty( $data ) ) {
 			return;
 		}
 
-		$data     = reset( $data );
+		$data = reset( $data );
+
+		if ( ! isset( $data['local'] ) ) {
+			return;
+		}
+
 		$is_newer = $data['is_newer'] ?? false;
 
 		$builder_version = $data['remote']['modified'] ?? 0;
@@ -46,12 +53,15 @@ class Edit extends BaseEditPage {
 					printf(
 						/* translators: 1: database version, 2: JSON version */
 						esc_html__( 'Your database version (%1$s) is lower than the JSON version (%2$s).
-						Any changes will override the JSON file. Please sync before making any changes to avoid losing data.',
+						Any changes will override the JSON file.',
 							'meta-box-builder' ),
 						$builder_version,
 						$json_version
 					);
 					?>
+					<a href="javascript:;" role="button" data-dialog="<?php esc_attr_e( $data['id'] ) ?>">
+						<?php esc_html_e( 'Review', 'meta-box-builder' ) ?>
+					</a>
 				</p>
 			</div>
 			<?php
@@ -88,7 +98,8 @@ class Edit extends BaseEditPage {
 		wp_enqueue_style( 'rwmb-modal', RWMB_CSS_URL . 'modal.css', [], RWMB_VER );
 		wp_style_add_data( 'rwmb-modal', 'path', RWMB_CSS_DIR . 'modal.css' );
 		wp_enqueue_script( 'rwmb-modal', RWMB_JS_URL . 'modal.js', [ 'jquery' ], RWMB_VER, true );
-
+		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], time(), true );
+		wp_enqueue_style( 'mbb-dialog', MBB_URL . 'assets/css/dialog.css', [], time() );
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], MBB_VER );
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', [ 'jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard', 'wp-color-picker', 'code-editor' ], MBB_VER, true );
 
