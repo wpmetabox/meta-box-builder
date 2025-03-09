@@ -294,14 +294,15 @@ class AdminColumns {
 		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], time(), true );
 		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], time(), true );
 		wp_enqueue_style( 'mbb-dialog', MBB_URL . 'assets/css/dialog.css', [], time() );
-		wp_localize_script( 'mbb-list', 'MBB', [ 
+		wp_localize_script( 'mbb-dialog', 'MBB', [ 
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
 			'not_imported' => esc_html__( 'Not Imported', 'meta-box-builder' ),
 			'error' => esc_html__( '!Error', 'meta-box-builder' ),
 			'synced' => esc_html__( 'Synced', 'meta-box-builder' ),
 			'syncing' => esc_html__( 'Syncing...', 'meta-box-builder' ),
-			'changes_detected' => esc_html__( 'Changes detected', 'meta-box-builder' ),
+			'newer' => esc_html__( '(newer)', 'meta-box-builder' ),
+			'sync_available' => esc_html__( 'Sync available', 'meta-box-builder' ),
 		] );
 
 		if ( Data::is_extension_active( 'mb-frontend-submission' ) ) {

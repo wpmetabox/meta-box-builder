@@ -19,17 +19,21 @@ class Template {
 				<div class="mbb-diff-dialog-main">
 					<div class="mbb-diff-dialog-button-group" data-split-views="true">
 						<div>
-							<h3><?php esc_html_e( 'Database Version', 'meta-box-builder' ) ?></h3>
-							<button type="button" role="button" class="button-sync" data-use="database">
-								<?php esc_html_e( 'Use Database', 'meta-box-builder' ) ?>
-							</button>
+							<h3><?php esc_html_e( 'Database', 'meta-box-builder' ) ?></h3>
+							<p><?php esc_html_e( 'Last updated:', 'meta-box-builder' ) ?> <span data-bind="database.modified"></span></p>
+							<span data-bind="database.newer"></span>
 						</div>
 
 						<div>
-							<h3><?php esc_html_e( 'JSON File Version', 'meta-box-builder' ) ?></h3>
-							<button type="button" role="button" class="button-sync" data-use="json">
-								<?php esc_html_e( 'Use JSON File', 'meta-box-builder' ) ?>
-							</button>
+							<h3>
+								<?php esc_html_e( 'JSON', 'meta-box-builder' ) ?>
+								<span class="text-sm"><?php esc_html_e( '(Always in use)', 'meta-box-builder' ) ?></span>
+							</h3>
+							<p>
+								<?php esc_html_e( 'Last updated:', 'meta-box-builder' ) ?> 
+								<span data-bind="local.modified"></span>
+								<span data-bind="local.newer"></span>
+							</p>
 						</div>
 					</div>
 
@@ -37,7 +41,7 @@ class Template {
 
 					<template id="sync-success">
 						<div class="sync-success-wrapper">
-							<div class="sync-success-content">
+							<div class="sync-success-content sync-status-text">
 								<p><?= esc_html__( 'All changes synced!', 'meta-box-builder' ) ?></p>
 							</div>
 						</div>
@@ -45,7 +49,7 @@ class Template {
 
 					<template id="sync-error">
 						<div class="sync-error-wrapper">
-							<div class="sync-error-content">
+							<div class="sync-error-content sync-status-text">
 								<p><?= esc_html__( 'Error during syncing data, please check folder permission or file format!', 'meta-box-builder' ) ?>
 								</p>
 							</div>
@@ -53,14 +57,14 @@ class Template {
 					</template>
 
 					<template id="no-changes">
-						<section class="no-changes-content">
+						<section class="no-changes-content sync-status-text">
 							<p><?= esc_html__( 'No changes detected.', 'meta-box-builder' ) ?></p>
 						</section>
 					</template>
 				</div>
 				<footer>
-					<button id="mbb-diff-dialog-close-btn" class="button button-secondary">
-						<?= esc_html__( 'Close', 'meta-box-builder' ) ?>
+					<button type="button" role="button" class="button-sync" data-use="json">
+						<?php esc_html_e( 'Sync changes', 'meta-box-builder' ) ?>
 					</button>
 				</footer>
 			</div>

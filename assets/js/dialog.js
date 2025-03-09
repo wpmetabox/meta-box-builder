@@ -1,3 +1,14 @@
+const formatDate = ( timestamp ) => {
+    if ( !timestamp ) {
+        return '';
+    }
+    // Convert to a human-readable format
+    const date = new Date( timestamp * 1000 ); // Multiply by 1000 for JavaScript's milliseconds
+    const options = { month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+    
+    return date.toLocaleString( 'en-US', options );
+};
+
 const showDialog = async ( mbbId ) => {
     const syncData = await wp.apiFetch( {
         path: '/mbb/json-data?id=' + mbbId,
@@ -11,6 +22,27 @@ const showDialog = async ( mbbId ) => {
         dialog.querySelector( '.mbb-diff-dialog-content' )
             .appendChild( document.getElementById( 'no-changes' ).content.cloneNode( true ) );
     }
+
+    const localModified = syncData[ mbbId ].local.modified ?? 0;
+    const remoteModified = syncData[ mbbId ].remote.modified ?? 0;
+
+    dialog.querySelectorAll( '[data-bind]' ).forEach( el => {
+        const bind = el.dataset.bind;
+
+        if ( bind === 'local.modified' ) {
+            el.innerHTML = formatDate( localModified );
+        }
+        if ( bind === 'database.modified' ) {
+            el.innerHTML = formatDate( remoteModified );
+        }
+
+        if ( bind === 'local.newer') {
+            el.innerHTML = localModified >= remoteModified ? MBB.newer : ''; 
+        }
+        if ( bind === 'remote.newer') {
+            el.innerHTML = localModified < remoteModified ? MBB.newer : ''; 
+        }
+    } );
 
     dialog.querySelectorAll( '.button-sync' ).forEach( btnSync => {
         const use = btnSync.dataset.use;
@@ -35,10 +67,6 @@ document.querySelectorAll( '[data-dialog]' ).forEach( button => {
 
 // Dialog for diff
 document.querySelector( '#mbb-diff-dialog-close' ).addEventListener( 'click', () => {
-    document.querySelector( '#mbb-diff-dialog' ).close();
-} );
-
-document.querySelector( '#mbb-diff-dialog-close-btn' ).addEventListener( 'click', () => {
     document.querySelector( '#mbb-diff-dialog' ).close();
 } );
 

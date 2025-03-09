@@ -1,57 +1,75 @@
-
 #mbb-diff-dialog {
-	width: 90%;
-    max-height: 80vh;
+	position: fixed;
+	top: 40px;
+	bottom: 40px;
+	right: 40px;
+	left: 40px;
+	width: auto;
+	height: auto;
+	z-index: 9999;
 	overflow: hidden;
-	border: 1px solid #ccd0d4;
+	border: none;
 	border-radius: 4px;
 	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-	padding: 20px;
 	background: #fff;
+	padding: 0;
 }
 
 .mbb-diff-dialog-wrapper {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	min-height: 80vh;
+}
+
+.mbb-diff-dialog-main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
 }
 
 #mbb-diff-dialog header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding-bottom: 10px;
-	margin-bottom: 20px;
+	padding: 10px 20px;
 }
 
 #mbb-diff-dialog header h2 {
 	margin: 0;
-	font-size: 1.5em;
+	font-size: 1.4em;
+	font-weight: normal;
 }
 
 #mbb-diff-dialog .mbb-diff-dialog-button-group {
 	width: 100%;
 	display: flex;
 	gap: 10px;
-	margin: 40px 0;
+	background: #f6f7f7;
+	padding: 10px 20px;
 }
 
 #mbb-diff-dialog .mbb-diff-dialog-button-group>div {
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 }
 
-.mbb-diff-dialog-main {
-	flex: 1;
+#mbb-diff-dialog .mbb-diff-dialog-button-group h3,
+#mbb-diff-dialog .mbb-diff-dialog-button-group p {
+	color: #333;
+	margin: 2px 0;
+}
+
+#mbb-diff-dialog .mbb-diff-dialog-button-group .text-sm {
+	font-size: 0.8em;
+	font-weight: normal;
 }
 
 #mbb-diff-dialog header button {
 	background: none;
 	border: none;
-	color: #0073aa;
+	color: #666;
 	cursor: pointer;
 }
 
@@ -60,10 +78,11 @@
 }
 
 .mbb-diff-dialog-content {
+	flex: 1;
 	display: flex;
 	justify-content: space-between;
-	background: #fafafa;
 	border-radius: 10px;
+	overflow: auto;
 }
 
 #mbb-diff-dialog .button-sync {
@@ -88,32 +107,27 @@
 	cursor: not-allowed;
 }
 
-.sync-success-content {
+.sync-status-text {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex: 1;
+	animation: fadeIn 0.5s ease-in-out;
+}
+
+.sync-success-content {
 	background: #D6F1DF;
 	color: #218358;
-	animation: fadeIn 0.5s ease-in-out;
 }
 
 .sync-error-content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex: 1;
 	background: #FFF7F8;
 	color: #CA244D;
-	animation: fadeIn 0.5s ease-in-out;
 }
 
 .no-changes-content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex: 1;
-	animation: fadeIn 0.5s ease-in-out;
+	color: #666;
+	font-size: 1.2em;
 }
 
 @keyframes fadeIn {
@@ -125,11 +139,6 @@
 		opacity: 1;
 		transform: translateY(0);
 	}
-}
-
-.mbb-diff-dialog-content {
-	max-height: 300px;
-	overflow: auto;
 }
 
 .mbb-diff-dialog-content>div {
@@ -151,6 +160,7 @@
 }
 
 #mbb-diff-dialog footer {
+	padding: 10px 20px;
 	display: flex;
 	justify-content: flex-end;
 	padding-top: 10px;
@@ -164,4 +174,11 @@
 #mbb-diff-dialog-close {
 	font-size: 2em;
 	text-decoration: none;
+}
+[data-if] {
+	display: none;
+}
+
+[data-if="true"] {
+	display: block;
 }
