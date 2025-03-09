@@ -23,11 +23,9 @@ class MetaBox extends Base {
 			->parse_fields( $this->settings['fields'] );
 
 		$this->remove_empty_values();
-		// Remove array keys again. Some methods like parse tabs change fields.
-		$this->fields = array_values( $this->fields );
 
 		$settings       = $this->settings_parser->get_settings();
-		$this->settings = array_merge( [ 'fields' => $this->fields ], $settings );
+		
 		if ( $this->validation['rules'] ) {
 			if ( empty( $this->validation['messages'] ) ) {
 				unset( $this->validation['messages'] );
@@ -36,6 +34,10 @@ class MetaBox extends Base {
 		}
 
 		$this->settings = apply_filters( 'mbb_meta_box_settings', $this->settings );
+
+		// Remove array keys again. Some methods like parse tabs change fields.
+		$this->fields = array_values( $this->fields );
+		$this->settings = array_merge( [ 'fields' => $this->fields ], $settings );
 	}
 
 	private function parse_settings() {
