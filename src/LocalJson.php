@@ -178,8 +178,7 @@ class LocalJson {
 		if ( isset( $args['post_id'] ) ) {
 			$post = get_post( $args['post_id'] );
 		} elseif ( isset( $args['post_name'] ) ) {
-			$post_type = $args['post_type'] ?? 'meta-box';
-			$post = get_page_by_path( $args['post_name'], OBJECT, $post_type );
+			$post = get_page_by_path( $args['post_name'], OBJECT, 'meta-box' );
 		} else {
 			return false;
 		}
@@ -188,20 +187,40 @@ class LocalJson {
 			return false;
 		}
 
-		$data = JsonService::get_json( [ 'post_id' => $post->ID ] );
-		$data = reset( $data );
-
-		if ( ! $data || ! is_array( $data ) || ! isset( $data['remote'] ) ) {
-			return false;
-		}
-
-		$meta_box = $data['remote'];
 		if ( ! self::is_enabled() ) {
 			return false;
 		}
 
+		if ( $post->post_type !== 'meta-box' ) {
+			return false;
+		}
+
+		$post_data = (array) $post;
+		$meta_box = get_post_meta( $post->ID, 'meta_box', true ) ?: [];
+		$post_data = array_merge( $post_data, $meta_box );
+		$settings = get_post_meta( $post->ID, 'settings', true );
+			
+		if ( is_array( $settings ) && isset( $settings['custom_settings'] ) ) {
+			$post_data = array_merge( $post_data, [
+				'custom_settings' => $settings['custom_settings'],
+			] );
+		}
+
+		$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
+		$unneeded_keys = $unparser->get_unneeded_keys();
+		$schema = \MBBParser\Unparsers\MetaBox::SCHEMAS[ 'meta-box' ] ?? null;
+		
+		// Remove unneeded keys
+		foreach ( $unneeded_keys as $key ) {
+			unset( $post_data[ $key ] );
+		}
+		
+		$post_data = array_merge([
+			'$schema' => $schema,
+		], $post_data );
+		
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
-		$success   = self::write_file( $file_path, $meta_box );
+		$success   = self::write_file( $file_path, $post_data );
 
 		if ( is_wp_error( $success ) ) {
 			// Return an error message.

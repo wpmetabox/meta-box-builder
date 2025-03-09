@@ -158,6 +158,14 @@ class JsonService {
 				$post_data = array_merge( $post_data, $main_meta );
 			}
 
+			$settings = get_post_meta( $post->ID, 'settings', true );
+			
+			if ( is_array( $settings ) && isset( $settings['custom_settings'] ) ) {
+				$post_data = array_merge( $post_data, [
+					'custom_settings' => $settings['custom_settings'],
+				] );
+			}
+
 			$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
 			$unneeded_keys = $unparser->get_unneeded_keys();
 			$schema = \MBBParser\Unparsers\MetaBox::SCHEMAS[ $query_params['post_type'] ] ?? null;
