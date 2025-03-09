@@ -32,9 +32,14 @@ class JsonService {
 
 			$unparser = new \MBBParser\Unparsers\MetaBox( $json );
 			$unparser->unparse();
-			$json = $unparser->get_settings();
+			$json            = $unparser->get_settings();
 			$local_minimized = $json['meta_box'];
 			ksort( $local_minimized );
+
+			$schema          = \MBBParser\Unparsers\MetaBox::SCHEMAS['meta-box'] ?? null;
+			$local_minimized = array_merge( [ 
+				'$schema' => $schema,
+			], $local_minimized );
 
 			$diff = wp_text_diff( '', wp_json_encode( $local_minimized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
 				'show_split_view' => true,
@@ -53,14 +58,14 @@ class JsonService {
 			];
 		}
 
-		$post_type  = $params['post_type'] ?? 'meta-box';
+		$post_type   = $params['post_type'] ?? 'meta-box';
 		$post_status = $params['post_status'] ?? 'publish';
 
 		$meta_boxes = self::get_meta_boxes( compact( 'post_type', 'post_status' ) );
 		foreach ( $meta_boxes as $meta_box ) {
 			ksort( $meta_box );
-			$id      = $meta_box['id'];
-			$post_id = $meta_box['post_id'];
+			$id        = $meta_box['id'];
+			$post_id   = $meta_box['post_id'];
 			$post_type = $meta_box['post_type'];
 
 			// Remove post_id, post_type to avoid diff
@@ -90,7 +95,7 @@ class JsonService {
 			}
 
 			$local_modified = $items[ $id ]['local']['modified'] ?? 0;
-			$is_newer = version_compare( $local_modified, $meta_box['modified'] ?? 0 );
+			$is_newer       = version_compare( $local_modified, $meta_box['modified'] ?? 0 );
 
 			$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
@@ -143,7 +148,7 @@ class JsonService {
 	}
 
 	public static function get_meta_boxes( array $query_params = [] ): array {
-		$defaults = [ 
+		$defaults     = [ 
 			'post_type' => 'meta-box',
 			'post_status' => get_post_stati(),
 			'posts_per_page' => -1,
@@ -151,8 +156,8 @@ class JsonService {
 			'update_post_term_cache' => false,
 		];
 		$query_params = wp_parse_args( $query_params, $defaults );
-		$query = new \WP_Query( $query_params );
-		
+		$query        = new \WP_Query( $query_params );
+
 		$meta_boxes = [];
 		foreach ( $query->posts as $post ) {
 			$post_data = (array) $post;
@@ -164,27 +169,27 @@ class JsonService {
 			}
 
 			$settings = get_post_meta( $post->ID, 'settings', true );
-			
-			if ( is_array( $settings ) && isset( $settings['custom_settings'] ) ) {
-				$post_data = array_merge( $post_data, [
+
+			if ( is_array( $settings ) && ! empty( $settings['custom_settings'] ) ) {
+				$post_data = array_merge( $post_data, [ 
 					'custom_settings' => $settings['custom_settings'],
 				] );
 			}
 
-			$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
+			$unparser      = new \MBBParser\Unparsers\MetaBox( $post_data );
 			$unneeded_keys = $unparser->get_unneeded_keys();
-			$schema = \MBBParser\Unparsers\MetaBox::SCHEMAS[ $query_params['post_type'] ] ?? null;
-			
+			$schema        = \MBBParser\Unparsers\MetaBox::SCHEMAS[ $query_params['post_type'] ] ?? null;
+
 			// Remove unneeded keys
 			foreach ( $unneeded_keys as $key ) {
 				unset( $post_data[ $key ] );
 			}
-			
-			// Extra post_id, post_type for filtering, check this line carefully if you want to change it
-			$post_data['post_id']    = $post->ID;
-			$post_data['post_type']  = $query_params['post_type'];
 
-			$post_data = array_merge([
+			// Extra post_id, post_type for filtering, check this line carefully if you want to change it
+			$post_data['post_id']   = $post->ID;
+			$post_data['post_type'] = $query_params['post_type'];
+
+			$post_data = array_merge( [ 
 				'$schema' => $schema,
 			], $post_data );
 
@@ -200,9 +205,9 @@ class JsonService {
 	 * @return string[]
 	 */
 	public static function get_files(): array {
-		$paths = self::get_paths();
+		$paths     = self::get_paths();
 		$all_files = [];
-		
+
 		foreach ( $paths as $path ) {
 			$all_files = array_merge( $all_files, glob( "$path/*.json" ) );
 		}

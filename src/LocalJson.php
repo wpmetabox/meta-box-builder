@@ -97,8 +97,8 @@ class LocalJson {
 			return false;
 		}
 
-		$json = reset( $json );
-		$data = $json['local'];
+		$json     = reset( $json );
+		$data     = $json['local'];
 		$unparser = new \MBBParser\Unparsers\MetaBox( $data );
 		$unparser->unparse();
 		$data = $unparser->get_settings();
@@ -140,9 +140,9 @@ class LocalJson {
 				return false;
 			}
 		}
-		$post_array  = [ 'ID' => $data['post_id'] ];
-		$data        = $data['local'];
-		$unparser    = new \MBBParser\Unparsers\MetaBox( $data );
+		$post_array = [ 'ID' => $data['post_id'] ];
+		$data       = $data['local'];
+		$unparser   = new \MBBParser\Unparsers\MetaBox( $data );
 		$unparser->unparse();
 		$data        = $unparser->get_settings();
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
@@ -196,29 +196,29 @@ class LocalJson {
 		}
 
 		$post_data = (array) $post;
-		$meta_box = get_post_meta( $post->ID, 'meta_box', true ) ?: [];
+		$meta_box  = get_post_meta( $post->ID, 'meta_box', true ) ?: [];
 		$post_data = array_merge( $post_data, $meta_box );
-		$settings = get_post_meta( $post->ID, 'settings', true );
-			
+		$settings  = get_post_meta( $post->ID, 'settings', true );
+
 		if ( is_array( $settings ) && isset( $settings['custom_settings'] ) ) {
-			$post_data = array_merge( $post_data, [
+			$post_data = array_merge( $post_data, [ 
 				'custom_settings' => $settings['custom_settings'],
 			] );
 		}
 
-		$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
+		$unparser      = new \MBBParser\Unparsers\MetaBox( $post_data );
 		$unneeded_keys = $unparser->get_unneeded_keys();
-		$schema = \MBBParser\Unparsers\MetaBox::SCHEMAS[ 'meta-box' ] ?? null;
-		
+		$schema        = \MBBParser\Unparsers\MetaBox::SCHEMAS['meta-box'] ?? null;
+
 		// Remove unneeded keys
 		foreach ( $unneeded_keys as $key ) {
 			unset( $post_data[ $key ] );
 		}
-		
-		$post_data = array_merge([
+
+		$post_data = array_merge( [ 
 			'$schema' => $schema,
 		], $post_data );
-		
+
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 		$success   = self::write_file( $file_path, $post_data );
 
