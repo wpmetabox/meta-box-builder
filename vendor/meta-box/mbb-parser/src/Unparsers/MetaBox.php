@@ -24,7 +24,7 @@ class MetaBox extends Base {
 	 * 
 	 * @var array
 	 */
-	protected const SCHEMAS = [ 
+	public const SCHEMAS = [ 
 		'meta-box' => 'https://schemas.metabox.io/field-group.json',
 		'mb-relationship' => 'https://schemas.metabox.io/relationships.json',
 		'mb-settings-page' => 'https://schemas.metabox.io/settings-page.json',
@@ -35,13 +35,14 @@ class MetaBox extends Base {
 	 * 
 	 * @var array
 	 */
-	protected const TYPE_META = [ 
+	public const TYPE_META = [ 
 		'meta-box' => 'meta_box',
 		'mb-relationship' => 'relationship',
 		'mb-settings-page' => 'settings_page',
 	];
 
 	public function unparse() {
+		$this->unparse_schema();
 		$this->unparse_meta_box();
 		$this->unparse_relationship();
 		$this->unparse_settings_page();
@@ -49,7 +50,6 @@ class MetaBox extends Base {
 		$this->unparse_modified();
 		$this->unparse_settings();
 		$this->unparse_fields( $this->settings['fields'] );
-		$this->unparse_modified();
 		$this->unparse_custom_table();
 		$this->unparse_tabs();
 		$this->unparse_validation();
@@ -58,6 +58,18 @@ class MetaBox extends Base {
 		$this->unparse_conditional_logic();
 		$this->unparse_include_exclude();
 		$this->unparse_show_hide();
+	}
+
+	public function unparse_schema() {
+		$schema = $this->lookup( [ '$schema' ], '' );
+		if ( ! empty( $schema ) ) {
+			return $this;
+		}
+
+		$post_type = $this->detect_post_type();
+		$this->settings['$schema'] = self::SCHEMAS[ $post_type ] ?? '';
+
+		return $this;
 	}
 
 	public function unparse_tabs() {
@@ -138,6 +150,12 @@ class MetaBox extends Base {
 		if ( isset( $this->settings['settings']['custom_table'] ) ) {
 			return $this;
 		}
+		
+		$post_type = $this->detect_post_type();
+
+		if ( $post_type !== 'meta-box' ) {
+			return $this;
+		}
 
 		$default_custom_table = [ 
 			'enable' => false,
@@ -163,7 +181,7 @@ class MetaBox extends Base {
 	}
 
 	public function unparse_modified() {
-		$this->modified = $this->lookup( [ 'modified', 'settings.modified' ], 0 );
+		$this->settings['modified'] = $this->lookup( [ 'modified', 'settings.modified' ], 0 );
 	}
 
 	public function unparse_meta_box() {
@@ -207,7 +225,7 @@ class MetaBox extends Base {
 		}
 
 		$this->settings_page = $settings_page;
-		
+
 		return $this;
 	}
 
@@ -243,9 +261,9 @@ class MetaBox extends Base {
 
 		// Basic settings.
 		$settings = [ 
-			'post_title' => $title,
-			'post_name' => $id,
-			'post_type' => $this->post_type ?? [ 'post' ],
+			'title' => $title,
+			'id' => $id,
+			'post_types' => $this->post_types ?? [ 'post' ],
 			'priority' => $this->priority ?? 'high',
 			'style' => $this->style ?? 'default',
 			'closed' => $this->closed ?? false,
@@ -260,6 +278,18 @@ class MetaBox extends Base {
 		// Merge custom settings
 		$custom_settings             = $this->lookup( [ 'custom_settings' ], [] );
 		$settings                    = array_merge( $this->lookup( [ 'settings' ], [] ), $settings );
+
+		foreach ( $this->settings as $key => $value ) {
+			if ( in_array( $key, $this->get_unneeded_keys() ) ) {
+				continue;
+			}
+
+			$settings[ $key ] = $value;
+		}
+
+		unset( $settings['settings'] );
+		unset( $settings['fields'] );
+
 		$settings['custom_settings'] = $custom_settings;
 
 		$this->settings_parser = new Settings( $settings );
@@ -283,6 +313,10 @@ class MetaBox extends Base {
 	}
 
 	public function detect_post_type(): string {
+		if ( isset( $this->post_type ) ) {
+			return $this->post_type;
+		}
+
 		// Detect post type from the schema (new format)
 		if ( isset( $this->settings['$schema'] ) ) {
 			$schema    = $this->settings['$schema'];
@@ -483,8 +517,9 @@ class MetaBox extends Base {
 		return array_merge( $keys, $extras[ $post_type ] ?? [] );
 	}
 
-	private function get_unneeded_keys(): array {
+	public function get_unneeded_keys(): array {
 		$default = [ 
+			'$schema',
 			'ID',
 			'post_name',
 			'post_date',

@@ -7,8 +7,9 @@ class JsonService {
 	 * @param array $params
 	 * @return array[]
 	 */
-	public static function get_json( array $params = [] ): ?array {
+	public static function get_json( array $params = [] ): array {
 		$files = self::get_files();
+
 		// key by meta box id
 		$items = [];
 		foreach ( $files as $file ) {
@@ -27,7 +28,7 @@ class JsonService {
 			$unparser = new \MBBParser\Unparsers\MetaBox( $json );
 			$unparser->unparse();
 			$json = $unparser->get_settings();
-			$local_minimized = Normalizer::minimize( $json );
+			$local_minimized = $json['meta_box'];
 			ksort( $local_minimized );
 
 			$diff = wp_text_diff( '', wp_json_encode( $local_minimized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
@@ -40,7 +41,7 @@ class JsonService {
 				'local_minimized' => $local_minimized,
 				'is_newer' => true,
 				'post_id' => null,
-				'post_type' => Normalizer::detect_post_type( $json ),
+				'post_type' => $json['post_type'] ?? 'meta-box',
 				'id' => $json['id'],
 				'remote' => null,
 				'diff' => $diff,
@@ -83,8 +84,8 @@ class JsonService {
 				continue;
 			}
 
-			$local_version = $items[ $id ]['local']['version'] ?? 'v0';
-			$is_newer = version_compare( $local_version, $meta_box['version'] ?? 'v0' );
+			$local_modified = $items[ $id ]['local']['modified'] ?? 0;
+			$is_newer = version_compare( $local_modified, $meta_box['modified'] ?? 0 );
 
 			$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
@@ -153,15 +154,27 @@ class JsonService {
 			$meta_keys = self::get_minimal_meta_keys( $query_params['post_type'] );
 
 			foreach ( $meta_keys as $meta_key ) {
-				$post_data[ $meta_key ] = get_post_meta( $post->ID, $meta_key, true );
-				$post_data              = Normalizer::minimize( $post_data, $query_params['post_type'] );
-				$post_data['post_id']   = $post->ID;
+				$main_meta = get_post_meta( $post->ID, $meta_key, true ) ?: [];
+				$post_data = array_merge( $post_data, $main_meta );
 			}
 
+			$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
+			$unneeded_keys = $unparser->get_unneeded_keys();
+			$schema = \MBBParser\Unparsers\MetaBox::SCHEMAS[ $query_params['post_type'] ] ?? null;
+			
+			// Remove unneeded keys
+			foreach ( $unneeded_keys as $key ) {
+				unset( $post_data[ $key ] );
+			}
+			
 			// Extra post_id, post_type for filtering, check this line carefully if you want to change it
 			$post_data['post_id']    = $post->ID;
 			$post_data['post_type']  = $query_params['post_type'];
-			
+
+			$post_data = array_merge([
+				'$schema' => $schema,
+			], $post_data );
+
 			$meta_boxes[ $post->ID ] = $post_data;
 		}
 
