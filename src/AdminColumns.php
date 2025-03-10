@@ -307,7 +307,7 @@ class AdminColumns {
 		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], MBB_VER, true );
 		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], MBB_VER, true );
 		wp_enqueue_style( 'mbb-dialog', MBB_URL . 'assets/css/dialog.css', [], MBB_VER );
-		wp_localize_script( 'mbb-dialog', 'MBB', [ 
+		wp_localize_script( 'mbb-dialog', 'MBBDialog', [ 
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
 			'not_imported' => esc_html__( 'Not Imported', 'meta-box-builder' ),

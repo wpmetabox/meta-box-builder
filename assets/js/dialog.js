@@ -37,10 +37,10 @@ const showDialog = async ( mbbId ) => {
         }
 
         if ( bind === 'local.newer' ) {
-            el.innerHTML = localModified >= remoteModified ? MBB.newer : '';
+            el.innerHTML = localModified >= remoteModified ? MBBDialog.newer : '';
         }
         if ( bind === 'remote.newer' ) {
-            el.innerHTML = localModified < remoteModified ? MBB.newer : '';
+            el.innerHTML = localModified < remoteModified ? MBBDialog.newer : '';
         }
     } );
 
@@ -96,7 +96,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
             // Set the button to loading state
             buttonSync.classList.add( 'loading' );
             buttonSync.disabled = true;
-            buttonSync.textContent = MBB.syncing;
+            buttonSync.textContent = MBBDialog.syncing;
 
             const data = await wp.apiFetch( {
                 path: '/mbb/set-json-data',
@@ -116,7 +116,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
                 // Update status of current row sync to synced
                 const label = document.querySelector( `.mbb-label[data-for-id="${ buttonSync.dataset.id }"]` );
                 if ( label !== null ) {
-                    label.textContent = MBB.synced;
+                    label.textContent = MBBDialog.synced;
                     label.dataset.status = 'synced';
                 }
             } else {
@@ -126,7 +126,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
                 document.querySelector( '.mbb-diff-dialog-content' ).innerHTML = templateSyncError.querySelector( 'div' ).innerHTML;
                 // Update status of current row sync to error
                 const label = document.querySelector( `.mbb-label[data-for-id="${ buttonSync.dataset.id }"]` );
-                label.textContent = MBB.error;
+                label.textContent = MBBDialog.error;
                 label.dataset.status = 'error';
             }
 
