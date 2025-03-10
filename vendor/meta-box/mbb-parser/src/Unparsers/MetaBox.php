@@ -225,6 +225,7 @@ class MetaBox extends Base {
 		}
 
 		$this->settings_page = $settings_page;
+		$this->post_title	= $this->lookup( [ 'menu_title', 'id' ]);
 
 		return $this;
 	}
@@ -245,6 +246,7 @@ class MetaBox extends Base {
 			unset( $relationship[ $key ] );
 		}
 		$this->relationship = $relationship;
+		$this->post_title	= $this->lookup( [ 'menu_title', 'id' ]);
 
 		return $this;
 	}
