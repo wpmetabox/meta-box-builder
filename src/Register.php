@@ -11,8 +11,26 @@ class Register {
 	}
 
 	public function register_meta_box( $meta_boxes ): array {
-		$files = JsonService::get_files();
+		$mbs = LocalJson::is_enabled() ? $this->get_json_meta_boxes() : $this->get_database_meta_boxes();
 
+		foreach ( $mbs as $meta_box ) {
+			$this->transform_for_block( $meta_box );
+			$this->create_custom_table( $meta_box );
+			$this->meta_box_post_ids[ $meta_box['id'] ] = $meta_box['id'];
+			$meta_boxes[] = $meta_box;
+		}
+
+		if ( ! empty( $this->meta_box_post_ids ) && is_admin() ) {
+			add_action( 'rwmb_enqueue_scripts', [ $this, 'enqueue_assets' ] );
+		}
+
+		return $meta_boxes;
+	}
+
+	private function get_json_meta_boxes(): array {
+		$meta_boxes = [];
+
+		$files = JsonService::get_files();
 		foreach ( $files as $file ) {
 			[ $data, $error ] = LocalJson::read_file( $file );
 
@@ -27,30 +45,16 @@ class Register {
 				continue;
 			}
 
-			$this->transform_for_block( $meta_box );
-
-			// @todo: since we load from files, these fields are not available,
-			// we need to find the alternative way to get the post_id
-			// ideally, we move create custom table to the save hook
-			// and we use post_name instead of post_id 
-			// and redirect to the edit screen by post_name
-			if ( isset( $data['post_id'] ) ) {
-				$post_id = $data['post_id'];
-				$this->create_custom_table( $meta_box, $post_id );
-
-				// Get list of meta box ID and meta box post ID to show the edit settings icon on the edit screen.
-				$settings = get_post_meta( $post_id, 'settings', true );
-				if ( 'post' === Arr::get( $settings, 'object_type', 'post' ) ) {
-					$this->meta_box_post_ids[ $meta_box['id'] ] = $post_id;
-				}
-			}
-
 			$meta_boxes[] = $meta_box;
 		}
 
-		if ( ! empty( $this->meta_box_post_ids ) ) {
-			add_action( 'rwmb_enqueue_scripts', [ $this, 'enqueue_assets' ] );
-		}
+		return $meta_boxes;
+	}
+
+	public function get_database_meta_boxes(): array {
+		$meta_boxes = JsonService::get_meta_boxes( [ 
+			'post_status' => 'publish',
+		] );
 
 		return $meta_boxes;
 	}
@@ -87,10 +91,20 @@ class Register {
 		};
 	}
 
-	private function create_custom_table( $meta_box, $post_id ): void {
+	private function create_custom_table( $meta_box ): void {
 		if ( ! Helpers\Data::is_extension_active( 'mb-custom-table' ) || empty( $meta_box['table'] ) ) {
 			return;
 		}
+
+		// Get post by meta box ID.
+		$post_name = $meta_box['id'];
+		$post      = get_page_by_path( $post_name, OBJECT, 'meta-box' );
+
+		if ( ! $post ) {
+			return;
+		}
+
+		$post_id = $post->ID;
 
 		// Get full custom table settings from JavaScript data.
 		$settings = get_post_meta( $post_id, 'settings', true );
@@ -117,6 +131,21 @@ class Register {
 	}
 
 	public function enqueue_assets(): void {
+		// Convert $this->meta_box_post_ids from string to int
+		$query = new \WP_Query([
+			'post_type' => 'meta-box',
+			'post_status' => 'publish',
+			'posts_per_page' => -1,
+			'post_name__in' => array_map( 'strval', $this->meta_box_post_ids ),
+			'no_found_rows' => true,
+			'update_post_term_cache' => false,
+		]);
+
+		$this->meta_box_post_ids = [];
+		foreach ( $query->posts as $post ) {
+			$this->meta_box_post_ids[ $post->post_name ] = $post->ID;
+		}
+
 		wp_enqueue_style( 'mbb-post', MBB_URL . 'assets/css/post.css', [], MBB_VER );
 		wp_enqueue_script( 'mbb-post', MBB_URL . 'assets/js/post.js', [], MBB_VER, true );
 		\RWMB_Helpers_Field::localize_script_once( 'mbb-post', 'MBB', [ 

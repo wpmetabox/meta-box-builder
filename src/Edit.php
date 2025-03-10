@@ -98,18 +98,18 @@ class Edit extends BaseEditPage {
 		wp_enqueue_style( 'rwmb-modal', RWMB_CSS_URL . 'modal.css', [], RWMB_VER );
 		wp_style_add_data( 'rwmb-modal', 'path', RWMB_CSS_DIR . 'modal.css' );
 		wp_enqueue_script( 'rwmb-modal', RWMB_JS_URL . 'modal.js', [ 'jquery' ], RWMB_VER, true );
-		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], time(), true );
+		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], MBB_VER, true );
 		wp_localize_script( 'mbb-dialog', 'MBB', [ 
 			'export' => esc_html__( 'Export', 'meta-box-builder' ),
 			'import' => esc_html__( 'Import', 'meta-box-builder' ),
 			'not_imported' => esc_html__( 'Not Imported', 'meta-box-builder' ),
-			'error' => esc_html__( '!Error', 'meta-box-builder' ),
+			'error' => esc_html__( 'Error!', 'meta-box-builder' ),
 			'synced' => esc_html__( 'Synced', 'meta-box-builder' ),
 			'syncing' => esc_html__( 'Syncing...', 'meta-box-builder' ),
 			'newer' => esc_html__( '(newer)', 'meta-box-builder' ),
 			'sync_available' => esc_html__( 'Sync available', 'meta-box-builder' ),
 		] );
-		wp_enqueue_style( 'mbb-dialog', MBB_URL . 'assets/css/dialog.css', [], time() );
+		wp_enqueue_style( 'mbb-dialog', MBB_URL . 'assets/css/dialog.css', [], MBB_VER );
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], MBB_VER );
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', [ 'jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard', 'wp-color-picker', 'code-editor' ], MBB_VER, true );
 
