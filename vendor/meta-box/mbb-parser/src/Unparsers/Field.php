@@ -31,7 +31,7 @@ class Field extends Base {
 			->unparse_conditional_logic()
 			->unparse_tooltip()
 			->unparse_admin_columns()
-			->ensure_boolean('save_field');
+			->ensure_boolean( 'save_field' );
 
 		$func = "unparse_field_{$this->type}";
 		if ( method_exists( $this, $func ) ) {
@@ -150,33 +150,35 @@ class Field extends Base {
 	}
 
 	private function unparse_tooltip() {
-		if (!isset($this->tooltip)) {
+		if ( ! isset( $this->tooltip ) ) {
 			return $this;
 		}
-	
-		$defaults = [
+
+		$defaults = [ 
 			'enable' => true,
 			'icon' => 'info',
 			'position' => 'top',
 			'content' => '',
-			'allow_html' => true
+			'allow_html' => true,
 		];
-	
-		if (is_string($this->tooltip)) {
-			$this->tooltip = ['content' => $this->tooltip];
+
+		if ( is_string( $this->tooltip ) ) {
+			$this->tooltip = [ 
+				'content' => $this->tooltip,
+			];
 		}
-	
-		$this->tooltip = array_merge($defaults, $this->tooltip);
-		
+
+		$this->tooltip = array_merge( $defaults, $this->tooltip );
+
 		return $this;
 	}
 
 	private function unparse_admin_columns() {
-		if (!isset($this->admin_columns)) {
+		if ( ! isset( $this->admin_columns ) ) {
 			return $this;
 		}
-	
-		$defaults = [
+
+		$defaults = [ 
 			'enable' => true,
 			'position' => 'after title',
 			'title' => '',
@@ -185,16 +187,16 @@ class Field extends Base {
 			'sort' => false,
 			'searchable' => false,
 			'filterable' => false,
-			'link' => false
+			'link' => false,
 		];
-	
-		if (is_bool($this->admin_columns)) {
-			$this->admin_columns = ['enable' => $this->admin_columns];
-		} elseif (is_string($this->admin_columns)) {
-			$this->admin_columns = ['enable' => true, 'position' => $this->admin_columns];
+
+		if ( is_bool( $this->admin_columns ) ) {
+			$this->admin_columns = [ 'enable' => $this->admin_columns ];
+		} elseif ( is_string( $this->admin_columns ) ) {
+			$this->admin_columns = [ 'enable' => true, 'position' => $this->admin_columns ];
 		}
-	
-		$this->admin_columns = array_merge($defaults, $this->admin_columns);
+
+		$this->admin_columns = array_merge( $defaults, $this->admin_columns );
 		return $this;
 	}
 
@@ -228,8 +230,8 @@ class Field extends Base {
 		return $this;
 	}
 
-	protected function ensure_boolean($key) {
-		if (isset($this->$key)) {
+	protected function ensure_boolean( $key ) {
+		if ( isset( $this->$key ) ) {
 			$this->$key = (bool) $this->$key;
 		}
 		return $this;
