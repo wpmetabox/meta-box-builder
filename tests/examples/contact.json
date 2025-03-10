@@ -2,7 +2,7 @@
     "$schema": "https://schemas.metabox.io/field-group.json",
     "fields": [
         {
-            "name": "Name2",
+            "name": "Name",
             "id": "name",
             "type": "text"
         },
@@ -31,30 +31,9 @@
                 "gender",
                 "female"
             ]
-        },
-        {
-            "name": "Admin Column",
-            "id": "admin_column",
-            "type": "text",
-            "admin_columns": {
-                "position": "after title",
-                "title": "alternate",
-                "sort": true
-            }
-        },
-        {
-            "name": "Tooltip",
-            "id": "tooltip",
-            "type": "text",
-            "tooltip": {
-                "enable": true,
-                "content": "This is a tooltip",
-                "icon": "dashicons-editor-help",
-                "position": "top"
-            }
         }
     ],
     "id": "contact",
     "title": "Contact Information",
-    "version": "v1739955432"
+    "modified": 1739955432
 }
