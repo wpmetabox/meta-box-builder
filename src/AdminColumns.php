@@ -419,7 +419,7 @@ class AdminColumns {
 			<?php esc_html_e( $available_statuses[ $status ] ) ?>
 		</span>
 
-		<?php if ( $sync_data['is_newer'] === 0 ) {
+		<?php if ( $sync_data['is_newer'] <= 0 ) {
 			return;
 		}
 		?>

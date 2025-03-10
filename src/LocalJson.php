@@ -97,8 +97,11 @@ class LocalJson {
 			return false;
 		}
 
-		$json     = reset( $json );
-		$data     = $json['local'];
+		$json = reset( $json );
+		$data = $json['local'];
+		if ( ! $data ) {
+			return false;
+		}
 		$unparser = new \MBBParser\Unparsers\MetaBox( $data );
 		$unparser->unparse();
 		$data = $unparser->get_settings();
@@ -175,6 +178,10 @@ class LocalJson {
 	 * @return bool Success or not
 	 */
 	public static function use_database( array $args = [] ): bool {
+		if ( ! self::is_enabled() ) {
+			return false;
+		}
+
 		if ( isset( $args['post_id'] ) ) {
 			$post = get_post( $args['post_id'] );
 		} elseif ( isset( $args['post_name'] ) ) {
@@ -184,10 +191,6 @@ class LocalJson {
 		}
 
 		if ( ! $post ) {
-			return false;
-		}
-
-		if ( ! self::is_enabled() ) {
 			return false;
 		}
 

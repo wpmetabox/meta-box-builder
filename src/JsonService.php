@@ -232,6 +232,11 @@ class JsonService {
 
 		$mb_json_paths = apply_filters( 'mb_json_paths', $mb_json_paths );
 
+		// Remove unwritable paths
+		$mb_json_paths = array_filter( $mb_json_paths, function ($path) {
+			return is_writable( $path );
+		} );
+
 		return $mb_json_paths;
 	}
 }
