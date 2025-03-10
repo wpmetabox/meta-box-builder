@@ -70,9 +70,7 @@ class LocalJson {
 
 	/**
 	 * Use local json file and override database. Currently, its using by REST API
-	 * 
-	 * @todo: Remove this function and use sync_json() instead.
-	 * 
+	 *  
 	 * @param array $args
 	 * @return bool Success or not
 	 */
@@ -98,35 +96,8 @@ class LocalJson {
 		}
 
 		$json = reset( $json );
-		$data = $json['local'];
-		if ( ! $data ) {
-			return false;
-		}
-		$unparser = new \MBBParser\Unparsers\MetaBox( $data );
-		$unparser->unparse();
-		$data = $unparser->get_settings();
-
-		$meta_fields = Export::get_meta_keys( $data['post_type'] );
-		$post_array  = array_merge( $post_array, [ 
-			'post_type' => $data['post_type'],
-			'post_name' => $data['post_name'],
-			'post_title' => $data['post_title'],
-			'post_date' => $data['post_date'],
-			'post_status' => $data['post_status'],
-			'post_content' => $data['post_content'],
-		] );
-
-		$post_id = wp_insert_post( $post_array );
-
-		foreach ( $meta_fields as $meta_key ) {
-			if ( ! isset( $data[ $meta_key ] ) ) {
-				continue;
-			}
-
-			update_post_meta( $post_id, $meta_key, $data[ $meta_key ] );
-		}
-
-		return true;
+		
+		return self::sync_json( $json );
 	}
 
 	/**
