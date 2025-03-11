@@ -39,7 +39,7 @@ class AdminColumns {
 		if ( ! LocalJson::is_enabled() ) {
 			return $status;
 		}
-		
+
 		if ( $status === 'draft' ) {
 			return 'publish';
 		}
@@ -178,7 +178,7 @@ class AdminColumns {
 		// Filter where local is not null
 
 		$json = array_filter( $json, function ($item) {
-			return ! empty( $item['local'] && $item['post_type'] === $this->post_type );
+			return ! empty( $item['local'] ) && $item['post_type'] === $this->post_type && $item['is_newer'] > 0;
 		} );
 		?>
 		<template id="mb-sync-list">
