@@ -25,6 +25,9 @@ class FieldTest extends TestCase {
                     "id": "field3",
                     "type": "checkbox",
                     "name": "Checkbox Field"
+                },
+                {
+                    "type": "divider"
                 }
             ],
             "modified": 1741272808
@@ -38,17 +41,24 @@ class FieldTest extends TestCase {
         $this->assertArrayHasKey('fields', $result, "Result should have 'fields' key");
         $this->assertIsArray($result['fields'], "'fields' should be an array");
 
+        $this->assertCount(
+            4,
+            $result['fields'],
+            "'fields' should have 4 fields"
+        );
+        
         // Check that fields is a key-value array (not numeric)
         $this->assertArrayHasKey('field1', $result['fields'], "'fields' should use 'field1' as key");
         $this->assertArrayHasKey('field2', $result['fields'], "'fields' should use 'field2' as key");
         $this->assertArrayHasKey('field3', $result['fields'], "'fields' should use 'field3' as key");
+
         $this->assertFalse(
             array_key_exists(0, $result['fields']),
             "'fields' should not have numeric keys"
         );
 
         // Required keys as per your unparser and schema
-        $requiredKeys = ['id', '_id', 'name', 'type', 'save_field'];
+        $requiredKeys = ['id', '_id', 'type'];
 
         // Check each field has required keys
         foreach ($result['fields'] as $fieldId => $field) {
@@ -74,14 +84,6 @@ class FieldTest extends TestCase {
                 $fieldId,
                 $field['_id'],
                 "Field '$fieldId' '_id' should match its key"
-            );
-            $this->assertTrue(
-                $field['save_field'],
-                "Field '$fieldId' 'save_field' should default to true"
-            );
-            $this->assertIsString(
-                $field['name'],
-                "Field '$fieldId' 'name' should be a string"
             );
             $this->assertIsString(
                 $field['type'],

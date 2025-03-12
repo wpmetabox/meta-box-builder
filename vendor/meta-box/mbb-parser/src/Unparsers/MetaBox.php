@@ -357,7 +357,7 @@ class MetaBox extends Base {
 			}
 
 			unset( $fields[ $id ] );
-			$fields[ $field['id'] ] = $field;
+			$fields[ $field['_id'] ] = $field;
 		}
 
 		return $this;
