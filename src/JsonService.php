@@ -19,18 +19,18 @@ class JsonService {
 				continue;
 			}
 
-			$json = json_decode( $data, true );
-
-			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $json ) ) {
+			$raw_json = json_decode( $data, true );
+			
+			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $raw_json ) ) {
 				continue;
 			}
-
+			
 			$private = $json['private'] ?? false;
 			if ( $private ) {
 				continue;
 			}
 
-			$unparser = new \MBBParser\Unparsers\MetaBox( $json );
+			$unparser = new \MBBParser\Unparsers\MetaBox( $raw_json );
 			$unparser->unparse();
 			$json            = $unparser->get_settings();
 			$local_minimized = $json['meta_box'];
@@ -41,7 +41,7 @@ class JsonService {
 				'$schema' => $schema,
 			], $local_minimized );
 
-			$diff = wp_text_diff( '', wp_json_encode( $local_minimized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
+			$diff = wp_text_diff( '', wp_json_encode( $raw_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
 				'show_split_view' => true,
 			] );
 
@@ -107,7 +107,7 @@ class JsonService {
 
 			$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
-			$diff = wp_text_diff( $left, wp_json_encode( $items[ $id ]['local_minimized'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
+			$diff = wp_text_diff( $left, wp_json_encode( $items[ $id ]['local'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
 				'show_split_view' => true,
 			] );
 

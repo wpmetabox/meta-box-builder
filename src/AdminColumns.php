@@ -407,16 +407,16 @@ class AdminColumns {
 
 		$status = 'sync_available';
 
-		if ( $sync_data['local'] === null ) {
-			$status = 'no_json';
-		}
-
 		if ( $sync_data['is_newer'] === 0 ) {
 			$status = 'synced';
 		}
 
 		if ( ! $sync_data['is_writable'] ) {
 			$status = 'error_file_permission';
+		}
+
+		if ( $sync_data['local'] === null ) {
+			$status = 'no_json';
 		}
 		?>
 		<span class="mbb-label" data-status="<?php esc_attr_e( $status ) ?>" data-for-id="<?php esc_attr_e( $meta_box_id ) ?>">

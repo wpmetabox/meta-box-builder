@@ -31,12 +31,6 @@ class Edit extends BaseEditPage {
 			return;
 		}
 
-		$data = get_post_meta( get_the_ID(), 'data', true );
-
-		if ( empty( $data ) ) {
-			return;
-		}
-
 		$json = JsonService::get_json( [ 
 			'post_id' => get_the_ID(),
 		] );
@@ -47,8 +41,36 @@ class Edit extends BaseEditPage {
 
 		$json = reset( $json );
 
-		$is_writable = $json['is_writable'] ?? false;
+		$is_newer = $json['is_newer'] ?? false;
 
+		$builder_version = $json['remote']['modified'] ?? 0;
+		$json_version    = $json['local']['modified'] ?? 0;
+
+		if ( $is_newer !== 0 ) {
+			?>
+			<div class="notice notice-warning">
+				<p>
+					<?php
+					printf(
+						/* translators: 1: database version, 2: JSON version */
+						esc_html__( 'Your database version (%1$s) is different than the JSON version (%2$s).
+						Any changes will override the JSON file.',
+							'meta-box-builder' ),
+						$builder_version,
+						$json_version
+					);
+					?>
+					<a href="javascript:;" role="button" data-dialog="<?php esc_attr_e( $json['id'] ) ?>">
+						<?php esc_html_e( 'Review', 'meta-box-builder' ) ?>
+					</a>
+				</p>
+			</div>
+			<?php
+			return;
+		}
+
+		$is_writable = $json['is_writable'] ?? false;
+		
 		if ( ! $is_writable ) {
 			?>
 			<div class="notice notice-error">
@@ -58,37 +80,6 @@ class Edit extends BaseEditPage {
 			</div>
 			<?php
 			return;
-		}
-
-		if ( ! isset( $json['local'] ) ) {
-			return;
-		}
-
-		$is_newer = $json['is_newer'] ?? false;
-
-		$builder_version = $json['remote']['modified'] ?? 0;
-		$json_version    = $json['local']['modified'] ?? 0;
-
-		if ( $is_newer > 0 ) {
-			?>
-			<div class="notice notice-warning">
-				<p>
-					<?php
-					printf(
-						/* translators: 1: database version, 2: JSON version */
-						esc_html__( 'Your database version (%1$s) is lower than the JSON version (%2$s).
-						Any changes will override the JSON file.',
-							'meta-box-builder' ),
-						$builder_version,
-						$json_version
-					);
-					?>
-					<a href="javascript:;" role="button" data-dialog="<?php esc_attr_e( $data['id'] ) ?>">
-						<?php esc_html_e( 'Review', 'meta-box-builder' ) ?>
-					</a>
-				</p>
-			</div>
-			<?php
 		}
 	}
 
