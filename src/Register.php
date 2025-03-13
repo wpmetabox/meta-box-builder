@@ -17,7 +17,7 @@ class Register {
 			$this->transform_for_block( $meta_box );
 			$this->create_custom_table( $meta_box );
 			$this->meta_box_post_ids[ $meta_box['id'] ] = $meta_box['id'];
-			$meta_boxes[] = $meta_box;
+			$meta_boxes[]                               = $meta_box;
 		}
 
 		if ( ! empty( $this->meta_box_post_ids ) && is_admin() ) {
@@ -39,7 +39,10 @@ class Register {
 			}
 
 			$json     = json_decode( $data, true );
-			$meta_box = $json;
+			$unparser = new \MBBParser\Unparsers\MetaBox( $json );
+			$unparser->unparse();
+			$json     = $unparser->get_settings();
+			$meta_box = $json['meta_box'];
 
 			if ( empty( $meta_box ) ) {
 				continue;
@@ -132,14 +135,14 @@ class Register {
 
 	public function enqueue_assets(): void {
 		// Convert $this->meta_box_post_ids from string to int
-		$query = new \WP_Query([
+		$query = new \WP_Query( [ 
 			'post_type' => 'meta-box',
 			'post_status' => 'publish',
 			'posts_per_page' => -1,
 			'post_name__in' => array_map( 'strval', $this->meta_box_post_ids ),
 			'no_found_rows' => true,
 			'update_post_term_cache' => false,
-		]);
+		] );
 
 		$this->meta_box_post_ids = [];
 		foreach ( $query->posts as $post ) {

@@ -26,24 +26,46 @@ class Edit extends BaseEditPage {
 			return;
 		}
 
-		$data = JsonService::get_json( [ 
-			'post_id' => get_the_ID(),
-		] );
+		// Show the notice if file is not writable.
+		if ( ! LocalJson::is_enabled() ) {
+			return;
+		}
+
+		$data = get_post_meta( get_the_ID(), 'data', true );
 
 		if ( empty( $data ) ) {
 			return;
 		}
 
-		$data = reset( $data );
-
-		if ( ! isset( $data['local'] ) ) {
+		if ( isset( $data['json_path_error'] ) && ! empty( $data['json_path_error'] ) ) {
+			?>
+			<div class="notice notice-error">
+				<p>
+					<?php esc_html_e( $data['json_path_error'] ) ?>
+				</p>
+			</div>
+			<?php
 			return;
 		}
 
-		$is_newer = $data['is_newer'] ?? false;
+		$json = JsonService::get_json( [ 
+			'post_id' => get_the_ID(),
+		] );
 
-		$builder_version = $data['remote']['modified'] ?? 0;
-		$json_version    = $data['local']['modified'] ?? 0;
+		if ( empty( $json ) ) {
+			return;
+		}
+
+		$json = reset( $json );
+
+		if ( ! isset( $json['local'] ) ) {
+			return;
+		}
+
+		$is_newer = $json['is_newer'] ?? false;
+
+		$builder_version = $json['remote']['modified'] ?? 0;
+		$json_version    = $json['local']['modified'] ?? 0;
 
 		if ( $is_newer > 0 ) {
 			?>

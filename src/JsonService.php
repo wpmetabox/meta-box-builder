@@ -45,14 +45,14 @@ class JsonService {
 				'show_split_view' => true,
 			] );
 
-			$items[ $json['id'] ] = [ 
+			$items[ $local_minimized['id'] ] = [ 
 				'file' => $file,
 				'local' => $json,
 				'local_minimized' => $local_minimized,
 				'is_newer' => true,
 				'post_id' => null,
 				'post_type' => $json['post_type'] ?? 'meta-box',
-				'id' => $json['id'],
+				'id' => $local_minimized['id'],
 				'remote' => null,
 				'diff' => $diff,
 			];

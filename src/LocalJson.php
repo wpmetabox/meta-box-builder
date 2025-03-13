@@ -41,7 +41,7 @@ class LocalJson {
 
 	public static function write_file( string $file_path, array $data ) {
 		if ( ! is_writable( dirname( $file_path ) ) ) {
-			return new \WP_Error( 'file_not_writable', __( 'File not writable!', 'meta-box-builder' ) );
+			return false;
 		}
 
 		if ( ! is_dir( dirname( $file_path ) ) ) {
@@ -50,7 +50,7 @@ class LocalJson {
 
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
-		return file_put_contents( $file_path, $output );
+		return @file_put_contents( $file_path, $output );
 	}
 
 	/**
@@ -195,8 +195,8 @@ class LocalJson {
 
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 		$success   = self::write_file( $file_path, $post_data );
-
-		if ( is_wp_error( $success ) ) {
+		
+		if ( ! $success ) {
 			// Return an error message.
 			$data = get_post_meta( $post->ID, 'data', true );
 
@@ -204,7 +204,7 @@ class LocalJson {
 				$data = [];
 			}
 
-			$data['json_path_error'] = __( 'JSON path is not writable. Please check the folder permission.', 'meta-box-builder' );
+			$data['json_path_error'] = __( 'Error during saving json file. Please check the folder permission and save again.', 'meta-box-builder' );
 
 			update_post_meta( $post->ID, 'data', $data );
 
