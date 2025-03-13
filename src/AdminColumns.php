@@ -336,11 +336,7 @@ class AdminColumns {
 		}
 
 		if ( LocalJson::is_enabled() ) {
-			if ( $this->is_status( 'sync' ) ) {
-				unset( $new_columns['location'] );
-				$new_columns['path'] = __( 'Path', 'meta-box-builder' );
-			}
-
+			$new_columns['path']        = __( 'Path', 'meta-box-builder' );
 			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' ) . Data::tooltip( __( 'You must set the modified time to a Unix timestamp for it to display correctly.', 'meta-box-builder' ) );
 		}
 
@@ -355,18 +351,18 @@ class AdminColumns {
 	}
 
 	public function show_column( $column, $post_id ) {
-		if ( ! in_array( $column, [ 'for', 'location', 'shortcode', 'sync_status' ], true ) ) {
+		if ( ! in_array( $column, [ 'for', 'location', 'shortcode', 'path', 'sync_status' ], true ) ) {
 			return;
 		}
 
 		$post_name = $post_id;
-		if ( $column === 'sync_status' && LocalJson::is_enabled() ) {
+		if ( in_array( $column, [ 'sync_status', 'path' ], true ) && LocalJson::is_enabled() ) {
 			if ( is_numeric( $post_id ) ) {
 				$post      = get_post( $post_id );
 				$post_name = $post->post_name;
 			}
 
-			$this->show_sync_status( $post_name );
+			call_user_func( [ $this, "show_$column" ], $post_name );
 			return;
 		}
 
@@ -406,10 +402,15 @@ class AdminColumns {
 		$available_statuses = [ 
 			'error_file_permission' => __( 'Error: File permission', 'meta-box-builder' ),
 			'sync_available' => __( 'Sync available', 'meta-box-builder' ),
+			'no_json' => __( 'No JSON file', 'meta-box-builder' ),
 			'synced' => __( 'Synced', 'meta-box-builder' ),
 		];
 
 		$status = 'sync_available';
+
+		if ( $sync_data['local'] === null ) {
+			$status = 'no_json';
+		}
 
 		if ( $sync_data['is_newer'] === 0 ) {
 			$status = 'synced';

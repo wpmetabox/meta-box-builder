@@ -8,9 +8,14 @@ $baseDir = dirname($vendorDir);
 return array(
     'eLightUp\\' => array($vendorDir . '/elightup/twig'),
     'Riimu\\Kit\\PHPEncoder\\' => array($vendorDir . '/riimu/kit-phpencoder/src'),
+    'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
+    'Opis\\Uri\\' => array($vendorDir . '/opis/uri/src'),
+    'Opis\\String\\' => array($vendorDir . '/opis/string/src'),
+    'Opis\\JsonSchema\\' => array($vendorDir . '/opis/json-schema/src'),
     'MetaBox\\Support\\' => array($vendorDir . '/meta-box/support'),
     'MBB\\SettingsPage\\' => array($baseDir . '/modules/settings-page/src'),
     'MBB\\Relationships\\' => array($baseDir . '/modules/relationships/src'),
     'MBB\\' => array($baseDir . '/src'),
     'MBBParser\\' => array($vendorDir . '/meta-box/mbb-parser/src'),
+    'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );

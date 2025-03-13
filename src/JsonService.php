@@ -59,9 +59,9 @@ class JsonService {
 		}
 
 		$post_type   = $params['post_type'] ?? 'meta-box';
-		$post_status = $params['post_status'] ?? 'publish';
 
-		$meta_boxes = self::get_meta_boxes( compact( 'post_type', 'post_status' ) );
+		$meta_boxes = self::get_meta_boxes();
+
 		foreach ( $meta_boxes as $meta_box ) {
 			ksort( $meta_box );
 			$id        = $meta_box['id'];
@@ -148,13 +148,16 @@ class JsonService {
 	}
 
 	public static function get_meta_boxes( array $query_params = [] ): array {
+		$allowed_statuses = [ 'publish', 'draft', 'pending', 'future', 'private', 'inherit', 'trash' ];
+
 		$defaults     = [ 
 			'post_type' => 'meta-box',
-			'post_status' => get_post_stati(),
+			'post_status' => $allowed_statuses,
 			'posts_per_page' => -1,
 			'no_found_rows' => true,
 			'update_post_term_cache' => false,
 		];
+
 		$query_params = wp_parse_args( $query_params, $defaults );
 		$query        = new \WP_Query( $query_params );
 
