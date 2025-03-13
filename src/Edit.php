@@ -37,17 +37,6 @@ class Edit extends BaseEditPage {
 			return;
 		}
 
-		if ( isset( $data['json_path_error'] ) && ! empty( $data['json_path_error'] ) ) {
-			?>
-			<div class="notice notice-error">
-				<p>
-					<?php esc_html_e( $data['json_path_error'] ) ?>
-				</p>
-			</div>
-			<?php
-			return;
-		}
-
 		$json = JsonService::get_json( [ 
 			'post_id' => get_the_ID(),
 		] );
@@ -57,6 +46,19 @@ class Edit extends BaseEditPage {
 		}
 
 		$json = reset( $json );
+
+		$is_writable = $json['is_writable'] ?? false;
+
+		if ( ! $is_writable ) {
+			?>
+			<div class="notice notice-error">
+				<p>
+					<?php esc_html_e( 'The JSON file is not writable. Please check the file permission.', 'meta-box-builder' ) ?>
+				</p>
+			</div>
+			<?php
+			return;
+		}
 
 		if ( ! isset( $json['local'] ) ) {
 			return;

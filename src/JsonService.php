@@ -45,6 +45,8 @@ class JsonService {
 				'show_split_view' => true,
 			] );
 
+			$is_writeable = is_writable( $file );
+
 			$items[ $local_minimized['id'] ] = [ 
 				'file' => $file,
 				'local' => $json,
@@ -55,10 +57,11 @@ class JsonService {
 				'id' => $local_minimized['id'],
 				'remote' => null,
 				'diff' => $diff,
+				'is_writable' => $is_writeable,
 			];
 		}
 
-		$post_type   = $params['post_type'] ?? 'meta-box';
+		$post_type = $params['post_type'] ?? 'meta-box';
 
 		$meta_boxes = self::get_meta_boxes();
 
@@ -72,6 +75,9 @@ class JsonService {
 			unset( $meta_box['post_id'] );
 			unset( $meta_box['post_type'] );
 
+			$file         = self::get_path( $id );
+			$is_writeable = is_writable( $file );
+
 			// No file found
 			if ( ! isset( $items[ $id ] ) ) {
 				$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
@@ -81,6 +87,8 @@ class JsonService {
 				] );
 
 				$items[ $id ] = [ 
+					'file' => $file,
+					'is_writable' => $is_writeable,
 					'id' => $id,
 					'is_newer' => -1,
 					'diff' => $diff,
@@ -104,12 +112,14 @@ class JsonService {
 			] );
 
 			$items[ $id ] = array_merge( $items[ $id ], [ 
+				'file' => $file,
 				'id' => $id,
 				'is_newer' => $is_newer,
 				'remote' => $meta_box,
 				'diff' => $diff,
 				'post_id' => $post_id,
 				'post_type' => $post_type,
+				'is_writable' => $is_writeable,
 			] );
 		}
 
@@ -121,11 +131,13 @@ class JsonService {
 		}
 
 		foreach ( [ 'is_newer', 'post_id', 'file' ] as $key ) {
-			if ( isset( $params[ $key ] ) ) {
-				$items = array_filter( $items, function ($item) use ($key, $params) {
-					return isset( $item[ $key ] ) && $item[ $key ] == $params[ $key ];
-				} );
+			if ( ! isset( $params[ $key ] ) ) {
+				continue;
 			}
+
+			$items = array_filter( $items, function ($item) use ($key, $params) {
+				return isset( $item[ $key ] ) && $item[ $key ] == $params[ $key ];
+			} );
 		}
 
 		return $items;
@@ -148,11 +160,11 @@ class JsonService {
 	}
 
 	public static function get_meta_boxes( array $query_params = [] ): array {
-		$allowed_statuses = [ 'publish', 'draft', 'pending', 'future', 'private', 'inherit', 'trash' ];
+		$default_statuses = [ 'publish', 'draft', 'pending', 'future', 'private', 'inherit' ];
 
-		$defaults     = [ 
+		$defaults = [ 
 			'post_type' => 'meta-box',
-			'post_status' => $allowed_statuses,
+			'post_status' => $default_statuses,
 			'posts_per_page' => -1,
 			'no_found_rows' => true,
 			'update_post_term_cache' => false,
@@ -241,5 +253,37 @@ class JsonService {
 		} );
 
 		return $mb_json_paths;
+	}
+
+	/**
+	 * Get the path to the .json file of a meta box, please note that we need to 
+	 * check json content too because the file name might not match the meta box id
+	 * 
+	 * @param string $meta_box_id
+	 * 
+	 * @return string
+	 */
+	public static function get_path( string $meta_box_id ): string {
+		$files = self::get_files();
+
+		foreach ( $files as $file ) {
+			[ $data, $error ] = LocalJson::read_file( $file );
+
+			if ( $data === null || $error !== null ) {
+				continue;
+			}
+
+			$json = json_decode( $data, true );
+
+			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $json ) ) {
+				continue;
+			}
+
+			if ( $json['id'] === $meta_box_id ) {
+				return $file;
+			}
+		}
+
+		return get_template_directory() . "/mb-json/$meta_box_id.json";
 	}
 }

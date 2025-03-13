@@ -22,4 +22,16 @@ jQuery( $ => {
 	$input.on( 'change', () => {
 		$submit.prop( 'disabled', !$input.val() );
 	} );
+
+	const renderJsonListTable = () => {
+		const template = document.querySelector( '#mb-sync-list' );
+		if ( template === null ) {
+			return;
+		}
+
+		const tbody = template.content.querySelector( 'tbody' );
+		document.querySelector( '.wp-list-table tbody' )?.replaceWith( tbody );
+	};
+
+	renderJsonListTable();
 } );

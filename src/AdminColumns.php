@@ -175,10 +175,11 @@ class AdminColumns {
 		$columns = $wp_list_table->get_columns();
 		$hidden  = get_hidden_columns( $wp_list_table->screen );
 		$json    = JsonService::get_json();
-		// Filter where local is not null
 
+		// Filter where local is not null
+		// and its should not imported yet.
 		$json = array_filter( $json, function ($item) {
-			return ! empty( $item['local'] ) && $item['post_type'] === $this->post_type && $item['is_newer'] > 0;
+			return ! empty( $item['local'] ) && empty( $item['remote'] );
 		} );
 		?>
 		<template id="mb-sync-list">
@@ -236,14 +237,6 @@ class AdminColumns {
 				<?php endforeach; ?>
 			</tbody>
 		</template>
-
-		<script>
-			document.addEventListener( 'DOMContentLoaded', () => {
-				const template = document.querySelector( '#mb-sync-list' );
-				const tbody = template.content.querySelector( 'tbody' );
-				document.querySelector( '.wp-list-table tbody' ).replaceWith( tbody );
-			} );
-		</script>
 		<?php
 	}
 
@@ -303,7 +296,7 @@ class AdminColumns {
 			return;
 		}
 
-		wp_enqueue_style( 'mbb-list', MBB_URL . 'assets/css/list.css', [], MBB_VER );
+		wp_enqueue_style( 'mbb-list', MBB_URL . 'assets/css/list.css', [], time() );
 		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], MBB_VER, true );
 		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], MBB_VER, true );
 		wp_enqueue_style( 'mbb-dialog', MBB_URL . 'assets/css/dialog.css', [], MBB_VER );
@@ -335,7 +328,7 @@ class AdminColumns {
 			$new_columns['shortcode'] = __( 'Shortcode', 'meta-box-builder' ) . Data::tooltip( __( 'Embed the field group in the front end for users to submit posts.', 'meta-box-builder' ) );
 		}
 
-		if ( LocalJson::is_enabled() ) {
+		if ( LocalJson::is_enabled() && ! $this->is_status( 'trash' ) ) {
 			$new_columns['path']        = __( 'Path', 'meta-box-builder' );
 			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' ) . Data::tooltip( __( 'You must set the modified time to a Unix timestamp for it to display correctly.', 'meta-box-builder' ) );
 		}
@@ -401,9 +394,9 @@ class AdminColumns {
 
 		$available_statuses = [ 
 			'error_file_permission' => __( 'Error: File permission', 'meta-box-builder' ),
-			'sync_available' => __( 'Sync available', 'meta-box-builder' ),
-			'no_json' => __( 'No JSON file', 'meta-box-builder' ),
-			'synced' => __( 'Synced', 'meta-box-builder' ),
+			'sync_available'        => __( 'Sync available', 'meta-box-builder' ),
+			'no_json'               => __( 'No JSON file', 'meta-box-builder' ),
+			'synced'                => __( 'Synced', 'meta-box-builder' ),
 		];
 
 		$status = 'sync_available';
@@ -414,6 +407,10 @@ class AdminColumns {
 
 		if ( $sync_data['is_newer'] === 0 ) {
 			$status = 'synced';
+		}
+
+		if ( ! $sync_data['is_writable'] ) {
+			$status = 'error_file_permission';
 		}
 		?>
 		<span class="mbb-label" data-status="<?php esc_attr_e( $status ) ?>" data-for-id="<?php esc_attr_e( $meta_box_id ) ?>">

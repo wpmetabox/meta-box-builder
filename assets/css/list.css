@@ -61,7 +61,7 @@
 	color: #218358;
 }
 
-.mbb-label[data-status="error"] {
+.mbb-label[data-status="error_file_permission"], .mbb-label[data-status="no_json"] {
 	background: #FFF7F8;
 	color: #CA244D;
 }

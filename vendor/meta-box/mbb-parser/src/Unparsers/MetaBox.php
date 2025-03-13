@@ -181,7 +181,7 @@ class MetaBox extends Base {
 	}
 
 	public function unparse_modified() {
-		$this->settings['modified'] = $this->lookup( [ 'modified', 'settings.modified' ], 0 );
+		$this->settings['modified'] = $this->lookup( [ 'modified', 'meta_box.modified' ], 0 );
 	}
 
 	public function unparse_meta_box() {

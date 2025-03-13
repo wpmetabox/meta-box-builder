@@ -160,6 +160,11 @@
 	max-height: 300px;
 }
 
+#mbb-diff-dialog table.diff td, 
+#mbb-diff-dialog table.diff th {
+	font-size: 12px !important;
+}
+
 #mbb-diff-dialog footer {
 	padding: 10px 20px;
 	display: flex;
