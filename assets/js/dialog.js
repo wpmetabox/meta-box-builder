@@ -59,9 +59,7 @@ const showDialog = async ( mbbId ) => {
     dialog.showModal();
 };
 
-
 document.addEventListener( 'DOMContentLoaded', () => {
-
     document.querySelectorAll( '[data-dialog]' ).forEach( button => {
         button.addEventListener( 'click', async () => {
             await showDialog( button.dataset.dialog );

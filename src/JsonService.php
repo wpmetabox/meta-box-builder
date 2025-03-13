@@ -75,7 +75,7 @@ class JsonService {
 			unset( $meta_box['post_id'] );
 			unset( $meta_box['post_type'] );
 
-			$file         = self::get_path( $id );
+			$file         = self::get_future_path( $id );
 			$is_writeable = is_writable( $file );
 
 			// No file found
@@ -256,34 +256,13 @@ class JsonService {
 	}
 
 	/**
-	 * Get the path to the .json file of a meta box, please note that we need to 
-	 * check json content too because the file name might not match the meta box id
+	 * Get the path to the future .json file
 	 * 
 	 * @param string $meta_box_id
 	 * 
 	 * @return string
 	 */
-	public static function get_path( string $meta_box_id ): string {
-		$files = self::get_files();
-
-		foreach ( $files as $file ) {
-			[ $data, $error ] = LocalJson::read_file( $file );
-
-			if ( $data === null || $error !== null ) {
-				continue;
-			}
-
-			$json = json_decode( $data, true );
-
-			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $json ) ) {
-				continue;
-			}
-
-			if ( $json['id'] === $meta_box_id ) {
-				return $file;
-			}
-		}
-
-		return get_template_directory() . "/mb-json/$meta_box_id.json";
+	public static function get_future_path( string $meta_box_id ): string {
+		return self::get_paths()[0] . "/$meta_box_id.json";
 	}
 }

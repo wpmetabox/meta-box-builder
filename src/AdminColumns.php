@@ -237,6 +237,14 @@ class AdminColumns {
 				<?php endforeach; ?>
 			</tbody>
 		</template>
+
+		<script>
+			document.addEventListener( 'DOMContentLoaded', () => {
+				const template = document.querySelector( '#mb-sync-list' );
+				const tbody = template.content.querySelector( 'tbody' );
+				document.querySelector( '.wp-list-table tbody' ).replaceWith( tbody );
+			} );
+		</script>
 		<?php
 	}
 
@@ -257,8 +265,6 @@ class AdminColumns {
 
 		$json = JsonService::get_json();
 
-		// Filter where local is not null
-		// and its should not imported yet.
 		$json = array_filter( $json, function ($item) {
 			return ! empty( $item['local'] ) && empty( $item['remote'] );
 		} );
@@ -274,7 +280,7 @@ class AdminColumns {
 				'<a %s href="%s">%s <span class="count">(%s)</span></a>',
 				$this->is_status( 'sync' ) ? 'class="current"' : '',
 				$url,
-				esc_html( __( 'Local JSON files', 'meta-box-builder' ) ),
+				esc_html( __( 'Sync available', 'meta-box-builder' ) ),
 				$count
 			);
 		}
@@ -393,9 +399,9 @@ class AdminColumns {
 		}
 
 		$available_statuses = [ 
-			'error_file_permission' => __( 'Error: File permission', 'meta-box-builder' ),
+			'error_file_permission' => __( 'Error: Not writable', 'meta-box-builder' ),
 			'sync_available'        => __( 'Sync available', 'meta-box-builder' ),
-			'no_json'               => __( 'No JSON file', 'meta-box-builder' ),
+			'no_json'               => __( 'No JSON available', 'meta-box-builder' ),
 			'synced'                => __( 'Synced', 'meta-box-builder' ),
 		];
 
@@ -417,7 +423,7 @@ class AdminColumns {
 			<?php esc_html_e( $available_statuses[ $status ] ) ?>
 		</span>
 
-		<?php if ( $sync_data['is_newer'] <= 0 ) {
+		<?php if ( $sync_data['is_newer'] <= 0 || ! $sync_data['is_writable'] ) {
 			return;
 		}
 		?>
