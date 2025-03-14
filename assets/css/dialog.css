@@ -1,0 +1,190 @@
+#mbb-diff-dialog {
+	position: fixed;
+	top: 40px;
+	bottom: 40px;
+	right: 40px;
+	left: 40px;
+	width: auto;
+	height: auto;
+	z-index: 9999;
+	overflow: hidden;
+	border: none;
+	border-radius: 4px;
+	box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+	background: #fff;
+	padding: 0;
+}
+
+.mbb-diff-dialog-wrapper {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.mbb-diff-dialog-main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#mbb-diff-dialog header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 20px;
+}
+
+#mbb-diff-dialog header h2 {
+	margin: 0;
+	font-size: 1.4em;
+	font-weight: normal;
+}
+
+#mbb-diff-dialog .mbb-diff-dialog-button-group {
+	width: 100%;
+	display: flex;
+	gap: 10px;
+	background: #f6f7f7;
+	padding: 10px 20px;
+}
+
+#mbb-diff-dialog .mbb-diff-dialog-button-group>div {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+#mbb-diff-dialog .mbb-diff-dialog-button-group h3,
+#mbb-diff-dialog .mbb-diff-dialog-button-group p {
+	color: #333;
+	margin: 2px 0;
+}
+
+#mbb-diff-dialog .mbb-diff-dialog-button-group .text-sm {
+	font-size: 0.8em;
+	font-weight: normal;
+}
+
+#mbb-diff-dialog header button {
+	background: none;
+	border: none;
+	color: #666;
+	cursor: pointer;
+}
+
+#mbb-diff-dialog header button:hover {
+	color: #005177;
+}
+
+.mbb-diff-dialog-content {
+	flex: 1;
+	display: flex;
+	justify-content: space-between;
+	border-radius: 10px;
+	overflow: auto;
+}
+
+#mbb-diff-dialog .button-sync {
+	background: none;
+	color: #0073aa;
+	border: 1px solid #0073aa;
+	border-radius: 4px;
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#mbb-diff-dialog .button-sync:hover {
+	background: #0073aa;
+	color: #fff;
+}
+
+#mbb-diff-dialog .button-sync:disabled {
+	background: none;
+	color: #0073aa;
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.sync-status-text {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	animation: fadeIn 0.5s ease-in-out;
+}
+
+.sync-success-content {
+	background: #D6F1DF;
+	color: #218358;
+}
+
+.sync-error-content {
+	background: #FFF7F8;
+	color: #CA244D;
+}
+
+.no-changes-content {
+	color: #666;
+	font-size: 1.2em;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.mbb-diff-dialog-content>div {
+	width: 48%;
+}
+
+.mbb-diff-dialog-content h3 {
+	margin-top: 0;
+	font-size: 1.2em;
+}
+
+.mbb-diff-dialog-content pre {
+	background: #f6f7f7;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	padding: 10px;
+	overflow-x: auto;
+	max-height: 300px;
+}
+
+#mbb-diff-dialog table.diff td, 
+#mbb-diff-dialog table.diff th {
+	font-size: 12px !important;
+}
+
+#mbb-diff-dialog footer {
+	padding: 10px 20px;
+	display: flex;
+	justify-content: flex-end;
+	padding-top: 10px;
+	margin-top: 20px;
+}
+
+#mbb-diff-dialog footer button {
+	margin-left: 10px;
+}
+
+#mbb-diff-dialog-close {
+	font-size: 2em;
+	text-decoration: none;
+}
+[data-if] {
+	display: none;
+}
+
+[data-if="true"] {
+	display: block;
+}

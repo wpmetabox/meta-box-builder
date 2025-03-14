@@ -42,8 +42,10 @@ new Extensions\FrontendSubmission();
 new Extensions\TextLimiter();
 
 if ( is_admin() ) {
+	new About();
 	new Import();
 	new Export();
+	new LocalJson();
 	new Edit( 'meta-box', __( 'Field Group ID', 'meta-box-builder' ) );
 	new AdminColumns();
 }
