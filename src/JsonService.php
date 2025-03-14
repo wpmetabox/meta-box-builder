@@ -238,6 +238,10 @@ class JsonService {
 	 * @return string
 	 */
 	public static function get_future_path( string $meta_box_id ): string {
+		if ( ! LocalJson::is_enabled()) {
+			return '';
+		}
+
 		return self::get_paths()[0] . "/$meta_box_id.json";
 	}
 }

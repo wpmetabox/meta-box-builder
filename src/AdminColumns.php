@@ -500,7 +500,7 @@ class AdminColumns {
 
 		$data = reset( $json );
 
-		if ( ! is_array( $data ) || ! isset( $data['file'] ) ) {
+		if ( ! is_array( $data ) || ! isset( $data['file'] ) || ! file_exists( $data['file'] ) ) {
 			return;
 		}
 
