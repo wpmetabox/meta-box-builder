@@ -254,6 +254,9 @@ class AdminColumns {
 
 	public function admin_table_bulk_actions( $actions ) {
 		if ( $this->is_status( 'sync' ) ) {
+			unset( $actions['edit'] );
+			unset( $actions['trash'] );
+			
 			$actions['mbb-sync'] = __( 'Sync changes', 'meta-box-builder' );
 		}
 

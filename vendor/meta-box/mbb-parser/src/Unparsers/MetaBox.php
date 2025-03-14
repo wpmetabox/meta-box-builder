@@ -292,8 +292,10 @@ class MetaBox extends Base {
 		unset( $settings['settings'] );
 		unset( $settings['fields'] );
 
-		$settings['custom_settings'] = $custom_settings;
-
+		if ( !empty( $custom_settings ) ) {
+			$settings['custom_settings'] = $custom_settings;
+		}
+		
 		$this->settings_parser = new Settings( $settings );
 		$this->settings_parser->unparse();
 

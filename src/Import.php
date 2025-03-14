@@ -85,6 +85,7 @@ class Import {
 			$unparser->unparse();
 			$post = $unparser->get_settings();
 			$post_id = wp_insert_post( $post );
+
 			if ( ! $post_id ) {
 				wp_die( wp_kses_post( sprintf(
 					// Translators: %1$s - post type, %2$s - post title, %3$s - go back URL.
@@ -94,6 +95,7 @@ class Import {
 					admin_url( "edit.php?post_type={$post['post_type']}" )
 				) ) );
 			}
+
 			if ( is_wp_error( $post_id ) ) {
 				wp_die( wp_kses_post( implode( '<br>', $post_id->get_error_messages() ) ) );
 			}
@@ -102,6 +104,9 @@ class Import {
 			foreach ( $meta_keys as $meta_key ) {
 				update_post_meta( $post_id, $meta_key, $post[ $meta_key ] );
 			}
+
+			// After importing, we write to the json file too.
+			LocalJson::use_database( [ 'post_id' => $post_id ] );
 		}
 
 		return true;

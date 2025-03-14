@@ -20,11 +20,11 @@ class JsonService {
 			}
 
 			$raw_json = json_decode( $data, true );
-			
+
 			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $raw_json ) ) {
 				continue;
 			}
-			
+
 			$private = $json['private'] ?? false;
 			if ( $private ) {
 				continue;
@@ -49,7 +49,7 @@ class JsonService {
 
 			$items[ $local_minimized['id'] ] = [ 
 				'file' => $file,
-				'local' => $json,
+				'local' => $raw_json,
 				'local_minimized' => $local_minimized,
 				'is_newer' => true,
 				'post_id' => null,

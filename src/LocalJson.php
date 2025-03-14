@@ -114,6 +114,7 @@ class LocalJson {
 				return false;
 			}
 		}
+		
 		$post_array = [ 'ID' => $data['post_id'] ];
 		$data       = $data['local'];
 		$unparser   = new \MBBParser\Unparsers\MetaBox( $data );
