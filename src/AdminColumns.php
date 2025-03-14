@@ -494,7 +494,7 @@ class AdminColumns {
 
 	public function show_path( string $meta_box_id ): void {
 		$json = JsonService::get_json( [ 
-			'id' => $meta_box_id,
+			'id' 		=> $meta_box_id,
 			'post_type' => $this->post_type,
 		] );
 

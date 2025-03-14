@@ -60,6 +60,32 @@ class MetaBox extends Base {
 		$this->unparse_show_hide();
 	}
 
+	public function to_minimal_format() {
+		$settings = $this->get_settings();
+		$meta_key = self::TYPE_META[ $settings['post_type'] ] ?? 'meta_box';
+		$settings = array_merge( $settings, $settings[ $meta_key ] );
+
+		foreach ( $this->get_unneeded_keys() as $key ) {
+			if ( $key === '$schema' ) {
+				continue;
+			}
+
+			if ( $key === 'settings' ) {
+				if ( is_array( $settings ) && ! empty( $settings['custom_settings'] ) ) {
+					$settings = array_merge( $settings, [ 
+						'custom_settings' => $settings['custom_settings'],
+					] );
+				}
+			}
+
+			unset( $settings[ $key ] );
+		}
+
+		ksort( $settings );
+
+		return $settings;
+	}
+
 	public function unparse_schema() {
 		$schema = $this->lookup( [ '$schema' ], '' );
 		if ( ! empty( $schema ) ) {
@@ -295,7 +321,7 @@ class MetaBox extends Base {
 		if ( !empty( $custom_settings ) ) {
 			$settings['custom_settings'] = $custom_settings;
 		}
-		
+
 		$this->settings_parser = new Settings( $settings );
 		$this->settings_parser->unparse();
 
@@ -511,9 +537,9 @@ class MetaBox extends Base {
 
 		// Add extra keys for other post types
 		$extras = [ 
-			'meta_box' => [ 'relationship' ],
-			'mb-relationship' => [ 'fields', 'meta_box', 'settings', 'data' ],
-			'mb-settings-page' => [ 'fields', 'meta_box', 'settings', 'data', 'relationship' ],
+			'meta_box' => [ 'meta_box', 'fields' ],
+			'mb-relationship' => [ 'relationship' ],
+			'mb-settings-page' => [ 'settings' ],
 		];
 
 		$post_type = $this->post_type ?? 'meta-box';
@@ -521,6 +547,12 @@ class MetaBox extends Base {
 		return array_merge( $keys, $extras[ $post_type ] ?? [] );
 	}
 
+	/**
+	 * By default, we move all keys under the root to the settings array.
+	 * Except these keys
+	 * 
+	 * @return string[]
+	 */
 	public function get_unneeded_keys(): array {
 		$default = [ 
 			'$schema',

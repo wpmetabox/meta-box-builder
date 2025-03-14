@@ -77,13 +77,9 @@ class LocalJson {
 	public static function use_json( array $args ): bool {
 		$post_name  = $args['post_name'];
 		$post       = get_page_by_path( $post_name, OBJECT, $args['post_type'] );
-		$post_array = [];
 
-		if ( $post ) {
-			$post_array = [ 
-				'ID' => $post->ID,
-				'post_type' => $post->post_type,
-			];
+		if ( ! $post ) {
+			return false;
 		}
 
 		$json = JsonService::get_json( [ 
@@ -172,27 +168,13 @@ class LocalJson {
 
 		$post_data = (array) $post;
 		$meta_box  = get_post_meta( $post->ID, 'meta_box', true ) ?: [];
-		$post_data = array_merge( $post_data, $meta_box );
+		$post_data['meta_box'] = $meta_box;
 		$settings  = get_post_meta( $post->ID, 'settings', true );
-
-		if ( is_array( $settings ) && isset( $settings['custom_settings'] ) ) {
-			$post_data = array_merge( $post_data, [ 
-				'custom_settings' => $settings['custom_settings'],
-			] );
-		}
+		$post_data['settings'] = (array) $settings;
 
 		$unparser      = new \MBBParser\Unparsers\MetaBox( $post_data );
-		$unneeded_keys = $unparser->get_unneeded_keys();
-		$schema        = \MBBParser\Unparsers\MetaBox::SCHEMAS['meta-box'] ?? null;
-
-		// Remove unneeded keys
-		foreach ( $unneeded_keys as $key ) {
-			unset( $post_data[ $key ] );
-		}
-
-		$post_data = array_merge( [ 
-			'$schema' => $schema,
-		], $post_data );
+		$unparser->unparse();
+		$post_data     = $unparser->to_minimal_format();
 
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 		$success   = self::write_file( $file_path, $post_data );

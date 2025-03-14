@@ -33,13 +33,7 @@ class JsonService {
 			$unparser = new \MBBParser\Unparsers\MetaBox( $raw_json );
 			$unparser->unparse();
 			$json            = $unparser->get_settings();
-			$local_minimized = $json['meta_box'];
-			ksort( $local_minimized );
-
-			$schema          = \MBBParser\Unparsers\MetaBox::SCHEMAS['meta-box'] ?? null;
-			$local_minimized = array_merge( [ 
-				'$schema' => $schema,
-			], $local_minimized );
+			$local_minimized = $unparser->to_minimal_format();
 
 			$diff = wp_text_diff( '', wp_json_encode( $raw_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
 				'show_split_view' => true,
@@ -66,7 +60,6 @@ class JsonService {
 		$meta_boxes = self::get_meta_boxes();
 
 		foreach ( $meta_boxes as $meta_box ) {
-			ksort( $meta_box );
 			$id        = $meta_box['id'];
 			$post_id   = $meta_box['post_id'];
 			$post_type = $meta_box['post_type'];
@@ -149,7 +142,7 @@ class JsonService {
 	 * @param string $post_type
 	 * @return string[]
 	 */
-	private static function get_minimal_meta_keys( string $post_type ): array {
+	private static function get_related_meta_keys( string $post_type ): array {
 		$meta_keys = [ 
 			'meta-box' => [ 'meta_box' ],
 			'mb-relationship' => [ 'relationship' ],
@@ -160,11 +153,9 @@ class JsonService {
 	}
 
 	public static function get_meta_boxes( array $query_params = [] ): array {
-		$default_statuses = [ 'publish', 'draft', 'pending', 'future', 'private', 'inherit' ];
-
 		$defaults = [ 
 			'post_type' => 'meta-box',
-			'post_status' => $default_statuses,
+			'post_status' => 'any',
 			'posts_per_page' => -1,
 			'no_found_rows' => true,
 			'update_post_term_cache' => false,
@@ -176,37 +167,23 @@ class JsonService {
 		$meta_boxes = [];
 		foreach ( $query->posts as $post ) {
 			$post_data = (array) $post;
-			$meta_keys = self::get_minimal_meta_keys( $query_params['post_type'] );
+			$meta_keys = self::get_related_meta_keys( $query_params['post_type'] );
 
 			foreach ( $meta_keys as $meta_key ) {
 				$main_meta = get_post_meta( $post->ID, $meta_key, true ) ?: [];
-				$post_data = array_merge( $post_data, $main_meta );
+				$post_data[ $meta_key ] = $main_meta;
 			}
 
 			$settings = get_post_meta( $post->ID, 'settings', true );
-
-			if ( is_array( $settings ) && ! empty( $settings['custom_settings'] ) ) {
-				$post_data = array_merge( $post_data, [ 
-					'custom_settings' => $settings['custom_settings'],
-				] );
-			}
+			$post_data['settings'] = (array) $settings;
 
 			$unparser      = new \MBBParser\Unparsers\MetaBox( $post_data );
-			$unneeded_keys = $unparser->get_unneeded_keys();
-			$schema        = \MBBParser\Unparsers\MetaBox::SCHEMAS[ $query_params['post_type'] ] ?? null;
-
-			// Remove unneeded keys
-			foreach ( $unneeded_keys as $key ) {
-				unset( $post_data[ $key ] );
-			}
+			$unparser->unparse();
+			$post_data     = $unparser->to_minimal_format();
 
 			// Extra post_id, post_type for filtering, check this line carefully if you want to change it
 			$post_data['post_id']   = $post->ID;
 			$post_data['post_type'] = $query_params['post_type'];
-
-			$post_data = array_merge( [ 
-				'$schema' => $schema,
-			], $post_data );
 
 			$meta_boxes[ $post->ID ] = $post_data;
 		}
