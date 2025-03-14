@@ -95,7 +95,7 @@ class JsonService {
 				continue;
 			}
 
-			$local_modified = $items[ $id ]['local']['modified'] ?? 0;
+			$local_modified = $items[ $id ]['local_minimized']['modified'] ?? 0;
 			$is_newer       = version_compare( $local_modified, $meta_box['modified'] ?? 0 );
 
 			$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
@@ -110,8 +110,7 @@ class JsonService {
 				'remote' => $meta_box,
 				'diff' => $diff,
 				'post_id' => $post_id,
-				'post_type' => $post_type,
-				'is_writable' => $is_writeable,
+				'post_type' => $post_type
 			] );
 		}
 

@@ -44,7 +44,7 @@ class Edit extends BaseEditPage {
 		$is_newer = $json['is_newer'] ?? false;
 
 		$builder_version = $json['remote']['modified'] ?? 0;
-		$json_version    = $json['local']['modified'] ?? 0;
+		$json_version    = $json['local_minimized']['modified'] ?? 0;
 
 		if ( $is_newer !== 0 ) {
 			?>
