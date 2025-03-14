@@ -211,7 +211,6 @@ class Field extends Base {
 			'label_description' => '',
 			'desc' => '',
 			'size' => '',
-			'columns' => '',
 			'hide_from_rest' => false,
 			'hide_from_front' => false,
 			'before' => '',

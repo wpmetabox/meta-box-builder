@@ -66,7 +66,7 @@ class TabsTest extends TestCase {
 
 			// Check fields for tab fields
 			$this->assertArrayHasKey( 'fields', $result, "[$caseName] Result should have 'fields'" );
-			$fields = $result['fields'];
+			$fields = array_values( $result['fields'] );
 			$this->assertGreaterThanOrEqual( 4, count( $fields ), "[$caseName] Should have at least 4 fields (2 tabs + 2 fields)" );
 
 			$tabs    = $case['is_new_format'] ? $case['input']['tabs'] : $case['input']['meta_box']['tabs'];

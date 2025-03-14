@@ -9,15 +9,8 @@ class Base {
 
 	protected $empty_keys = [];
 
-	protected $original_settings = [];
-
 	public function __construct( $settings = [] ) {
-		$this->original_settings = (array) $settings;
 		$this->settings = (array) $settings;
-	}
-
-	public function has_schema() {
-		return array_key_exists( '$schema', $this->original_settings );
 	}
 
 	public function set_settings( $settings ) {
