@@ -75,13 +75,6 @@ class LocalJson {
 	 * @return bool Success or not
 	 */
 	public static function use_json( array $args ): bool {
-		$post_name  = $args['post_name'];
-		$post       = get_page_by_path( $post_name, OBJECT, $args['post_type'] );
-
-		if ( ! $post ) {
-			return false;
-		}
-
 		$json = JsonService::get_json( [ 
 			'id' => $args['post_name'],
 			'post_type' => $args['post_type'],

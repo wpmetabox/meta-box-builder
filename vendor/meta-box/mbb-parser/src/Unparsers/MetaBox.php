@@ -208,6 +208,9 @@ class MetaBox extends Base {
 
 	public function unparse_modified() {
 		$this->settings['modified'] = $this->lookup( [ 'modified', 'meta_box.modified' ], 0 );
+		$this->settings['meta_box']['modified'] = $this->settings['modified'];
+		
+		return $this;
 	}
 
 	public function unparse_meta_box() {
@@ -518,33 +521,6 @@ class MetaBox extends Base {
 			}
 		}
 		return $this;
-	}
-
-	private function get_known_keys(): array {
-		$keys = [ 
-			'$schema',
-			'id',
-			'title',
-			'post_type',
-			'post_name',
-			'post_date',
-			'post_status',
-			'post_content',
-			'settings',
-			'modified',
-			'data',
-		];
-
-		// Add extra keys for other post types
-		$extras = [ 
-			'meta_box' => [ 'meta_box', 'fields' ],
-			'mb-relationship' => [ 'relationship' ],
-			'mb-settings-page' => [ 'settings' ],
-		];
-
-		$post_type = $this->post_type ?? 'meta-box';
-
-		return array_merge( $keys, $extras[ $post_type ] ?? [] );
 	}
 
 	/**

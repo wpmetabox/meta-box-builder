@@ -25,7 +25,7 @@ class JsonService {
 				continue;
 			}
 
-			$private = $json['private'] ?? false;
+			$private = $raw_json['private'] ?? false;
 			if ( $private ) {
 				continue;
 			}
@@ -68,9 +68,6 @@ class JsonService {
 			unset( $meta_box['post_id'] );
 			unset( $meta_box['post_type'] );
 
-			$file         = self::get_future_path( $id );
-			$is_writeable = is_writable( $file );
-
 			// No file found
 			if ( ! isset( $items[ $id ] ) ) {
 				$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
@@ -78,6 +75,9 @@ class JsonService {
 				$diff = wp_text_diff( $left, '', [ 
 					'show_split_view' => true,
 				] );
+
+				$file         = self::get_future_path( $id );
+				$is_writeable = is_writable( $file );
 
 				$items[ $id ] = [ 
 					'file' => $file,
@@ -105,7 +105,6 @@ class JsonService {
 			] );
 
 			$items[ $id ] = array_merge( $items[ $id ], [ 
-				'file' => $file,
 				'id' => $id,
 				'is_newer' => $is_newer,
 				'remote' => $meta_box,
