@@ -32,6 +32,10 @@ class TabsTest extends TestCase {
 						'tab_style' => 'left',
 						'tab_default_active' => 'social',
 						'tab_remember' => false,
+						'fields' => [ 
+							[ 'id' => 'phone', 'type' => 'text', 'name' => 'Phone', 'tab' => 'contact' ],
+							[ 'id' => 'twitter', 'type' => 'text', 'name' => 'Twitter', 'tab' => 'social' ],
+						],
 					],
 					'fields' => [ 
 						[ 'id' => 'phone', 'type' => 'text', 'name' => 'Phone', 'tab' => 'contact' ],
