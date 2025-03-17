@@ -1,25 +1,11 @@
 {
 	"name": "wpmetabox/meta-box-builder",
-	"abandoned": "meta-box/meta-box-builder",
 	"description": "MB Builder extension for Meta Box",
+	"license": "GPL-2.0-or-later",
 	"type": "wordpress-plugin",
 	"config": {
 		"prepend-autoloader": false
 	},
-	"repositories": [
-		{
-			"type": "git",
-			"url": "https://github.com/elightup/twig.git"
-		},
-		{
-			"type": "git",
-			"url": "https://github.com/wpmetabox/support.git"
-		},
-		{
-			"type": "git",
-			"url": "git@github.com:wpmetabox/mbb-parser.git"
-		}
-	],
 	"autoload": {
 		"psr-4": {
 			"MBB\\": "src/",
@@ -28,8 +14,8 @@
 		}
 	},
 	"require": {
-		"meta-box/support": "dev-master",
-		"meta-box/mbb-parser": "dev-master",
+		"wpmetabox/support": "dev-master",
+		"wpmetabox/mbb-parser": "dev-master",
 		"elightup/twig": "dev-master"
 	},
 	"require-dev": {
