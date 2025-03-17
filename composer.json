@@ -1,5 +1,7 @@
 {
-	"name": "meta-box/meta-box-builder",
+	"name": "wpmetabox/meta-box-builder",
+	"abandoned": "meta-box/meta-box-builder",
+	"description": "MB Builder extension for Meta Box",
 	"type": "wordpress-plugin",
 	"config": {
 		"prepend-autoloader": false
@@ -29,6 +31,10 @@
 		"meta-box/support": "dev-master",
 		"meta-box/mbb-parser": "dev-master",
 		"elightup/twig": "dev-master"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^11.3",
+		"opis/json-schema": "^2.4"
 	},
 	"scripts": {
 		"post-update-cmd": [
