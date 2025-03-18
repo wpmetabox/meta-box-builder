@@ -99,21 +99,11 @@ class Register {
 			return;
 		}
 
-		// Get post by meta box ID.
-		$post_name = $meta_box['id'];
-		$post      = get_page_by_path( $post_name, OBJECT, 'meta-box' );
-
-		if ( ! $post ) {
-			return;
-		}
-
-		$post_id = $post->ID;
-
 		// Get full custom table settings from JavaScript data.
-		$settings = get_post_meta( $post_id, 'settings', true );
-		if ( ! Arr::get( $settings, 'custom_table.create' ) ) {
+		if ( ! Arr::get( $meta_box, 'custom_table.create' ) ) {
 			return;
 		}
+		
 		$columns = [];
 		$fields  = array_filter( $meta_box['fields'], [ $this, 'has_value' ] );
 		foreach ( $fields as $field ) {
@@ -134,26 +124,11 @@ class Register {
 	}
 
 	public function enqueue_assets(): void {
-		// Convert $this->meta_box_post_ids from string to int
-		$query = new \WP_Query( [
-			'post_type'              => 'meta-box',
-			'post_status'            => 'publish',
-			'posts_per_page'         => -1,
-			'post_name__in'          => array_map( 'strval', $this->meta_box_post_ids ),
-			'no_found_rows'          => true,
-			'update_post_term_cache' => false,
-		] );
-
-		$this->meta_box_post_ids = [];
-		foreach ( $query->posts as $post ) {
-			$this->meta_box_post_ids[ $post->post_name ] = $post->ID;
-		}
-
 		wp_enqueue_style( 'mbb-post', MBB_URL . 'assets/css/post.css', [], MBB_VER );
 		wp_enqueue_script( 'mbb-post', MBB_URL . 'assets/js/post.js', [], MBB_VER, true );
 		\RWMB_Helpers_Field::localize_script_once( 'mbb-post', 'MBB', [
 			'meta_box_post_ids' => $this->meta_box_post_ids,
-			'base_url'          => admin_url( 'post.php?action=edit&post=' ),
+			'base_url'          => get_rest_url( null, 'mbb/redirection-url' ),
 			'title'             => __( 'Edit the field group settings', 'meta-box-builder' ),
 		] );
 	}

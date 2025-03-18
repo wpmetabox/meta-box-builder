@@ -166,6 +166,24 @@ class Base {
 		return $json;
 	}
 
+	public function get_redirection_url( \WP_REST_Request $request ) {
+		$params = $request->get_params();
+
+		$slug = $params['slug'] ?? '';
+		if ( empty( $slug ) ) {
+			return '';
+		}
+
+		$post = get_page_by_path( $slug, OBJECT, 'meta-box' );
+
+		if ( ! $post ) {
+			return '';
+		}
+
+		header( 'Location: ' . get_edit_post_link( $post->ID, '' ) );
+		exit;
+	}
+
 	public function set_json_data( \WP_REST_Request $request ): \WP_REST_Response {
 		$params = $request->get_params();
 

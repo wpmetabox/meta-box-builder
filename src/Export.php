@@ -57,6 +57,8 @@ class Export {
 			return $item;
 		}, $data );
 
+		$data = array_values( $data );
+
 		$file_name = str_replace( 'mb-', '', $post_type ) . '-export';
 		if ( count( $post_ids ) === 1 ) {
 			$data      = reset( $data );
@@ -65,7 +67,6 @@ class Export {
 
 		// Sort keys alphabetically so we have a consistent order
 		ksort( $data );
-		$data = array_values( $data );
 
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 

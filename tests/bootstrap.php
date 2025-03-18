@@ -1,4 +1,16 @@
 <?php
+// Polyfill for getallheaders function for NGINX
+if ( ! function_exists( 'getallheaders' ) ) {
+	function getallheaders() {
+		$headers = [];
+		foreach ( $_SERVER as $name => $value ) {
+			if ( substr( $name, 0, 5 ) == 'HTTP_' ) {
+				$headers[ str_replace( ' ', '-', ucwords( strtolower( str_replace( '_', ' ', substr( $name, 5 ) ) ) ) ) ] = $value;
+			}
+		}
+		return $headers;
+	}
+}
 // Steps to run this test:
 // 1. composer install --dev
 // 2. ./vendor/bin/phpunit
