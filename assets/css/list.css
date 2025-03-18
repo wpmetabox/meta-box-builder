@@ -48,7 +48,7 @@
 
 .mbb-label {
 	padding: 4px 8px;
-	border-radius: 5px;
+	border-radius: 4px;
 	display: inline-block;
 }
 
@@ -57,21 +57,21 @@
 }
 
 .mbb-label[data-status="synced"] {
-	background: #D6F1DF;
-	color: #218358;
+	background: #dcfce7;
+	color: #16a34a;
 }
 
 .mbb-label[data-status="error_file_permission"] {
-	background: #FFF7F8;
-	color: #CA244D;
+	background: #fef2f2;
+	color: #ef4444;
 }
 
 .mbb-label[data-status="no_json"] {
-	background: #FEFCFB;
-	color: #CC4E00;
+	background: #fef2f2;
+	color: #ef4444;
 }
 
 .mbb-label[data-status="sync_available"] {
-	background: #F0F0F0;
-	color: #646464;
+	background: #fffbeb;
+	color: #d97706;
 }
