@@ -216,7 +216,7 @@ class JsonService {
 	 * @return string[]
 	 */
 	public static function get_paths(): array {
-		$theme_path    = get_template_directory();
+		$theme_path    = get_stylesheet_directory();
 		$mb_json_paths = [];
 
 		if ( file_exists( "$theme_path/mb-json" ) ) {
@@ -224,6 +224,11 @@ class JsonService {
 		}
 
 		$mb_json_paths = apply_filters( 'mb_json_paths', $mb_json_paths );
+
+		// Allow developers to return a single path.
+		if ( is_string( $mb_json_paths ) ) {
+			$mb_json_paths = [ $mb_json_paths ];
+		}
 
 		// Remove unwritable paths
 		$mb_json_paths = array_filter( $mb_json_paths, function ( $path ) {
