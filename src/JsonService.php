@@ -28,6 +28,12 @@ class JsonService {
 	 * @return array[]
 	 */
 	public static function get_json( array $params = [] ): array {
+		static $items = null;
+
+		if ( $items !== null ) {
+			return $items;
+		}
+
 		$files = self::get_files();
 
 		// key by meta box id
