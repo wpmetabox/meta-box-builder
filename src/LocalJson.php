@@ -90,7 +90,25 @@ class LocalJson {
 	}
 
 	/**
-	 * Sync json file with database
+	 * Sync from JSON file to database.
+	 *
+	 * Exprected format: [ 'post_id' => 123, 'local' => [local JSON array] ]
+	 * After unparsing: 'local' becomes:
+	 * [
+	 *   	// Post fields:
+	 *		'post_type',
+	 *		'post_name',
+	 * 		'post_title',
+	 * 		'post_date',
+	 * 		'post_status',
+	 *		'post_content',
+	 *
+	 * 		// Meta keys (same as exported)
+	 * 		'settings',
+	 * 		'meta_box',
+	 * 		'fields',
+	 * 		'data',
+	 * ]
 	 *
 	 * @param array $data
 	 * @return bool Success or not
@@ -133,9 +151,9 @@ class LocalJson {
 	}
 
 	/**
-	 * Use database and override local json file
+	 * Sync data from database to JSON file, overwriting existing content.
 	 *
-	 * @param array $args
+	 * @param array $args Contains either `post_id` or `post_name`.
 	 * @return bool Success or not
 	 */
 	public static function use_database( array $args = [] ): bool {
@@ -173,7 +191,12 @@ class LocalJson {
 		$success   = self::write_file( $file_path, $post_data );
 
 		if ( ! $success ) {
-			// Return an error message.
+			/**
+			 * Meta key 'data' is used to store temporary error messages.
+			 * It's used for both local JSON and blocks JSON. See src/Extensions/Blocks.php
+			 * Return an error message.
+			 * @var mixed
+			 */
 			$data = get_post_meta( $post->ID, 'data', true );
 
 			if ( ! is_array( $data ) ) {
