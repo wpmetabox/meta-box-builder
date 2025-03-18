@@ -43,15 +43,13 @@ class Export {
 		$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
 
 		$post_status = get_post_stati();
-		$meta_boxes  = JsonService::get_meta_boxes( compact( 'post_type', 'post_status' ) );
+		$data        = JsonService::get_meta_boxes( [
+			'post_type'   => $post_type,
+			'post_status' => $post_status,
+			'post__in'    => $post_ids,
+		] );
 
-		$data = array_filter( $meta_boxes, function ( $meta_box ) use ( $post_ids ) {
-			return in_array( $meta_box['post_id'], $post_ids );
-		} );
-
-		$data = array_values( $data );
-
-		// Remove post_id from the data
+		// Remove post_id & post_type from the data
 		$data = array_map( function ( $item ) {
 			unset( $item['post_id'] );
 			unset( $item['post_type'] );
@@ -67,10 +65,11 @@ class Export {
 
 		// Sort keys alphabetically so we have a consistent order
 		ksort( $data );
+		$data = array_values( $data );
 
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
-		header( 'Content-Type: application/json' );
+		header( 'Content-Type: application/octet-stream' );
 		header( "Content-Disposition: attachment; filename=$file_name.json" );
 		header( 'Expires: 0' );
 		header( 'Cache-Control: must-revalidate' );
