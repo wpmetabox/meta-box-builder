@@ -27,10 +27,10 @@ class Template {
 						<div>
 							<h3>
 								<?php esc_html_e( 'JSON', 'meta-box-builder' ) ?>
-								<span class="text-sm"><?php esc_html_e( '(Always in use)', 'meta-box-builder' ) ?></span>
+								<small><?php esc_html_e( '(Always in use)', 'meta-box-builder' ) ?></small>
 							</h3>
 							<p>
-								<?php esc_html_e( 'Last updated:', 'meta-box-builder' ) ?> 
+								<?php esc_html_e( 'Last updated:', 'meta-box-builder' ) ?>
 								<span data-bind="local.modified"></span>
 								<span data-bind="local.newer"></span>
 							</p>
@@ -63,7 +63,7 @@ class Template {
 					</template>
 				</div>
 				<footer>
-					<button type="button" role="button" class="button-sync" data-use="json">
+					<button type="button" class="button-primary button-sync" data-use="json">
 						<?php esc_html_e( 'Sync changes', 'meta-box-builder' ) ?>
 					</button>
 				</footer>
