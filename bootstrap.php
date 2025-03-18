@@ -42,7 +42,6 @@ new Extensions\FrontendSubmission();
 new Extensions\TextLimiter();
 
 if ( is_admin() ) {
-	new About();
 	new Import();
 	new Export();
 	new LocalJson();
