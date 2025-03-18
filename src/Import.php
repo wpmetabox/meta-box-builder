@@ -50,7 +50,7 @@ class Import {
 
 		$url    = admin_url( 'edit.php?post_type=' . sanitize_text_field( wp_unslash( $_POST['mbb_post_type'] ) ) );
 		$data   = file_get_contents( sanitize_text_field( $_FILES['mbb_file']['tmp_name'] ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-		$result = self::import_json( $data, sanitize_text_field( wp_unslash( $_POST['mbb_post_type'] ) ) );
+		$result = $this->import_json( $data );
 
 		if ( ! $result ) {
 			$result = $this->import_dat( $data );
@@ -69,7 +69,7 @@ class Import {
 	/**
 	 * Import .json from v4.
 	 */
-	public static function import_json( string $data, string $post_type ): bool {
+	private function import_json( string $data ): bool {
 		$posts = json_decode( $data, true );
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
 			return false;
