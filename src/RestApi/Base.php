@@ -173,7 +173,8 @@ class Base {
 			if ( ! isset( $params[ $param ] ) ) {
 				return new \WP_REST_Response( [
 					'success' => false,
-					'message' => ucfirst( $param ) . ' is required',
+					// Translators: %s - The parameter name.
+					'message' => sprintf( __( '%s is required', 'meta-box-builder' ), ucfirst( $param ) ),
 				], 400 );
 			}
 		}

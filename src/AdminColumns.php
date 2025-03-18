@@ -142,7 +142,7 @@ class AdminColumns {
 			return;
 		}
 
-		if ( ! current_user_can( 'administrator' ) ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( __( 'Not allowed', 'meta-box-builder' ) );
 		}
 
