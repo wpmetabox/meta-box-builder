@@ -12,7 +12,7 @@ class LocalJson {
 
 	/**
 	 * Check if the local JSON feature is enabled
-	 * 
+	 *
 	 * @return bool
 	 */
 	public static function is_enabled(): bool {
@@ -21,7 +21,7 @@ class LocalJson {
 
 	/**
 	 * Get data from a .json file
-	 * 
+	 *
 	 * @param string $file_path
 	 * @return array[ $data, $error ]
 	 */
@@ -55,7 +55,7 @@ class LocalJson {
 
 	/**
 	 * Import from .json file
-	 * 
+	 *
 	 * @return \WP_Error|boolean
 	 */
 	public static function import( array $data ): bool {
@@ -70,13 +70,13 @@ class LocalJson {
 
 	/**
 	 * Use local json file and override database. Currently, its using by REST API
-	 *  
+	 *
 	 * @param array $args
 	 * @return bool Success or not
 	 */
 	public static function use_json( array $args ): bool {
-		$json = JsonService::get_json( [ 
-			'id' => $args['post_name'],
+		$json = JsonService::get_json( [
+			'id'        => $args['post_name'],
 			'post_type' => $args['post_type'],
 		] );
 
@@ -85,13 +85,13 @@ class LocalJson {
 		}
 
 		$json = reset( $json );
-		
+
 		return self::sync_json( $json );
 	}
 
 	/**
 	 * Sync json file with database
-	 * 
+	 *
 	 * @param array $data
 	 * @return bool Success or not
 	 */
@@ -103,19 +103,19 @@ class LocalJson {
 				return false;
 			}
 		}
-		
+
 		$post_array = [ 'ID' => $data['post_id'] ];
 		$data       = $data['local'];
 		$unparser   = new \MBBParser\Unparsers\MetaBox( $data );
 		$unparser->unparse();
 		$data        = $unparser->get_settings();
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
-		$post_array  = array_merge( $post_array, [ 
-			'post_type' => $data['post_type'],
-			'post_name' => $data['post_name'],
-			'post_title' => $data['post_title'],
-			'post_date' => $data['post_date'],
-			'post_status' => $data['post_status'],
+		$post_array  = array_merge( $post_array, [
+			'post_type'    => $data['post_type'],
+			'post_name'    => $data['post_name'],
+			'post_title'   => $data['post_title'],
+			'post_date'    => $data['post_date'],
+			'post_status'  => $data['post_status'],
 			'post_content' => $data['post_content'],
 		] );
 
@@ -134,7 +134,7 @@ class LocalJson {
 
 	/**
 	 * Use database and override local json file
-	 * 
+	 *
 	 * @param array $args
 	 * @return bool Success or not
 	 */
@@ -159,19 +159,19 @@ class LocalJson {
 			return false;
 		}
 
-		$post_data = (array) $post;
-		$meta_box  = get_post_meta( $post->ID, 'meta_box', true ) ?: [];
+		$post_data             = (array) $post;
+		$meta_box              = get_post_meta( $post->ID, 'meta_box', true ) ?: [];
 		$post_data['meta_box'] = $meta_box;
-		$settings  = get_post_meta( $post->ID, 'settings', true );
+		$settings              = get_post_meta( $post->ID, 'settings', true );
 		$post_data['settings'] = (array) $settings;
 
-		$unparser      = new \MBBParser\Unparsers\MetaBox( $post_data );
+		$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
 		$unparser->unparse();
-		$post_data     = $unparser->to_minimal_format();
+		$post_data = $unparser->to_minimal_format();
 
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 		$success   = self::write_file( $file_path, $post_data );
-		
+
 		if ( ! $success ) {
 			// Return an error message.
 			$data = get_post_meta( $post->ID, 'data', true );

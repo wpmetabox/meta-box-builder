@@ -37,23 +37,23 @@ class JsonService {
 			$json            = $unparser->get_settings();
 			$local_minimized = $unparser->to_minimal_format();
 
-			$diff = wp_text_diff( '', wp_json_encode( $raw_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
+			$diff = wp_text_diff( '', wp_json_encode( $raw_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [
 				'show_split_view' => true,
 			] );
 
 			$is_writeable = is_writable( $file );
 
-			$items[ $local_minimized['id'] ] = [ 
-				'file' => $file,
-				'local' => $raw_json,
+			$items[ $local_minimized['id'] ] = [
+				'file'            => $file,
+				'local'           => $raw_json,
 				'local_minimized' => $local_minimized,
-				'is_newer' => true,
-				'post_id' => null,
-				'post_type' => $json['post_type'] ?? 'meta-box',
-				'id' => $local_minimized['id'],
-				'remote' => null,
-				'diff' => $diff,
-				'is_writable' => $is_writeable,
+				'is_newer'        => true,
+				'post_id'         => null,
+				'post_type'       => $json['post_type'] ?? 'meta-box',
+				'id'              => $local_minimized['id'],
+				'remote'          => null,
+				'diff'            => $diff,
+				'is_writable'     => $is_writeable,
 			];
 		}
 
@@ -74,25 +74,25 @@ class JsonService {
 			if ( ! isset( $items[ $id ] ) ) {
 				$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
-				$diff = wp_text_diff( $left, '', [ 
+				$diff = wp_text_diff( $left, '', [
 					'show_split_view' => true,
 				] );
 
 				$file         = self::get_future_path( $id );
-				$folder 	 = dirname( $file );
+				$folder       = dirname( $file );
 				$is_writeable = Blocks::is_future_path_writable( $folder );
 
-				$items[ $id ] = [ 
-					'file' => $file,
-					'is_writable' => $is_writeable,
-					'id' => $id,
-					'is_newer' => -1,
-					'diff' => $diff,
-					'local' => null,
+				$items[ $id ] = [
+					'file'            => $file,
+					'is_writable'     => $is_writeable,
+					'id'              => $id,
+					'is_newer'        => -1,
+					'diff'            => $diff,
+					'local'           => null,
 					'local_minimized' => null,
-					'post_id' => $post_id,
-					'post_type' => $post_type,
-					'remote' => $meta_box,
+					'post_id'         => $post_id,
+					'post_type'       => $post_type,
+					'remote'          => $meta_box,
 				];
 
 				continue;
@@ -103,23 +103,23 @@ class JsonService {
 
 			$left = empty( $meta_box ) ? '' : wp_json_encode( $meta_box, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
-			$diff = wp_text_diff( $left, wp_json_encode( $items[ $id ]['local'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [ 
+			$diff = wp_text_diff( $left, wp_json_encode( $items[ $id ]['local'], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [
 				'show_split_view' => true,
 			] );
 
-			$items[ $id ] = array_merge( $items[ $id ], [ 
-				'id' => $id,
-				'is_newer' => $is_newer,
-				'remote' => $meta_box,
-				'diff' => $diff,
-				'post_id' => $post_id,
-				'post_type' => $post_type
+			$items[ $id ] = array_merge( $items[ $id ], [
+				'id'        => $id,
+				'is_newer'  => $is_newer,
+				'remote'    => $meta_box,
+				'diff'      => $diff,
+				'post_id'   => $post_id,
+				'post_type' => $post_type,
 			] );
 		}
 
 		// Filter by params
 		if ( isset( $params['id'] ) ) {
-			$items = array_filter( $items, function ($item) use ($params) {
+			$items = array_filter( $items, function ( $item ) use ( $params ) {
 				return $item['id'] == $params['id'];
 			} );
 		}
@@ -129,7 +129,7 @@ class JsonService {
 				continue;
 			}
 
-			$items = array_filter( $items, function ($item) use ($key, $params) {
+			$items = array_filter( $items, function ( $item ) use ( $key, $params ) {
 				return isset( $item[ $key ] ) && $item[ $key ] == $params[ $key ];
 			} );
 		}
@@ -139,14 +139,14 @@ class JsonService {
 
 	/**
 	 * Bare minimum keys needed in the json file
-	 * 
+	 *
 	 * @param string $post_type
 	 * @return string[]
 	 */
 	private static function get_related_meta_keys( string $post_type ): array {
-		$meta_keys = [ 
-			'meta-box' => [ 'meta_box' ],
-			'mb-relationship' => [ 'relationship' ],
+		$meta_keys = [
+			'meta-box'         => [ 'meta_box' ],
+			'mb-relationship'  => [ 'relationship' ],
 			'mb-settings-page' => [ 'settings_page' ],
 		];
 
@@ -154,11 +154,11 @@ class JsonService {
 	}
 
 	public static function get_meta_boxes( array $query_params = [] ): array {
-		$defaults = [ 
-			'post_type' => 'meta-box',
-			'post_status' => 'any',
-			'posts_per_page' => -1,
-			'no_found_rows' => true,
+		$defaults = [
+			'post_type'              => 'meta-box',
+			'post_status'            => 'any',
+			'posts_per_page'         => -1,
+			'no_found_rows'          => true,
 			'update_post_term_cache' => false,
 		];
 
@@ -171,16 +171,16 @@ class JsonService {
 			$meta_keys = self::get_related_meta_keys( $query_params['post_type'] );
 
 			foreach ( $meta_keys as $meta_key ) {
-				$main_meta = get_post_meta( $post->ID, $meta_key, true ) ?: [];
+				$main_meta              = get_post_meta( $post->ID, $meta_key, true ) ?: [];
 				$post_data[ $meta_key ] = $main_meta;
 			}
 
-			$settings = get_post_meta( $post->ID, 'settings', true );
+			$settings              = get_post_meta( $post->ID, 'settings', true );
 			$post_data['settings'] = (array) $settings;
 
-			$unparser      = new \MBBParser\Unparsers\MetaBox( $post_data );
+			$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
 			$unparser->unparse();
-			$post_data     = $unparser->to_minimal_format();
+			$post_data = $unparser->to_minimal_format();
 
 			// Extra post_id, post_type for filtering, check this line carefully if you want to change it
 			$post_data['post_id']   = $post->ID;
@@ -194,7 +194,7 @@ class JsonService {
 
 	/**
 	 * Get all meta box .json files
-	 * 
+	 *
 	 * @return string[]
 	 */
 	public static function get_files(): array {
@@ -212,7 +212,7 @@ class JsonService {
 
 	/**
 	 * Get all paths to search for .json files
-	 * 
+	 *
 	 * @return string[]
 	 */
 	public static function get_paths(): array {
@@ -226,7 +226,7 @@ class JsonService {
 		$mb_json_paths = apply_filters( 'mb_json_paths', $mb_json_paths );
 
 		// Remove unwritable paths
-		$mb_json_paths = array_filter( $mb_json_paths, function ($path) {
+		$mb_json_paths = array_filter( $mb_json_paths, function ( $path ) {
 			return is_writable( $path );
 		} );
 
@@ -235,13 +235,13 @@ class JsonService {
 
 	/**
 	 * Get the path to the future .json file
-	 * 
+	 *
 	 * @param string $meta_box_id
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function get_future_path( string $meta_box_id ): string {
-		if ( ! LocalJson::is_enabled()) {
+		if ( ! LocalJson::is_enabled() ) {
 			return '';
 		}
 

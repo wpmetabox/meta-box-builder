@@ -8,7 +8,7 @@ use MetaBox\Support\Arr;
 class AdminColumns {
 	/**
 	 * Current view
-	 * 
+	 *
 	 * @var string $view
 	 */
 	protected $view;
@@ -19,8 +19,8 @@ class AdminColumns {
 		add_action( 'admin_print_styles-edit.php', [ $this, 'enqueue' ] );
 		add_filter( 'manage_meta-box_posts_columns', [ $this, 'add_columns' ] );
 		add_action( 'manage_meta-box_posts_custom_column', [ $this, 'show_column' ], 10, 2 );
-		add_filter( "views_edit-meta-box", [ $this, 'admin_table_views' ], 10, 1 );
-		add_filter( "bulk_actions-edit-meta-box", [ $this, 'admin_table_bulk_actions' ], 10, 1 );
+		add_filter( 'views_edit-meta-box', [ $this, 'admin_table_views' ], 10, 1 );
+		add_filter( 'bulk_actions-edit-meta-box', [ $this, 'admin_table_bulk_actions' ], 10, 1 );
 		add_action( 'current_screen', [ $this, 'current_screen' ] );
 		add_action( 'admin_footer', [ Template::class, 'render_diff_dialog' ] );
 		add_action( 'admin_notices', [ $this, 'admin_notices' ] );
@@ -53,7 +53,7 @@ class AdminColumns {
 			return;
 		}
 
-		$json = JsonService::get_json( [ 
+		$json = JsonService::get_json( [
 			'post_id' => $post_id,
 		] );
 
@@ -77,7 +77,7 @@ class AdminColumns {
 			return false;
 		}
 
-		return LocalJson::use_database( [ 
+		return LocalJson::use_database( [
 			'post_id' => $post_id,
 		] );
 	}
@@ -89,13 +89,13 @@ class AdminColumns {
 
 		$custom_admin_notice = $_GET['status'] ?? '';
 
-		$messages = [ 
-			'imported' => [ 
-				'status' => 'success',
+		$messages = [
+			'imported'      => [
+				'status'  => 'success',
 				'message' => __( 'Imported successfully', 'meta-box-builder' ),
 			],
-			'import-failed' => [ 
-				'status' => 'error',
+			'import-failed' => [
+				'status'  => 'error',
 				'message' => __( 'Import failed', 'meta-box-builder' ),
 			],
 		];
@@ -159,7 +159,7 @@ class AdminColumns {
 
 		$json = JsonService::get_json();
 
-		$json = array_filter( $json, function ($item, $key) use ($id) {
+		$json = array_filter( $json, function ( $item, $key ) use ( $id ) {
 			return in_array( $key, $id, true );
 		}, ARRAY_FILTER_USE_BOTH );
 
@@ -178,7 +178,7 @@ class AdminColumns {
 
 		// Filter where local is not null
 		// and its should not imported yet.
-		$json = array_filter( $json, function ($item) {
+		$json = array_filter( $json, function ( $item ) {
 			return ! empty( $item['local'] ) && empty( $item['remote'] );
 		} );
 		?>
@@ -186,7 +186,8 @@ class AdminColumns {
 			<tbody>
 				<?php foreach ( $json as $id => $data ) : ?>
 					<tr>
-						<?php foreach ( $columns as $name => $label ) :
+						<?php
+						foreach ( $columns as $name => $label ) :
 							$tag     = $name === 'cb' ? 'th' : 'td';
 							$classes = [ $name, "column-$name" ];
 
@@ -232,7 +233,8 @@ class AdminColumns {
 							}
 
 							echo "</$tag>";
-						endforeach; ?>
+						endforeach;
+						?>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
@@ -256,7 +258,7 @@ class AdminColumns {
 		if ( $this->is_status( 'sync' ) ) {
 			unset( $actions['edit'] );
 			unset( $actions['trash'] );
-			
+
 			$actions['mbb-sync'] = __( 'Sync changes', 'meta-box-builder' );
 		}
 
@@ -268,14 +270,14 @@ class AdminColumns {
 
 		$json = JsonService::get_json();
 
-		$json = array_filter( $json, function ($item) {
+		$json = array_filter( $json, function ( $item ) {
 			return ! empty( $item['local'] ) && empty( $item['remote'] );
 		} );
 
 		$count = count( $json );
 
 		if ( $count ) {
-			$url = add_query_arg( [ 
+			$url = add_query_arg( [
 				'post_status' => 'sync',
 			] );
 
@@ -289,10 +291,10 @@ class AdminColumns {
 		}
 
 		if ( $this->view === 'sync' ) {
-			$wp_list_table->set_pagination_args( [ 
+			$wp_list_table->set_pagination_args( [
 				'total_items' => $count,
 				'total_pages' => 1,
-				'per_page' => $count,
+				'per_page'    => $count,
 			] );
 			$wp_query->post_count = 1; // At least one post is needed to render bulk drop-down.
 		}
@@ -309,14 +311,14 @@ class AdminColumns {
 		wp_enqueue_script( 'mbb-list', MBB_URL . 'assets/js/list.js', [ 'jquery' ], MBB_VER, true );
 		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], MBB_VER, true );
 		wp_enqueue_style( 'mbb-dialog', MBB_URL . 'assets/css/dialog.css', [], MBB_VER );
-		wp_localize_script( 'mbb-dialog', 'MBBDialog', [ 
-			'export' => esc_html__( 'Export', 'meta-box-builder' ),
-			'import' => esc_html__( 'Import', 'meta-box-builder' ),
-			'not_imported' => esc_html__( 'Not Imported', 'meta-box-builder' ),
-			'error' => esc_html__( 'Error!', 'meta-box-builder' ),
-			'synced' => esc_html__( 'Synced', 'meta-box-builder' ),
-			'syncing' => esc_html__( 'Syncing...', 'meta-box-builder' ),
-			'newer' => esc_html__( '(newer)', 'meta-box-builder' ),
+		wp_localize_script( 'mbb-dialog', 'MBBDialog', [
+			'export'         => esc_html__( 'Export', 'meta-box-builder' ),
+			'import'         => esc_html__( 'Import', 'meta-box-builder' ),
+			'not_imported'   => esc_html__( 'Not Imported', 'meta-box-builder' ),
+			'error'          => esc_html__( 'Error!', 'meta-box-builder' ),
+			'synced'         => esc_html__( 'Synced', 'meta-box-builder' ),
+			'syncing'        => esc_html__( 'Syncing...', 'meta-box-builder' ),
+			'newer'          => esc_html__( '(newer)', 'meta-box-builder' ),
 			'sync_available' => esc_html__( 'Sync available', 'meta-box-builder' ),
 		] );
 
@@ -328,8 +330,8 @@ class AdminColumns {
 	}
 
 	public function add_columns( $columns ) {
-		$new_columns = [ 
-			'for' => __( 'Show For', 'meta-box-builder' ),
+		$new_columns = [
+			'for'      => __( 'Show For', 'meta-box-builder' ),
 			'location' => __( 'Location', 'meta-box-builder' ),
 		];
 
@@ -386,7 +388,7 @@ class AdminColumns {
 			return;
 		}
 
-		$json = JsonService::get_json( [ 
+		$json = JsonService::get_json( [
 			'id' => $meta_box_id,
 		] );
 
@@ -401,7 +403,7 @@ class AdminColumns {
 			return;
 		}
 
-		$available_statuses = [ 
+		$available_statuses = [
 			'error_file_permission' => __( 'Error: Not writable', 'meta-box-builder' ),
 			'sync_available'        => __( 'Sync available', 'meta-box-builder' ),
 			'no_json'               => __( 'No JSON available', 'meta-box-builder' ),
@@ -426,7 +428,8 @@ class AdminColumns {
 			<?php esc_html_e( $available_statuses[ $status ] ) ?>
 		</span>
 
-		<?php if ( $sync_data['is_newer'] <= 0 || ! $sync_data['is_writable'] ) {
+		<?php
+		if ( $sync_data['is_newer'] <= 0 || ! $sync_data['is_writable'] ) {
 			return;
 		}
 		?>
@@ -434,13 +437,13 @@ class AdminColumns {
 			<span class="sync">
 				<a class="button-sync" data-use="json" data-id="<?php esc_html_e( $meta_box_id ) ?>" href="javascript:;"
 					role="button">
-					<?= esc_html__( 'Sync', 'meta-box-builder' ) ?>
+					<?= esc_html__( 'Sync', 'meta-box-builder' ); ?>
 				</a>
 			</span>
 			|
 			<span class="review">
 				<a href="javascript:;" role="button" data-dialog="<?php esc_attr_e( $meta_box_id ) ?>">
-					<?= esc_html__( 'Review', 'meta-box-builder' ) ?>
+					<?= esc_html__( 'Review', 'meta-box-builder' ); ?>
 				</a>
 			</span>
 		</div>
@@ -450,13 +453,13 @@ class AdminColumns {
 	private function show_for( $data ): void {
 		$object_type = Arr::get( $data, 'object_type', 'post' );
 
-		$labels = [ 
-			'user' => __( 'Users', 'meta-box-builder' ),
+		$labels = [
+			'user'    => __( 'Users', 'meta-box-builder' ),
 			'comment' => __( 'Comments', 'meta-box-builder' ),
 			'setting' => __( 'Settings Pages', 'meta-box-builder' ),
-			'post' => __( 'Posts', 'meta-box-builder' ),
-			'term' => __( 'Taxonomies', 'meta-box-builder' ),
-			'block' => __( 'Blocks', 'meta-box-builder' ),
+			'post'    => __( 'Posts', 'meta-box-builder' ),
+			'term'    => __( 'Taxonomies', 'meta-box-builder' ),
+			'block'   => __( 'Blocks', 'meta-box-builder' ),
 		];
 
 		esc_html_e( $labels[ $object_type ] ?? '' );
@@ -464,7 +467,7 @@ class AdminColumns {
 
 	/**
 	 * Display human friendly file location to display in the column.
-	 * 
+	 *
 	 * @param string $file
 	 * @return string
 	 */
@@ -473,7 +476,7 @@ class AdminColumns {
 		$active_theme = get_template_directory();
 		$plugins_path = WP_PLUGIN_DIR;
 
-		$icon     = 'wordpress';
+		$icon     = 'WordPress';
 		$sub_path = str_replace( ABSPATH, '', $file );
 
 		if ( str_contains( $file, $active_theme ) ) {
@@ -493,8 +496,8 @@ class AdminColumns {
 	}
 
 	public function show_path( string $meta_box_id ): void {
-		$json = JsonService::get_json( [ 
-			'id' 		=> $meta_box_id,
+		$json = JsonService::get_json( [
+			'id'        => $meta_box_id,
 			'post_type' => $this->post_type,
 		] );
 
@@ -520,18 +523,18 @@ class AdminColumns {
 			case 'setting':
 				$settings_pages = Data::get_setting_pages();
 				$settings_pages = wp_list_pluck( $settings_pages, 'title', 'id' );
-				$ids = Arr::get( $data, 'settings_pages', [] );
-				$saved = array_intersect_key( $settings_pages, array_flip( $ids ) );
+				$ids            = Arr::get( $data, 'settings_pages', [] );
+				$saved          = array_intersect_key( $settings_pages, array_flip( $ids ) );
 				echo wp_kses_post( implode( '<br>', $saved ) );
 				break;
 			case 'post':
-				echo wp_kses_post( implode( '<br>', array_filter( array_map( function ($post_type) {
+				echo wp_kses_post( implode( '<br>', array_filter( array_map( function ( $post_type ) {
 					$post_type_object = get_post_type_object( $post_type );
 					return $post_type_object ? $post_type_object->labels->singular_name : '';
 				}, Arr::get( $data, 'post_types', [ 'post' ] ) ) ) ) );
 				break;
 			case 'term':
-				echo wp_kses_post( implode( '<br>', array_filter( array_map( function ($taxonomy) {
+				echo wp_kses_post( implode( '<br>', array_filter( array_map( function ( $taxonomy ) {
 					$taxonomy_object = get_taxonomy( $taxonomy );
 					return $taxonomy_object ? $taxonomy_object->labels->singular_name : '';
 				}, Arr::get( $data, 'taxonomies', [] ) ) ) ) );

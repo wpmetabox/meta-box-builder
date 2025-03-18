@@ -18,7 +18,7 @@ class ShowHide extends Base {
 			'format'   => 'get_formats',
 		];
 		$method  = $methods[ $name ] ?? 'get_terms';
-		
+
 		return $method;
 	}
 }

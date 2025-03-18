@@ -55,7 +55,7 @@ class Register {
 	}
 
 	public function get_database_meta_boxes(): array {
-		$meta_boxes = JsonService::get_meta_boxes( [ 
+		$meta_boxes = JsonService::get_meta_boxes( [
 			'post_status' => 'publish',
 		] );
 
@@ -71,10 +71,10 @@ class Register {
 			return;
 		}
 
-		$meta_box['render_callback'] = function ($attributes, $is_preview = false, $post_id = null) use ($meta_box) {
+		$meta_box['render_callback'] = function ( $attributes, $is_preview = false, $post_id = null ) use ( $meta_box ) {
 			$data               = $attributes;
 			$data['is_preview'] = $is_preview;
-			$data['post_id'] = $post_id;
+			$data['post_id']    = $post_id;
 
 			// Get all fields data.
 			$fields = array_filter( $meta_box['fields'], [ $this, 'has_value' ] );
@@ -82,10 +82,10 @@ class Register {
 				$data[ $field['id'] ] = 'group' === $field['type'] ? mb_get_block_field( $field['id'], [] ) : mb_the_block_field( $field['id'], [], false );
 			}
 
-			$loader = new \eLightUp\Twig\Loader\ArrayLoader( [ 
+			$loader = new \eLightUp\Twig\Loader\ArrayLoader( [
 				'block' => '{% autoescape false %}' . $meta_box['render_code'] . '{% endautoescape %}',
 			] );
-			$twig = new \eLightUp\Twig\Environment( $loader );
+			$twig   = new \eLightUp\Twig\Environment( $loader );
 
 			// Proxy for all PHP/WordPress functions.
 			$data['mb'] = new TwigProxy();
@@ -120,8 +120,8 @@ class Register {
 			$columns[ $field['id'] ] = 'TEXT';
 		}
 
-		$data      = [ 
-			'table' => $meta_box['table'],
+		$data      = [
+			'table'   => $meta_box['table'],
 			'columns' => $columns,
 		];
 		$cache_key = 'mb_create_table_' . md5( wp_json_encode( $data ) );
@@ -135,12 +135,12 @@ class Register {
 
 	public function enqueue_assets(): void {
 		// Convert $this->meta_box_post_ids from string to int
-		$query = new \WP_Query( [ 
-			'post_type' => 'meta-box',
-			'post_status' => 'publish',
-			'posts_per_page' => -1,
-			'post_name__in' => array_map( 'strval', $this->meta_box_post_ids ),
-			'no_found_rows' => true,
+		$query = new \WP_Query( [
+			'post_type'              => 'meta-box',
+			'post_status'            => 'publish',
+			'posts_per_page'         => -1,
+			'post_name__in'          => array_map( 'strval', $this->meta_box_post_ids ),
+			'no_found_rows'          => true,
 			'update_post_term_cache' => false,
 		] );
 
@@ -151,10 +151,10 @@ class Register {
 
 		wp_enqueue_style( 'mbb-post', MBB_URL . 'assets/css/post.css', [], MBB_VER );
 		wp_enqueue_script( 'mbb-post', MBB_URL . 'assets/js/post.js', [], MBB_VER, true );
-		\RWMB_Helpers_Field::localize_script_once( 'mbb-post', 'MBB', [ 
+		\RWMB_Helpers_Field::localize_script_once( 'mbb-post', 'MBB', [
 			'meta_box_post_ids' => $this->meta_box_post_ids,
-			'base_url' => admin_url( 'post.php?action=edit&post=' ),
-			'title' => __( 'Edit the field group settings', 'meta-box-builder' ),
+			'base_url'          => admin_url( 'post.php?action=edit&post=' ),
+			'title'             => __( 'Edit the field group settings', 'meta-box-builder' ),
 		] );
 	}
 

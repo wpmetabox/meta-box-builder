@@ -31,7 +31,7 @@ class Edit extends BaseEditPage {
 			return;
 		}
 
-		$json = JsonService::get_json( [ 
+		$json = JsonService::get_json( [
 			'post_id' => get_the_ID(),
 		] );
 
@@ -47,9 +47,10 @@ class Edit extends BaseEditPage {
 			?>
 			<div class="notice notice-warning">
 				<p>
-					<?php echo esc_html__( 'Your database version is different than the JSON version.
+					<?php
+					echo esc_html__( 'Your database version is different than the JSON version.
 						Any changes will override the JSON file.',
-							'meta-box-builder' );
+					'meta-box-builder' );
 					?>
 					<a href="javascript:;" role="button" data-dialog="<?php esc_attr_e( $json['id'] ) ?>">
 						<?php esc_html_e( 'Review', 'meta-box-builder' ) ?>
@@ -60,7 +61,7 @@ class Edit extends BaseEditPage {
 		}
 
 		$is_writable = $json['is_writable'] ?? false;
-		
+
 		if ( ! $is_writable ) {
 			?>
 			<div class="notice notice-error">
@@ -76,16 +77,16 @@ class Edit extends BaseEditPage {
 	public function add_meta_boxes( $meta_boxes ) {
 		$meta_boxes = parent::add_meta_boxes( $meta_boxes );
 
-		$meta_boxes[] = [ 
-			'title' => esc_html__( 'Documentation', 'meta-box-builder' ),
-			'id' => 'mbb-documentation',
+		$meta_boxes[] = [
+			'title'      => esc_html__( 'Documentation', 'meta-box-builder' ),
+			'id'         => 'mbb-documentation',
 			'post_types' => [ $this->post_type ],
-			'context' => 'side',
-			'priority' => 'low',
-			'fields' => [ 
-				[ 
+			'context'    => 'side',
+			'priority'   => 'low',
+			'fields'     => [
+				[
 					'type' => 'custom_html',
-					'std' => '<ul>
+					'std'  => '<ul>
 						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
 						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
 						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
@@ -104,14 +105,14 @@ class Edit extends BaseEditPage {
 		wp_style_add_data( 'rwmb-modal', 'path', RWMB_CSS_DIR . 'modal.css' );
 		wp_enqueue_script( 'rwmb-modal', RWMB_JS_URL . 'modal.js', [ 'jquery' ], RWMB_VER, true );
 		wp_enqueue_script( 'mbb-dialog', MBB_URL . 'assets/js/dialog.js', [ 'jquery', 'wp-api-fetch' ], MBB_VER, true );
-		wp_localize_script( 'mbb-dialog', 'MBBDialog', [ 
-			'export' => esc_html__( 'Export', 'meta-box-builder' ),
-			'import' => esc_html__( 'Import', 'meta-box-builder' ),
-			'not_imported' => esc_html__( 'Not Imported', 'meta-box-builder' ),
-			'error' => esc_html__( 'Error!', 'meta-box-builder' ),
-			'synced' => esc_html__( 'Synced', 'meta-box-builder' ),
-			'syncing' => esc_html__( 'Syncing...', 'meta-box-builder' ),
-			'newer' => esc_html__( '(newer)', 'meta-box-builder' ),
+		wp_localize_script( 'mbb-dialog', 'MBBDialog', [
+			'export'         => esc_html__( 'Export', 'meta-box-builder' ),
+			'import'         => esc_html__( 'Import', 'meta-box-builder' ),
+			'not_imported'   => esc_html__( 'Not Imported', 'meta-box-builder' ),
+			'error'          => esc_html__( 'Error!', 'meta-box-builder' ),
+			'synced'         => esc_html__( 'Synced', 'meta-box-builder' ),
+			'syncing'        => esc_html__( 'Syncing...', 'meta-box-builder' ),
+			'newer'          => esc_html__( '(newer)', 'meta-box-builder' ),
 			'sync_available' => esc_html__( 'Sync available', 'meta-box-builder' ),
 		] );
 		wp_enqueue_style( 'mbb-dialog', MBB_URL . 'assets/css/dialog.css', [], MBB_VER );
@@ -122,42 +123,42 @@ class Edit extends BaseEditPage {
 		$fields = array_values( $fields );
 
 		// All other fields are false by default, but save_field need to be true by default.
-		$fields = array_map( function ($field) {
+		$fields = array_map( function ( $field ) {
 			$field['save_field'] = $field['save_field'] ?? true;
 			return $field;
 		}, $fields );
 
-		$data = [ 
-			'fields' => $fields,
-			'settings' => get_post_meta( get_the_ID(), 'settings', true ),
-			'data' => get_post_meta( get_the_ID(), 'data', true ),
+		$data = [
+			'fields'        => $fields,
+			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
+			'data'          => get_post_meta( get_the_ID(), 'data', true ),
 
-			'rest' => untrailingslashit( rest_url() ),
-			'nonce' => wp_create_nonce( 'wp_rest' ),
+			'rest'          => untrailingslashit( rest_url() ),
+			'nonce'         => wp_create_nonce( 'wp_rest' ),
 
-			'postTypes' => Data::get_post_types(),
-			'taxonomies' => Data::get_taxonomies(),
+			'postTypes'     => Data::get_post_types(),
+			'taxonomies'    => Data::get_taxonomies(),
 			'settingsPages' => Data::get_setting_pages(),
-			'templates' => Data::get_templates(),
-			'icons' => DataHelper::get_dashicons(),
+			'templates'     => Data::get_templates(),
+			'icons'         => DataHelper::get_dashicons(),
 
 			// Extensions check.
-			'extensions' => [ 
-				'blocks' => Data::is_extension_active( 'mb-blocks' ),
-				'columns' => Data::is_extension_active( 'meta-box-columns' ),
-				'commentMeta' => Data::is_extension_active( 'mb-comment-meta' ),
-				'conditionalLogic' => Data::is_extension_active( 'meta-box-conditional-logic' ),
-				'customTable' => Data::is_extension_active( 'mb-custom-table' ),
+			'extensions'    => [
+				'blocks'             => Data::is_extension_active( 'mb-blocks' ),
+				'columns'            => Data::is_extension_active( 'meta-box-columns' ),
+				'commentMeta'        => Data::is_extension_active( 'mb-comment-meta' ),
+				'conditionalLogic'   => Data::is_extension_active( 'meta-box-conditional-logic' ),
+				'customTable'        => Data::is_extension_active( 'mb-custom-table' ),
 				'frontendSubmission' => Data::is_extension_active( 'mb-frontend-submission' ),
-				'group' => Data::is_extension_active( 'meta-box-group' ),
-				'includeExclude' => Data::is_extension_active( 'meta-box-include-exclude' ),
-				'settingsPage' => Data::is_extension_active( 'mb-settings-page' ),
-				'showHide' => Data::is_extension_active( 'meta-box-show-hide' ),
-				'tabs' => Data::is_extension_active( 'meta-box-tabs' ),
-				'termMeta' => Data::is_extension_active( 'mb-term-meta' ),
-				'userMeta' => Data::is_extension_active( 'mb-user-meta' ),
-				'revision' => Data::is_extension_active( 'mb-revision' ),
-				'views' => Data::is_extension_active( 'mb-views' ),
+				'group'              => Data::is_extension_active( 'meta-box-group' ),
+				'includeExclude'     => Data::is_extension_active( 'meta-box-include-exclude' ),
+				'settingsPage'       => Data::is_extension_active( 'mb-settings-page' ),
+				'showHide'           => Data::is_extension_active( 'meta-box-show-hide' ),
+				'tabs'               => Data::is_extension_active( 'meta-box-tabs' ),
+				'termMeta'           => Data::is_extension_active( 'mb-term-meta' ),
+				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
+				'revision'           => Data::is_extension_active( 'mb-revision' ),
+				'views'              => Data::is_extension_active( 'mb-views' ),
 			],
 		];
 

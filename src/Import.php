@@ -74,7 +74,7 @@ class Import {
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
 			return false;
 		}
-		
+
 		// Check if $posts is multi-dimensional array or not.
 		if ( array_keys( $posts ) !== range( 0, count( $posts ) - 1 ) ) {
 			$posts = [ $posts ];
@@ -83,7 +83,7 @@ class Import {
 		foreach ( $posts as $post ) {
 			$unparser = new \MBBParser\Unparsers\MetaBox( $post );
 			$unparser->unparse();
-			$post = $unparser->get_settings();
+			$post    = $unparser->get_settings();
 			$post_id = wp_insert_post( $post );
 
 			if ( ! $post_id ) {

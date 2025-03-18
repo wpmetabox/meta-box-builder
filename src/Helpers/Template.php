@@ -4,7 +4,7 @@ namespace MBB\Helpers;
 use MBB\LocalJson;
 
 class Template {
-    public static function render_diff_dialog() {
+	public static function render_diff_dialog() {
 		if ( ! LocalJson::is_enabled() ) {
 			return;
 		}
@@ -42,7 +42,7 @@ class Template {
 					<template id="sync-success">
 						<div class="sync-success-wrapper">
 							<div class="sync-success-content sync-status-text">
-								<p><?= esc_html__( 'All changes synced!', 'meta-box-builder' ) ?></p>
+								<p><?= esc_html__( 'All changes synced!', 'meta-box-builder' ); ?></p>
 							</div>
 						</div>
 					</template>
@@ -50,7 +50,7 @@ class Template {
 					<template id="sync-error">
 						<div class="sync-error-wrapper">
 							<div class="sync-error-content sync-status-text">
-								<p><?= esc_html__( 'Error during syncing data, please check folder permission or file format!', 'meta-box-builder' ) ?>
+								<p><?= esc_html__( 'Error during syncing data, please check folder permission or file format!', 'meta-box-builder' ); ?>
 								</p>
 							</div>
 						</div>
@@ -58,7 +58,7 @@ class Template {
 
 					<template id="no-changes">
 						<section class="no-changes-content sync-status-text">
-							<p><?= esc_html__( 'No changes detected.', 'meta-box-builder' ) ?></p>
+							<p><?= esc_html__( 'No changes detected.', 'meta-box-builder' ); ?></p>
 						</section>
 					</template>
 				</div>

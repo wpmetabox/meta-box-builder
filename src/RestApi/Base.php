@@ -38,13 +38,13 @@ class Base {
 
 	/**
 	 * Get all public methods of the class.
-	 * 
+	 *
 	 * @return string[]
 	 */
 	private function get_public_methods(): array {
 		$methods = get_class_methods( $this );
 
-		return array_filter( $methods, function ($method) {
+		return array_filter( $methods, function ( $method ) {
 			$reflect = new ReflectionMethod( $this, $method );
 			return $reflect->isPublic();
 		} );
@@ -110,7 +110,7 @@ class Base {
 		$data  = [];
 		foreach ( $roles as $key => $role ) {
 			if ( empty( $s ) || false !== strpos( $role['name'], $s ) ) {
-				$data[] = [ 
+				$data[] = [
 					'value' => $key,
 					'label' => $role['name'],
 				];
@@ -132,7 +132,7 @@ class Base {
 
 		$data = [];
 		foreach ( $items as $id => $name ) {
-			$data[] = [ 
+			$data[] = [
 				'value' => $id,
 				'label' => $name,
 			];
@@ -156,7 +156,7 @@ class Base {
 
 	/**
 	 * Get local json data, including sync status.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_json_data( \WP_REST_Request $request ): array {
@@ -171,7 +171,7 @@ class Base {
 
 		foreach ( [ 'id', 'use' ] as $param ) {
 			if ( ! isset( $params[ $param ] ) ) {
-				return new \WP_REST_Response( [ 
+				return new \WP_REST_Response( [
 					'success' => false,
 					'message' => ucfirst( $param ) . ' is required',
 				], 400 );
@@ -182,13 +182,13 @@ class Base {
 
 		$res = call_user_func(
 			[ LocalJson::class, "use_$target" ],
-			[ 
+			[
 				'post_name' => $params['id'],
-				'post_type' => $params['post_type'] ?? 'meta-box'
+				'post_type' => $params['post_type'] ?? 'meta-box',
 			]
 		);
 
-		return new \WP_REST_Response( [ 
+		return new \WP_REST_Response( [
 			'success' => (bool) $res,
 		], 200 );
 	}

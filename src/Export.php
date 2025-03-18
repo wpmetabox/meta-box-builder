@@ -9,9 +9,9 @@ class Export {
 
 	/**
 	 * Add export link to the post row actions.
-	 * 
+	 *
 	 * @param array<string, string> $actions
-	 * @param \WP_Post $post
+	 * @param \WP_Post              $post
 	 * @return array
 	 */
 	public function add_export_link( $actions, $post ): array {
@@ -19,10 +19,10 @@ class Export {
 			return $actions;
 		}
 
-		$url               = wp_nonce_url( add_query_arg( [ 
-			'action' => 'mbb-export',
+		$url               = wp_nonce_url( add_query_arg( [
+			'action'    => 'mbb-export',
 			'post_type' => $post->post_type,
-			'post[]' => $post->ID,
+			'post[]'    => $post->ID,
 		] ), 'bulk-posts' ); // @see WP_List_Table::display_tablenav()
 		$actions['export'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Export', 'meta-box-builder' ) . '</a>';
 
@@ -41,21 +41,21 @@ class Export {
 
 		$post_ids  = wp_parse_id_list( wp_unslash( $_REQUEST['post'] ) );
 		$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
-		
-		$post_status = get_post_stati();
-		$meta_boxes = JsonService::get_meta_boxes( compact( 'post_type', 'post_status' ) );
 
-		$data = array_filter( $meta_boxes, function ($meta_box) use ($post_ids) {
+		$post_status = get_post_stati();
+		$meta_boxes  = JsonService::get_meta_boxes( compact( 'post_type', 'post_status' ) );
+
+		$data = array_filter( $meta_boxes, function ( $meta_box ) use ( $post_ids ) {
 			return in_array( $meta_box['post_id'], $post_ids );
 		} );
-		
+
 		$data = array_values( $data );
-		
+
 		// Remove post_id from the data
-		$data = array_map( function ($item) {
+		$data = array_map( function ( $item ) {
 			unset( $item['post_id'] );
 			unset( $item['post_type'] );
-				
+
 			return $item;
 		}, $data );
 
@@ -83,14 +83,14 @@ class Export {
 
 	/**
 	 * Get the meta keys that saved in the database for the post type.
-	 * 
+	 *
 	 * @param string $post_type
 	 * @return string[]
 	 */
 	public static function get_meta_keys( string $post_type ): array {
-		$meta_keys = [ 
-			'meta-box' => [ 'settings', 'fields', 'data', 'meta_box' ],
-			'mb-relationship' => [ 'settings', 'relationship' ],
+		$meta_keys = [
+			'meta-box'         => [ 'settings', 'fields', 'data', 'meta_box' ],
+			'mb-relationship'  => [ 'settings', 'relationship' ],
 			'mb-settings-page' => [ 'settings', 'settings_page' ],
 		];
 

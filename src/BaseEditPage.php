@@ -60,15 +60,15 @@ abstract class BaseEditPage {
 	}
 
 	public function add_meta_boxes( $meta_boxes ) {
-		$meta_boxes[] = [ 
-			'title' => $this->slug_meta_box_title,
+		$meta_boxes[] = [
+			'title'      => $this->slug_meta_box_title,
 			'post_types' => [ $this->post_type ],
-			'context' => 'side',
-			'priority' => 'low',
-			'fields' => [ 
-				[ 
+			'context'    => 'side',
+			'priority'   => 'low',
+			'fields'     => [
+				[
 					'type' => 'text',
-					'id' => 'post_name',
+					'id'   => 'post_name',
 				],
 			],
 		];
