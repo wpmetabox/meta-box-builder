@@ -7,90 +7,40 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/elightup/twig.git",
-                "reference": "878f6cfa57ac080192f53922f93e5bdbeda314dd"
+                "reference": "588a9d55508d383de47cade5cb0049c809f4750f"
             },
-            "time": "2022-12-03T14:54:46+00:00",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elightup/twig/zipball/588a9d55508d383de47cade5cb0049c809f4750f",
+                "reference": "588a9d55508d383de47cade5cb0049c809f4750f",
+                "shasum": ""
+            },
+            "time": "2025-03-17T09:08:24+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
                 "mozart": {
-                    "dep_namespace": "eLightUp\\",
-                    "dep_directory": "/",
-                    "classmap_directory": "/",
-                    "classmap_prefix": "eLightUp_",
                     "packages": [
                         "twig/twig"
                     ],
+                    "dep_directory": "/",
+                    "dep_namespace": "eLightUp\\",
+                    "classmap_prefix": "eLightUp_",
+                    "classmap_directory": "/",
                     "delete_vendor_directories": true
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-4": {
                     "eLightUp\\": "./"
                 }
             },
-            "scripts": {
-                "post-install-cmd": [
-                    "mozart compose",
-                    "composer dump-autoload"
-                ],
-                "post-update-cmd": [
-                    "mozart compose",
-                    "composer dump-autoload"
-                ]
+            "notification-url": "https://packagist.org/downloads/",
+            "support": {
+                "source": "https://github.com/elightup/twig/tree/master"
             },
             "install-path": "../elightup/twig"
-        },
-        {
-            "name": "meta-box/mbb-parser",
-            "version": "dev-master",
-            "version_normalized": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:wpmetabox/mbb-parser.git",
-                "reference": "8fd84824fb6f678b0b2527e8aae226c093b635d1"
-            },
-            "require": {
-                "meta-box/support": "dev-master",
-                "riimu/kit-phpencoder": "^2.4"
-            },
-            "time": "2024-10-23T09:11:04+00:00",
-            "default-branch": true,
-            "type": "library",
-            "installation-source": "source",
-            "autoload": {
-                "psr-4": {
-                    "MBBParser\\": "src/"
-                }
-            },
-            "description": "Parse meta box settings from JSON",
-            "install-path": "../meta-box/mbb-parser"
-        },
-        {
-            "name": "meta-box/support",
-            "version": "dev-master",
-            "version_normalized": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/wpmetabox/support.git",
-                "reference": "99607eb4d8c8c96a7c882fc5a7c69cf3534d95bd"
-            },
-            "time": "2024-10-07T00:27:46+00:00",
-            "default-branch": true,
-            "type": "library",
-            "installation-source": "source",
-            "autoload": {
-                "psr-4": {
-                    "MetaBox\\Support\\": ""
-                }
-            },
-            "license": [
-                "GNU GPL-2.0"
-            ],
-            "description": "Helpers for Meta Box plugins",
-            "homepage": "https://metabox.io",
-            "install-path": "../meta-box/support"
         },
         {
             "name": "riimu/kit-phpencoder",
@@ -143,8 +93,82 @@
                 "source": "https://github.com/Riimu/Kit-PHPEncoder/tree/v2.4.2"
             },
             "install-path": "../riimu/kit-phpencoder"
+        },
+        {
+            "name": "wpmetabox/mbb-parser",
+            "version": "dev-feat-unparser",
+            "version_normalized": "dev-feat-unparser",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wpmetabox/mbb-parser.git",
+                "reference": "7a6da393d77bdedbbe878f8e59e074f7526a1215"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/7a6da393d77bdedbbe878f8e59e074f7526a1215",
+                "reference": "7a6da393d77bdedbbe878f8e59e074f7526a1215",
+                "shasum": ""
+            },
+            "require": {
+                "riimu/kit-phpencoder": "^2.4",
+                "wpmetabox/support": "dev-master"
+            },
+            "time": "2025-03-18T01:36:42+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "MBBParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Parse meta box settings from JSON",
+            "support": {
+                "issues": "https://github.com/wpmetabox/mbb-parser/issues",
+                "source": "https://github.com/wpmetabox/mbb-parser/tree/feat-unparser"
+            },
+            "install-path": "../wpmetabox/mbb-parser"
+        },
+        {
+            "name": "wpmetabox/support",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wpmetabox/support.git",
+                "reference": "874318ec497ce7fb918eb0629dec825210155d97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wpmetabox/support/zipball/874318ec497ce7fb918eb0629dec825210155d97",
+                "reference": "874318ec497ce7fb918eb0629dec825210155d97",
+                "shasum": ""
+            },
+            "time": "2025-03-17T08:34:51+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "MetaBox\\Support\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Helpers for Meta Box plugins",
+            "homepage": "https://metabox.io",
+            "support": {
+                "issues": "https://github.com/wpmetabox/support/issues",
+                "source": "https://github.com/wpmetabox/support/tree/master"
+            },
+            "install-path": "../wpmetabox/support"
         }
     ],
-    "dev": true,
+    "dev": false,
     "dev-package-names": []
 }
