@@ -92,7 +92,7 @@ class LocalJson {
 	/**
 	 * Sync from JSON file to database.
 	 *
-	 * Exprected format: [ 'post_id' => 123, 'local' => [local JSON array] ]
+	 * Exprected format: [ 'post_id' => 123, 'local' => [local JSON array] ]. See JsonService::get_json() for the full format.
 	 * After unparsing: 'local' becomes:
 	 * [
 	 *   	// Post fields:

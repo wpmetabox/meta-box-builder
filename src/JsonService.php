@@ -6,6 +6,24 @@ use MBB\Extensions\Blocks;
 class JsonService {
 
 	/**
+	 * Get data from JSON file and format it in a verbose format to use everywhere possible:
+	 * - Compare
+	 * - Sync to database
+	 *
+	 * Each JSON file after formatting will contains the following data:
+	 * [
+	 * 		'file'            => string,
+	 *		'local'           => array,
+	 *		'local_minimized' => array,
+	 *		'is_newer'        => bool,
+	 *		'post_id'         => null|int,
+	 *		'post_type'       => string<'meta-box'>,
+	 *		'id'              => string,
+	 *		'remote'          => null|array<meta box array>,
+	 *		'diff'            => string,
+	 *		'is_writable'     => bool,
+	 * ]
+	 *
 	 * @param array $params
 	 * @return array[]
 	 */
