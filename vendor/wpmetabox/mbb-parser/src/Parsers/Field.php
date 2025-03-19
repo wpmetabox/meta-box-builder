@@ -6,16 +6,24 @@ class Field extends Base {
 	protected $empty_keys = [ 'save_field' ];
 
 	// Remove if "true", set to "false" if missing.
-	protected $default_true = [
-		'button_group'   => [ 'inline' ],
-		'radio'          => [ 'inline' ],
-		'file_advanced'  => [ 'max_status' ],
-		'file_upload'    => [ 'max_status' ],
+	protected $default_true = [ 
+		'button_group' => [ 'inline' ],
+		'radio' => [ 'inline' ],
+		'file_advanced' => [ 'max_status' ],
+		'file_upload' => [ 'max_status' ],
 		'image_advanced' => [ 'max_status' ],
-		'image_upload'   => [ 'max_status' ],
-		'video'          => [ 'max_status' ],
+		'image_upload' => [ 'max_status' ],
+		'video' => [ 'max_status' ],
 	];
-	private $choice_types   = [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ];
+	
+	/**
+	 * Keep these settings even if they're false. Other false settings will be removed.
+	 * 
+	 * @var array
+	 */
+	protected $keep_false = [ 'inline', 'max_status' ];
+
+	private $choice_types = [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ];
 
 	public function parse() {
 		// Remove collapse/expand state.
@@ -61,8 +69,8 @@ class Field extends Base {
 		if ( empty( $this->settings['datalist_choices'] ) ) {
 			return $this;
 		}
-		$this->datalist = [
-			'id'      => uniqid(),
+		$this->datalist = [ 
+			'id' => uniqid(),
 			'options' => explode( "\n", $this->settings['datalist_choices'] ),
 		];
 		unset( $this->settings['datalist_choices'] );
@@ -115,7 +123,7 @@ class Field extends Base {
 			if ( is_callable( $callback ) ) {
 				try {
 					$this->options = call_user_func( $callback );
-				} catch ( \Throwable $th ) {
+				} catch (\Throwable $th) {
 					// throw $th;
 				}
 				$this->_callback = $callback; // For using in the encoders.

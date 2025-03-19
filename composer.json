@@ -15,7 +15,7 @@
 	},
 	"require": {
 		"wpmetabox/support": "dev-master",
-		"wpmetabox/mbb-parser": "dev-master",
+		"wpmetabox/mbb-parser": "dev-feat-unparser",
 		"elightup/twig": "dev-master"
 	},
 	"require-dev": {
@@ -32,7 +32,10 @@
 			"rm -rf vendor/**/**/.git"
 		],
 		"phpcs": [
-			"phpcs > phpcs.txt"
+			"phpcs src --standard='../meta-box-aio/phpcs.xml'"
+		],
+		"phpcbf": [
+			"phpcbf src --standard='../meta-box-aio/phpcs.xml'"
 		]
 	},
 	"extra": {
