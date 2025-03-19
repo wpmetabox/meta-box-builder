@@ -41,7 +41,7 @@ class Edit extends BaseEditPage {
 
 		$json = reset( $json );
 
-		$is_newer = $json['is_newer'] ?? false;
+		$is_newer = $json['is_newer'] ?? 0;
 
 		if ( $is_newer !== 0 ) {
 			?>

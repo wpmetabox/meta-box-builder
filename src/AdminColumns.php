@@ -179,7 +179,7 @@ class AdminColumns {
 		// Filter where local is not null
 		// and its should not imported yet.
 		$json = array_filter( $json, function ( $item ) {
-			return ! empty( $item['local'] ) && empty( $item['remote'] );
+			return $item['is_newer'] !== 0;
 		} );
 		?>
 		<template id="mb-sync-list">
@@ -271,7 +271,7 @@ class AdminColumns {
 		$json = JsonService::get_json();
 
 		$json = array_filter( $json, function ( $item ) {
-			return ! empty( $item['local'] ) && empty( $item['remote'] );
+			return $item['is_newer'] !== 0;
 		} );
 
 		$count = count( $json );
@@ -504,6 +504,7 @@ class AdminColumns {
 		$data = reset( $json );
 
 		if ( ! is_array( $data ) || ! isset( $data['file'] ) || ! file_exists( $data['file'] ) ) {
+			echo esc_html__( 'File not found', 'meta-box-builder' );
 			return;
 		}
 

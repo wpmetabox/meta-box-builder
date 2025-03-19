@@ -15,7 +15,7 @@ class JsonService {
 	 * 		'file'            => string,
 	 *		'local'           => array,
 	 *		'local_minimized' => array,
-	 *		'is_newer'        => bool,
+	 *		'is_newer'        => number<-1|0|1>,
 	 *		'post_id'         => null|int,
 	 *		'post_type'       => string<'meta-box'>,
 	 *		'id'              => string,
@@ -30,12 +30,18 @@ class JsonService {
 	public static function get_json( array $params = [] ): array {
 		static $items = null;
 
-		if ( $items !== null ) {
-			return $items;
+		if ( $items === null ) {
+			$items = self::query_json( $params );
 		}
 
-		$files = self::get_files();
+		$filter_items = self::filter_items( $items, $params );
 
+		return $filter_items;
+	}
+
+	private static function query_json( array $params ): array {
+		$files = self::get_files();
+		
 		// key by meta box id
 		$items = [];
 		foreach ( $files as $file ) {
@@ -71,7 +77,7 @@ class JsonService {
 				'file'            => $file,
 				'local'           => $raw_json,
 				'local_minimized' => $local_minimized,
-				'is_newer'        => true,
+				'is_newer'        => 1,
 				'post_id'         => null,
 				'post_type'       => $json['post_type'] ?? 'meta-box',
 				'id'              => $local_minimized['id'],
@@ -82,8 +88,11 @@ class JsonService {
 		}
 
 		$post_type = $params['post_type'] ?? 'meta-box';
+		if ( isset( $params['post_id'] ) ) {
+			$params['post__in'] = [ $params['post_id'] ];
+		}
 
-		$meta_boxes = self::get_meta_boxes();
+		$meta_boxes = self::get_meta_boxes( $params );
 
 		foreach ( $meta_boxes as $meta_box ) {
 			$id        = $meta_box['id'];
@@ -141,6 +150,10 @@ class JsonService {
 			] );
 		}
 
+		return $items;
+	}
+
+	private static function filter_items( array $items, array $params ): array {
 		// Filter by params
 		if ( isset( $params['id'] ) ) {
 			$items = array_filter( $items, function ( $item ) use ( $params ) {

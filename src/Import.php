@@ -100,6 +100,17 @@ class Import {
 				wp_die( wp_kses_post( implode( '<br>', $post_id->get_error_messages() ) ) );
 			}
 
+			// Handle the case when importing a meta box to already existing post.
+			// For example, when importing a meta box to a post that has post name "foo",
+			// The post name of the new post will be "foo-1", causing mismatch between the
+			// post name and the meta box id.
+			// Now we need to update those values
+			$new_post = get_post( $post_id );
+			if ( $new_post->post_name !== $post['post_name'] ) {
+				$post['post_name']      = $new_post->post_name;
+				$post['meta_box']['id'] = $new_post->post_name;
+			}
+
 			$meta_keys = Export::get_meta_keys( $post['post_type'] );
 			foreach ( $meta_keys as $meta_key ) {
 				update_post_meta( $post_id, $meta_key, $post[ $meta_key ] );
