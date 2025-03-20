@@ -4,7 +4,27 @@ namespace MBB\Integrations\WPML;
 use WP_Post;
 
 class FieldGroup {
+	private $keys = [];
+
 	public function __construct() {
+		// List of keys for field that need to be translated.
+		// See mbb-parser/src/Encoders/Field.php for the list of keys.
+		$this->keys = [
+			'name' => __( 'Label', 'meta-box-builder' ),
+			'desc' => __( 'Description', 'meta-box-builder' ),
+			'label_description' => __( 'Label description', 'meta-box-builder' ),
+			'add_button' => __( 'Add more text', 'meta-box-builder' ),
+			'placeholder' => __( 'Placeholder', 'meta-box-builder' ),
+			'prefix' => __( 'Prefix', 'meta-box-builder' ),
+			'suffix' => __( 'Suffix', 'meta-box-builder' ),
+			'before' => __( 'Before', 'meta-box-builder' ),
+			'after' => __( 'After', 'meta-box-builder' ),
+			'std' => __( 'Default value', 'meta-box-builder' ),
+			'group_title' => __( 'Group title', 'meta-box-builder' ),
+			'prepend' => __( 'Prepend', 'meta-box-builder' ),
+			'append' => __( 'Append', 'meta-box-builder' ),
+		];
+
 		add_action( 'save_post_meta-box', [ $this, 'register_package' ], 20, 2 );
 		add_filter( 'mbb_meta_box', [ $this, 'use_translations' ], 10, 2 );
 		add_action( 'deleted_post_meta-box', [ $this, 'delete_package' ], 10, 2 );
@@ -25,84 +45,6 @@ class FieldGroup {
 		do_action( 'wpml_delete_unused_package_strings', $package );
 	}
 
-	public function use_translations( array $meta_box, WP_Post $post ): array {
-		$package = $this->get_package( $post );
-
-		if ( ! empty( $meta_box['title'] ) ) {
-			$meta_box['title'] = apply_filters( 'wpml_translate_string', $meta_box['title'], 'title', $package );
-		}
-
-		$this->use_fields_translations( $meta_box['fields'], $package );
-
-		return $meta_box;
-	}
-
-	private function use_fields_translations( array &$fields, array $package, string $base_id = '' ): void {
-		foreach ( $fields as &$field ) {
-			$this->use_field_translations( $field, $package, $base_id );
-		}
-	}
-
-	private function use_field_translations( array &$field, array $package, string $base_id = '' ): void {
-		$id = $base_id ? $base_id . '_' . $field['id'] : $field['id'];
-
-		if ( ! empty( $field['name'] ) ) {
-			$field['name'] = apply_filters( 'wpml_translate_string', $field['name'], $id . '_name', $package );
-		}
-		if ( ! empty( $field['desc'] ) ) {
-			$field['desc'] = apply_filters( 'wpml_translate_string', $field['desc'], $id . '_desc', $package );
-		}
-		if ( ! empty( $field['label_description'] ) ) {
-			$field['label_description'] = apply_filters( 'wpml_translate_string', $field['label_description'], $id . '_label_description', $package );
-		}
-		if ( ! empty( $field['placeholder'] ) ) {
-			$field['placeholder'] = apply_filters( 'wpml_translate_string', $field['placeholder'], $id . '_placeholder', $package );
-		}
-		if ( ! empty( $field['add_button'] ) ) {
-			$field['add_button'] = apply_filters( 'wpml_translate_string', $field['add_button'], $id . '_add_button', $package );
-		}
-
-		if ( ! empty( $field['clone'] ) && ! empty( $field['add_button'] ) ) {
-			$field['add_button'] = apply_filters( 'wpml_translate_string', $field['add_button'], $id . '_add_button', $package );
-		}
-
-		if ( in_array( $field['type'], [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ], true ) ) {
-			$options = $field['options'] ?? [];
-			foreach ( $options as $key => $option ) {
-				$options[$key] = apply_filters( 'wpml_translate_string', $option, $id . '_option_' . $key, $package );
-			}
-			$field['options'] = $options;
-		}
-
-		if ( isset( $field['tooltip'] ) ) {
-			$tooltip = '';
-			if ( is_string( $field['tooltip'] ) ) {
-				$tooltip = $field['tooltip'];
-			} elseif ( isset( $field['tooltip']['content'] ) ) {
-				$tooltip = $field['tooltip']['content'];
-			}
-			if ( ! empty( $tooltip ) ) {
-				$field['tooltip'] = apply_filters( 'wpml_translate_string', $tooltip, $id . '_tooltip', $package );
-			}
-		}
-
-		if ( 'group' === $field['type'] ) {
-			if ( ! empty( $field['group_title'] ) ) {
-				$field['group_title'] = apply_filters( 'wpml_translate_string', $field['group_title'], $id . '_group_title', $package );
-			}
-			$this->use_fields_translations( $field['fields'], $package, $id );
-		}
-	}
-
-	private function get_package( WP_Post $post ): array {
-		return [
-			'kind'      => 'Meta Box: Field Group',
-			'name'      => $post->post_name,
-			'title'     => $post->post_title,
-			'edit_link' => get_edit_post_link( $post ),
-		];
-	}
-
 	private function register_strings( array $meta_box, WP_Post $post ): void {
 		$package = $this->get_package( $post );
 
@@ -115,65 +57,40 @@ class FieldGroup {
 			LINE
 		);
 
+		if ( ! empty( $meta_box['tabs'] ) ) {
+			foreach ( $meta_box['tabs'] as $key => $tab ) {
+				do_action(
+					'wpml_register_string',
+					$tab['label'] ?? '',
+					'tab_' . $key,
+					$package,
+					sprintf( __( 'Tab: %s', 'meta-box-builder' ), $tab['label'] ?? '' ),
+					LINE
+				);
+			}
+		}
+
 		$this->register_fields_strings( $meta_box['fields'], $package );
 	}
 
 	private function register_fields_strings( array $fields, array $package, string $base_id = '' ): void {
-		foreach ( $fields as $field ) {
-			$this->register_field_strings( $field, $package, $base_id );
+		foreach ( $fields as $index => $field ) {
+			$this->register_field_strings( $field, $package, $base_id, $index );
 		}
 	}
 
-	private function register_field_strings( array $field, array $package, string $base_id = '' ): void {
-		$id = $base_id ? $base_id . '_' . $field['id'] : $field['id'];
+	private function register_field_strings( array $field, array $package, string $base_id = '', int $index = 0 ): void {
+		$field_id = $this->get_field_id( $field, $index );
+		$id       = $base_id ? $base_id . '_' . $field_id : $field_id;
 
-		do_action(
-			'wpml_register_string',
-			$field['name'] ?? '',
-			$id . '_name',
-			$package,
-			// translators: %s is the field name.
-			sprintf( __( '%s: Label', 'meta-box-builder' ), $field['name'] ),
-			LINE
-		);
-		do_action(
-			'wpml_register_string',
-			$field['desc'] ?? '',
-			$id . '_desc',
-			$package,
-			// translators: %s is the field name.
-			sprintf( __( '%s: Description', 'meta-box-builder' ), $field['name'] ),
-			LINE
-		);
-
-		do_action(
-			'wpml_register_string',
-			$field['label_description'] ?? '',
-			$id . '_label_description',
-			$package,
-			// translators: %s is the field name.
-			sprintf( __( '%s: Label description', 'meta-box-builder' ), $field['name'] ),
-			LINE
-		);
-
-		do_action(
-			'wpml_register_string',
-			$field['placeholder'] ?? '',
-			$id . '_placeholder',
-			$package,
-			// translators: %s is the field name.
-			sprintf( __( '%s: Placeholder', 'meta-box-builder' ), $field['name'] ),
-			LINE
-		);
-
-		if ( ! empty( $field['clone'] ) ) {
+		foreach ( $this->keys as $key => $label ) {
 			do_action(
 				'wpml_register_string',
-				$field['add_button'] ?? '',
-				$id . '_add_button',
+				$field[$key] ?? '',
+				$id . '_' . $key,
 				$package,
-				// translators: %s is the field name.
-				sprintf( __( '%s: Add more text', 'meta-box-builder' ), $field['name'] ),
+				// translators: %1$s is the field name, %2$s is the key.
+				sprintf( '%1$s: %2$s', $field['name'], $label ),
 				LINE
 			);
 		}
@@ -215,27 +132,86 @@ class FieldGroup {
 		}
 
 		if ( 'group' === $field['type'] ) {
-			if ( ! empty( $field['collapsible'] ) ) {
-				do_action(
-					'wpml_register_string',
-					$field['group_title'] ?? '',
-					$id . '_group_title',
-					$package,
-					// translators: %s is the field name.
-					sprintf( __( '%s: Group title', 'meta-box-builder' ), $field['name'] ),
-					LINE
-				);
-			}
-
 			$this->register_fields_strings( $field['fields'], $package, $id );
 		}
 	}
 
-	/**
-	 * Delete the WPML string package when a field group is deleted.
-	 */
+	public function use_translations( array $meta_box, WP_Post $post ): array {
+		$package = $this->get_package( $post );
+
+		if ( ! empty( $meta_box['title'] ) ) {
+			$meta_box['title'] = apply_filters( 'wpml_translate_string', $meta_box['title'], 'title', $package );
+		}
+
+		if ( ! empty( $meta_box['tabs'] ) ) {
+			foreach ( $meta_box['tabs'] as $key => &$tab ) {
+				if ( ! empty( $tab['label'] ) ) {
+					$tab['label'] = apply_filters( 'wpml_translate_string', $tab['label'], 'tab_' . $key, $package );
+				}
+			}
+		}
+
+		$this->use_fields_translations( $meta_box['fields'], $package );
+
+		return $meta_box;
+	}
+
+	private function use_fields_translations( array &$fields, array $package, string $base_id = '' ): void {
+		foreach ( $fields as $index => &$field ) {
+			$this->use_field_translations( $field, $package, $base_id, $index );
+		}
+	}
+
+	private function use_field_translations( array &$field, array $package, string $base_id = '', int $index = 0 ): void {
+		$field_id = $this->get_field_id( $field, $index );
+		$id       = $base_id ? $base_id . '_' . $field_id : $field_id;
+
+		foreach ( $this->keys as $key => $label ) {
+			if ( ! empty( $field[$key] ) ) {
+				$field[$key] = apply_filters( 'wpml_translate_string', $field[$key], $id . '_' . $key, $package );
+			}
+		}
+
+		if ( in_array( $field['type'], [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ], true ) ) {
+			$options = $field['options'] ?? [];
+			foreach ( $options as $key => $option ) {
+				$options[$key] = apply_filters( 'wpml_translate_string', $option, $id . '_option_' . $key, $package );
+			}
+			$field['options'] = $options;
+		}
+
+		if ( isset( $field['tooltip'] ) ) {
+			$tooltip = '';
+			if ( is_string( $field['tooltip'] ) ) {
+				$tooltip = $field['tooltip'];
+			} elseif ( isset( $field['tooltip']['content'] ) ) {
+				$tooltip = $field['tooltip']['content'];
+			}
+			if ( ! empty( $tooltip ) ) {
+				$field['tooltip'] = apply_filters( 'wpml_translate_string', $tooltip, $id . '_tooltip', $package );
+			}
+		}
+
+		if ( 'group' === $field['type'] ) {
+			$this->use_fields_translations( $field['fields'], $package, $id );
+		}
+	}
+
+	private function get_package( WP_Post $post ): array {
+		return [
+			'kind'      => 'Meta Box: Field Group',
+			'name'      => $post->post_name,
+			'title'     => $post->post_title,
+			'edit_link' => get_edit_post_link( $post ),
+		];
+	}
+
 	public function delete_package( int $post_id, WP_Post $post ) {
 		$package = $this->get_package( $post );
 		do_action( 'wpml_delete_package', $package['name'], $package['kind'] );
+	}
+
+	private function get_field_id( array $field, int $index = 0 ): string {
+		return empty( $field['id'] ) ? sanitize_key( $field['type'] ) . '_' . $index : $field['id'];
 	}
 }
