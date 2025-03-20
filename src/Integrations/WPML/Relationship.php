@@ -9,14 +9,14 @@ class Relationship {
 
 	public function __construct() {
 		$this->keys = [
-			'empty_message' => __( 'Empty message', 'meta-box-builder' ),
-			'admin_column.title' => __( 'Admin column title', 'meta-box-builder' ),
-			'meta_box.title' => __( 'Meta box title', 'meta-box-builder' ),
-			'field.name' => __( 'Field name', 'meta-box-builder' ),
-			'field.desc' => __( 'Field description', 'meta-box-builder' ),
+			'empty_message'           => __( 'Empty message', 'meta-box-builder' ),
+			'admin_column.title'      => __( 'Admin column title', 'meta-box-builder' ),
+			'meta_box.title'          => __( 'Meta box title', 'meta-box-builder' ),
+			'field.name'              => __( 'Field name', 'meta-box-builder' ),
+			'field.desc'              => __( 'Field description', 'meta-box-builder' ),
 			'field.label_description' => __( 'Field label description', 'meta-box-builder' ),
-			'field.placeholder' => __( 'Field placeholder', 'meta-box-builder' ),
-			'field.add_button' => __( 'Field add button', 'meta-box-builder' ),
+			'field.placeholder'       => __( 'Field placeholder', 'meta-box-builder' ),
+			'field.add_button'        => __( 'Field add button', 'meta-box-builder' ),
 		];
 
 		add_action( 'save_post_mb-relationship', [ $this, 'register_package' ], 20, 2 );

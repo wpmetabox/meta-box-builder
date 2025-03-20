@@ -31,8 +31,8 @@
 			"echo Deleting .git dirs...",
 			"rm -rf vendor/**/**/.git"
 		],
-		"phpcs": [
-			"phpcs > phpcs.txt"
+		"phpcbf": [
+			"phpcbf src/ --standard=../meta-box-aio/phpcs.xml"
 		]
 	},
 	"extra": {

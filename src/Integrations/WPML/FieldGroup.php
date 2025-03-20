@@ -10,19 +10,19 @@ class FieldGroup {
 		// List of keys for field that need to be translated.
 		// See mbb-parser/src/Encoders/Field.php for the list of keys.
 		$this->keys = [
-			'name' => __( 'Label', 'meta-box-builder' ),
-			'desc' => __( 'Description', 'meta-box-builder' ),
+			'name'              => __( 'Label', 'meta-box-builder' ),
+			'desc'              => __( 'Description', 'meta-box-builder' ),
 			'label_description' => __( 'Label description', 'meta-box-builder' ),
-			'add_button' => __( 'Add more text', 'meta-box-builder' ),
-			'placeholder' => __( 'Placeholder', 'meta-box-builder' ),
-			'prefix' => __( 'Prefix', 'meta-box-builder' ),
-			'suffix' => __( 'Suffix', 'meta-box-builder' ),
-			'before' => __( 'Before', 'meta-box-builder' ),
-			'after' => __( 'After', 'meta-box-builder' ),
-			'std' => __( 'Default value', 'meta-box-builder' ),
-			'group_title' => __( 'Group title', 'meta-box-builder' ),
-			'prepend' => __( 'Prepend', 'meta-box-builder' ),
-			'append' => __( 'Append', 'meta-box-builder' ),
+			'add_button'        => __( 'Add more text', 'meta-box-builder' ),
+			'placeholder'       => __( 'Placeholder', 'meta-box-builder' ),
+			'prefix'            => __( 'Prefix', 'meta-box-builder' ),
+			'suffix'            => __( 'Suffix', 'meta-box-builder' ),
+			'before'            => __( 'Before', 'meta-box-builder' ),
+			'after'             => __( 'After', 'meta-box-builder' ),
+			'std'               => __( 'Default value', 'meta-box-builder' ),
+			'group_title'       => __( 'Group title', 'meta-box-builder' ),
+			'prepend'           => __( 'Prepend', 'meta-box-builder' ),
+			'append'            => __( 'Append', 'meta-box-builder' ),
 		];
 
 		add_action( 'save_post_meta-box', [ $this, 'register_package' ], 20, 2 );
@@ -86,7 +86,7 @@ class FieldGroup {
 		foreach ( $this->keys as $key => $label ) {
 			do_action(
 				'wpml_register_string',
-				$field[$key] ?? '',
+				$field[ $key ] ?? '',
 				$id . '_' . $key,
 				$package,
 				// translators: %1$s is the field name, %2$s is the key.
@@ -167,15 +167,15 @@ class FieldGroup {
 		$id       = $base_id ? $base_id . '_' . $field_id : $field_id;
 
 		foreach ( $this->keys as $key => $label ) {
-			if ( ! empty( $field[$key] ) ) {
-				$field[$key] = apply_filters( 'wpml_translate_string', $field[$key], $id . '_' . $key, $package );
+			if ( ! empty( $field[ $key ] ) ) {
+				$field[ $key ] = apply_filters( 'wpml_translate_string', $field[ $key ], $id . '_' . $key, $package );
 			}
 		}
 
 		if ( in_array( $field['type'], [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ], true ) ) {
 			$options = $field['options'] ?? [];
 			foreach ( $options as $key => $option ) {
-				$options[$key] = apply_filters( 'wpml_translate_string', $option, $id . '_option_' . $key, $package );
+				$options[ $key ] = apply_filters( 'wpml_translate_string', $option, $id . '_option_' . $key, $package );
 			}
 			$field['options'] = $options;
 		}
