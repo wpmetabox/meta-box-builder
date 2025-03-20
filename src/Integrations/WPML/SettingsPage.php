@@ -25,34 +25,6 @@ class SettingsPage {
 		do_action( 'wpml_delete_unused_package_strings', $package );
 	}
 
-	public function use_translations( array $settings_page, WP_Post $post ): array {
-		$package = $this->get_package( $post );
-
-		if ( ! empty( $settings_page['menu_title'] ) ) {
-			$settings_page['menu_title'] = apply_filters( 'wpml_translate_string', $settings_page['menu_title'], 'title', $package );
-		}
-
-		if ( ! empty( $settings_page['submit_button'] ) ) {
-			$settings_page['submit_button'] = apply_filters( 'wpml_translate_string', $settings_page['submit_button'], 'submit_button', $package );
-		}
-
-		if ( ! empty( $settings_page['message'] ) ) {
-			$settings_page['message'] = apply_filters( 'wpml_translate_string', $settings_page['message'], 'message', $package );
-		}
-
-		return $settings_page;
-	}
-
-	private function get_package( WP_Post $post ): array {
-		return [
-			'kind'      => 'Meta Box: Settings Page',
-			'name'      => $post->post_name,
-			'title'     => $post->post_title,
-			'edit_link' => get_edit_post_link( $post ),
-			'view_link' => admin_url( "admin.php?page={$post->post_name}" ),
-		];
-	}
-
 	private function register_strings( array $settings_page, WP_Post $post ): void {
 		$package = $this->get_package( $post );
 
@@ -82,9 +54,34 @@ class SettingsPage {
 		);
 	}
 
-	/**
-	 * Delete the WPML string package when a settings page is deleted.
-	 */
+	public function use_translations( array $settings_page, WP_Post $post ): array {
+		$package = $this->get_package( $post );
+
+		if ( ! empty( $settings_page['menu_title'] ) ) {
+			$settings_page['menu_title'] = apply_filters( 'wpml_translate_string', $settings_page['menu_title'], 'title', $package );
+		}
+
+		if ( ! empty( $settings_page['submit_button'] ) ) {
+			$settings_page['submit_button'] = apply_filters( 'wpml_translate_string', $settings_page['submit_button'], 'submit_button', $package );
+		}
+
+		if ( ! empty( $settings_page['message'] ) ) {
+			$settings_page['message'] = apply_filters( 'wpml_translate_string', $settings_page['message'], 'message', $package );
+		}
+
+		return $settings_page;
+	}
+
+	private function get_package( WP_Post $post ): array {
+		return [
+			'kind'      => 'Meta Box: Settings Page',
+			'name'      => $post->post_name,
+			'title'     => $post->post_title,
+			'edit_link' => get_edit_post_link( $post ),
+			'view_link' => admin_url( "admin.php?page={$post->post_name}" ),
+		];
+	}
+
 	public function delete_package( int $post_id, WP_Post $post ) {
 		$package = $this->get_package( $post );
 		do_action( 'wpml_delete_package', $package['name'], $package['kind'] );
