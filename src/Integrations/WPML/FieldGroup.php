@@ -32,20 +32,18 @@ class FieldGroup {
 			$meta_box['title'] = apply_filters( 'wpml_translate_string', $meta_box['title'], 'title', $package );
 		}
 
-		$this->use_fields_translations( $meta_box['fields'], $post );
+		$this->use_fields_translations( $meta_box['fields'], $package );
 
 		return $meta_box;
 	}
 
-	private function use_fields_translations( array &$fields, WP_Post $post, string $base_id = '' ): void {
-		$package = $this->get_package( $post );
-
+	private function use_fields_translations( array &$fields, array $package, string $base_id = '' ): void {
 		foreach ( $fields as &$field ) {
-			$this->use_field_translations( $field, $post, $package, $base_id );
+			$this->use_field_translations( $field, $package, $base_id );
 		}
 	}
 
-	private function use_field_translations( array &$field, WP_Post $post, array $package, string $base_id = '' ): void {
+	private function use_field_translations( array &$field, array $package, string $base_id = '' ): void {
 		$id = $base_id ? $base_id . '_' . $field['id'] : $field['id'];
 
 		if ( ! empty( $field['name'] ) ) {
@@ -92,7 +90,7 @@ class FieldGroup {
 			if ( ! empty( $field['group_title'] ) ) {
 				$field['group_title'] = apply_filters( 'wpml_translate_string', $field['group_title'], $id . '_group_title', $package );
 			}
-			$this->use_fields_translations( $field['fields'], $post, $id );
+			$this->use_fields_translations( $field['fields'], $package, $id );
 		}
 	}
 
@@ -117,18 +115,16 @@ class FieldGroup {
 			LINE
 		);
 
-		$this->register_fields_strings( $meta_box['fields'], $post );
+		$this->register_fields_strings( $meta_box['fields'], $package );
 	}
 
-	private function register_fields_strings( array $fields, WP_Post $post, string $base_id = '' ): void {
+	private function register_fields_strings( array $fields, array $package, string $base_id = '' ): void {
 		foreach ( $fields as $field ) {
-			$this->register_field_strings( $field, $post, $base_id );
+			$this->register_field_strings( $field, $package, $base_id );
 		}
 	}
 
-	private function register_field_strings( array $field, WP_Post $post, string $base_id = '' ): void {
-		$package = $this->get_package( $post );
-
+	private function register_field_strings( array $field, array $package, string $base_id = '' ): void {
 		$id = $base_id ? $base_id . '_' . $field['id'] : $field['id'];
 
 		do_action(
@@ -231,7 +227,7 @@ class FieldGroup {
 				);
 			}
 
-			$this->register_fields_strings( $field['fields'], $post, $id );
+			$this->register_fields_strings( $field['fields'], $package, $id );
 		}
 	}
 
