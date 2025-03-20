@@ -1,24 +1,16 @@
 <?php
-namespace MBB\Integrations;
+namespace MBB\Integrations\WPML;
 
 use WP_Post;
 
-class WPML {
+class SettingsPage {
 	public function __construct() {
-		if ( ! $this->is_active() ) {
-			return;
-		}
-
-		add_action( 'save_post_mb-settings-page', [ $this, 'register_package_for_settings_page' ], 10, 2 );
+		add_action( 'save_post_mb-settings-page', [ $this, 'register_package' ], 10, 2 );
 		add_filter( 'mbb_settings_page', [ $this, 'use_translations' ], 10, 2 );
-		add_action( 'deleted_post_mb-settings-page', [ $this, 'delete_package_for_settings_page' ], 10, 2 );
+		add_action( 'deleted_post_mb-settings-page', [ $this, 'delete_package' ], 10, 2 );
 	}
 
-	public function is_active(): bool {
-		return defined( 'ICL_SITEPRESS_VERSION' );
-	}
-
-	public function register_package_for_settings_page( int $post_id, WP_Post $post ): void {
+	public function register_package( int $post_id, WP_Post $post ): void {
 		$settings_page = get_post_meta( $post_id, 'settings_page', true );
 		if ( empty( $settings_page ) || ! is_array( $settings_page ) ) {
 			return;
@@ -93,7 +85,7 @@ class WPML {
 	/**
 	 * Delete the WPML string package when a settings page is deleted.
 	 */
-	public function delete_package_for_settings_page( int $post_id, WP_Post $post ) {
+	public function delete_package( int $post_id, WP_Post $post ) {
 		$package = $this->get_package( $post );
 		do_action( 'wpml_delete_package', $package['name'], $package['kind'] );
 	}

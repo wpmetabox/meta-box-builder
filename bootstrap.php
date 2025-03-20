@@ -25,7 +25,7 @@ if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 	new RestApi\ShowHide();
 }
 
-new Integrations\WPML();
+new Integrations\WPML\Manager();
 
 new Extensions\AdminColumns();
 new Extensions\Blocks();
