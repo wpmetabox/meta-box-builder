@@ -2,9 +2,23 @@
 namespace MBB\Integrations\WPML;
 
 use WP_Post;
+use MetaBox\Support\Arr;
 
 class Relationship {
+	private $keys = [];
+
 	public function __construct() {
+		$this->keys = [
+			'empty_message' => __( 'Empty message', 'meta-box-builder' ),
+			'admin_column.title' => __( 'Admin column title', 'meta-box-builder' ),
+			'meta_box.title' => __( 'Meta box title', 'meta-box-builder' ),
+			'field.name' => __( 'Field name', 'meta-box-builder' ),
+			'field.desc' => __( 'Field description', 'meta-box-builder' ),
+			'field.label_description' => __( 'Field label description', 'meta-box-builder' ),
+			'field.placeholder' => __( 'Field placeholder', 'meta-box-builder' ),
+			'field.add_button' => __( 'Field add button', 'meta-box-builder' ),
+		];
+
 		add_action( 'save_post_mb-relationship', [ $this, 'register_package' ], 20, 2 );
 		add_filter( 'mbb_relationship', [ $this, 'use_translations' ], 10, 2 );
 		add_action( 'deleted_post_mb-relationship', [ $this, 'delete_package' ], 10, 2 );
@@ -42,77 +56,16 @@ class Relationship {
 	}
 
 	private function register_side_strings( string $side, array $data, array $package ): void {
-		do_action(
-			'wpml_register_string',
-			$data['empty_message'] ?? '',
-			$side . '_empty_message',
-			$package,
-			sprintf( __( '%s: Empty message', 'meta-box-builder' ), $side ),
-			LINE
-		);
-
-		do_action(
-			'wpml_register_string',
-			$data['admin_column']['title'] ?? '',
-			$side . '_admin_column_title',
-			$package,
-			sprintf( __( '%s: Admin column title', 'meta-box-builder' ), $side ),
-			LINE
-		);
-
-		do_action(
-			'wpml_register_string',
-			$data['meta_box']['title'] ?? '',
-			$side . '_meta_box_title',
-			$package,
-			sprintf( __( '%s: Meta box title', 'meta-box-builder' ), $side ),
-			LINE
-		);
-
-		do_action(
-			'wpml_register_string',
-			$data['field']['name'] ?? '',
-			$side . '_field_name',
-			$package,
-			sprintf( __( '%s: Field name', 'meta-box-builder' ), $side ),
-			LINE
-		);
-
-		do_action(
-			'wpml_register_string',
-			$data['field']['desc'] ?? '',
-			$side . '_field_desc',
-			$package,
-			sprintf( __( '%s: Field description', 'meta-box-builder' ), $side ),
-			LINE
-		);
-
-		do_action(
-			'wpml_register_string',
-			$data['field']['label_description'] ?? '',
-			$side . '_field_label_description',
-			$package,
-			sprintf( __( '%s: Field label description', 'meta-box-builder' ), $side ),
-			LINE
-		);
-
-		do_action(
-			'wpml_register_string',
-			$data['field']['placeholder'] ?? '',
-			$side . '_field_placeholder',
-			$package,
-			sprintf( __( '%s: Field placeholder', 'meta-box-builder' ), $side ),
-			LINE
-		);
-
-		do_action(
-			'wpml_register_string',
-			$data['field']['add_button'] ?? '',
-			$side . '_field_add_button',
-			$package,
-			sprintf( __( '%s: Field add button', 'meta-box-builder' ), $side ),
-			LINE
-		);
+		foreach ( $this->keys as $key => $label ) {
+			do_action(
+				'wpml_register_string',
+				Arr::get( $data, $key, '' ),
+				$side . '_' . str_replace( '.', '_', $key ),
+				$package,
+				sprintf( '%s: %s', $side, $label ),
+				LINE
+			);
+		}
 	}
 
 	public function use_translations( array $relationship, WP_Post $post ): array {
@@ -129,29 +82,11 @@ class Relationship {
 	}
 
 	private function use_side_translations( string $side, array &$data, array $package ): void {
-		if ( ! empty( $data['empty_message'] ) ) {
-			$data['empty_message'] = apply_filters( 'wpml_translate_string', $data['empty_message'], $side . '_empty_message', $package );
-		}
-		if ( ! empty( $data['admin_column']['title'] ) ) {
-			$data['admin_column']['title'] = apply_filters( 'wpml_translate_string', $data['admin_column']['title'], $side . '_admin_column_title', $package );
-		}
-		if ( ! empty( $data['meta_box']['title'] ) ) {
-			$data['meta_box']['title'] = apply_filters( 'wpml_translate_string', $data['meta_box']['title'], $side . '_meta_box_title', $package );
-		}
-		if ( ! empty( $data['field']['name	'] ) ) {
-			$data['field']['name'] = apply_filters( 'wpml_translate_string', $data['field']['name'], $side . '_field_name', $package );
-		}
-		if ( ! empty( $data['field']['desc'] ) ) {
-			$data['field']['desc'] = apply_filters( 'wpml_translate_string', $data['field']['desc'], $side . '_field_desc', $package );
-		}
-		if ( ! empty( $data['field']['label_description'] ) ) {
-			$data['field']['label_description'] = apply_filters( 'wpml_translate_string', $data['field']['label_description'], $side . '_field_label_description', $package );
-		}
-		if ( ! empty( $data['field']['placeholder'] ) ) {
-			$data['field']['placeholder'] = apply_filters( 'wpml_translate_string', $data['field']['placeholder'], $side . '_field_placeholder', $package );
-		}
-		if ( ! empty( $data['field']['add_button'] ) ) {
-			$data['field']['add_button'] = apply_filters( 'wpml_translate_string', $data['field']['add_button'], $side . '_field_add_button', $package );
+		foreach ( $this->keys as $key => $label ) {
+			$value = Arr::get( $data, $key );
+			if ( ! empty( $value ) ) {
+				Arr::set( $data, $key, apply_filters( 'wpml_translate_string', $value, $side . '_' . str_replace( '.', '_', $key ), $package ) );
+			}
 		}
 	}
 

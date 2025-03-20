@@ -4,7 +4,15 @@ namespace MBB\Integrations\WPML;
 use WP_Post;
 
 class SettingsPage {
+	private $keys = [];
+
 	public function __construct() {
+		$this->keys = [
+			'menu_title'    => __( 'Title', 'meta-box-builder' ),
+			'submit_button' => __( 'Submit button', 'meta-box-builder' ),
+			'message'       => __( 'Custom message', 'meta-box-builder' ),
+		];
+
 		add_action( 'save_post_mb-settings-page', [ $this, 'register_package' ], 20, 2 );
 		add_filter( 'mbb_settings_page', [ $this, 'use_translations' ], 10, 2 );
 		add_action( 'deleted_post_mb-settings-page', [ $this, 'delete_package' ], 10, 2 );
@@ -20,53 +28,31 @@ class SettingsPage {
 
 		do_action( 'wpml_start_string_package_registration', $package );
 
-		$this->register_strings( $settings_page, $post );
+		$this->register_strings( $settings_page, $package );
 
 		do_action( 'wpml_delete_unused_package_strings', $package );
 	}
 
-	private function register_strings( array $settings_page, WP_Post $post ): void {
-		$package = $this->get_package( $post );
-
-		do_action(
-			'wpml_register_string',
-			$post->post_title,
-			'title',
-			$package,
-			__( 'Title', 'meta-box-builder' ),
-			LINE
-		);
-		do_action(
-			'wpml_register_string',
-			$settings_page['submit_button'] ?? '',
-			'submit_button',
-			$package,
-			__( 'Submit button', 'meta-box-builder' ),
-			LINE
-		);
-		do_action(
-			'wpml_register_string',
-			$settings_page['message'] ?? '',
-			'message',
-			$package,
-			__( 'Custom message', 'meta-box-builder' ),
-			LINE
-		);
+	private function register_strings( array $settings_page, array $package ): void {
+		foreach ( $this->keys as $key => $label ) {
+			do_action(
+				'wpml_register_string',
+				$settings_page[ $key ] ?? '',
+				$key,
+				$package,
+				$label,
+				LINE
+			);
+		}
 	}
 
 	public function use_translations( array $settings_page, WP_Post $post ): array {
 		$package = $this->get_package( $post );
 
-		if ( ! empty( $settings_page['menu_title'] ) ) {
-			$settings_page['menu_title'] = apply_filters( 'wpml_translate_string', $settings_page['menu_title'], 'title', $package );
-		}
-
-		if ( ! empty( $settings_page['submit_button'] ) ) {
-			$settings_page['submit_button'] = apply_filters( 'wpml_translate_string', $settings_page['submit_button'], 'submit_button', $package );
-		}
-
-		if ( ! empty( $settings_page['message'] ) ) {
-			$settings_page['message'] = apply_filters( 'wpml_translate_string', $settings_page['message'], 'message', $package );
+		foreach ( $this->keys as $key => $label ) {
+			if ( ! empty( $settings_page[ $key ] ) ) {
+				$settings_page[ $key ] = apply_filters( 'wpml_translate_string', $settings_page[ $key ], $key, $package );
+			}
 		}
 
 		return $settings_page;
