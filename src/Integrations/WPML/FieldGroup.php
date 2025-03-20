@@ -5,7 +5,7 @@ use WP_Post;
 
 class FieldGroup {
 	public function __construct() {
-		add_action( 'save_post_meta-box', [ $this, 'register_package' ], 10, 2 );
+		add_action( 'save_post_meta-box', [ $this, 'register_package' ], 20, 2 );
 		add_filter( 'mbb_meta_box', [ $this, 'use_translations' ], 10, 2 );
 		add_action( 'deleted_post_meta-box', [ $this, 'delete_package' ], 10, 2 );
 	}

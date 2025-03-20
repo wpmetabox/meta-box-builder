@@ -5,7 +5,7 @@ use WP_Post;
 
 class SettingsPage {
 	public function __construct() {
-		add_action( 'save_post_mb-settings-page', [ $this, 'register_package' ], 10, 2 );
+		add_action( 'save_post_mb-settings-page', [ $this, 'register_package' ], 20, 2 );
 		add_filter( 'mbb_settings_page', [ $this, 'use_translations' ], 10, 2 );
 		add_action( 'deleted_post_mb-settings-page', [ $this, 'delete_package' ], 10, 2 );
 	}
