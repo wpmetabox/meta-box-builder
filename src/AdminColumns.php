@@ -179,7 +179,7 @@ class AdminColumns {
 		// Filter where local is not null
 		// and its should not imported yet.
 		$json = array_filter( $json, function ( $item ) {
-			return $item['is_newer'] !== 0;
+			return isset( $item['local'] ) && $item['is_newer'] !== 0;
 		} );
 		?>
 		<template id="mb-sync-list">
@@ -271,7 +271,7 @@ class AdminColumns {
 		$json = JsonService::get_json();
 
 		$json = array_filter( $json, function ( $item ) {
-			return $item['is_newer'] !== 0;
+			return isset( $item['local'] ) && $item['is_newer'] !== 0;
 		} );
 
 		$count = count( $json );

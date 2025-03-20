@@ -5,6 +5,15 @@ use MBB\LocalJson;
 
 class Template {
 	public static function render_diff_dialog() {
+		$show_on_screens = [
+			'meta-box',
+			'edit-meta-box',
+		];
+		// Only show the dialog in the meta box edit screen.
+		if ( ! in_array( get_current_screen()->id, $show_on_screens, true ) ) {
+			return;
+		}
+
 		if ( ! LocalJson::is_enabled() ) {
 			return;
 		}
