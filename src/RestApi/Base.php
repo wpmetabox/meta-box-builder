@@ -24,11 +24,12 @@ class Base {
 	private function register_route( $method ): void {
 		$route   = str_replace( [ 'get_', '_' ], [ '', '-' ], $method );
 		$methods = str_starts_with( $method, 'set_' ) ? WP_REST_Server::EDITABLE : WP_REST_Server::READABLE;
+		$permission_callback = $route === 'redirection-url' ? '__return_true' : [ $this, 'has_permission' ];
 
 		register_rest_route( 'mbb', $route, [
 			'methods'             => $methods,
 			'callback'            => [ $this, $method ],
-			'permission_callback' => [ $this, 'has_permission' ],
+			'permission_callback' => $permission_callback,
 		] );
 	}
 
@@ -179,8 +180,8 @@ class Base {
 		if ( ! $post ) {
 			return '';
 		}
-
-		header( 'Location: ' . get_edit_post_link( $post->ID, '' ) );
+		
+		wp_safe_redirect( admin_url( "post.php?post={$post->ID}&action=edit") );
 		exit;
 	}
 
