@@ -8,6 +8,7 @@ class Manager {
 		}
 
 		new SettingsPage();
+		new FieldGroup();
 	}
 
 	private function is_active(): bool {

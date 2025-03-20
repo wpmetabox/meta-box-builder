@@ -79,6 +79,7 @@ class Register {
 				continue;
 			}
 
+			// Allow WPML to modify the settings page to use translations.
 			$settings_page = apply_filters( 'mbb_settings_page', $settings_page, $post );
 
 			$settings_pages[] = $settings_page;
