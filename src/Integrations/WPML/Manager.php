@@ -9,6 +9,7 @@ class Manager {
 
 		new SettingsPage();
 		new FieldGroup();
+		new Relationship();
 	}
 
 	private function is_active(): bool {
