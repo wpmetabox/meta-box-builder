@@ -26,6 +26,7 @@ if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 }
 
 new Integrations\WPML\Manager();
+new Integrations\Polylang();
 
 new Extensions\AdminColumns();
 new Extensions\Blocks();
