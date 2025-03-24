@@ -22,13 +22,13 @@ class Register {
 			}
 
 			$settings = $meta_box['settings'] ?? [];
-	
+
 			$object_type = Arr::get( $settings, 'object_type' );
 
 			if ( $object_type === 'post' ) {
 				$this->meta_box_post_ids[ $meta_box['meta_box']['id'] ] = $meta_box['meta_box']['id'];
 			}
-			
+
 			$meta_boxes[]                               = $meta_box['meta_box'];
 		}
 
@@ -115,7 +115,7 @@ class Register {
 		if ( ! Arr::get( $meta_box, 'custom_table.create' ) ) {
 			return;
 		}
-		
+
 		$columns = [];
 		$fields  = array_filter( $meta_box['fields'], [ $this, 'has_value' ] );
 		foreach ( $fields as $field ) {
