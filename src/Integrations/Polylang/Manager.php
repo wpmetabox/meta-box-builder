@@ -8,7 +8,7 @@ class Manager {
 		}
 
 		new FieldGroup();
-		// new SettingsPage();
+		new SettingsPage();
 		// new Relationship();
 	}
 }
