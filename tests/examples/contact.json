@@ -1,0 +1,39 @@
+{
+    "$schema": "https://schemas.metabox.io/field-group.json",
+    "fields": [
+        {
+            "name": "Name",
+            "id": "name",
+            "type": "text"
+        },
+        {
+            "name": "Gender",
+            "id": "gender",
+            "type": "radio",
+            "options": {
+                "male": "Male",
+                "female": "Female"
+            }
+        },
+        {
+            "name": "Email",
+            "id": "email",
+            "type": "text"
+        },
+        {
+            "name": "Phone",
+            "id": "phone",
+            "type": "text",
+            "attributes": {
+                "type": "tel"
+            },
+            "visible": [
+                "gender",
+                "female"
+            ]
+        }
+    ],
+    "id": "contact",
+    "title": "Contact Information",
+    "modified": 1739955432
+}

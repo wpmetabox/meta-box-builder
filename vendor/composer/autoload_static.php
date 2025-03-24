@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
+class ComposerStaticInitd1599e3afcef8b053685b84474d2ba2c
 {
     public static $prefixLengthsPsr4 = array (
         'e' => 
@@ -36,7 +36,7 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         ),
         'MetaBox\\Support\\' => 
         array (
-            0 => __DIR__ . '/..' . '/meta-box/support',
+            0 => __DIR__ . '/..' . '/wpmetabox/support',
         ),
         'MBB\\SettingsPage\\' => 
         array (
@@ -52,7 +52,7 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
         ),
         'MBBParser\\' => 
         array (
-            0 => __DIR__ . '/..' . '/meta-box/mbb-parser/src',
+            0 => __DIR__ . '/..' . '/wpmetabox/mbb-parser/src',
         ),
     );
 
@@ -63,9 +63,9 @@ class ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb514f273ab9a36d3fea19808c7c51d62::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd1599e3afcef8b053685b84474d2ba2c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd1599e3afcef8b053685b84474d2ba2c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd1599e3afcef8b053685b84474d2ba2c::$classMap;
 
         }, null, ClassLoader::class);
     }
