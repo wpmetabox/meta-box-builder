@@ -59,7 +59,8 @@ class Edit extends BaseEditPage {
 			?>
 			<div class="notice notice-warning">
 				<p>
-					<?php esc_html_e( sprintf( 'No related local JSON file, a new file named "%s" will be created when you save the meta box.', $file_name ), 'meta-box-builder' );
+					<?php esc_html_e( sprintf( 
+						__( 'No related local JSON file, a new file named "%s" will be created when you save the meta box.', 'meta-box-builder' ), $file_name ) );
 					?>
 				</p>
 			</div>
