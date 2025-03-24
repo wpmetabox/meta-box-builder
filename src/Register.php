@@ -14,10 +14,22 @@ class Register {
 		$mbs = LocalJson::is_enabled() ? $this->get_json_meta_boxes() : $this->get_database_meta_boxes();
 
 		foreach ( $mbs as $meta_box ) {
-			$this->transform_for_block( $meta_box );
-			$this->create_custom_table( $meta_box );
-			$this->meta_box_post_ids[ $meta_box['id'] ] = $meta_box['id'];
-			$meta_boxes[]                               = $meta_box;
+			$this->transform_for_block( $meta_box['meta_box'] );
+			$this->create_custom_table( $meta_box['meta_box'] );
+
+			if ( empty( $meta_box['meta_box'] ) ) {
+				continue;
+			}
+
+			$settings = $meta_box['settings'] ?? [];
+	
+			$object_type = Arr::get( $settings, 'object_type' );
+
+			if ( $object_type === 'post' ) {
+				$this->meta_box_post_ids[ $meta_box['meta_box']['id'] ] = $meta_box['meta_box']['id'];
+			}
+			
+			$meta_boxes[]                               = $meta_box['meta_box'];
 		}
 
 		if ( ! empty( $this->meta_box_post_ids ) && is_admin() ) {
@@ -42,7 +54,7 @@ class Register {
 			$unparser = new \MBBParser\Unparsers\MetaBox( $json );
 			$unparser->unparse();
 			$json     = $unparser->get_settings();
-			$meta_box = $json['meta_box'];
+			$meta_box = $json;
 
 			if ( empty( $meta_box ) ) {
 				continue;
@@ -57,7 +69,7 @@ class Register {
 	public function get_database_meta_boxes(): array {
 		$meta_boxes = JsonService::get_meta_boxes( [
 			'post_status' => 'publish',
-		] );
+		], 'full' );
 
 		return $meta_boxes;
 	}

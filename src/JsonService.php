@@ -190,7 +190,7 @@ class JsonService {
 		return $meta_keys[ $post_type ] ?? [];
 	}
 
-	public static function get_meta_boxes( array $query_params = [] ): array {
+	public static function get_meta_boxes( array $query_params = [], $format = 'minimal' ): array {
 		$defaults = [
 			'post_type'              => 'meta-box',
 			'post_status'            => 'any',
@@ -217,7 +217,7 @@ class JsonService {
 
 			$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
 			$unparser->unparse();
-			$post_data = $unparser->to_minimal_format();
+			$post_data = $format === 'minimal' ? $unparser->to_minimal_format() : $unparser->get_settings();
 
 			// Extra post_id, post_type for filtering, check this line carefully if you want to change it
 			$post_data['post_id']   = $post->ID;

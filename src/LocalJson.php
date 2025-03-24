@@ -138,7 +138,7 @@ class LocalJson {
 		] );
 
 		$post_id = wp_insert_post( $post_array );
-
+		
 		foreach ( $meta_fields as $meta_key ) {
 			if ( ! isset( $data[ $meta_key ] ) ) {
 				continue;
@@ -146,6 +146,9 @@ class LocalJson {
 
 			update_post_meta( $post_id, $meta_key, $data[ $meta_key ] );
 		}
+
+		// Now we need to save the modified data back to the JSON file
+		LocalJson::use_database( [ 'post_id' => $post_id ] );
 
 		return true;
 	}
