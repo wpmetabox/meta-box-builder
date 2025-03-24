@@ -190,7 +190,37 @@ class LocalJson {
 		$unparser->unparse();
 		$post_data = $unparser->to_minimal_format();
 
+		// By default, we will save the file in the first path with {$post->post_name}.json
+		// however, some users might store the file name different with the meta box ID
+		// so we need to make an additional check if the file exists and write to that file instead
+		// of writing to the new file.
+		$files = JsonService::get_files();
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
+		foreach ( $files as $file ) {
+			[ $data, $error ] = self::read_file( $file );
+
+			if ( $data === null || $error !== null ) {
+				continue;
+			}
+
+			$raw_json = json_decode( $data, true );
+			
+			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $raw_json ) ) {
+				continue;
+			}
+
+			$unparser = new \MBBParser\Unparsers\MetaBox( $raw_json );
+			$unparser->unparse();
+			$json            = $unparser->get_settings();
+
+			if ( $json['meta_box']['id'] !== $post->post_name ) {
+				continue;
+			}
+
+			$file_path = $file;
+			break;
+		}
+
 		$success   = self::write_file( $file_path, $post_data );
 
 		if ( ! $success ) {
