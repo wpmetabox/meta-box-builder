@@ -22,8 +22,8 @@ class Base {
 	}
 
 	private function register_route( $method ): void {
-		$route   = str_replace( [ 'get_', '_' ], [ '', '-' ], $method );
-		$methods = str_starts_with( $method, 'set_' ) ? WP_REST_Server::EDITABLE : WP_REST_Server::READABLE;
+		$route               = str_replace( [ 'get_', '_' ], [ '', '-' ], $method );
+		$methods             = str_starts_with( $method, 'set_' ) ? WP_REST_Server::EDITABLE : WP_REST_Server::READABLE;
 		$permission_callback = $route === 'redirection-url' ? '__return_true' : [ $this, 'has_permission' ];
 
 		register_rest_route( 'mbb', $route, [
@@ -180,8 +180,8 @@ class Base {
 		if ( ! $post ) {
 			return '';
 		}
-		
-		wp_safe_redirect( admin_url( "post.php?post={$post->ID}&action=edit") );
+
+		wp_safe_redirect( admin_url( "post.php?post={$post->ID}&action=edit" ) );
 		exit;
 	}
 

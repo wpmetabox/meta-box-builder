@@ -29,7 +29,17 @@ class Register {
 				$this->meta_box_post_ids[ $meta_box['meta_box']['id'] ] = $meta_box['meta_box']['id'];
 			}
 
-			$meta_boxes[]                               = $meta_box['meta_box'];
+			// Allow WPML to modify the meta box to use translations. JSON meta boxes might not have post_title and post_name.
+			if ( isset( $meta_box['post_title'] ) && isset( $meta_box['post_name'] ) ) {
+				$post_object = (object) [
+					'post_title' => $meta_box['post_title'],
+					'post_name'  => $meta_box['post_name'],
+				];
+
+				$meta_box['meta_box'] = apply_filters( 'mbb_meta_box', $meta_box['meta_box'], $post_object );
+			}
+
+			$meta_boxes[] = $meta_box['meta_box'];
 		}
 
 		if ( ! empty( $this->meta_box_post_ids ) && is_admin() ) {

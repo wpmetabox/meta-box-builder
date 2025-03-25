@@ -95,19 +95,19 @@ class LocalJson {
 	 * Exprected format: [ 'post_id' => 123, 'local' => [local JSON array] ]. See JsonService::get_json() for the full format.
 	 * After unparsing: 'local' becomes:
 	 * [
-	 *   	// Post fields:
-	 *		'post_type',
-	 *		'post_name',
-	 * 		'post_title',
-	 * 		'post_date',
-	 * 		'post_status',
-	 *		'post_content',
+	 *      // Post fields:
+	 *      'post_type',
+	 *      'post_name',
+	 *      'post_title',
+	 *      'post_date',
+	 *      'post_status',
+	 *      'post_content',
 	 *
-	 * 		// Meta keys (same as exported)
-	 * 		'settings',
-	 * 		'meta_box',
-	 * 		'fields',
-	 * 		'data',
+	 *      // Meta keys (same as exported)
+	 *      'settings',
+	 *      'meta_box',
+	 *      'fields',
+	 *      'data',
 	 * ]
 	 *
 	 * @param array $data
@@ -138,7 +138,7 @@ class LocalJson {
 		] );
 
 		$post_id = wp_insert_post( $post_array );
-		
+
 		foreach ( $meta_fields as $meta_key ) {
 			if ( ! isset( $data[ $meta_key ] ) ) {
 				continue;
@@ -148,7 +148,7 @@ class LocalJson {
 		}
 
 		// Now we need to save the modified data back to the JSON file
-		LocalJson::use_database( [ 'post_id' => $post_id ] );
+		self::use_database( [ 'post_id' => $post_id ] );
 
 		return true;
 	}
@@ -194,7 +194,7 @@ class LocalJson {
 		// however, some users might store the file name different with the meta box ID
 		// so we need to make an additional check if the file exists and write to that file instead
 		// of writing to the new file.
-		$files = JsonService::get_files();
+		$files     = JsonService::get_files();
 		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 		foreach ( $files as $file ) {
 			[ $data, $error ] = self::read_file( $file );
@@ -204,14 +204,14 @@ class LocalJson {
 			}
 
 			$raw_json = json_decode( $data, true );
-			
+
 			if ( json_last_error() !== JSON_ERROR_NONE || ! is_array( $raw_json ) ) {
 				continue;
 			}
 
 			$unparser = new \MBBParser\Unparsers\MetaBox( $raw_json );
 			$unparser->unparse();
-			$json            = $unparser->get_settings();
+			$json = $unparser->get_settings();
 
 			if ( $json['meta_box']['id'] !== $post->post_name ) {
 				continue;
@@ -221,7 +221,7 @@ class LocalJson {
 			break;
 		}
 
-		$success   = self::write_file( $file_path, $post_data );
+		$success = self::write_file( $file_path, $post_data );
 
 		if ( ! $success ) {
 			/**

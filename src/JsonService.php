@@ -12,16 +12,16 @@ class JsonService {
 	 *
 	 * Each JSON file after formatting will contains the following data:
 	 * [
-	 * 		'file'            => string,
-	 *		'local'           => array,
-	 *		'local_minimized' => array,
-	 *		'is_newer'        => number<-1|0|1>,
-	 *		'post_id'         => null|int,
-	 *		'post_type'       => string<'meta-box'>,
-	 *		'id'              => string,
-	 *		'remote'          => null|array<meta box array>,
-	 *		'diff'            => string,
-	 *		'is_writable'     => bool,
+	 *      'file'            => string,
+	 *      'local'           => array,
+	 *      'local_minimized' => array,
+	 *      'is_newer'        => number<-1|0|1>,
+	 *      'post_id'         => null|int,
+	 *      'post_type'       => string<'meta-box'>,
+	 *      'id'              => string,
+	 *      'remote'          => null|array<meta box array>,
+	 *      'diff'            => string,
+	 *      'is_writable'     => bool,
 	 * ]
 	 *
 	 * @param array $params
@@ -41,7 +41,7 @@ class JsonService {
 
 	private static function query_json( array $params ): array {
 		$files = self::get_files();
-		
+
 		// key by meta box id
 		$items = [];
 		foreach ( $files as $file ) {
