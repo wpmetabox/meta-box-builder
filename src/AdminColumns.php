@@ -29,22 +29,28 @@ class AdminColumns {
 		add_action( 'wp_trash_post', [ $this, 'delete_json' ], 10, 1 );
 		add_action( 'before_delete_post', [ $this, 'delete_json' ], 10, 1 );
 
-		add_filter( 'wp_untrash_post_status', [ $this, 'set_post_status' ], 10, 1 );
+		add_filter( 'wp_untrash_post_status', [ $this, 'set_post_status' ], 10, 2 );
 		// Restore posts should restore the json file as well.
 		add_action( 'untrashed_post', [ $this, 'restore_json' ], 10, 1 );
 	}
 
-	public function set_post_status( $status ) {
+	public function set_post_status( $new_status, $post_id ) {
 		// Bail if LocalJson is not enabled.
 		if ( ! LocalJson::is_enabled() ) {
-			return $status;
+			return $new_status;
 		}
 
-		if ( $status === 'draft' ) {
+		if ( $new_status === 'draft' ) {
+			$post = get_post( $post_id );
+			
+			if ( $post->post_type !== $this->post_type ) {
+				return $new_status;
+			}
+
 			return 'publish';
 		}
 
-		return $status;
+		return $new_status;
 	}
 
 	public function delete_json( $post_id ) {

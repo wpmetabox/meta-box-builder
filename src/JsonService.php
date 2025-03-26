@@ -67,6 +67,11 @@ class JsonService {
 			$json            = $unparser->get_settings();
 			$local_minimized = $unparser->to_minimal_format();
 
+			// ID is required so we can compare with the post ID
+			if ( ! isset( $local_minimized['id'] ) ) {
+				continue;
+			}
+
 			$diff = wp_text_diff( '', wp_json_encode( $raw_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [
 				'show_split_view' => true,
 			] );
