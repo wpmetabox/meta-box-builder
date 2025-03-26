@@ -95,6 +95,10 @@ class JsonService {
 		$meta_boxes = self::get_meta_boxes( $params );
 
 		foreach ( $meta_boxes as $meta_box ) {
+			if ( ! isset( $meta_box['id'] ) ) {
+				continue;
+			}
+			
 			$id        = $meta_box['id'];
 			$post_id   = $meta_box['post_id'];
 			$post_type = $meta_box['post_type'];
