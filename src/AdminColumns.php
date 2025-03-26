@@ -32,6 +32,40 @@ class AdminColumns {
 		add_filter( 'wp_untrash_post_status', [ $this, 'set_post_status' ], 10, 2 );
 		// Restore posts should restore the json file as well.
 		add_action( 'untrashed_post', [ $this, 'restore_json' ], 10, 1 );
+
+		add_action( 'transition_post_status', [ $this, 'handle_draft_to_publish' ], 10, 3 );
+	}
+
+	public function handle_draft_to_publish( $new_status, $old_status, $post ) {
+		// Bail if LocalJson is not enabled.
+		if ( ! LocalJson::is_enabled() ) {
+			return;
+		}
+
+		if ( $post->post_type !== $this->post_type ) {
+			return;
+		}
+
+		if ( $new_status === 'publish' && $old_status === 'draft' ) {
+			// When switching from 'draft' to 'publish', the earlier meta box does not contains id 
+			// (since draft posts don't have post_name property).
+			// So, we need to set the id for the meta box
+			$meta_box = get_post_meta( $post->ID, 'meta_box', true );
+
+			if ( ! is_array( $meta_box ) ) {
+				return;
+			}
+
+			if ( ! isset( $meta_box['id'] ) ) {
+				$meta_box['id'] = $post->post_name;
+				update_post_meta( $post->ID, 'meta_box', $meta_box );
+			}
+
+			// Publish the json file.
+			LocalJson::use_database( [
+				'post_id' => $post->ID,
+			] );
+		}
 	}
 
 	public function set_post_status( $new_status, $post_id ) {
