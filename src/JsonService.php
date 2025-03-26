@@ -205,6 +205,12 @@ class JsonService {
 		$meta_boxes = [];
 		foreach ( $query->posts as $post ) {
 			$post_data = (array) $post;
+
+			// Drafts don't have post_name so we skip them
+			if ( empty( $post_data['post_name'] ) ) {
+				continue;
+			}
+
 			$meta_keys = self::get_related_meta_keys( $query_params['post_type'] );
 
 			foreach ( $meta_keys as $meta_key ) {
