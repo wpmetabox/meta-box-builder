@@ -176,7 +176,7 @@ class LocalJson {
 			return false;
 		}
 
-		if ( $post->post_type !== 'meta-box' ) {
+		if ( $post->post_type !== 'meta-box' || $post->post_status !== 'publish' ) {
 			return false;
 		}
 

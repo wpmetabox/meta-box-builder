@@ -67,6 +67,11 @@ class JsonService {
 			$json            = $unparser->get_settings();
 			$local_minimized = $unparser->to_minimal_format();
 
+			// ID is required so we can compare with the post ID
+			if ( ! isset( $local_minimized['id'] ) ) {
+				continue;
+			}
+
 			$diff = wp_text_diff( '', wp_json_encode( $raw_json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ), [
 				'show_split_view' => true,
 			] );
@@ -95,6 +100,10 @@ class JsonService {
 		$meta_boxes = self::get_meta_boxes( $params );
 
 		foreach ( $meta_boxes as $meta_box ) {
+			if ( ! isset( $meta_box['id'] ) ) {
+				continue;
+			}
+			
 			$id        = $meta_box['id'];
 			$post_id   = $meta_box['post_id'];
 			$post_type = $meta_box['post_type'];
@@ -205,6 +214,12 @@ class JsonService {
 		$meta_boxes = [];
 		foreach ( $query->posts as $post ) {
 			$post_data = (array) $post;
+
+			// Drafts don't have post_name so we skip them
+			if ( empty( $post_data['post_name'] ) ) {
+				continue;
+			}
+
 			$meta_keys = self::get_related_meta_keys( $query_params['post_type'] );
 
 			foreach ( $meta_keys as $meta_key ) {

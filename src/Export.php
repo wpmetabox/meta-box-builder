@@ -48,6 +48,10 @@ class Export {
 			'post_status' => $post_status,
 			'post__in'    => $post_ids,
 		] );
+		
+		if ( empty( $data ) ) {
+			return;
+		}
 
 		// Remove post_id & post_type from the data
 		$data = array_map( function ( $item ) {
