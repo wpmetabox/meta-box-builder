@@ -15,7 +15,7 @@ class Register {
 
 		foreach ( $mbs as $meta_box ) {
 			$this->transform_for_block( $meta_box['meta_box'] );
-			$this->create_custom_table( $meta_box['meta_box'] );
+			$this->create_custom_table( $meta_box );
 
 			if ( empty( $meta_box['meta_box'] ) ) {
 				continue;
@@ -117,15 +117,22 @@ class Register {
 	}
 
 	private function create_custom_table( $meta_box ): void {
-		if ( ! Helpers\Data::is_extension_active( 'mb-custom-table' ) || empty( $meta_box['table'] ) ) {
+		if ( ! Helpers\Data::is_extension_active( 'mb-custom-table' ) || empty( $meta_box['meta_box']['table'] ) ) {
 			return;
 		}
 
-		// Get full custom table settings from JavaScript data.
-		if ( ! Arr::get( $meta_box, 'custom_table.create' ) ) {
+		// Get full custom table settings from both meta box settings and JavaScript data.
+		$custom_table_settings = $meta_box['meta_box']['custom_table'] ?? $meta_box['settings']['custom_table'] ?? [];
+
+		if ( empty( $custom_table_settings ) || ! is_array( $custom_table_settings ) ) {
 			return;
 		}
 
+		if ( ! Arr::get( $custom_table_settings, 'create' ) ) {
+			return;
+		}
+
+		$meta_box = $meta_box['meta_box'];
 		$columns = [];
 		$fields  = array_filter( $meta_box['fields'], [ $this, 'has_value' ] );
 		foreach ( $fields as $field ) {
