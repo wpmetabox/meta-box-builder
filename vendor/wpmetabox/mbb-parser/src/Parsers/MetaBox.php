@@ -6,8 +6,8 @@ use MetaBox\Support\Arr;
 class MetaBox extends Base {
 	protected $empty_keys = [ 'fields' ];
 	private $settings_parser;
-	private $validation = [ 
-		'rules' => [],
+	private $validation = [
+		'rules'    => [],
 		'messages' => [],
 	];
 
@@ -24,8 +24,8 @@ class MetaBox extends Base {
 
 		$this->remove_empty_values();
 
-		$settings       = $this->settings_parser->get_settings();
-		
+		$settings = $this->settings_parser->get_settings();
+
 		if ( $this->validation['rules'] ) {
 			if ( empty( $this->validation['messages'] ) ) {
 				unset( $this->validation['messages'] );
@@ -36,14 +36,14 @@ class MetaBox extends Base {
 		$this->settings = apply_filters( 'mbb_meta_box_settings', $this->settings );
 
 		// Remove array keys again. Some methods like parse tabs change fields.
-		$this->fields = array_values( $this->fields );
+		$this->fields   = array_values( $this->fields );
 		$this->settings = array_merge( [ 'fields' => $this->fields ], $settings );
 	}
 
 	private function parse_settings() {
-		$settings = [ 
-			'title' => $this->post_title,
-			'id' => $this->post_name,
+		$settings = [
+			'title'    => $this->post_title,
+			'id'       => $this->post_name,
 			'modified' => $this->modified ?? time(),
 		];
 

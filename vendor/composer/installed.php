@@ -3,7 +3,7 @@
         'name' => 'wpmetabox/meta-box-builder',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'a2cddd8fc3dc22093c21859302fb1153dcd90e8b',
+        'reference' => '6706df0910f7ef34a8998c75ac80068301d03fe0',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -33,7 +33,7 @@
         'wpmetabox/mbb-parser' => array(
             'pretty_version' => 'dev-feat-unparser',
             'version' => 'dev-feat-unparser',
-            'reference' => '7a6da393d77bdedbbe878f8e59e074f7526a1215',
+            'reference' => '09ddbb791b86e7b5dec23dc1ec6f93c985fc6775',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wpmetabox/mbb-parser',
             'aliases' => array(),
@@ -42,7 +42,7 @@
         'wpmetabox/meta-box-builder' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'a2cddd8fc3dc22093c21859302fb1153dcd90e8b',
+            'reference' => '6706df0910f7ef34a8998c75ac80068301d03fe0',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

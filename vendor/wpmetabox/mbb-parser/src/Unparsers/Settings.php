@@ -1,8 +1,6 @@
 <?php
 namespace MBBParser\Unparsers;
 
-use MetaBox\Support\Arr;
-
 class Settings extends Base {
 	// Allow these settings to be empty.
 	protected $empty_keys = [ 'post_types', 'taxonomies', 'settings_pages' ];
@@ -13,8 +11,6 @@ class Settings extends Base {
 			->unparse_numeric_values()
 			->unparse_location()
 			->unparse_conditional_logic();
-
-		unset( $this->object_type );
 	}
 
 	private function unparse_location() {
@@ -30,11 +26,11 @@ class Settings extends Base {
 			return $string;
 		}
 
-		return strtr( $string, [ 
-			'{{ site.path }}' 	=> wp_normalize_path( ABSPATH ),
-			'{{ site.url }}'  	=> untrailingslashit( home_url( '/' ) ),
-			'{{ theme.path }}' 	=> wp_normalize_path( get_stylesheet_directory() ),
-			'{{ theme.url }}' 	=> get_stylesheet_directory_uri(),
+		return strtr( $string, [
+			'{{ site.path }}'  => wp_normalize_path( ABSPATH ),
+			'{{ site.url }}'   => untrailingslashit( home_url( '/' ) ),
+			'{{ theme.path }}' => wp_normalize_path( get_stylesheet_directory() ),
+			'{{ theme.url }}'  => get_stylesheet_directory_uri(),
 		] );
 	}
 }

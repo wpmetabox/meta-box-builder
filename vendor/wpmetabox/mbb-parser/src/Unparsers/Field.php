@@ -8,11 +8,11 @@ class Field extends Base {
 	private $choice_types = [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ];
 
 	/**
-	 * This is revert of parse method. While parse method converts to the minimal format, 
+	 * This is revert of parse method. While parse method converts to the minimal format,
 	 * this method converts back to the original format.
-	 * 
+	 *
 	 * Used when importing JSON to the builder.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function unparse() {
@@ -51,9 +51,9 @@ class Field extends Base {
 
 	/**
 	 * Inverse of parse_choice_options.
-	 * 
+	 *
 	 * Convert options array to string.
-	 * 
+	 *
 	 * @return static
 	 */
 	private function unparse_choice_options() {
@@ -141,8 +141,8 @@ class Field extends Base {
 			return $this;
 		}
 
-		$this->text_limiter = [ 
-			'limit' => $this->limit,
+		$this->text_limiter = [
+			'limit'      => $this->limit,
 			'limit_type' => $this->limit_type ?? 'word',
 		];
 
@@ -154,16 +154,16 @@ class Field extends Base {
 			return $this;
 		}
 
-		$defaults = [ 
-			'enable' => true,
-			'icon' => 'info',
-			'position' => 'top',
-			'content' => '',
+		$defaults = [
+			'enable'     => true,
+			'icon'       => 'info',
+			'position'   => 'top',
+			'content'    => '',
 			'allow_html' => true,
 		];
 
 		if ( is_string( $this->tooltip ) ) {
-			$this->tooltip = [ 
+			$this->tooltip = [
 				'content' => $this->tooltip,
 			];
 		}
@@ -178,22 +178,25 @@ class Field extends Base {
 			return $this;
 		}
 
-		$defaults = [ 
-			'enable' => true,
-			'position' => 'after title',
-			'title' => '',
-			'before' => '',
-			'after' => '',
-			'sort' => false,
+		$defaults = [
+			'enable'     => true,
+			'position'   => 'after title',
+			'title'      => '',
+			'before'     => '',
+			'after'      => '',
+			'sort'       => false,
 			'searchable' => false,
 			'filterable' => false,
-			'link' => false,
+			'link'       => false,
 		];
 
 		if ( is_bool( $this->admin_columns ) ) {
 			$this->admin_columns = [ 'enable' => $this->admin_columns ];
 		} elseif ( is_string( $this->admin_columns ) ) {
-			$this->admin_columns = [ 'enable' => true, 'position' => $this->admin_columns ];
+			$this->admin_columns = [
+				'enable'   => true,
+				'position' => $this->admin_columns,
+			];
 		}
 
 		$this->admin_columns = array_merge( $defaults, $this->admin_columns );
@@ -201,27 +204,27 @@ class Field extends Base {
 	}
 
 	public function unparse_default_values() {
-		$this->id = $this->id ?? uniqid();
+		$this->id  = $this->id ?? uniqid();
 		$this->_id = $this->_id ?? $this->id;
 
 		$key_defaults = [
-			'id' => $this->id, 
-			'_id' => $this->_id,
-			'save_field' => true,
+			'id'                => $this->id,
+			'_id'               => $this->_id,
+			'save_field'        => true,
 			'label_description' => '',
-			'desc' => '',
-			'size' => '',
-			'hide_from_rest' => false,
-			'hide_from_front' => false,
-			'before' => '',
-			'after' => '',
-			'class' => '',
+			'desc'              => '',
+			'size'              => '',
+			'hide_from_rest'    => false,
+			'hide_from_front'   => false,
+			'before'            => '',
+			'after'             => '',
+			'class'             => '',
 			'sanitize_callback' => '',
-			'required' => false,
-			'disabled' => false,
-			'readonly' => false,
-			'prepend' => '',
-			'append' => '',
+			'required'          => false,
+			'disabled'          => false,
+			'readonly'          => false,
+			'prepend'           => '',
+			'append'            => '',
 		];
 
 		foreach ( $key_defaults as $key => $default ) {

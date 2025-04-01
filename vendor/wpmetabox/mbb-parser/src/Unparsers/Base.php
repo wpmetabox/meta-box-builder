@@ -26,9 +26,9 @@ class Base {
 	}
 
 	protected function convert_string_to_boolean( &$value ) {
-		if ('true' === $value) {
+		if ( 'true' === $value ) {
 			$value = true;
-		} elseif ('false' === $value) {
+		} elseif ( 'false' === $value ) {
 			$value = false;
 		}
 	}
@@ -39,9 +39,9 @@ class Base {
 	}
 
 	protected function convert_number_to_string( &$value ) {
-		if (is_numeric($value) && !is_bool($value)) {
-            $value = (string) $value;
-        }
+		if ( is_numeric( $value ) && ! is_bool( $value ) ) {
+			$value = (string) $value;
+		}
 	}
 
 	protected function unparse_array_attributes( $key ) {
@@ -54,7 +54,11 @@ class Base {
 		$tmp_array = [];
 		foreach ( $value as $k => $v ) {
 			$tmp_key               = uniqid();
-			$tmp_array[ $tmp_key ] = [ 'id' => $tmp_key, 'key' => $k, 'value' => $v ];
+			$tmp_array[ $tmp_key ] = [
+				'id'    => $tmp_key,
+				'key'   => $k,
+				'value' => $v,
+			];
 		}
 
 		$this->$key = $tmp_array;
@@ -82,11 +86,11 @@ class Base {
 			foreach ( $condition['when'] as $criteria ) {
 				$name = $criteria[0]; // Use field name as key
 
-				$output['when'][ $name ] = [ 
-					'id' => $name,
-					'name' => $name,
+				$output['when'][ $name ] = [
+					'id'       => $name,
+					'name'     => $name,
 					'operator' => $criteria[1],
-					'value' => $criteria[2],
+					'value'    => $criteria[2],
 				];
 			}
 		}
@@ -99,7 +103,7 @@ class Base {
 
 	/**
 	 * Inverse of remove_default.
-	 * 
+	 *
 	 * @param mixed $key
 	 * @param mixed $value
 	 * @return static
@@ -114,7 +118,7 @@ class Base {
 
 	/**
 	 * Lookup from the data using keys, return the first key found or null
-	 * 
+	 *
 	 * @param array $keys
 	 * @return mixed
 	 */
