@@ -15,7 +15,7 @@
 	},
 	"require": {
 		"wpmetabox/support": "dev-master",
-		"wpmetabox/mbb-parser": "dev-feat-unparser",
+		"wpmetabox/mbb-parser": "dev-master",
 		"elightup/twig": "dev-master"
 	},
 	"require-dev": {

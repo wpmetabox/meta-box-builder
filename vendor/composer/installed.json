@@ -96,24 +96,25 @@
         },
         {
             "name": "wpmetabox/mbb-parser",
-            "version": "dev-feat-unparser",
-            "version_normalized": "dev-feat-unparser",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/mbb-parser.git",
-                "reference": "09ddbb791b86e7b5dec23dc1ec6f93c985fc6775"
+                "reference": "c0fe9d81797f946eaccb3cb2ce979e2869d030f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/09ddbb791b86e7b5dec23dc1ec6f93c985fc6775",
-                "reference": "09ddbb791b86e7b5dec23dc1ec6f93c985fc6775",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/c0fe9d81797f946eaccb3cb2ce979e2869d030f2",
+                "reference": "c0fe9d81797f946eaccb3cb2ce979e2869d030f2",
                 "shasum": ""
             },
             "require": {
                 "riimu/kit-phpencoder": "^2.4",
                 "wpmetabox/support": "dev-master"
             },
-            "time": "2025-03-24T04:26:05+00:00",
+            "time": "2025-03-27T12:29:01+00:00",
+            "default-branch": true,
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -128,7 +129,7 @@
             "description": "Parse meta box settings from JSON",
             "support": {
                 "issues": "https://github.com/wpmetabox/mbb-parser/issues",
-                "source": "https://github.com/wpmetabox/mbb-parser/tree/feat-unparser"
+                "source": "https://github.com/wpmetabox/mbb-parser/tree/master"
             },
             "install-path": "../wpmetabox/mbb-parser"
         },

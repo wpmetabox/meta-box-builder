@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1599e3afcef8b053685b84474d2ba2c",
+    "content-hash": "e19679b2c031a0a42c1567343a0d570f",
     "packages": [
         {
             "name": "elightup/twig",
@@ -96,22 +96,23 @@
         },
         {
             "name": "wpmetabox/mbb-parser",
-            "version": "dev-feat-unparser",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/mbb-parser.git",
-                "reference": "09ddbb791b86e7b5dec23dc1ec6f93c985fc6775"
+                "reference": "c0fe9d81797f946eaccb3cb2ce979e2869d030f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/09ddbb791b86e7b5dec23dc1ec6f93c985fc6775",
-                "reference": "09ddbb791b86e7b5dec23dc1ec6f93c985fc6775",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/c0fe9d81797f946eaccb3cb2ce979e2869d030f2",
+                "reference": "c0fe9d81797f946eaccb3cb2ce979e2869d030f2",
                 "shasum": ""
             },
             "require": {
                 "riimu/kit-phpencoder": "^2.4",
                 "wpmetabox/support": "dev-master"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -125,9 +126,9 @@
             "description": "Parse meta box settings from JSON",
             "support": {
                 "issues": "https://github.com/wpmetabox/mbb-parser/issues",
-                "source": "https://github.com/wpmetabox/mbb-parser/tree/feat-unparser"
+                "source": "https://github.com/wpmetabox/mbb-parser/tree/master"
             },
-            "time": "2025-03-24T04:26:05+00:00"
+            "time": "2025-03-27T12:29:01+00:00"
         },
         {
             "name": "wpmetabox/support",
