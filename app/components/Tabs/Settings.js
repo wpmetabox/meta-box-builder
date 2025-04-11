@@ -1,4 +1,6 @@
+import { Button } from "@wordpress/components";
 import { Suspense, useContext, useState } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 import { SettingsContext } from "../../contexts/SettingsContext";
 import TranslationModal from "../../controls/TranslationModal";
 import { getControlParams } from "../../functions";
@@ -28,10 +30,7 @@ const Settings = () => {
 	};
 
 	const handleModalSave = ( translations ) => {
-		updateSettings( {
-			...settings,
-			fields_translations: JSON.stringify( translations )
-		} );
+		document.querySelector( 'input[name="settings[fields_translations]"]' ).value = JSON.stringify( translations );
 	};
 
 	return (
@@ -47,6 +46,17 @@ const Settings = () => {
 									onChange: handleTranslationChange
 								}
 							}, settings, updateSettings ) }
+							{
+								settings.translation === 'advanced' && (
+									<Button
+										className="mbb-translation-config"
+										isLink
+										onClick={ () => setIsModalOpen( true ) }
+									>
+										{ __( 'View settings', 'meta-box-builder' ) }
+									</Button>
+								)
+							}
 						</Suspense>
 					);
 				}
@@ -61,6 +71,7 @@ const Settings = () => {
 				onClose={ () => setIsModalOpen( false ) }
 				onSave={ handleModalSave }
 			/>
+			<input type="hidden" name="settings[fields_translations]" value={ JSON.stringify( settings.fields_translations ) } />
 		</>
 	);
 };

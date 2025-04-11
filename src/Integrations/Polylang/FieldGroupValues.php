@@ -16,7 +16,7 @@ class FieldGroupValues {
             'options' => [
                 'ignore'    => __( 'Do not translate any fields in this field group', 'meta-box-builder' ),
                 'translate' => __( 'Translate all fields in this field group', 'meta-box-builder' ),
-                'advanced'  => __( 'Select which fields to translate', 'meta-box-builder' ),
+                'advanced'  => __( 'Set translation mode per field', 'meta-box-builder' ),
             ],
         ], 'ignore' );
 

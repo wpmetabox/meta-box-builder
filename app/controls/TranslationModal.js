@@ -3,7 +3,10 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
 const TranslationModal = ( { isOpen, onClose, onSave } ) => {
-	const [ translations, setTranslations ] = useState( {} );
+	const [ translations, setTranslations ] = useState( () => {
+		const input = document.querySelector( 'input[name="settings[fields_translations]"]' );
+		return input?.value ? JSON.parse( input.value ) : {};
+	} );
 
 	const fields = MbbApp.fields;
 
@@ -24,14 +27,15 @@ const TranslationModal = ( { isOpen, onClose, onSave } ) => {
 			title={ __( 'Select a translation mode for each field', 'meta-box-builder' ) }
 			onRequestClose={ onClose }
 			className="mbb-translation-modal"
+			size="large"
 		>
 			<div className="mbb-translation-modal__content">
 				<table className="mbb-translation-modal__table">
 					<thead>
 						<tr>
 							<th>{ __( 'Field', 'meta-box-builder' ) }</th>
-							<th>{ __( 'Ignore', 'meta-box-builder' ) }</th>
-							<th>{ __( 'Translate', 'meta-box-builder' ) }</th>
+							<th align="center">{ __( 'Ignore', 'meta-box-builder' ) }</th>
+							<th align="center">{ __( 'Translate', 'meta-box-builder' ) }</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -39,7 +43,7 @@ const TranslationModal = ( { isOpen, onClose, onSave } ) => {
 							fields.map( field => (
 								<tr key={ field.id }>
 									<td>{ field.name || field.id }</td>
-									<td>
+									<td align="center">
 										<RadioControl
 											selected={ translations[ field.id ] }
 											options={ [
@@ -48,7 +52,7 @@ const TranslationModal = ( { isOpen, onClose, onSave } ) => {
 											onChange={ value => handleChange( field.id, value ) }
 										/>
 									</td>
-									<td>
+									<td align="center">
 										<RadioControl
 											selected={ translations[ field.id ] }
 											options={ [
