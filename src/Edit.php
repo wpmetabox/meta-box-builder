@@ -93,7 +93,12 @@ class Edit extends BaseEditPage {
 		// Save data for JavaScript (serialized arrays).
 		$request     = rwmb_request();
 		$base_parser = new BaseParser();
-		$settings    = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
+
+		$settings    = $request->post( 'settings' );
+
+		$settings['fields_translations'] = isset( $settings['fields_translations'] ) ? json_decode( wp_unslash( $settings['fields_translations'] ), true ) : [];
+
+		$settings    = apply_filters( 'mbb_save_settings', $settings, $request );
 		$fields      = apply_filters( 'mbb_save_fields', $request->post( 'fields' ), $request );
 		$data        = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
 

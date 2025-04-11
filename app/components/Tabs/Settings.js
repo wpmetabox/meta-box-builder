@@ -23,55 +23,39 @@ const Settings = () => {
 	const { settings, updateSettings } = useContext( SettingsContext );
 	const [ isModalOpen, setIsModalOpen ] = useState( false );
 
-	const handleTranslationChange = event => {
-		if ( event.target.value === 'advanced' ) {
-			setIsModalOpen( true );
-		}
-	};
-
-	const handleModalSave = ( translations ) => {
-		document.querySelector( 'input[name="settings[fields_translations]"]' ).value = JSON.stringify( translations );
-	};
+	const handleTranslationChange = event => setIsModalOpen( event.target.value === 'advanced' );
 
 	return (
 		<>
-			{ settingsControls.map( control => {
-				if ( control.setting === 'translation' ) {
-					return (
-						<Suspense fallback={ null } key={ control.setting }>
-							{ getControlComponent( {
+			{ settingsControls.map( control => control.setting === 'translation'
+				? (
+					<Suspense fallback={ null } key={ control.setting }>
+						{
+							getControlComponent( {
 								...control,
 								props: {
 									...control.props,
 									onChange: handleTranslationChange
 								}
-							}, settings, updateSettings ) }
-							{
-								settings.translation === 'advanced' && (
-									<Button
-										className="mbb-translation-config"
-										isLink
-										onClick={ () => setIsModalOpen( true ) }
-									>
-										{ __( 'View settings', 'meta-box-builder' ) }
-									</Button>
-								)
-							}
-						</Suspense>
-					);
-				}
-				return (
+							}, settings, updateSettings )
+						}
+						{
+							settings.translation === 'advanced' && (
+								<Button className="mbb-translation-config" isLink onClick={ () => setIsModalOpen( true ) }>
+									{ __( 'View settings', 'meta-box-builder' ) }
+								</Button>
+							)
+						}
+					</Suspense>
+				)
+				: (
 					<Suspense fallback={ null } key={ control.setting }>
 						{ getControlComponent( control, settings, updateSettings ) }
 					</Suspense>
-				);
-			} ) }
-			<TranslationModal
-				isOpen={ isModalOpen }
-				onClose={ () => setIsModalOpen( false ) }
-				onSave={ handleModalSave }
-			/>
-			<input type="hidden" name="settings[fields_translations]" value={ JSON.stringify( settings.fields_translations ) } />
+				)
+			) }
+			<TranslationModal isOpen={ isModalOpen } onClose={ () => setIsModalOpen( false ) } settings={ settings } updateSettings={ updateSettings } />
+			<input type="hidden" name="settings[fields_translations]" value={ JSON.stringify( settings?.fields_translations || {} ) } />
 		</>
 	);
 };
