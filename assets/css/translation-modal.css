@@ -1,0 +1,28 @@
+.mbb-translation-modal__content {
+    margin: 20px 0;
+}
+
+.mbb-translation-modal__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mbb-translation-modal__table th,
+.mbb-translation-modal__table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.mbb-translation-modal__table th {
+    font-weight: 600;
+}
+
+.mbb-translation-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}

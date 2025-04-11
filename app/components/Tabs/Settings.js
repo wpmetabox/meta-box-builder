@@ -1,6 +1,6 @@
-import { Suspense, useContext } from "@wordpress/element";
-import { __ } from "@wordpress/i18n";
+import { Suspense, useContext, useState } from "@wordpress/element";
 import { SettingsContext } from "../../contexts/SettingsContext";
+import TranslationModal from "../../controls/TranslationModal";
 import { getControlParams } from "../../functions";
 import useApi from "../../hooks/useApi";
 
@@ -19,16 +19,50 @@ const getControlComponent = ( control, settings, updateSettings ) => {
 const Settings = () => {
 	const settingsControls = useApi( 'settings-controls', [] );
 	const { settings, updateSettings } = useContext( SettingsContext );
+	const [ isModalOpen, setIsModalOpen ] = useState( false );
 
-	return settingsControls.length === 0
-		? <p>{ __( 'Loading settings, please wait...', 'meta-box-builder' ) }</p>
-		: <>
-			{
-				settingsControls.map( control => (
-					<Suspense fallback={ null } key={ control.setting }>{ getControlComponent( control, settings, updateSettings ) }</Suspense>
-				) )
-			}
-		</>;
+	const handleTranslationChange = event => {
+		if ( event.target.value === 'advanced' ) {
+			setIsModalOpen( true );
+		}
+	};
+
+	const handleModalSave = ( translations ) => {
+		updateSettings( {
+			...settings,
+			fields_translations: JSON.stringify( translations )
+		} );
+	};
+
+	return (
+		<>
+			{ settingsControls.map( control => {
+				if ( control.setting === 'translation' ) {
+					return (
+						<Suspense fallback={ null } key={ control.setting }>
+							{ getControlComponent( {
+								...control,
+								props: {
+									...control.props,
+									onChange: handleTranslationChange
+								}
+							}, settings, updateSettings ) }
+						</Suspense>
+					);
+				}
+				return (
+					<Suspense fallback={ null } key={ control.setting }>
+						{ getControlComponent( control, settings, updateSettings ) }
+					</Suspense>
+				);
+			} ) }
+			<TranslationModal
+				isOpen={ isModalOpen }
+				onClose={ () => setIsModalOpen( false ) }
+				onSave={ handleModalSave }
+			/>
+		</>
+	);
 };
 
 export default Settings;
