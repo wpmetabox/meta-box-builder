@@ -1,6 +1,11 @@
 <?php
 namespace MBB;
 
+// Prevent loading this file directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 // Show Meta Box admin menu.
 add_filter( 'rwmb_admin_menu', '__return_true' );
 load_plugin_textdomain( 'meta-box-builder', false, plugin_basename( MBB_DIR ) . '/languages/' );

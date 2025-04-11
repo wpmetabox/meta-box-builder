@@ -10,5 +10,6 @@ class Manager {
 		new FieldGroup();
 		new SettingsPage();
 		new Relationship();
+		new FieldGroupValues();
 	}
 }
