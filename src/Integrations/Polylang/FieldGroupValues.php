@@ -44,10 +44,14 @@ class FieldGroupValues {
 		$fields = $this->get_translatable_fields( $from );
 
 		if ( $sync ) {
-			return array_merge( $keys, $fields['copy'] );
+			$keys = array_merge( $keys, $fields['copy'] );
 		} else {
-			return array_merge( $keys, $fields['copy'], $fields['translate'] );
+			$keys = array_merge( $keys, $fields['copy'], $fields['translate'] );
 		}
+
+		$keys = array_diff( $keys, $fields['ignore'] );
+
+		return $keys;
 	}
 
 	private function get_translatable_fields( $post_id ): array {
