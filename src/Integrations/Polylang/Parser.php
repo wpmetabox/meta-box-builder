@@ -7,6 +7,7 @@ class Parser {
 
 	public function __construct() {
 		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_translation_settings' ] );
+		add_filter( 'mbb_app_data', [ $this, 'filter_data_to_app' ] );
 	}
 
 	/**
@@ -67,5 +68,15 @@ class Parser {
 		// if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
 		// 	$this->process_fields( $field['fields'] );
 		// }
+	}
+
+	public function filter_data_to_app( array $data ): array {
+		if ( empty( $data['settings']['fields_translations'] ) ) {
+			return $data;
+		}
+
+		$data['settings']['fields_translations'] = json_decode( $data['settings']['fields_translations'] ) ?: [];
+
+		return $data;
 	}
 }
