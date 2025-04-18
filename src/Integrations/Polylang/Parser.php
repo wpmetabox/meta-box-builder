@@ -2,7 +2,7 @@
 namespace MBB\Integrations\Polylang;
 
 class Parser {
-	const MODES = [ 'translate', 'copy', 'ignore' ];
+	const MODES = [ 'translate', 'copy' ];
 	private $fields_translations = [];
 
 	public function __construct() {
@@ -33,43 +33,36 @@ class Parser {
 
 		// Process fields to add translation settings
 		if ( isset( $settings['fields'] ) && is_array( $settings['fields'] ) ) {
-			$this->process_fields( $settings['fields'] );
+			$this->parse_fields( $settings['fields'] );
 		}
 
 		return $settings;
 	}
 
-	/**
-	 * Process fields to add translation settings
-	 *
-	 * @param array &$fields Fields to process
-	 */
-	private function process_fields( &$fields ) {
+	private function parse_fields( array &$fields ): void {
 		foreach ( $fields as &$field ) {
-			$this->process_field( $field );
+			$this->parse_field( $field );
 		}
 	}
 
 	/**
-	 * Process a single field to add translation settings
-	 *
-	 * @param array &$field Field to process
+	 * Add translation setting for field if it exists in fields_translations
 	 */
-	private function process_field( &$field ) {
-		// Add translation setting if it exists in fields_translations
-		if ( isset( $field['id'] ) && isset( $this->fields_translations[ $field['id'] ] ) ) {
-			$translation_mode = $this->fields_translations[ $field['id'] ];
-			if ( in_array( $translation_mode, self::MODES, true ) ) {
-				$field['translation'] = $translation_mode;
-			}
+	private function parse_field( array &$field ): void {
+		if ( empty( $field['id'] ) || empty( $this->fields_translations[ $field['id'] ] ) ) {
+			return;
 		}
 
-		// Process nested fields if they exist
-		// if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
-		// 	$this->process_fields( $field['fields'] );
-		// }
+		$mode = $this->fields_translations[ $field['id'] ];
+		if ( in_array( $mode, self::MODES, true ) ) {
+			$field['translation'] = $mode;
+		}
 	}
 
+	/**
+	 * Send fields_translations as an array to the JS app.
+	 * It's stored as a JSON string in the database, we need to decode it to an array.
+	 */
 	public function filter_data_to_app( array $data ): array {
 		if ( empty( $data['settings']['fields_translations'] ) ) {
 			return $data;
