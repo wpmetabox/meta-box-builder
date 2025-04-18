@@ -2,6 +2,7 @@
 namespace MBB\Integrations\Polylang;
 
 use MBB\Control;
+use RW_Meta_Box;
 
 class FieldGroupValues {
 	// Define test field IDs as constants
@@ -11,16 +12,19 @@ class FieldGroupValues {
 		'wysiwyg_field'
 	];
 
-	const MODES = ['translate', 'copy', 'ignore'];
+	const MODES = [ 'translate', 'copy', 'ignore', 'advanced' ];
 
 	public function __construct() {
 		add_filter( 'mbb_settings_controls', [ $this, 'add_translation_control' ] );
 
 		// Add filter to handle field value translations
-		add_filter( 'rwmb_field_meta', [ $this, 'translate_field_value' ], 10, 4 );
+		// add_filter( 'rwmb_field_meta', [ $this, 'translate_field_value' ], 10, 4 );
+
+		// Tell Polylang whether to translate or copy a field
+		add_filter( 'pll_copy_post_metas', [ $this, 'copy_post_metas' ], 10, 3 );
 	}
 
-	public function add_translation_control( $controls ) {
+	public function add_translation_control( array $controls ): array {
 		// Add the control after the custom settings control (index 40)
 		$controls[50] = Control::Select( 'translation', [
 			'label'   => __( 'Translation', 'meta-box-builder' ),
@@ -34,6 +38,44 @@ class FieldGroupValues {
 		], 'ignore' );
 
 		return $controls;
+	}
+
+	public function copy_post_metas( $keys, $sync, $from ): array {
+		$fields = $this->get_translatable_fields( $from );
+
+		if ( $sync ) {
+			return array_merge( $keys, $fields['copy'] );
+		} else {
+			return array_merge( $keys, $fields['copy'], $fields['translate'] );
+		}
+	}
+
+	private function get_translatable_fields( $post_id ): array {
+		$meta_boxes = rwmb_get_registry( 'meta_box' )->get_by( [ 'object_type' => 'post' ] );
+		array_walk( $meta_boxes, 'rwmb_check_meta_box_supports', [ 'post', $post_id ] );
+		$meta_boxes = array_filter( $meta_boxes );
+
+		$fields = [
+			'copy'      => [],
+			'translate' => [],
+			'ignore'    => [],
+		];
+		foreach ( $meta_boxes as $meta_box ) {
+			foreach ( $meta_box->fields as $field ) {
+				if ( empty( $field['id'] ) ) {
+					continue;
+				}
+
+				$mode = $meta_box->translation ?: 'ignore';
+				if ( $mode === 'advanced' ) {
+					$mode = $field['translation'] ?? 'ignore';
+				}
+
+				$fields[ $mode ][] = $field['id'];
+			}
+		}
+
+		return $fields;
 	}
 
 	/**
@@ -107,20 +149,6 @@ class FieldGroupValues {
 		}
 
 		return $meta;
-	}
-
-	private function get_field_group_translation_mode( int $field_group_id ): string {
-		$settings = get_post_meta( $field_group_id, 'settings', true );
-		$mode     = $settings['translation'] ?? 'ignore';
-
-		return in_array( $mode, self::MODES, true ) ? $mode : 'ignore';
-	}
-
-	private function get_field_translation_mode( int $field_group_id, string $field_id ): string {
-		$settings = get_post_meta( $field_group_id, 'settings', true );
-		$mode     = $settings['translations'][$field_id] ?? 'ignore';
-
-		return in_array( $mode, self::MODES, true ) ? $mode : 'ignore';
 	}
 
 	/**
