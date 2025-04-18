@@ -15,3 +15,5 @@ composer.lock export-ignore
 package.json export-ignore
 pnpm-lock.yaml export-ignore
 webpack.config.js export-ignore
+
+prompts

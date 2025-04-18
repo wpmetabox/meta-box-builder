@@ -7,7 +7,7 @@
     "css:relationships": "sass --no-source-map --load-path=assets/sass --style=compressed modules/relationships/assets/relationships.scss modules/relationships/assets/relationships.css",
     "css": "npm run css:main && npm run css:settings && npm run css:relationships",
     "build": "webpack --mode production",
-    "watch": "webpack --mode development --watch"
+    "start": "webpack --mode development --watch"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
