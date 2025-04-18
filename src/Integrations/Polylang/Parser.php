@@ -23,7 +23,7 @@ class Parser {
 
 		// Store fields' translations for later parsing
 		if ( ! empty( $settings['fields_translations'] ) && is_string( $settings['fields_translations'] ) ) {
-			$this->fields_translations = json_decode( $settings['fields_translations'], true );
+			$this->fields_translations = json_decode( wp_unslash( $settings['fields_translations'] ), true );
 			if ( json_last_error() !== JSON_ERROR_NONE ) {
 				$this->fields_translations = [];
 			}
