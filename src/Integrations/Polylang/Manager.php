@@ -8,6 +8,7 @@ class Manager {
 		}
 
 		new FieldGroup();
+		new Parser();
 		new SettingsPage();
 		new Relationship();
 		new FieldGroupValues();
