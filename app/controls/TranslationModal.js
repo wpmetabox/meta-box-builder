@@ -1,5 +1,6 @@
 import { Button, Modal, RadioControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import Tooltip from './Tooltip';
 
 const TranslationModal = ( { isOpen, onClose, settings, updateSettings } ) => {
 	const translations = settings?.fields_translations || {};
@@ -25,9 +26,18 @@ const TranslationModal = ( { isOpen, onClose, settings, updateSettings } ) => {
 					<thead>
 						<tr>
 							<th>{ __( 'Field', 'meta-box-builder' ) }</th>
-							<th align="center">{ __( 'Ignore', 'meta-box-builder' ) }</th>
-							<th align="center">{ __( 'Translate', 'meta-box-builder' ) }</th>
-							<th align="center">{ __( 'Synchronize', 'meta-box-builder' ) }</th>
+							<th align="center">
+								{ __( 'Ignore', 'meta-box-builder' ) }
+								<Tooltip content={ __( 'The field value will NOT be copied to the new translation', 'meta-box-builder' ) } />
+							</th>
+							<th align="center">
+								{ __( 'Translate', 'meta-box-builder' ) }
+								<Tooltip content={ __( 'The field value will be copied to the new translation, then you can edit it', 'meta-box-builder' ) } />
+							</th>
+							<th align="center">
+								{ __( 'Synchronize', 'meta-box-builder' ) }
+								<Tooltip content={ __( 'The field value will be synced to ALL translations whenever you make changes to ANY translation', 'meta-box-builder' ) } />
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -35,7 +45,7 @@ const TranslationModal = ( { isOpen, onClose, settings, updateSettings } ) => {
 							fields.map( field => field.id && ![ 'button', 'custom_html', 'divider', 'heading', 'tab' ].includes( field.type ) && (
 								<tr key={ field.id }>
 									<td>{ field.name || field.id }</td>
-									<td align="center">
+									<td>
 										<RadioControl
 											selected={ translations[ field.id ] }
 											options={ [
@@ -44,16 +54,16 @@ const TranslationModal = ( { isOpen, onClose, settings, updateSettings } ) => {
 											onChange={ value => handleChange( field.id, value ) }
 										/>
 									</td>
-									<td align="center">
+									<td>
 										<RadioControl
-											selected={ translations[ field.id ] }
+											selected={ translations[ field.id ] || 'translate' }
 											options={ [
 												{ label: '', value: 'translate' }
 											] }
 											onChange={ value => handleChange( field.id, value ) }
 										/>
 									</td>
-									<td align="center">
+									<td>
 										<RadioControl
 											selected={ translations[ field.id ] }
 											options={ [

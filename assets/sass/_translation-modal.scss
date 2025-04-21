@@ -1,6 +1,11 @@
 .mbb-translation-modal__table {
     width: 100%;
     border-collapse: collapse;
+
+    .components-radio-control__option {
+        grid-template-columns: auto;
+        justify-content: center;
+    }
 }
 
 .mbb-translation-modal__table th,
@@ -12,6 +17,10 @@
 
 .mbb-translation-modal__table th {
     font-weight: 600;
+}
+
+.mbb-translation-modal__table th[align="center"] {
+    text-align: center;
 }
 
 .mbb-translation-modal__footer {
