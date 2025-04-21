@@ -2,6 +2,7 @@
 namespace MBB\Integrations\Polylang;
 
 use MetaBox\Support\Arr;
+use WP_Post;
 
 class Relationship {
 	private $keys = [];
@@ -18,7 +19,7 @@ class Relationship {
 			'field.add_button'        => __( 'Field add button', 'meta-box-builder' ),
 		];
 
-		add_filter( 'mbb_relationship', [ $this, 'register_strings' ], 10 );
+		add_filter( 'mbb_relationship', [ $this, 'register_strings' ], 10, 2 );
 		add_filter( 'mbb_relationship', [ $this, 'use_translations' ], 20 );
 	}
 
@@ -28,17 +29,12 @@ class Relationship {
 	 * @param array $relationship Relationship data.
 	 * @return array Modified relationship data.
 	 */
-	public function register_strings( array $relationship ): array {
+	public function register_strings( array $relationship, WP_Post $post ): array {
 		if ( empty( $relationship ) || ! is_array( $relationship ) ) {
 			return $relationship;
 		}
 
-		$context = $this->get_context( $relationship );
-
-		// Register title.
-		if ( ! empty( $relationship['title'] ) ) {
-			pll_register_string( 'title', $relationship['title'], $context );
-		}
+		$context = $this->get_context( $relationship, $post );
 
 		// Register strings for both sides.
 		$this->register_side_strings( 'from', $relationship['from'] ?? [], $context );
@@ -61,10 +57,6 @@ class Relationship {
 	}
 
 	public function use_translations( array $relationship ): array {
-		if ( ! empty( $relationship['title'] ) ) {
-			$relationship['title'] = pll__( $relationship['title'] );
-		}
-
 		$this->use_side_translations( 'from', $relationship['from'] );
 		$this->use_side_translations( 'to', $relationship['to'] );
 
@@ -80,8 +72,8 @@ class Relationship {
 		}
 	}
 
-	private function get_context( array $relationship ): string {
+	private function get_context( array $relationship, WP_Post $post ): string {
 		// translators: %s is the title of the relationship.
-		return sprintf( __( 'Meta Box Relationship: %s', 'meta-box-builder' ), $relationship['title'] ?? '' );
+		return sprintf( __( 'Meta Box Relationship: %s', 'meta-box-builder' ), $post->post_title );
 	}
 }
