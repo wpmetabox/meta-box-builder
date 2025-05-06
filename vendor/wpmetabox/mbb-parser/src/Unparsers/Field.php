@@ -28,7 +28,6 @@ class Field extends Base {
 			->unparse_array_attributes( 'query_args' )
 			->unparse_array_attributes( 'attributes' )
 			->unparse_text_limiter()
-			->unparse_conditional_logic()
 			->unparse_tooltip()
 			->unparse_admin_columns()
 			->ensure_boolean( 'save_field' );
