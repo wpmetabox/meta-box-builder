@@ -4,6 +4,11 @@ import { doNothing, getOptions } from "../../../functions";
 const Select = ( { field } ) => {
 	const options = getOptions( field.options || '' );
 	const std = field.multiple ? getOptions( field.std || '' ) : field.std;
+
+	// For field preview: don't need to render all options.
+	// Only render the selected option or the first option if nothing is selected.
+	const renderedOption = std ? std : ( options.length > 0 ? options[ 0 ] : '' );
+
 	return (
 		<>
 			<select multiple={ field.multiple } value={ std } onChange={ doNothing }>
@@ -11,7 +16,7 @@ const Select = ( { field } ) => {
 					!field.multiple && field.placeholder &&
 					<option value="">{ field.placeholder }</option>
 				}
-				{ options.map( option => <option key={ option } value={ option }>{ option }</option> ) }
+				<option>{ renderedOption }</option>
 			</select>
 			{
 				field.multiple && field.select_all_none &&
