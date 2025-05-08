@@ -24,7 +24,7 @@ const Category = ( { category, searchQuery, onSelect, addField } ) => {
 	const fieldTypes = useApi( 'field-types', {} );
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( searchQuery.toLowerCase() ) );
 
-	return fields.length &&
+	return fields.length > 0 &&
 		<>
 			<div className="og-add-field__title">{ category.title }</div>
 			<FieldList fields={ fields } onSelect={ onSelect } addField={ addField } />
