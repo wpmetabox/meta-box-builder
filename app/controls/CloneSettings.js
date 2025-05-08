@@ -6,7 +6,7 @@ import DivRow from "./DivRow";
 import Tooltip from "./Tooltip";
 
 const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
-	const [ sortable, toggleSortable ] = useReducer( on => !on, defaultValue.sortable );
+	const [ sort_clone, toggleSortClone ] = useReducer( on => !on, defaultValue.sort_clone );
 	const [ clone_default, toggleCloneDefault ] = useReducer( on => !on, defaultValue.clone_default );
 	const [ clone_as_multiple, toggleCloneAsMultiple ] = useReducer( on => !on, defaultValue.clone_as_multiple );
 	const [ min_clone, setMinClone ] = useState( defaultValue.min_clone );
@@ -30,7 +30,7 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 						</label>
 
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone' ) }` } value={ defaultValue.clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'sortable' ) }` } value={ sortable } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'sort_clone' ) }` } value={ sort_clone } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_default' ) }` } value={ clone_default } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_empty_start' ) }` } value={ defaultValue.clone_empty_start } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_as_multiple' ) }` } value={ clone_as_multiple } />
@@ -58,8 +58,8 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 						/>
 						<Toggle
 							label={ __( 'Allow to reorder clones', 'meta-box-builder' ) }
-							onChange={ toggleSortable }
-							defaultValue={ sortable }
+							onChange={ toggleSortClone }
+							defaultValue={ sort_clone }
 							componentId={ `${ componentId }-sortable` }
 						/>
 						<Toggle
