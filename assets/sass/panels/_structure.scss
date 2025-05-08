@@ -3,6 +3,8 @@
 	cursor: pointer;
 	position: relative;
 	max-width: 40%;
+	display: inline-flex;
+	align-items: center;
 
 	&__inner {
 		overflow: hidden;
