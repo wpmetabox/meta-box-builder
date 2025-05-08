@@ -342,7 +342,7 @@ const useLists = create( ( set, get ) => ( {
 		setActiveField( newField );
 	},
 	removeField: ( listId, fieldId ) => {
-		const { setNavPanel } = useNav.getState();
+		const { navPanel, setNavPanel } = useNav.getState();
 
 		set( state => ( {
 			lists: state.lists.map( l => {
@@ -357,7 +357,9 @@ const useLists = create( ( set, get ) => ( {
 			} ),
 		} ) );
 
-		setNavPanel( 'field_group_settings' );
+		if ( navPanel !== 'structure' ) {
+			setNavPanel( '' );
+		}
 	},
 	updateField: ( listId, fieldId, key, value ) => set( state => ( {
 		lists: state.lists.map( l => {
