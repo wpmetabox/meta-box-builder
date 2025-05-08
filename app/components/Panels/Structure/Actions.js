@@ -92,7 +92,7 @@ const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, remove
 								</MenuItem>
 							</MenuGroup>
 							<MenuGroup>
-								<MenuItem icon={ trash } onClick={ remove( onClose ) }>
+								<MenuItem isDestructive icon={ trash } onClick={ remove( onClose ) }>
 									{ __( 'Remove', 'meta-box-builder' ) }
 								</MenuItem>
 							</MenuGroup>
