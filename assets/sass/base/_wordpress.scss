@@ -68,3 +68,8 @@
 .components-toolbar-group .components-button.has-icon.has-icon {
 	min-width: 30px;
 }
+
+.components-button:focus:not(:disabled) {
+	outline: none;
+	box-shadow: none;
+}

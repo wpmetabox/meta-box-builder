@@ -1,7 +1,5 @@
-[ ] Chuyển settings của field group sang sidebar
-	[ ] Kiểm tra khi settings có thì open panel: Tạm thời để sau...
-[ ] Chuyển settings của fields sang sidebar
-	[ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
+[ ] Kiểm tra khi settings có thì open panel: Tạm thời để sau...
+[ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 
 Preview:
 
@@ -18,7 +16,6 @@ Preview:
 Feedback:
 
 [ ] Thay đổi field type
-[ ] icon mở sidebar setting của field group cũng khó nhìn
 
 ## Settings của field group:
 

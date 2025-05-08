@@ -3,25 +3,12 @@ import { useCopyToClipboard } from "@wordpress/compose";
 import { memo, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
-import { getFieldIcon, inside } from "../../../functions";
-import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
-import useNav from "../../../hooks/useNav";
+import { getFieldIcon, ucwords } from "../../../functions";
 import Actions from './Actions';
 import Group from './Group';
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
-	const { activeField, setActiveField } = useFieldSettingsPanel();
-	const { setNavPanel } = useNav();
 	const [ copied, setCopied ] = useState( false );
-
-	const toggleSettings = e => {
-		if ( inside( e.target, '.components-button,.og-item__id' ) ) {
-			return;
-		}
-
-		setActiveField( activeField._id === field._id ? {} : field );
-		setNavPanel( activeField._id === field._id ? 'field_group_settings' : 'field_settings' );
-	};
 
 	const copyRef = useCopyToClipboard( field.id, () => {
 		setCopied( true );
@@ -29,13 +16,12 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	} );
 
 	return field.type && (
-		<div className={ `og-item og-item--${ field.type } ${ field._id === activeField._id ? 'og-item--active' : '' }` }>
+		<div className={ `og-item og-item--${ field.type }` }>
 			<Flex
 				gap={ 1 }
 				align="center"
 				className="og-item__header"
-				title={ __( 'Click to toggle field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
-				onClick={ toggleSettings }
+				title={ __( 'Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
 				<Icon size={ 16 } icon={ getFieldIcon( field.type ) } className="og-item__icon" />
 				<div className="og-item__label">{ getFieldLabel( field ) }</div>

@@ -136,15 +136,6 @@
 		white-space: nowrap;
 	}
 
-	&--active>.og-item__header {
-		background: var(--color-primary);
-		color: #fff;
-
-		&>.og-item__icon {
-			opacity: .9;
-		}
-	}
-
 	&__editable {
 		input {
 			line-height: 24px;
