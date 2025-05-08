@@ -1,4 +1,4 @@
-import { lazy, memo, Suspense, useState } from "@wordpress/element";
+import { lazy, memo, Suspense } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
@@ -14,7 +14,6 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
 	const { setNavPanel } = useNav();
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
-	const [ hover, setHover ] = useState( false );
 
 	const isActive = activeField._id === field._id;
 
