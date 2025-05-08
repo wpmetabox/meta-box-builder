@@ -1,3 +1,7 @@
+### 4.11.0 - 2025-05-08
+
+Add integration for Polylang & improve the integration with WPML: allow translating settings pages/relationships/fields' labels and also value. For more details, please see this [blog post](https://metabox.io/wpml-polylang-integrations-improvements/).
+
 ### 4.10.1 - 2025-04-17
 
 Fix tab not rendering
