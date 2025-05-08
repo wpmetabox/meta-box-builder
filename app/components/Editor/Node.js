@@ -24,16 +24,11 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 		e.stopPropagation();
 
-		// If the field is already active, close it.
-		if ( isActive ) {
-			setActiveField( {} );
-			setNavPanel( '' );
-			return;
-		}
-
 		// Set active field and show settings panel.
-		setActiveField( field );
-		setNavPanel( 'field_settings' );
+		if ( !isActive ) {
+			setActiveField( field );
+			setNavPanel( 'field_settings' );
+		}
 	};
 
 	const update = ( key, value ) => {
