@@ -22,13 +22,18 @@ const useContextMenu = () => {
 		setPosition( { x, y } );
 	};
 
+	// Close context menu when click or scroll inside the editor, or press any key.
 	const closeContextMenu = () => setOpen( false );
+	const events = [ 'click', 'scroll' ];
+	const editor = document.querySelector( '.mb-body__inner' );
 
 	useEffect( () => {
-		document.addEventListener( "click", closeContextMenu );
+		events.forEach( event => editor.addEventListener( event, closeContextMenu ) );
+		document.addEventListener( 'keydown', closeContextMenu );
 
 		return () => {
-			document.removeEventListener( "click", closeContextMenu );
+			events.forEach( event => editor.removeEventListener( event, closeContextMenu ) );
+			document.removeEventListener( 'keydown', closeContextMenu );
 		};
 	}, [] );
 
