@@ -25,7 +25,6 @@
 
 .mb {
 	--nav-width: 350px;
-	--sidebar-width: 360px;
 
 	display: flex;
 	flex-direction: column;
@@ -123,7 +122,7 @@
 		top: 0;
 		bottom: 0;
 		left: var(--nav-width);
-		right: var(--sidebar-width);
+		right: 0;
 		overflow-y: auto;
 
 		.mb-no-nav & {
@@ -145,42 +144,6 @@
 
 	&--padding {
 		padding: 32px;
-	}
-}
-
-// Sidebar panel
-.mb-sidebar .mb-panel {
-	position: fixed;
-	top: calc(32px + 60px + 1px); // Admin bar + header + border
-	bottom: 0;
-	right: 0;
-	width: var(--sidebar-width);
-	z-index: 99;
-	transition: all .25s;
-	transform: translateX(var(--sidebar-width));
-
-	margin-top: -1px; // Override to the header's border
-	border-right: 0;
-
-	&--show {
-		transform: translateX(0);
-	}
-
-	// Only scroll inner content, keep the panel header sticky
-	&__inner {
-		position: absolute;
-		top: calc(48px - 1px); // 48px: header, -1px: margin top
-		bottom: 0;
-		right: 0;
-		width: var(--sidebar-width);
-		overflow-y: auto;
-	}
-
-	// Field settings panel
-	&--field-settings {
-		.components-panel__header svg {
-			fill: var(--color-gray);
-		}
 	}
 }
 

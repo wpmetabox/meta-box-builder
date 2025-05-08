@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { create } from 'zustand';
 import { ensureArray, getFieldValue, ucwords, uniqid } from '../functions';
 import useFieldSettingsPanel from './useFieldSettingsPanel';
-import useSidebarPanel from './useSidebarPanel';
+import useNav from './useNav';
 
 let lists = [];
 
@@ -29,7 +29,7 @@ parseLists( MbbApp, 'root', 'fields' );
 const useLists = create( ( set, get ) => ( {
 	lists,
 	addFieldAt: ( listId, fieldType, position ) => {
-		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setNavPanel } = useNav.getState();
 		const { setActiveField } = useFieldSettingsPanel.getState();
 
 		const list = get().lists.find( l => l.id === listId );
@@ -79,11 +79,11 @@ const useLists = create( ( set, get ) => ( {
 			return { lists };
 		} );
 
-		setSidebarPanel( 'field_settings' );
+		setNavPanel( 'field_settings' );
 		setActiveField( newField );
 	},
 	addField: ( listId, fieldType ) => {
-		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setNavPanel } = useNav.getState();
 		const { setActiveField } = useFieldSettingsPanel.getState();
 
 		const list = get().lists.find( l => l.id === listId );
@@ -121,11 +121,11 @@ const useLists = create( ( set, get ) => ( {
 			return { lists };
 		} );
 
-		setSidebarPanel( 'field_settings' );
+		setNavPanel( 'field_settings' );
 		setActiveField( newField );
 	},
 	prependField: ( listId, fieldType ) => {
-		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setNavPanel } = useNav.getState();
 		const { setActiveField } = useFieldSettingsPanel.getState();
 
 		const list = get().lists.find( l => l.id === listId );
@@ -163,11 +163,11 @@ const useLists = create( ( set, get ) => ( {
 			return { lists };
 		} );
 
-		setSidebarPanel( 'field_settings' );
+		setNavPanel( 'field_settings' );
 		setActiveField( newField );
 	},
 	addFieldBefore: ( listId, fieldId, fieldType ) => {
-		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setNavPanel } = useNav.getState();
 		const { setActiveField } = useFieldSettingsPanel.getState();
 
 		const list = get().lists.find( l => l.id === listId );
@@ -213,11 +213,11 @@ const useLists = create( ( set, get ) => ( {
 			return { lists };
 		} );
 
-		setSidebarPanel( 'field_settings' );
+		setNavPanel( 'field_settings' );
 		setActiveField( newField );
 	},
 	addFieldAfter: ( listId, fieldId, fieldType ) => {
-		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setNavPanel } = useNav.getState();
 		const { setActiveField } = useFieldSettingsPanel.getState();
 
 		const list = get().lists.find( l => l.id === listId );
@@ -263,11 +263,11 @@ const useLists = create( ( set, get ) => ( {
 			return { lists };
 		} );
 
-		setSidebarPanel( 'field_settings' );
+		setNavPanel( 'field_settings' );
 		setActiveField( newField );
 	},
 	duplicateField: ( listId, fieldId ) => {
-		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setNavPanel } = useNav.getState();
 		const { setActiveField } = useFieldSettingsPanel.getState();
 
 		const list = get().lists.find( l => l.id === listId );
@@ -338,11 +338,11 @@ const useLists = create( ( set, get ) => ( {
 			return { lists };
 		} );
 
-		setSidebarPanel( 'field_settings' );
+		setNavPanel( 'field_settings' );
 		setActiveField( newField );
 	},
 	removeField: ( listId, fieldId ) => {
-		const { setSidebarPanel } = useSidebarPanel.getState();
+		const { setNavPanel } = useNav.getState();
 
 		set( state => ( {
 			lists: state.lists.map( l => {
@@ -357,7 +357,7 @@ const useLists = create( ( set, get ) => ( {
 			} ),
 		} ) );
 
-		setSidebarPanel( 'field_group_settings' );
+		setNavPanel( 'field_group_settings' );
 	},
 	updateField: ( listId, fieldId, key, value ) => set( state => ( {
 		lists: state.lists.map( l => {

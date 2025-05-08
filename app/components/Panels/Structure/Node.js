@@ -5,13 +5,13 @@ import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { getFieldIcon, inside } from "../../../functions";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
-import useSidebarPanel from "../../../hooks/useSidebarPanel";
+import useNav from "../../../hooks/useNav";
 import Actions from './Actions';
 import Group from './Group';
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
-	const { setSidebarPanel } = useSidebarPanel();
+	const { setNavPanel } = useNav();
 	const [ copied, setCopied ] = useState( false );
 
 	const toggleSettings = e => {
@@ -20,7 +20,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		}
 
 		setActiveField( activeField._id === field._id ? {} : field );
-		setSidebarPanel( activeField._id === field._id ? 'field_group_settings' : 'field_settings' );
+		setNavPanel( activeField._id === field._id ? 'field_group_settings' : 'field_settings' );
 	};
 
 	const copyRef = useCopyToClipboard( field.id, () => {

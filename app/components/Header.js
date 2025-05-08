@@ -1,6 +1,6 @@
 import { Button, Flex } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import { listView, plus } from "@wordpress/icons";
+import { cog, listView, plus } from "@wordpress/icons";
 import useNav from '../hooks/useNav';
 // import { ReactComponent as Logo } from './logo.svg';
 
@@ -34,6 +34,14 @@ const Header = () => {
 					showTooltip={ true }
 					onClick={ updateNavPanel( 'structure' ) }
 					isPressed={ navPanel === 'structure' }
+				/>
+				<Button
+					icon={ cog }
+					size="compact"
+					label={ __( 'Edit field group settings', 'meta-box-builder' ) }
+					showTooltip={ true }
+					onClick={ updateNavPanel( 'field_group_settings' ) }
+					isPressed={ navPanel === 'field_group_settings' }
 				/>
 			</Flex>
 			<input

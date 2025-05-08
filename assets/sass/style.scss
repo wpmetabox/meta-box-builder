@@ -31,18 +31,12 @@
 	@import "field-settings/sub-settings";
 	@import "field-settings/select-with-input";
 
-	@import "nav/add-field";
-	@import "nav/structure";
-}
+	@import "panels/base";
+	@import "panels/location";
+	@import "panels/include-exclude";
+	@import "panels/field-settings";
+	@import "panels/attribute";
 
-.mb-sidebar {
-	@import "sidebar/_panel";
-}
-
-.mb-sidebar .og {
-	@import "sidebar/base";
-	@import "sidebar/location";
-	@import "sidebar/include-exclude";
-	@import "sidebar/field-settings";
-	@import "sidebar/attribute";
+	@import "panels/add-field";
+	@import "panels/structure";
 }

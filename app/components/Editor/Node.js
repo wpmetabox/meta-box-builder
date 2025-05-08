@@ -4,7 +4,7 @@ import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
 import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
-import useSidebarPanel from "../../hooks/useSidebarPanel";
+import useNav from "../../hooks/useNav";
 import ContextMenu from "./ContextMenu";
 import Field from './Field';
 import Base from "./FieldTypePreview/Base";
@@ -12,7 +12,7 @@ import Toolbar from "./Toolbar";
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
-	const { setSidebarPanel } = useSidebarPanel();
+	const { setNavPanel } = useNav();
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
 	const [ hover, setHover ] = useState( false );
 
@@ -28,13 +28,13 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		// If the field is already active, close it.
 		if ( isActive ) {
 			setActiveField( {} );
-			setSidebarPanel( 'field_group_settings' );
+			setNavPanel( '' );
 			return;
 		}
 
 		// Set active field and show settings panel.
 		setActiveField( field );
-		setSidebarPanel( 'field_settings' );
+		setNavPanel( 'field_settings' );
 	};
 
 	const update = ( key, value ) => {
