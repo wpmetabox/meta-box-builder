@@ -66,9 +66,6 @@ const CollapsibleElements = ( { field } ) => {
 		<>
 			<div className="rwmb-group-title-wrapper">
 				<h4 className="rwmb-group-title">{ groupTitle }</h4>
-				{
-					field.clone && <a href="#" className="rwmb-group-remove">{ __( 'Remove', 'meta-box-builder' ) }</a>
-				}
 			</div>
 			<button className="rwmb-group-toggle-handle button-link">
 				<span className="rwmb-group-toggle-indicator" />
