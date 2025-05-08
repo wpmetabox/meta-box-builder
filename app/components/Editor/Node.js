@@ -12,7 +12,7 @@ import Toolbar from "./Toolbar";
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { activeField, setActiveField } = useFieldSettingsPanel();
-	const { setNavPanel } = useNav();
+	const { navPanel, setNavPanel } = useNav();
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
 
 	const isActive = activeField._id === field._id;
@@ -27,6 +27,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		// Set active field and show settings panel.
 		if ( !isActive ) {
 			setActiveField( field );
+			setNavPanel( 'field_settings' );
+		} else if ( navPanel !== 'field_settings' ) {
 			setNavPanel( 'field_settings' );
 		}
 	};
