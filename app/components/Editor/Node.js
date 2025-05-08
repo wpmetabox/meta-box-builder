@@ -22,6 +22,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			return;
 		}
 
+		// Make it able to select sub-fields in a group
 		e.stopPropagation();
 
 		// Set active field and show settings panel.
