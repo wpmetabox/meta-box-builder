@@ -3,7 +3,7 @@ import { useCopyToClipboard } from "@wordpress/compose";
 import { memo, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
-import { getFieldIcon, ucwords } from "../../../functions";
+import { getFieldIcon, scrollIntoView, ucwords } from "../../../functions";
 import Actions from './Actions';
 import Group from './Group';
 
@@ -15,6 +15,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		setTimeout( () => setCopied( false ), 2000 );
 	} );
 
+	const scrollToField = () => scrollIntoView( `mb-field-${ field._id }` );
+
 	return field.type && (
 		<div className={ `og-item og-item--${ field.type }` }>
 			<Flex
@@ -22,6 +24,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				align="center"
 				className="og-item__header"
 				title={ __( 'Drag and drop to reorder fields.', 'meta-box-builder' ) }
+				onClick={ scrollToField }
 			>
 				<Icon size={ 16 } icon={ getFieldIcon( field.type ) } className="og-item__icon" />
 				<div className="og-item__label">{ getFieldLabel( field ) }</div>

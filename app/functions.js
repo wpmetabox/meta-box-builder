@@ -227,3 +227,17 @@ export const getFullOptions = text => text === "" ? [] : text.split( "\n" ).map(
 
 // Do nothing callback function for field preview inputs
 export const doNothing = () => {};
+
+export const scrollIntoView = id => {
+	const element = document.getElementById( id );
+	if ( !element ) {
+		return;
+	}
+
+	const rect = element.getBoundingClientRect();
+	const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+	if ( rect.top < 0 || rect.top > viewportHeight ) {
+		element.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+	}
+};
