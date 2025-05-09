@@ -1,6 +1,5 @@
 import { createPortal } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { isActiveField } from "../../../functions";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import PersistentPanelBody from '../../PersistentPanelBody';
 import Tab from './Tab';
@@ -47,7 +46,7 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 	} ) );
 
 	return portalElement && createPortal(
-		<div className={ `og-field-settings ${ isActiveField( field ) ? 'og-field-settings--show' : '' }` }>
+		<div className={ `og-field-settings ${ field._active ? 'og-field-settings--show' : '' }` }>
 			<div className="og-field-settings__header">
 				<Tab controls={ headerControls } field={ field } { ...rest } />
 			</div>

@@ -2,7 +2,6 @@ import { Modal, Toolbar as T, ToolbarButton, ToolbarGroup } from '@wordpress/com
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { arrowDown, arrowUp, copy, insertAfter, insertBefore, trash } from "@wordpress/icons";
-import { isActiveField } from '../../functions';
 import useLists from '../../hooks/useLists';
 import AddFieldContent from '../AddFieldContent';
 
@@ -51,7 +50,7 @@ const Toolbar = ( {
 
 	return (
 		<>
-			<div className={ `mb-toolbar ${ isActiveField( field ) ? 'mb-toolbar--show' : '' }` }>
+			<div className={ `mb-toolbar ${ field._active ? 'mb-toolbar--show' : '' }` }>
 				<T label={ __( 'Toolbar', 'meta-box-builder' ) }>
 					<ToolbarGroup>
 						<ToolbarButton size="small" icon={ arrowUp } onClick={ moveUp } label={ __( 'Move up', 'meta-box-builder' ) } />
