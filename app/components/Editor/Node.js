@@ -11,11 +11,9 @@ import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
-	const { activeField, setActiveField } = useFieldSettingsPanel();
+	const { isActiveField, setActiveField } = useFieldSettingsPanel();
 	const { navPanel, setNavPanel } = useNav();
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
-
-	const isActive = activeField._id === field._id;
 
 	const toggleSettings = e => {
 		if ( !inside( e.target, '.mb-field ' ) || inside( e.target, '.mb-context-menu,.mb-toolbar,.og-item__editable' ) ) {
@@ -26,7 +24,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		e.stopPropagation();
 
 		// Set active field and show settings panel.
-		if ( !isActive ) {
+		if ( !isActiveField( field ) ) {
 			setActiveField( field );
 			setNavPanel( 'field_settings' );
 		} else if ( navPanel !== 'field_settings' ) {
@@ -54,7 +52,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			className={ `
 				mb-field
 				mb-field--${ field.type }
-				${ isActive ? 'mb-field--active' : '' }
+				${ isActiveField( field ) ? 'mb-field--active' : '' }
 			` }
 			id={ `mb-field-${ field._id }` }
 			onClick={ toggleSettings }

@@ -5,7 +5,7 @@ import PersistentPanelBody from '../../PersistentPanelBody';
 import Tab from './Tab';
 
 const FieldSettings = ( { controls, field, ...rest } ) => {
-	const { activeField, portalElement } = useFieldSettingsPanel();
+	const { isActiveField, portalElement } = useFieldSettingsPanel();
 
 	// Extract controls displayed in the panel header.
 	const headerSettings = [ 'required', 'clone_settings' ];
@@ -46,7 +46,7 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 	} ) );
 
 	return portalElement && createPortal(
-		<div className={ `og-field-settings ${ field._id === activeField._id ? 'og-field-settings--show' : '' }` }>
+		<div className={ `og-field-settings ${ isActiveField( field ) ? 'og-field-settings--show' : '' }` }>
 			<div className="og-field-settings__header">
 				<Tab controls={ headerControls } field={ field } { ...rest } />
 			</div>

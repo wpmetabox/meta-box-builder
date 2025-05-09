@@ -15,7 +15,7 @@ const Toolbar = ( {
 	moveFieldUp,
 	moveFieldDown
 } ) => {
-	const { activeField } = useFieldSettingsPanel();
+	const { isActiveField } = useFieldSettingsPanel();
 	const { getForList } = useLists();
 	const [ action, setAction ] = useState( () => () => {} );
 	const [ isOpen, setOpen ] = useState( false );
@@ -52,7 +52,7 @@ const Toolbar = ( {
 
 	return (
 		<>
-			<div className={ `mb-toolbar ${ activeField._id === field._id ? 'mb-toolbar--show' : '' }` }>
+			<div className={ `mb-toolbar ${ isActiveField( field ) ? 'mb-toolbar--show' : '' }` }>
 				<T label={ __( 'Toolbar', 'meta-box-builder' ) }>
 					<ToolbarGroup>
 						<ToolbarButton size="small" icon={ arrowUp } onClick={ moveUp } label={ __( 'Move up', 'meta-box-builder' ) } />

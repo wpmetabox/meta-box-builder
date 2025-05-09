@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { scrollIntoView } from '../functions';
 
-const useFieldSettingsPanel = create( set => ( {
+const useFieldSettingsPanel = create( ( set, get ) => ( {
 	portalElement: null,
 	activeField: {},
 	setPortalElement: portalElement => set( state => ( { portalElement } ) ),
@@ -16,7 +16,8 @@ const useFieldSettingsPanel = create( set => ( {
 		setTimeout( () => {
 			scrollIntoView( `mb-field-${ activeField._id }` );
 		}, 0 );
-	}
+	},
+	isActiveField: field => field._id === get().activeField._id,
 } ) );
 
 export default useFieldSettingsPanel;
