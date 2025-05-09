@@ -1,7 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import { create } from 'zustand';
 import { ensureArray, getFieldValue, ucwords, uniqid } from '../functions';
-import useFieldSettingsPanel from './useFieldSettingsPanel';
 import useNav from './useNav';
 
 const areListsEqual = ( a, b ) => a.length === b.length && a.every( ( field, index ) => field._id === b[ index ]._id );
@@ -31,9 +30,6 @@ parseLists( MbbApp, 'root', 'fields' );
 const useLists = create( ( set, get ) => ( {
 	lists,
 	addFieldAt: ( listId, fieldType, position ) => {
-		const { setNavPanel } = useNav.getState();
-		const { setActiveField } = useFieldSettingsPanel.getState();
-
 		const list = get().lists.find( l => l.id === listId );
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
@@ -80,14 +76,8 @@ const useLists = create( ( set, get ) => ( {
 
 			return { lists };
 		} );
-
-		setNavPanel( 'field_settings' );
-		setActiveField( newField );
 	},
 	addField: ( listId, fieldType ) => {
-		const { setNavPanel } = useNav.getState();
-		const { setActiveField } = useFieldSettingsPanel.getState();
-
 		const list = get().lists.find( l => l.id === listId );
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
@@ -122,14 +112,8 @@ const useLists = create( ( set, get ) => ( {
 
 			return { lists };
 		} );
-
-		setNavPanel( 'field_settings' );
-		setActiveField( newField );
 	},
 	prependField: ( listId, fieldType ) => {
-		const { setNavPanel } = useNav.getState();
-		const { setActiveField } = useFieldSettingsPanel.getState();
-
 		const list = get().lists.find( l => l.id === listId );
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
@@ -164,14 +148,8 @@ const useLists = create( ( set, get ) => ( {
 
 			return { lists };
 		} );
-
-		setNavPanel( 'field_settings' );
-		setActiveField( newField );
 	},
 	addFieldBefore: ( listId, fieldId, fieldType ) => {
-		const { setNavPanel } = useNav.getState();
-		const { setActiveField } = useFieldSettingsPanel.getState();
-
 		const list = get().lists.find( l => l.id === listId );
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
@@ -214,14 +192,8 @@ const useLists = create( ( set, get ) => ( {
 
 			return { lists };
 		} );
-
-		setNavPanel( 'field_settings' );
-		setActiveField( newField );
 	},
 	addFieldAfter: ( listId, fieldId, fieldType ) => {
-		const { setNavPanel } = useNav.getState();
-		const { setActiveField } = useFieldSettingsPanel.getState();
-
 		const list = get().lists.find( l => l.id === listId );
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
@@ -264,14 +236,8 @@ const useLists = create( ( set, get ) => ( {
 
 			return { lists };
 		} );
-
-		setNavPanel( 'field_settings' );
-		setActiveField( newField );
 	},
 	duplicateField: ( listId, fieldId ) => {
-		const { setNavPanel } = useNav.getState();
-		const { setActiveField } = useFieldSettingsPanel.getState();
-
 		const list = get().lists.find( l => l.id === listId );
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
@@ -339,9 +305,6 @@ const useLists = create( ( set, get ) => ( {
 
 			return { lists };
 		} );
-
-		setNavPanel( 'field_settings' );
-		setActiveField( newField );
 	},
 	removeField: ( listId, fieldId ) => {
 		const { navPanel, setNavPanel } = useNav.getState();
@@ -359,7 +322,7 @@ const useLists = create( ( set, get ) => ( {
 			} ),
 		} ) );
 
-		if ( navPanel !== 'structure' ) {
+		if ( navPanel === 'field_settings' ) {
 			setNavPanel( '' );
 		}
 	},
