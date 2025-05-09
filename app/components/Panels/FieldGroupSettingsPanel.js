@@ -15,12 +15,12 @@ import ShowHide from './FieldGroupSettings/ShowHide';
 import Summary from './FieldGroupSettings/Summary';
 import Tabs from './FieldGroupSettings/Tabs';
 
-const FieldGroupSettingsPanel = ( { show = false } ) => {
+const FieldGroupSettingsPanel = () => {
 	const { getObjectType } = useSettings();
 	const objectType = getObjectType();
 
 	return (
-		<Panel header={ __( 'Edit field group settings', 'meta-box-builder' ) } className={ `mb-panel ${ show ? 'mb-panel--show' : '' }` }>
+		<Panel header={ __( 'Edit field group settings', 'meta-box-builder' ) } className="mb-panel mb-panel--field-group-settings">
 			<div className="mb-panel__inner">
 				<Summary />
 				<PersistentPanelBody title={ __( 'Location', 'meta-box-builder' ) }>

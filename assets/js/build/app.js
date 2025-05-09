@@ -5100,7 +5100,7 @@ const Category = ({
 }) => {
   const fieldTypes = (0,_hooks_useApi__WEBPACK_IMPORTED_MODULE_5__["default"])('field-types', {});
   const fields = Object.entries(fieldTypes).filter(([type, field]) => field.category === category.slug && field.title.toLowerCase().includes(searchQuery.toLowerCase()));
-  return fields.length && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  return fields.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "og-add-field__title"
   }, category.title), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(FieldList, {
     fields: fields,
@@ -5756,6 +5756,7 @@ const Fields = () => {
   // As we manually added the field with a correct format in the handleAdd() function above
   // We need to remove the auto-added item by SortableJS.
   const setList = list => fieldActions.setFields([...list].filter(f => f?._id !== undefined));
+  console.debug(`LIST`);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, fields.length === 0 ? (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.RawHTML, {
     className: "mb-editor__empty"
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder')) : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_sortablejs__WEBPACK_IMPORTED_MODULE_3__.ReactSortable, {
@@ -5806,12 +5807,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../functions */ "./app/functions.js");
 /* harmony import */ var _hooks_useContextMenu__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../hooks/useContextMenu */ "./app/hooks/useContextMenu.js");
-/* harmony import */ var _hooks_useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../hooks/useFieldSettingsPanel */ "./app/hooks/useFieldSettingsPanel.js");
-/* harmony import */ var _hooks_useNav__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../hooks/useNav */ "./app/hooks/useNav.js");
-/* harmony import */ var _ContextMenu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ContextMenu */ "./app/components/Editor/ContextMenu.js");
-/* harmony import */ var _Field__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Field */ "./app/components/Editor/Field.js");
-/* harmony import */ var _FieldTypePreview_Base__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./FieldTypePreview/Base */ "./app/components/Editor/FieldTypePreview/Base.js");
-/* harmony import */ var _Toolbar__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Toolbar */ "./app/components/Editor/Toolbar.js");
+/* harmony import */ var _ContextMenu__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ContextMenu */ "./app/components/Editor/ContextMenu.js");
+/* harmony import */ var _Field__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Field */ "./app/components/Editor/Field.js");
+/* harmony import */ var _FieldTypePreview_Base__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./FieldTypePreview/Base */ "./app/components/Editor/FieldTypePreview/Base.js");
+/* harmony import */ var _Toolbar__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Toolbar */ "./app/components/Editor/Toolbar.js");
 
 
 
@@ -5822,43 +5821,61 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
+const isClickedOnAField = e => (0,_functions__WEBPACK_IMPORTED_MODULE_4__.inside)(e.target, '.mb-field ') && !(0,_functions__WEBPACK_IMPORTED_MODULE_4__.inside)(e.target, '.mb-context-menu,.mb-toolbar,.og-item__editable');
+const OutsideClickDetector = ({
+  onClickOutside,
+  children
+}) => {
+  const ref = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useRef)();
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    const handleClickOutside = e => {
+      if (!isClickedOnAField(e)) {
+        return;
+      }
+      if (ref.current && !ref.current.contains(e.target)) {
+        onClickOutside?.();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [onClickOutside]);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    ref: ref
+  }, children);
+};
 const Node = ({
   field,
   parent = '',
   ...fieldActions
 }) => {
   const {
-    activeField,
-    setActiveField
-  } = (0,_hooks_useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_6__["default"])();
-  const {
-    setNavPanel
-  } = (0,_hooks_useNav__WEBPACK_IMPORTED_MODULE_7__["default"])();
-  const {
     isContextMenuOpen,
     openContextMenu,
     contextMenuPosition
   } = (0,_hooks_useContextMenu__WEBPACK_IMPORTED_MODULE_5__["default"])();
-  const [hover, setHover] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
-  const isActive = activeField._id === field._id;
   const toggleSettings = e => {
-    if (!(0,_functions__WEBPACK_IMPORTED_MODULE_4__.inside)(e.target, '.mb-field ') || (0,_functions__WEBPACK_IMPORTED_MODULE_4__.inside)(e.target, '.mb-context-menu,.mb-toolbar,.og-item__editable')) {
+    if (!isClickedOnAField(e)) {
       return;
     }
+
+    // Make it able to select sub-fields in a group
     e.stopPropagation();
-
-    // If the field is already active, close it.
-    if (isActive) {
-      setActiveField({});
-      setNavPanel('');
-      return;
+    if (field._active) {
+      // Deselect the field.
+      update('_active', false);
+      (0,_functions__WEBPACK_IMPORTED_MODULE_4__.setNavPanel)('');
+    } else {
+      // Select the field.
+      update('_active', true);
+      (0,_functions__WEBPACK_IMPORTED_MODULE_4__.setNavPanel)('field-settings');
     }
-
-    // Set active field and show settings panel.
-    setActiveField(field);
-    setNavPanel('field_settings');
+  };
+  const deselect = () => {
+    if (field._active) {
+      update('_active', false);
+    }
   };
   const update = (key, value) => {
     if (key.includes('[')) {
@@ -5871,16 +5888,19 @@ const Node = ({
     return;
   }
   const FieldType = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.lazy)(() => __webpack_require__("./app/components/Editor/FieldTypePreview lazy recursive ^\\.\\/.*$")(`./${(0,_functions__WEBPACK_IMPORTED_MODULE_4__.ucwords)(field.type, '_', '')}`));
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  console.debug(`Render field ${field._id}`);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(OutsideClickDetector, {
+    onClickOutside: deselect
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `
-				mb-field
-				mb-field--${field.type}
-				${isActive ? 'mb-field--active' : ''}
-			`,
+					mb-field
+					mb-field--${field.type}
+					${field._active ? 'mb-field--active' : ''}
+				`,
     id: `mb-field-${field._id}`,
     onClick: toggleSettings,
     onContextMenu: openContextMenu,
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Click to toggle field settings. Drag and drop to reoder fields.', 'meta-box-builder')
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Click to toggle field settings. Drag and drop to reorder fields.', 'meta-box-builder')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "hidden",
     name: `fields${parent}[${field._id}][_id]`,
@@ -5889,10 +5909,10 @@ const Node = ({
     type: "hidden",
     name: `fields${parent}[${field._id}][type]`,
     defaultValue: field.type
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Toolbar__WEBPACK_IMPORTED_MODULE_11__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Toolbar__WEBPACK_IMPORTED_MODULE_9__["default"], {
     field: field,
     ...fieldActions
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldTypePreview_Base__WEBPACK_IMPORTED_MODULE_10__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldTypePreview_Base__WEBPACK_IMPORTED_MODULE_8__["default"], {
     field: field,
     ...fieldActions,
     updateField: update
@@ -5901,17 +5921,17 @@ const Node = ({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(FieldType, {
     field: field,
     parent: parent
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ContextMenu__WEBPACK_IMPORTED_MODULE_8__["default"], {
+  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_ContextMenu__WEBPACK_IMPORTED_MODULE_6__["default"], {
     open: isContextMenuOpen,
     top: contextMenuPosition.y,
     left: contextMenuPosition.x,
     field: field,
     ...fieldActions
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Field__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Field__WEBPACK_IMPORTED_MODULE_7__["default"], {
     field: field,
     parent: parent,
     updateField: update
-  }));
+  })));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.memo)(Node, (prev, next) => {
   delete prev.field.fields;
@@ -5940,16 +5960,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/arrow-up.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/arrow-down.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/insert-before.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/insert-after.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/copy.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/trash.js");
-/* harmony import */ var _hooks_useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useFieldSettingsPanel */ "./app/hooks/useFieldSettingsPanel.js");
-/* harmony import */ var _hooks_useLists__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../hooks/useLists */ "./app/hooks/useLists.js");
-/* harmony import */ var _AddFieldContent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../AddFieldContent */ "./app/components/AddFieldContent.js");
-
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/arrow-up.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/arrow-down.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/insert-before.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/insert-after.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/copy.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/trash.js");
+/* harmony import */ var _hooks_useLists__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useLists */ "./app/hooks/useLists.js");
+/* harmony import */ var _AddFieldContent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../AddFieldContent */ "./app/components/AddFieldContent.js");
 
 
 
@@ -5967,11 +5985,8 @@ const Toolbar = ({
   moveFieldDown
 }) => {
   const {
-    activeField
-  } = (0,_hooks_useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_4__["default"])();
-  const {
     getForList
-  } = (0,_hooks_useLists__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  } = (0,_hooks_useLists__WEBPACK_IMPORTED_MODULE_4__["default"])();
   const [action, setAction] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(() => () => {});
   const [isOpen, setOpen] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
   const openModal = () => setOpen(true);
@@ -6005,32 +6020,32 @@ const Toolbar = ({
   const moveUp = () => moveFieldUp(field._id);
   const moveDown = () => moveFieldDown(field._id);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `mb-toolbar ${activeField._id === field._id ? 'mb-toolbar--show' : ''}`
+    className: `mb-toolbar ${field._active ? 'mb-toolbar--show' : ''}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Toolbar, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Toolbar', 'meta-box-builder')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
     size: "small",
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
     onClick: moveUp,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Move up', 'meta-box-builder')
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
     size: "small",
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
     onClick: moveDown,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Move down', 'meta-box-builder')
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
     size: "small",
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_8__["default"],
     onClick: actionCallback('addBefore'),
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add a field before', 'meta-box-builder')
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
     size: "small",
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_9__["default"],
     onClick: actionCallback('addAfter'),
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add a field after', 'meta-box-builder')
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
     size: "small",
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_10__["default"],
     onClick: duplicate,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Duplicate', 'meta-box-builder')
   })), field.type === 'group' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
@@ -6092,7 +6107,7 @@ const Toolbar = ({
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarGroup, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToolbarButton, {
     isDestructive: true,
     size: "small",
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_12__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__["default"],
     onClick: remove,
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove', 'meta-box-builder')
   })))), isOpen && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
@@ -6100,7 +6115,7 @@ const Toolbar = ({
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add a new field', 'meta-box-builder'),
     size: "large",
     onRequestClose: closeModal
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddFieldContent__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddFieldContent__WEBPACK_IMPORTED_MODULE_5__["default"], {
     addField: action,
     onSelect: closeModal
   })));
@@ -6124,12 +6139,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/plus.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/list-view.js");
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/cog.js");
-/* harmony import */ var _hooks_useNav__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../hooks/useNav */ "./app/hooks/useNav.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/plus.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/list-view.js");
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/icons */ "./node_modules/.pnpm/@wordpress+icons@10.23.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/cog.js");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../functions */ "./app/functions.js");
+
 
 
 
@@ -6138,44 +6156,45 @@ __webpack_require__.r(__webpack_exports__);
 // import { ReactComponent as Logo } from './logo.svg';
 
 const Header = () => {
-  const {
-    navPanel,
-    setNavPanel
-  } = (0,_hooks_useNav__WEBPACK_IMPORTED_MODULE_3__["default"])();
-  const updateNavPanel = key => () => setNavPanel(key === navPanel ? '' : key);
+  const [navPanel, setNavPanel] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)((0,_functions__WEBPACK_IMPORTED_MODULE_4__.getNavPanel)());
+  const updateNavPanel = key => () => {
+    const newPanel = key === navPanel ? '' : key;
+    (0,_functions__WEBPACK_IMPORTED_MODULE_4__.setNavPanel)(newPanel);
+    setNavPanel(newPanel);
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
     className: "mb-header"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
     expanded: false
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "primary",
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__["default"],
-    size: "compact",
-    className: "mb-header__add",
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add a new field', 'meta-box-builder'),
-    showTooltip: true,
-    onClick: updateNavPanel('add_field'),
-    isPressed: navPanel === 'add_field'
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__["default"],
     size: "compact",
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Show field group structure', 'meta-box-builder'),
+    className: "mb-header__add",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add a new field', 'meta-box-builder'),
+    showTooltip: true,
+    onClick: updateNavPanel('add'),
+    isPressed: navPanel === 'add'
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
+    size: "compact",
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show field group structure', 'meta-box-builder'),
     showTooltip: true,
     onClick: updateNavPanel('structure'),
     isPressed: navPanel === 'structure'
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__["default"],
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__["default"],
     size: "compact",
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Edit field group settings', 'meta-box-builder'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edit field group settings', 'meta-box-builder'),
     showTooltip: true,
-    onClick: updateNavPanel('field_group_settings'),
-    isPressed: navPanel === 'field_group_settings'
+    onClick: updateNavPanel('field-group-settings'),
+    isPressed: navPanel === 'field-group-settings'
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "text",
     name: "post_title",
     id: "post_title",
     defaultValue: MbbApp.title,
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Field group title', 'meta-box-builder')
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Field group title', 'meta-box-builder')
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
     gap: 3,
     expanded: false,
@@ -6184,12 +6203,12 @@ const Header = () => {
     type: "submit",
     "data-status": "draft",
     className: "components-button is-compact is-tertiary",
-    value: MbbApp.status == 'publish' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Switch to draft', 'meta-box-builder') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Save draft', 'meta-box-builder')
+    value: MbbApp.status == 'publish' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Switch to draft', 'meta-box-builder') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Save draft', 'meta-box-builder')
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "submit",
     "data-status": "publish",
     className: "components-button is-primary",
-    value: MbbApp.status == 'publish' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Update', 'meta-box-builder') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Publish', 'meta-box-builder')
+    value: MbbApp.status == 'publish' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Update', 'meta-box-builder') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Publish', 'meta-box-builder')
   })));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Header);
@@ -6318,33 +6337,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _hooks_useNav__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../hooks/useNav */ "./app/hooks/useNav.js");
-/* harmony import */ var _Panels_AddFieldPanel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Panels/AddFieldPanel */ "./app/components/Panels/AddFieldPanel.js");
-/* harmony import */ var _Panels_FieldGroupSettingsPanel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Panels/FieldGroupSettingsPanel */ "./app/components/Panels/FieldGroupSettingsPanel.js");
-/* harmony import */ var _Panels_FieldSettingsPanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Panels/FieldSettingsPanel */ "./app/components/Panels/FieldSettingsPanel.js");
-/* harmony import */ var _Panels_StructurePanel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Panels/StructurePanel */ "./app/components/Panels/StructurePanel.js");
+/* harmony import */ var _Panels_AddFieldPanel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Panels/AddFieldPanel */ "./app/components/Panels/AddFieldPanel.js");
+/* harmony import */ var _Panels_FieldGroupSettingsPanel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Panels/FieldGroupSettingsPanel */ "./app/components/Panels/FieldGroupSettingsPanel.js");
+/* harmony import */ var _Panels_FieldSettingsPanel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Panels/FieldSettingsPanel */ "./app/components/Panels/FieldSettingsPanel.js");
+/* harmony import */ var _Panels_StructurePanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Panels/StructurePanel */ "./app/components/Panels/StructurePanel.js");
 
 
 
 
 
-
-const Nav = () => {
-  const {
-    navPanel
-  } = (0,_hooks_useNav__WEBPACK_IMPORTED_MODULE_1__["default"])();
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "mb-nav"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_AddFieldPanel__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    show: navPanel === 'add_field'
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_StructurePanel__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    show: navPanel === 'structure'
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_FieldGroupSettingsPanel__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    show: navPanel === 'field_group_settings'
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_FieldSettingsPanel__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    show: navPanel === 'field_settings'
-  }));
-};
+const Nav = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+  className: "mb-nav"
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_AddFieldPanel__WEBPACK_IMPORTED_MODULE_1__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_StructurePanel__WEBPACK_IMPORTED_MODULE_4__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_FieldGroupSettingsPanel__WEBPACK_IMPORTED_MODULE_2__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_FieldSettingsPanel__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Nav);
 
 /***/ }),
@@ -6472,9 +6476,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const AddFieldPanel = ({
-  show
-}) => {
+const AddFieldPanel = () => {
   const {
     getForList
   } = (0,_hooks_useLists__WEBPACK_IMPORTED_MODULE_3__["default"])();
@@ -6483,7 +6485,7 @@ const AddFieldPanel = ({
   } = getForList('root');
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
     header: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add a new field', 'meta-box-builder'),
-    className: `mb-panel mb-panel--add ${show ? 'mb-panel--show' : ''}`
+    className: "mb-panel mb-panel--add"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_AddFieldContent__WEBPACK_IMPORTED_MODULE_4__["default"], {
     addField: addField,
     className: "mb-panel__inner"
@@ -7896,16 +7898,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const FieldGroupSettingsPanel = ({
-  show = false
-}) => {
+const FieldGroupSettingsPanel = () => {
   const {
     getObjectType
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_3__["default"])();
   const objectType = getObjectType();
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
     header: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Edit field group settings', 'meta-box-builder'),
-    className: `mb-panel ${show ? 'mb-panel--show' : ''}`
+    className: "mb-panel mb-panel--field-group-settings"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mb-panel__inner"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldGroupSettings_Summary__WEBPACK_IMPORTED_MODULE_15__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_PersistentPanelBody__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -7968,7 +7968,6 @@ const FieldSettings = ({
   ...rest
 }) => {
   const {
-    activeField,
     portalElement
   } = (0,_hooks_useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_3__["default"])();
 
@@ -8002,7 +8001,7 @@ const FieldSettings = ({
     controls: controls.filter(control => control.tab === tab.value)
   }));
   return portalElement && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createPortal)((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `og-field-settings ${field._id === activeField._id ? 'og-field-settings--show' : ''}`
+    className: `og-field-settings ${field._active ? 'og-field-settings--show' : ''}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "og-field-settings__header"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Tab__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -8103,19 +8102,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../functions */ "./app/functions.js");
 /* harmony import */ var _hooks_useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useFieldSettingsPanel */ "./app/hooks/useFieldSettingsPanel.js");
+/* harmony import */ var _hooks_useLists__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../hooks/useLists */ "./app/hooks/useLists.js");
 
 
 
 
 
-const FieldSettingsPanel = ({
-  show = false
-}) => {
+
+const FieldSettingsPanel = () => {
   const ref = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)();
   const {
-    activeField,
     setPortalElement
   } = (0,_hooks_useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_4__["default"])();
+  const {
+    getAllFields
+  } = (0,_hooks_useLists__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  const activeField = getAllFields().find(field => field._active) || {};
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     setPortalElement(ref.current); // Setup the ref to the portal only once, when the component is rendered.
   }, []);
@@ -8127,7 +8129,7 @@ const FieldSettingsPanel = ({
   }), (0,_functions__WEBPACK_IMPORTED_MODULE_3__.ucwords)(activeField.type || '', '_'));
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
     header: header,
-    className: `mb-panel mb-panel--field-settings ${show ? 'mb-panel--show' : ''}`
+    className: "mb-panel mb-panel--field-settings mb-panel--field-settings"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "mb-panel__inner",
     ref: ref
@@ -8254,6 +8256,7 @@ const Actions = ({
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_11__["default"],
     onClick: moveDown(onClose)
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Move down', 'meta-box-builder'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuGroup, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.MenuItem, {
+    isDestructive: true,
     icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_12__["default"],
     onClick: remove(onClose)
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove', 'meta-box-builder'))))), isOpen && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Modal, {
@@ -8428,12 +8431,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "lodash");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../functions */ "./app/functions.js");
-/* harmony import */ var _hooks_useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../hooks/useFieldSettingsPanel */ "./app/hooks/useFieldSettingsPanel.js");
-/* harmony import */ var _hooks_useNav__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../hooks/useNav */ "./app/hooks/useNav.js");
-/* harmony import */ var _Actions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Actions */ "./app/components/Panels/Structure/Actions.js");
-/* harmony import */ var _Group__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Group */ "./app/components/Panels/Structure/Group.js");
-
-
+/* harmony import */ var _Actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Actions */ "./app/components/Panels/Structure/Actions.js");
+/* harmony import */ var _Group__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Group */ "./app/components/Panels/Structure/Group.js");
 
 
 
@@ -8448,33 +8447,20 @@ const Node = ({
   parent = '',
   ...fieldActions
 }) => {
-  const {
-    activeField,
-    setActiveField
-  } = (0,_hooks_useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_7__["default"])();
-  const {
-    setNavPanel
-  } = (0,_hooks_useNav__WEBPACK_IMPORTED_MODULE_8__["default"])();
   const [copied, setCopied] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
-  const toggleSettings = e => {
-    if ((0,_functions__WEBPACK_IMPORTED_MODULE_6__.inside)(e.target, '.components-button,.og-item__id')) {
-      return;
-    }
-    setActiveField(activeField._id === field._id ? {} : field);
-    setNavPanel(activeField._id === field._id ? 'field_group_settings' : 'field_settings');
-  };
   const copyRef = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.useCopyToClipboard)(field.id, () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   });
+  const scrollToField = () => (0,_functions__WEBPACK_IMPORTED_MODULE_6__.scrollIntoView)(`mb-field-${field._id}`);
   return field.type && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: `og-item og-item--${field.type} ${field._id === activeField._id ? 'og-item--active' : ''}`
+    className: `og-item og-item--${field.type}`
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
     gap: 1,
     align: "center",
     className: "og-item__header",
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Click to toggle field settings. Drag and drop to reorder fields.', 'meta-box-builder'),
-    onClick: toggleSettings
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('Drag and drop to reorder fields.', 'meta-box-builder'),
+    onClick: scrollToField
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Icon, {
     size: 16,
     icon: (0,_functions__WEBPACK_IMPORTED_MODULE_6__.getFieldIcon)(field.type),
@@ -8487,15 +8473,15 @@ const Node = ({
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "og-item__id__inner",
     ref: copyRef
-  }, field.id)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Actions__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  }, field.id)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Actions__WEBPACK_IMPORTED_MODULE_7__["default"], {
     field: field,
     ...fieldActions
-  })), field.type === 'group' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Group__WEBPACK_IMPORTED_MODULE_10__["default"], {
+  })), field.type === 'group' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Group__WEBPACK_IMPORTED_MODULE_8__["default"], {
     field: field,
     parent: parent
   }));
 };
-const getFieldLabel = field => ['hidden', 'divider'].includes(field.type) ? ucwords(field.type) : field.name || field.group_title || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('(No label)', 'meta-box-builder');
+const getFieldLabel = field => ['hidden', 'divider'].includes(field.type) ? (0,_functions__WEBPACK_IMPORTED_MODULE_6__.ucwords)(field.type) : field.name || field.group_title || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__.__)('(No label)', 'meta-box-builder');
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.memo)(Node, (prev, next) => {
   delete prev.field.fields;
   delete next.field.fields;
@@ -8526,11 +8512,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const StructurePanel = ({
-  show
-}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
+const StructurePanel = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Panel, {
   header: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Structure', 'meta-box-builder'),
-  className: `mb-panel mb-panel--structure ${show ? 'mb-panel--show' : ''}`
+  className: "mb-panel mb-panel--structure"
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
   className: "mb-panel__inner"
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Structure_Fields__WEBPACK_IMPORTED_MODULE_3__["default"], null)));
@@ -9143,7 +9127,7 @@ const Item = ({
   const [values, setValues] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(valuesList);
   const handleSelect = (inputRef, value) => {
     inputRef.current.value = value;
-    const newValuesList = objectDepth(valuesList) == 1 ? valuesList : valuesList[value] ? valuesList[value] : valuesList['default'];
+    const newValuesList = objectDepth(valuesList) == 1 ? valuesList : Array.isArray(valuesList[value]) ? valuesList[value] : valuesList['default'];
     setValues(newValuesList || []);
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
@@ -9558,12 +9542,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getFieldIcon: () => (/* binding */ getFieldIcon),
 /* harmony export */   getFieldValue: () => (/* binding */ getFieldValue),
 /* harmony export */   getFullOptions: () => (/* binding */ getFullOptions),
+/* harmony export */   getNavPanel: () => (/* binding */ getNavPanel),
 /* harmony export */   getOptions: () => (/* binding */ getOptions),
 /* harmony export */   htmlDecode: () => (/* binding */ htmlDecode),
 /* harmony export */   inside: () => (/* binding */ inside),
 /* harmony export */   isPositiveInteger: () => (/* binding */ isPositiveInteger),
 /* harmony export */   parseQueryString: () => (/* binding */ parseQueryString),
 /* harmony export */   sanitizeId: () => (/* binding */ sanitizeId),
+/* harmony export */   scrollIntoView: () => (/* binding */ scrollIntoView),
+/* harmony export */   setNavPanel: () => (/* binding */ setNavPanel),
 /* harmony export */   ucwords: () => (/* binding */ ucwords),
 /* harmony export */   uniqid: () => (/* binding */ uniqid)
 /* harmony export */ });
@@ -9704,7 +9691,7 @@ const getControlParams = (control, objectValue, importFallback, checkNewField = 
   let key = bracketsToDots(name);
   let defaultValue = dot_prop__WEBPACK_IMPORTED_MODULE_1___default().get(objectValue, key, defaultFallbackValue);
   if (control.name === 'CloneSettings') {
-    defaultValue = getFieldValueForCombinedControl(objectValue, name, 'clone_settings', ['clone', 'sortable', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button']);
+    defaultValue = getFieldValueForCombinedControl(objectValue, name, 'clone_settings', ['clone', 'sort_clone', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button']);
   }
   if (control.name === 'InputAttributes') {
     defaultValue = getFieldValueForCombinedControl(objectValue, name, 'input_attributes', ['disabled', 'readonly'], false);
@@ -9829,6 +9816,26 @@ const getFullOptions = text => text === "" ? [] : text.split("\n").map(option =>
 
 // Do nothing callback function for field preview inputs
 const doNothing = () => {};
+const scrollIntoView = id => {
+  const element = document.getElementById(id);
+  if (!element) {
+    return;
+  }
+  const rect = element.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  if (rect.top < 0 || rect.top > viewportHeight) {
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+  }
+};
+
+// Set nav panel as a document dataset for handling visibility via CSS.
+// Avoid state change in JS (if use hooks).
+document.body.dataset.navPanel = '';
+const setNavPanel = panel => document.body.dataset.navPanel = panel;
+const getNavPanel = () => document.body.dataset.navPanel;
 
 /***/ }),
 
@@ -9895,11 +9902,17 @@ const useContextMenu = () => {
       y
     });
   };
+
+  // Close context menu when click or scroll inside the editor, or press any key.
   const closeContextMenu = () => setOpen(false);
+  const events = ['click', 'scroll'];
+  const editor = document.querySelector('.mb-body__inner');
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    document.addEventListener("click", closeContextMenu);
+    events.forEach(event => editor.addEventListener(event, closeContextMenu));
+    document.addEventListener('keydown', closeContextMenu);
     return () => {
-      document.removeEventListener("click", closeContextMenu);
+      events.forEach(event => editor.removeEventListener(event, closeContextMenu));
+      document.removeEventListener('keydown', closeContextMenu);
     };
   }, []);
   return {
@@ -9927,38 +9940,9 @@ __webpack_require__.r(__webpack_exports__);
 
 const useFieldSettingsPanel = (0,zustand__WEBPACK_IMPORTED_MODULE_0__.create)(set => ({
   portalElement: null,
-  activeField: {},
   setPortalElement: portalElement => set(state => ({
     portalElement
-  })),
-  setActiveField: activeField => {
-    set(state => ({
-      activeField: {
-        ...activeField
-      }
-    }));
-    if (!activeField._id) {
-      return;
-    }
-
-    // Scroll to active field in the editor.
-    setTimeout(() => {
-      const fieldElement = document.getElementById(`mb-field-${activeField._id}`);
-      if (!fieldElement) {
-        return;
-      }
-      const rect = fieldElement.getBoundingClientRect();
-      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-      const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-      const isPartiallyInView = rect.top < viewportHeight && rect.bottom > 0 && rect.left < viewportWidth && rect.right > 0;
-      if (!isPartiallyInView) {
-        fieldElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-      }
-    }, 0);
-  }
+  }))
 }));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (useFieldSettingsPanel);
 
@@ -9977,15 +9961,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var zustand__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! zustand */ "./node_modules/.pnpm/zustand@4.5.5_@types+react@18.3.12_react@18.3.1/node_modules/zustand/esm/index.mjs");
+/* harmony import */ var zustand__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! zustand */ "./node_modules/.pnpm/zustand@4.5.5_@types+react@18.3.12_react@18.3.1/node_modules/zustand/esm/index.mjs");
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions */ "./app/functions.js");
-/* harmony import */ var _useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./useFieldSettingsPanel */ "./app/hooks/useFieldSettingsPanel.js");
-/* harmony import */ var _useNav__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./useNav */ "./app/hooks/useNav.js");
 
 
 
-
-
+const areListsEqual = (a, b) => a.length === b.length && a.every((field, index) => field._id === b[index]._id);
 let lists = [];
 
 // Parse fields and put into the lists.
@@ -10005,15 +9986,9 @@ const parseLists = (obj, listId, baseInputName) => {
   });
 };
 parseLists(MbbApp, 'root', 'fields');
-const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => ({
+const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_2__.create)((set, get) => ({
   lists,
   addFieldAt: (listId, fieldType, position) => {
-    const {
-      setNavPanel
-    } = _useNav__WEBPACK_IMPORTED_MODULE_3__["default"].getState();
-    const {
-      setActiveField
-    } = _useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_2__["default"].getState();
     const list = get().lists.find(l => l.id === listId);
     if (!list) {
       console.error(`List with id ${listId} not found.`);
@@ -10053,16 +10028,8 @@ const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => (
         lists
       };
     });
-    setNavPanel('field_settings');
-    setActiveField(newField);
   },
   addField: (listId, fieldType) => {
-    const {
-      setNavPanel
-    } = _useNav__WEBPACK_IMPORTED_MODULE_3__["default"].getState();
-    const {
-      setActiveField
-    } = _useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_2__["default"].getState();
     const list = get().lists.find(l => l.id === listId);
     if (!list) {
       console.error(`List with id ${listId} not found.`);
@@ -10098,16 +10065,8 @@ const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => (
         lists
       };
     });
-    setNavPanel('field_settings');
-    setActiveField(newField);
   },
   prependField: (listId, fieldType) => {
-    const {
-      setNavPanel
-    } = _useNav__WEBPACK_IMPORTED_MODULE_3__["default"].getState();
-    const {
-      setActiveField
-    } = _useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_2__["default"].getState();
     const list = get().lists.find(l => l.id === listId);
     if (!list) {
       console.error(`List with id ${listId} not found.`);
@@ -10143,16 +10102,8 @@ const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => (
         lists
       };
     });
-    setNavPanel('field_settings');
-    setActiveField(newField);
   },
   addFieldBefore: (listId, fieldId, fieldType) => {
-    const {
-      setNavPanel
-    } = _useNav__WEBPACK_IMPORTED_MODULE_3__["default"].getState();
-    const {
-      setActiveField
-    } = _useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_2__["default"].getState();
     const list = get().lists.find(l => l.id === listId);
     if (!list) {
       console.error(`List with id ${listId} not found.`);
@@ -10195,16 +10146,8 @@ const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => (
         lists
       };
     });
-    setNavPanel('field_settings');
-    setActiveField(newField);
   },
   addFieldAfter: (listId, fieldId, fieldType) => {
-    const {
-      setNavPanel
-    } = _useNav__WEBPACK_IMPORTED_MODULE_3__["default"].getState();
-    const {
-      setActiveField
-    } = _useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_2__["default"].getState();
     const list = get().lists.find(l => l.id === listId);
     if (!list) {
       console.error(`List with id ${listId} not found.`);
@@ -10247,16 +10190,8 @@ const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => (
         lists
       };
     });
-    setNavPanel('field_settings');
-    setActiveField(newField);
   },
   duplicateField: (listId, fieldId) => {
-    const {
-      setNavPanel
-    } = _useNav__WEBPACK_IMPORTED_MODULE_3__["default"].getState();
-    const {
-      setActiveField
-    } = _useFieldSettingsPanel__WEBPACK_IMPORTED_MODULE_2__["default"].getState();
     const list = get().lists.find(l => l.id === listId);
     if (!list) {
       console.error(`List with id ${listId} not found.`);
@@ -10315,13 +10250,8 @@ const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => (
         lists
       };
     });
-    setNavPanel('field_settings');
-    setActiveField(newField);
   },
   removeField: (listId, fieldId) => {
-    const {
-      setNavPanel
-    } = _useNav__WEBPACK_IMPORTED_MODULE_3__["default"].getState();
     set(state => ({
       lists: state.lists.map(l => {
         if (l.id !== listId) {
@@ -10333,7 +10263,9 @@ const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => (
         };
       })
     }));
-    setNavPanel('field_group_settings');
+    if ((0,_functions__WEBPACK_IMPORTED_MODULE_1__.getNavPanel)() === 'field-settings') {
+      (0,_functions__WEBPACK_IMPORTED_MODULE_1__.setNavPanel)('');
+    }
   },
   updateField: (listId, fieldId, key, value) => set(state => ({
     lists: state.lists.map(l => {
@@ -10383,17 +10315,27 @@ const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => (
       };
     })
   })),
-  setFields: (listId, fields) => set(state => ({
-    lists: state.lists.map(l => {
-      if (l.id !== listId) {
-        return l;
-      }
-      return {
-        ...l,
-        fields
-      };
-    })
-  })),
+  setFields: (listId, fields) => {
+    const list = get().lists.find(l => l.id === listId);
+    if (!list) {
+      console.error(`List with id ${listId} not found.`);
+      return;
+    }
+    if (areListsEqual(list.fields, fields)) {
+      return;
+    }
+    set(state => ({
+      lists: state.lists.map(l => {
+        if (l.id !== listId) {
+          return l;
+        }
+        return {
+          ...l,
+          fields
+        };
+      })
+    }));
+  },
   getForList: listId => {
     const list = get().lists.find(l => l.id === listId);
     return {
@@ -10420,35 +10362,6 @@ const useLists = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => (
   }
 }));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (useLists);
-
-/***/ }),
-
-/***/ "./app/hooks/useNav.js":
-/*!*****************************!*\
-  !*** ./app/hooks/useNav.js ***!
-  \*****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var zustand__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! zustand */ "./node_modules/.pnpm/zustand@4.5.5_@types+react@18.3.12_react@18.3.1/node_modules/zustand/esm/index.mjs");
-
-document.body.classList.add('mb-no-nav');
-const useNav = (0,zustand__WEBPACK_IMPORTED_MODULE_0__.create)(set => ({
-  navPanel: '',
-  setNavPanel: navPanel => {
-    set(state => ({
-      navPanel
-    }));
-
-    // Add an extra class to the <body> for styling.
-    document.body.classList.toggle('mb-no-nav', !navPanel);
-  }
-}));
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (useNav);
 
 /***/ }),
 

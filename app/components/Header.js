@@ -1,13 +1,18 @@
 import { Button, Flex } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { cog, listView, plus } from "@wordpress/icons";
-import useNav from '../hooks/useNav';
+import { getNavPanel, setNavPanel as updatePanelForBody } from '../functions';
 // import { ReactComponent as Logo } from './logo.svg';
 
 const Header = () => {
-	const { navPanel, setNavPanel } = useNav();
+	const [ navPanel, setNavPanel ] = useState( getNavPanel() );
 
-	const updateNavPanel = key => () => setNavPanel( key === navPanel ? '' : key );
+	const updateNavPanel = key => () => {
+		const newPanel = key === navPanel ? '' : key;
+		updatePanelForBody( newPanel );
+		setNavPanel( newPanel );
+	};
 
 	return (
 		<Flex className="mb-header">
@@ -24,8 +29,8 @@ const Header = () => {
 					className="mb-header__add"
 					label={ __( 'Add a new field', 'meta-box-builder' ) }
 					showTooltip={ true }
-					onClick={ updateNavPanel( 'add_field' ) }
-					isPressed={ navPanel === 'add_field' }
+					onClick={ updateNavPanel( 'add' ) }
+					isPressed={ navPanel === 'add' }
 				/>
 				<Button
 					icon={ listView }
@@ -40,8 +45,8 @@ const Header = () => {
 					size="compact"
 					label={ __( 'Edit field group settings', 'meta-box-builder' ) }
 					showTooltip={ true }
-					onClick={ updateNavPanel( 'field_group_settings' ) }
-					isPressed={ navPanel === 'field_group_settings' }
+					onClick={ updateNavPanel( 'field-group-settings' ) }
+					isPressed={ navPanel === 'field-group-settings' }
 				/>
 			</Flex>
 			<input

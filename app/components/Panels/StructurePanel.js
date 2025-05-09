@@ -2,8 +2,8 @@ import { Panel } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import Fields from './Structure/Fields';
 
-const StructurePanel = ( { show } ) => (
-	<Panel header={ __( 'Structure', 'meta-box-builder' ) } className={ `mb-panel mb-panel--structure ${ show ? 'mb-panel--show' : '' }` }>
+const StructurePanel = () => (
+	<Panel header={ __( 'Structure', 'meta-box-builder' ) } className="mb-panel mb-panel--structure">
 		<div className="mb-panel__inner">
 			<Fields />
 		</div>

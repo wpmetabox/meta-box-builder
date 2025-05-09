@@ -125,7 +125,7 @@
 		right: 0;
 		overflow-y: auto;
 
-		.mb-no-nav & {
+		[data-nav-panel=""] & {
 			left: 0;
 		}
 	}
@@ -165,10 +165,6 @@
 		left: 36px;
 	}
 
-	&--show {
-		transform: translateX(0);
-	}
-
 	// Only scroll inner content, keep the panel header sticky
 	&__inner {
 		position: absolute;
@@ -178,4 +174,11 @@
 		width: var(--nav-width);
 		overflow-y: auto;
 	}
+}
+
+[data-nav-panel="add"] .mb-panel--add,
+[data-nav-panel="structure"] .mb-panel--structure,
+[data-nav-panel="field-group-settings"] .mb-panel--field-group-settings,
+[data-nav-panel="field-settings"] .mb-panel--field-settings {
+	transform: translateX(0);
 }

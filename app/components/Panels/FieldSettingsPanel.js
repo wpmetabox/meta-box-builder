@@ -4,7 +4,7 @@ import { getFieldIcon, ucwords } from '../../functions';
 import useFieldSettingsPanel from '../../hooks/useFieldSettingsPanel';
 import useLists from '../../hooks/useLists';
 
-const FieldSettingsPanel = ( { show = false } ) => {
+const FieldSettingsPanel = () => {
 	const ref = useRef();
 	const { setPortalElement } = useFieldSettingsPanel();
 	const { getAllFields } = useLists();
@@ -22,7 +22,7 @@ const FieldSettingsPanel = ( { show = false } ) => {
 	);
 
 	return (
-		<Panel header={ header } className={ `mb-panel mb-panel--field-settings ${ show ? 'mb-panel--show' : '' }` }>
+		<Panel header={ header } className="mb-panel mb-panel--field-settings mb-panel--field-settings">
 			<div className="mb-panel__inner" ref={ ref } />
 		</Panel>
 	);
