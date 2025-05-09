@@ -241,3 +241,29 @@ export const scrollIntoView = id => {
 		element.scrollIntoView( { behavior: 'smooth', block: 'center' } );
 	}
 };
+
+// Logic for active field. Use session storage instead of zustand to avoid state change.
+sessionStorage.removeItem( 'mbb-active-field' );
+
+export const setActiveField = field => {
+	if ( !field._id ) {
+		return;
+	}
+
+	sessionStorage.setItem( 'mbb-active-field', JSON.stringify( field ) );
+
+	// Scroll to active field in the editor.
+	setTimeout( () => {
+		scrollIntoView( `mb-field-${ field._id }` );
+	}, 0 );
+};
+
+export const getActiveField = () => {
+	try {
+		return JSON.parse( sessionStorage.getItem( 'mbb-active-field' ) ) || {};
+	} catch ( error ) {
+		return {};
+	}
+};
+
+export const isActiveField = field => field._id === getActiveField()._id;

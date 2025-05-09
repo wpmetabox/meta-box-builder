@@ -1,11 +1,12 @@
 import { createPortal } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { isActiveField } from "../../../functions";
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import PersistentPanelBody from '../../PersistentPanelBody';
 import Tab from './Tab';
 
 const FieldSettings = ( { controls, field, ...rest } ) => {
-	const { isActiveField, portalElement } = useFieldSettingsPanel();
+	const { portalElement } = useFieldSettingsPanel();
 
 	// Extract controls displayed in the panel header.
 	const headerSettings = [ 'required', 'clone_settings' ];

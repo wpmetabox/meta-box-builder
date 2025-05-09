@@ -1,9 +1,8 @@
 import { lazy, memo, Suspense } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
-import { inside, ucwords } from "../../functions";
+import { inside, isActiveField, setActiveField, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
-import useFieldSettingsPanel from "../../hooks/useFieldSettingsPanel";
 import useNav from "../../hooks/useNav";
 import ContextMenu from "./ContextMenu";
 import Field from './Field';
@@ -11,7 +10,6 @@ import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
-	const { isActiveField, setActiveField } = useFieldSettingsPanel();
 	const { navPanel, setNavPanel } = useNav();
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
 

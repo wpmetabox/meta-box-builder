@@ -2,7 +2,7 @@ import { Modal, Toolbar as T, ToolbarButton, ToolbarGroup } from '@wordpress/com
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { arrowDown, arrowUp, copy, insertAfter, insertBefore, trash } from "@wordpress/icons";
-import useFieldSettingsPanel from '../../hooks/useFieldSettingsPanel';
+import { isActiveField } from '../../functions';
 import useLists from '../../hooks/useLists';
 import AddFieldContent from '../AddFieldContent';
 
@@ -15,7 +15,6 @@ const Toolbar = ( {
 	moveFieldUp,
 	moveFieldDown
 } ) => {
-	const { isActiveField } = useFieldSettingsPanel();
 	const { getForList } = useLists();
 	const [ action, setAction ] = useState( () => () => {} );
 	const [ isOpen, setOpen ] = useState( false );

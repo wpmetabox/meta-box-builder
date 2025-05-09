@@ -1,11 +1,12 @@
 import { Flex, Icon, Panel } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
-import { getFieldIcon, ucwords } from '../../functions';
+import { getActiveField, getFieldIcon, ucwords } from '../../functions';
 import useFieldSettingsPanel from '../../hooks/useFieldSettingsPanel';
 
 const FieldSettingsPanel = ( { show = false } ) => {
 	const ref = useRef();
-	const { activeField, setPortalElement } = useFieldSettingsPanel();
+	const { setPortalElement } = useFieldSettingsPanel();
+	const activeField = getActiveField();
 
 	useEffect( () => {
 		setPortalElement( ref.current ); // Setup the ref to the portal only once, when the component is rendered.
