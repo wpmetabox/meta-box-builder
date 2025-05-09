@@ -4,6 +4,8 @@ import { ensureArray, getFieldValue, ucwords, uniqid } from '../functions';
 import useFieldSettingsPanel from './useFieldSettingsPanel';
 import useNav from './useNav';
 
+const areListsEqual = ( a, b ) => a.length === b.length && a.every( ( field, index ) => field._id === b[ index ]._id );
+
 let lists = [];
 
 // Parse fields and put into the lists.
@@ -417,18 +419,30 @@ const useLists = create( ( set, get ) => ( {
 			};
 		} )
 	} ) ),
-	setFields: ( listId, fields ) => set( state => ( {
-		lists: state.lists.map( l => {
-			if ( l.id !== listId ) {
-				return l;
-			}
+	setFields: ( listId, fields ) => {
+		const list = get().lists.find( l => l.id === listId );
+		if ( !list ) {
+			console.error( `List with id ${ listId } not found.` );
+			return;
+		}
 
-			return {
-				...l,
-				fields,
-			};
-		} )
-	} ) ),
+		if ( areListsEqual( list.fields, fields ) ) {
+			return;
+		}
+
+		set( state => ( {
+			lists: state.lists.map( l => {
+				if ( l.id !== listId ) {
+					return l;
+				}
+
+				return {
+					...l,
+					fields,
+				};
+			} )
+		} ) );
+	},
 	getForList: listId => {
 		const list = get().lists.find( l => l.id === listId );
 
