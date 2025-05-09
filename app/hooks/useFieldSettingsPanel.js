@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { scrollIntoView } from '../functions';
 
 const useFieldSettingsPanel = create( set => ( {
 	portalElement: null,
@@ -13,24 +14,7 @@ const useFieldSettingsPanel = create( set => ( {
 
 		// Scroll to active field in the editor.
 		setTimeout( () => {
-			const fieldElement = document.getElementById( `mb-field-${ activeField._id }` );
-			if ( !fieldElement ) {
-				return;
-			}
-			const rect = fieldElement.getBoundingClientRect();
-            const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-            const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-
-            const isPartiallyInView = (
-                rect.top < viewportHeight &&
-                rect.bottom > 0 &&
-                rect.left < viewportWidth &&
-                rect.right > 0
-            );
-
-            if ( !isPartiallyInView ) {
-                fieldElement.scrollIntoView( { behavior: 'smooth', block: 'center' } );
-            }
+			scrollIntoView( `mb-field-${ activeField._id }` );
 		}, 0 );
 	}
 } ) );
