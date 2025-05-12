@@ -17,7 +17,7 @@ const GroupTitle = ( { name, componentId, field, updateField, ...rest } ) => {
 		.filter( f => !ignoreTypes.includes( f.type ) )
 		.map( f => [ f.id, `${ f.name } (${ f.id })` ] );
 
-	fields = [ [ '{#}', __( 'Entry index', 'meta-box-builder' ) ], ...fields ];
+	fields = [ [ '{#}', __( 'Entry index (#)', 'meta-box-builder' ) ], ...fields ];
 
 	const handleChange = ( inputRef, value ) => updateField( 'group_title', value );
 

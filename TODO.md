@@ -1,30 +1,23 @@
-Fix:
+Must:
 
 [ ] Khi label của field quá dài thì sẽ bị chườm sang phần input: https://monosnap.com/direct/M8ZKwXVMk1elu9UQ7lG4KYRsQepWiu
 [ ] Không double click để chọn field label để edit cho nhanh
 [ ] Merge từ master vào
 [ ] Debounce cho Name, Id, TooltipSettings, format, save_format, clone's add button text, group title
 
-Improvements:
+Nice to have:
 
-[ ] Kiểm tra khi settings có thì open panel: Tạm thời để sau...
+[ ] Group title: suggest only sub-fields
 [ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
-
-Preview:
-
 [ ] Column
-
-[ ] Switch to field khi có trường required chưa điền
+[ ] Thay đổi field type
 [ ] Object field, chuyển chọn field type thành icon
+[ ] Switch to field khi có trường required chưa điền
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
 	[ ] Xoá react tabs
 	[ ] Xóa phần collapsible, bao gồm cả CSS
-
-Feedback:
-
-[ ] Thay đổi field type
 
 ## Settings của field group:
 
@@ -51,10 +44,7 @@ Feedback:
 
 - Phần settings của field sẽ được hiện ở sidebar, trong panel `EditFieldSettingsPanel`. Trong panel này sẽ hiện tất cả các settings của các field (do dùng uncontrolled form nên buộc phải có các input trong DOM).
 - Panel này chứa 1 div để làm portal cho các field. Mỗi field sẽ tách làm 2 phần, 1 phần preview ở phần main và 1 phần edit settings nằm trong portal.
-- Khi lựa chọn 1 field ở vùng main thì
-	- Lưu unique ID của field đó vào trong hook `useEditFieldSettingsPanel`
-	- Thêm class để hiển thị settings của field đó trong panel
-	- Setup sidebar hiện panel `EditFieldSettingsPanel`. Do phần ẩn hiện sidebar panel này được sử dụng khi chọn 1 field, nên id của sidebar panel và action ẩn hiện được đưa vào hook `useSidebarPanel`.
+- Khi lựa chọn 1 field ở vùng main thì sẽ hiển thị div tương ứng của field settings trong `FieldSettingsPanel`.
 
 ## Danh sách fields
 
