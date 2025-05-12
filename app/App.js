@@ -76,3 +76,6 @@ form.addEventListener( 'submit', e => {
 	submitButton.setAttribute( 'value', MbbApp.saving );
 	document.querySelector( '[name="post_status"]' ).setAttribute( 'value', status );
 } );
+
+// Auto collapse the admin menu.
+document.body.classList.add( 'folded' );
