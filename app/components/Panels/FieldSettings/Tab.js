@@ -13,6 +13,7 @@ const settingsWithLiveUpdate = [
 	'desc',
 	'placeholder',
 	'size',
+	'textarea_size',
 	'prepend_append',
 	'text_limiter',
 	'tooltip',
@@ -43,9 +44,28 @@ const settingsWithLiveUpdate = [
 	'icon_fa',
 ];
 
+const getControlSettings = control => {
+	if ( control.name === 'CloneSettings' ) {
+		return [ 'clone', 'sort_clone', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ];
+	}
+	if ( control.name === 'InputAttributes' ) {
+		return [ 'disabled', 'readonly' ];
+	}
+	if ( control.name === 'InputGroup' ) {
+		return [ control.props.key1, control.props.key2 ];
+	}
+
+	return [ control.setting ];
+};
+
+const getWatchedValue = ( field, control ) => {
+	const settings = getControlSettings( control );
+	return JSON.stringify( settings.map( setting => field[ setting ] ) );
+};
+
 const Tab = ( { controls, field, parent = '', updateField } ) => {
 	return controls.map( control => {
-		const watchValue = JSON.stringify( field[ control.setting ] );
+		const watchValue = getWatchedValue( field, control );
 
 		const memoizedControl = useMemo( () => {
 			let [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
