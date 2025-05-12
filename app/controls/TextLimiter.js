@@ -1,10 +1,20 @@
+import { useCallback } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
+import { debounce } from 'lodash';
 import DivRow from './DivRow';
 
 const TextLimiter = ( { defaultValue, componentId, name, updateField, ...rest } ) => {
-	const update = key => e => updateField( 'text_limiter', {
+	const updateLimit = useCallback(
+		debounce( e => updateField( 'text_limiter', {
+			...defaultValue,
+			limit: e.target.value
+		} ), 300 ),
+		[] // empty deps means it runs once
+	);
+
+	const updateType = e => updateField( 'text_limiter', {
 		...defaultValue,
-		[ key ]: e.target.value
+		limit_type: e.target.value
 	} );
 
 	return (
@@ -16,12 +26,12 @@ const TextLimiter = ( { defaultValue, componentId, name, updateField, ...rest } 
 					id={ componentId }
 					name={ `${ name }[limit]` }
 					defaultValue={ defaultValue.limit }
-					onChange={ update( 'limit' ) }
+					onChange={ updateLimit }
 				/>
 				<select
 					name={ `${ name }[limit_type]` }
 					defaultValue={ defaultValue.limit_type || '' }
-					onChange={ update( 'limit_type' ) }
+					onChange={ updateType }
 				>
 					<option value="character">{ __( 'characters', 'meta-box-builder' ) }</option>
 					<option value="word">{ __( 'words', 'meta-box-builder' ) }</option>

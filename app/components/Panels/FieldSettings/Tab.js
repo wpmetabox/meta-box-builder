@@ -24,7 +24,6 @@ const settingsWithLiveUpdate = [
 	'multiple',
 	'format',
 	'save_format',
-	'options',
 	'placeholder_key',
 	'placeholder_value',
 	'prefix_suffix',
@@ -87,8 +86,6 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 			if ( settingsWithLiveUpdate.includes( control.setting ) ) {
 				props.updateField = updateField;
 			}
-
-			console.debug( `%c  - Control: ${ control.setting }`, "color:orange;" );
 
 			return <Control { ...props } />;
 		}, [ control, parent, watchValue ] ); // dependencies

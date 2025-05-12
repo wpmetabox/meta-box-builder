@@ -1,3 +1,5 @@
+import { useCallback } from '@wordpress/element';
+import { debounce } from 'lodash';
 import TextareaAutosize from 'react-textarea-autosize';
 import DivRow from './DivRow';
 
@@ -10,7 +12,10 @@ const Textarea = ( {
 	updateField,
 	...rest
 } ) => {
-	const handleChange = e => updateField && updateField( name, e.target.value );
+	const handleChange = useCallback(
+			debounce( e => updateField && updateField( name, e.target.value ), 300 ),
+			[] // empty deps means it runs once
+		);
 
 	return (
 		<DivRow { ...rest } htmlFor={ componentId }>

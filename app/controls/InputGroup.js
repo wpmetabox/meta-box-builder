@@ -1,3 +1,5 @@
+import { useCallback } from '@wordpress/element';
+import { debounce } from 'lodash';
 import DivRow from './DivRow';
 
 const InputGroup = ( {
@@ -12,7 +14,15 @@ const InputGroup = ( {
 	updateField,
 	...rest
 } ) => {
-	const update = key => e => updateField && updateField( key, e.target.value );
+	const updateKey1 = useCallback(
+		debounce( e => updateField && updateField( key1, e.target.value ), 300 ),
+		[] // empty deps means it runs once
+	);
+
+	const updateKey2 = useCallback(
+		debounce( e => updateField && updateField( key2, e.target.value ), 300 ),
+		[] // empty deps means it runs once
+	);
 
 	return (
 		<DivRow { ...rest }>
@@ -23,7 +33,7 @@ const InputGroup = ( {
 					id={ `${ componentId }-${ key1 }` }
 					name={ `${ name.replace( componentName, key1 ) }` }
 					defaultValue={ defaultValue[ key1 ] }
-					onChange={ update( key1 ) }
+					onChange={ updateKey1 }
 				/>
 				<label htmlFor={ `${ componentId }-${ key2 }` }>{ label2 }</label>
 				<input
@@ -31,7 +41,7 @@ const InputGroup = ( {
 					id={ `${ componentId }-${ key2 }` }
 					name={ `${ name.replace( componentName, key2 ) }` }
 					defaultValue={ defaultValue[ key2 ] }
-					onChange={ update( key2 ) }
+					onChange={ updateKey2 }
 				/>
 			</div>
 		</DivRow>

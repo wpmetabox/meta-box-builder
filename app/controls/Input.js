@@ -1,7 +1,12 @@
+import { useCallback } from '@wordpress/element';
+import { debounce } from 'lodash';
 import DivRow from './DivRow';
 
 const Input = ( { name, componentId, placeholder, defaultValue, type = 'text', updateField, ...rest } ) => {
-	const handleChange = e => updateField && updateField( name, e.target.value );
+	const handleChange = useCallback(
+		debounce( e => updateField && updateField( name, e.target.value ), 300 ),
+		[] // empty deps means it runs once
+	);
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
