@@ -1,4 +1,6 @@
+import { useCallback } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
+import { debounce } from 'lodash';
 import useLists from '../hooks/useLists';
 import useSettings from '../hooks/useSettings';
 import DivRow from './DivRow';
@@ -21,7 +23,10 @@ const GroupTitle = ( { name, componentId, field, updateField, ...rest } ) => {
 
 	fields = [ [ '{#}', __( 'Entry index (#)', 'meta-box-builder' ) ], ...fields ];
 
-	const handleChange = ( inputRef, value ) => updateField( 'group_title', value );
+	const handleChange = useCallback(
+		debounce( ( inputRef, value ) => updateField( 'group_title', value ), 300 ),
+		[] // empty deps means it runs once
+	);
 
 	const handleSelectItem = ( inputRef, value ) => {
 		const title = value === '{#}' ? value : `{${ getPrefix() }${ value }}`;

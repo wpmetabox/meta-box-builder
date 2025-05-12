@@ -1,7 +1,8 @@
 import { Button, Dropdown } from "@wordpress/components";
-import { useReducer, useState } from "@wordpress/element";
+import { useCallback, useEffect, useReducer, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { close } from "@wordpress/icons";
+import { debounce } from 'lodash';
 import DivRow from "./DivRow";
 import Tooltip from "./Tooltip";
 
@@ -11,10 +12,20 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 	const [ clone_as_multiple, toggleCloneAsMultiple ] = useReducer( on => !on, defaultValue.clone_as_multiple );
 	const [ min_clone, setMinClone ] = useState( defaultValue.min_clone );
 	const [ max_clone, setMaxClone ] = useState( defaultValue.max_clone );
+	const [ add_button, setAddButton ] = useState( defaultValue.add_button );
 
 	const toggleClone = e => updateField( 'clone', e.target.checked );
 	const toggleCloneEmptyStart = e => updateField( 'clone_empty_start', e.target.checked );
-	const updateAddButton = e => updateField( 'add_button', e.target.value );
+	const updateAddButton = e => setAddButton( e.target.value );
+
+	const debouncedUpdateAddButton = useCallback(
+		debounce( value => updateField( 'add_button', value ), 300 ),
+		[] // empty deps means it runs once
+	);
+
+	useEffect( () => {
+		debouncedUpdateAddButton( add_button );
+	}, [ add_button, debouncedUpdateAddButton ] );
 
 	return (
 		<>
@@ -36,7 +47,7 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_as_multiple' ) }` } value={ clone_as_multiple } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'min_clone' ) }` } value={ min_clone } />
 						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'max_clone' ) }` } value={ max_clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'add_button' ) }` } value={ defaultValue.add_button } />
+						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'add_button' ) }` } value={ add_button } />
 					</>
 				) }
 				renderContent={ ( { onToggle } ) => (
@@ -100,7 +111,7 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 							label={ __( 'Add more text', 'meta-box-builder' ) }
 							description={ __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ) }
 						>
-							<input type="text" id={ `${ componentId }-add_button` } value={ defaultValue.add_button } onChange={ updateAddButton } />
+							<input type="text" id={ `${ componentId }-add_button` } value={ add_button } onChange={ updateAddButton } />
 						</DivRow>
 					</>
 				) }
