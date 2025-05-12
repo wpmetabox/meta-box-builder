@@ -11,9 +11,11 @@ import FieldInserter from './FieldInserter';
 const GroupTitle = ( { name, componentId, field, updateField, ...rest } ) => {
 	const { getPrefix } = useSettings();
 
-	const { getAllFields } = useLists();
+	const { getForList } = useLists();
+	let { fields } = getForList( field._id );
+
 	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
-	let fields = getAllFields()
+	fields = fields
 		.filter( f => !ignoreTypes.includes( f.type ) )
 		.map( f => [ f.id, `${ f.name } (${ f.id })` ] );
 

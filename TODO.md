@@ -7,7 +7,6 @@ Must:
 
 Nice to have:
 
-[ ] Group title: suggest only sub-fields
 [ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 [ ] Column
 [ ] Thay đổi field type
