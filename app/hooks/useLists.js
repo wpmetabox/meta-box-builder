@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { create } from 'zustand';
-import { ensureArray, getFieldValue, getNavPanel, setNavPanel, ucwords, uniqid } from '../functions';
+import { ensureArray, getFieldValue, ucwords, uniqid } from '../functions';
+import useNavPanel from './useNavPanel';
 
 const areListsEqual = ( a, b ) => a.length === b.length && a.every( ( field, index ) => field._id === b[ index ]._id );
 
@@ -306,6 +307,7 @@ const useLists = create( ( set, get ) => ( {
 		} );
 	},
 	removeField: ( listId, fieldId ) => {
+		const { navPanel, setNavPanel } = useNavPanel.getState();
 
 		set( state => ( {
 			lists: state.lists.map( l => {
@@ -320,7 +322,7 @@ const useLists = create( ( set, get ) => ( {
 			} ),
 		} ) );
 
-		if ( getNavPanel() === 'field-settings' ) {
+		if ( navPanel === 'field-settings' ) {
 			setNavPanel( '' );
 		}
 	},

@@ -1,18 +1,12 @@
 import { Button, Flex } from '@wordpress/components';
-import { useState } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { cog, listView, plus } from "@wordpress/icons";
-import { getNavPanel, setNavPanel as updatePanelForBody } from '../functions';
+import useNavPanel from '../hooks/useNavPanel';
 // import { ReactComponent as Logo } from './logo.svg';
 
 const Header = () => {
-	const [ navPanel, setNavPanel ] = useState( getNavPanel() );
-
-	const updateNavPanel = key => () => {
-		const newPanel = key === navPanel ? '' : key;
-		updatePanelForBody( newPanel );
-		setNavPanel( newPanel );
-	};
+	const { navPanel, setNavPanel } = useNavPanel();
+	const updateNavPanel = key => () => setNavPanel( key === navPanel ? '' : key );
 
 	return (
 		<Flex className="mb-header">

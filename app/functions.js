@@ -241,9 +241,3 @@ export const scrollIntoView = id => {
 		element.scrollIntoView( { behavior: 'smooth', block: 'center' } );
 	}
 };
-
-// Set nav panel as a document dataset for handling visibility via CSS.
-// Avoid state change in JS (if use hooks).
-document.body.dataset.navPanel = 'field-group-settings';
-export const setNavPanel = panel => document.body.dataset.navPanel = panel;
-export const getNavPanel = () => document.body.dataset.navPanel;

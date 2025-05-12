@@ -1,8 +1,9 @@
 import { lazy, memo, Suspense, useEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
-import { inside, setNavPanel, ucwords } from "../../functions";
+import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
+import useNavPanel from "../../hooks/useNavPanel";
 import ContextMenu from "./ContextMenu";
 import Field from './Field';
 import Base from "./FieldTypePreview/Base";
@@ -35,6 +36,7 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
+	const setNavPanel = useNavPanel( state => state.setNavPanel );
 
 	const toggleSettings = e => {
 		if ( !isClickedOnAField( e ) ) {
@@ -44,14 +46,9 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		// Make it able to select sub-fields in a group
 		e.stopPropagation();
 
-		if ( field._active ) {
-			// Deselect the field.
-			update( '_active', false );
-			setNavPanel( '' );
-		} else {
-			// Select the field.
+		setNavPanel( 'field-settings' );
+		if ( ! field._active ) {
 			update( '_active', true );
-			setNavPanel( 'field-settings' );
 		}
 	};
 
