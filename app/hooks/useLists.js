@@ -27,6 +27,17 @@ const parseLists = ( obj, listId, baseInputName ) => {
 };
 parseLists( MbbApp, 'root', 'fields' );
 
+const createNewField = type => {
+	const id = `${ type }_${ uniqid() }`;
+	return {
+		_id: id,
+		_new: true,
+		type,
+		id,
+		name: ucwords( type, '_' )
+	};
+};
+
 const useLists = create( ( set, get ) => ( {
 	lists,
 	addFieldAt: ( listId, fieldType, position ) => {
@@ -41,14 +52,7 @@ const useLists = create( ( set, get ) => ( {
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
 			// Create a new lists object
@@ -66,10 +70,10 @@ const useLists = create( ( set, get ) => ( {
 
 			// Create a new list for group fields.
 			if ( fieldType === 'group' ) {
-				lists[ newId ] = {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
 				};
 			}
 
@@ -83,14 +87,7 @@ const useLists = create( ( set, get ) => ( {
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
 			// Create a new lists object
@@ -104,10 +101,10 @@ const useLists = create( ( set, get ) => ( {
 
 			// Create a new list for group fields.
 			if ( fieldType === 'group' ) {
-				lists[ newId ] = {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
 				};
 			}
 
@@ -121,14 +118,7 @@ const useLists = create( ( set, get ) => ( {
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
 			// Create a new lists object
@@ -142,10 +132,10 @@ const useLists = create( ( set, get ) => ( {
 
 			// Create a new list for group fields.
 			if ( fieldType === 'group' ) {
-				lists[ newId ] = {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
 				};
 			}
 
@@ -159,14 +149,7 @@ const useLists = create( ( set, get ) => ( {
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
 			// Create a new lists object
@@ -185,10 +168,10 @@ const useLists = create( ( set, get ) => ( {
 
 			// Create a new list for group fields.
 			if ( newField.type === 'group' ) {
-				lists[ newId ] = {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
 				};
 			}
 
@@ -202,14 +185,7 @@ const useLists = create( ( set, get ) => ( {
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
 			// Create a new lists object
@@ -228,10 +204,10 @@ const useLists = create( ( set, get ) => ( {
 
 			// Create a new list for group fields.
 			if ( newField.type === 'group' ) {
-				lists[ newId ] = {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
 				};
 			}
 
