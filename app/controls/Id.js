@@ -1,5 +1,6 @@
-import { RawHTML, useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { RawHTML, useCallback, useEffect, useLayoutEffect, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from "@wordpress/i18n";
+import { debounce } from 'lodash';
 import useApi from "../hooks/useApi";
 import DivRow from './DivRow';
 
@@ -13,12 +14,23 @@ const Id = ( { field, name, componentId, updateField, ...rest } ) => {
 	const ids = useApi( 'fields-ids', [] );
 	const [ existingFieldGroup, setExistingFieldGroup ] = useState( {} );
 	const [ duplicate, setDuplicate ] = useState( false );
+	const [ value, setValue ] = useState( field.id );
 
+	// Live update to the input, and debounce update to the field.
 	const handleChange = e => {
-		setTimeout( () => checkDuplicateId( e.target.value ), 200 );
-		updateField( 'id', e.target.value );
+		setValue( e.target.value );
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	};
+	const debouncedUpdate = useCallback(
+		debounce( val => {
+			checkDuplicateId( val );
+			updateField( 'id', val );
+		}, 300 ),
+		[] // empty deps means it runs once
+	);
+	useEffect( () => {
+		debouncedUpdate( value );
+	}, [ value, debouncedUpdate ] );
 
 	const checkDuplicateId = value => {
 		// Has a duplicate and not the current field
@@ -45,7 +57,7 @@ const Id = ( { field, name, componentId, updateField, ...rest } ) => {
 				type="text"
 				id={ componentId }
 				name={ name }
-				value={ field.id }
+				value={ value }
 				onChange={ handleChange }
 				pattern="[A-Za-z0-9\-_]+"
 			/>

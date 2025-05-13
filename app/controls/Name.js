@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { debounce } from 'lodash';
 import { sanitizeId } from '../functions';
 import DivRow from './DivRow';
 
@@ -9,13 +10,23 @@ import DivRow from './DivRow';
 const Name = ( { name, componentId, field, updateField, ...rest } ) => {
 	const ref = useRef();
 	const [ selection, setSelection ] = useState();
+	const [ value, setValue ] = useState( field.name );
 
+	// Live update to the input, and debounce update to the field.
 	const handleChange = e => {
-		updateField( 'name', e.target.value );
-		maybeGenerateId( e.target.value );
-
+		setValue( e.target.value );
 		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
 	};
+	const debouncedUpdate = useCallback(
+		debounce( val => {
+			maybeGenerateId( val );
+			updateField( 'name', val );
+		}, 300 ),
+		[] // empty deps means it runs once
+	);
+	useEffect( () => {
+		debouncedUpdate( value );
+	}, [ value, debouncedUpdate ] );
 
 	const maybeGenerateId = value => {
 		// No ID?
@@ -52,7 +63,7 @@ const Name = ( { name, componentId, field, updateField, ...rest } ) => {
 				type="text"
 				id={ componentId }
 				name={ name }
-				value={ field.name }
+				value={ value }
 				onBlur={ stopGeneratingId }
 				onInput={ handleChange }
 			/>
