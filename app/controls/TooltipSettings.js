@@ -1,7 +1,8 @@
 import { Button, Flex, RadioControl } from '@wordpress/components';
-import { useState } from "@wordpress/element";
+import { useCallback, useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { settings } from '@wordpress/icons';
+import { debounce } from 'lodash';
 import DashiconPicker from "./DashiconPicker";
 import DivRow from "./DivRow";
 import Position from "./Position";
@@ -27,10 +28,6 @@ const TooltipSettings = ( { name, componentId, defaultValue, updateField, ...res
 	};
 
 	const toggleShowSettings = () => setShowSettings( prev => !prev );
-	const updateContent = e => updateField( 'tooltip', {
-		...defaultValue,
-		content: e.target.value,
-	} );
 	const updateIcon = value => updateField( 'tooltip', {
 		...defaultValue,
 		icon: value,
@@ -54,15 +51,12 @@ const TooltipSettings = ( { name, componentId, defaultValue, updateField, ...res
 			{
 				showSettings && (
 					<div className="og-sub-settings">
-						<DivRow htmlFor={ `${ componentId }-content` } label={ __( 'Content', 'meta-box-builder' ) }>
-							<input
-								type="text"
-								id={ `${ componentId }-content` }
-								name={ `${ name }[content]` }
-								defaultValue={ defaultValue.content || '' }
-								onChange={ updateContent }
-							/>
-						</DivRow>
+						<TooltipContent
+							componentId={ componentId }
+							name={ name }
+							defaultValue={ defaultValue }
+							updateField={ updateField }
+						/>
 						<DivRow label={ __( 'Icon type', 'meta-box-builder' ) }>
 							<RadioControl
 								options={ [
@@ -100,6 +94,32 @@ const TooltipSettings = ( { name, componentId, defaultValue, updateField, ...res
 				)
 			}
 		</>
+	);
+};
+
+const TooltipContent = ( { componentId, name, defaultValue, updateField } ) => {
+	const [ content, setContent ] = useState( defaultValue?.content );
+	const updateContent = e => setContent( e.target.value );
+
+	const debouncedUpdateContent = useCallback(
+		debounce( content => updateField( 'tooltip', { ...defaultValue, content } ), 300 ),
+		[] // empty deps means it runs once
+	);
+
+	useEffect( () => {
+		debouncedUpdateContent( content );
+	}, [ content, debouncedUpdateContent ] );
+
+	return (
+		<DivRow htmlFor={ `${ componentId }-content` } label={ __( 'Content', 'meta-box-builder' ) }>
+			<input
+				type="text"
+				id={ `${ componentId }-content` }
+				name={ `${ name }[content]` }
+				value={ content }
+				onChange={ updateContent }
+			/>
+		</DivRow>
 	);
 };
 
