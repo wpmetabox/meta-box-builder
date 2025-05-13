@@ -3,6 +3,10 @@ Must:
 [ ] Khi label của field quá dài thì sẽ bị chườm sang phần input: https://monosnap.com/direct/M8ZKwXVMk1elu9UQ7lG4KYRsQepWiu
 [ ] Không double click để chọn field label để edit cho nhanh
 [ ] Merge từ master vào
+[ ] Fix rerender Group
+[ ] Fix khi open clone settings của 1 field, mà switch sang field khác thì panel ko tự biến mất
+[ ] Fix khi chọn 1 group, rồi chọn 1 subfield thì vẫn hiển thị field settings của group
+[ ] Fix khi chọn 1 field active, rồi click chuột phải vào 1 field khác thì field settings panel empty
 
 Nice to have:
 
