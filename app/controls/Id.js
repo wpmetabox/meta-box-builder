@@ -1,4 +1,4 @@
-import { RawHTML, useCallback, useEffect, useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { RawHTML, useCallback, useEffect, useState } from '@wordpress/element';
 import { __, sprintf } from "@wordpress/i18n";
 import { debounce } from 'lodash';
 import useApi from "../hooks/useApi";
@@ -9,18 +9,18 @@ import DivRow from './DivRow';
  * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
  */
 const Id = ( { field, name, componentId, updateField, ...rest } ) => {
-	const ref = useRef();
-	const [ selection, setSelection ] = useState();
 	const ids = useApi( 'fields-ids', [] );
 	const [ existingFieldGroup, setExistingFieldGroup ] = useState( {} );
 	const [ duplicate, setDuplicate ] = useState( false );
 	const [ value, setValue ] = useState( field.id );
 
+	// Live update value with incoming change.
+	useEffect( () => {
+		setValue( field.id );
+	}, [ field.id, field._id_changed ] );
+
 	// Live update to the input, and debounce update to the field.
-	const handleChange = e => {
-		setValue( e.target.value );
-		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
-	};
+	const handleChange = e => setValue( e.target.value );
 	const debouncedUpdate = useCallback(
 		debounce( val => {
 			checkDuplicateId( val );
@@ -44,16 +44,9 @@ const Id = ( { field, name, componentId, updateField, ...rest } ) => {
 		setDuplicate( false );
 	};
 
-	useLayoutEffect( () => {
-		if ( selection && ref.current ) {
-			[ ref.current.selectionStart, ref.current.selectionEnd ] = selection;
-		}
-	}, [ selection ] );
-
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
 			<input
-				ref={ ref }
 				type="text"
 				id={ componentId }
 				name={ name }
@@ -66,7 +59,7 @@ const Id = ( { field, name, componentId, updateField, ...rest } ) => {
 				<RawHTML className="og-description og-error">
 					{
 						sprintf(
-							__( 'This ID already exists in the field group <a href="%s">%s</a>, please change it or edit that field group to avoid duplication.', 'slim-seo' ),
+							__( 'This ID already exists in the field group <a href="%s">%s</a>, please change it or edit that field group to avoid duplication.', 'meta-box-builder' ),
 							existingFieldGroup.link,
 							existingFieldGroup.title
 						)
