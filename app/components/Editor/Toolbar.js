@@ -50,7 +50,7 @@ const Toolbar = ( {
 
 	return (
 		<>
-			<div className={ `mb-toolbar ${ field._active ? 'mb-toolbar--show' : '' }` }>
+			<div className="mb-toolbar">
 				<T label={ __( 'Toolbar', 'meta-box-builder' ) }>
 					<ToolbarGroup>
 						<ToolbarButton size="small" icon={ arrowUp } onClick={ moveUp } label={ __( 'Move up', 'meta-box-builder' ) } />

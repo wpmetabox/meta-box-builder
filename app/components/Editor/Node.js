@@ -91,7 +91,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
 				<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
 
-				<Toolbar field={ field } { ...fieldActions } />
+				{ field._active && <Toolbar field={ field } { ...fieldActions } /> }
 				<Base field={ field } { ...fieldActions } updateField={ update }>
 					<Suspense fallback={ null }>
 						<FieldType field={ field } parent={ parent } />

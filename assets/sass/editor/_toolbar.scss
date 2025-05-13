@@ -1,15 +1,11 @@
 .mb-toolbar {
-	display: none;
+	display: flex;
 	position: absolute;
 	top: -16px;
 	left: 0;
 	right: 0;
 	justify-content: center;
 	z-index: 9; // Ensure toolbar is above the field outline when hovering.
-
-	&--show {
-		display: flex;
-	}
 
 	&__icon {
 		stroke: currentColor;
