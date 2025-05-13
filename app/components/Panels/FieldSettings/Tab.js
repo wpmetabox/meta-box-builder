@@ -87,6 +87,8 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 				props.updateField = updateField;
 			}
 
+			console.debug( `    Control: ${ control.setting }` );
+
 			return <Control { ...props } />;
 		}, [ control, parent, watchValue ] ); // dependencies
 

@@ -73,7 +73,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) );
 
-	console.debug( `Render field ${ field._id }` );
+	console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
 	return (
 		<OutsideClickDetector onClickOutside={ deselect }>
