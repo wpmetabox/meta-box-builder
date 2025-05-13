@@ -5,7 +5,7 @@ import useNavPanel from './useNavPanel';
 
 const areListsEqual = ( a, b ) => a.length === b.length && a.every( ( field, index ) => field._id === b[ index ]._id );
 
-let lists = [];
+let lists = {};
 
 // Parse fields and put into the lists.
 // Recursively put groups' fields into other lists.
@@ -13,11 +13,11 @@ const parseLists = ( obj, listId, baseInputName ) => {
 	let fields = ensureArray( obj.fields );
 	fields = fields.filter( field => field.type );
 
-	lists.push( {
+	lists[ listId ] = {
 		id: listId,
 		fields,
 		baseInputName,
-	} );
+	};
 
 	fields.forEach( field => {
 		if ( field.type === 'group' ) {
@@ -27,218 +27,195 @@ const parseLists = ( obj, listId, baseInputName ) => {
 };
 parseLists( MbbApp, 'root', 'fields' );
 
+const createNewField = type => {
+	const id = `${ type }_${ uniqid() }`;
+	return {
+		_id: id,
+		_new: true,
+		type,
+		id,
+		name: ucwords( type, '_' )
+	};
+};
+
 const useLists = create( ( set, get ) => ( {
 	lists,
 	addFieldAt: ( listId, fieldType, position ) => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = get().lists[ listId ];
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
 			return;
 		}
 
-		if ( position < 0 || position >= list.length ) {
+		if ( position < 0 || position >= list.fields.length ) {
 			console.error( 'Invalid position.' );
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
-			// Add field to the list.
-			let lists = state.lists.map( l =>
-				l.id === listId
-					? {
-						...l,
-						fields: [
-							...l.fields.slice( 0, position ),
-							newField,
-							...l.fields.slice( position )
-						]
-					}
-					: l
-			);
+			// Create a new lists object
+			const lists = { ...state.lists };
+
+			// Add field to the list
+			lists[ listId ] = {
+				...lists[ listId ],
+				fields: [
+					...lists[ listId ].fields.slice( 0, position ),
+					newField,
+					...lists[ listId ].fields.slice( position )
+				]
+			};
 
 			// Create a new list for group fields.
 			if ( fieldType === 'group' ) {
-				lists.push( {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-				} );
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
+				};
 			}
 
 			return { lists };
 		} );
 	},
 	addField: ( listId, fieldType ) => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = get().lists[ listId ];
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
-			// Add field to the list.
-			let lists = state.lists.map( l =>
-				l.id === listId
-					? { ...l, fields: [ ...l.fields, newField ] }
-					: l
-			);
+			// Create a new lists object
+			const lists = { ...state.lists };
+
+			// Add field to the list
+			lists[ listId ] = {
+				...lists[ listId ],
+				fields: [ ...lists[ listId ].fields, newField ]
+			};
 
 			// Create a new list for group fields.
 			if ( fieldType === 'group' ) {
-				lists.push( {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-				} );
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
+				};
 			}
 
 			return { lists };
 		} );
 	},
 	prependField: ( listId, fieldType ) => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = get().lists[ listId ];
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
-			// Add field to the list.
-			let lists = state.lists.map( l =>
-				l.id === listId
-					? { ...l, fields: [ newField, ...l.fields ] }
-					: l
-			);
+			// Create a new lists object
+			const lists = { ...state.lists };
+
+			// Add field to the list
+			lists[ listId ] = {
+				...lists[ listId ],
+				fields: [ newField, ...lists[ listId ].fields ]
+			};
 
 			// Create a new list for group fields.
 			if ( fieldType === 'group' ) {
-				lists.push( {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-				} );
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
+				};
 			}
 
 			return { lists };
 		} );
 	},
 	addFieldBefore: ( listId, fieldId, fieldType ) => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = get().lists[ listId ];
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
-			const lists = state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
-				}
+			// Create a new lists object
+			const lists = { ...state.lists };
 
-				const index = l.fields.findIndex( f => f._id === fieldId );
-				let newFields = [ ...l.fields ];
-				newFields.splice( index, 0, newField );
+			// Find the index of the field
+			const index = lists[ listId ].fields.findIndex( f => f._id === fieldId );
+			let newFields = [ ...lists[ listId ].fields ];
+			newFields.splice( index, 0, newField );
 
-				return {
-					...l,
-					fields: newFields,
-				};
-			} );
+			// Update the list
+			lists[ listId ] = {
+				...lists[ listId ],
+				fields: newFields
+			};
 
 			// Create a new list for group fields.
 			if ( newField.type === 'group' ) {
-				lists.push( {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-				} );
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
+				};
 			}
 
 			return { lists };
 		} );
 	},
 	addFieldAfter: ( listId, fieldId, fieldType ) => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = get().lists[ listId ];
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
 			return;
 		}
 
-		const newId = `${ fieldType }_${ uniqid() }`;
-		const newField = {
-			_id: newId, // Internal use, won't change
-			_new: true, // Detect the field is newly added, to auto generate ID
-			type: fieldType,
-			id: newId, // ID of the field that use can edit
-			name: ucwords( fieldType, '_' ),
-		};
+		const newField = createNewField( fieldType );
 
 		set( state => {
-			const lists = state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
-				}
+			// Create a new lists object
+			const lists = { ...state.lists };
 
-				const index = l.fields.findIndex( f => f._id === fieldId );
-				let newFields = [ ...l.fields ];
-				newFields.splice( index + 1, 0, newField );
+			// Find the index of the field
+			const index = lists[ listId ].fields.findIndex( f => f._id === fieldId );
+			let newFields = [ ...lists[ listId ].fields ];
+			newFields.splice( index + 1, 0, newField );
 
-				return {
-					...l,
-					fields: newFields,
-				};
-			} );
+			// Update the list
+			lists[ listId ] = {
+				...lists[ listId ],
+				fields: newFields
+			};
 
 			// Create a new list for group fields.
 			if ( newField.type === 'group' ) {
-				lists.push( {
-					id: newId,
+				lists[ newField._id ] = {
+					id: newField._id,
 					fields: [],
-					baseInputName: `${ list.baseInputName }[${ newId }][fields]`,
-				} );
+					baseInputName: `${ list.baseInputName }[${ newField._id }][fields]`,
+				};
 			}
 
 			return { lists };
 		} );
 	},
 	duplicateField: ( listId, fieldId ) => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = get().lists[ listId ];
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
 			return;
@@ -252,29 +229,28 @@ const useLists = create( ( set, get ) => ( {
 		newField.name += __( ' (Copy)', 'meta-box-builder' );
 
 		set( state => {
-			const lists = state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
-				}
+			// Create a new lists object
+			const lists = { ...state.lists };
 
-				const index = l.fields.findIndex( f => f._id === fieldId );
-				let newFields = [ ...l.fields ];
-				newFields.splice( index + 1, 0, newField );
+			// Find the index of the field
+			const index = lists[ listId ].fields.findIndex( f => f._id === fieldId );
+			let newFields = [ ...lists[ listId ].fields ];
+			newFields.splice( index + 1, 0, newField );
 
-				return {
-					...l,
-					fields: newFields,
-				};
-			} );
+			// Update the list
+			lists[ listId ] = {
+				...lists[ listId ],
+				fields: newFields
+			};
 
 			const createNewList = group => {
 				updateSubFieldIds( group );
 
-				lists.push( {
+				lists[ group._id ] = {
 					id: group._id,
 					fields: Object.values( group.fields ),
 					baseInputName: `${ list.baseInputName }[${ group._id }][fields]`,
-				} );
+				};
 			};
 
 			const updateSubFieldIds = group => {
@@ -309,25 +285,25 @@ const useLists = create( ( set, get ) => ( {
 	removeField: ( listId, fieldId ) => {
 		const { navPanel, setNavPanel } = useNavPanel.getState();
 
-		set( state => ( {
-			lists: state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
-				}
+		set( state => {
+			const lists = { ...state.lists };
 
-				return {
-					...l,
-					fields: l.fields.filter( f => f._id !== fieldId ),
+			if ( lists[ listId ] ) {
+				lists[ listId ] = {
+					...lists[ listId ],
+					fields: lists[ listId ].fields.filter( f => f._id !== fieldId )
 				};
-			} ),
-		} ) );
+			}
+
+			return { lists };
+		} );
 
 		if ( navPanel === 'field-settings' ) {
 			setNavPanel( '' );
 		}
 	},
 	updateField: ( listId, fieldId, key, value ) => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = get().lists[ listId ];
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
 			return;
@@ -344,65 +320,64 @@ const useLists = create( ( set, get ) => ( {
 			return;
 		}
 
-		set( state => ( {
-			lists: state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
+		set( state => {
+			const list = state.lists[ listId ];
+			const fields = list.fields.map( f => f._id === fieldId ? { ...f, [ key ]: value } : f );
+
+			return {
+				lists: {
+					...state.lists,
+					[ listId ]: { ...list, fields }
 				}
-
-				return {
-					...l,
-					fields: l.fields.map( f =>
-						f._id === fieldId
-							? { ...f, [ key ]: value }
-							: f,
-					)
-				};
-			} )
-		} ) );
+			};
+		} );
 	},
-	moveFieldUp: ( listId, fieldId ) => set( state => ( {
-		lists: state.lists.map( l => {
-			if ( l.id !== listId ) {
-				return l;
-			}
+	moveFieldUp: ( listId, fieldId ) => set( state => {
+		const lists = { ...state.lists };
 
-			const index = l.fields.findIndex( f => f._id === fieldId );
-			if ( index <= 0 ) {
-				return l;
-			}
+		if ( !lists[ listId ] ) {
+			return { lists };
+		}
 
-			let newFields = [ ...l.fields ];
-			[ newFields[ index - 1 ], newFields[ index ] ] = [ newFields[ index ], newFields[ index - 1 ] ];
+		const index = lists[ listId ].fields.findIndex( f => f._id === fieldId );
+		if ( index <= 0 ) {
+			return { lists };
+		}
 
-			return {
-				...l,
-				fields: newFields
-			};
-		} )
-	} ) ),
-	moveFieldDown: ( listId, fieldId ) => set( state => ( {
-		lists: state.lists.map( l => {
-			if ( l.id !== listId ) {
-				return l;
-			}
+		let newFields = [ ...lists[ listId ].fields ];
+		[ newFields[ index - 1 ], newFields[ index ] ] = [ newFields[ index ], newFields[ index - 1 ] ];
 
-			const index = l.fields.findIndex( f => f._id === fieldId );
-			if ( index >= l.fields.length - 1 ) {
-				return l;
-			}
+		lists[ listId ] = {
+			...lists[ listId ],
+			fields: newFields
+		};
 
-			let newFields = [ ...l.fields ];
-			[ newFields[ index ], newFields[ index + 1 ] ] = [ newFields[ index + 1 ], newFields[ index ] ];
+		return { lists };
+	} ),
+	moveFieldDown: ( listId, fieldId ) => set( state => {
+		const lists = { ...state.lists };
 
-			return {
-				...l,
-				fields: newFields
-			};
-		} )
-	} ) ),
+		if ( !lists[ listId ] ) {
+			return { lists };
+		}
+
+		const index = lists[ listId ].fields.findIndex( f => f._id === fieldId );
+		if ( index >= lists[ listId ].fields.length - 1 ) {
+			return { lists };
+		}
+
+		let newFields = [ ...lists[ listId ].fields ];
+		[ newFields[ index ], newFields[ index + 1 ] ] = [ newFields[ index + 1 ], newFields[ index ] ];
+
+		lists[ listId ] = {
+			...lists[ listId ],
+			fields: newFields
+		};
+
+		return { lists };
+	} ),
 	setFields: ( listId, fields ) => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = get().lists[ listId ];
 		if ( !list ) {
 			console.error( `List with id ${ listId } not found.` );
 			return;
@@ -412,21 +387,19 @@ const useLists = create( ( set, get ) => ( {
 			return;
 		}
 
-		set( state => ( {
-			lists: state.lists.map( l => {
-				if ( l.id !== listId ) {
-					return l;
-				}
+		set( state => {
+			const lists = { ...state.lists };
 
-				return {
-					...l,
-					fields,
-				};
-			} )
-		} ) );
+			lists[ listId ] = {
+				...lists[ listId ],
+				fields
+			};
+
+			return { lists };
+		} );
 	},
 	getForList: listId => {
-		const list = get().lists.find( l => l.id === listId );
+		const list = get().lists[ listId ];
 
 		return {
 			fields: list.fields,
@@ -448,7 +421,7 @@ const useLists = create( ( set, get ) => ( {
 	getAllFields: () => {
 		let fields = [];
 
-		get().lists.forEach( list => {
+		Object.values( get().lists ).forEach( list => {
 			fields = [ ...fields, ...list.fields ];
 		} );
 
