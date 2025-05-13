@@ -326,22 +326,41 @@ const useLists = create( ( set, get ) => ( {
 			setNavPanel( '' );
 		}
 	},
-	updateField: ( listId, fieldId, key, value ) => set( state => ( {
-		lists: state.lists.map( l => {
-			if ( l.id !== listId ) {
-				return l;
-			}
+	updateField: ( listId, fieldId, key, value ) => {
+		const list = get().lists.find( l => l.id === listId );
+		if ( !list ) {
+			console.error( `List with id ${ listId } not found.` );
+			return;
+		}
 
-			return {
-				...l,
-				fields: l.fields.map( f =>
-					f._id === fieldId
-						? { ...f, [ key ]: value }
-						: f,
-				)
-			};
-		} )
-	} ) ),
+		const field = list.fields.find( f => f._id === fieldId );
+		if ( !field ) {
+			console.error( `Field with id ${ fieldId } not found.` );
+			return;
+		}
+
+		// Don't update if the value is the same.
+		if ( field[ key ] === value ) {
+			return;
+		}
+
+		set( state => ( {
+			lists: state.lists.map( l => {
+				if ( l.id !== listId ) {
+					return l;
+				}
+
+				return {
+					...l,
+					fields: l.fields.map( f =>
+						f._id === fieldId
+							? { ...f, [ key ]: value }
+							: f,
+					)
+				};
+			} )
+		} ) );
+	},
 	moveFieldUp: ( listId, fieldId ) => set( state => ( {
 		lists: state.lists.map( l => {
 			if ( l.id !== listId ) {
