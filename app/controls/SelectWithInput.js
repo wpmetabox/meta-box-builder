@@ -1,7 +1,8 @@
 import { Button } from "@wordpress/components";
-import { useRef, useState } from "@wordpress/element";
+import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { Icon, chevronDown, close } from "@wordpress/icons";
+import { debounce } from 'lodash';
 import DivRow from './DivRow';
 
 const SelectWithInput = ( {
@@ -14,6 +15,7 @@ const SelectWithInput = ( {
 } ) => {
 	const [ showOptions, setShowOptions ] = useState( false );
 	const ref = useRef();
+	const [ value, setValue ] = useState( defaultValue );
 
 	const predefinedItem = Object.entries( options ).find( item => item[ 0 ] === defaultValue );
 	const isPredefined = predefinedItem !== undefined;
@@ -33,7 +35,15 @@ const SelectWithInput = ( {
 		updateField( name, e.target.dataset.value );
 	};
 
-	const update = e => updateField( name, e.target.value );
+	// Live update to the input, and debounce update to the field.
+	const update = e => setValue( e.target.value );
+	const debouncedUpdate = useCallback(
+		debounce( val => updateField( name, val ), 300 ),
+		[] // empty deps means it runs once
+	);
+	useEffect( () => {
+		debouncedUpdate( value );
+	}, [ value, debouncedUpdate ] );
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
 		<div className="og-select-with-input">
@@ -44,7 +54,7 @@ const SelectWithInput = ( {
 				placeholder={ __( 'Please select or enter a value', 'meta-box-builder' ) }
 				id={ componentId }
 				onFocus={ show }
-				value={ defaultValue }
+				value={ value }
 				onChange={ update }
 			/>
 			<div className="og-select-with-input__icon" onClick={ toggle }><Icon icon={ chevronDown } /></div>

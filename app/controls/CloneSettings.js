@@ -16,13 +16,13 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 
 	const toggleClone = e => updateField( 'clone', e.target.checked );
 	const toggleCloneEmptyStart = e => updateField( 'clone_empty_start', e.target.checked );
-	const updateAddButton = e => setAddButton( e.target.value );
 
+	// Live update to the input, and debounce update to the field.
+	const updateAddButton = e => setAddButton( e.target.value );
 	const debouncedUpdateAddButton = useCallback(
 		debounce( value => updateField( 'add_button', value ), 300 ),
 		[] // empty deps means it runs once
 	);
-
 	useEffect( () => {
 		debouncedUpdateAddButton( add_button );
 	}, [ add_button, debouncedUpdateAddButton ] );
