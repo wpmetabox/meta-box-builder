@@ -2,12 +2,11 @@ import { Flex, Icon, Panel } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
 import { getFieldIcon, ucwords } from '../../functions';
 import useFieldSettingsPanel from '../../hooks/useFieldSettingsPanel';
-import useLists from '../../hooks/useLists';
+import { getAllFields } from '../../list-functions';
 
 const FieldSettingsPanel = () => {
 	const ref = useRef();
 	const { setPortalElement } = useFieldSettingsPanel();
-	const { getAllFields } = useLists();
 	const activeField = getAllFields().find( field => field._active ) || {};
 
 	useEffect( () => {

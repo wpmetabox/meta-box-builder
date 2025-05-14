@@ -1,12 +1,11 @@
 import { __ } from '@wordpress/i18n';
 import { ReactSortable } from 'react-sortablejs';
-import useLists from '../../../hooks/useLists';
+import getList from '../../../list-functions';
 import AddFieldButton from '../AddFieldButton';
 import Node from '../Node';
 
 const Group = ( { field, parent } ) => {
-	const { getForList } = useLists();
-	const { fields, ...fieldActions } = getForList( field._id );
+	const { fields, ...fieldActions } = getList( field._id )();
 
 	const handleAdd = e => {
 		// Only handle when drag from the Add Field panel.

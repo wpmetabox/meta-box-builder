@@ -1,6 +1,6 @@
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import useLists from "../hooks/useLists";
+import { getAllFields } from "../list-functions";
 import FieldInserter from './FieldInserter';
 import { uniqid } from '/functions';
 
@@ -43,7 +43,6 @@ const Intro = ( { name, setting } ) => (
 );
 
 const Rule = ( { rule, name, removeRule } ) => {
-	const { getAllFields } = useLists();
 	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
 	const fields = getAllFields()
 		.filter( field => !ignoreTypes.includes( field.type ) )

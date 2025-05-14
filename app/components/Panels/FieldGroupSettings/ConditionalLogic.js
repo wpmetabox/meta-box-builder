@@ -2,8 +2,8 @@ import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import FieldInserter from '../../../controls/FieldInserter';
 import { uniqid } from "../../../functions";
-import useLists from "../../../hooks/useLists";
 import useSettings from "../../../hooks/useSettings";
+import { getAllFields } from "../../../list-functions";
 
 const ConditionalLogic = () => {
 	const name = 'settings[conditional_logic]';
@@ -47,7 +47,6 @@ const Intro = ( { name, setting } ) => (
 );
 
 const Rule = ( { rule, name, removeRule } ) => {
-	const { getAllFields } = useLists();
 	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
 	const fields = getAllFields()
 		.filter( field => !ignoreTypes.includes( field.type ) )
