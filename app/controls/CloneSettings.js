@@ -1,10 +1,29 @@
 import { Button, Dropdown } from "@wordpress/components";
-import { useCallback, useEffect, useReducer, useState } from "@wordpress/element";
+import { useCallback, useEffect, useReducer, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { close } from "@wordpress/icons";
 import { debounce } from 'lodash';
 import DivRow from "./DivRow";
 import Tooltip from "./Tooltip";
+
+const OutsideClickDetector = ( { onClickOutside, children } ) => {
+	const ref = useRef();
+
+	useEffect( () => {
+		const handleClickOutside = e => {
+			if ( ref.current && !ref.current.contains( e.target ) ) {
+				onClickOutside?.();
+			}
+		};
+
+		document.addEventListener( 'mousedown', handleClickOutside );
+		return () => {
+			document.removeEventListener( 'mousedown', handleClickOutside );
+		};
+	}, [ onClickOutside ] );
+
+	return <div ref={ ref }>{ children }</div>;
+};
 
 const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
 	const [ sort_clone, toggleSortClone ] = useReducer( on => !on, defaultValue.sort_clone );
@@ -51,7 +70,7 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 					</>
 				) }
 				renderContent={ ( { onToggle } ) => (
-					<>
+					<OutsideClickDetector onClickOutside={ onToggle }>
 						<Button icon={ close } onClick={ onToggle } iconSize={ 16 } />
 
 						<Toggle
@@ -113,7 +132,7 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 						>
 							<input type="text" id={ `${ componentId }-add_button` } value={ add_button } onChange={ updateAddButton } />
 						</DivRow>
-					</>
+					</OutsideClickDetector>
 				) }
 			/>
 		</>
