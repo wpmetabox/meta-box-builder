@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { create } from 'zustand';
-import { getFieldValue, ucwords, uniqid } from '../functions';
-import useNavPanel from './useNavPanel';
+import { getFieldValue, ucwords, uniqid } from './functions';
+import useNavPanel from './hooks/useNavPanel';
 
 const areFieldsEqual = ( a, b ) => a.length === b.length && a.every( ( field, index ) => field._id === b[ index ]._id );
 
