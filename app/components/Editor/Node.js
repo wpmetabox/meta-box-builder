@@ -16,6 +16,11 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 
 	useEffect( () => {
 		const handleClickOutside = e => {
+			// Hanle left-click only, to avoid bug when right-click to open context menu (deselect the current field, thus makes the field settings panel empty).
+			if ( e.button !== 0 ) {
+				return;
+			}
+
 			if ( !isClickedOnAField( e ) ) {
 				return;
 			}
@@ -48,7 +53,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		e.stopPropagation();
 
 		setNavPanel( 'field-settings' );
-		if ( ! field._active ) {
+		if ( !field._active ) {
 			update( '_active', true );
 		}
 	};
