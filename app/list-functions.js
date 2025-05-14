@@ -75,16 +75,47 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 			set( state => {
 				// Find the index of the field
 				const index = state.fields.findIndex( f => f._id === fieldId );
-				if ( index === -1 ) {
-					console.error( `Field with id ${ fieldId } not found.` );
-					return state;
-				}
-
 				let newFields = [ ...state.fields ];
 				newFields.splice( index + 1, 0, newField );
 
 				return { fields: newFields };
 			} );
+
+			const createNewList = group => {
+				updateSubFieldIds( group );
+
+				createList( {
+					id: group._id,
+					fields: Object.values( group.fields ),
+					baseInputName: `${ baseInputName }[${ group._id }][fields]`,
+				} );
+			};
+
+			const updateSubFieldIds = group => {
+				// Convert to array to do easier.
+				let subFields = Object.values( group.fields || {} );
+
+				group.fields = {};
+
+				subFields.forEach( subField => {
+					// Change id
+					const newId = `${ subField.type }_${ uniqid() }`;
+					subField.id = newId;
+					subField._id = newId;
+
+					// Recurring update subfield IDs and create lists.
+					if ( subField.type === 'group' ) {
+						createNewList( subField );
+					};
+
+					group.fields[ subField._id ] = subField;
+				} );
+			};
+
+			// Create a new list for group fields.
+			if ( newField.type === 'group' ) {
+				createNewList( newField );
+			}
 		},
 		removeField: ( fieldId ) => {
 			const { navPanel, setNavPanel } = useNavPanel.getState();
