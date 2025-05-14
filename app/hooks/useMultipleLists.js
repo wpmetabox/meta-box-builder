@@ -16,7 +16,7 @@ const createNewField = type => {
 	};
 };
 
-const useSingleList = create( ( set, get ) => ( {
+const createList = create( ( set, get ) => ( {
 	id: '',
 	fields: [],
 	baseInputName: '',
@@ -175,4 +175,11 @@ const useSingleList = create( ( set, get ) => ( {
 	},
 } ) );
 
-export default useSingleList;
+const lists = new Map(); // or a proxy if needed
+
+export function getList( id ) {
+	if ( !lists.has( id ) ) {
+		lists.set( id, createList() );
+	}
+	return lists.get( id );
+}
