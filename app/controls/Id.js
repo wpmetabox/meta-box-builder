@@ -14,7 +14,7 @@ const Id = ( { field, name, componentId, updateField, ...rest } ) => {
 	const [ duplicate, setDuplicate ] = useState( false );
 	const [ value, setValue ] = useState( field.id );
 
-	// Live update value with incoming change.
+	// Live update value with incoming change, which can happen when the ID is generated from Name or FieldLabel in live preview.
 	useEffect( () => {
 		setValue( field.id );
 	}, [ field.id, field._id_changed ] );

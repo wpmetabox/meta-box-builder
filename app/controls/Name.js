@@ -10,6 +10,11 @@ import DivRow from './DivRow';
 const Name = ( { name, componentId, field, updateField, ...rest } ) => {
 	const [ value, setValue ] = useState( field.name );
 
+	// Live update value with incoming change, which can happen when the field is changed from FieldLabel in live preview.
+	useEffect( () => {
+		setValue( field.name );
+	}, [ field.name ] );
+
 	// Use ref to stored latest `_id_changed` value. When this value changes, don't trigger rerender.
 	const idChangedRef = useRef( field._id_changed );
 
