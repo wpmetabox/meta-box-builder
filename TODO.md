@@ -3,7 +3,6 @@ Must:
 [ ] Khi label của field quá dài thì sẽ bị chườm sang phần input: https://monosnap.com/direct/M8ZKwXVMk1elu9UQ7lG4KYRsQepWiu
 [ ] Không double click để chọn field label để edit cho nhanh
 [ ] Merge từ master vào
-[ ] Fix rerender Group
 [ ] Fix khi open clone settings của 1 field, mà switch sang field khác thì panel ko tự biến mất
 [ ] Fix khi chọn 1 group, rồi chọn 1 subfield thì vẫn hiển thị field settings của group
 [ ] Fix khi chọn 1 field active, rồi click chuột phải vào 1 field khác thì field settings panel empty
@@ -52,7 +51,7 @@ Nice to have:
 ## Danh sách fields
 
 - Do sử dụng library SortableJS nên cần phải tạo nhiều list để chứa các field. Mỗi 1 group sẽ là 1 list, và có 1 list là root, chứa các field root.
-- Sử dụng `useLists` hook để truy xuất đến các list này ở mọi nơi (globally), khác với cách dùng `useFields` trước đây, chỉ dùng cục bộ.
-- Khi cần sử dụng các hàm CRUD cho từng list, gọi qua hàm `getForList`.
+- Sử dụng `list-functions` để truy xuất đến các list này ở mọi nơi (globally), khác với cách dùng `useFields` trước đây, chỉ dùng cục bộ. Mỗi list là một store, dùng Zustand, để tránh trường hợp khi update 1 list thì các list khác bị ảnh hưởng và re-render.
+- Khi cần sử dụng các hàm CRUD cho từng list, gọi qua hàm `getList`.
 - Do lưu tất cả các field vào đây, nên có thể lấy danh sách tất cả các field, thay thế cho hook `useFieldIds` trước đây. Vì có thể lấy đủ thông tin, nên các phần suggestion trong `<FieldInserter>` của group title, address, conditional logic, ... có thể hiện tên field và khi chọn thì điền ID của field.
 - Các update về field như name/id/label hoặc icon thông qua các hook cũ `useFieldData` hoặc `useFieldNameId` đều bỏ, thay thế bằng `updateField`.
