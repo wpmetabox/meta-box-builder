@@ -31,8 +31,8 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 		addFieldAt: ( fieldType, position ) => {
 			const { fields, baseInputName } = get();
 
-			if ( position < 0 || position >= fields.length ) {
-				console.error( 'Invalid position.' );
+			if ( position < 0 || position > fields.length ) {
+				console.error( `%cInvalid position: ${ position }.`, 'color:red' );
 				return;
 			}
 
@@ -58,54 +58,10 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 				} );
 			}
 		},
-		addField: ( fieldType ) => {
-			const newField = createNewField( fieldType );
-
-			set( state => ( {
-				fields: [ ...state.fields, newField ]
-			} ) );
-		},
-		prependField: ( fieldType ) => {
-			const newField = createNewField( fieldType );
-
-			set( state => ( {
-				fields: [ newField, ...state.fields ]
-			} ) );
-		},
-		addFieldBefore: ( fieldId, fieldType ) => {
-			const newField = createNewField( fieldType );
-
-			set( state => {
-				// Find the index of the field
-				const index = state.fields.findIndex( f => f._id === fieldId );
-				if ( index === -1 ) {
-					console.error( `Field with id ${ fieldId } not found.` );
-					return state;
-				}
-
-				let newFields = [ ...state.fields ];
-				newFields.splice( index, 0, newField );
-
-				return { fields: newFields };
-			} );
-		},
-		addFieldAfter: ( fieldId, fieldType ) => {
-			const newField = createNewField( fieldType );
-
-			set( state => {
-				// Find the index of the field
-				const index = state.fields.findIndex( f => f._id === fieldId );
-				if ( index === -1 ) {
-					console.error( `Field with id ${ fieldId } not found.` );
-					return state;
-				}
-
-				let newFields = [ ...state.fields ];
-				newFields.splice( index + 1, 0, newField );
-
-				return { fields: newFields };
-			} );
-		},
+		addField: ( fieldType ) => get().addFieldAt( fieldType, get().fields.length ),
+		prependField: ( fieldType ) => get().addFieldAt( fieldType, 0 ),
+		addFieldBefore: ( fieldId, fieldType ) => get().addFieldAt( fieldType, get().fields.findIndex( f => f._id === fieldId ) ),
+		addFieldAfter: ( fieldId, fieldType ) => get().addFieldAt( fieldType, get().fields.findIndex( f => f._id === fieldId ) + 1 ),
 		duplicateField: ( fieldId ) => {
 			const { baseInputName } = get();
 
