@@ -28,7 +28,11 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			>
 				<Icon size={ 16 } icon={ getFieldIcon( field.type ) } className="og-item__icon" />
 				<div className="og-item__label">{ getFieldLabel( field ) }</div>
-				<div className="og-item__id" data-tooltip={ copied ? __( 'Copied!', 'meta-box-builder' ) : __( 'Click to copy', 'meta-box-builder' ) }>
+				<div
+					className="og-item__id"
+					data-tooltip={ copied ? __( 'Copied!', 'meta-box-builder' ) : __( 'Click to copy', 'meta-box-builder' ) }
+					data-tooltip-position="bottom" // To make tooltip not hidden for the 1st field
+				>
 					<span className="og-item__id__inner" ref={ copyRef }>{ field.id }</span>
 				</div>
 				<Actions field={ field } { ...fieldActions } />

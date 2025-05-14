@@ -1,7 +1,6 @@
 &-item__id {
 	font-size: 12px;
 	cursor: pointer;
-	position: relative;
 	max-width: 40%;
 	display: inline-flex;
 	align-items: center;
@@ -12,33 +11,5 @@
 		white-space: nowrap;
 		width: 100%;
 		display: inline-block;
-	}
-
-	&:after {
-		display: inline-block;
-		content: attr(data-tooltip);
-
-		position: absolute;
-		z-index: 1;
-		bottom: calc(-100% - 20px);
-		left: 50%;
-		transform: translateX(-50%) translateY(-100%);
-
-		background-color: #3c434a;
-		color: #fff;
-		font-size: 10px;
-		line-height: 1;
-		padding: 4px 6px;
-		border-radius: 4px;
-
-		visibility: hidden;
-		opacity: 0;
-		transition: opacity .3s;
-		white-space: nowrap;
-	}
-
-	&:hover:after {
-		visibility: visible;
-		opacity: 1;
 	}
 }

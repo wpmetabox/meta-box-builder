@@ -90,11 +90,11 @@ const FieldLabel = ( { field, updateField } ) => {
 			suppressContentEditableWarning={ true }
 			ref={ spanRef }
 			className="og-item__editable"
-			title={ __( 'Click to edit', 'meta-box-builder' ) }
 			onKeyDown={ maybeFinishEditing }
 			onInput={ handleChange }
 			onBlur={ handleBlur }
 			onFocus={ handleFocus }
+			data-tooltip={ __( 'Click to edit', 'meta-box-builder' ) }
 		/>
 	);
 };
