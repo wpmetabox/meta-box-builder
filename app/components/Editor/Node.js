@@ -9,7 +9,7 @@ import Field from './Field';
 import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
-const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.target, '.mb-context-menu,.mb-toolbar,.og-item__editable' );
+const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.target, '.mb-context-menu,.mb-toolbar' );
 
 const OutsideClickDetector = ( { onClickOutside, children } ) => {
 	const ref = useRef();

@@ -53,7 +53,7 @@ const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, remove
 
 	return (
 		<>
-			<DropdownMenu icon={ moreVertical } label={ __( 'Select an action', 'meta-box-builder' ) }>
+			<DropdownMenu className="og-item__actions" icon={ moreVertical } label={ __( 'Select an action', 'meta-box-builder' ) }>
 				{
 					( { onClose } ) => (
 						<>

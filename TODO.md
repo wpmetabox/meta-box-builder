@@ -1,7 +1,4 @@
 Must:
-
-[ ] Khi label của field quá dài thì sẽ bị chườm sang phần input: https://monosnap.com/direct/M8ZKwXVMk1elu9UQ7lG4KYRsQepWiu
-[ ] Không double click để chọn field label để edit cho nhanh
 [ ] Merge từ master vào
 
 Nice to have:

@@ -20,8 +20,6 @@
 
 // Disable entering for inputs
 .mb-field .rwmb-input {
-
-	input:not(.og-item__editable input),
 	select,
 	textarea,
 	// For buttons, but not "Add field" button or toolbar buttons
