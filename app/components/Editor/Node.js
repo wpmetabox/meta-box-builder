@@ -20,7 +20,8 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 				return;
 			}
 
-			if ( ref.current && !ref.current.contains( e.target ) ) {
+			const closestField = e.target.matches( '.mb-field' ) ? e.target : e.target.closest( '.mb-field' );
+			if ( ref.current && closestField.parentElement !== ref.current ) {
 				onClickOutside?.();
 			}
 		};
