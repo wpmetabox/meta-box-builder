@@ -1,0 +1,8 @@
+[contenteditable] {
+	cursor: text;
+	display: inline-block;
+
+	&:focus {
+		outline: none;
+	}
+}

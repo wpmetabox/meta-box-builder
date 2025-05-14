@@ -135,10 +135,6 @@
 		overflow: hidden;
 		white-space: nowrap;
 	}
-
-	&__editable[contenteditable] {
-		cursor: text;
-	}
 }
 
 // Admin columns.
