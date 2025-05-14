@@ -6,11 +6,24 @@ import { sanitizeId } from "../../../../functions";
 // Output field label on the header bar.
 const FieldLabel = ( { field, updateField } ) => {
 	const [ value, setValue ] = useState( field.name );
+	const isFocusedRef = useRef( false );
+	const spanRef = useRef();
 
 	// Live update value with incoming change, which can happen when the field is changed from Name in the field settings panel.
+	// Avoid syncing from field.name while the user is typing (i.e., while focused).
+	// Use ref to manually update its textContent, avoid React touching the inner text directly to avoid cursor jumping to the start.
 	useEffect( () => {
-		setValue( field.name );
+		if ( spanRef.current && !isFocusedRef.current ) {
+			if ( spanRef.current.textContent !== field.name ) {
+				spanRef.current.textContent = field.name;
+			}
+			setValue( field.name ); // Still keep value in sync internally
+		}
 	}, [ field.name ] );
+
+	const handleFocus = () => {
+		isFocusedRef.current = true;
+	};
 
 	// Use ref to stored latest `_id_changed` value. When this value changes, don't trigger rerender.
 	const idChangedRef = useRef( field._id_changed );
@@ -66,18 +79,23 @@ const FieldLabel = ( { field, updateField } ) => {
 	// When done updating "name", don't auto generate ID.
 	const stopGeneratingId = () => updateField( '_id_changed', true );
 
+	const handleBlur = () => {
+		isFocusedRef.current = false;
+		stopGeneratingId();
+	};
+
 	return (
 		<span
 			contentEditable
 			suppressContentEditableWarning={ true }
+			ref={ spanRef }
 			className="og-item__editable"
 			title={ __( 'Click to edit', 'meta-box-builder' ) }
 			onKeyDown={ maybeFinishEditing }
 			onInput={ handleChange }
-			onBlur={ stopGeneratingId }
-		>
-			{ field.name }
-		</span>
+			onBlur={ handleBlur }
+			onFocus={ handleFocus }
+		/>
 	);
 };
 
