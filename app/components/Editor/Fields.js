@@ -2,13 +2,12 @@ import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useApi from "../../hooks/useApi";
-import useLists from "../../hooks/useLists";
+import getList from "../../list-functions";
 import AddFieldButton from "./AddFieldButton";
 import Node from './Node';
 
 const Fields = () => {
-	const { getForList } = useLists();
-	const { fields, ...fieldActions } = getForList( 'root' );
+	const { fields, ...fieldActions } = getList( 'root' )();
 
 	// Don't render any field if fields data is not available.
 	const types = useApi( 'field-types', {} );

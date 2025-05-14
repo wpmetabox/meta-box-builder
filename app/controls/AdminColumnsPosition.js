@@ -1,6 +1,6 @@
 import { __ } from "@wordpress/i18n";
-import useLists from "../hooks/useLists";
 import useSettings from "../hooks/useSettings";
+import { getAllFields } from "../list-functions";
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
@@ -14,7 +14,6 @@ const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) =>
 	};
 	const defaultColumn = defaultColumns[ objectType ] || 'title';
 
-	const { getAllFields } = useLists();
 	// Select only text and select fields.
 	let fields = getAllFields()
 		.filter( field => [ 'text', 'select' ].includes( field.type ) )

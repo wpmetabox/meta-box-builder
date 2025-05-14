@@ -1,6 +1,6 @@
 import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import useLists from "../../../hooks/useLists";
+import getList from "../../../list-functions";
 import FieldLabel from "./Elements/FieldLabel";
 import TextLimiter from "./Elements/TextLimiter";
 import Tooltip from "./Elements/Tooltip";
@@ -87,15 +87,13 @@ const Plain = ( { field, children } ) => (
 
 const Description = ( { field } ) => field.desc && <p className="description">{ field.desc }</p>;
 const CloneButton = ( { field } ) => {
-	const { getForList } = useLists();
-
 	if ( !field.clone ) {
 		return;
 	}
 
 	// Do not show the clone button if the group has no subfields.
 	if ( field.type === 'group' ) {
-		const { fields } = getForList( field._id );
+		const fields = getList( field._id )( state => state.fields );
 		if ( fields.length === 0 ) {
 			return;
 		}

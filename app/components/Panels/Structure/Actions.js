@@ -2,11 +2,10 @@ import { DropdownMenu, MenuGroup, MenuItem, Modal } from '@wordpress/components'
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { arrowDown, arrowUp, copy, insertAfter, insertBefore, moreVertical, trash } from "@wordpress/icons";
-import useLists from '../../../hooks/useLists';
+import getList from '../../../list-functions';
 import AddFieldContent from '../../AddFieldContent';
 
 const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, removeField, moveFieldUp, moveFieldDown } ) => {
-	const { getForList } = useLists();
 	const [ action, setAction ] = useState( () => () => {} );
 	const [ isOpen, setOpen ] = useState( false );
 	const openModal = () => setOpen( true );
@@ -15,15 +14,13 @@ const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, remove
 	const actionMap = {
 		addBefore: fieldType => addFieldBefore( field._id, fieldType ),
 		addAfter: fieldType => addFieldAfter( field._id, fieldType ),
-		addSubFieldBefore: fieldType => {
-			const { prependField } = getForList( field._id );
-			prependField( fieldType );
-		},
-		addSubFieldAfter: fieldType => {
-			const { addField } = getForList( field._id );
-			addField( fieldType );
-		},
 	};
+
+	if ( field.type === 'group' ) {
+		const { prependField, addField } = getList( field._id )( state => ( { prependField: state.prependField, addField: state.addField } ) );
+		actionMap.addSubFieldBefore = fieldType => prependField( fieldType );
+		actionMap.addSubFieldAfter = fieldType => addField( fieldType );
+	}
 
 	const actionCallback = ( closeMenu, name ) => () => {
 		closeMenu();

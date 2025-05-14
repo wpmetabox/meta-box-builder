@@ -7,6 +7,7 @@ Must:
 [ ] Fix khi open clone settings của 1 field, mà switch sang field khác thì panel ko tự biến mất
 [ ] Fix khi chọn 1 group, rồi chọn 1 subfield thì vẫn hiển thị field settings của group
 [ ] Fix khi chọn 1 field active, rồi click chuột phải vào 1 field khác thì field settings panel empty
+[ ] Right click to open context menu, nhưng khi show popup thì ko tự close
 
 Nice to have:
 

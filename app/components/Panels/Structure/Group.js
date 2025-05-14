@@ -1,10 +1,9 @@
 import { ReactSortable } from 'react-sortablejs';
-import useLists from "../../../hooks/useLists";
+import getList from '../../../list-functions';
 import Node from './Node';
 
 const Group = ( { field, parent = '' } ) => {
-	const { getForList } = useLists();
-	const { fields, setFields, ...fieldActions } = getForList( field._id );
+	const { fields, setFields, ...fieldActions } = getList( field._id )();
 
 	return (
 		<div className="og-group-fields">

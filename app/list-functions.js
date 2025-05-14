@@ -173,4 +173,14 @@ const parseLists = ( obj, listId, baseInputName ) => {
 };
 parseLists( MbbApp, 'root', 'fields' );
 
+export const getAllFields = () => {
+	let fields = [];
+
+	lists.values().forEach( list => {
+		fields = [ ...fields, ...list( state => state.fields ) ];
+	} );
+
+	return fields;
+};
+
 export default getList;

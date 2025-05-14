@@ -1,8 +1,8 @@
 import { useCallback } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { debounce } from 'lodash';
-import useLists from '../hooks/useLists';
 import useSettings from '../hooks/useSettings';
+import getList from '../list-functions';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
@@ -13,8 +13,7 @@ import FieldInserter from './FieldInserter';
 const GroupTitle = ( { name, componentId, field, updateField, ...rest } ) => {
 	const { getPrefix } = useSettings();
 
-	const { getForList } = useLists();
-	let { fields } = getForList( field._id );
+	let fields = getList( field._id )( state => state.fields );
 
 	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
 	fields = fields
