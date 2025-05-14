@@ -89,7 +89,7 @@ const FieldLabel = ( { field, updateField } ) => {
 			contentEditable
 			suppressContentEditableWarning={ true }
 			ref={ spanRef }
-			className="og-item__editable"
+			className="mb-field__label"
 			onKeyDown={ maybeFinishEditing }
 			onInput={ handleChange }
 			onBlur={ handleBlur }
