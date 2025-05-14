@@ -4,7 +4,6 @@ Must:
 [ ] Không double click để chọn field label để edit cho nhanh
 [ ] Merge từ master vào
 [ ] Fix khi open clone settings của 1 field, mà switch sang field khác thì panel ko tự biến mất
-[ ] Right click to open context menu, nhưng khi show popup thì ko tự close
 
 Nice to have:
 
