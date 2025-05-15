@@ -208,7 +208,8 @@ export const getAllFields = () => {
 	let fields = [];
 
 	lists.values().forEach( list => {
-		fields = [ ...fields, ...list( state => state.fields ) ];
+		// Use .getState() to access the store's state directly — avoid side effect when using store as a hook (store(fn)).
+		fields = [ ...fields, ...list.getState().fields ];
 	} );
 
 	return fields;
