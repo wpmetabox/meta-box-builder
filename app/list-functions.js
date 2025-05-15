@@ -204,15 +204,6 @@ const parseLists = ( obj, listId, baseInputName ) => {
 };
 parseLists( MbbApp, 'root', 'fields' );
 
-export const getAllFields = () => {
-	let fields = [];
-
-	lists.values().forEach( list => {
-		// Use .getState() to access the store's state directly — avoid side effect when using store as a hook (store(fn)).
-		fields = [ ...fields, ...list.getState().fields ];
-	} );
-
-	return fields;
-};
+export { lists };
 
 export default getList;
