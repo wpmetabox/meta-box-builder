@@ -1,3 +1,4 @@
+import { Tooltip } from '@wordpress/components';
 import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { debounce } from 'lodash';
@@ -85,17 +86,18 @@ const FieldLabel = ( { field, updateField } ) => {
 	};
 
 	return (
-		<span
-			contentEditable
-			suppressContentEditableWarning={ true }
-			ref={ spanRef }
-			className="mb-field__label"
-			onKeyDown={ maybeFinishEditing }
-			onInput={ handleChange }
-			onBlur={ handleBlur }
-			onFocus={ handleFocus }
-			data-tooltip={ __( 'Click to edit', 'meta-box-builder' ) }
-		/>
+		<Tooltip text={ __( 'Click to edit', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
+			<span
+				contentEditable
+				suppressContentEditableWarning={ true }
+				ref={ spanRef }
+				className="mb-field__label"
+				onKeyDown={ maybeFinishEditing }
+				onInput={ handleChange }
+				onBlur={ handleBlur }
+				onFocus={ handleFocus }
+			/>
+		</Tooltip>
 	);
 };
 
