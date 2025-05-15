@@ -22,7 +22,7 @@ class Edit extends BaseEditPage {
 		$asset = require MBB_DIR . "/assets/js/build/app.asset.php";
 
 		// Add extra JS libs for copy code to clipboard & block color picker.
-		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'wp-color-picker', 'code-editor' ] );
+		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'code-editor' ] );
 
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/build/app.js', $asset['dependencies'], $asset['version'], true );
 

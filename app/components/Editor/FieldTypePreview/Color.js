@@ -1,15 +1,11 @@
-import { useEffect, useRef } from "@wordpress/element";
+import { __ } from "@wordpress/i18n";
 
-const Color = ( { field } ) => {
-	const ref = useRef();
-
-	useEffect( () => {
-		const $input = jQuery( ref.current );
-		$input.wpColorPicker();
-		$input.iris( 'color', field.std || '' );
-	}, [ field.std ] );
-
-	return <input ref={ ref } type="text" />;
-};
+const Color = ( { field } ) => (
+	<div className="wp-picker-container">
+		<button type="button" className="button wp-color-result" style={ { backgroundColor: field.std || '' } }>
+			<span className="wp-color-result-text">{ __( 'Select Color', 'meta-box-builder' ) }</span>
+		</button>
+	</div>
+);
 
 export default Color;

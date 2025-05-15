@@ -1,7 +1,6 @@
 <?php
 namespace MBB;
 
-use RWMB_Loader;
 use MBB\Helpers\Data;
 
 class Assets {
@@ -21,7 +20,6 @@ class Assets {
 		wp_enqueue_style( 'rwmb-select', RWMB_CSS_URL . 'select.css', [], RWMB_VER );
 		wp_enqueue_style( 'rwmb-button-group', RWMB_CSS_URL . 'button-group.css', [], RWMB_VER );
 		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_script( 'wp-color-picker' );
 		wp_enqueue_style( 'rwmb-fieldset-text', RWMB_CSS_URL . 'fieldset-text.css', [], RWMB_VER );
 		wp_enqueue_style( 'rwmb-image-select', RWMB_CSS_URL . 'image-select.css', [], RWMB_VER );
 		wp_enqueue_style( 'rwmb-key-value', RWMB_CSS_URL . 'key-value.css', [], RWMB_VER );
