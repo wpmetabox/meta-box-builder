@@ -13,27 +13,38 @@ const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.ta
 
 const OutsideClickDetector = ( { onClickOutside, children } ) => {
 	const ref = useRef();
+	const isDragging = useRef( false );
+
+	const handleDragStart = () => isDragging.current = true;
+	const handleDragEnd = () => isDragging.current = false;
 
 	useEffect( () => {
-		const handleClickOutside = e => {
-			// Hanle left-click only, to avoid bug when right-click to open context menu (deselect the current field, thus makes the field settings panel empty).
-			if ( e.button !== 0 ) {
-				return;
-			}
+		const handleMouseDown = e => {
+			// Because mousedown fires before dragstart, use timeout to delay, so that isDragging.current is updated before checking it.
+			setTimeout( () => {
+				if ( e.button !== 0 || isDragging.current ) {
+					return;
+				}
 
-			if ( !isClickedOnAField( e ) ) {
-				return;
-			}
+				if ( !isClickedOnAField( e ) ) {
+					return;
+				}
 
-			const closestField = e.target.matches( '.mb-field' ) ? e.target : e.target.closest( '.mb-field' );
-			if ( ref.current && closestField.parentElement !== ref.current ) {
-				onClickOutside?.();
-			}
+				const closestField = e.target.matches( '.mb-field' ) ? e.target : e.target.closest( '.mb-field' );
+				if ( ref.current && closestField?.parentElement !== ref.current ) {
+					onClickOutside?.();
+				}
+			}, 200 );
 		};
 
-		document.addEventListener( 'mousedown', handleClickOutside );
+		document.addEventListener( 'dragstart', handleDragStart );
+		document.addEventListener( 'dragend', handleDragEnd );
+		document.addEventListener( 'mousedown', handleMouseDown );
+
 		return () => {
-			document.removeEventListener( 'mousedown', handleClickOutside );
+			document.removeEventListener( 'dragstart', handleDragStart );
+			document.removeEventListener( 'dragend', handleDragEnd );
+			document.removeEventListener( 'mousedown', handleMouseDown );
 		};
 	}, [ onClickOutside ] );
 
