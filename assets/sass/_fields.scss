@@ -111,6 +111,10 @@
 		box-sizing: border-box;
 		cursor: grab;
 		transition: all .2s;
+		display: grid;
+		grid-template-columns: 16px 2fr 1fr 36px;
+		gap: 8px;
+		align-items: center;
 
 		&:hover {
 			background: var(--color-lightest);
@@ -130,14 +134,9 @@
 	}
 
 	&__label {
-		margin-right: auto;
 		text-overflow: ellipsis;
 		overflow: hidden;
 		white-space: nowrap;
-	}
-
-	&__actions.og-item__actions {
-		min-width: 36px;
 	}
 }
 
