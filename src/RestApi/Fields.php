@@ -203,7 +203,7 @@ class Fields extends Base {
 				'category'    => 'html5',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std' ] ),
+					array_merge( $general_tab, [ 'std', 'input_attributes' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
@@ -375,7 +375,7 @@ class Fields extends Base {
 				'category'    => 'html5',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'minmax', 'step', 'std' ] ),
+					array_merge( $general_tab, [ 'minmax', 'step', 'std', 'input_attributes' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
@@ -387,7 +387,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'not_available_string' ] ),
+					array_merge( $general_tab, [ 'std', 'not_available_string', 'input_attributes' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
@@ -554,7 +554,7 @@ class Fields extends Base {
 				'category'    => 'basic',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std' ] ),
+					array_merge( $general_tab, [ 'std', 'input_attributes' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					array_merge( [ 'datalist_choices' ], $advanced_tab )
@@ -578,7 +578,7 @@ class Fields extends Base {
 				'category'    => 'basic',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std' ] ),
+					array_merge( $general_tab, [ 'std', 'input_attributes' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'textarea_size' ],
 					$validation_tab,
 					$advanced_tab
@@ -614,7 +614,7 @@ class Fields extends Base {
 				'category'    => 'html5',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std' ] ),
+					array_merge( $general_tab, [ 'std', 'input_attributes' ] ),
 					[ 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					$advanced_tab
