@@ -105,9 +105,6 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				onContextMenu={ openContextMenu }
 				title={ __( 'Click to toggle field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
-				<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
-				<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
-
 				{ field._active && <Toolbar field={ field } { ...fieldActions } /> }
 				<Base field={ field } { ...fieldActions } updateField={ update }>
 					<Suspense fallback={ null }>
