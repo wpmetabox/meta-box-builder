@@ -19,8 +19,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	return field.type && (
 		<div className={ `og-item og-item--${ field.type }` }>
-			<input type="hidden" name={ `fields${ parent }[${ field._id }][_id]` } defaultValue={ field._id } />
-			<input type="hidden" name={ `fields${ parent }[${ field._id }][type]` } defaultValue={ field.type } />
+			<input type="hidden" name={ `fields${ parent }[${ field._id }]` } defaultValue={ JSON.stringify( field ) } />
 
 			<div className="og-item__header" onClick={ scrollToField }>
 				<Icon size={ 16 } icon={ getFieldIcon( field.type ) } className="og-item__icon" />

@@ -2,6 +2,7 @@
 namespace MBB;
 
 use MBBParser\Parsers\Base as BaseParser;
+use MBBParser\Parsers\FieldJson;
 use MBBParser\Parsers\MetaBox as Parser;
 use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
@@ -94,8 +95,17 @@ class Edit extends BaseEditPage {
 		$request     = rwmb_request();
 		$base_parser = new BaseParser();
 		$settings    = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
-		$fields      = apply_filters( 'mbb_save_fields', $request->post( 'fields' ), $request );
-		$data        = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
+
+		// Because fields' settings are submitted as JSON strings, we need to parse it before saving into the DB.
+		$fields            = $request->post( 'fields' );
+		// d( $fields );
+		$field_json_parser = new FieldJson( $fields );
+		$field_json_parser->parse();
+		$fields = $field_json_parser->get_settings();
+		$fields = apply_filters( 'mbb_save_fields', $fields, $request );
+		// dd( $fields );
+
+		$data = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
 
 		$base_parser->set_settings( $settings )->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'settings', $base_parser->get_settings() );
