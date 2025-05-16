@@ -6,8 +6,6 @@ const Text = ( { field, type = "text" } ) => {
 	const append = field.append && <span className="rwmb-input-group-text">{ field.append }</span>;
 	const input = <input type={ type } placeholder={ field.placeholder } size={ field.size } value={ field.std || '' } onChange={ doNothing } />;
 
-	console.info( 'render text preview' );
-
 	return prepend || append
 		? <div className="rwmb-input-group">{ prepend }{ input }{ append }</div>
 		: input;
