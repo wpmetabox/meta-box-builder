@@ -60,9 +60,10 @@ const ContextMenu = () => {
 	};
 
 	if ( field.type === 'group' ) {
-		const { prependField, addField } = getList( field._id )( state => ( { prependField: state.prependField, addField: state.addField } ) );
-		actionMap.addSubFieldBefore = fieldType => prependField( fieldType );
-		actionMap.addSubFieldAfter = fieldType => addField( fieldType );
+		// Use list.getState() to avoid using reactivity hook, which would cause the context menu to re-render.
+		const list = getList( field._id );
+		actionMap.addSubFieldBefore = fieldType => list.getState().prependField( fieldType );
+		actionMap.addSubFieldAfter = fieldType => list.getState().addField( fieldType );
 	}
 
 	const actionCallback = name => () => {
