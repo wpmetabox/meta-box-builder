@@ -1,3 +1,4 @@
+import { memo } from "@wordpress/element";
 import { doNothing } from "../../../functions";
 
 const Range = ( { field } ) => (
@@ -7,4 +8,8 @@ const Range = ( { field } ) => (
 	</div>
 );
 
-export default Range;
+export default memo( Range, ( prev, next ) => (
+	prev.field.std === next.field.std
+	&& prev.field.min === next.field.min
+	&& prev.field.max === next.field.max
+) );

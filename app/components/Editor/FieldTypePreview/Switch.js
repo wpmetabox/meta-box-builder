@@ -1,3 +1,4 @@
+import { memo } from "@wordpress/element";
 import { doNothing } from "../../../functions";
 
 const Switch = ( { field } ) => (
@@ -11,4 +12,9 @@ const Switch = ( { field } ) => (
 	</label>
 );
 
-export default Switch;
+export default memo( Switch, ( prev, next ) => (
+	prev.field.style === next.field.style
+	&& prev.field.on_label === next.field.on_label
+	&& prev.field.off_label === next.field.off_label
+	&& prev.field.std === next.field.std
+) );
