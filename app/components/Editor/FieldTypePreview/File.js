@@ -1,4 +1,4 @@
-import { doNothing } from "../../../functions";
+import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 
 const File = ( { field } ) => {
@@ -13,4 +13,4 @@ const File = ( { field } ) => {
 	);
 };
 
-export default File;
+export default memo( File, ( prev, next ) => prev.field.max_file_uploads === next.field.max_file_uploads );

@@ -1,3 +1,4 @@
+import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 
 const Color = ( { field } ) => (
@@ -8,4 +9,4 @@ const Color = ( { field } ) => (
 	</div>
 );
 
-export default Color;
+export default memo( Color, ( prev, next ) => prev.field.std === next.field.std );

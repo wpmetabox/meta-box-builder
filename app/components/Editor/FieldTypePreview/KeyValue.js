@@ -1,3 +1,5 @@
+import { memo } from "@wordpress/element";
+
 const KeyValue = ( { field } ) => {
 	return (
 		<>
@@ -7,4 +9,7 @@ const KeyValue = ( { field } ) => {
 	);
 };
 
-export default KeyValue;
+export default memo( KeyValue, ( prev, next ) => (
+	prev.field.placeholder_key === next.field.placeholder_key
+	&& prev.field.placeholder_value === next.field.placeholder_value
+) );

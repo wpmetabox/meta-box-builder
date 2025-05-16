@@ -1,3 +1,4 @@
+import { memo } from "@wordpress/element";
 import { doNothing } from "../../../functions";
 
 const Checkbox = ( { field } ) => {
@@ -9,4 +10,4 @@ const Checkbox = ( { field } ) => {
 	return output;
 };
 
-export default Checkbox;
+export default memo( Checkbox, ( prev, next ) => prev.field.std === next.field.std && prev.field.desc === next.field.desc );

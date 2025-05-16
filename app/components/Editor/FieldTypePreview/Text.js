@@ -1,3 +1,4 @@
+import { memo } from "@wordpress/element";
 import { doNothing } from "../../../functions";
 
 const Text = ( { field, type = "text" } ) => {
@@ -10,4 +11,12 @@ const Text = ( { field, type = "text" } ) => {
 		: input;
 };
 
-export default Text;
+// Memo to avoid re-rendering because there might be a lot of fields with this field type.
+export default memo( Text, ( prev, next ) => (
+	prev.type === next.type
+	&& prev.field.prepend === next.field.prepend
+	&& prev.field.append === next.field.append
+	&& prev.field.placeholder === next.field.placeholder
+	&& prev.field.size === next.field.size
+	&& prev.field.std === next.field.std
+) );

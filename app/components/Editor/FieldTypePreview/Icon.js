@@ -1,3 +1,4 @@
+import { memo } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { doNothing } from "../../../functions";
 
@@ -8,4 +9,4 @@ const Icon = ( { field } ) => (
 	</select>
 );
 
-export default Icon;
+export default memo( Icon, ( prev, next ) => prev.field.std === next.field.std && prev.field.placeholder === next.field.placeholder );

@@ -1,3 +1,4 @@
+import { memo } from "@wordpress/element";
 import { __ } from '@wordpress/i18n';
 
 const FileAdvanced = ( { field } ) => (
@@ -10,4 +11,4 @@ const FileAdvanced = ( { field } ) => (
 	</>
 );
 
-export default FileAdvanced;
+export default memo( FileAdvanced, ( prev, next ) => prev.field.max_status === next.field.max_status && prev.field.max_file_uploads === next.field.max_file_uploads );

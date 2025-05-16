@@ -1,3 +1,5 @@
+import { memo } from "@wordpress/element";
+
 const Heading = ( { field } ) => (
 	<>
 		{ field.name && <h4>{ field.name }</h4> }
@@ -5,4 +7,4 @@ const Heading = ( { field } ) => (
 	</>
 );
 
-export default Heading;
+export default memo( Heading, ( prev, next ) => prev.field.name === next.field.name && prev.field.desc === next.field.desc );

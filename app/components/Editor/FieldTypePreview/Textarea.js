@@ -1,3 +1,4 @@
+import { memo } from "@wordpress/element";
 import { doNothing } from "../../../functions";
 
 const Textarea = ( { field } ) => (
@@ -10,4 +11,9 @@ const Textarea = ( { field } ) => (
 	/>
 );
 
-export default Textarea;
+export default memo( Textarea, ( prev, next ) => (
+	prev.field.placeholder === next.field.placeholder
+	&& prev.field.cols === next.field.cols
+	&& prev.field.rows === next.field.rows
+	&& prev.field.std === next.field.std
+) );
