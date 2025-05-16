@@ -15,12 +15,12 @@ const InputGroup = ( {
 	...rest
 } ) => {
 	const updateKey1 = useCallback(
-		debounce( e => updateField && updateField( key1, e.target.value ), 300 ),
+		debounce( e => updateField( key1, e.target.value ), 300 ),
 		[] // empty deps means it runs once
 	);
 
 	const updateKey2 = useCallback(
-		debounce( e => updateField && updateField( key2, e.target.value ), 300 ),
+		debounce( e => updateField( key2, e.target.value ), 300 ),
 		[] // empty deps means it runs once
 	);
 
@@ -31,7 +31,6 @@ const InputGroup = ( {
 				<input
 					type="text"
 					id={ `${ componentId }-${ key1 }` }
-					name={ `${ name.replace( componentName, key1 ) }` }
 					defaultValue={ defaultValue[ key1 ] }
 					onChange={ updateKey1 }
 				/>
@@ -39,7 +38,6 @@ const InputGroup = ( {
 				<input
 					type="text"
 					id={ `${ componentId }-${ key2 }` }
-					name={ `${ name.replace( componentName, key2 ) }` }
 					defaultValue={ defaultValue[ key2 ] }
 					onChange={ updateKey2 }
 				/>

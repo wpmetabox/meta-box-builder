@@ -9,7 +9,7 @@ const Radio = ( { componentId, label, name, options, defaultValue, updateField, 
 
 	useEffect( () => {
 		toggle();
-		updateField && updateField( name, value );
+		updateField( name, value );
 	}, [ value ] );
 
 	const radioOpions = Object.entries( options ).map( ( [ value, label ] ) => ( { value, label } ) );
@@ -21,7 +21,6 @@ const Radio = ( { componentId, label, name, options, defaultValue, updateField, 
 			options={ radioOpions }
 			selected={ value }
 		/>
-		<input type="hidden" id={ componentId } name={ name } defaultValue={ value } />
 	</DivRow>;
 };
 
