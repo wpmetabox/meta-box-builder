@@ -96,7 +96,7 @@ const ContextMenu = () => {
 		<>
 			{
 				isOpen && (
-					<div className="mb-context-menu mb-context-menu--show" style={ position }>
+					<div className="mb-context-menu" style={ position }>
 						<MenuGroup>
 							<MenuItem icon={ insertBefore } onClick={ actionCallback( 'addBefore' ) }>
 								{ __( 'Add a field before', 'meta-box-builder' ) }
