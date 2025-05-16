@@ -7,6 +7,11 @@ import Tab from './Tab';
 const FieldSettings = ( { controls, field, ...rest } ) => {
 	const { portalElement } = useFieldSettingsPanel();
 
+	// Render field settings only when the field is active.
+	if ( !field._active ) {
+		return;
+	}
+
 	// Extract controls displayed in the panel header.
 	const headerSettings = [ 'required', 'clone_settings' ];
 	const headerControls = controls.filter( control => headerSettings.includes( control.setting ) );
