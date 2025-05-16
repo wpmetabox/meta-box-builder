@@ -13,15 +13,14 @@ const Textarea = ( {
 	...rest
 } ) => {
 	const handleChange = useCallback(
-			debounce( e => updateField && updateField( name, e.target.value ), 300 ),
-			[] // empty deps means it runs once
-		);
+		debounce( e => updateField( name, e.target.value ), 300 ),
+		[] // empty deps means it runs once
+	);
 
 	return (
 		<DivRow { ...rest } htmlFor={ componentId }>
 			<TextareaAutosize
 				id={ componentId }
-				name={ name }
 				minRows={ 2 }
 				maxRows={ 6 }
 				placeholder={ placeholder }

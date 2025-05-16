@@ -81,11 +81,8 @@ const Tab = ( { controls, field, parent = '', updateField } ) => {
 				name: `fields${ parent }[${ field._id }]${ input }`,
 				defaultValue,
 				field,
+				updateField,
 			};
-
-			if ( settingsWithLiveUpdate.includes( control.setting ) ) {
-				props.updateField = updateField;
-			}
 
 			console.debug( `    Control: ${ control.setting }` );
 
