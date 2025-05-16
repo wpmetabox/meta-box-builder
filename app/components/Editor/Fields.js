@@ -4,6 +4,7 @@ import { ReactSortable } from 'react-sortablejs';
 import useApi from "../../hooks/useApi";
 import getList from "../../list-functions";
 import AddFieldButton from "./AddFieldButton";
+import ContextMenu from "./ContextMenu";
 import Node from './Node';
 
 const Fields = () => {
@@ -62,6 +63,7 @@ const Fields = () => {
 					</ReactSortable>
 			}
 			<AddFieldButton { ...fieldActions } />
+			<ContextMenu />
 		</>
 	);
 };

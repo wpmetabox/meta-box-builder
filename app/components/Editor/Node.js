@@ -4,7 +4,6 @@ import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
 import useNavPanel from "../../hooks/useNavPanel";
-import ContextMenu from "./ContextMenu";
 import Field from './Field';
 import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
@@ -52,7 +51,7 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 };
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
-	const { isContextMenuOpen, openContextMenu, contextMenuPosition } = useContextMenu();
+	const openContextMenu = useContextMenu( state => state.openContextMenu );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 
 	const toggleSettings = e => {
@@ -84,6 +83,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		fieldActions.updateField( field._id, key, value );
 	};
 
+	const handleContextMenu = e => openContextMenu( e, field, fieldActions );
+
 	if ( !field.type ) {
 		return;
 	}
@@ -102,7 +103,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				` }
 				id={ `mb-field-${ field._id }` }
 				onClick={ toggleSettings }
-				onContextMenu={ openContextMenu }
+				onContextMenu={ handleContextMenu }
 				title={ __( 'Click to toggle field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
 				{ field._active && <Toolbar field={ field } { ...fieldActions } /> }
@@ -111,13 +112,6 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 						<FieldType field={ field } parent={ parent } />
 					</Suspense>
 				</Base>
-				<ContextMenu
-					open={ isContextMenuOpen }
-					top={ contextMenuPosition.y }
-					left={ contextMenuPosition.x }
-					field={ field }
-					{ ...fieldActions }
-				/>
 				<Field field={ field } parent={ parent } updateField={ update } />
 			</div>
 		</OutsideClickDetector>

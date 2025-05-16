@@ -8,6 +8,7 @@ Nice to have:
 [ ] Thay đổi field type
 [ ] Object field, chuyển chọn field type thành icon
 [ ] Switch to field khi có trường required chưa điền
+[ ] Chỉ render panel field settings khi chọn 1 field
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
