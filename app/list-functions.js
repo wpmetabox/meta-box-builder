@@ -18,7 +18,7 @@ const createNewField = type => {
 
 const lists = new Map();
 
-const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
+const createList = ( { id = '', fields = [] } ) => {
 	if ( lists.has( id ) ) {
 		return lists.get( id );
 	}
@@ -26,10 +26,9 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 	const list = create( ( set, get ) => ( {
 		id,
 		fields,
-		baseInputName,
 
 		addFieldAt: ( fieldType, position ) => {
-			const { fields, baseInputName } = get();
+			const { fields } = get();
 
 			if ( position < 0 || position > fields.length ) {
 				console.error( `%cInvalid position: ${ position }.`, 'color:red' );
@@ -54,7 +53,6 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 				createList( {
 					id: newField._id,
 					fields: [],
-					baseInputName: `${ baseInputName }[${ newField._id }][fields]`,
 				} );
 			}
 		},
@@ -87,7 +85,6 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 				createList( {
 					id: group._id,
 					fields: Object.values( group.fields ),
-					baseInputName: `${ baseInputName }[${ group._id }][fields]`,
 				} );
 			};
 
@@ -190,19 +187,19 @@ const getList = id => {
 
 // Parse fields and put into the lists.
 // Recursively put groups' fields into other lists.
-const parseLists = ( obj, listId, baseInputName ) => {
+const parseLists = ( obj, listId ) => {
 	let fields = ensureArray( obj.fields );
 	fields = fields.filter( field => field.type );
 
-	createList( { id: listId, fields, baseInputName } );
+	createList( { id: listId, fields } );
 
 	fields.forEach( field => {
 		if ( field.type === 'group' ) {
-			parseLists( field, field._id, `${ baseInputName }[${ field._id }][fields]` );
+			parseLists( field, field._id );
 		}
 	} );
 };
-parseLists( MbbApp, 'root', 'fields' );
+parseLists( MbbApp, 'root' );
 
 export { lists };
 
