@@ -91,6 +91,19 @@ class Edit extends BaseEditPage {
 	}
 
 	public function save( $post_id, $post ) {
+		// This method is now just a fallback in case JavaScript is disabled
+		// Most of the saving logic has been moved to the REST API endpoint
+
+		// Check if this is a REST API request
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			return;
+		}
+
+		// Verify nonce
+		if ( ! wp_verify_nonce( rwmb_request()->post( 'mbb_nonce' ), 'mbb-save' ) ) {
+			return;
+		}
+
 		// Save data for JavaScript (serialized arrays).
 		$request     = rwmb_request();
 		$base_parser = new BaseParser();
@@ -98,12 +111,10 @@ class Edit extends BaseEditPage {
 
 		// Because fields' settings are submitted as JSON strings, we need to parse it before saving into the DB.
 		$fields            = $request->post( 'fields' );
-		// d( $fields );
 		$field_json_parser = new FieldJson( $fields );
 		$field_json_parser->parse();
 		$fields = $field_json_parser->get_settings();
 		$fields = apply_filters( 'mbb_save_fields', $fields, $request );
-		// dd( $fields );
 
 		$data = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
 
