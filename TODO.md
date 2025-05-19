@@ -2,6 +2,7 @@ Must:
 [ ] Merge từ master vào
 [ ] Chỉ render panel field settings khi chọn 1 field
 	[ ] Ajax save data
+	[ ] Show alert when saving successfully
 	[ ] Check all PHP code to hook to save process
 		[ ] Blocks.php
 
