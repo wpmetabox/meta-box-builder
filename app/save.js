@@ -16,7 +16,8 @@ export const initSaveForm = () => {
 		}
 
 		submitButton.disabled = true;
-		submitButton.setAttribute( 'value', MbbApp.saving );
+		const originalText = submitButton.value;
+		submitButton.value = MbbApp.saving;
 
 		// Build fields tree similar to useAllFieldsTree
 		const buildFieldsTree = () => {
@@ -73,7 +74,7 @@ export const initSaveForm = () => {
 		}, 'POST' );
 
 		submitButton.disabled = false;
-		submitButton.setAttribute( 'value', MbbApp.save );
+		submitButton.value = originalText;
 
 		if ( !response.success ) {
 			alert( response.message );
