@@ -55,7 +55,6 @@ class Edit extends BaseEditPage {
 
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
-			'nonce_save'    => wp_create_nonce( 'mbb-save' ),
 
 			'postTypes'     => Data::get_post_types(),
 			'taxonomies'    => Data::get_taxonomies(),
@@ -90,57 +89,7 @@ class Edit extends BaseEditPage {
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}
 
+	// Do nothing as all saving is done via REST API.
 	public function save( $post_id, $post ) {
-		// This method is now just a fallback in case JavaScript is disabled
-		// Most of the saving logic has been moved to the REST API endpoint
-
-		// Check if this is a REST API request
-		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-			return;
-		}
-
-		// Verify nonce
-		if ( ! wp_verify_nonce( rwmb_request()->post( 'mbb_nonce' ), 'mbb-save' ) ) {
-			return;
-		}
-
-		// Save data for JavaScript (serialized arrays).
-		$request     = rwmb_request();
-		$base_parser = new BaseParser();
-		$settings    = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
-
-		// Because fields' settings are submitted as JSON strings, we need to parse it before saving into the DB.
-		$fields            = $request->post( 'fields' );
-		$field_json_parser = new FieldJson( $fields );
-		$field_json_parser->parse();
-		$fields = $field_json_parser->get_settings();
-		$fields = apply_filters( 'mbb_save_fields', $fields, $request );
-
-		$data = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
-
-		$base_parser->set_settings( $settings )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'settings', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $fields )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'fields', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $data )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
-
-		// Save parsed data for PHP (serialized array).
-		$submitted_data = compact( 'fields', 'settings' );
-		$submitted_data = apply_filters( 'mbb_save_submitted_data', $submitted_data, $request );
-
-		// Set post title and slug in case they're auto-generated.
-		$submitted_data['post_title'] = $post->post_title;
-		$submitted_data['post_name']  = $post->post_name;
-
-		$parser = new Parser( $submitted_data );
-		$parser->parse();
-
-		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
-
-		// Allow developers to add actions after saving the meta box.
-		do_action( 'mbb_after_save', $parser, $post_id, $submitted_data );
 	}
 }
