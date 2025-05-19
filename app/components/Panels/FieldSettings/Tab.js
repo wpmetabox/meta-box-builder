@@ -1,48 +1,6 @@
 import { Suspense, useMemo } from "@wordpress/element";
 import { getControlParams } from '/functions';
 
-// Specific settings that have live update.
-const settingsWithLiveUpdate = [
-	'before',
-	'after',
-	'name',
-	'id',
-	'required',
-	'clone_settings',
-	'label_description',
-	'desc',
-	'placeholder',
-	'size',
-	'textarea_size',
-	'prepend_append',
-	'text_limiter',
-	'tooltip',
-	'std',
-	'options',
-	'inline',
-	'select_all_none',
-	'multiple',
-	'format',
-	'save_format',
-	'placeholder_key',
-	'placeholder_value',
-	'prefix_suffix',
-	'style',
-	'on_off',
-	'minmax',
-	'field_type',
-	'add_new',
-	'max_file_uploads',
-	'max_status',
-	'collapsible',
-	'group_title',
-	'class',
-	'icon_type',
-	'icon',
-	'icon_url',
-	'icon_fa',
-];
-
 const getControlSettings = control => {
 	if ( control.name === 'CloneSettings' ) {
 		return [ 'clone', 'sort_clone', 'clone_default', 'clone_empty_start', 'clone_as_multiple', 'min_clone', 'max_clone', 'add_button' ];
