@@ -3,6 +3,7 @@ Must:
 [ ] Chỉ render panel field settings khi chọn 1 field
 	[ ] Ajax save data
 	[ ] Check all PHP code to hook to save process
+		[ ] Blocks.php
 
 Nice to have:
 
