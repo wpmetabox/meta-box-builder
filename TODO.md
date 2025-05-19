@@ -7,6 +7,7 @@ Must:
 	[ ] Check all PHP code to hook to save process
 		[ ] Blocks.php
 	[ ] Check DashiconPicker in Block.js
+	[ ] FieldInserter
 
 Nice to have:
 
