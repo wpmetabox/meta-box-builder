@@ -48,13 +48,12 @@ const DashiconPicker = ( { name, componentId, defaultValue, updateField, ...rest
 
 	const handleChange = ( icon, onToggle ) => {
 		setValue( icon );
-		updateField && updateField( name, icon );
+		updateField( name, icon );
 		onToggle();
 	};
 
 	return (
 		<DivRow className="og-icon" { ...rest }>
-			<input type="hidden" name={ name } defaultValue={ value } />
 			<Dropdown
 				popoverProps={ { placement: 'left-start' } }
 				contentClassName="og-icon__dropdown"

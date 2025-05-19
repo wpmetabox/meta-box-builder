@@ -6,6 +6,7 @@ Must:
 	[ ] Show alert when saving successfully
 	[ ] Check all PHP code to hook to save process
 		[ ] Blocks.php
+	[ ] Check DashiconPicker in Block.js
 
 Nice to have:
 
