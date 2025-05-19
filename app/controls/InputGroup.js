@@ -9,8 +9,6 @@ const InputGroup = ( {
 	key2,
 	defaultValue,
 	componentId,
-	componentName,
-	name,
 	updateField,
 	...rest
 } ) => {
@@ -24,6 +22,7 @@ const InputGroup = ( {
 		[] // empty deps means it runs once
 	);
 
+	// Use `defaultValue` instead of `value` because updates are debounced.
 	return (
 		<DivRow { ...rest }>
 			<div className="og-input-group">
