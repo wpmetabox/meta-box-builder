@@ -4,7 +4,7 @@ import useSettings from "../hooks/useSettings";
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
-const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) => {
+const AdminColumnsPosition = ( { componentId, defaultValue, updateField, ...rest } ) => {
 	const { getObjectType } = useSettings();
 	const objectType = getObjectType();
 
@@ -21,14 +21,29 @@ const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) =>
 
 	fields = [ ...objectTypeFields( objectType ), ...fields ];
 
+	const handleChangeType = e => updateField( 'admin_columns.position.type', e.target.value );
+	const handleChangeColumn = ( inputRef, value ) => updateField( 'admin_columns.position.column', value );
+	const handleSelectColumn = ( inputRef, value ) => {
+		inputRef.current.value = value;
+		updateField( 'admin_columns.position.column', value );
+	};
+
 	return (
 		<DivRow { ...rest }>
-			<select name={ `${ name }[type]` } defaultValue={ defaultValue.type || 'after' }>
+			<select defaultValue={ defaultValue.type || 'after' } onChange={ handleChangeType }>
 				<option value="after">{ __( 'After', 'meta-box-builder' ) }</option>
 				<option value="before">{ __( 'Before', 'meta-box-builder' ) }</option>
 				<option value="replace">{ __( 'Replace', 'meta-box-builder' ) }</option>
 			</select>
-			<FieldInserter id={ componentId } name={ `${ name }[column]` } defaultValue={ defaultValue.column || defaultColumn } items={ fields } isID={ true } exclude={ objectTypeFields( objectType ) } />
+			<FieldInserter
+				id={ componentId }
+				defaultValue={ defaultValue.column || defaultColumn }
+				items={ fields }
+				isID={ true }
+				exclude={ objectTypeFields( objectType ) }
+				onChange={ handleChangeColumn }
+				onSelect={ handleSelectColumn }
+			/>
 		</DivRow>
 	);
 };

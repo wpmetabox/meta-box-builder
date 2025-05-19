@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import dotProp from 'dot-prop';
 import { create } from 'zustand';
 import { ensureArray, ucwords, uniqid } from './functions';
 import useNavPanel from './hooks/useNavPanel';
@@ -142,6 +143,32 @@ const createList = ( { id = '', fields = [] } ) => {
 				return;
 			}
 
+			// Handle dot notation for nested properties
+			if ( key.includes( '.' ) ) {
+				// Create a deep clone of the field to avoid reference issues
+				const updatedField = structuredClone( field );
+
+				// Get the current value using dot notation
+				const currentValue = dotProp.get( field, key );
+
+				// Don't update if the value is the same
+				if ( currentValue === value ) {
+					return;
+				}
+
+				// Set the value using dot notation
+				dotProp.set( updatedField, key, value );
+
+				set( state => ( {
+					fields: state.fields.map( f =>
+						f._id === fieldId ? updatedField : f
+					)
+				} ) );
+
+				return;
+			}
+
+			// Handle regular (non-dot notation) keys
 			// Don't update if the value is the same.
 			if ( field[ key ] === value ) {
 				return;
