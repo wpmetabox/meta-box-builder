@@ -1,5 +1,6 @@
 Must:
 [ ] Merge từ master vào
+[ ] Fix when add new field, unique _id is updated/generated from name
 [ ] Chỉ render panel field settings khi chọn 1 field
 	[ ] Ajax save data
 	[ ] Show alert when saving successfully

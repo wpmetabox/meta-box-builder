@@ -44,16 +44,6 @@ export const parseQueryString = queryString => {
 	return convert( params );
 };
 
-export const getFieldValue = key => {
-	const data = serializeForm( document.querySelector( '#post' ) );
-	return dotProp.get( data, bracketsToDots( key ) );
-};
-
-const serializeForm = form => {
-	const formData = new FormData( form );
-	return convert( formData );
-};
-
 // Convert form data and query string to objects.
 const convert = params => {
 	const data = {};
