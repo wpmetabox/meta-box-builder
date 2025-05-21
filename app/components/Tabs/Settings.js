@@ -25,6 +25,8 @@ const Settings = () => {
 
 	const handleTranslationChange = event => setIsModalOpen( event.target.value === 'advanced' );
 
+	const hasTranslation = settingsControls.some( control => control.setting === 'translation' );
+
 	return (
 		<>
 			{ settingsControls.map( control => control.setting === 'translation'
@@ -54,8 +56,13 @@ const Settings = () => {
 					</Suspense>
 				)
 			) }
-			<TranslationModal isOpen={ isModalOpen } onClose={ () => setIsModalOpen( false ) } settings={ settings } updateSettings={ updateSettings } />
-			<input type="hidden" name="settings[fields_translations]" value={ JSON.stringify( settings?.fields_translations || {} ) } />
+			{
+				hasTranslation &&
+				<>
+					<TranslationModal isOpen={ isModalOpen } onClose={ () => setIsModalOpen( false ) } settings={ settings } updateSettings={ updateSettings } />
+					<input type="hidden" name="settings[fields_translations]" value={ JSON.stringify( settings?.fields_translations || {} ) } />
+				</>
+			}
 		</>
 	);
 };
