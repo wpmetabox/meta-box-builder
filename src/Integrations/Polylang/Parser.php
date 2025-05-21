@@ -6,8 +6,11 @@ class Parser {
 	private $fields_translations = [];
 
 	public function __construct() {
-		add_filter( 'mbb_save_settings', [ $this, 'save_fields_translations_to_settings' ] );
-		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_translation_settings' ] );
+		if ( function_exists( 'pll_register_string' ) ) {
+			add_filter( 'mbb_save_settings', [ $this, 'save_fields_translations_to_settings' ] );
+			add_filter( 'mbb_meta_box_settings', [ $this, 'parse_translation_settings' ] );
+		}
+
 		add_filter( 'mbb_app_data', [ $this, 'filter_data_to_app' ] );
 	}
 
@@ -79,16 +82,20 @@ class Parser {
 		}
 	}
 
-	/**
-	 * Backward compatibility: send fields_translations as an array to the JS app.
-	 * Previous versions stored fields_translations as a JSON string.
-	 */
 	public function filter_data_to_app( array $data ): array {
-		if ( empty( $data['settings']['fields_translations'] ) || ! is_string( $data['settings']['fields_translations'] ) ) {
+		if ( empty( $data['settings'] ) || ! is_array( $data['settings'] ) ) {
 			return $data;
 		}
 
-		$data['settings']['fields_translations'] = $this->parse_json( $data['settings']['fields_translations'] );
+		$settings = &$data['settings'];
+
+		// Fix fields_translations data still stored in settings when Polylang is not active and it grows after saving field groups.
+		if ( ! function_exists( 'pll_register_string' ) ) {
+			unset( $settings['fields_translations'] );
+			return $data;
+		}
+
+		$settings = $this->save_fields_translations_to_settings( $settings );
 
 		return $data;
 	}
