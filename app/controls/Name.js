@@ -7,7 +7,7 @@ import DivRow from './DivRow';
  * Fix cursor jumping to the end of the `<input>` after typing.
  * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
  */
-const Name = ( { name, componentId, field, updateField, ...rest } ) => {
+const Name = ( { componentId, field, updateField, ...rest } ) => {
 	const [ value, setValue ] = useState( field.name );
 
 	// Live update value with incoming change, which can happen when the field is changed from FieldLabel in live preview.
@@ -63,7 +63,6 @@ const Name = ( { name, componentId, field, updateField, ...rest } ) => {
 			<input
 				type="text"
 				id={ componentId }
-				name={ name }
 				value={ value }
 				onBlur={ stopGeneratingId }
 				onInput={ handleChange }

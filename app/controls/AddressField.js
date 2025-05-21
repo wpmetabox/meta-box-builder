@@ -3,7 +3,7 @@ import useSettings from '../hooks/useSettings';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
-const AddressField = ( { name, componentId, placeholder, defaultValue, ...rest } ) => {
+const AddressField = ( { componentId, placeholder, defaultValue, updateField, ...rest } ) => {
 	const { getPrefix } = useSettings();
 
 	// Select only text and select fields.
@@ -11,14 +11,27 @@ const AddressField = ( { name, componentId, placeholder, defaultValue, ...rest }
 		.filter( field => [ 'text', 'select' ].includes( field.type ) )
 		.map( field => [ field.id, `${ field.name } (${ field.id })` ] );
 
-	const handleSelectItem = ( inputRef, value ) => {
+	const handleChange = ( inputRef, value ) => updateField( 'address_field', value );
+
+	const handleSelect = ( inputRef, value ) => {
 		const address = !inputRef.current.value ? '' : inputRef.current.value + ',';
 		inputRef.current.value = address + `${ getPrefix() || '' }${ value }`;
+
+		updateField( 'address_field', inputRef.current.value );
 	};
+
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<FieldInserter id={ componentId } name={ name } defaultValue={ defaultValue } placeholder={ placeholder } required={ true } items={ fields } onSelect={ handleSelectItem } />
+			<FieldInserter
+				id={ componentId }
+				defaultValue={ defaultValue }
+				placeholder={ placeholder }
+				required={ true }
+				items={ fields }
+				onChange={ handleChange }
+				onSelect={ handleSelect }
+			/>
 		</DivRow>
 	);
 };

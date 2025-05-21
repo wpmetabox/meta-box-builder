@@ -4,6 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Header from './components/Header';
 import Main from './components/Main';
 import Nav from "./components/Nav";
+import { initSaveForm } from './save';
 
 const Layout = ( { children } ) => (
 	<ErrorBoundary fallback={ <p>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</p> }>
@@ -61,21 +62,7 @@ form.addEventListener( 'keydown', preventSubmitWhenPressEnter );
 form.addEventListener( 'keyup', preventSubmitWhenPressEnter );
 
 // Set post status when clicking submit buttons.
-form.addEventListener( 'submit', e => {
-	const submitButton = e.submitter;
-	const status = submitButton.dataset.status;
-	const originalStatus = document.querySelector( '#original_post_status' ).value;
-	if ( originalStatus !== status ) {
-		document.querySelector( '[name="messages"]' ).setAttribute( 'name', MbbApp.status !== 'publish' ? 'publish' : 'save' );
-	}
-	if ( originalStatus === 'auto-draft' && status === 'draft' ) {
-		document.querySelector( '[name="messages"]' ).setAttribute( 'name', 'save' );
-	}
-
-	submitButton.disabled = true;
-	submitButton.setAttribute( 'value', MbbApp.saving );
-	document.querySelector( '[name="post_status"]' ).setAttribute( 'value', status );
-} );
+initSaveForm();
 
 // Auto collapse the admin menu.
 document.body.classList.add( 'folded' );

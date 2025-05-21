@@ -1,5 +1,13 @@
 Must:
 [ ] Merge từ master vào
+[ ] Fix when add new field, unique _id is updated/generated from name
+[ ] Chỉ render panel field settings khi chọn 1 field
+	[ ] Ajax save data
+	[ ] Show alert when saving successfully
+	[ ] Check all PHP code to hook to save process
+		[ ] Blocks.php
+	[ ] Check DashiconPicker in Block.js
+	[ ] FieldInserter
 
 Nice to have:
 
@@ -8,7 +16,6 @@ Nice to have:
 [ ] Thay đổi field type
 [ ] Object field, chuyển chọn field type thành icon
 [ ] Switch to field khi có trường required chưa điền
-[ ] Chỉ render panel field settings khi chọn 1 field
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
