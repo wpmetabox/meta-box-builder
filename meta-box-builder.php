@@ -31,7 +31,7 @@ if ( ! function_exists( 'mb_builder_load' ) ) {
 			return;
 		}
 
-		define( 'MBB_VER', '5.0.0-alpha' );
+		define( 'MBB_VER', '5.0.0-beta' );
 		define( 'MBB_DIR', trailingslashit( __DIR__ ) );
 
 		list( , $url ) = \RWMB_Loader::get_path( MBB_DIR );
