@@ -1,3 +1,7 @@
+### 4.11.1 - 2025-05-21
+
+- Fix `fields_translations` settings still available and grows rapidly event when Polylang is not active
+
 ### 4.11.0 - 2025-05-08
 
 Add integration for Polylang & improve the integration with WPML: allow translating settings pages/relationships/fields' labels and also value. For more details, please see this [blog post](https://metabox.io/wpml-polylang-integrations-improvements/).
