@@ -6,10 +6,6 @@ import getList from '../list-functions';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
-/**
- * Fix cursor jumping to the end of the `<input>` after typing.
- * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
- */
 const GroupTitle = ( { name, componentId, field, updateField, ...rest } ) => {
 	const { getPrefix } = useSettings();
 
