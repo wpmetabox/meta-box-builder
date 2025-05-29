@@ -12,7 +12,8 @@ Must:
 Nice to have:
 
 [ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
-[ ] Column
+[ ] Column khi enable thì sẽ show label ở trên, input ở dưới
+[ ] Live preview khi thay đổi số column
 [ ] Thay đổi field type
 [ ] Object field, chuyển chọn field type thành icon
 [ ] Switch to field khi có trường required chưa điền
