@@ -1,5 +1,4 @@
 import { Button, Flex, SelectControl } from "@wordpress/components";
-import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { maybeArrayToObject, uniqid } from '../functions';
 import useAllFields from "../hooks/useAllFields";
@@ -8,20 +7,23 @@ import FieldInserter from './FieldInserter';
 
 const ConditionalLogic = ( { defaultValue, updateField } ) => {
 	const setting = defaultValue;
+	const rules = maybeArrayToObject( setting.when, 'id' );
 
-	const [ rules, setRules ] = useState( maybeArrayToObject( setting.when, 'id' ) );
-	const addRule = () => setRules( prev => {
+	const addRule = () => {
 		const newRule = { name: '', operator: '=', value: '', id: uniqid() };
-		const newRules = { ...prev, [ newRule.id ]: newRule };
-		updateField( 'conditional_logic.when', newRules );
-		return newRules;
-	} );
-	const removeRule = id => setRules( prev => {
-		const newRules = { ...prev };
+
+		updateField( 'conditional_logic.when', {
+			...rules,
+			[ newRule.id ]: newRule,
+		} );
+	};
+
+	const removeRule = id => {
+		const newRules = { ...rules };
 		delete newRules[ id ];
+
 		updateField( 'conditional_logic.when', newRules );
-		return newRules;
-	} );
+	};
 
 	return (
 		<div className="og-include-exclude">
