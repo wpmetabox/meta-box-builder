@@ -8,6 +8,7 @@ Must:
 		[ ] Blocks.php
 	[ ] Check DashiconPicker in Block.js
 	[ ] FieldInserter
+	[ ] ReactSelect (used for both field settings (post, taxonomy) and field group settings)
 
 Nice to have:
 
