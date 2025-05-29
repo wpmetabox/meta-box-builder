@@ -231,3 +231,14 @@ export const scrollIntoView = id => {
 		element.scrollIntoView( { behavior: 'smooth', block: 'center' } );
 	}
 };
+
+export const maybeArrayToObject = ( arr, key ) => {
+	if ( Array.isArray( arr ) ) {
+		return arr.reduce( ( obj, item ) => {
+			obj[ item[ key ] ] = item;
+			return obj;
+		}, {} );
+	}
+
+	return typeof arr === 'object' ? arr : {};
+};
