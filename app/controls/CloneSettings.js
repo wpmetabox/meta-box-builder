@@ -1,5 +1,5 @@
 import { Button, Dropdown } from "@wordpress/components";
-import { useCallback, useEffect, useReducer, useRef, useState } from "@wordpress/element";
+import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { close } from "@wordpress/icons";
 import { debounce } from 'lodash';
@@ -25,18 +25,12 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 	return <div ref={ ref }>{ children }</div>;
 };
 
-const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
-	const [ sort_clone, toggleSortClone ] = useReducer( on => !on, defaultValue.sort_clone );
-	const [ clone_default, toggleCloneDefault ] = useReducer( on => !on, defaultValue.clone_default );
-	const [ clone_as_multiple, toggleCloneAsMultiple ] = useReducer( on => !on, defaultValue.clone_as_multiple );
-	const [ min_clone, setMinClone ] = useState( defaultValue.min_clone );
-	const [ max_clone, setMaxClone ] = useState( defaultValue.max_clone );
-	const [ add_button, setAddButton ] = useState( defaultValue.add_button );
-
-	const toggleClone = e => updateField( 'clone', e.target.checked );
-	const toggleCloneEmptyStart = e => updateField( 'clone_empty_start', e.target.checked );
+const CloneSettings = ( { componentId, defaultValue, updateField, ...rest } ) => {
+	const toggle = name => e => updateField( name, e.target.checked );
+	const update = name => e => updateField( name, e.target.value );
 
 	// Live update to the input, and debounce update to the field.
+	const [ add_button, setAddButton ] = useState( defaultValue.add_button );
 	const updateAddButton = e => setAddButton( e.target.value );
 	const debouncedUpdateAddButton = useCallback(
 		debounce( value => updateField( 'add_button', value ), 300 ),
@@ -54,20 +48,9 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 				contentClassName="og og-clone__content"
 				focusOnMount={ false }
 				renderToggle={ ( { onToggle } ) => (
-					<>
-						<label className={ `og-status ${ defaultValue.clone ? 'og-status--active' : '' }` } onClick={ onToggle }>
-							{ __( 'Cloneable', 'meta-box-builder' ) }
-						</label>
-
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone' ) }` } value={ defaultValue.clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'sort_clone' ) }` } value={ sort_clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_default' ) }` } value={ clone_default } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_empty_start' ) }` } value={ defaultValue.clone_empty_start } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'clone_as_multiple' ) }` } value={ clone_as_multiple } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'min_clone' ) }` } value={ min_clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'max_clone' ) }` } value={ max_clone } />
-						<input type="hidden" name={ `${ name.replace( 'clone_settings', 'add_button' ) }` } value={ add_button } />
-					</>
+					<label className={ `og-status ${ defaultValue.clone ? 'og-status--active' : '' }` } onClick={ onToggle }>
+						{ __( 'Cloneable', 'meta-box-builder' ) }
+					</label>
 				) }
 				renderContent={ ( { onToggle } ) => (
 					<OutsideClickDetector onClickOutside={ onToggle }>
@@ -77,32 +60,32 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 							label={ __( 'Make the field cloneable', 'meta-box-builder' ) }
 							defaultValue={ defaultValue.clone }
 							componentId={ `${ componentId }-clone` }
-							onChange={ toggleClone }
+							onChange={ toggle( 'clone' ) }
 						/>
 						<Toggle
 							label={ __( 'Start with no inputs', 'meta-box-builder' ) }
 							tooltip={ __( 'Show no inputs at first except the "+ Add more" button', 'meta-box-builder' ) }
-							onChange={ toggleCloneEmptyStart }
+							onChange={ toggle( 'clone_empty_start' ) }
 							defaultValue={ defaultValue.clone_empty_start }
 							componentId={ `${ componentId }-clone_empty_start` }
 						/>
 						<Toggle
 							label={ __( 'Allow to reorder clones', 'meta-box-builder' ) }
-							onChange={ toggleSortClone }
-							defaultValue={ sort_clone }
+							onChange={ toggle( 'sort_clone' ) }
+							defaultValue={ defaultValue.sort_clone }
 							componentId={ `${ componentId }-sortable` }
 						/>
 						<Toggle
 							label={ __( 'Set default values for new clones', 'meta-box-builder' ) }
-							onChange={ toggleCloneDefault }
-							defaultValue={ clone_default }
+							onChange={ toggle( 'clone_default' ) }
+							defaultValue={ defaultValue.clone_default }
 							componentId={ `${ componentId }-clone_default` }
 						/>
 						<Toggle
 							label={ __( 'Save in multiple rows', 'meta-box-builder' ) }
 							tooltip={ __( 'Save each clone in a single row instead of saving all clones in one serialized row in the database', 'meta-box-builder' ) }
-							onChange={ toggleCloneAsMultiple }
-							defaultValue={ clone_as_multiple }
+							onChange={ toggle( 'clone_as_multiple' ) }
+							defaultValue={ defaultValue.clone_as_multiple }
 							componentId={ `${ componentId }-clone_as_multiple` }
 						/>
 						<DivRow label={ __( 'Number of clones', 'meta-box-builder' ) }>
@@ -112,16 +95,16 @@ const CloneSettings = ( { name, componentId, defaultValue, updateField, ...rest 
 									type="number"
 									min="0"
 									id={ `${ componentId }-min_clone` }
-									defaultValue={ min_clone }
-									onChange={ e => setMinClone( e.target.value ) }
+									defaultValue={ defaultValue.min_clone }
+									onChange={ update( 'min_clone' ) }
 								/>
 								<label htmlFor={ `${ componentId }-max_clone` }>{ __( 'Max', 'meta-box-builder' ) }</label>
 								<input
 									type="number"
 									min="0"
 									id={ `${ componentId }-max_clone` }
-									defaultValue={ max_clone }
-									onChange={ e => setMaxClone( e.target.value ) }
+									defaultValue={ defaultValue.max_clone }
+									onChange={ update( 'max_clone' ) }
 								/>
 							</div>
 						</DivRow>
