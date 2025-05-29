@@ -1,14 +1,14 @@
 import { RangeControl } from '@wordpress/components';
-import { useState } from '@wordpress/element';
 import DivRow from './DivRow';
 
-const Range = ( { name, defaultValue, ...rest } ) => {
-	const [ value, setValue ] = useState( defaultValue );
+const Range = ( { name, defaultValue, updateField, ...rest } ) => {
+	const update = value => updateField( name, value );
 
-	return <DivRow { ...rest }>
-		<RangeControl min={ 1 } max={ 12 } initialPosition={ 12 } value={ value } onChange={ setValue } />
-		<input type="hidden" name={ name } defaultValue={ value } />
-	</DivRow>;
+	return (
+		<DivRow { ...rest }>
+			<RangeControl min={ 1 } max={ 12 } initialPosition={ 12 } value={ defaultValue } onChange={ update } />
+		</DivRow>
+	);
 };
 
 export default Range;

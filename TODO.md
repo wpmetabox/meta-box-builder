@@ -1,14 +1,23 @@
 Must:
 [ ] Merge từ master vào
+[ ] Fix when add new field, unique _id is updated/generated from name
+[ ] Chỉ render panel field settings khi chọn 1 field
+	[ ] Ajax save data
+	[ ] Show alert when saving successfully
+	[ ] Check all PHP code to hook to save process
+		[ ] Blocks.php
+	[ ] Check DashiconPicker in Block.js
+	[ ] FieldInserter
+	[ ] ReactSelect (used for both field settings (post, taxonomy) and field group settings)
 
 Nice to have:
 
 [ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
-[ ] Column
+[ ] Column khi enable thì sẽ show label ở trên, input ở dưới
+[ ] Live preview khi thay đổi số column
 [ ] Thay đổi field type
 [ ] Object field, chuyển chọn field type thành icon
 [ ] Switch to field khi có trường required chưa điền
-[ ] Chỉ render panel field settings khi chọn 1 field
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships

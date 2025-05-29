@@ -1,31 +1,32 @@
-import { useRef, useState } from "@wordpress/element";
+import { useState } from "@wordpress/element";
 import DivRow from './DivRow';
 
-const FileSize = ( { defaultValue, componentId, name, ...rest } ) => {
-	const [ value, setValue ] = useState( defaultValue );
-	const numberRef = useRef();
-	const suffixRef = useRef();
+const FileSize = ( { defaultValue, componentId, name, updateField, ...rest } ) => {
+	const [ number, setNumber ] = useState( defaultValue.replace( /[^0-9]+/, '' ).trim() );
+	const [ suffix, setSuffix ] = useState( defaultValue.replace( /[0-9]+/, '' ).trim() || 'kb' );
 
-	const number = value.replace( /[^0-9]+/, '' ).trim();
-	const suffix = value.replace( /[0-9]+/, '' ).trim() || 'kb';
-
-	const sanitizedValue = number && suffix ? value : '';
-
-	const update = () => setValue( `${ numberRef.current.value }${ suffixRef.current.value }` );
+	const updateNumber = e => {
+		setNumber( e.target.value );
+		const value = e.target.value && suffix ? `${ e.target.value }${ suffix }` : '';
+		updateField( name, value );
+	};
+	const updateSuffix = e => {
+		setSuffix( e.target.value );
+		const value = number && e.target.value ? `${ number }${ e.target.value }` : '';
+		updateField( name, value );
+	};
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<input type="hidden" name={ name } defaultValue={ sanitizedValue } />
 			<div className="og-input-group og-input-group--small">
 				<input
 					type="number"
 					min="0"
 					id={ componentId }
-					ref={ numberRef }
-					defaultValue={ number }
-					onChange={ update }
+					value={ number }
+					onChange={ updateNumber }
 				/>
-				<select ref={ suffixRef } defaultValue={ suffix } onChange={ update }>
+				<select value={ suffix } onChange={ updateSuffix }>
 					<option value="kb">KB</option>
 					<option value="mb">MB</option>
 					<option value="gb">GB</option>

@@ -1,3 +1,4 @@
+import { Button, Flex } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import FieldInserter from '../../../controls/FieldInserter';
@@ -26,13 +27,13 @@ const ConditionalLogic = () => {
 					removeRule={ removeRule }
 				/> )
 			}
-			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
+			<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 		</>
 	);
 };
 
 const Intro = ( { name, setting } ) => (
-	<div className="og-include-exclude__intro">
+	<Flex gap={ 1 } align="center" className="og-include-exclude__intro">
 		<select name={ `${ name }[type]` } defaultValue={ setting.type || 'visible' }>
 			<option value="visible">{ __( 'Visible', 'meta-box-builder' ) }</option>
 			<option value="hidden">{ __( 'Hidden', 'meta-box-builder' ) }</option>
@@ -43,7 +44,7 @@ const Intro = ( { name, setting } ) => (
 			<option value="and">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'conditions match', 'meta-box-builder' ) }
-	</div>
+	</Flex>
 );
 
 const Rule = ( { rule, name, removeRule } ) => {
@@ -77,7 +78,7 @@ const Rule = ( { rule, name, removeRule } ) => {
 				<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
 			</select>
 			<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ name }[value]` } />
-			<a href="#" className="og-include-exclude__remove" onClick={ () => removeRule( rule.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
+			<Button variant="link" isDestructive={ true } onClick={ () => removeRule( rule.id ) } text={ __( 'Remove', 'meta-box-builder' ) } />
 		</div>
 	);
 };
