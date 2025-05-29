@@ -1,3 +1,4 @@
+import { Button, Flex } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import KeyValue from '../../../controls/KeyValue';
@@ -26,13 +27,13 @@ const ShowHide = () => {
 					removeRule={ removeRule }
 				/> )
 			}
-			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
+			<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 		</>
 	);
 };
 
 const Intro = ( { name, setting } ) => (
-	<div className="og-include-exclude__intro">
+	<Flex gap={ 1 } align="center" className="og-include-exclude__intro">
 		<select name={ `${ name }[type]` } defaultValue={ setting.type || 'show' }>
 			<option value="show">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="hide">{ __( 'Hide', 'meta-box-builder' ) }</option>
@@ -43,7 +44,7 @@ const Intro = ( { name, setting } ) => (
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'conditions match', 'meta-box-builder' ) }
-	</div>
+	</Flex>
 );
 
 const Rule = ( { rule, baseName, removeRule } ) => {
@@ -100,7 +101,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 					defaultValue={ name === rule.name ? rule.value : {} }
 				/>
 			}
-			<a href="#" className="og-include-exclude__remove" onClick={ () => removeRule( rule.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
+			<Button variant="link" isDestructive={ true } onClick={ () => removeRule( rule.id ) } text={ __( 'Remove', 'meta-box-builder' ) } />
 		</div>
 	);
 };
