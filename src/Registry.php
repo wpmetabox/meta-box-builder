@@ -415,7 +415,7 @@ class Registry {
 			] ),
 
 			// Fieldset text.
-			'options_fieldset_text'        => Control::ControlledKeyValue( 'options', [
+			'options_fieldset_text'        => Control::KeyValue( 'options', [
 				'label'            => __( 'Inputs', 'meta-box-builder' ),
 				'valuePlaceholder' => __( 'Enter label', 'meta-box-builder' ),
 			] ),
