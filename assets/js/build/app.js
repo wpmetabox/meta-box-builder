@@ -4249,14 +4249,6 @@ var map = {
 		"./app/controls/ConditionalLogic.js",
 		"app_controls_ConditionalLogic_js"
 	],
-	"./ControlledKeyValue": [
-		"./app/controls/ControlledKeyValue.js",
-		"app_controls_ControlledKeyValue_js"
-	],
-	"./ControlledKeyValue.js": [
-		"./app/controls/ControlledKeyValue.js",
-		"app_controls_ControlledKeyValue_js"
-	],
 	"./DashiconPicker": [
 		"./app/controls/DashiconPicker.js"
 	],
@@ -4835,13 +4827,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _DivRow__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DivRow */ "./app/controls/DivRow.js");
-/* harmony import */ var _FieldInserter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./FieldInserter */ "./app/controls/FieldInserter.js");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../../../../functions */ "./app/functions.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _DivRow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DivRow */ "./app/controls/DivRow.js");
+/* harmony import */ var _FieldInserter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./FieldInserter */ "./app/controls/FieldInserter.js");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../../../../functions */ "./app/functions.js");
+
 
 
 
@@ -4851,80 +4846,102 @@ __webpack_require__.r(__webpack_exports__);
 const KeyValue = ({
   defaultValue,
   name,
-  keyPlaceholder = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter key', 'meta-box-builder'),
-  valuePlaceholder = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter value', 'meta-box-builder'),
+  keyPlaceholder = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter key', 'meta-box-builder'),
+  valuePlaceholder = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter value', 'meta-box-builder'),
   keys = [],
   values = [],
   description = '',
   className = 'og-attribute-wrapper',
+  updateField,
   ...rest
 }) => {
-  const [items, setItems] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(Object.values(defaultValue || {}));
-  const add = () => setItems(prev => [...prev, {
-    key: '',
-    value: '',
-    id: (0,_functions__WEBPACK_IMPORTED_MODULE_5__.uniqid)()
-  }]);
-  const remove = id => setItems(prev => prev.filter(item => item.id !== id));
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DivRow__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  defaultValue = (0,_functions__WEBPACK_IMPORTED_MODULE_6__.maybeArrayToObject)(defaultValue, 'id');
+  const add = () => {
+    const newItem = {
+      key: '',
+      value: '',
+      id: (0,_functions__WEBPACK_IMPORTED_MODULE_6__.uniqid)()
+    };
+    updateField(name, {
+      ...defaultValue,
+      [newItem.id]: newItem
+    });
+  };
+  const remove = id => {
+    const newItems = {
+      ...defaultValue
+    };
+    delete newItems[id];
+    updateField(name, newItems);
+  };
+  const updateItem = (id, prop, value) => updateField(name, {
+    ...defaultValue,
+    [id]: {
+      ...defaultValue[id],
+      [prop]: value
+    }
+  });
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DivRow__WEBPACK_IMPORTED_MODULE_4__["default"], {
     className: className,
     ...rest
-  }, description && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.RawHTML, {
+  }, description && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.RawHTML, {
     className: "og-description"
-  }, description), items.map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Item, {
+  }, description), Object.values(defaultValue || {}).map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Item, {
     key: item.id,
     item: item,
     remove: remove,
-    name: `${name}[${item.id}]`,
     keysList: keys,
     values: `${name}-values`,
     valuesList: values,
     keyPlaceholder: keyPlaceholder,
-    valuePlaceholder: valuePlaceholder
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
-    type: "button",
-    className: "button",
-    onClick: add
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('+ Add New', 'meta-box-builder')));
+    valuePlaceholder: valuePlaceholder,
+    updateItem: updateItem
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "secondary",
+    onClick: add,
+    text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('+ Add New', 'meta-box-builder')
+  }));
 };
 const Item = ({
-  name,
   keysList,
   valuesList,
   item,
   remove,
   keyPlaceholder,
-  valuePlaceholder
+  valuePlaceholder,
+  updateItem
 }) => {
-  const [values, setValues] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(valuesList);
-  const handleSelect = (inputRef, value) => {
+  const [values, setValues] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(valuesList);
+  const updateKey = (inputRef, value) => {
     inputRef.current.value = value;
+    updateItem(item.id, 'key', value);
     const newValuesList = objectDepth(valuesList) == 1 ? valuesList : Array.isArray(valuesList[value]) ? valuesList[value] : valuesList['default'];
     setValues(newValuesList || []);
   };
+  const updateValue = (inputRef, value) => {
+    inputRef.current.value = value;
+    updateItem(item.id, 'value', value);
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "og-attribute"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "hidden",
-    name: `${name}[id]`,
-    defaultValue: item.id
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldInserter__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldInserter__WEBPACK_IMPORTED_MODULE_5__["default"], {
     placeholder: keyPlaceholder,
-    name: `${name}[key]`,
     defaultValue: item.key,
     items: keysList,
-    onSelect: handleSelect,
-    onChange: handleSelect
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldInserter__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    onSelect: updateKey,
+    onChange: updateKey
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldInserter__WEBPACK_IMPORTED_MODULE_5__["default"], {
     placeholder: valuePlaceholder,
-    name: `${name}[value]`,
     defaultValue: item.value,
-    items: values
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("a", {
-    href: "#",
-    className: "og-remove",
-    onClick: () => remove(item.id)
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Remove', 'meta-box-builder')));
+    items: values,
+    onSelect: updateValue,
+    onChange: updateValue
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "link",
+    isDestructive: true,
+    onClick: () => remove(item.id),
+    text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove', 'meta-box-builder')
+  }));
 };
 const objectDepth = object => Object(object) === object ? 1 + Math.max(-1, ...Object.values(object).map(objectDepth)) : 0;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (KeyValue);
@@ -5198,25 +5215,19 @@ const Toggle = ({
   ...rest
 }) => {
   const toggleDependencies = (0,_hooks_useToggle__WEBPACK_IMPORTED_MODULE_3__.useToggle)(componentId);
-  const toggle = e => {
+  const handleChange = e => {
     toggleDependencies();
-    updateField && updateField(name, e.target.checked);
+    updateField(name, e.target.checked);
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DivRow__WEBPACK_IMPORTED_MODULE_1__["default"], {
     ...rest
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", {
     className: "og-toggle"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "hidden",
-    name: name,
-    value: false
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "checkbox",
     id: componentId,
-    name: name,
-    onChange: toggle,
-    defaultChecked: defaultValue,
-    value: true
+    onChange: handleChange,
+    defaultChecked: defaultValue
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "og-toggle__switch"
   }), label, tooltip && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Tooltip__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -5323,6 +5334,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   htmlDecode: () => (/* binding */ htmlDecode),
 /* harmony export */   inside: () => (/* binding */ inside),
 /* harmony export */   isPositiveInteger: () => (/* binding */ isPositiveInteger),
+/* harmony export */   maybeArrayToObject: () => (/* binding */ maybeArrayToObject),
 /* harmony export */   parseQueryString: () => (/* binding */ parseQueryString),
 /* harmony export */   sanitizeId: () => (/* binding */ sanitizeId),
 /* harmony export */   scrollIntoView: () => (/* binding */ scrollIntoView),
@@ -5596,6 +5608,15 @@ const scrollIntoView = id => {
       block: 'center'
     });
   }
+};
+const maybeArrayToObject = (arr, key) => {
+  if (Array.isArray(arr)) {
+    return arr.reduce((obj, item) => {
+      obj[item[key]] = item;
+      return obj;
+    }, {});
+  }
+  return typeof arr === 'object' ? arr : {};
 };
 
 /***/ }),
@@ -5924,22 +5945,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var zustand__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! zustand */ "./node_modules/.pnpm/zustand@4.5.5_@types+react@19.1.4_react@18.3.1/node_modules/zustand/esm/index.mjs");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./functions */ "./app/functions.js");
-/* harmony import */ var _hooks_useNavPanel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./hooks/useNavPanel */ "./app/hooks/useNavPanel.js");
+/* harmony import */ var dot_prop__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dot-prop */ "./node_modules/.pnpm/dot-prop@6.0.1/node_modules/dot-prop/index.js");
+/* harmony import */ var dot_prop__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dot_prop__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var zustand__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! zustand */ "./node_modules/.pnpm/zustand@4.5.5_@types+react@19.1.4_react@18.3.1/node_modules/zustand/esm/index.mjs");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./functions */ "./app/functions.js");
+/* harmony import */ var _hooks_useNavPanel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./hooks/useNavPanel */ "./app/hooks/useNavPanel.js");
+
 
 
 
 
 const areFieldsEqual = (a, b) => a.length === b.length && a.every((field, index) => field._id === b[index]._id);
 const createNewField = type => {
-  const id = `${type}_${(0,_functions__WEBPACK_IMPORTED_MODULE_1__.uniqid)()}`;
+  const id = `${type}_${(0,_functions__WEBPACK_IMPORTED_MODULE_2__.uniqid)()}`;
   return {
     _id: id,
     _new: true,
     type,
     id,
-    name: (0,_functions__WEBPACK_IMPORTED_MODULE_1__.ucwords)(type, '_')
+    name: (0,_functions__WEBPACK_IMPORTED_MODULE_2__.ucwords)(type, '_')
   };
 };
 const lists = new Map();
@@ -5950,7 +5974,7 @@ const createList = ({
   if (lists.has(id)) {
     return lists.get(id);
   }
-  const list = (0,zustand__WEBPACK_IMPORTED_MODULE_3__.create)((set, get) => ({
+  const list = (0,zustand__WEBPACK_IMPORTED_MODULE_4__.create)((set, get) => ({
     id,
     fields,
     addFieldAt: (fieldType, position) => {
@@ -5995,7 +6019,7 @@ const createList = ({
 
       // Deep clone the field to avoid reference issues
       const newField = structuredClone(originalField);
-      const newId = `${newField.type}_${(0,_functions__WEBPACK_IMPORTED_MODULE_1__.uniqid)()}`;
+      const newId = `${newField.type}_${(0,_functions__WEBPACK_IMPORTED_MODULE_2__.uniqid)()}`;
 
       // Temporary keys used in the builder.
       delete newField._active;
@@ -6028,7 +6052,7 @@ const createList = ({
         subField._original_id = subField._id;
 
         // Change id
-        const newId = `${subField.type}_${(0,_functions__WEBPACK_IMPORTED_MODULE_1__.uniqid)()}`;
+        const newId = `${subField.type}_${(0,_functions__WEBPACK_IMPORTED_MODULE_2__.uniqid)()}`;
         subField.id = newId;
         subField._id = newId;
 
@@ -6049,7 +6073,7 @@ const createList = ({
       const {
         navPanel,
         setNavPanel
-      } = _hooks_useNavPanel__WEBPACK_IMPORTED_MODULE_2__["default"].getState();
+      } = _hooks_useNavPanel__WEBPACK_IMPORTED_MODULE_3__["default"].getState();
       set(state => ({
         fields: state.fields.filter(f => f._id !== fieldId)
       }));
@@ -6064,6 +6088,28 @@ const createList = ({
         return;
       }
 
+      // Handle dot notation for nested properties
+      if (key.includes('.')) {
+        // Create a deep clone of the field to avoid reference issues
+        const updatedField = structuredClone(field);
+
+        // Get the current value using dot notation
+        const currentValue = dot_prop__WEBPACK_IMPORTED_MODULE_1___default().get(field, key);
+
+        // Don't update if the value is the same
+        if (currentValue === value) {
+          return;
+        }
+
+        // Set the value using dot notation
+        dot_prop__WEBPACK_IMPORTED_MODULE_1___default().set(updatedField, key, value);
+        set(state => ({
+          fields: state.fields.map(f => f._id === fieldId ? updatedField : f)
+        }));
+        return;
+      }
+
+      // Handle regular (non-dot notation) keys
       // Don't update if the value is the same.
       if (field[key] === value) {
         return;
@@ -6119,7 +6165,7 @@ const getList = id => {
 // Parse fields and put into the lists.
 // Recursively put groups' fields into other lists.
 const parseLists = (obj, listId) => {
-  let fields = (0,_functions__WEBPACK_IMPORTED_MODULE_1__.ensureArray)(obj.fields);
+  let fields = (0,_functions__WEBPACK_IMPORTED_MODULE_2__.ensureArray)(obj.fields);
   fields = fields.filter(field => field.type);
   createList({
     id: listId,

@@ -3,10 +3,6 @@ import { debounce } from 'lodash';
 import { sanitizeId } from '../functions';
 import DivRow from './DivRow';
 
-/**
- * Fix cursor jumping to the end of the `<input>` after typing.
- * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
- */
 const Name = ( { componentId, field, updateField, ...rest } ) => {
 	const [ value, setValue ] = useState( field.name );
 

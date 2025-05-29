@@ -4,10 +4,6 @@ import { debounce } from 'lodash';
 import useApi from "../hooks/useApi";
 import DivRow from './DivRow';
 
-/**
- * Fix cursor jumping to the end of the `<input>` after typing.
- * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
- */
 const Id = ( { field, componentId, updateField, ...rest } ) => {
 	const ids = useApi( 'fields-ids', [] );
 	const [ existingFieldGroup, setExistingFieldGroup ] = useState( {} );
