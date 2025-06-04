@@ -9,6 +9,7 @@ Must:
 	[ ] Check DashiconPicker in Block.js
 	[ ] FieldInserter
 	[ ] ReactSelect (used for both field settings (post, taxonomy) and field group settings)
+[ ] Fix:  I had a group with many fields and then I decided to turn on this feature “Start with no inputs” and it deleted the names of every field in that group. The fields stayed, but without any name.
 
 Nice to have:
 
@@ -23,6 +24,47 @@ Nice to have:
 [ ] Update UI for creating relationships
 	[ ] Xoá react tabs
 	[ ] Xóa phần collapsible, bao gồm cả CSS
+
+[ ] Scrollbar issue (firefox on Mac)
+
+https://helpdesk.elightup.com/conversation/11098?folder_id=7
+
+[ ] 1. I don't really like that the wordpress sidebar hides every time I refresh the page, I'd like the plugin to remember my choice, whether to keep it open or closed. => Detect kích cỡ màn hình và tự collapse khi ở màn nhỏ + ghi nhớ state ở local storage.
+[ ] 2. I would keep the main central box (.mb-main) to have a max-width because at a certain point on a wide screen that can get huge! I don’t use full screen because everything get really wide in the first place :) but I have tested some CSS and I think around 80 to 100 rem max-width is good enough.
+[ ] 3. It would be great if you could include under appearance the option on how many rows I can have { "textarea_rows": 10 }, typing this every time for examples 10 times, takes a lot of time.
+[ ] 4. My last point is about the fields being display on pages, while you kept it pretty clean, it is almost too clean I would say. I would create some separation between fields of some sort, very minimalist. I have done some custom css, but would be very welcome as the core of metabox, I believe many people would agree. Here is an examples of my styling. =>  Or to create additional style and let people choose to keep it plain or to choose a style.
+
+```css
+.rwmb-field {
+gap: var(--space-m);
+}
+.rwmb-input .rwmb-input {
+padding: 1rem 0;
+}
+.rwmb-field:not(:last-of-type) {
+border-bottom: 1px solid var(--border);
+margin: 0 0 0;
+}
+.rwmb-label {
+width: 12%;
+padding: var(--space-m);
+background: var(--bg-light);
+}
+.rwmb-tabs-left {
+margin: 0;
+/*border-top: 1px solid var(--border);*/
+}
+.rwmb-tabs-left .rwmb-tab-nav {
+background: var(--bg-light);
+border-top: 1px solid #ccd0d4;
+}
+.rwmb-tabs-left .rwmb-tab-panel {
+padding: 0 1.25rem;
+}
+.edit-post-meta-boxes-area .postbox>.inside {
+padding: 1rem 1.5rem 1.5rem;
+}
+```
 
 ## Settings của field group:
 
