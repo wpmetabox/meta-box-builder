@@ -1,4 +1,5 @@
 import { fetcher } from './functions';
+import useSettings from './hooks/useSettings';
 import { lists } from './list-functions';
 
 export const initSaveForm = () => {
@@ -57,19 +58,18 @@ export const initSaveForm = () => {
 
 		// Get form data for other fields
 		const formData = new FormData( form );
-		const settings = {};
 		const data = {};
 
-		// Extract settings and data from form
+		// Extract data from form
 		for ( const [ key, value ] of formData.entries() ) {
-			if ( key.startsWith( 'settings[' ) ) {
-				const settingKey = key.replace( 'settings[', '' ).replace( /\].*$/, '' );
-				settings[ settingKey ] = value;
-			} else if ( key.startsWith( 'data[' ) ) {
+			if ( key.startsWith( 'data[' ) ) {
 				const dataKey = key.replace( 'data[', '' ).replace( /\].*$/, '' );
 				data[ dataKey ] = value;
 			}
 		}
+
+		// Get settings from useSettings store
+		const settings = useSettings.getState().settings;
 
 		// Send AJAX request
 		const response = await fetcher( 'save', {
