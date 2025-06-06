@@ -139,44 +139,26 @@ const createList = ( { id = '', fields = [] } ) => {
 		updateField: ( fieldId, key, value ) => {
 			const field = get().fields.find( f => f._id === fieldId );
 			if ( !field ) {
-				console.error( `Field with id ${ fieldId } not found.` );
 				return;
 			}
 
-			// Handle dot notation for nested properties
-			if ( key.includes( '.' ) ) {
-				// Create a deep clone of the field to avoid reference issues
-				const updatedField = structuredClone( field );
+			// Get the current value using dot notation, to be able to update nested properties.
+			const currentValue = dotProp.get( field, key );
 
-				// Get the current value using dot notation
-				const currentValue = dotProp.get( field, key );
-
-				// Don't update if the value is the same
-				if ( currentValue === value ) {
-					return;
-				}
-
-				// Set the value using dot notation
-				dotProp.set( updatedField, key, value );
-
-				set( state => ( {
-					fields: state.fields.map( f =>
-						f._id === fieldId ? updatedField : f
-					)
-				} ) );
-
+			// Don't update if the value is the same
+			if ( currentValue === value ) {
 				return;
 			}
 
-			// Handle regular (non-dot notation) keys
-			// Don't update if the value is the same.
-			if ( field[ key ] === value ) {
-				return;
-			}
+			// Create a deep clone of the field to avoid reference issues
+			const updatedField = structuredClone( field );
+
+			// Set the value using dot notation
+			dotProp.set( updatedField, key, value );
 
 			set( state => ( {
 				fields: state.fields.map( f =>
-					f._id === fieldId ? { ...f, [ key ]: value } : f
+					f._id === fieldId ? updatedField : f
 				)
 			} ) );
 		},
