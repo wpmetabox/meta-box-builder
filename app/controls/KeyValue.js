@@ -17,28 +17,28 @@ const KeyValue = ( {
 	updateField,
 	...rest
 } ) => {
-	defaultValue = maybeArrayToObject( defaultValue, 'id' );
+	const items = maybeArrayToObject( defaultValue, 'id' );
 
 	const add = () => {
 		const newItem = { key: '', value: '', id: uniqid() };
 
 		updateField( name, {
-			...defaultValue,
+			...items,
 			[ newItem.id ]: newItem,
 		} );
 	};
 
 	const remove = id => {
-		const newItems = { ...defaultValue };
+		const newItems = { ...items };
 		delete newItems[ id ];
 
 		updateField( name, newItems );
 	};
 
 	const updateItem = ( id, prop, value ) => updateField( name, {
-		...defaultValue,
+		...items,
 		[ id ]: {
-			...defaultValue[ id ],
+			...items[ id ],
 			[ prop ]: value,
 		}
 	} );
@@ -47,7 +47,7 @@ const KeyValue = ( {
 		<DivRow className={ className } { ...rest }>
 			{ description && <RawHTML className="og-description">{ description }</RawHTML> }
 			{
-				Object.values( defaultValue || {} ).map( item => (
+				Object.values( items || {} ).map( item => (
 					<Item
 						key={ item.id }
 						item={ item }
