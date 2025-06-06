@@ -1,3 +1,4 @@
+import { Button, Flex } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from '../../../controls/DivRow';
@@ -18,8 +19,8 @@ const IncludeExclude = () => {
 	return (
 		<DivRow
 			className="og-include-exclude"
-			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced rules', 'meta-box-builder' ) }</a>` }
-			tooltip={ __( 'More rules on where to display the field group. For each rule, maximum 10 items are displayed. To select other items, please use the search.', 'meta-box-builder' ) }
+			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank">${ __( 'Advanced rules', 'meta-box-builder' ) }</a>` }
+			tooltip={ __( 'More rules on where to display the field group. For each rule, maximum 10 items are displayed. To select other items, please type to search.', 'meta-box-builder' ) }
 		>
 			{ rules.length > 0 && <Intro name={ name } setting={ setting } /> }
 			{
@@ -30,13 +31,13 @@ const IncludeExclude = () => {
 					removeRule={ removeRule }
 				/> )
 			}
-			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
+			<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 		</DivRow>
 	);
 };
 
 const Intro = ( { name, setting } ) => (
-	<div className="og-include-exclude__intro">
+	<Flex gap={ 1 } align="center" className="og-include-exclude__intro">
 		<select name={ `${ name }[type]` } defaultValue={ setting.type || 'include' }>
 			<option value="include">{ __( 'Show', 'meta-box-builder' ) }</option>
 			<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
@@ -47,7 +48,7 @@ const Intro = ( { name, setting } ) => (
 			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
 		</select>
 		{ __( 'conditions match', 'meta-box-builder' ) }
-	</div>
+	</Flex>
 );
 
 const Rule = ( { rule, baseName, removeRule } ) => {
@@ -121,7 +122,7 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 					defaultValue={ rule.value }
 				/>
 			}
-			<a href="#" className="og-include-exclude__remove" onClick={ () => removeRule( rule.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
+			<Button variant="link" isDestructive={ true } onClick={ () => removeRule( rule.id ) } text={ __( 'Remove', 'meta-box-builder' ) } />
 		</div>
 	);
 };

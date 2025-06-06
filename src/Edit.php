@@ -2,6 +2,7 @@
 namespace MBB;
 
 use MBBParser\Parsers\Base as BaseParser;
+use MBBParser\Parsers\FieldJson;
 use MBBParser\Parsers\MetaBox as Parser;
 use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
@@ -54,7 +55,6 @@ class Edit extends BaseEditPage {
 
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
-			'nonce_save'    => wp_create_nonce( 'mbb-save' ),
 
 			'postTypes'     => Data::get_post_types(),
 			'taxonomies'    => Data::get_taxonomies(),
@@ -89,37 +89,7 @@ class Edit extends BaseEditPage {
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}
 
+	// Do nothing as all saving is done via REST API.
 	public function save( $post_id, $post ) {
-		// Save data for JavaScript (serialized arrays).
-		$request     = rwmb_request();
-		$base_parser = new BaseParser();
-		$settings    = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
-		$fields      = apply_filters( 'mbb_save_fields', $request->post( 'fields' ), $request );
-		$data        = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
-
-		$base_parser->set_settings( $settings )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'settings', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $fields )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'fields', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $data )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
-
-		// Save parsed data for PHP (serialized array).
-		$submitted_data = compact( 'fields', 'settings' );
-		$submitted_data = apply_filters( 'mbb_save_submitted_data', $submitted_data, $request );
-
-		// Set post title and slug in case they're auto-generated.
-		$submitted_data['post_title'] = $post->post_title;
-		$submitted_data['post_name']  = $post->post_name;
-
-		$parser = new Parser( $submitted_data );
-		$parser->parse();
-
-		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
-
-		// Allow developers to add actions after saving the meta box.
-		do_action( 'mbb_after_save', $parser, $post_id, $submitted_data );
 	}
 }
