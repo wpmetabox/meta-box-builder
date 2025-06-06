@@ -22,7 +22,39 @@ const useSettings = create( ( set, get ) => ( {
 	updatePrefix: prefix => get().updateSetting( 'prefix', prefix ),
 
 	getObjectType: () => get().getSetting( 'object_type', 'post' ),
-	updateObjectType: object_type => get().updateSetting( 'object_type', object_type ),
+	updateObjectType: value => {
+		const key = 'object_type';
+		const settings = get().settings;
+		const currentValue = dotProp.get( settings, key );
+
+		// Don't update if the value is the same
+		if ( currentValue === value ) {
+			return;
+		}
+
+		// Create a deep clone of the settings to avoid reference issues
+		const updatedSettings = structuredClone( settings );
+
+		// Set the value using dot notation
+		dotProp.set( updatedSettings, key, value );
+
+		// Remove other settings that are not relevant for the selected object type.
+		if ( value === 'post' ) {
+			dotProp.delete( updatedSettings, 'taxonomies' );
+			dotProp.delete( updatedSettings, 'settings_pages' );
+			dotProp.delete( updatedSettings, 'type' );
+		} else if ( value === 'term' ) {
+			dotProp.delete( updatedSettings, 'post_types' );
+			dotProp.delete( updatedSettings, 'settings_pages' );
+			dotProp.delete( updatedSettings, 'type' );
+		} else if ( value === 'setting' ) {
+			dotProp.delete( updatedSettings, 'post_types' );
+			dotProp.delete( updatedSettings, 'taxonomies' );
+			dotProp.delete( updatedSettings, 'type' );
+		}
+
+		set( { settings: updatedSettings } );
+	},
 
 	getPostTypes: () => sanitize( ensureArray( get().getSetting( 'post_types', [ 'post' ] ) ) ),
 	updatePostTypes: post_types => get().updateSetting( 'post_types', sanitize( post_types ) ),
