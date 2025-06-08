@@ -84,7 +84,8 @@
 	}
 }
 
-&-description {
+&-description,
+&-error {
 	font-size: 12px;
 	margin-top: 4px;
 	color: #757575;
@@ -99,8 +100,6 @@
 
 &-error {
 	color: var(--color-red);
-	font-size: 12px;
-	margin-top: 4px;
 }
 
 &-item {

@@ -76,13 +76,13 @@ const BlockJSONSettings = () => {
 			isNewer &&
 			<DivRow dependency="block_json_enable:true" label={ __( 'Synchronize block.json', 'meta-box-builder' ) }>
 				<Flex direction="column">
-					<div className="og-description" dangerouslySetInnerHTML={ {
-						__html: __( 'We detected a newer version of <code>block.json</code> from the current folder, do you want to override settings from this path?', 'meta-box-builder' )
+					<div className="og-error" dangerouslySetInnerHTML={ {
+						__html: __( 'We detected a newer version of <code>block.json</code>, do you want to override settings from this file?', 'meta-box-builder' )
 					} }></div>
 
 					<input
 						name="override_block_json"
-						value={ __( 'Override Block JSON', 'meta-box-builder' ) }
+						value={ __( 'Yes, overrite from block.json', 'meta-box-builder' ) }
 						type="submit"
 						className="button secondary"
 						onClick={ e => {
