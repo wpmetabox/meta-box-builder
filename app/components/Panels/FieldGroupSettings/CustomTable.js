@@ -5,23 +5,25 @@ import Toggle from "../../../controls/Toggle";
 import useSettings from "../../../hooks/useSettings";
 
 const CustomTable = () => {
-	const { getSetting } = useSettings();
+	const { getSetting, updateSetting } = useSettings();
 	const setting = getSetting( 'custom_table', {} );
 
 	return <>
 		<Toggle
-			name="settings[custom_table][enable]"
+			name="custom_table.enable"
 			label={ __( 'Save data in a custom table', 'meta-box-builder' ) }
 			componentId="settings-table_enable"
 			defaultValue={ !!setting.enable }
+			updateField={ updateSetting }
 		/>
 		<Toggle
 			dependency="table_enable:true"
-			name="settings[custom_table][create]"
+			name="custom_table.create"
 			label={ __( 'Auto create table', 'meta-box-builder' ) }
 			tooltip={ __( 'This settings will create the table with all columns as TEXT. Create the table manually to set proper column types for a better performance.', 'meta-box-builder' ) }
 			componentId="settings-table_create"
 			defaultValue={ !!setting.create }
+			updateField={ updateSetting }
 		/>
 		<DivRow htmlFor="settings-table_name" dependency="table_enable:true" label={ __( 'Table name', 'meta-box-builder' ) }>
 			<div className="og-input-group">
@@ -29,16 +31,15 @@ const CustomTable = () => {
 					type="text"
 					size={ 16 }
 					id="settings-table_name"
-					name="settings[custom_table][name]"
 					defaultValue={ setting.name }
+					onChange={ e => updateSetting( 'custom_table.name', e.target.value ) }
 				/>
 				<label>
-					<input type="hidden" name="settings[custom_table][prefix]" value={ false } />
 					<input
 						type="checkbox"
-						name="settings[custom_table][prefix]"
 						defaultChecked={ !!setting.prefix }
 						value={ true }
+						onChange={ e => updateSetting( 'custom_table.prefix', e.target.checked ) }
 					/>
 					<span className="dashicons dashicons-yes-alt"></span>
 					<Tooltip text={ __( 'Include the table prefix set in wp-config.php', 'meta-box-builder' ) } delay={ 0 } placement="bottom">

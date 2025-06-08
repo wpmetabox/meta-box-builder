@@ -5,16 +5,17 @@ import KeyValue from "../../../controls/KeyValue";
 import useSettings from "../../../hooks/useSettings";
 
 const Advanced = () => {
-	const { getSetting, getPrefix, updatePrefix } = useSettings();
+	const { getSetting, getPrefix, updatePrefix, updateSetting } = useSettings();
 
 	return (
 		<>
 			<Input
-				name="settings[class]"
+				name="class"
 				label={ __( 'Custom CSS class', 'meta-box-builder' ) }
 				tooltip={ __( 'Custom CSS class for the wrapper div', 'meta-box-builder' ) }
 				componentId="settings-class"
 				defaultValue={ getSetting( 'class', '' ) }
+				updateField={ updateSetting }
 			/>
 			<DivRow
 				htmlFor="settings-prefix"
@@ -24,18 +25,19 @@ const Advanced = () => {
 				<input
 					type="text"
 					id="settings-prefix"
-					name="settings[prefix]"
+					name="prefix"
 					defaultValue={ getPrefix() }
 					onChange={ e => updatePrefix( e.target.value ) }
 				/>
 			</DivRow>
 
 			<KeyValue
-				name="settings[custom_settings]"
+				name="custom_settings"
 				label={ __( 'Custom settings', 'meta-box-builder' ) }
 				tooltip={ __( 'Apply to the current field group. For individual fields, please go to each field > tab Advanced.', 'meta-box-builder' ) }
 				componentId="settings-custom_settings"
 				defaultValue={ getSetting( 'custom_settings', {} ) }
+				updateField={ updateSetting }
 			/>
 		</>
 	);

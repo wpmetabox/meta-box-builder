@@ -1,8 +1,3 @@
-## Update field group settings
-[ ] Update Tabs control
-[ ] Update CustomTable control
-[ ] Update Advanced control
-
 ## Blocks
 [ ] Update Block control
 [ ] Check DashiconPicker in Block.js
