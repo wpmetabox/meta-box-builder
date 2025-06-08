@@ -24,7 +24,7 @@ const getRenderViewId = ( renderView ) => {
 };
 
 const BlockRenderSettings = () => {
-	const { getSetting } = useSettings();
+	const { getSetting, updateSetting } = useSettings();
 	const [ renderWith, setRenderWith ] = useState( getSetting( 'render_with', 'callback' ) );
 	const [ codeEditor, setCodeEditor ] = useState();
 
@@ -33,8 +33,6 @@ const BlockRenderSettings = () => {
 
 	const addViewButtonRef = useRef();
 	const editViewButtonRef = useRef();
-
-	const codeRef = useRef();
 
 	const updateRenderWith = e => setRenderWith( e.target.value );
 
@@ -55,6 +53,7 @@ const BlockRenderSettings = () => {
 				[ postId ]: { ID: postId, post_name: postName, post_title: postTitle }
 			} );
 			setRenderView( postName );
+			updateSetting( 'render_view', postName );
 		},
 	};
 
@@ -74,6 +73,7 @@ const BlockRenderSettings = () => {
 
 	const handleSelectView = e => {
 		setRenderView( e.target.value );
+		updateSetting( 'render_view', e.target.value );
 	};
 
 	useEffect( () => {
@@ -92,31 +92,34 @@ const BlockRenderSettings = () => {
 
 	return <>
 		<Select
-			name="settings[render_with]"
+			name="render_with"
 			label={ __( 'Render with', 'meta-box-builder' ) }
 			componentId="settings-block-render_with"
 			options={ renderWithOptions }
 			defaultValue={ renderWith }
 			onChange={ updateRenderWith }
+			updateField={ updateSetting }
 		/>
 		{
 			renderWith === 'callback' &&
 			<Input
-				name="settings[render_callback]"
+				name="render_callback"
 				label={ __( 'Render callback', 'meta-box-builder' ) }
 				componentId="settings-block-render_callback"
 				placeholder={ __( 'Enter PHP function name', 'meta-box-builder' ) }
 				defaultValue={ getSetting( 'render_callback', '' ) }
+				updateField={ updateSetting }
 			/>
 		}
 		{
 			renderWith === 'template' &&
 			<Input
-				name="settings[render_template]"
+				name="render_template"
 				label={ __( 'Render template', 'meta-box-builder' ) }
 				componentId="settings-block-render_template"
 				placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) }
 				defaultValue={ getSetting( 'render_template', '' ) }
+				updateField={ updateSetting }
 			/>
 		}
 		{
@@ -125,10 +128,9 @@ const BlockRenderSettings = () => {
 				<CodeMirror
 					options={ { mode: 'php' } }
 					value={ getSetting( 'render_code', '' ) }
-					onChange={ ( editor, data, value ) => codeRef.current.value = value }
+					onChange={ ( editor, data, value ) => updateSetting( 'render_code', value ) }
 					editorDidMount={ setCodeEditor }
 				/>
-				<input type="hidden" name="settings[render_code]" ref={ codeRef } defaultValue={ getSetting( 'render_code', '' ) } />
 				<table className="og-block-description">
 					<tbody>
 						<tr>
@@ -160,7 +162,6 @@ const BlockRenderSettings = () => {
 			renderWith === 'view' && MbbApp.extensions.views &&
 			<DivRow htmlFor="settings-block-render_view" label={ __( 'Select a view', 'meta-box-builder' ) } className="og-field--block-view">
 				<select
-					name="settings[render_view]"
 					id="settings-block-render_view"
 					value={ renderView }
 					onChange={ handleSelectView }
@@ -183,25 +184,28 @@ const BlockRenderSettings = () => {
 		}
 
 		<Input
-			name="settings[enqueue_style]"
+			name="enqueue_style"
 			label={ __( 'Custom CSS', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_style"
 			placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
 			defaultValue={ getSetting( 'enqueue_style', '' ) }
+			updateField={ updateSetting }
 		/>
 		<Input
-			name="settings[enqueue_script]"
+			name="enqueue_script"
 			label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_script"
 			placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
 			defaultValue={ getSetting( 'enqueue_script', '' ) }
+			updateField={ updateSetting }
 		/>
 		<Input
-			name="settings[enqueue_assets]"
+			name="enqueue_assets"
 			label={ __( 'Custom assets callback', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_assets"
 			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
 			defaultValue={ getSetting( 'enqueue_assets', '' ) }
+			updateField={ updateSetting }
 		/>
 
 		<DivRow label={ __( 'Supported variables', 'meta-box-builder' ) } >

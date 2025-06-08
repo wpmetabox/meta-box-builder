@@ -8,7 +8,7 @@ import { fetcher } from "../../../functions";
 import useSettings from "../../../hooks/useSettings";
 
 const BlockJSONSettings = () => {
-	const { getSetting } = useSettings();
+	const { getSetting, updateSetting } = useSettings();
 	const block_json = getSetting( 'block_json', {} );
 
 	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
@@ -49,20 +49,24 @@ const BlockJSONSettings = () => {
 
 	return <>
 		<Toggle
-			name="settings[block_json][enable]"
+			name="block_json.enable"
 			label={ __( 'Generate block.json', 'meta-box-builder' ) }
 			componentId="settings-block_json_enable"
 			defaultValue={ !!block_json.enable }
+			updateField={ updateSetting }
 		/>
 
 		<Input
-			name="settings[block_json][path]"
+			name="block_json.path"
 			label={ __( 'Block folder', 'meta-box-builder' ) }
 			componentId="settings-block-path"
 			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
 			defaultValue={ block_json.path }
 			error={ blockPathError }
-			updateField={ getLocalPathData }
+			updateField={ value => {
+				updateSetting( 'block_json.path', value );
+				getLocalPathData( null, value );
+			} }
 			dependency="block_json_enable:true"
 		/>
 
