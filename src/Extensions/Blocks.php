@@ -3,7 +3,9 @@ namespace MBB\Extensions;
 
 use MBB\Helpers\Data;
 use MBBParser\Parsers\Settings;
+use MBBParser\Parsers\MetaBox as MetaBoxParser;
 use WP_REST_Request;
+use WP_REST_Server;
 
 class Blocks {
 	public function __construct() {
@@ -14,24 +16,8 @@ class Blocks {
 		add_action( 'mbb_after_save', [ $this, 'generate_block_json' ], 10, 3 );
 		add_action( 'init', [ $this, 'register_blocks' ] );
 
-		// Add filters to alter the block metadata.
-		add_filter( 'mbb_save_settings', [ $this, 'alter_settings' ], 10, 2 );
-		add_filter( 'mbb_save_fields', [ $this, 'alter_fields' ], 10, 2 );
-		add_filter( 'mbb_save_submitted_data', [ $this, 'alter_submitted_data' ], 10, 2 );
-		// add_filter( 'wp_insert_post_data', [ $this, 'alter_post_data' ], 10, 2 );
-	}
-
-	public function alter_post_data( $post_data, $post_id ) {
-		//phpcs:ignore
-		if ( ! isset( $_POST['override_block_json'] ) || ! $_POST['override_block_json'] ) {
-			return $post_data;
-		}
-		$request    = rwmb_request();
-		$block_json = self::get_block_metadata( $request );
-
-		$post_data['post_title'] = $block_json['title'];
-
-		return $post_data;
+		// Add REST API endpoint for block.json override
+		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
 	}
 
 	public static function get_block_metadata( WP_REST_Request $request ): array {
@@ -60,64 +46,6 @@ class Blocks {
 		$block_json['version'] = max( $block_json['version'], filemtime( $path_to_block_json ) );
 
 		return $block_json;
-	}
-
-	public function alter_settings( ?array $settings, WP_REST_Request $request ): ?array {
-		if ( ! is_array( $settings ) ) {
-			return $settings;
-		}
-
-		if ( ! $this->has_override_block_json( $request ) ) {
-			return $settings;
-		}
-
-		$block_json                        = self::get_block_metadata( $request );
-		$settings['description']           = $block_json['description'];
-		$icon_type                         = str_contains( $block_json['icon'], '<svg' ) ? 'svg' : 'dashicons';
-		$settings['icon_type']             = $icon_type;
-		$settings['icon']                  = $icon_type === 'dashicons' ? $block_json['icon'] : '';
-		$settings['icon_svg']              = $icon_type === 'svg' ? $block_json['icon'] : '';
-		$settings['category']              = $block_json['category'];
-		$settings['keywords']              = $block_json['keywords'];
-		$settings['block_json']['version'] = $block_json['version'];
-
-		return $settings;
-	}
-
-	public function alter_fields( ?array $fields, WP_REST_Request $request ): ?array {
-		if ( ! is_array( $fields ) || ! $this->has_override_block_json( $request ) ) {
-			return $fields;
-		}
-
-		$block_json = self::get_block_metadata( $request );
-
-		// Loop through the attributes and get array of fields
-		$attributes = $block_json['attributes'];
-
-		foreach ( $attributes as $name => $value ) {
-			if ( is_array( $value ) && isset( $value['meta-box-field'] ) ) {
-				$field                   = $value['meta-box-field'];
-				$field['id']             = $name;
-				$fields[ $field['_id'] ] = $field;
-			}
-		}
-
-		return $fields;
-	}
-
-	public function alter_submitted_data( array $post, WP_REST_Request $request ): array {
-		if ( ! $this->has_override_block_json( $request ) ) {
-			return $post;
-		}
-
-		$post['fields']   = $this->alter_fields( $post['fields'], $request );
-		$post['settings'] = $this->alter_settings( $post['settings'], $request );
-
-		return $post;
-	}
-
-	private function has_override_block_json( WP_REST_Request $request ): bool {
-		return (bool) $request->get_param( 'override_block_json' );
 	}
 
 	public function register_blocks(): void {
@@ -430,5 +358,93 @@ class Blocks {
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable
 		return is_dir( $path_str ) && is_writable( $path_str );
+	}
+
+	public function register_rest_routes() {
+		register_rest_route( 'mbb', 'override-block-json', [
+			'methods'             => WP_REST_Server::EDITABLE,
+			'callback'            => [ $this, 'handle_override_block_json' ],
+			'permission_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+		] );
+	}
+
+	public function handle_override_block_json( WP_REST_Request $request ) {
+		$post_id = $request->get_param( 'post_id' );
+		if ( ! $post_id ) {
+			return [
+				'success' => false,
+				'message' => __( 'Invalid post ID', 'meta-box-builder' ),
+			];
+		}
+
+		// Get block metadata from block.json
+		$block_json = self::get_block_metadata( $request );
+		if ( empty( $block_json ) ) {
+			return [
+				'success' => false,
+				'message' => __( 'Could not read block.json file', 'meta-box-builder' ),
+			];
+		}
+
+		$post_title = $block_json['title'] ?? '';
+		$post_name  = str_replace( 'meta-box/', '', $block_json['name'] ?? '' );
+
+		// Update post title
+		wp_update_post( [
+			'ID'         => $post_id,
+			'post_title' => $post_title,
+		] );
+
+		// Update settings from block.json
+		$settings = get_post_meta( $post_id, 'settings', true );
+		if ( ! is_array( $settings ) ) {
+			$settings = [];
+		}
+		$settings['description']           = $block_json['description'] ?? '';
+		$icon_type                         = str_contains( $block_json['icon'], '<svg' ) ? 'svg' : 'dashicons';
+		$settings['icon_type']             = $icon_type;
+		$settings['icon']                  = $icon_type === 'dashicons' ? $block_json['icon'] : '';
+		$settings['icon_svg']              = $icon_type === 'svg' ? $block_json['icon'] : '';
+		$settings['category']              = $block_json['category'] ?? '';
+		$settings['keywords']              = $block_json['keywords'] ?? [];
+		$settings['block_json']['version'] = $block_json['version'] ?? 'v' . time();
+		update_post_meta( $post_id, 'settings', $settings );
+
+		// Update fields from block.json attributes
+		$fields = get_post_meta( $post_id, 'fields', true );
+		if ( ! is_array( $fields ) ) {
+			$fields = [];
+		}
+		$attributes = isset( $block_json['attributes'] ) && is_array( $block_json['attributes'] ) ? $block_json['attributes'] : [];
+		foreach ( $attributes as $name => $value ) {
+			if ( is_array( $value ) && isset( $value['meta-box-field'] ) ) {
+				$field                   = $value['meta-box-field'];
+				$field['id']             = $name;
+				$fields[ $field['_id'] ] = $field;
+			}
+		}
+		update_post_meta( $post_id, 'fields', $fields );
+
+		// Save parsed data for PHP
+		$submitted_data = [
+			'fields'     => $fields,
+			'settings'   => $settings,
+			'post_title' => $post_title,
+			'post_name'  => $post_name,
+		];
+
+		$parser = new MetaBoxParser( $submitted_data );
+		$parser->parse();
+		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
+
+		// Trigger after save action
+		do_action( 'mbb_after_save', $parser, $post_id, $submitted_data );
+
+		return [
+			'success' => true,
+			'message' => __( 'Block settings overridden successfully', 'meta-box-builder' ),
+		];
 	}
 }

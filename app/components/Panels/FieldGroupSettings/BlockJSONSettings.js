@@ -47,6 +47,37 @@ const BlockJSONSettings = () => {
 		getLocalPathData( null, block_json.path );
 	}, [] );
 
+	const handleOverride = async ( e ) => {
+		e.preventDefault();
+
+		if ( !confirm( __( 'Are you sure you want to override the block settings from the block.json file?', 'meta-box-builder' ) ) ) {
+			return;
+		}
+
+		try {
+			const response = await fetcher( 'override-block-json', {
+				post_id: MbbApp.data.post_id,
+				post_title: document.getElementById( 'post_title' ).value,
+				post_name: document.getElementById( 'post_name' ).value,
+				post_status: document.getElementById( 'post_status' ).value,
+				settings: {
+					block_json: {
+						path: block_json.path,
+						version: block_json.version
+					}
+				}
+			}, 'POST' );
+
+			if ( response.success ) {
+				window.location.reload();
+			} else {
+				alert( response.message || __( 'Failed to override block.json', 'meta-box-builder' ) );
+			}
+		} catch ( error ) {
+			alert( __( 'Failed to override block.json', 'meta-box-builder' ) );
+		}
+	};
+
 	return <>
 		<Toggle
 			name="block_json.enable"
@@ -80,17 +111,13 @@ const BlockJSONSettings = () => {
 						__html: __( 'We detected a newer version of <code>block.json</code>, do you want to override settings from this file?', 'meta-box-builder' )
 					} }></div>
 
-					<input
-						name="override_block_json"
-						value={ __( 'Yes, overrite from block.json', 'meta-box-builder' ) }
-						type="submit"
+					<button
+						type="button"
 						className="button secondary"
-						onClick={ e => {
-							if ( !confirm( __( 'Are you sure you want to override the block.json settings?', 'meta-box-builder' ) ) ) {
-								e.preventDefault();
-							}
-						} }
-					/>
+						onClick={ handleOverride }
+					>
+						{ __( 'Yes, override from block.json', 'meta-box-builder' ) }
+					</button>
 				</Flex>
 			</DivRow>
 		}
