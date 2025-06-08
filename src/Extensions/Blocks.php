@@ -1,9 +1,9 @@
 <?php
 namespace MBB\Extensions;
 
-use MBB\Control;
 use MBB\Helpers\Data;
 use MBBParser\Parsers\Settings;
+use WP_REST_Request;
 
 class Blocks {
 	public function __construct() {
@@ -18,7 +18,7 @@ class Blocks {
 		add_filter( 'mbb_save_settings', [ $this, 'alter_settings' ], 10, 2 );
 		add_filter( 'mbb_save_fields', [ $this, 'alter_fields' ], 10, 2 );
 		add_filter( 'mbb_save_submitted_data', [ $this, 'alter_submitted_data' ], 10, 2 );
-		add_filter( 'wp_insert_post_data', [ $this, 'alter_post_data' ], 10, 2 );
+		// add_filter( 'wp_insert_post_data', [ $this, 'alter_post_data' ], 10, 2 );
 	}
 
 	public function alter_post_data( $post_data, $post_id ) {
@@ -34,23 +34,23 @@ class Blocks {
 		return $post_data;
 	}
 
-	public static function get_block_metadata( $request ) {
-		$meta_box_settings = $request->post( 'settings' );
+	public static function get_block_metadata( WP_REST_Request $request ): array {
+		$meta_box_settings = $request->get_param( 'settings' );
 
 		if ( ! isset( $meta_box_settings['block_json'] ) || ! isset( $meta_box_settings['block_json']['path'] ) ) {
-			return;
+			return [];
 		}
 
 		$path   = $meta_box_settings['block_json']['path'];
 		$parser = new Settings();
 		$path   = $parser->replace_variables( $path );
 
-		$block_id = $request->post( 'post_name' );
+		$block_id = $request->get_param( 'post_name' );
 		// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
 		$path_to_block_json = $path . '/' . $block_id . '/block.json';
 
 		if ( ! file_exists( $path_to_block_json ) || ! is_readable( $path_to_block_json ) ) {
-			return;
+			return [];
 		}
 
 		$block_json = json_decode( file_get_contents( $path_to_block_json ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
@@ -62,7 +62,7 @@ class Blocks {
 		return $block_json;
 	}
 
-	public function alter_settings( ?array $settings, $request ) {
+	public function alter_settings( ?array $settings, WP_REST_Request $request ): ?array {
 		if ( ! is_array( $settings ) ) {
 			return $settings;
 		}
@@ -84,7 +84,7 @@ class Blocks {
 		return $settings;
 	}
 
-	public function alter_fields( ?array $fields, $request ) {
+	public function alter_fields( ?array $fields, WP_REST_Request $request ): ?array {
 		if ( ! is_array( $fields ) || ! $this->has_override_block_json( $request ) ) {
 			return $fields;
 		}
@@ -105,12 +105,10 @@ class Blocks {
 		return $fields;
 	}
 
-	public function alter_submitted_data( array $post, $request ) {
+	public function alter_submitted_data( array $post, WP_REST_Request $request ): array {
 		if ( ! $this->has_override_block_json( $request ) ) {
 			return $post;
 		}
-
-		$block_json = self::get_block_metadata( $request );
 
 		$post['fields']   = $this->alter_fields( $post['fields'], $request );
 		$post['settings'] = $this->alter_settings( $post['settings'], $request );
@@ -118,13 +116,11 @@ class Blocks {
 		return $post;
 	}
 
-	private function has_override_block_json( $request ) {
-		$override_block_json = $request->post( 'override_block_json' );
-
-		return ! empty( $override_block_json );
+	private function has_override_block_json( WP_REST_Request $request ): bool {
+		return (bool) $request->get_param( 'override_block_json' );
 	}
 
-	public function register_blocks() {
+	public function register_blocks(): void {
 		$query = new \WP_Query( [
 			'post_type'              => 'meta-box',
 			'post_status'            => 'publish',
@@ -165,7 +161,7 @@ class Blocks {
 		}
 	}
 
-	public function add_app_data( array $data ) {
+	public function add_app_data( array $data ): array {
 		$data['blockCategories'] = wp_list_pluck( get_block_categories( get_post() ), 'title', 'slug' );
 		$data['settings']        = is_array( $data['settings'] ) ? $data['settings'] : [];
 
@@ -234,7 +230,7 @@ class Blocks {
 			$attributes = $this->generate_block_attributes( $raw_data['fields'] );
 		}
 
-		$align = array_filter( $settings['supports']['align'] );
+		$align = array_filter( $settings['supports']['align'] ?? [] );
 		// Alignments
 		if ( ! empty( $align ) ) {
 			$metadata['supports']['align'] = $align;
