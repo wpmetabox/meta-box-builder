@@ -1,5 +1,4 @@
 ## Blocks
-[ ] Update BlockJSONSettings control
 [ ] Check saving `data`
 [ ] Fix error rendering blocks in the editor: This block has encountered an error and cannot be previewed.
 

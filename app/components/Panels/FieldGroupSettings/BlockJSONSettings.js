@@ -1,4 +1,4 @@
-import { Flex } from "@wordpress/components";
+import { Button } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from '../../../controls/DivRow';
@@ -94,28 +94,17 @@ const BlockJSONSettings = () => {
 			dependency="block_json_enable:true"
 		/>
 
-		<input type="hidden" name="settings[block_json][version]" value={ block_json.version } />
-
 		{
 			isNewer &&
-			<DivRow dependency="block_json_enable:true" label={ __( 'Synchronize block.json', 'meta-box-builder' ) }>
-				<Flex direction="column">
-					<div className="og-error" dangerouslySetInnerHTML={ {
-						__html: __( 'We detected a newer version of <code>block.json</code>, do you want to override settings from this file?', 'meta-box-builder' )
-					} }></div>
-
-					<button
-						type="button"
-						className="button secondary"
-						onClick={ handleOverride }
-					>
-						{ __( 'Yes, override from block.json', 'meta-box-builder' ) }
-					</button>
-				</Flex>
+			<DivRow dependency="block_json_enable:true" label={ __( 'Override from block.json', 'meta-box-builder' ) }>
+				<p className="og-error">
+					{ __( 'We detected a newer version of block.json, do you want to override settings from this file?', 'meta-box-builder' ) }
+				</p>
+				<Button variant="secondary" onClick={ handleOverride } text={ __( 'Yes, override from block.json', 'meta-box-builder' ) } />
 			</DivRow>
 		}
 
-		<DivRow dependency="block_json_enable:true" label={ `<span class="og-indent"></span>${ __( 'Supported variables', 'meta-box-builder' ) }` } >
+		<DivRow dependency="block_json_enable:true" label={ __( 'Supported variables', 'meta-box-builder' ) }>
 			<table className="og-block-description">
 				<tbody>
 					<tr>
