@@ -1,6 +1,4 @@
 ## Blocks
-[ ] Update Block control
-[ ] Check DashiconPicker in Block.js
 [ ] Update BlockRenderSettings control
 [ ] Update BlockJSONSettings control
 [ ] Check saving `data`

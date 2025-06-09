@@ -40,7 +40,7 @@ const getIconLabel = icon => {
 	return label.trim().toLowerCase();
 };
 
-const DashiconPicker = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
+const DashiconPicker = ( { name, defaultValue, updateField, ...rest } ) => {
 	const [ query, setQuery ] = useState( '' );
 	const [ value, setValue ] = useState( defaultValue );
 	let filteredIcons = MbbApp.icons.map( icon => [ icon, getIconLabel( icon ) ] )
