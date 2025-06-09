@@ -5,7 +5,7 @@ import DivRow from './DivRow';
 const FontAwesome = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
 	const handleChange = useCallback(
 		debounce( e => updateField( name, e.target.value ), 300 ),
-		[] // empty deps means it runs once
+		[ name, updateField ]
 	);
 
 	return (
