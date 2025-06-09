@@ -11,24 +11,17 @@ const BlockJSONSettings = () => {
 	const { getSetting, updateSetting } = useSettings();
 	const block_json = getSetting( 'block_json', {} );
 
-	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
+	const [ blockPathError, setBlockPathError ] = useState( '' );
 	const [ isNewer, setIsNewer ] = useState( true );
 
-	/**
-	 * Get local path data, including whether the path is writable, block.json version.
-	 *
-	 * @param any _
-	 * @param string path
-	 */
-	const getLocalPathData = async ( _, path ) => {
-		const postName = document.getElementById( 'post_name' ).value;
-
+	const getLocalPathData = async () => {
+		const postName = document.querySelector( '#post_name' ).value;
 		if ( !postName ) {
 			return;
 		}
 
 		const { is_writable, is_newer } = await fetcher( 'local-path-data', {
-			path,
+			path: block_json.path,
 			version: block_json.version || 0,
 			postName
 		} );
@@ -40,12 +33,8 @@ const BlockJSONSettings = () => {
 	};
 
 	useEffect( () => {
-		if ( !block_json.path ) {
-			return;
-		}
-
-		getLocalPathData( null, block_json.path );
-	}, [] );
+		getLocalPathData();
+	}, [ block_json.path ] );
 
 	const handleOverride = async ( e ) => {
 		e.preventDefault();
@@ -87,10 +76,7 @@ const BlockJSONSettings = () => {
 			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
 			defaultValue={ block_json.path }
 			error={ blockPathError }
-			updateField={ value => {
-				updateSetting( 'block_json.path', value );
-				getLocalPathData( null, value );
-			} }
+			updateField={ updateSetting }
 			dependency="block_json_enable:true"
 		/>
 

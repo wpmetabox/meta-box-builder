@@ -1,10 +1,11 @@
 ## Blocks
-[ ] Check saving `data`
 [ ] Fix error rendering blocks in the editor: This block has encountered an error and cannot be previewed.
+[ ] Merge `RestApi/Blocks.php` into `Extensions/Blocks.php`
 
 ## Bugs
 [ ] Fix when add new field, unique _id is updated/generated from name
 [ ] Fix:  I had a group with many fields and then I decided to turn on this feature “Start with no inputs” and it deleted the names of every field in that group. The fields stayed, but without any name.
+[ ] Encountered two children with the same key, `.$osm_l77yl1euyo`. Keys should be unique. In `Fields.js`
 
 ## UX
 [ ] Show alert when saving successfully

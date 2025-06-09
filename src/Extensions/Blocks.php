@@ -237,17 +237,6 @@ class Blocks {
 		$parent_block_path = dirname( $block_path );
 
 		if ( ! self::is_future_path_writable( $parent_block_path ) ) {
-			// Return an error message.
-			$data = get_post_meta( $post_id, 'data', true );
-
-			if ( ! is_array( $data ) ) {
-				$data = [];
-			}
-
-			$data['block_path_error'] = __( 'Block path is not writable. Please check the folder permission.', 'meta-box-builder' );
-
-			update_post_meta( $post_id, 'data', $data );
-
 			return;
 		}
 
