@@ -88,7 +88,7 @@ const DashiconPicker = ( { name, componentId, defaultValue, updateField, ...rest
 					</>
 				) }
 			/>
-		</DivRow >
+		</DivRow>
 	);
 };
 

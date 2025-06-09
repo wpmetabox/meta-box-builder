@@ -1,6 +1,7 @@
 import { RadioControl, ToggleControl } from "@wordpress/components";
-import { useEffect, useState } from "@wordpress/element";
+import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import Color from '../../../controls/Color';
 import DashiconPicker from '../../../controls/DashiconPicker';
 import Input from '../../../controls/Input';
 import ReactSelect from '../../../controls/ReactSelect';
@@ -13,10 +14,6 @@ const Block = () => {
 	const { getSetting, updateSetting } = useSettings();
 	const [ iconType, setIconType ] = useState( getSetting( 'icon_type', 'dashicons' ) );
 	const [ context, setContext ] = useState( getSetting( 'block_context', 'side' ) );
-
-	useEffect( () => {
-		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
-	}, [ iconType ] );
 
 	const updateIconType = e => setIconType( e.target.value );
 
@@ -59,27 +56,22 @@ const Block = () => {
 		}
 		{
 			iconType === 'dashicons' &&
-			<Input
-				name="icon_foreground"
-				className="og-color-picker"
-				componentId="settings-block-icon_foreground"
-				label={ __( 'Icon color', 'meta-box-builder' ) }
-				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'icon_foreground', '' ) }
-				updateField={ updateSetting }
-			/>
-		}
-		{
-			iconType === 'dashicons' &&
-			<Input
-				name="icon_background"
-				className="og-color-picker"
-				componentId="settings-block-icon_background"
-				label={ __( 'Icon background color', 'meta-box-builder' ) }
-				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'icon_background', '' ) }
-				updateField={ updateSetting }
-			/>
+			<>
+				<Color
+					name="icon_foreground"
+					label={ __( 'Icon color', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'icon_foreground', '' ) }
+					updateField={ updateSetting }
+					tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
+				/>
+				<Color
+					name="icon_background"
+					label={ __( 'Icon background color', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'icon_background', '' ) }
+					updateField={ updateSetting }
+					tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
+				/>
+			</>
 		}
 		<Select
 			name="category"
