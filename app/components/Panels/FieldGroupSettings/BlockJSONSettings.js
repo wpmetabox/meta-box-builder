@@ -20,7 +20,7 @@ const BlockJSONSettings = () => {
 			return;
 		}
 
-		const { is_writable, is_newer } = await fetcher( 'local-path-data', {
+		const { is_writable, is_newer } = await fetcher( 'check-path-writable', {
 			path: block_json.path,
 			version: block_json.version || 0,
 			postName

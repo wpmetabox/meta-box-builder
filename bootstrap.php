@@ -14,10 +14,6 @@ new RestApi\ThemeCode\ThemeCode();
 
 new RestApi\Fields( new Registry() );
 
-if ( Helpers\Data::is_extension_active( 'mb-blocks' ) ) {
-	new RestApi\Blocks();
-}
-
 if ( Helpers\Data::is_extension_active( 'meta-box-include-exclude' ) ) {
 	new RestApi\IncludeExclude();
 }

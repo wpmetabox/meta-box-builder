@@ -1,6 +1,5 @@
 ## Blocks
 [ ] Fix error rendering blocks in the editor: This block has encountered an error and cannot be previewed.
-[ ] Merge `RestApi/Blocks.php` into `Extensions/Blocks.php`
 
 ## Bugs
 [ ] Fix when add new field, unique _id is updated/generated from name
