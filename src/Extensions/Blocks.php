@@ -79,12 +79,7 @@ class Blocks {
 		return $data;
 	}
 
-	public function generate_block_json( $parser, $post_id, $raw_data ) {
-		// Don't generate block JSON if we are syncing from block.json
-		if ( isset( $raw_data['override_block_json'] ) && $raw_data['override_block_json'] ) {
-			return;
-		}
-
+	public function generate_block_json( $parser, $post_id, $raw_data ): void {
 		$settings = $parser->get_settings();
 
 		// Bail if this is not a block.
@@ -101,7 +96,7 @@ class Blocks {
 	}
 
 	private function generate_block_metadata( array $settings, array $raw_data ): array {
-		$block_id = sanitize_title( $settings['title'] );
+		$block_id = $settings['id'] ?? sanitize_title( $settings['title'] );
 
 		$metadata = [
 			'$schema'     => 'https://schemas.wp.org/trunk/block.json',
@@ -294,7 +289,7 @@ class Blocks {
 		update_post_meta( $post_id, 'settings', $settings );
 
 		// phpcs:disable
-		$new_metadata = json_encode( $new_metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+		$new_metadata = json_encode( $new_metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 		file_put_contents( $block_json_path, $new_metadata );
 		chmod( $block_json_path, 0664 );
 		// phpcs:enable
