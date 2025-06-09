@@ -20,34 +20,6 @@ class Blocks {
 		add_action( 'rest_api_init', [ $this, 'register_rest_routes' ] );
 	}
 
-	public static function get_block_metadata( WP_REST_Request $request ): array {
-		$meta_box_settings = $request->get_param( 'settings' );
-
-		if ( ! isset( $meta_box_settings['block_json'] ) || ! isset( $meta_box_settings['block_json']['path'] ) ) {
-			return [];
-		}
-
-		$path   = $meta_box_settings['block_json']['path'];
-		$parser = new Settings();
-		$path   = $parser->replace_variables( $path );
-
-		$block_id = $request->get_param( 'post_name' );
-		// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
-		$path_to_block_json = $path . '/' . $block_id . '/block.json';
-
-		if ( ! file_exists( $path_to_block_json ) || ! is_readable( $path_to_block_json ) ) {
-			return [];
-		}
-
-		$block_json = json_decode( file_get_contents( $path_to_block_json ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-
-		$block_json['version'] = $block_json['version'] ?? 'v0';
-		$block_json['version'] = (int) str_replace( 'v', '', $block_json['version'] );
-		$block_json['version'] = max( $block_json['version'], filemtime( $path_to_block_json ) );
-
-		return $block_json;
-	}
-
 	public function register_blocks(): void {
 		$query = new \WP_Query( [
 			'post_type'              => 'meta-box',
@@ -361,16 +333,16 @@ class Blocks {
 	}
 
 	public function register_rest_routes() {
-		register_rest_route( 'mbb', 'override-block-json', [
+		register_rest_route( 'mbb', 'override-from-block-json', [
 			'methods'             => WP_REST_Server::EDITABLE,
-			'callback'            => [ $this, 'handle_override_block_json' ],
+			'callback'            => [ $this, 'override_from_block_json' ],
 			'permission_callback' => function() {
 				return current_user_can( 'edit_posts' );
 			},
 		] );
 	}
 
-	public function handle_override_block_json( WP_REST_Request $request ) {
+	public function override_from_block_json( WP_REST_Request $request ): array {
 		$post_id = $request->get_param( 'post_id' );
 		if ( ! $post_id ) {
 			return [
@@ -380,7 +352,7 @@ class Blocks {
 		}
 
 		// Get block metadata from block.json
-		$block_json = self::get_block_metadata( $request );
+		$block_json = $this->get_block_metadata( $request );
 		if ( empty( $block_json ) ) {
 			return [
 				'success' => false,
@@ -391,10 +363,11 @@ class Blocks {
 		$post_title = $block_json['title'] ?? '';
 		$post_name  = str_replace( 'meta-box/', '', $block_json['name'] ?? '' );
 
-		// Update post title
+		// Update post title and slug.
 		wp_update_post( [
 			'ID'         => $post_id,
 			'post_title' => $post_title,
+			'post_name'  => $post_name,
 		] );
 
 		// Update settings from block.json
@@ -446,5 +419,31 @@ class Blocks {
 			'success' => true,
 			'message' => __( 'Block settings overridden successfully', 'meta-box-builder' ),
 		];
+	}
+
+	private function get_block_metadata( WP_REST_Request $request ): array {
+		$path = $request->get_param( 'path' );
+		if ( ! $path ) {
+			return [];
+		}
+
+		$parser = new Settings();
+		$path   = $parser->replace_variables( $path );
+
+		$block_id = $request->get_param( 'post_name' );
+		// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent
+		$path = "$path/$block_id/block.json";
+
+		if ( ! file_exists( $path ) || ! is_readable( $path ) ) {
+			return [];
+		}
+
+		$block_json = json_decode( file_get_contents( $path ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+
+		$block_json['version'] = $block_json['version'] ?? 'v0';
+		$block_json['version'] = (int) str_replace( 'v', '', $block_json['version'] );
+		$block_json['version'] = max( $block_json['version'], filemtime( $path ) );
+
+		return $block_json;
 	}
 }

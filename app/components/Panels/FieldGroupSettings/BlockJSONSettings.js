@@ -55,17 +55,10 @@ const BlockJSONSettings = () => {
 		}
 
 		try {
-			const response = await fetcher( 'override-block-json', {
-				post_id: MbbApp.data.post_id,
-				post_title: document.getElementById( 'post_title' ).value,
-				post_name: document.getElementById( 'post_name' ).value,
-				post_status: document.getElementById( 'post_status' ).value,
-				settings: {
-					block_json: {
-						path: block_json.path,
-						version: block_json.version
-					}
-				}
+			const response = await fetcher( 'override-from-block-json', {
+				post_id: document.querySelector( '#post_ID' ).value,
+				post_name: document.querySelector( '#post_name' ).value,
+				path: block_json.path,
 			}, 'POST' );
 
 			if ( response.success ) {
