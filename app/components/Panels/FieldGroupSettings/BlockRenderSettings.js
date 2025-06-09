@@ -25,7 +25,7 @@ const getRenderViewId = ( renderView ) => {
 
 const BlockRenderSettings = () => {
 	const { getSetting, updateSetting } = useSettings();
-	const [ renderWith, setRenderWith ] = useState( getSetting( 'render_with', 'callback' ) );
+	const renderWith = getSetting( 'render_with', 'callback' );
 	const [ codeEditor, setCodeEditor ] = useState();
 
 	const [ views, setViews ] = useState( MbbApp.views );
@@ -33,8 +33,6 @@ const BlockRenderSettings = () => {
 
 	const addViewButtonRef = useRef();
 	const editViewButtonRef = useRef();
-
-	const updateRenderWith = e => setRenderWith( e.target.value );
 
 	const modalConfig = {
 		hideElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
@@ -97,7 +95,6 @@ const BlockRenderSettings = () => {
 			componentId="settings-block-render_with"
 			options={ renderWithOptions }
 			defaultValue={ renderWith }
-			onChange={ updateRenderWith }
 			updateField={ updateSetting }
 		/>
 		{

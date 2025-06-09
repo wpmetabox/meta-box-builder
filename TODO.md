@@ -1,8 +1,7 @@
 ## Blocks
-[ ] Update BlockRenderSettings control
 [ ] Update BlockJSONSettings control
 [ ] Check saving `data`
-[ ] Check compatibility from Blocks.php
+[ ] Fix error rendering blocks in the editor: This block has encountered an error and cannot be previewed.
 
 ## Bugs
 [ ] Fix when add new field, unique _id is updated/generated from name
