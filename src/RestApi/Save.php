@@ -22,7 +22,6 @@ class Save extends Base {
 		$post_status = sanitize_text_field( $request->get_param( 'post_status' ) );
 		$fields      = $request->get_param( 'fields' );
 		$settings    = $request->get_param( 'settings' );
-		$data        = $request->get_param( 'data' );
 
 		if ( ! $post_id || ! $post_title || ! $post_name || ! $post_status ) {
 			return [
@@ -48,10 +47,6 @@ class Save extends Base {
 		$fields = apply_filters( 'mbb_save_fields', $fields, $request );
 		$base_parser->set_settings( $fields )->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'fields', $base_parser->get_settings() );
-
-		$data = apply_filters( 'mbb_save_data', $data, $request );
-		$base_parser->set_settings( $data )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
 
 		// Save parsed data for PHP (serialized array)
 		$submitted_data = compact( 'fields', 'settings' );

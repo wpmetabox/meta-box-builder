@@ -51,7 +51,6 @@ class Edit extends BaseEditPage {
 
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
-			'data'          => get_post_meta( get_the_ID(), 'data', true ),
 
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
