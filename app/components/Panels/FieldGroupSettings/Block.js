@@ -1,4 +1,4 @@
-import { RadioControl } from "@wordpress/components";
+import { RadioControl, ToggleControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DashiconPicker from '../../../controls/DashiconPicker';
@@ -6,7 +6,6 @@ import Input from '../../../controls/Input';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
 import Textarea from '../../../controls/Textarea';
-import Toggle from "../../../controls/Toggle";
 import useSettings from "../../../hooks/useSettings";
 import { ensureArray } from '/functions';
 
@@ -128,16 +127,14 @@ const Block = () => {
 				wide: __( 'Wide', 'meta-box-builder' ),
 				full: __( 'Full', 'meta-box-builder' ),
 			} }
-			defaultValue={ ensureArray( getSetting( 'supports', {} ).align || [] ) }
+			defaultValue={ ensureArray( getSetting( 'supports.align', [] ) ) }
 			onChange={ items => updateSetting( 'supports.align', items ? items.map( item => item.value ) : [] ) }
 		/>
 
-		<Toggle
-			name="supports.customClassName"
+		<ToggleControl
 			label={ __( 'Custom CSS class name', 'meta-box-builder' ) }
-			componentId="settings-block-supports-custom-class-name"
-			defaultValue={ !!getSetting( 'supports', {} ).customClassName }
-			updateField={ updateSetting }
+			checked={ !!getSetting( 'supports.customClassName' ) }
+			onChange={ value => updateSetting( 'supports.customClassName', value ) }
 		/>
 	</>;
 };

@@ -59,7 +59,7 @@ const useSettings = create( ( set, get ) => ( {
 	getPostTypes: () => sanitize( ensureArray( get().getSetting( 'post_types', [ 'post' ] ) ) ),
 	updatePostTypes: post_types => get().updateSetting( 'post_types', sanitize( post_types ) ),
 
-	getSetting: ( name, defaultValue = null ) => get().settings[ name ] || defaultValue,
+	getSetting: ( name, defaultValue = null ) => dotProp.get( get().settings, name, defaultValue ),
 
 	updateSetting: ( key, value ) => {
 		const settings = get().settings;
