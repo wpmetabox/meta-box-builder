@@ -47,11 +47,12 @@ class Blocks {
 				continue;
 			}
 
-			if ( ! isset( $meta_box['block_json']['enable'] )
-				|| ! $meta_box['block_json']['enable']
+			if ( empty( $meta_box['block_json']['enable'] )
 				|| ! file_exists( $meta_box['block_json']['path'] )
+				// Do not register block.json if its rendering method is via a callback, template or code.
 				|| isset( $meta_box['function_name'] )
 				|| isset( $meta_box['render_template'] )
+				|| isset( $meta_box['render_code'] )
 			) {
 				continue;
 			}
@@ -320,14 +321,14 @@ class Blocks {
 		register_rest_route( 'mbb', 'override-from-block-json', [
 			'methods'             => WP_REST_Server::EDITABLE,
 			'callback'            => [ $this, 'override_from_block_json' ],
-			'permission_callback' => function() {
+			'permission_callback' => function () {
 				return current_user_can( 'edit_posts' );
 			},
 		] );
 		register_rest_route( 'mbb', 'check-path-writable', [
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => [ $this, 'check_path_writable' ],
-			'permission_callback' => function() {
+			'permission_callback' => function () {
 				return current_user_can( 'edit_posts' );
 			},
 		] );

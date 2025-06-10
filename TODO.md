@@ -1,5 +1,5 @@
 ## Blocks
-[ ] Fix error rendering blocks in the editor: This block has encountered an error and cannot be previewed.
+[ ] Slow load of the block editor when MB Views is enabled. Shows a blank screen and after a long delay, it will show the content.
 
 ## Bugs
 [ ] Fix when add new field, unique _id is updated/generated from name
