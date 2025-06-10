@@ -37,6 +37,7 @@ class Edit extends BaseEditPage {
 
 		$data = [
 			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
+			'adminUrl'      => admin_url(),
 			'status'        => $post->post_status,
 			'title'         => $post->post_title,
 			'slug'          => $post->post_name,
@@ -44,7 +45,6 @@ class Edit extends BaseEditPage {
 			'trash'         => get_delete_post_link(),
 			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
 			'modified'      => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
-			'saving'        => __( 'Saving...', 'meta-box-builder' ),
 
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
@@ -78,6 +78,16 @@ class Edit extends BaseEditPage {
 			],
 
 			'assetsBaseUrl' => MBB_URL . 'assets',
+
+			'texts' => [
+				'saving'        => __( 'Saving...', 'meta-box-builder' ),
+				'switchToDraft' => __( 'Switch to draft', 'meta-box-builder' ),
+				'saveDraft'     => __( 'Save draft', 'meta-box-builder' ),
+				'update'        => __( 'Update', 'meta-box-builder' ),
+				'publish'       => __( 'Publish', 'meta-box-builder' ),
+				'draft'         => __( 'Draft', 'meta-box-builder' ),
+				'published'     => __( 'Published', 'meta-box-builder' ),
+			],
 		];
 
 		$data = apply_filters( 'mbb_app_data', $data );

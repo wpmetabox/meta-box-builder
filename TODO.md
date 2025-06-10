@@ -5,10 +5,6 @@
 [ ] Fix when add new field, unique _id is updated/generated from name
 [ ] Fix:  I had a group with many fields and then I decided to turn on this feature “Start with no inputs” and it deleted the names of every field in that group. The fields stayed, but without any name.
 
-## UX
-[ ] Update the URL when create a new field group, so refreshing works
-[ ] Update save/update draft and update/publish buttons after clicking
-
 ## Final
 [ ] Merge from master and check compatibility with Local JSON feature and recent updates
 

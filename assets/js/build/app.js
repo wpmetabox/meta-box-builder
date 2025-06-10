@@ -1707,12 +1707,12 @@ const Header = () => {
     type: "submit",
     "data-status": "draft",
     className: "components-button is-compact is-tertiary",
-    value: MbbApp.status == 'publish' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Switch to draft', 'meta-box-builder') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Save draft', 'meta-box-builder')
+    value: MbbApp.status === 'publish' ? MbbApp.texts.switchToDraft : MbbApp.texts.saveDraft
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "submit",
     "data-status": "publish",
     className: "components-button is-primary",
-    value: MbbApp.status == 'publish' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Update', 'meta-box-builder') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Publish', 'meta-box-builder')
+    value: MbbApp.status === 'publish' ? MbbApp.texts.update : MbbApp.texts.publish
   })));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Header);
@@ -1854,6 +1854,48 @@ const Nav = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
   className: "mb-nav"
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_AddFieldPanel__WEBPACK_IMPORTED_MODULE_1__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_StructurePanel__WEBPACK_IMPORTED_MODULE_4__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_FieldGroupSettingsPanel__WEBPACK_IMPORTED_MODULE_2__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Panels_FieldSettingsPanel__WEBPACK_IMPORTED_MODULE_3__["default"], null));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Nav);
+
+/***/ }),
+
+/***/ "./app/components/Notification.js":
+/*!****************************************!*\
+  !*** ./app/components/Notification.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+const Notification = () => {
+  const [visible, setVisible] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const hide = () => setVisible(false);
+
+  // Expose show method to the global scope to be used in the save.js file.
+  window.mbbShowNotification = () => {
+    setVisible(true);
+    setTimeout(hide, 3000);
+  };
+  return visible && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Snackbar, {
+    className: "mb-notification",
+    explicitDismiss: true,
+    onDismiss: hide
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Field group is updated.', 'meta-box-builder'));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Notification);
 
 /***/ }),
 
@@ -2023,14 +2065,16 @@ const Advanced = () => {
   const {
     getSetting,
     getPrefix,
-    updatePrefix
+    updatePrefix,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_5__["default"])();
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    name: "settings[class]",
+    name: "class",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Custom CSS class', 'meta-box-builder'),
     tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Custom CSS class for the wrapper div', 'meta-box-builder'),
     componentId: "settings-class",
-    defaultValue: getSetting('class', '')
+    defaultValue: getSetting('class', ''),
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_2__["default"], {
     htmlFor: "settings-prefix",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Field ID prefix', 'meta-box-builder'),
@@ -2038,15 +2082,16 @@ const Advanced = () => {
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "text",
     id: "settings-prefix",
-    name: "settings[prefix]",
+    name: "prefix",
     defaultValue: getPrefix(),
     onChange: e => updatePrefix(e.target.value)
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_KeyValue__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    name: "settings[custom_settings]",
+    name: "custom_settings",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Custom settings', 'meta-box-builder'),
     tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Apply to the current field group. For individual fields, please go to each field > tab Advanced.', 'meta-box-builder'),
     componentId: "settings-custom_settings",
-    defaultValue: getSetting('custom_settings', {})
+    defaultValue: getSetting('custom_settings', {}),
+    updateField: updateSetting
   }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Advanced);
@@ -2072,12 +2117,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _controls_DashiconPicker__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../controls/DashiconPicker */ "./app/controls/DashiconPicker.js");
-/* harmony import */ var _controls_Input__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../controls/Input */ "./app/controls/Input.js");
-/* harmony import */ var _controls_ReactSelect__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../controls/ReactSelect */ "./app/controls/ReactSelect.js");
-/* harmony import */ var _controls_Select__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../controls/Select */ "./app/controls/Select.js");
-/* harmony import */ var _controls_Textarea__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../controls/Textarea */ "./app/controls/Textarea.js");
-/* harmony import */ var _controls_Toggle__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../controls/Toggle */ "./app/controls/Toggle.js");
+/* harmony import */ var _controls_Color__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../controls/Color */ "./app/controls/Color.js");
+/* harmony import */ var _controls_DashiconPicker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../controls/DashiconPicker */ "./app/controls/DashiconPicker.js");
+/* harmony import */ var _controls_Input__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../controls/Input */ "./app/controls/Input.js");
+/* harmony import */ var _controls_ReactSelect__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../controls/ReactSelect */ "./app/controls/ReactSelect.js");
+/* harmony import */ var _controls_Select__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../controls/Select */ "./app/controls/Select.js");
+/* harmony import */ var _controls_Textarea__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../controls/Textarea */ "./app/controls/Textarea.js");
 /* harmony import */ var _hooks_useSettings__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../hooks/useSettings */ "./app/hooks/useSettings.js");
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../../../../../functions */ "./app/functions.js");
 
@@ -2094,21 +2139,20 @@ __webpack_require__.r(__webpack_exports__);
 
 const Block = () => {
   const {
-    getSetting
+    getSetting,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_10__["default"])();
   const [iconType, setIconType] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(getSetting('icon_type', 'dashicons'));
   const [context, setContext] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(getSetting('block_context', 'side'));
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
-    jQuery('.og-color-picker input[type="text"]').wpColorPicker();
-  }, [iconType]);
   const updateIconType = e => setIconType(e.target.value);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    name: "settings[description]",
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    name: "description",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Description', 'meta-box-builder'),
     componentId: "settings-block-description",
-    defaultValue: getSetting('description', '')
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Select__WEBPACK_IMPORTED_MODULE_7__["default"], {
-    name: "settings[icon_type]",
+    defaultValue: getSetting('description', ''),
+    updateField: updateSetting
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Select__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    name: "icon_type",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Icon type', 'meta-box-builder'),
     componentId: "settings-block-icon_type",
     options: {
@@ -2116,43 +2160,46 @@ const Block = () => {
       svg: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom SVG', 'meta-box-builder')
     },
     defaultValue: iconType,
-    onChange: updateIconType
-  }), iconType === 'svg' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Textarea__WEBPACK_IMPORTED_MODULE_8__["default"], {
-    name: "settings[icon_svg]",
+    onChange: updateIconType,
+    updateField: updateSetting
+  }), iconType === 'svg' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Textarea__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    name: "icon_svg",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('SVG icon', 'meta-box-builder'),
     componentId: "settings-block-icon_svg",
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Paste the SVG content here', 'meta-box-builder'),
-    defaultValue: getSetting('icon_svg', '')
-  }), iconType === 'dashicons' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DashiconPicker__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    defaultValue: getSetting('icon_svg', ''),
+    updateField: updateSetting
+  }), iconType === 'dashicons' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DashiconPicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Icon', 'meta-box-builder'),
-    name: "settings[icon]",
-    defaultValue: getSetting('icon')
-  }), iconType === 'dashicons' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    name: "settings[icon_foreground]",
-    className: "og-color-picker",
-    componentId: "settings-block-icon_foreground",
+    name: "icon",
+    defaultValue: getSetting('icon'),
+    updateField: updateSetting
+  }), iconType === 'dashicons' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Color__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    name: "icon_foreground",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Icon color', 'meta-box-builder'),
-    tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Leave empty to use default color', 'meta-box-builder'),
-    defaultValue: getSetting('icon_foreground', '')
-  }), iconType === 'dashicons' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    name: "settings[icon_background]",
-    className: "og-color-picker",
-    componentId: "settings-block-icon_background",
+    defaultValue: getSetting('icon_foreground', ''),
+    updateField: updateSetting,
+    tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Leave empty to use default color', 'meta-box-builder')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Color__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    name: "icon_background",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Icon background color', 'meta-box-builder'),
-    tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Leave empty to use default color', 'meta-box-builder'),
-    defaultValue: getSetting('icon_background', '')
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Select__WEBPACK_IMPORTED_MODULE_7__["default"], {
-    name: "settings[category]",
+    defaultValue: getSetting('icon_background', ''),
+    updateField: updateSetting,
+    tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Leave empty to use default color', 'meta-box-builder')
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Select__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    name: "category",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Category', 'meta-box-builder'),
     componentId: "settings-block-category",
     options: MbbApp.blockCategories,
-    defaultValue: getSetting('category', '')
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    name: "settings[keywords]",
+    defaultValue: getSetting('category', ''),
+    updateField: updateSetting
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    name: "keywords",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Keywords', 'meta-box-builder'),
     componentId: "settings-block-keywords",
     tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Separate by commas', 'meta-box-builder'),
-    defaultValue: getSetting('keywords', '')
+    defaultValue: getSetting('keywords', ''),
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.RadioControl, {
     className: "og-field",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Block settings position', 'meta-box-builder'),
@@ -2164,13 +2211,12 @@ const Block = () => {
       value: 'side'
     }],
     selected: context,
-    onChange: setContext
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "hidden",
-    name: "settings[block_context]",
-    value: context
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactSelect__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    name: "settings[supports][align][]",
+    onChange: value => {
+      setContext(value);
+      updateSetting('block_context', value);
+    }
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactSelect__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    name: "supports.align",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Alignment', 'meta-box-builder'),
     componentId: "settings-block-supports-align",
     options: {
@@ -2180,12 +2226,12 @@ const Block = () => {
       wide: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Wide', 'meta-box-builder'),
       full: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Full', 'meta-box-builder')
     },
-    defaultValue: (0,_functions__WEBPACK_IMPORTED_MODULE_11__.ensureArray)(getSetting('supports', {}).align || [])
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_9__["default"], {
-    name: "settings[supports][customClassName]",
+    defaultValue: (0,_functions__WEBPACK_IMPORTED_MODULE_11__.ensureArray)(getSetting('supports.align', [])),
+    updateField: updateSetting
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ToggleControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom CSS class name', 'meta-box-builder'),
-    componentId: "settings-block-supports-custom-class-name",
-    defaultValue: !!getSetting('supports', {}).customClassName
+    checked: !!getSetting('supports.customClassName'),
+    onChange: value => updateSetting('supports.customClassName', value)
   }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Block);
@@ -2227,28 +2273,22 @@ __webpack_require__.r(__webpack_exports__);
 
 const BlockJSONSettings = () => {
   const {
-    getSetting
+    getSetting,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_8__["default"])();
   const block_json = getSetting('block_json', {});
-  const [blockPathError, setBlockPathError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(MbbApp.data?.block_path_error);
-  const [isNewer, setIsNewer] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(true);
-
-  /**
-   * Get local path data, including whether the path is writable, block.json version.
-   *
-   * @param any _
-   * @param string path
-   */
-  const getLocalPathData = async (_, path) => {
-    const postName = document.getElementById('post_name').value;
+  const [blockPathError, setBlockPathError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)('');
+  const [isNewer, setIsNewer] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(false);
+  const getLocalPathData = async () => {
+    const postName = document.querySelector('#post_name').value;
     if (!postName) {
       return;
     }
     const {
       is_writable,
       is_newer
-    } = await (0,_functions__WEBPACK_IMPORTED_MODULE_7__.fetcher)('local-path-data', {
-      path,
+    } = await (0,_functions__WEBPACK_IMPORTED_MODULE_7__.fetcher)('blocks/json/check-path', {
+      path: block_json.path,
       version: block_json.version || 0,
       postName
     });
@@ -2257,52 +2297,55 @@ const BlockJSONSettings = () => {
     setBlockPathError(errorMessage);
   };
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
-    if (!block_json.path) {
+    getLocalPathData();
+  }, [block_json.path]);
+  const handleOverride = async e => {
+    e.preventDefault();
+    if (!confirm((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Are you sure you want to override the block settings from the block.json file?', 'meta-box-builder'))) {
       return;
     }
-    getLocalPathData(null, block_json.path);
-  }, []);
+    try {
+      const response = await (0,_functions__WEBPACK_IMPORTED_MODULE_7__.fetcher)('blocks/json/override', {
+        post_id: document.querySelector('#post_ID').value,
+        post_name: document.querySelector('#post_name').value,
+        path: block_json.path
+      }, 'POST');
+      if (response.success) {
+        window.location.reload();
+      } else {
+        alert(response.message || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Failed to override block.json', 'meta-box-builder'));
+      }
+    } catch (error) {
+      alert((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Failed to override block.json', 'meta-box-builder'));
+    }
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    name: "settings[block_json][enable]",
+    name: "block_json.enable",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Generate block.json', 'meta-box-builder'),
     componentId: "settings-block_json_enable",
-    defaultValue: !!block_json.enable
+    defaultValue: !!block_json.enable,
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    name: "settings[block_json][path]",
+    name: "block_json.path",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Block folder', 'meta-box-builder'),
     componentId: "settings-block-path",
     description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder'),
     defaultValue: block_json.path,
     error: blockPathError,
-    updateField: getLocalPathData,
+    updateField: updateSetting,
     dependency: "block_json_enable:true"
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "hidden",
-    name: "settings[block_json][version]",
-    value: block_json.version
   }), isNewer && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_4__["default"], {
     dependency: "block_json_enable:true",
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Synchronize block.json', 'meta-box-builder')
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
-    direction: "column"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "og-description",
-    dangerouslySetInnerHTML: {
-      __html: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('We detected a newer version of <code>block.json</code> from the current folder, do you want to override settings from this path?', 'meta-box-builder')
-    }
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    name: "override_block_json",
-    value: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Override Block JSON', 'meta-box-builder'),
-    type: "submit",
-    className: "button secondary",
-    onClick: e => {
-      if (!confirm((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Are you sure you want to override the block.json settings?', 'meta-box-builder'))) {
-        e.preventDefault();
-      }
-    }
-  }))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Override from block.json', 'meta-box-builder')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "og-error"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('We detected a newer version of block.json, do you want to override settings from this file?', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "secondary",
+    onClick: handleOverride,
+    text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Yes, override from block.json', 'meta-box-builder')
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_4__["default"], {
     dependency: "block_json_enable:true",
-    label: `<span class="og-indent"></span>${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Supported variables', 'meta-box-builder')}`
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Supported variables', 'meta-box-builder')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
     className: "og-block-description"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", null, "{{ site.path }}")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Site path', 'meta-box-builder'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", null, "{{ site.url }}")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Site URL', 'meta-box-builder'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", null, "{{ theme.path }}")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Path to the current [child] theme directory', 'meta-box-builder'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", null, "{{ theme.url }}")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('URL to the current [child] theme directory', 'meta-box-builder')))))));
@@ -2358,16 +2401,15 @@ const getRenderViewId = renderView => {
 };
 const BlockRenderSettings = () => {
   const {
-    getSetting
+    getSetting,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_8__["default"])();
-  const [renderWith, setRenderWith] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(getSetting('render_with', 'callback'));
+  const renderWith = getSetting('render_with', 'callback');
   const [codeEditor, setCodeEditor] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)();
   const [views, setViews] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(MbbApp.views);
   const [renderView, setRenderView] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(getSetting('render_view'));
   const addViewButtonRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)();
   const editViewButtonRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)();
-  const codeRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useRef)();
-  const updateRenderWith = e => setRenderWith(e.target.value);
   const modalConfig = {
     hideElement: '#editor .interface-interface-skeleton__footer, .edit-post-fullscreen-mode-close',
     isBlockEditor: false,
@@ -2388,6 +2430,7 @@ const BlockRenderSettings = () => {
         }
       });
       setRenderView(postName);
+      updateSetting('render_view', postName);
     }
   };
   const showEditViewModal = e => {
@@ -2407,6 +2450,7 @@ const BlockRenderSettings = () => {
   };
   const handleSelectView = e => {
     setRenderView(e.target.value);
+    updateSetting('render_view', e.target.value);
   };
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (codeEditor) {
@@ -2420,24 +2464,26 @@ const BlockRenderSettings = () => {
     showEditViewModal(editViewButtonRef?.current);
   }, [editViewButtonRef.current, renderWith, renderView]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Select__WEBPACK_IMPORTED_MODULE_7__["default"], {
-    name: "settings[render_with]",
+    name: "render_with",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Render with', 'meta-box-builder'),
     componentId: "settings-block-render_with",
     options: renderWithOptions,
     defaultValue: renderWith,
-    onChange: updateRenderWith
+    updateField: updateSetting
   }), renderWith === 'callback' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    name: "settings[render_callback]",
+    name: "render_callback",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Render callback', 'meta-box-builder'),
     componentId: "settings-block-render_callback",
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter PHP function name', 'meta-box-builder'),
-    defaultValue: getSetting('render_callback', '')
+    defaultValue: getSetting('render_callback', ''),
+    updateField: updateSetting
   }), renderWith === 'template' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    name: "settings[render_template]",
+    name: "render_template",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Render template', 'meta-box-builder'),
     componentId: "settings-block-render_template",
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter absolute path to the template file', 'meta-box-builder'),
-    defaultValue: getSetting('render_template', '')
+    defaultValue: getSetting('render_template', ''),
+    updateField: updateSetting
   }), renderWith === 'code' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_5__["default"], {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Render code', 'meta-box-builder')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_codemirror2__WEBPACK_IMPORTED_MODULE_4__.UnControlled, {
@@ -2445,13 +2491,8 @@ const BlockRenderSettings = () => {
       mode: 'php'
     },
     value: getSetting('render_code', ''),
-    onChange: (editor, data, value) => codeRef.current.value = value,
+    onChange: (editor, data, value) => updateSetting('render_code', value),
     editorDidMount: setCodeEditor
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "hidden",
-    name: "settings[render_code]",
-    ref: codeRef,
-    defaultValue: getSetting('render_code', '')
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
     className: "og-block-description"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tbody", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", null, "{{ attribute }}")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.RawHTML, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Block attribute. Replace <code>attribute</code> with <code>anchor</code>, <code>align</code> or <code>className</code>).', 'meta-box-builder')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", null, "{{ field_id }}")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.RawHTML, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Field value. Replace <code>field_id</code> with a real field ID.', 'meta-box-builder')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", null, "{{ is_preview }}")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.RawHTML, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Whether in preview mode.', 'meta-box-builder')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", null, "{{ post_id }}")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.RawHTML, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Current post ID.', 'meta-box-builder')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("tr", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("code", null, "mb.function()")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("td", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.RawHTML, null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Run a PHP/WordPress function via <code>mb</code> namespace. Replace <code>function</code> with a valid PHP/WordPress function name.', 'meta-box-builder'))))))), renderWith === 'view' && MbbApp.extensions.views && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -2459,7 +2500,6 @@ const BlockRenderSettings = () => {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Select a view', 'meta-box-builder'),
     className: "og-field--block-view"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    name: "settings[render_view]",
     id: "settings-block-render_view",
     value: renderView,
     onChange: handleSelectView
@@ -2479,23 +2519,26 @@ const BlockRenderSettings = () => {
     href: "#",
     ref: editViewButtonRef
   }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edit View', 'meta-box-builder')))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    name: "settings[enqueue_style]",
+    name: "enqueue_style",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom CSS', 'meta-box-builder'),
     componentId: "settings-block-enqueue_style",
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter URL to the custom CSS file', 'meta-box-builder'),
-    defaultValue: getSetting('enqueue_style', '')
+    defaultValue: getSetting('enqueue_style', ''),
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    name: "settings[enqueue_script]",
+    name: "enqueue_script",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom JavaScript', 'meta-box-builder'),
     componentId: "settings-block-enqueue_script",
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter URL to the custom JavaScript file', 'meta-box-builder'),
-    defaultValue: getSetting('enqueue_script', '')
+    defaultValue: getSetting('enqueue_script', ''),
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    name: "settings[enqueue_assets]",
+    name: "enqueue_assets",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom assets callback', 'meta-box-builder'),
     componentId: "settings-block-enqueue_assets",
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter PHP callback function name', 'meta-box-builder'),
-    defaultValue: getSetting('enqueue_assets', '')
+    defaultValue: getSetting('enqueue_assets', ''),
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_5__["default"], {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Supported variables', 'meta-box-builder')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("table", {
@@ -2519,146 +2562,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _controls_FieldInserter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../controls/FieldInserter */ "./app/controls/FieldInserter.js");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../functions */ "./app/functions.js");
-/* harmony import */ var _hooks_useAllFields__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../hooks/useAllFields */ "./app/hooks/useAllFields.js");
-/* harmony import */ var _hooks_useSettings__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../hooks/useSettings */ "./app/hooks/useSettings.js");
+/* harmony import */ var _controls_ConditionalLogic__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../controls/ConditionalLogic */ "./app/controls/ConditionalLogic.js");
+/* harmony import */ var _hooks_useSettings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../hooks/useSettings */ "./app/hooks/useSettings.js");
 
 
 
-
-
-
-
-
-const ConditionalLogic = () => {
-  const name = 'settings[conditional_logic]';
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (() => {
   const {
-    getSetting
-  } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_7__["default"])();
+    getSetting,
+    updateSetting
+  } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_2__["default"])();
   const setting = getSetting('conditional_logic', {});
-  const [rules, setRules] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(Object.values(setting.when || {}));
-  const addRule = () => setRules(prev => [...prev, {
-    name: '',
-    operator: '=',
-    value: '',
-    id: (0,_functions__WEBPACK_IMPORTED_MODULE_5__.uniqid)()
-  }]);
-  const removeRule = id => setRules(prev => prev.filter(rule => rule.id !== id));
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, rules.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Intro, {
-    name: name,
-    setting: setting
-  }), rules.map(rule => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Rule, {
-    key: rule.id,
-    rule: rule,
-    name: `${name}[when][${rule.id}]`,
-    removeRule: removeRule
-  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    variant: "secondary",
-    onClick: addRule,
-    text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('+ Add Rule', 'meta-box-builder')
-  }));
-};
-const Intro = ({
-  name,
-  setting
-}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
-  gap: 1,
-  align: "center",
-  className: "og-include-exclude__intro"
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-  name: `${name}[type]`,
-  defaultValue: setting.type || 'visible'
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "visible"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Visible', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "hidden"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Hidden', 'meta-box-builder'))), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('when', 'meta-box-builder'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-  name: `${name}[relation]`,
-  defaultValue: setting.relation || 'or'
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "or"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('any', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "and"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('all', 'meta-box-builder'))), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('conditions match', 'meta-box-builder'));
-const Rule = ({
-  rule,
-  name,
-  removeRule
-}) => {
-  const ignoreTypes = ['background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group'];
-  const fields = (0,_hooks_useAllFields__WEBPACK_IMPORTED_MODULE_6__["default"])().filter(field => !ignoreTypes.includes(field.type)).map(field => [field.id, `${field.name} (${field.id})`]);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
-    className: "og-include-exclude__rule"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "hidden",
-    name: `${name}[id]`,
-    defaultValue: rule.id
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_FieldInserter__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    name: `${name}[name]`,
-    defaultValue: rule.name,
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter or select a field ID', 'meta-box-builder'),
-    items: fields,
-    isID: true
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    name: `${name}[operator]`,
-    className: "og-include-exclude__operator",
-    defaultValue: rule.operator
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "="
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('=', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: ">"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('>', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "<"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('<', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: ">="
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('>=', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "<="
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('<=', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "!="
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('!=', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "contains"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('contains', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "not contains"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('not contains', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "starts with"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('starts with', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "not starts with"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('not starts with', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "ends with"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('ends with', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "not ends with"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('not ends with', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "between"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('between', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "not between"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('not between', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "in"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('in', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "not in"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('not in', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "match"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('match', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "not match"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('not match', 'meta-box-builder'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    defaultValue: rule.value,
-    type: "text",
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter a value', 'meta-box-builder'),
-    name: `${name}[value]`
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
-    variant: "link",
-    isDestructive: true,
-    onClick: () => removeRule(rule.id),
-    text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Remove', 'meta-box-builder')
-  }));
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ConditionalLogic);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ConditionalLogic__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    defaultValue: setting,
+    updateField: updateSetting
+  });
+});
 
 /***/ }),
 
@@ -2690,21 +2609,24 @@ __webpack_require__.r(__webpack_exports__);
 
 const CustomTable = () => {
   const {
-    getSetting
+    getSetting,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_5__["default"])();
   const setting = getSetting('custom_table', {});
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    name: "settings[custom_table][enable]",
+    name: "custom_table.enable",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Save data in a custom table', 'meta-box-builder'),
     componentId: "settings-table_enable",
-    defaultValue: !!setting.enable
+    defaultValue: !!setting.enable,
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_4__["default"], {
     dependency: "table_enable:true",
-    name: "settings[custom_table][create]",
+    name: "custom_table.create",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Auto create table', 'meta-box-builder'),
     tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('This settings will create the table with all columns as TEXT. Create the table manually to set proper column types for a better performance.', 'meta-box-builder'),
     componentId: "settings-table_create",
-    defaultValue: !!setting.create
+    defaultValue: !!setting.create,
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_3__["default"], {
     htmlFor: "settings-table_name",
     dependency: "table_enable:true",
@@ -2715,17 +2637,13 @@ const CustomTable = () => {
     type: "text",
     size: 16,
     id: "settings-table_name",
-    name: "settings[custom_table][name]",
-    defaultValue: setting.name
+    defaultValue: setting.name,
+    onChange: e => updateSetting('custom_table.name', e.target.value)
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "hidden",
-    name: "settings[custom_table][prefix]",
-    value: false
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "checkbox",
-    name: "settings[custom_table][prefix]",
     defaultChecked: !!setting.prefix,
-    value: true
+    value: true,
+    onChange: e => updateSetting('custom_table.prefix', e.target.checked)
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     className: "dashicons dashicons-yes-alt"
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Tooltip, {
@@ -2770,30 +2688,43 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const IncludeExclude = () => {
-  const name = 'settings[include_exclude]';
   const {
-    getSetting
+    getSetting,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_7__["default"])();
   const setting = getSetting('include_exclude', {});
-  const [rules, setRules] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(Object.values(setting.rules || {}));
-  const addRule = () => setRules(prev => [...prev, {
-    name: 'ID',
-    value: '',
-    id: (0,_functions__WEBPACK_IMPORTED_MODULE_6__.uniqid)()
-  }]);
-  const removeRule = id => setRules(prev => prev.filter(rule => rule.id !== id));
+  const rules = (0,_functions__WEBPACK_IMPORTED_MODULE_6__.maybeArrayToObject)(setting.rules, 'id');
+  const addRule = () => {
+    const newRule = {
+      name: 'ID',
+      value: '',
+      id: (0,_functions__WEBPACK_IMPORTED_MODULE_6__.uniqid)()
+    };
+    const newRules = {
+      ...rules,
+      [newRule.id]: newRule
+    };
+    updateSetting('include_exclude.rules', newRules);
+  };
+  const removeRule = id => {
+    const newRules = {
+      ...rules
+    };
+    delete newRules[id];
+    updateSetting('include_exclude.rules', newRules);
+  };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_4__["default"], {
     className: "og-include-exclude",
     label: `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank">${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Advanced rules', 'meta-box-builder')}</a>`,
     tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('More rules on where to display the field group. For each rule, maximum 10 items are displayed. To select other items, please type to search.', 'meta-box-builder')
-  }, rules.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Intro, {
-    name: name,
-    setting: setting
-  }), rules.map(rule => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Rule, {
+  }, Object.values(rules).length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Intro, {
+    setting: setting,
+    updateSetting: updateSetting
+  }), Object.values(rules).map(rule => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Rule, {
     key: rule.id,
     rule: rule,
-    baseName: `${name}[rules][${rule.id}]`,
-    removeRule: removeRule
+    removeRule: removeRule,
+    updateSetting: updateSetting
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "secondary",
     onClick: addRule,
@@ -2801,31 +2732,42 @@ const IncludeExclude = () => {
   }));
 };
 const Intro = ({
-  name,
-  setting
-}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
-  gap: 1,
-  align: "center",
-  className: "og-include-exclude__intro"
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-  name: `${name}[type]`,
-  defaultValue: setting.type || 'include'
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "include"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "exclude"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Hide', 'meta-box-builder'))), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('when', 'meta-box-builder'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-  name: `${name}[relation]`,
-  defaultValue: setting.relation || 'OR'
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "OR"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('any', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "AND"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('all', 'meta-box-builder'))), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('conditions match', 'meta-box-builder'));
+  setting,
+  updateSetting
+}) => {
+  const update = key => value => updateSetting(`include_exclude.${key}`, value);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
+    gap: 1,
+    align: "center",
+    className: "og-include-exclude__intro"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: setting.type || 'include',
+    onChange: update('type'),
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Include', 'meta-box-builder'),
+      value: 'include'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Exclude', 'meta-box-builder'),
+      value: 'exclude'
+    }],
+    __nextHasNoMarginBottom: true
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('when', 'meta-box-builder'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: setting.relation || 'OR',
+    onChange: update('relation'),
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('any', 'meta-box-builder'),
+      value: 'OR'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('all', 'meta-box-builder'),
+      value: 'AND'
+    }],
+    __nextHasNoMarginBottom: true
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('conditions match', 'meta-box-builder'));
+};
 const Rule = ({
   rule,
-  baseName,
-  removeRule
+  removeRule,
+  updateSetting
 }) => {
   const {
     getObjectType,
@@ -2834,18 +2776,24 @@ const Rule = ({
   const postTypes = getPostTypes();
   const objectType = getObjectType();
   const [name, setName] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(rule.name);
-  const onChangeName = e => setName(e.target.value);
+  const onChangeName = value => {
+    setName(value);
+    updateSetting(`include_exclude.rules.${rule.id}.name`, value);
+  };
 
   // Validate rule name.
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (['comment', 'setting'].includes(objectType) && !['user_role', 'user_id', 'custom'].includes(name)) {
       setName('user_role');
+      updateSetting(`include_exclude.rules.${rule.id}.name`, 'user_role');
     }
     if (objectType === 'user' && !['user_role', 'user_id', 'edited_user_role', 'edited_user_id', 'custom'].includes(name)) {
       setName('user_role');
+      updateSetting(`include_exclude.rules.${rule.id}.name`, 'user_role');
     }
     if (objectType === 'term' && ['ID', 'parent', 'template', 'is_child'].includes(name)) {
       setName('category');
+      updateSetting(`include_exclude.rules.${rule.id}.name`, 'category');
     }
   }, [objectType]);
   const loadOptions = s => (0,_functions__WEBPACK_IMPORTED_MODULE_6__.fetcher)('include-exclude', {
@@ -2853,63 +2801,105 @@ const Rule = ({
     s,
     post_types: postTypes
   });
+  const optionsMap = {
+    'post': [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Post', 'meta-box-builder'),
+      value: 'ID'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Parent post', 'meta-box-builder'),
+      value: 'parent'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Page template', 'meta-box-builder'),
+      value: 'template'
+    }, ...MbbApp.taxonomies.map(taxonomy => ({
+      label: `${taxonomy.name} (${taxonomy.slug})`,
+      value: taxonomy.slug
+    })), ...MbbApp.taxonomies.map(taxonomy => ({
+      label: `${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Parent', 'meta-box-builder')} ${taxonomy.name} (${taxonomy.slug})`,
+      value: `parent_${taxonomy.slug}`
+    })), {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('User role', 'meta-box-builder'),
+      value: 'user_role'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('User', 'meta-box-builder'),
+      value: 'user_id'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Is child post', 'meta-box-builder'),
+      value: 'is_child'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom', 'meta-box-builder'),
+      value: 'custom'
+    }],
+    'term': [...MbbApp.taxonomies.map(taxonomy => ({
+      label: `${taxonomy.name} (${taxonomy.slug})`,
+      value: taxonomy.slug
+    })), ...MbbApp.taxonomies.map(taxonomy => ({
+      label: `${(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Parent', 'meta-box-builder')} ${taxonomy.name} (${taxonomy.slug})`,
+      value: `parent_${taxonomy.slug}`
+    })), {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('User role', 'meta-box-builder'),
+      value: 'user_role'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('User', 'meta-box-builder'),
+      value: 'user_id'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom', 'meta-box-builder'),
+      value: 'custom'
+    }],
+    'user': [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('User role', 'meta-box-builder'),
+      value: 'user_role'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('User', 'meta-box-builder'),
+      value: 'user_id'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edited user role', 'meta-box-builder'),
+      value: 'edited_user_role'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edited user', 'meta-box-builder'),
+      value: 'edited_user_id'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom', 'meta-box-builder'),
+      value: 'custom'
+    }],
+    'default': [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom', 'meta-box-builder'),
+      value: 'custom'
+    }]
+  };
+  const options = optionsMap[objectType] || optionsMap.default;
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "og-include-exclude__rule"
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "hidden",
-    name: `${baseName}[id]`,
-    defaultValue: rule.id
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    name: `${baseName}[name]`,
-    className: "og-include-exclude__name",
-    defaultValue: name,
-    onChange: onChangeName
-  }, objectType === 'post' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "ID"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Post', 'meta-box-builder')), objectType === 'post' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "parent"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Parent post', 'meta-box-builder')), objectType === 'post' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "template"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Page template', 'meta-box-builder')), ['term', 'post'].includes(objectType) && MbbApp.taxonomies.map(taxonomy => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    key: taxonomy.slug,
-    value: taxonomy.slug
-  }, taxonomy.name, " (", taxonomy.slug, ")")), ['term', 'post'].includes(objectType) && MbbApp.taxonomies.map(taxonomy => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    key: taxonomy.slug,
-    value: `parent_${taxonomy.slug}`
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Parent', 'meta-box-builder'), " ", taxonomy.name, " (", taxonomy.slug, ")")), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "user_role"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('User role', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "user_id"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('User', 'meta-box-builder')), objectType === 'user' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "edited_user_role"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edited user role', 'meta-box-builder')), objectType === 'user' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "edited_user_id"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Edited user', 'meta-box-builder')), objectType === 'post' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "is_child"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Is child post', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "custom"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Custom', 'meta-box-builder'))),
-  // Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
-  !['is_child', 'custom'].includes(name) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactAsyncSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    key: name + objectType + postTypes,
-    baseName: baseName,
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: name,
+    onChange: onChangeName,
+    options: options,
+    __nextHasNoMarginBottom: true
+  }), !['is_child', 'custom'].includes(name) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactAsyncSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    key: `${name}-${objectType}-${JSON.stringify(postTypes)}`,
     className: "og-include-exclude__value",
     defaultValue: rule,
-    loadOptions: loadOptions
-  }), name === 'is_child' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    className: "og-include-exclude__value",
-    name: `${baseName}[value]`,
-    defaultValue: rule.value
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "true"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Yes', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "false"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No', 'meta-box-builder'))), name === 'custom' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "text",
-    name: `${baseName}[value]`,
-    className: "og-include-exclude__value",
+    loadOptions: loadOptions,
+    onChange: items => {
+      updateSetting(`include_exclude.rules.${rule.id}.value`, items ? items.map(item => item.value) : []);
+      updateSetting(`include_exclude.rules.${rule.id}.label`, items ? items.map(item => item.label) : []);
+    }
+  }), name === 'is_child' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: rule.value || 'true',
+    onChange: value => updateSetting(`include_exclude.rules.${rule.id}.value`, value),
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Yes', 'meta-box-builder'),
+      value: 'true'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No', 'meta-box-builder'),
+      value: 'false'
+    }],
+    __nextHasNoMarginBottom: true
+  }), name === 'custom' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.TextControl, {
+    value: rule.value,
+    onChange: value => updateSetting(`include_exclude.rules.${rule.id}.value`, value),
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Enter PHP callback function name', 'meta-box-builder'),
-    defaultValue: rule.value
+    __nextHasNoMarginBottom: true
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "link",
     isDestructive: true,
@@ -2934,17 +2924,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _controls_DivRow__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../controls/DivRow */ "./app/controls/DivRow.js");
-/* harmony import */ var _controls_ReactSelect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../controls/ReactSelect */ "./app/controls/ReactSelect.js");
-/* harmony import */ var _controls_Select__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../controls/Select */ "./app/controls/Select.js");
-/* harmony import */ var _controls_Toggle__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../controls/Toggle */ "./app/controls/Toggle.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _controls_DivRow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../controls/DivRow */ "./app/controls/DivRow.js");
+/* harmony import */ var _controls_ReactSelect__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../controls/ReactSelect */ "./app/controls/ReactSelect.js");
+/* harmony import */ var _controls_Select__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../controls/Select */ "./app/controls/Select.js");
+/* harmony import */ var _controls_Toggle__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../controls/Toggle */ "./app/controls/Toggle.js");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../functions */ "./app/functions.js");
 /* harmony import */ var _hooks_useSettings__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../hooks/useSettings */ "./app/hooks/useSettings.js");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../../../../functions */ "./app/functions.js");
-
 
 
 
@@ -2959,72 +2946,74 @@ const Location = () => {
     updateObjectType,
     getPostTypes,
     updatePostTypes,
-    getSetting
+    getSetting,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_7__["default"])();
   const objectType = getObjectType();
   const postTypes = getPostTypes();
-  const [settingsPages, setSettingsPages] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)((0,_functions__WEBPACK_IMPORTED_MODULE_8__.ensureArray)(getSetting('settings_pages', [])));
+  const settingsPages = (0,_functions__WEBPACK_IMPORTED_MODULE_6__.ensureArray)(getSetting('settings_pages', []));
   const selectedSettingsPage = MbbApp.settingsPages.find(p => settingsPages.includes(p.id));
   const tabs = selectedSettingsPage ? selectedSettingsPage.tabs : [];
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Rule', 'meta-box-builder'),
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_DivRow__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Rule', 'meta-box-builder'),
     htmlFor: "settings-object_type",
     className: "og-location",
-    tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Where to display the field group', 'meta-box-builder')
+    tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Where to display the field group', 'meta-box-builder')
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
     id: "settings-object_type",
-    name: "settings[object_type]",
     defaultValue: objectType,
     onChange: e => updateObjectType(e.target.value)
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "post"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Post type', 'meta-box-builder')), MbbApp.extensions.termMeta && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Post type', 'meta-box-builder')), MbbApp.extensions.termMeta && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "term"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Taxonomy', 'meta-box-builder')), MbbApp.extensions.userMeta && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Taxonomy', 'meta-box-builder')), MbbApp.extensions.userMeta && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "user"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('User', 'meta-box-builder')), MbbApp.extensions.commentMeta && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('User', 'meta-box-builder')), MbbApp.extensions.commentMeta && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "comment"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Comment', 'meta-box-builder')), MbbApp.extensions.settingsPage && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Comment', 'meta-box-builder')), MbbApp.extensions.settingsPage && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "setting"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Settings page', 'meta-box-builder')), MbbApp.extensions.blocks && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Settings page', 'meta-box-builder')), MbbApp.extensions.blocks && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
     value: "block"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Block', 'meta-box-builder'))), 'post' === objectType && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Block', 'meta-box-builder'))), 'post' === objectType && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
     wrapper: false,
-    name: "settings[post_types][]",
     options: MbbApp.postTypes.map(item => ({
       value: item.slug,
       label: `${item.name} (${item.slug})`
     })),
     defaultValue: postTypes,
-    onChange: items => updatePostTypes(items ? items.map(item => item.value) : [])
-  }), 'term' === objectType && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    updateField: (name, values) => updatePostTypes(values)
+  }), 'term' === objectType && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    name: "taxonomies",
     wrapper: false,
-    name: "settings[taxonomies][]",
     options: MbbApp.taxonomies.map(item => ({
       value: item.slug,
       label: `${item.name} (${item.slug})`
     })),
-    defaultValue: (0,_functions__WEBPACK_IMPORTED_MODULE_8__.ensureArray)(getSetting('taxonomies', []))
-  }), 'setting' === objectType && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactSelect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    defaultValue: (0,_functions__WEBPACK_IMPORTED_MODULE_6__.ensureArray)(getSetting('taxonomies', [])),
+    updateField: updateSetting
+  }), 'setting' === objectType && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactSelect__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    name: "settings_pages",
     wrapper: false,
-    name: "settings[settings_pages][]",
     options: MbbApp.settingsPages.map(item => ({
       value: item.id,
       label: `${item.title} (${item.id})`
     })),
-    defaultValue: (0,_functions__WEBPACK_IMPORTED_MODULE_8__.ensureArray)(getSetting('settings_pages', [])),
-    onChange: items => setSettingsPages(items ? items.map(item => item.value) : [])
-  })), 'post' === objectType && postTypes.includes('attachment') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_6__["default"], {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Show in media modal', 'meta-box-builder'),
-    name: "settings[media_modal]",
-    defaultValue: !!getSetting('media_modal', false)
-  }), 'setting' === objectType && Object.keys(tabs).length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Select__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Tab', 'meta-box-builder'),
-    tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Select a tab in the settings page that the field group belongs to', 'meta-box-builder'),
-    name: "settings[tab]",
+    defaultValue: (0,_functions__WEBPACK_IMPORTED_MODULE_6__.ensureArray)(getSetting('settings_pages', [])),
+    updateField: updateSetting
+  })), 'post' === objectType && postTypes.includes('attachment') && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Show in media modal', 'meta-box-builder'),
+    defaultValue: !!getSetting('media_modal', false),
+    name: "media_modal",
+    updateField: updateSetting
+  }), 'setting' === objectType && Object.keys(tabs).length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Select__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tab', 'meta-box-builder'),
+    tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select a tab in the settings page that the field group belongs to', 'meta-box-builder'),
     options: tabs,
     defaultValue: getSetting('tab', ''),
-    componentId: "settings-tab"
+    componentId: "settings-tab",
+    name: "tab",
+    updateField: updateSetting
   }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Location);
@@ -3059,7 +3048,8 @@ __webpack_require__.r(__webpack_exports__);
 const Post = () => {
   const {
     getPostTypes,
-    getSetting
+    getSetting,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_5__["default"])();
   const postTypes = getPostTypes();
   const isClassic = !MbbApp.postTypes.find(pt => postTypes.includes(pt.slug) && pt.block_editor);
@@ -3074,45 +3064,52 @@ const Post = () => {
     contextOptions.after_title = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('After post title', 'meta-box-builder');
   }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(ContextControl, {
-    name: "settings[context]",
+    name: "context",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Position', 'meta-box-builder'),
     options: contextOptions,
-    defaultValue: getSetting('context', 'normal')
+    defaultValue: getSetting('context', 'normal'),
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ToggleGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    name: "settings[priority]",
+    name: "priority",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Priority', 'meta-box-builder'),
     options: {
       high: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('High', 'meta-box-builder'),
       low: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Low', 'meta-box-builder')
     },
-    defaultValue: getSetting('priority', 'high')
+    defaultValue: getSetting('priority', 'high'),
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ToggleGroup__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    name: "settings[style]",
+    name: "style",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Style', 'meta-box-builder'),
     options: {
       default: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Standard', 'meta-box-builder'),
       seamless: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Seamless', 'meta-box-builder')
     },
-    defaultValue: getSetting('style', 'default')
+    defaultValue: getSetting('style', 'default'),
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    name: "settings[closed]",
+    name: "closed",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Collapsed by default', 'meta-box-builder'),
     tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Whether to collapse the meta box when page loads', 'meta-box-builder'),
-    defaultValue: !!getSetting('closed', false)
+    defaultValue: !!getSetting('closed', false),
+    updateField: updateSetting
   }), isClassic && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    name: "settings[default_hidden]",
+    name: "default_hidden",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Hidden by default', 'meta-box-builder'),
     tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('The meta box is hidden by default and requires users to select the corresponding checkbox in Screen Options to show it', 'meta-box-builder'),
-    defaultValue: !!getSetting('default_hidden', false)
+    defaultValue: !!getSetting('default_hidden', false),
+    updateField: updateSetting
   }), isClassic && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    name: "settings[autosave]",
+    name: "autosave",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Autosave', 'meta-box-builder'),
-    defaultValue: !!getSetting('autosave', false)
+    defaultValue: !!getSetting('autosave', false),
+    updateField: updateSetting
   }), MbbApp.extensions.revision && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Toggle__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    name: "settings[revision]",
+    name: "revision",
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Enable revision', 'meta-box-builder'),
     tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Track changes of custom fields with revisions', 'meta-box-builder'),
-    defaultValue: !!getSetting('revision', false)
+    defaultValue: !!getSetting('revision', false),
+    updateField: updateSetting
   }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Post);
@@ -3151,26 +3148,41 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const ShowHide = () => {
-  const name = 'settings[show_hide]';
   const {
-    getSetting
+    getSetting,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_7__["default"])();
   const setting = getSetting('show_hide', {});
-  const [rules, setRules] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(Object.values(setting.rules || {}));
-  const addRule = () => setRules(prev => [...prev, {
-    name: 'template',
-    value: '',
-    id: (0,_functions__WEBPACK_IMPORTED_MODULE_6__.uniqid)()
-  }]);
-  const removeRule = id => setRules(prev => prev.filter(rule => rule.id !== id));
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, rules.length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Intro, {
-    name: name,
-    setting: setting
-  }), rules.map(rule => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Rule, {
+  const rules = (0,_functions__WEBPACK_IMPORTED_MODULE_6__.maybeArrayToObject)(setting.rules, 'id');
+  const addRule = () => {
+    const newRule = {
+      name: 'template',
+      value: '',
+      id: (0,_functions__WEBPACK_IMPORTED_MODULE_6__.uniqid)()
+    };
+    const newRules = {
+      ...rules,
+      [newRule.id]: newRule
+    };
+    updateSetting('show_hide.rules', newRules);
+  };
+  const removeRule = id => {
+    const newRules = {
+      ...rules
+    };
+    delete newRules[id];
+    updateSetting('show_hide.rules', newRules);
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "og-include-exclude"
+  }, Object.values(rules).length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Intro, {
+    setting: setting,
+    updateSetting: updateSetting
+  }), Object.values(rules).map(rule => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Rule, {
     key: rule.id,
     rule: rule,
-    baseName: `${name}[rules][${rule.id}]`,
-    removeRule: removeRule
+    removeRule: removeRule,
+    updateSetting: updateSetting
   })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "secondary",
     onClick: addRule,
@@ -3178,38 +3190,52 @@ const ShowHide = () => {
   }));
 };
 const Intro = ({
-  name,
-  setting
-}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
-  gap: 1,
-  align: "center",
-  className: "og-include-exclude__intro"
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-  name: `${name}[type]`,
-  defaultValue: setting.type || 'show'
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "show"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "hide"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Hide', 'meta-box-builder'))), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('when', 'meta-box-builder'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-  name: `${name}[relation]`,
-  defaultValue: setting.relation || 'OR'
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "OR"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('any', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-  value: "AND"
-}, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('all', 'meta-box-builder'))), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('conditions match', 'meta-box-builder'));
+  setting,
+  updateSetting
+}) => {
+  const update = key => value => updateSetting(`show_hide.${key}`, value);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
+    gap: 1,
+    align: "center",
+    className: "og-include-exclude__intro"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: setting.type || 'show',
+    onChange: update('type'),
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Show', 'meta-box-builder'),
+      value: 'show'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Hide', 'meta-box-builder'),
+      value: 'hide'
+    }],
+    __nextHasNoMarginBottom: true
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('when', 'meta-box-builder'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: setting.relation || 'OR',
+    onChange: update('relation'),
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('any', 'meta-box-builder'),
+      value: 'OR'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('all', 'meta-box-builder'),
+      value: 'AND'
+    }],
+    __nextHasNoMarginBottom: true
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('conditions match', 'meta-box-builder'));
+};
 const Rule = ({
   rule,
-  baseName,
-  removeRule
+  removeRule,
+  updateSetting
 }) => {
   const {
     getObjectType
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_7__["default"])();
   const objectType = getObjectType();
   const [name, setName] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)(rule.name);
-  const onChangeName = e => setName(e.target.value);
+  const onChangeName = value => {
+    setName(value);
+    updateSetting(`show_hide.rules.${rule.id}.name`, value);
+  };
   const loadOptions = s => (0,_functions__WEBPACK_IMPORTED_MODULE_6__.fetcher)('show-hide', {
     name,
     s
@@ -3219,51 +3245,63 @@ const Rule = ({
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useEffect)(() => {
     if (objectType !== 'post' && name !== 'input_value') {
       setName('input_value');
+      updateSetting(`show_hide.rules.${rule.id}.name`, 'input_value');
     }
   }, [objectType]);
+  const updateInputValue = (name, items) => updateSetting(`show_hide.rules.${rule.id}.value`, items);
+  const options = objectType === 'post' ? [{
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Page template', 'meta-box-builder'),
+    value: 'template'
+  }, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Post format', 'meta-box-builder'),
+    value: 'format'
+  }, ...MbbApp.taxonomies.map(taxonomy => ({
+    label: `${taxonomy.name} (${taxonomy.slug})`,
+    value: taxonomy.slug
+  })), {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Is child post', 'meta-box-builder'),
+    value: 'is_child'
+  }, {
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Input value', 'meta-box-builder'),
+    value: 'input_value'
+  }] : [{
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Input value', 'meta-box-builder'),
+    value: 'input_value'
+  }];
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: `og-include-exclude__rule ${name === 'input_value' ? ' og-show-hide__inputs' : ''}`
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    type: "hidden",
-    name: `${baseName}[id]`,
-    defaultValue: rule.id
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    name: `${baseName}[name]`,
-    className: "og-include-exclude__name",
-    defaultValue: name,
-    onChange: onChangeName
-  }, objectType === 'post' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "template"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Page template', 'meta-box-builder')), objectType === 'post' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "format"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Post format', 'meta-box-builder')), objectType === 'post' && MbbApp.taxonomies.map(taxonomy => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    key: taxonomy.slug,
-    value: taxonomy.slug
-  }, taxonomy.name, " (", taxonomy.slug, ")")), objectType === 'post' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "is_child"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Is child post', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "input_value"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Input value', 'meta-box-builder'))),
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: name,
+    onChange: onChangeName,
+    options: options,
+    __nextHasNoMarginBottom: true
+  }),
   // Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
   !['is_child', 'input_value'].includes(name) && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ReactAsyncSelect__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    key: name + objectType,
-    name: `${baseName}[value][]`,
-    baseName: baseName,
+    key: `${name}-${objectType}`,
     className: "og-include-exclude__value",
     defaultValue: rule,
-    loadOptions: loadOptions
-  }), name === 'is_child' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
-    className: "og-include-exclude__value",
-    name: `${baseName}[value]`,
-    defaultValue: rule.value
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "true"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Yes', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
-    value: "false"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No', 'meta-box-builder'))), name === 'input_value' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_KeyValue__WEBPACK_IMPORTED_MODULE_4__["default"], {
-    name: `${baseName}[value]`,
+    loadOptions: loadOptions,
+    onChange: items => {
+      updateSetting(`show_hide.rules.${rule.id}.value`, items ? items.map(item => item.value) : []);
+      updateSetting(`show_hide.rules.${rule.id}.label`, items ? items.map(item => item.label) : []);
+    }
+  }), name === 'is_child' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: rule.value || 'true',
+    onChange: value => updateSetting(`show_hide.rules.${rule.id}.value`, value),
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Yes', 'meta-box-builder'),
+      value: 'true'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('No', 'meta-box-builder'),
+      value: 'false'
+    }],
+    __nextHasNoMarginBottom: true
+  }), name === 'input_value' && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_KeyValue__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    name: "value",
     keyPlaceholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('CSS selector', 'meta-box-builder'),
-    defaultValue: name === rule.name ? rule.value : {}
+    defaultValue: name === rule.name ? rule.value : {},
+    updateField: updateInputValue
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
     variant: "link",
     isDestructive: true,
@@ -3308,7 +3346,9 @@ const Summary = ({
   defaultValue: MbbApp.slug
 })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
   className: "mb-summary__status"
-}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Status', 'meta-box-builder')), " ", MbbApp.status), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Published', 'meta-box-builder')), " ", MbbApp.published), MbbApp.modified && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Last modified', 'meta-box-builder')), " ", MbbApp.modified), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Author', 'meta-box-builder')), " ", MbbApp.author), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Status', 'meta-box-builder')), " ", (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  id: "post_status"
+}, MbbApp.status)), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Published', 'meta-box-builder')), " ", MbbApp.published), MbbApp.modified && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Last modified', 'meta-box-builder')), " ", MbbApp.modified), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Author', 'meta-box-builder')), " ", MbbApp.author), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
   href: MbbApp.trash,
   isDestructive: true,
   variant: "secondary"
@@ -3342,22 +3382,25 @@ __webpack_require__.r(__webpack_exports__);
 
 const Tabs = () => {
   const {
-    getSetting
+    getSetting,
+    updateSetting
   } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_4__["default"])();
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_ToggleGroup__WEBPACK_IMPORTED_MODULE_3__["default"], {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Tab style', 'meta-box-builder'),
     tooltip: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Change how look and feel of tabs in Meta Box Tabs', 'meta-box-builder'),
-    name: "settings[tab_style]",
+    name: "tab_style",
     options: {
       default: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Default', 'meta-box-builder'),
       box: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Box', 'meta-box-builder'),
       left: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Left', 'meta-box-builder')
     },
-    defaultValue: getSetting('tab_style', 'default')
+    defaultValue: getSetting('tab_style', 'default'),
+    updateField: updateSetting
   }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_controls_Input__WEBPACK_IMPORTED_MODULE_2__["default"], {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Default active tab ID', 'meta-box-builder'),
-    name: "settings[tab_default_active]",
-    defaultValue: getSetting('tab_default_active', '')
+    name: "tab_default_active",
+    defaultValue: getSetting('tab_default_active', ''),
+    updateField: updateSetting
   }));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Tabs);
@@ -4259,13 +4302,17 @@ var map = {
 		"./app/controls/CloneSettings.js",
 		"app_controls_CloneSettings_js"
 	],
+	"./Color": [
+		"./app/controls/Color.js"
+	],
+	"./Color.js": [
+		"./app/controls/Color.js"
+	],
 	"./ConditionalLogic": [
-		"./app/controls/ConditionalLogic.js",
-		"app_controls_ConditionalLogic_js"
+		"./app/controls/ConditionalLogic.js"
 	],
 	"./ConditionalLogic.js": [
-		"./app/controls/ConditionalLogic.js",
-		"app_controls_ConditionalLogic_js"
+		"./app/controls/ConditionalLogic.js"
 	],
 	"./DashiconPicker": [
 		"./app/controls/DashiconPicker.js"
@@ -4480,6 +4527,236 @@ module.exports = webpackAsyncContext;
 
 /***/ }),
 
+/***/ "./app/controls/Color.js":
+/*!*******************************!*\
+  !*** ./app/controls/Color.js ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _DivRow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DivRow */ "./app/controls/DivRow.js");
+
+
+
+const Color = ({
+  name,
+  defaultValue = '',
+  updateField,
+  ...rest
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DivRow__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  ...rest
+}, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Dropdown, {
+  renderToggle: ({
+    onToggle
+  }) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+    type: "button",
+    onClick: onToggle,
+    className: "button button-secondary og-icon__pick",
+    style: {
+      backgroundColor: defaultValue || 'transparent'
+    }
+  }),
+  renderContent: () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ColorPicker, {
+    color: defaultValue,
+    onChange: value => updateField(name, value),
+    copyFormat: "hex"
+  })
+}));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Color);
+
+/***/ }),
+
+/***/ "./app/controls/ConditionalLogic.js":
+/*!******************************************!*\
+  !*** ./app/controls/ConditionalLogic.js ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../functions */ "./app/functions.js");
+/* harmony import */ var _hooks_useAllFields__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../hooks/useAllFields */ "./app/hooks/useAllFields.js");
+/* harmony import */ var _hooks_useSettings__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../hooks/useSettings */ "./app/hooks/useSettings.js");
+/* harmony import */ var _FieldInserter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./FieldInserter */ "./app/controls/FieldInserter.js");
+
+
+
+
+
+
+
+const ConditionalLogic = ({
+  defaultValue,
+  updateField
+}) => {
+  const setting = defaultValue;
+  const rules = (0,_functions__WEBPACK_IMPORTED_MODULE_3__.maybeArrayToObject)(setting.when, 'id');
+  const addRule = () => {
+    const newRule = {
+      name: '',
+      operator: '=',
+      value: '',
+      id: (0,_functions__WEBPACK_IMPORTED_MODULE_3__.uniqid)()
+    };
+    updateField('conditional_logic.when', {
+      ...rules,
+      [newRule.id]: newRule
+    });
+  };
+  const removeRule = id => {
+    const newRules = {
+      ...rules
+    };
+    delete newRules[id];
+    updateField('conditional_logic.when', newRules);
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "og-include-exclude"
+  }, Object.values(rules).length > 0 && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Intro, {
+    setting: setting,
+    updateField: updateField
+  }), Object.values(rules).map(rule => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Rule, {
+    key: rule.id,
+    rule: rule,
+    removeRule: removeRule,
+    updateField: updateField
+  })), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "secondary",
+    onClick: addRule,
+    text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('+ Add Rule', 'meta-box-builder')
+  }));
+};
+const Intro = ({
+  setting,
+  updateField
+}) => {
+  const update = key => value => updateField(`conditional_logic.${key}`, value);
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Flex, {
+    gap: 1,
+    align: "center",
+    className: "og-include-exclude__intro"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: setting.type || 'visible',
+    onChange: update('type'),
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Visible', 'meta-box-builder'),
+      value: 'visible'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Hidden', 'meta-box-builder'),
+      value: 'hidden'
+    }],
+    __nextHasNoMarginBottom: true
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('when', 'meta-box-builder'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SelectControl, {
+    value: setting.relation || 'or',
+    onChange: update('relation'),
+    options: [{
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('any', 'meta-box-builder'),
+      value: 'or'
+    }, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('all', 'meta-box-builder'),
+      value: 'and'
+    }],
+    __nextHasNoMarginBottom: true
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('conditions match', 'meta-box-builder'));
+};
+const Rule = ({
+  rule,
+  removeRule,
+  updateField
+}) => {
+  const {
+    getPrefix
+  } = (0,_hooks_useSettings__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  const ignoreTypes = ['background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group'];
+  const fields = (0,_hooks_useAllFields__WEBPACK_IMPORTED_MODULE_4__["default"])().filter(field => !ignoreTypes.includes(field.type)).map(field => [field.id, `${field.name} (${field.id})`]);
+  const update = key => e => updateField(`conditional_logic.when.${rule.id}.${key}`, e.target.value);
+  const handleChangeName = (inputRef, value) => updateField(`conditional_logic.when.${rule.id}.name`, value);
+  const handleSelectName = (inputRef, value) => {
+    inputRef.current.value = `${getPrefix() || ''}${value}`;
+    updateField(`conditional_logic.when.${rule.id}.name`, inputRef.current.value);
+  };
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "og-include-exclude__rule"
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_FieldInserter__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    defaultValue: rule.name,
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter or select a field ID', 'meta-box-builder'),
+    items: fields,
+    isID: true,
+    onChange: handleChangeName,
+    onSelect: handleSelectName
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("select", {
+    className: "og-include-exclude__operator",
+    defaultValue: rule.operator,
+    onChange: update('operator')
+  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "="
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('=', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: ">"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('>', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "<"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('<', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: ">="
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('>=', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "<="
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('<=', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "!="
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('!=', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "contains"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('contains', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "not contains"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('not contains', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "starts with"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('starts with', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "not starts with"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('not starts with', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "ends with"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('ends with', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "not ends with"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('not ends with', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "between"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('between', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "not between"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('not between', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "in"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('in', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "not in"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('not in', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "match"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('match', 'meta-box-builder')), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
+    value: "not match"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('not match', 'meta-box-builder'))), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    defaultValue: rule.value,
+    type: "text",
+    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Enter a value', 'meta-box-builder'),
+    onChange: update('value')
+  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.Button, {
+    variant: "link",
+    isDestructive: true,
+    onClick: () => removeRule(rule.id),
+    text: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Remove', 'meta-box-builder')
+  }));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ConditionalLogic);
+
+/***/ }),
+
 /***/ "./app/controls/DashiconPicker.js":
 /*!****************************************!*\
   !*** ./app/controls/DashiconPicker.js ***!
@@ -4539,7 +4816,6 @@ const getIconLabel = icon => {
 };
 const DashiconPicker = ({
   name,
-  componentId,
   defaultValue,
   updateField,
   ...rest
@@ -4814,8 +5090,7 @@ const Input = ({
   updateField,
   ...rest
 }) => {
-  const handleChange = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((0,lodash__WEBPACK_IMPORTED_MODULE_2__.debounce)(e => updateField(name, e.target.value), 300), [] // empty deps means it runs once
-  );
+  const handleChange = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useCallback)((0,lodash__WEBPACK_IMPORTED_MODULE_2__.debounce)(e => updateField(name, e.target.value), 300), [name, updateField]);
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DivRow__WEBPACK_IMPORTED_MODULE_3__["default"], {
     htmlFor: componentId,
     ...rest
@@ -4873,7 +5148,7 @@ const KeyValue = ({
   updateField,
   ...rest
 }) => {
-  defaultValue = (0,_functions__WEBPACK_IMPORTED_MODULE_6__.maybeArrayToObject)(defaultValue, 'id');
+  const items = (0,_functions__WEBPACK_IMPORTED_MODULE_6__.maybeArrayToObject)(defaultValue, 'id');
   const add = () => {
     const newItem = {
       key: '',
@@ -4881,21 +5156,21 @@ const KeyValue = ({
       id: (0,_functions__WEBPACK_IMPORTED_MODULE_6__.uniqid)()
     };
     updateField(name, {
-      ...defaultValue,
+      ...items,
       [newItem.id]: newItem
     });
   };
   const remove = id => {
     const newItems = {
-      ...defaultValue
+      ...items
     };
     delete newItems[id];
     updateField(name, newItems);
   };
   const updateItem = (id, prop, value) => updateField(name, {
-    ...defaultValue,
+    ...items,
     [id]: {
-      ...defaultValue[id],
+      ...items[id],
       [prop]: value
     }
   });
@@ -4904,7 +5179,7 @@ const KeyValue = ({
     ...rest
   }, description && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.RawHTML, {
     className: "og-description"
-  }, description), Object.values(defaultValue || {}).map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Item, {
+  }, description), Object.values(items || {}).map(item => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Item, {
     key: item.id,
     item: item,
     remove: remove,
@@ -4979,50 +5254,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_select_async__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-select/async */ "./node_modules/.pnpm/react-select@5.10.1_@types+react@19.1.4_react-dom@18.3.1_react@18.3.1/node_modules/react-select/async/dist/react-select-async.esm.js");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../../../../functions */ "./app/functions.js");
-
+/* harmony import */ var react_select_async__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-select/async */ "./node_modules/.pnpm/react-select@5.10.1_@types+react@19.1.4_react-dom@18.3.1_react@18.3.1/node_modules/react-select/async/dist/react-select-async.esm.js");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions */ "./app/functions.js");
 
 
 
 const ReactAsyncSelect = ({
-  baseName,
-  isMulti = true,
   className,
   defaultValue,
   ...rest
 }) => {
-  const [labels, setLabels] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)((0,_functions__WEBPACK_IMPORTED_MODULE_3__.ensureArray)(defaultValue.label || []));
-  let values = defaultValue.value || [];
-  values = (0,_functions__WEBPACK_IMPORTED_MODULE_3__.ensureArray)(values);
-  let transformedDefaultValue;
-  if (values) {
-    transformedDefaultValue = values.map((value, index) => ({
-      value,
-      label: labels[index]
-    }));
-  }
-  const onChange = items => {
-    const newLabels = Array.isArray(items) ? items.map(item => item.label) : [items.label];
-    setLabels(newLabels);
-  };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select_async__WEBPACK_IMPORTED_MODULE_2__["default"], {
-    name: isMulti ? `${baseName}[value][]` : `${baseName}[value]`,
+  const labels = (0,_functions__WEBPACK_IMPORTED_MODULE_2__.ensureArray)(defaultValue.label || []);
+  const values = (0,_functions__WEBPACK_IMPORTED_MODULE_2__.ensureArray)(defaultValue.value || []);
+  const transformedDefaultValue = values.length > 0 ? values.map((value, index) => ({
+    value,
+    label: labels[index]
+  })) : null;
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select_async__WEBPACK_IMPORTED_MODULE_1__["default"], {
     className: `react-select ${className}`,
     classNamePrefix: "react-select",
-    isMulti: isMulti,
+    isMulti: true,
     defaultOptions: true,
-    defaultValue: isMulti ? transformedDefaultValue : defaultValue,
-    onChange: onChange,
+    defaultValue: transformedDefaultValue,
     ...rest
-  }), labels.map(label => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-    key: label,
-    type: "hidden",
-    name: isMulti ? `${baseName}[label][]` : `${baseName}[label]`,
-    defaultValue: label
-  })));
+  });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ReactAsyncSelect);
 
@@ -5055,10 +5310,12 @@ const ReactSelect = ({
   keyValue,
   required,
   dependency,
+  name,
   wrapper = true,
   // Whether to wrap in DivRow.
   options,
   defaultValue,
+  updateField,
   ...rest
 }) => {
   if (!Array.isArray(options)) {
@@ -5071,12 +5328,14 @@ const ReactSelect = ({
     }
     newValue = newValue.map(value => options.find(item => item.value === value));
   }
+  const handleChange = items => updateField(name, items ? items.map(item => item.value) : []);
   const select = (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_select__WEBPACK_IMPORTED_MODULE_2__["default"], {
     className: "react-select",
     classNamePrefix: "react-select",
     isMulti: true,
     options: options,
     defaultValue: newValue,
+    onChange: handleChange,
     ...rest
   });
   return !wrapper ? select : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_DivRow__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -5356,7 +5615,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   sanitizeId: () => (/* binding */ sanitizeId),
 /* harmony export */   scrollIntoView: () => (/* binding */ scrollIntoView),
 /* harmony export */   ucwords: () => (/* binding */ ucwords),
-/* harmony export */   uniqid: () => (/* binding */ uniqid)
+/* harmony export */   uniqid: () => (/* binding */ uniqid),
+/* harmony export */   updateNewPostUrl: () => (/* binding */ updateNewPostUrl)
 /* harmony export */ });
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
@@ -5626,6 +5886,17 @@ const scrollIntoView = id => {
     });
   }
 };
+const updateNewPostUrl = () => {
+  const postId = document.querySelector('#post_ID')?.value;
+  if (!postId) {
+    return;
+  }
+
+  // Only update URL if we're on the new post page.
+  if (location.href.includes('post-new.php')) {
+    history.replaceState({}, '', `${MbbApp.adminUrl}post.php?post=${postId}&action=edit`);
+  }
+};
 const maybeArrayToObject = (arr, key) => {
   if (Array.isArray(arr)) {
     return arr.reduce((obj, item) => {
@@ -5830,12 +6101,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var zustand__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! zustand */ "./node_modules/.pnpm/zustand@4.5.5_@types+react@19.1.4_react@18.3.1/node_modules/zustand/esm/index.mjs");
-/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../functions */ "./app/functions.js");
+/* harmony import */ var dot_prop__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dot-prop */ "./node_modules/.pnpm/dot-prop@6.0.1/node_modules/dot-prop/index.js");
+/* harmony import */ var dot_prop__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dot_prop__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var zustand__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! zustand */ "./node_modules/.pnpm/zustand@4.5.5_@types+react@19.1.4_react@18.3.1/node_modules/zustand/esm/index.mjs");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions */ "./app/functions.js");
+
 
 
 const getSettings = () => {
-  const urlParams = (0,_functions__WEBPACK_IMPORTED_MODULE_0__.parseQueryString)(window.location.search);
+  const urlParams = (0,_functions__WEBPACK_IMPORTED_MODULE_1__.parseQueryString)(window.location.search);
   const settings = MbbApp.settings || {};
   return {
     ...settings,
@@ -5847,30 +6121,66 @@ const sanitize = types => {
   // Remove empty value.
   return t.filter(type => /\S/.test(type));
 };
-const useSettings = (0,zustand__WEBPACK_IMPORTED_MODULE_1__.create)((set, get) => ({
+const useSettings = (0,zustand__WEBPACK_IMPORTED_MODULE_2__.create)((set, get) => ({
   settings: getSettings(),
-  getPrefix: () => get().settings.prefix || '',
-  updatePrefix: prefix => set(state => ({
-    settings: {
-      ...state.settings,
-      prefix
+  getPrefix: () => get().getSetting('prefix', ''),
+  updatePrefix: prefix => get().updateSetting('prefix', prefix),
+  getObjectType: () => get().getSetting('object_type', 'post'),
+  updateObjectType: value => {
+    const key = 'object_type';
+    const settings = get().settings;
+    const currentValue = dot_prop__WEBPACK_IMPORTED_MODULE_0___default().get(settings, key);
+
+    // Don't update if the value is the same
+    if (currentValue === value) {
+      return;
     }
-  })),
-  getObjectType: () => get().settings.object_type || 'post',
-  updateObjectType: object_type => set(state => ({
-    settings: {
-      ...state.settings,
-      object_type
+
+    // Create a deep clone of the settings to avoid reference issues
+    const updatedSettings = structuredClone(settings);
+
+    // Set the value using dot notation
+    dot_prop__WEBPACK_IMPORTED_MODULE_0___default().set(updatedSettings, key, value);
+
+    // Remove other settings that are not relevant for the selected object type.
+    if (value === 'post') {
+      dot_prop__WEBPACK_IMPORTED_MODULE_0___default()["delete"](updatedSettings, 'taxonomies');
+      dot_prop__WEBPACK_IMPORTED_MODULE_0___default()["delete"](updatedSettings, 'settings_pages');
+      dot_prop__WEBPACK_IMPORTED_MODULE_0___default()["delete"](updatedSettings, 'type');
+    } else if (value === 'term') {
+      dot_prop__WEBPACK_IMPORTED_MODULE_0___default()["delete"](updatedSettings, 'post_types');
+      dot_prop__WEBPACK_IMPORTED_MODULE_0___default()["delete"](updatedSettings, 'settings_pages');
+      dot_prop__WEBPACK_IMPORTED_MODULE_0___default()["delete"](updatedSettings, 'type');
+    } else if (value === 'setting') {
+      dot_prop__WEBPACK_IMPORTED_MODULE_0___default()["delete"](updatedSettings, 'post_types');
+      dot_prop__WEBPACK_IMPORTED_MODULE_0___default()["delete"](updatedSettings, 'taxonomies');
+      dot_prop__WEBPACK_IMPORTED_MODULE_0___default()["delete"](updatedSettings, 'type');
     }
-  })),
-  getPostTypes: () => sanitize((0,_functions__WEBPACK_IMPORTED_MODULE_0__.ensureArray)(get().settings.post_types || ['post'])),
-  updatePostTypes: post_types => set(state => ({
-    settings: {
-      ...state.settings,
-      post_types: sanitize(post_types)
+    set({
+      settings: updatedSettings
+    });
+  },
+  getPostTypes: () => sanitize((0,_functions__WEBPACK_IMPORTED_MODULE_1__.ensureArray)(get().getSetting('post_types', ['post']))),
+  updatePostTypes: post_types => get().updateSetting('post_types', sanitize(post_types)),
+  getSetting: (name, defaultValue = null) => dot_prop__WEBPACK_IMPORTED_MODULE_0___default().get(get().settings, name, defaultValue),
+  updateSetting: (key, value) => {
+    const settings = get().settings;
+    const currentValue = dot_prop__WEBPACK_IMPORTED_MODULE_0___default().get(settings, key);
+
+    // Don't update if the value is the same
+    if (currentValue === value) {
+      return;
     }
-  })),
-  getSetting: (name, defaultValue = null) => get().settings[name] || defaultValue
+
+    // Create a deep clone of the settings to avoid reference issues
+    const updatedSettings = structuredClone(settings);
+
+    // Set the value using dot notation
+    dot_prop__WEBPACK_IMPORTED_MODULE_0___default().set(updatedSettings, key, value);
+    set({
+      settings: updatedSettings
+    });
+  }
 }));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (useSettings);
 
@@ -6101,41 +6411,24 @@ const createList = ({
     updateField: (fieldId, key, value) => {
       const field = get().fields.find(f => f._id === fieldId);
       if (!field) {
-        console.error(`Field with id ${fieldId} not found.`);
         return;
       }
 
-      // Handle dot notation for nested properties
-      if (key.includes('.')) {
-        // Create a deep clone of the field to avoid reference issues
-        const updatedField = structuredClone(field);
+      // Get the current value using dot notation, to be able to update nested properties.
+      const currentValue = dot_prop__WEBPACK_IMPORTED_MODULE_1___default().get(field, key);
 
-        // Get the current value using dot notation
-        const currentValue = dot_prop__WEBPACK_IMPORTED_MODULE_1___default().get(field, key);
-
-        // Don't update if the value is the same
-        if (currentValue === value) {
-          return;
-        }
-
-        // Set the value using dot notation
-        dot_prop__WEBPACK_IMPORTED_MODULE_1___default().set(updatedField, key, value);
-        set(state => ({
-          fields: state.fields.map(f => f._id === fieldId ? updatedField : f)
-        }));
+      // Don't update if the value is the same
+      if (currentValue === value) {
         return;
       }
 
-      // Handle regular (non-dot notation) keys
-      // Don't update if the value is the same.
-      if (field[key] === value) {
-        return;
-      }
+      // Create a deep clone of the field to avoid reference issues
+      const updatedField = structuredClone(field);
+
+      // Set the value using dot notation
+      dot_prop__WEBPACK_IMPORTED_MODULE_1___default().set(updatedField, key, value);
       set(state => ({
-        fields: state.fields.map(f => f._id === fieldId ? {
-          ...f,
-          [key]: value
-        } : f)
+        fields: state.fields.map(f => f._id === fieldId ? updatedField : f)
       }));
     },
     moveFieldUp: fieldId => set(state => {
@@ -6212,7 +6505,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   initSaveForm: () => (/* binding */ initSaveForm)
 /* harmony export */ });
 /* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./functions */ "./app/functions.js");
-/* harmony import */ var _list_functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./list-functions */ "./app/list-functions.js");
+/* harmony import */ var _hooks_useSettings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./hooks/useSettings */ "./app/hooks/useSettings.js");
+/* harmony import */ var _list_functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./list-functions */ "./app/list-functions.js");
+
 
 
 const initSaveForm = () => {
@@ -6229,12 +6524,12 @@ const initSaveForm = () => {
     }
     submitButton.disabled = true;
     const originalText = submitButton.value;
-    submitButton.value = MbbApp.saving;
+    submitButton.value = MbbApp.texts.saving;
 
     // Build fields tree similar to useAllFieldsTree
     const buildFieldsTree = () => {
       // Get all root fields first
-      const rootFields = _list_functions__WEBPACK_IMPORTED_MODULE_1__.lists.has('root') ? [..._list_functions__WEBPACK_IMPORTED_MODULE_1__.lists.get('root').getState().fields] : [];
+      const rootFields = _list_functions__WEBPACK_IMPORTED_MODULE_2__.lists.has('root') ? [..._list_functions__WEBPACK_IMPORTED_MODULE_2__.lists.get('root').getState().fields] : [];
 
       // Process each field to include sub-fields for groups
       const processField = field => {
@@ -6253,8 +6548,8 @@ const initSaveForm = () => {
         delete processedField.selected;
 
         // If it's a group field, get its sub-fields
-        if (field.type === 'group' && _list_functions__WEBPACK_IMPORTED_MODULE_1__.lists.has(field._id)) {
-          processedField.fields = _list_functions__WEBPACK_IMPORTED_MODULE_1__.lists.get(field._id).getState().fields.map(processField);
+        if (field.type === 'group' && _list_functions__WEBPACK_IMPORTED_MODULE_2__.lists.has(field._id)) {
+          processedField.fields = _list_functions__WEBPACK_IMPORTED_MODULE_2__.lists.get(field._id).getState().fields.map(processField);
         }
         return processedField;
       };
@@ -6266,21 +6561,8 @@ const initSaveForm = () => {
     // Get hierarchical fields
     const fields = buildFieldsTree();
 
-    // Get form data for other fields
-    const formData = new FormData(form);
-    const settings = {};
-    const data = {};
-
-    // Extract settings and data from form
-    for (const [key, value] of formData.entries()) {
-      if (key.startsWith('settings[')) {
-        const settingKey = key.replace('settings[', '').replace(/\].*$/, '');
-        settings[settingKey] = value;
-      } else if (key.startsWith('data[')) {
-        const dataKey = key.replace('data[', '').replace(/\].*$/, '');
-        data[dataKey] = value;
-      }
-    }
+    // Get settings from useSettings store
+    const settings = _hooks_useSettings__WEBPACK_IMPORTED_MODULE_1__["default"].getState().settings;
 
     // Send AJAX request
     const response = await (0,_functions__WEBPACK_IMPORTED_MODULE_0__.fetcher)('save', {
@@ -6289,14 +6571,24 @@ const initSaveForm = () => {
       post_name: document.querySelector('#post_name').value,
       post_status: submitButton.dataset.status,
       fields,
-      settings,
-      data
+      settings
     }, 'POST');
     submitButton.disabled = false;
     submitButton.value = originalText;
     if (!response.success) {
       alert(response.message);
+      return;
     }
+    window.mbbShowNotification?.();
+
+    // Update button texts based on new status.
+    const draftButton = document.querySelector('[data-status="draft"]');
+    const publishButton = document.querySelector('[data-status="publish"]');
+    draftButton.value = submitButton.dataset.status === 'publish' ? MbbApp.texts.switchToDraft : MbbApp.texts.saveDraft;
+    publishButton.value = submitButton.dataset.status === 'publish' ? MbbApp.texts.update : MbbApp.texts.publish;
+
+    // Update status text.
+    document.querySelector('#post_status').textContent = submitButton.dataset.status === 'publish' ? MbbApp.texts.published : MbbApp.texts.draft;
   });
 };
 
@@ -28227,11 +28519,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var react_error_boundary__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-error-boundary */ "./node_modules/.pnpm/react-error-boundary@4.1.2_react@18.3.1/node_modules/react-error-boundary/dist/react-error-boundary.development.esm.js");
+/* harmony import */ var react_error_boundary__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-error-boundary */ "./node_modules/.pnpm/react-error-boundary@4.1.2_react@18.3.1/node_modules/react-error-boundary/dist/react-error-boundary.development.esm.js");
 /* harmony import */ var _components_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Header */ "./app/components/Header.js");
 /* harmony import */ var _components_Main__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Main */ "./app/components/Main.js");
 /* harmony import */ var _components_Nav__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Nav */ "./app/components/Nav.js");
-/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./save */ "./app/save.js");
+/* harmony import */ var _components_Notification__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Notification */ "./app/components/Notification.js");
+/* harmony import */ var _functions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./functions */ "./app/functions.js");
+/* harmony import */ var _save__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./save */ "./app/save.js");
+
+
 
 
 
@@ -28242,7 +28538,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const Layout = ({
   children
-}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_error_boundary__WEBPACK_IMPORTED_MODULE_7__.ErrorBoundary, {
+}) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_error_boundary__WEBPACK_IMPORTED_MODULE_9__.ErrorBoundary, {
   fallback: (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Something went wrong. Please try again!', 'meta-box-builder'))
 }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Header__WEBPACK_IMPORTED_MODULE_3__["default"], null), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
   className: "mb-body"
@@ -28260,7 +28556,7 @@ const Layout = ({
   type: "hidden",
   name: "mbb_nonce",
   value: MbbApp.nonce_save
-}));
+}), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Notification__WEBPACK_IMPORTED_MODULE_6__["default"], null));
 const App = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(Layout, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_Main__WEBPACK_IMPORTED_MODULE_4__["default"], null));
 const container = document.getElementById('poststuff');
 container.classList.add('mb');
@@ -28271,6 +28567,9 @@ container.id = 'mb-app';
 (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.render)((0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(App, null), container);
 // const root = createRoot( container );
 // root.render( <App /> );
+
+// Update URL for new posts
+(0,_functions__WEBPACK_IMPORTED_MODULE_7__.updateNewPostUrl)();
 
 // Remove .wp-header-end element to properly show notices.
 document.querySelector('.wp-header-end').remove();
@@ -28293,7 +28592,7 @@ form.addEventListener('keydown', preventSubmitWhenPressEnter);
 form.addEventListener('keyup', preventSubmitWhenPressEnter);
 
 // Set post status when clicking submit buttons.
-(0,_save__WEBPACK_IMPORTED_MODULE_6__.initSaveForm)();
+(0,_save__WEBPACK_IMPORTED_MODULE_8__.initSaveForm)();
 
 // Auto collapse the admin menu.
 document.body.classList.add('folded');

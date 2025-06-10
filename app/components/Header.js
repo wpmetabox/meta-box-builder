@@ -55,13 +55,13 @@ const Header = () => {
 					type="submit"
 					data-status="draft"
 					className="components-button is-compact is-tertiary"
-					value={ MbbApp.status == 'publish' ? __( 'Switch to draft', 'meta-box-builder' ) : __( 'Save draft', 'meta-box-builder' ) }
+					value={ MbbApp.status === 'publish' ? MbbApp.texts.switchToDraft : MbbApp.texts.saveDraft }
 				/>
 				<input
 					type="submit"
 					data-status="publish"
 					className="components-button is-primary"
-					value={ MbbApp.status == 'publish' ? __( 'Update', 'meta-box-builder' ) : __( 'Publish', 'meta-box-builder' ) }
+					value={ MbbApp.status === 'publish' ? MbbApp.texts.update : MbbApp.texts.publish }
 				/>
 			</Flex>
 		</Flex>

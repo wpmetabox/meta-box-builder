@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Main from './components/Main';
 import Nav from "./components/Nav";
 import Notification from './components/Notification';
+import { updateNewPostUrl } from './functions';
 import { initSaveForm } from './save';
 
 const Layout = ( { children } ) => (
@@ -42,6 +43,9 @@ container.id = 'mb-app';
 render( <App />, container );
 // const root = createRoot( container );
 // root.render( <App /> );
+
+// Update URL for new posts
+updateNewPostUrl();
 
 // Remove .wp-header-end element to properly show notices.
 document.querySelector( '.wp-header-end' ).remove();

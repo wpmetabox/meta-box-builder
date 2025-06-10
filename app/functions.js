@@ -232,6 +232,18 @@ export const scrollIntoView = id => {
 	}
 };
 
+export const updateNewPostUrl = () => {
+	const postId = document.querySelector( '#post_ID' )?.value;
+	if ( !postId ) {
+		return;
+	}
+
+	// Only update URL if we're on the new post page.
+	if ( location.href.includes( 'post-new.php' ) ) {
+		history.replaceState( {}, '', `${ MbbApp.adminUrl }post.php?post=${ postId }&action=edit` );
+	}
+};
+
 export const maybeArrayToObject = ( arr, key ) => {
 	if ( Array.isArray( arr ) ) {
 		return arr.reduce( ( obj, item ) => {

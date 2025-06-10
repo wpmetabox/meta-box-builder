@@ -18,7 +18,7 @@ export const initSaveForm = () => {
 
 		submitButton.disabled = true;
 		const originalText = submitButton.value;
-		submitButton.value = MbbApp.saving;
+		submitButton.value = MbbApp.texts.saving;
 
 		// Build fields tree similar to useAllFieldsTree
 		const buildFieldsTree = () => {
@@ -72,10 +72,21 @@ export const initSaveForm = () => {
 		submitButton.disabled = false;
 		submitButton.value = originalText;
 
-		if ( response.success ) {
-			window.mbbShowNotification?.();
-		} else {
+		if ( !response.success ) {
 			alert( response.message );
+			return;
 		}
+
+		window.mbbShowNotification?.();
+
+		// Update button texts based on new status.
+		const draftButton = document.querySelector( '[data-status="draft"]' );
+		const publishButton = document.querySelector( '[data-status="publish"]' );
+
+		draftButton.value = submitButton.dataset.status === 'publish' ? MbbApp.texts.switchToDraft : MbbApp.texts.saveDraft;
+		publishButton.value = submitButton.dataset.status === 'publish' ? MbbApp.texts.update : MbbApp.texts.publish;
+
+		// Update status text.
+		document.querySelector( '#post_status' ).textContent = submitButton.dataset.status === 'publish' ? MbbApp.texts.published : MbbApp.texts.draft;
 	} );
 };
