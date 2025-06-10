@@ -1,4 +1,4 @@
-import { Button, Dropdown } from "@wordpress/components";
+import { Button, Dropdown, ToggleControl } from "@wordpress/components";
 import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { close } from "@wordpress/icons";
@@ -26,7 +26,7 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 };
 
 const CloneSettings = ( { componentId, defaultValue, updateField, ...rest } ) => {
-	const toggle = name => e => updateField( name, e.target.checked );
+	const toggle = name => value => updateField( name, value );
 	const update = name => e => updateField( name, e.target.value );
 
 	// Live update to the input, and debounce update to the field.
@@ -52,42 +52,51 @@ const CloneSettings = ( { componentId, defaultValue, updateField, ...rest } ) =>
 						{ __( 'Cloneable', 'meta-box-builder' ) }
 					</label>
 				) }
-				renderContent={ ( { onToggle } ) => (
-					<OutsideClickDetector onClickOutside={ onToggle }>
-						<Button icon={ close } onClick={ onToggle } iconSize={ 16 } />
+				renderContent={ ( { onClose } ) => (
+					<OutsideClickDetector onClickOutside={ onClose }>
+						<Button icon={ close } onClick={ onClose } iconSize={ 16 } />
 
-						<Toggle
+						<ToggleControl
+							className="og-field"
 							label={ __( 'Make the field cloneable', 'meta-box-builder' ) }
-							defaultValue={ defaultValue.clone }
-							componentId={ `${ componentId }-clone` }
+							checked={ defaultValue.clone }
 							onChange={ toggle( 'clone' ) }
 						/>
-						<Toggle
-							label={ __( 'Start with no inputs', 'meta-box-builder' ) }
-							tooltip={ __( 'Show no inputs at first except the "+ Add more" button', 'meta-box-builder' ) }
+						<ToggleControl
+							className="og-field"
+							label={
+								<>
+									{ __( 'Start with no inputs', 'meta-box-builder' ) }
+									<Tooltip content={ __( 'Show no inputs at first except the "+ Add more" button', 'meta-box-builder' ) } />
+								</>
+							}
+							checked={ defaultValue.clone_empty_start }
 							onChange={ toggle( 'clone_empty_start' ) }
-							defaultValue={ defaultValue.clone_empty_start }
-							componentId={ `${ componentId }-clone_empty_start` }
 						/>
-						<Toggle
+						<ToggleControl
+							className="og-field"
 							label={ __( 'Allow to reorder clones', 'meta-box-builder' ) }
+							checked={ defaultValue.sort_clone }
 							onChange={ toggle( 'sort_clone' ) }
-							defaultValue={ defaultValue.sort_clone }
-							componentId={ `${ componentId }-sortable` }
 						/>
-						<Toggle
+						<ToggleControl
+							className="og-field"
 							label={ __( 'Set default values for new clones', 'meta-box-builder' ) }
+							checked={ defaultValue.clone_default }
 							onChange={ toggle( 'clone_default' ) }
-							defaultValue={ defaultValue.clone_default }
-							componentId={ `${ componentId }-clone_default` }
 						/>
-						<Toggle
-							label={ __( 'Save in multiple rows', 'meta-box-builder' ) }
-							tooltip={ __( 'Save each clone in a single row instead of saving all clones in one serialized row in the database', 'meta-box-builder' ) }
+						<ToggleControl
+							className="og-field"
+							label={
+								<>
+									{ __( 'Save in multiple rows', 'meta-box-builder' ) }
+									<Tooltip content={ __( 'Save each clone in a single row instead of saving all clones in one serialized row in the database', 'meta-box-builder' ) } />
+								</>
+							}
+							checked={ defaultValue.clone_as_multiple }
 							onChange={ toggle( 'clone_as_multiple' ) }
-							defaultValue={ defaultValue.clone_as_multiple }
-							componentId={ `${ componentId }-clone_as_multiple` }
 						/>
+
 						<DivRow label={ __( 'Number of clones', 'meta-box-builder' ) }>
 							<div className="og-input-group">
 								<label htmlFor={ `${ componentId }-min_clone` }>{ __( 'Min', 'meta-box-builder' ) }</label>
@@ -121,16 +130,5 @@ const CloneSettings = ( { componentId, defaultValue, updateField, ...rest } ) =>
 		</>
 	);
 };
-
-const Toggle = ( { componentId, label, defaultValue, tooltip, onChange } ) => (
-	<DivRow>
-		<label className="og-toggle">
-			<input type="checkbox" id={ componentId } onChange={ onChange } defaultChecked={ defaultValue } />
-			<div className="og-toggle__switch"></div>
-			{ label }
-			{ tooltip && <Tooltip id={ componentId } content={ tooltip } /> }
-		</label>
-	</DivRow>
-);
 
 export default CloneSettings;
