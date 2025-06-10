@@ -9,7 +9,7 @@ const TextLimiter = ( { defaultValue, componentId, updateField, ...rest } ) => {
 			...defaultValue,
 			limit: e.target.value
 		} ), 300 ),
-		[ defaultValue, updateField ]
+		[ updateField ]
 	);
 
 	const updateType = e => updateField( 'text_limiter', {
