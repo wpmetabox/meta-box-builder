@@ -4,6 +4,9 @@ import { ErrorBoundary } from "react-error-boundary";
 import Header from './components/Header';
 import Main from './components/Main';
 import Nav from "./components/Nav";
+import Notification from './components/Notification';
+import { updateNewPostUrl } from './functions';
+import { initSaveForm } from './save';
 
 const Layout = ( { children } ) => (
 	<ErrorBoundary fallback={ <p>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</p> }>
@@ -20,6 +23,8 @@ const Layout = ( { children } ) => (
 		<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
 		<input type="hidden" name="messages" value="" />
 		<input type="hidden" name="mbb_nonce" value={ MbbApp.nonce_save } />
+
+		<Notification />
 	</ErrorBoundary>
 );
 
@@ -38,6 +43,9 @@ container.id = 'mb-app';
 render( <App />, container );
 // const root = createRoot( container );
 // root.render( <App /> );
+
+// Update URL for new posts
+updateNewPostUrl();
 
 // Remove .wp-header-end element to properly show notices.
 document.querySelector( '.wp-header-end' ).remove();
@@ -61,21 +69,7 @@ form.addEventListener( 'keydown', preventSubmitWhenPressEnter );
 form.addEventListener( 'keyup', preventSubmitWhenPressEnter );
 
 // Set post status when clicking submit buttons.
-form.addEventListener( 'submit', e => {
-	const submitButton = e.submitter;
-	const status = submitButton.dataset.status;
-	const originalStatus = document.querySelector( '#original_post_status' ).value;
-	if ( originalStatus !== status ) {
-		document.querySelector( '[name="messages"]' ).setAttribute( 'name', MbbApp.status !== 'publish' ? 'publish' : 'save' );
-	}
-	if ( originalStatus === 'auto-draft' && status === 'draft' ) {
-		document.querySelector( '[name="messages"]' ).setAttribute( 'name', 'save' );
-	}
-
-	submitButton.disabled = true;
-	submitButton.setAttribute( 'value', MbbApp.saving );
-	document.querySelector( '[name="post_status"]' ).setAttribute( 'value', status );
-} );
+initSaveForm();
 
 // Auto collapse the admin menu.
 document.body.classList.add( 'folded' );

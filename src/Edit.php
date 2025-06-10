@@ -1,8 +1,6 @@
 <?php
 namespace MBB;
 
-use MBBParser\Parsers\Base as BaseParser;
-use MBBParser\Parsers\MetaBox as Parser;
 use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
@@ -39,6 +37,7 @@ class Edit extends BaseEditPage {
 
 		$data = [
 			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
+			'adminUrl'      => admin_url(),
 			'status'        => $post->post_status,
 			'title'         => $post->post_title,
 			'slug'          => $post->post_name,
@@ -46,15 +45,12 @@ class Edit extends BaseEditPage {
 			'trash'         => get_delete_post_link(),
 			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
 			'modified'      => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
-			'saving'        => __( 'Saving...', 'meta-box-builder' ),
 
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
-			'data'          => get_post_meta( get_the_ID(), 'data', true ),
 
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
-			'nonce_save'    => wp_create_nonce( 'mbb-save' ),
 
 			'postTypes'     => Data::get_post_types(),
 			'taxonomies'    => Data::get_taxonomies(),
@@ -82,6 +78,17 @@ class Edit extends BaseEditPage {
 			],
 
 			'assetsBaseUrl' => MBB_URL . 'assets',
+
+			'texts' => [
+				'saving'        => __( 'Saving...', 'meta-box-builder' ),
+				'switchToDraft' => __( 'Switch to draft', 'meta-box-builder' ),
+				'saveDraft'     => __( 'Save draft', 'meta-box-builder' ),
+				'update'        => __( 'Update', 'meta-box-builder' ),
+				'publish'       => __( 'Publish', 'meta-box-builder' ),
+				'draft'         => __( 'Draft', 'meta-box-builder' ),
+				'published'     => __( 'Published', 'meta-box-builder' ),
+				'saveError'     => __( 'Error saving form. Please try again.', 'meta-box-builder' ),
+			],
 		];
 
 		$data = apply_filters( 'mbb_app_data', $data );
@@ -89,37 +96,7 @@ class Edit extends BaseEditPage {
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}
 
+	// Do nothing as all saving is done via REST API.
 	public function save( $post_id, $post ) {
-		// Save data for JavaScript (serialized arrays).
-		$request     = rwmb_request();
-		$base_parser = new BaseParser();
-		$settings    = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
-		$fields      = apply_filters( 'mbb_save_fields', $request->post( 'fields' ), $request );
-		$data        = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
-
-		$base_parser->set_settings( $settings )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'settings', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $fields )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'fields', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $data )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
-
-		// Save parsed data for PHP (serialized array).
-		$submitted_data = compact( 'fields', 'settings' );
-		$submitted_data = apply_filters( 'mbb_save_submitted_data', $submitted_data, $request );
-
-		// Set post title and slug in case they're auto-generated.
-		$submitted_data['post_title'] = $post->post_title;
-		$submitted_data['post_name']  = $post->post_name;
-
-		$parser = new Parser( $submitted_data );
-		$parser->parse();
-
-		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
-
-		// Allow developers to add actions after saving the meta box.
-		do_action( 'mbb_after_save', $parser, $post_id, $submitted_data );
 	}
 }

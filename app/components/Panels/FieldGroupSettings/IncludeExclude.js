@@ -1,127 +1,181 @@
+import { Button, Flex, SelectControl, TextControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from '../../../controls/DivRow';
 import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
-import { fetcher, uniqid } from "../../../functions";
+import { fetcher, maybeArrayToObject, uniqid } from "../../../functions";
 import useSettings from "../../../hooks/useSettings";
 
 const IncludeExclude = () => {
-	const name = 'settings[include_exclude]';
-
-	const { getSetting } = useSettings();
+	const { getSetting, updateSetting } = useSettings();
 	const setting = getSetting( 'include_exclude', {} );
+	const rules = maybeArrayToObject( setting.rules, 'id' );
 
-	const [ rules, setRules ] = useState( Object.values( setting.rules || {} ) );
-	const addRule = () => setRules( prev => [ ...prev, { name: 'ID', value: '', id: uniqid() } ] );
-	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
+	const addRule = () => {
+		const newRule = { name: 'ID', value: '', id: uniqid() };
+		const newRules = { ...rules, [ newRule.id ]: newRule };
+		updateSetting( 'include_exclude.rules', newRules );
+	};
+
+	const removeRule = id => {
+		const newRules = { ...rules };
+		delete newRules[ id ];
+		updateSetting( 'include_exclude.rules', newRules );
+	};
 
 	return (
 		<DivRow
 			className="og-include-exclude"
-			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank" rel="noopener norefferer">${ __( 'Advanced rules', 'meta-box-builder' ) }</a>` }
-			tooltip={ __( 'More rules on where to display the field group. For each rule, maximum 10 items are displayed. To select other items, please use the search.', 'meta-box-builder' ) }
+			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank">${ __( 'Advanced rules', 'meta-box-builder' ) }</a>` }
+			tooltip={ __( 'More rules on where to display the field group. For each rule, maximum 10 items are displayed. To select other items, please type to search.', 'meta-box-builder' ) }
 		>
-			{ rules.length > 0 && <Intro name={ name } setting={ setting } /> }
+			{ Object.values( rules ).length > 0 && <Intro setting={ setting } updateSetting={ updateSetting } /> }
 			{
-				rules.map( rule => <Rule
+				Object.values( rules ).map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					baseName={ `${ name }[rules][${ rule.id }]` }
 					removeRule={ removeRule }
+					updateSetting={ updateSetting }
 				/> )
 			}
-			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
+			<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 		</DivRow>
 	);
 };
 
-const Intro = ( { name, setting } ) => (
-	<div className="og-include-exclude__intro">
-		<select name={ `${ name }[type]` } defaultValue={ setting.type || 'include' }>
-			<option value="include">{ __( 'Show', 'meta-box-builder' ) }</option>
-			<option value="exclude">{ __( 'Hide', 'meta-box-builder' ) }</option>
-		</select>
-		{ __( 'when', 'meta-box-builder' ) }
-		<select name={ `${ name }[relation]` } defaultValue={ setting.relation || 'OR' }>
-			<option value="OR">{ __( 'any', 'meta-box-builder' ) }</option>
-			<option value="AND">{ __( 'all', 'meta-box-builder' ) }</option>
-		</select>
-		{ __( 'conditions match', 'meta-box-builder' ) }
-	</div>
-);
+const Intro = ( { setting, updateSetting } ) => {
+	const update = key => value => updateSetting( `include_exclude.${ key }`, value );
 
-const Rule = ( { rule, baseName, removeRule } ) => {
+	return (
+		<Flex gap={ 1 } align="center" className="og-include-exclude__intro">
+			<SelectControl
+				value={ setting.type || 'include' }
+				onChange={ update( 'type' ) }
+				options={ [
+					{ label: __( 'Include', 'meta-box-builder' ), value: 'include' },
+					{ label: __( 'Exclude', 'meta-box-builder' ), value: 'exclude' },
+				] }
+				__nextHasNoMarginBottom
+			/>
+			{ __( 'when', 'meta-box-builder' ) }
+			<SelectControl
+				value={ setting.relation || 'OR' }
+				onChange={ update( 'relation' ) }
+				options={ [
+					{ label: __( 'any', 'meta-box-builder' ), value: 'OR' },
+					{ label: __( 'all', 'meta-box-builder' ), value: 'AND' },
+				] }
+				__nextHasNoMarginBottom
+			/>
+			{ __( 'conditions match', 'meta-box-builder' ) }
+		</Flex>
+	);
+};
+
+const Rule = ( { rule, removeRule, updateSetting } ) => {
 	const { getObjectType, getPostTypes } = useSettings();
 	const postTypes = getPostTypes();
 	const objectType = getObjectType();
 
 	const [ name, setName ] = useState( rule.name );
-	const onChangeName = e => setName( e.target.value );
+	const onChangeName = value => {
+		setName( value );
+		updateSetting( `include_exclude.rules.${ rule.id }.name`, value );
+	};
 
 	// Validate rule name.
 	useEffect( () => {
 		if ( [ 'comment', 'setting' ].includes( objectType ) && ![ 'user_role', 'user_id', 'custom' ].includes( name ) ) {
 			setName( 'user_role' );
+			updateSetting( `include_exclude.rules.${ rule.id }.name`, 'user_role' );
 		}
 		if ( objectType === 'user' && ![ 'user_role', 'user_id', 'edited_user_role', 'edited_user_id', 'custom' ].includes( name ) ) {
 			setName( 'user_role' );
+			updateSetting( `include_exclude.rules.${ rule.id }.name`, 'user_role' );
 		}
 		if ( ( objectType === 'term' ) && [ 'ID', 'parent', 'template', 'is_child' ].includes( name ) ) {
 			setName( 'category' );
+			updateSetting( `include_exclude.rules.${ rule.id }.name`, 'category' );
 		}
 	}, [ objectType ] );
 
 	const loadOptions = s => fetcher( 'include-exclude', { name, s, post_types: postTypes } );
 
+	const optionsMap = {
+		'post': [
+			{ label: __( 'Post', 'meta-box-builder' ), value: 'ID' },
+			{ label: __( 'Parent post', 'meta-box-builder' ), value: 'parent' },
+			{ label: __( 'Page template', 'meta-box-builder' ), value: 'template' },
+			...MbbApp.taxonomies.map( taxonomy => ( { label: `${ taxonomy.name } (${ taxonomy.slug })`, value: taxonomy.slug } ) ),
+			...MbbApp.taxonomies.map( taxonomy => ( { label: `${ __( 'Parent', 'meta-box-builder' ) } ${ taxonomy.name } (${ taxonomy.slug })`, value: `parent_${ taxonomy.slug }` } ) ),
+			{ label: __( 'User role', 'meta-box-builder' ), value: 'user_role' },
+			{ label: __( 'User', 'meta-box-builder' ), value: 'user_id' },
+			{ label: __( 'Is child post', 'meta-box-builder' ), value: 'is_child' },
+			{ label: __( 'Custom', 'meta-box-builder' ), value: 'custom' },
+		],
+		'term': [
+			...MbbApp.taxonomies.map( taxonomy => ( { label: `${ taxonomy.name } (${ taxonomy.slug })`, value: taxonomy.slug } ) ),
+			...MbbApp.taxonomies.map( taxonomy => ( { label: `${ __( 'Parent', 'meta-box-builder' ) } ${ taxonomy.name } (${ taxonomy.slug })`, value: `parent_${ taxonomy.slug }` } ) ),
+			{ label: __( 'User role', 'meta-box-builder' ), value: 'user_role' },
+			{ label: __( 'User', 'meta-box-builder' ), value: 'user_id' },
+			{ label: __( 'Custom', 'meta-box-builder' ), value: 'custom' },
+		],
+		'user': [
+			{ label: __( 'User role', 'meta-box-builder' ), value: 'user_role' },
+			{ label: __( 'User', 'meta-box-builder' ), value: 'user_id' },
+			{ label: __( 'Edited user role', 'meta-box-builder' ), value: 'edited_user_role' },
+			{ label: __( 'Edited user', 'meta-box-builder' ), value: 'edited_user_id' },
+			{ label: __( 'Custom', 'meta-box-builder' ), value: 'custom' },
+		],
+		'default': [
+			{ label: __( 'Custom', 'meta-box-builder' ), value: 'custom' },
+		],
+	};
+	const options = optionsMap[ objectType ] || optionsMap.default;
+
 	return (
 		<div className="og-include-exclude__rule">
-			<input type="hidden" name={ `${ baseName }[id]` } defaultValue={ rule.id } />
-			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" defaultValue={ name } onChange={ onChangeName }>
-				{ objectType === 'post' && <option value="ID">{ __( 'Post', 'meta-box-builder' ) }</option> }
-				{ objectType === 'post' && <option value="parent">{ __( 'Parent post', 'meta-box-builder' ) }</option> }
-				{ objectType === 'post' && <option value="template">{ __( 'Page template', 'meta-box-builder' ) }</option> }
-				{
-					[ 'term', 'post' ].includes( objectType ) && MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ taxonomy.slug }>{ taxonomy.name } ({ taxonomy.slug })</option> )
-				}
-				{
-					[ 'term', 'post' ].includes( objectType ) && MbbApp.taxonomies.map( taxonomy => <option key={ taxonomy.slug } value={ `parent_${ taxonomy.slug }` }>{ __( 'Parent', 'meta-box-builder' ) } { taxonomy.name } ({ taxonomy.slug })</option> )
-				}
-				<option value="user_role">{ __( 'User role', 'meta-box-builder' ) }</option>
-				<option value="user_id">{ __( 'User', 'meta-box-builder' ) }</option>
-				{ objectType === 'user' && <option value="edited_user_role">{ __( 'Edited user role', 'meta-box-builder' ) }</option> }
-				{ objectType === 'user' && <option value="edited_user_id">{ __( 'Edited user', 'meta-box-builder' ) }</option> }
-				{ objectType === 'post' && <option value="is_child">{ __( 'Is child post', 'meta-box-builder' ) }</option> }
-				<option value="custom">{ __( 'Custom', 'meta-box-builder' ) }</option>
-			</select>
+			<SelectControl
+				value={ name }
+				onChange={ onChangeName }
+				options={ options }
+				__nextHasNoMarginBottom
+			/>
 			{
-				// Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
 				![ 'is_child', 'custom' ].includes( name ) &&
 				<ReactAsyncSelect
-					key={ name + objectType + postTypes }
-					baseName={ baseName }
+					key={ `${ name }-${ objectType }-${ JSON.stringify( postTypes ) }` }
 					className="og-include-exclude__value"
 					defaultValue={ rule }
 					loadOptions={ loadOptions }
+					onChange={ items => {
+						updateSetting( `include_exclude.rules.${ rule.id }.value`, items ? items.map( item => item.value ) : [] );
+						updateSetting( `include_exclude.rules.${ rule.id }.label`, items ? items.map( item => item.label ) : [] );
+					} }
 				/>
 			}
 			{
 				name === 'is_child' &&
-				<select className="og-include-exclude__value" name={ `${ baseName }[value]` } defaultValue={ rule.value }>
-					<option value="true">{ __( 'Yes', 'meta-box-builder' ) }</option>
-					<option value="false">{ __( 'No', 'meta-box-builder' ) }</option>
-				</select>
+				<SelectControl
+					value={ rule.value || 'true' }
+					onChange={ value => updateSetting( `include_exclude.rules.${ rule.id }.value`, value ) }
+					options={ [
+						{ label: __( 'Yes', 'meta-box-builder' ), value: 'true' },
+						{ label: __( 'No', 'meta-box-builder' ), value: 'false' },
+					] }
+					__nextHasNoMarginBottom
+				/>
 			}
 			{
 				name === 'custom' &&
-				<input
-					type="text"
-					name={ `${ baseName }[value]` }
-					className="og-include-exclude__value"
+				<TextControl
+					value={ rule.value }
+					onChange={ value => updateSetting( `include_exclude.rules.${ rule.id }.value`, value ) }
 					placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
-					defaultValue={ rule.value }
+					__nextHasNoMarginBottom
 				/>
 			}
-			<a href="#" className="og-include-exclude__remove" onClick={ () => removeRule( rule.id ) }>{ __( 'Remove', 'meta-box-builder' ) }</a>
+			<Button variant="link" isDestructive={ true } onClick={ () => removeRule( rule.id ) } text={ __( 'Remove', 'meta-box-builder' ) } />
 		</div>
 	);
 };

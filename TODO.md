@@ -1,19 +1,34 @@
-Must:
-[ ] Merge từ master vào
+## Blocks
+[ ] Slow load of the block editor when MB Views is enabled. Shows a blank screen and after a long delay, it will show the content.
+
+## Bugs
+[ ] Fix when add new field, unique _id is updated/generated from name
+[ ] Fix:  I had a group with many fields and then I decided to turn on this feature “Start with no inputs” and it deleted the names of every field in that group. The fields stayed, but without any name.
+
+## Final
+[ ] Merge from master and check compatibility with Local JSON feature and recent updates
 
 Nice to have:
 
 [ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
-[ ] Column
+[ ] Column khi enable thì sẽ show label ở trên, input ở dưới
+[ ] Live preview khi thay đổi số column
 [ ] Thay đổi field type
 [ ] Object field, chuyển chọn field type thành icon
 [ ] Switch to field khi có trường required chưa điền
-[ ] Chỉ render panel field settings khi chọn 1 field
 
 [ ] Update UI for creating settings pages
 [ ] Update UI for creating relationships
 	[ ] Xoá react tabs
 	[ ] Xóa phần collapsible, bao gồm cả CSS
+
+[ ] Scrollbar issue (firefox on Mac)
+
+https://helpdesk.elightup.com/conversation/11098?folder_id=7
+
+[ ] 1. I don't really like that the wordpress sidebar hides every time I refresh the page, I'd like the plugin to remember my choice, whether to keep it open or closed. => Detect kích cỡ màn hình và tự collapse khi ở màn nhỏ + ghi nhớ state ở local storage.
+[ ] 2. I would keep the main central box (.mb-main) to have a max-width because at a certain point on a wide screen that can get huge! I don’t use full screen because everything get really wide in the first place :) but I have tested some CSS and I think around 80 to 100 rem max-width is good enough.
+[ ] 3. It would be great if you could include under appearance the option on how many rows I can have { "textarea_rows": 10 }, typing this every time for examples 10 times, takes a lot of time.
 
 ## Settings của field group:
 

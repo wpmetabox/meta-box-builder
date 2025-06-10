@@ -4,11 +4,7 @@ import { debounce } from 'lodash';
 import useApi from "../hooks/useApi";
 import DivRow from './DivRow';
 
-/**
- * Fix cursor jumping to the end of the `<input>` after typing.
- * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
- */
-const Id = ( { field, name, componentId, updateField, ...rest } ) => {
+const Id = ( { field, componentId, updateField, ...rest } ) => {
 	const ids = useApi( 'fields-ids', [] );
 	const [ existingFieldGroup, setExistingFieldGroup ] = useState( {} );
 	const [ duplicate, setDuplicate ] = useState( false );
@@ -49,7 +45,6 @@ const Id = ( { field, name, componentId, updateField, ...rest } ) => {
 			<input
 				type="text"
 				id={ componentId }
-				name={ name }
 				value={ value }
 				onChange={ handleChange }
 				pattern="[A-Za-z0-9\-_]+"

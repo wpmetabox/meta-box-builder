@@ -20,49 +20,49 @@ class AdminColumns {
 		}
 
 		$controls[] = Control::Toggle( 'admin_columns_enable', [
-			'name'    => 'admin_columns[enable]',
+			'name'    => 'admin_columns.enable',
 			'label'   => __( 'Show as an admin column', 'meta-box-builder' ),
 			'tooltip' => __( 'Show this field as a column in the All posts/terms/users table list in the admin area', 'meta-box-builder' ),
 		], false, 'admin_columns' );
 		$controls[] = Control::AdminColumnsPosition( 'admin_columns_position', [
-			'name'       => 'admin_columns[position]',
+			'name'       => 'admin_columns.position',
 			'className'  => 'og-admin-columns-position',
 			'label'      => __( 'Position', 'meta-box-builder' ),
 			'tooltip'    => __( 'Where to show the column in the table', 'meta-box-builder' ),
 			'dependency' => 'admin_columns_enable:true',
 		], ['type' => 'after', 'column' => ''], 'admin_columns' );
 		$controls[] = Control::Input( 'admin_columns_title', [
-			'name'        => 'admin_columns[title]',
+			'name'        => 'admin_columns.title',
 			'label'       => __( 'Title', 'meta-box-builder' ),
 			'description' => __( 'Leave empty to use the field name.', 'meta-box-builder' ),
 			'dependency'  => 'admin_columns_enable:true',
 		], '', 'admin_columns' );
 		$controls[] = Control::Input( 'admin_columns_before', [
-			'name'        => 'admin_columns[before]',
+			'name'        => 'admin_columns.before',
 			'label'       => __( 'Content before', 'meta-box-builder' ),
 			'description' => __( 'Custom HTML outputted before the column content.', 'meta-box-builder' ),
 			'dependency'  => 'admin_columns_enable:true',
 		], '', 'admin_columns' );
 		$controls[] = Control::Input( 'admin_columns_after', [
-			'name'        => 'admin_columns[after]',
+			'name'        => 'admin_columns.after',
 			'label'       => __( 'Content after', 'meta-box-builder' ),
 			'description' => __( 'Custom HTML outputted after the column content.', 'meta-box-builder' ),
 			'dependency'  => 'admin_columns_enable:true',
 		], '', 'admin_columns' );
 		$controls[] = Control::Toggle( 'admin_columns_searchable', [
-			'name'       => 'admin_columns[searchable]',
+			'name'       => 'admin_columns.searchable',
 			'label'      => __( 'Searchable', 'meta-box-builder' ),
 			'tooltip'    => __( 'Allow to search posts by field values', 'meta-box-builder' ),
 			'dependency' => 'admin_columns_enable:true',
 		], false, 'admin_columns' );
 		$controls[] = Control::Toggle( 'admin_columns_filterable', [
-			'name'       => 'admin_columns[filterable]',
+			'name'       => 'admin_columns.filterable',
 			'label'      => __( 'Filterable', 'meta-box-builder' ),
 			'tooltip'    => __( 'Allow to filter posts by custom taxonomy, applied only if the field is a taxonomy field', 'meta-box-builder' ),
 			'dependency' => 'admin_columns_enable:true',
 		], false, 'admin_columns' );
 		$controls[] = Control::ToggleGroup( 'admin_columns_sort', [
-			'name'       => 'admin_columns[sort]',
+			'name'       => 'admin_columns.sort',
 			'label'      => __( 'Sortable', 'meta-box-builder' ),
 			'tooltip'    => __( 'Whether to sort the column by field values', 'meta-box-builder' ),
 			'options'    => [
@@ -73,7 +73,7 @@ class AdminColumns {
 			'dependency' => 'admin_columns_enable:true',
 		], 'false', 'admin_columns' );
 		$controls[] = Control::ToggleGroup( 'admin_columns_link', [
-			'name'       => 'admin_columns[link]',
+			'name'       => 'admin_columns.link',
 			'label'      => __( 'Item link type', 'meta-box-builder' ),
 			'tooltip'    => __( 'The link for the items displayed in the admin column.', 'meta-box-builder' ),
 			'options'    => [

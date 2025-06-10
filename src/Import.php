@@ -162,7 +162,7 @@ class Import {
 	private function get_meta_keys( $post_type ) {
 		switch ( $post_type ) {
 			case 'meta-box':
-				return [ 'settings', 'fields', 'data', 'meta_box' ];
+				return [ 'settings', 'fields', 'meta_box' ];
 			case 'mb-relationship':
 				return [ 'settings', 'relationship' ];
 			case 'mb-settings-page':

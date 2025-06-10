@@ -1,94 +1,93 @@
-import { RadioControl } from "@wordpress/components";
-import { useEffect, useState } from "@wordpress/element";
+import { RadioControl, ToggleControl } from "@wordpress/components";
+import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import Color from '../../../controls/Color';
 import DashiconPicker from '../../../controls/DashiconPicker';
 import Input from '../../../controls/Input';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
 import Textarea from '../../../controls/Textarea';
-import Toggle from "../../../controls/Toggle";
 import useSettings from "../../../hooks/useSettings";
 import { ensureArray } from '/functions';
 
 const Block = () => {
-	const { getSetting } = useSettings();
+	const { getSetting, updateSetting } = useSettings();
 	const [ iconType, setIconType ] = useState( getSetting( 'icon_type', 'dashicons' ) );
 	const [ context, setContext ] = useState( getSetting( 'block_context', 'side' ) );
-
-	useEffect( () => {
-		jQuery( '.og-color-picker input[type="text"]' ).wpColorPicker();
-	}, [ iconType ] );
 
 	const updateIconType = e => setIconType( e.target.value );
 
 	return <>
 		<Input
-			name="settings[description]"
+			name="description"
 			label={ __( 'Description', 'meta-box-builder' ) }
 			componentId="settings-block-description"
 			defaultValue={ getSetting( 'description', '' ) }
+			updateField={ updateSetting }
 		/>
 		<Select
-			name="settings[icon_type]"
+			name="icon_type"
 			label={ __( 'Icon type', 'meta-box-builder' ) }
 			componentId="settings-block-icon_type"
 			options={ { dashicons: __( 'Dashicons', 'meta-box-builder' ), svg: __( 'Custom SVG', 'meta-box-builder' ) } }
 			defaultValue={ iconType }
 			onChange={ updateIconType }
+			updateField={ updateSetting }
 		/>
 		{
 			iconType === 'svg' &&
 			<Textarea
-				name="settings[icon_svg]"
+				name="icon_svg"
 				label={ __( 'SVG icon', 'meta-box-builder' ) }
 				componentId="settings-block-icon_svg"
 				placeholder={ __( 'Paste the SVG content here', 'meta-box-builder' ) }
 				defaultValue={ getSetting( 'icon_svg', '' ) }
+				updateField={ updateSetting }
 			/>
 		}
 		{
 			iconType === 'dashicons' &&
 			<DashiconPicker
 				label={ __( 'Icon', 'meta-box-builder' ) }
-				name="settings[icon]"
+				name="icon"
 				defaultValue={ getSetting( 'icon' ) }
+				updateField={ updateSetting }
 			/>
 		}
 		{
 			iconType === 'dashicons' &&
-			<Input
-				name="settings[icon_foreground]"
-				className="og-color-picker"
-				componentId="settings-block-icon_foreground"
-				label={ __( 'Icon color', 'meta-box-builder' ) }
-				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'icon_foreground', '' ) }
-			/>
-		}
-		{
-			iconType === 'dashicons' &&
-			<Input
-				name="settings[icon_background]"
-				className="og-color-picker"
-				componentId="settings-block-icon_background"
-				label={ __( 'Icon background color', 'meta-box-builder' ) }
-				tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'icon_background', '' ) }
-			/>
+			<>
+				<Color
+					name="icon_foreground"
+					label={ __( 'Icon color', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'icon_foreground', '' ) }
+					updateField={ updateSetting }
+					tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
+				/>
+				<Color
+					name="icon_background"
+					label={ __( 'Icon background color', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'icon_background', '' ) }
+					updateField={ updateSetting }
+					tooltip={ __( 'Leave empty to use default color', 'meta-box-builder' ) }
+				/>
+			</>
 		}
 		<Select
-			name="settings[category]"
+			name="category"
 			label={ __( 'Category', 'meta-box-builder' ) }
 			componentId="settings-block-category"
 			options={ MbbApp.blockCategories }
 			defaultValue={ getSetting( 'category', '' ) }
+			updateField={ updateSetting }
 		/>
 		<Input
-			name="settings[keywords]"
+			name="keywords"
 			label={ __( 'Keywords', 'meta-box-builder' ) }
 			componentId="settings-block-keywords"
 			tooltip={ __( 'Separate by commas', 'meta-box-builder' ) }
 			defaultValue={ getSetting( 'keywords', '' ) }
+			updateField={ updateSetting }
 		/>
 		<RadioControl
 			className="og-field"
@@ -104,11 +103,13 @@ const Block = () => {
 				},
 			] }
 			selected={ context }
-			onChange={ setContext }
+			onChange={ value => {
+				setContext( value );
+				updateSetting( 'block_context', value );
+			} }
 		/>
-		<input type="hidden" name="settings[block_context]" value={ context } />
 		<ReactSelect
-			name="settings[supports][align][]"
+			name="supports.align"
 			label={ __( 'Alignment', 'meta-box-builder' ) }
 			componentId="settings-block-supports-align"
 			options={ {
@@ -118,14 +119,14 @@ const Block = () => {
 				wide: __( 'Wide', 'meta-box-builder' ),
 				full: __( 'Full', 'meta-box-builder' ),
 			} }
-			defaultValue={ ensureArray( getSetting( 'supports', {} ).align || [] ) }
+			defaultValue={ ensureArray( getSetting( 'supports.align', [] ) ) }
+			updateField={ updateSetting }
 		/>
 
-		<Toggle
-			name="settings[supports][customClassName]"
+		<ToggleControl
 			label={ __( 'Custom CSS class name', 'meta-box-builder' ) }
-			componentId="settings-block-supports-custom-class-name"
-			defaultValue={ !!getSetting( 'supports', {} ).customClassName }
+			checked={ !!getSetting( 'supports.customClassName' ) }
+			onChange={ value => updateSetting( 'supports.customClassName', value ) }
 		/>
 	</>;
 };

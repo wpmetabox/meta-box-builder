@@ -44,16 +44,6 @@ export const parseQueryString = queryString => {
 	return convert( params );
 };
 
-export const getFieldValue = key => {
-	const data = serializeForm( document.querySelector( '#post' ) );
-	return dotProp.get( data, bracketsToDots( key ) );
-};
-
-const serializeForm = form => {
-	const formData = new FormData( form );
-	return convert( formData );
-};
-
 // Convert form data and query string to objects.
 const convert = params => {
 	const data = {};
@@ -240,4 +230,27 @@ export const scrollIntoView = id => {
 	if ( rect.top < 0 || rect.top > viewportHeight ) {
 		element.scrollIntoView( { behavior: 'smooth', block: 'center' } );
 	}
+};
+
+export const updateNewPostUrl = () => {
+	const postId = document.querySelector( '#post_ID' )?.value;
+	if ( !postId ) {
+		return;
+	}
+
+	// Only update URL if we're on the new post page.
+	if ( location.href.includes( 'post-new.php' ) ) {
+		history.replaceState( {}, '', `${ MbbApp.adminUrl }post.php?post=${ postId }&action=edit` );
+	}
+};
+
+export const maybeArrayToObject = ( arr, key ) => {
+	if ( Array.isArray( arr ) ) {
+		return arr.reduce( ( obj, item ) => {
+			obj[ item[ key ] ] = item;
+			return obj;
+		}, {} );
+	}
+
+	return typeof arr === 'object' ? arr : {};
 };

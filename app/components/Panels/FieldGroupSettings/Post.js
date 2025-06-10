@@ -5,7 +5,7 @@ import ToggleGroup from "../../../controls/ToggleGroup";
 import useSettings from "../../../hooks/useSettings";
 
 const Post = () => {
-	const { getPostTypes, getSetting } = useSettings();
+	const { getPostTypes, getSetting, updateSetting } = useSettings();
 	const postTypes = getPostTypes();
 
 	const isClassic = !MbbApp.postTypes.find( pt => postTypes.includes( pt.slug ) && pt.block_editor );
@@ -23,53 +23,60 @@ const Post = () => {
 
 	return <>
 		<ContextControl
-			name="settings[context]"
+			name="context"
 			label={ __( 'Position', 'meta-box-builder' ) }
 			options={ contextOptions }
 			defaultValue={ getSetting( 'context', 'normal' ) }
+			updateField={ updateSetting }
 		/>
 		<ToggleGroup
-			name="settings[priority]"
+			name="priority"
 			label={ __( 'Priority', 'meta-box-builder' ) }
 			options={ { high: __( 'High', 'meta-box-builder' ), low: __( 'Low', 'meta-box-builder' ) } }
 			defaultValue={ getSetting( 'priority', 'high' ) }
+			updateField={ updateSetting }
 		/>
 		<ToggleGroup
-			name="settings[style]"
+			name="style"
 			label={ __( 'Style', 'meta-box-builder' ) }
 			options={ { default: __( 'Standard', 'meta-box-builder' ), seamless: __( 'Seamless', 'meta-box-builder' ) } }
 			defaultValue={ getSetting( 'style', 'default' ) }
+			updateField={ updateSetting }
 		/>
 		<Toggle
-			name="settings[closed]"
+			name="closed"
 			label={ __( 'Collapsed by default', 'meta-box-builder' ) }
 			tooltip={ __( 'Whether to collapse the meta box when page loads', 'meta-box-builder' ) }
 			defaultValue={ !!getSetting( 'closed', false ) }
+			updateField={ updateSetting }
 		/>
 		{
 			isClassic &&
 			<Toggle
-				name="settings[default_hidden]"
+				name="default_hidden"
 				label={ __( 'Hidden by default', 'meta-box-builder' ) }
 				tooltip={ __( 'The meta box is hidden by default and requires users to select the corresponding checkbox in Screen Options to show it', 'meta-box-builder' ) }
 				defaultValue={ !!getSetting( 'default_hidden', false ) }
+				updateField={ updateSetting }
 			/>
 		}
 		{
 			isClassic &&
 			<Toggle
-				name="settings[autosave]"
+				name="autosave"
 				label={ __( 'Autosave', 'meta-box-builder' ) }
 				defaultValue={ !!getSetting( 'autosave', false ) }
+				updateField={ updateSetting }
 			/>
 		}
 		{
 			MbbApp.extensions.revision &&
 			<Toggle
-				name="settings[revision]"
+				name="revision"
 				label={ __( 'Enable revision', 'meta-box-builder' ) }
 				tooltip={ __( 'Track changes of custom fields with revisions', 'meta-box-builder' ) }
 				defaultValue={ !!getSetting( 'revision', false ) }
+				updateField={ updateSetting }
 			/>
 		}
 	</>;

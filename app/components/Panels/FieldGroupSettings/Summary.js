@@ -7,7 +7,7 @@ const Summary = ( { show = false } ) => (
 			<label htmlFor="post_name">{ __( 'ID', 'meta-box-builder' ) }</label>
 			<input type="text" name="post_name" id="post_name" defaultValue={ MbbApp.slug } />
 		</p>
-		<p className="mb-summary__status"><label>{ __( 'Status', 'meta-box-builder' ) }</label> { MbbApp.status }</p>
+		<p className="mb-summary__status"><label>{ __( 'Status', 'meta-box-builder' ) }</label> <span id="post_status">{ MbbApp.status }</span></p>
 		<p><label>{ __( 'Published', 'meta-box-builder' ) }</label> { MbbApp.published }</p>
 		{ MbbApp.modified && <p><label>{ __( 'Last modified', 'meta-box-builder' ) }</label> { MbbApp.modified }</p> }
 		<p><label>{ __( 'Author', 'meta-box-builder' ) }</label> { MbbApp.author }</p>

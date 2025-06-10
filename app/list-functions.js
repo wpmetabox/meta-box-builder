@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
+import dotProp from 'dot-prop';
 import { create } from 'zustand';
-import { ensureArray, getFieldValue, ucwords, uniqid } from './functions';
+import { ensureArray, ucwords, uniqid } from './functions';
 import useNavPanel from './hooks/useNavPanel';
 
 const areFieldsEqual = ( a, b ) => a.length === b.length && a.every( ( field, index ) => field._id === b[ index ]._id );
@@ -18,7 +19,7 @@ const createNewField = type => {
 
 const lists = new Map();
 
-const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
+const createList = ( { id = '', fields = [] } ) => {
 	if ( lists.has( id ) ) {
 		return lists.get( id );
 	}
@@ -26,10 +27,9 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 	const list = create( ( set, get ) => ( {
 		id,
 		fields,
-		baseInputName,
 
 		addFieldAt: ( fieldType, position ) => {
-			const { fields, baseInputName } = get();
+			const { fields } = get();
 
 			if ( position < 0 || position > fields.length ) {
 				console.error( `%cInvalid position: ${ position }.`, 'color:red' );
@@ -54,7 +54,6 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 				createList( {
 					id: newField._id,
 					fields: [],
-					baseInputName: `${ baseInputName }[${ newField._id }][fields]`,
 				} );
 			}
 		},
@@ -63,10 +62,28 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 		addFieldBefore: ( fieldId, fieldType ) => get().addFieldAt( fieldType, get().fields.findIndex( f => f._id === fieldId ) ),
 		addFieldAfter: ( fieldId, fieldType ) => get().addFieldAt( fieldType, get().fields.findIndex( f => f._id === fieldId ) + 1 ),
 		duplicateField: ( fieldId ) => {
-			const { baseInputName } = get();
+			const { fields } = get();
 
-			let newField = getFieldValue( `${ baseInputName }[${ fieldId }]` );
+			// Find the field to duplicate
+			const originalField = fields.find( f => f._id === fieldId );
+			if ( !originalField ) {
+				return;
+			}
+
+			// Deep clone the field to avoid reference issues
+			const newField = structuredClone( originalField );
 			const newId = `${ newField.type }_${ uniqid() }`;
+
+			// Temporary keys used in the builder.
+			delete newField._active;
+			delete newField._id_changed;
+
+			// Temporary keys used by SortableJS.
+			delete newField.chosen;
+			delete newField.selected;
+
+			// For getting list of fields if that's a group.
+			newField._original_id = originalField._id;
 
 			newField.id = newId;
 			newField._id = newId;
@@ -81,36 +98,27 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 				return { fields: newFields };
 			} );
 
-			const createNewList = group => {
-				updateSubFieldIds( group );
+			const createNewList = group => createList( {
+				id: group._id,
+				fields: updateSubFieldIds( group ),
+			} );
 
-				createList( {
-					id: group._id,
-					fields: Object.values( group.fields ),
-					baseInputName: `${ baseInputName }[${ group._id }][fields]`,
-				} );
-			};
+			const updateSubFieldIds = group => lists.get( group._original_id ).getState().fields.map( subField => {
+				// For getting list of fields if that's a group.
+				subField._original_id = subField._id;
 
-			const updateSubFieldIds = group => {
-				// Convert to array to do easier.
-				let subFields = Object.values( group.fields || {} );
+				// Change id
+				const newId = `${ subField.type }_${ uniqid() }`;
+				subField.id = newId;
+				subField._id = newId;
 
-				group.fields = {};
+				// Recurring update subfield IDs and create lists.
+				if ( subField.type === 'group' ) {
+					createNewList( subField );
+				};
 
-				subFields.forEach( subField => {
-					// Change id
-					const newId = `${ subField.type }_${ uniqid() }`;
-					subField.id = newId;
-					subField._id = newId;
-
-					// Recurring update subfield IDs and create lists.
-					if ( subField.type === 'group' ) {
-						createNewList( subField );
-					};
-
-					group.fields[ subField._id ] = subField;
-				} );
-			};
+				return subField;
+			} );
 
 			// Create a new list for group fields.
 			if ( newField.type === 'group' ) {
@@ -131,18 +139,26 @@ const createList = ( { id = '', fields = [], baseInputName = '' } ) => {
 		updateField: ( fieldId, key, value ) => {
 			const field = get().fields.find( f => f._id === fieldId );
 			if ( !field ) {
-				console.error( `Field with id ${ fieldId } not found.` );
 				return;
 			}
 
-			// Don't update if the value is the same.
-			if ( field[ key ] === value ) {
+			// Get the current value using dot notation, to be able to update nested properties.
+			const currentValue = dotProp.get( field, key );
+
+			// Don't update if the value is the same
+			if ( currentValue === value ) {
 				return;
 			}
+
+			// Create a deep clone of the field to avoid reference issues
+			const updatedField = structuredClone( field );
+
+			// Set the value using dot notation
+			dotProp.set( updatedField, key, value );
 
 			set( state => ( {
 				fields: state.fields.map( f =>
-					f._id === fieldId ? { ...f, [ key ]: value } : f
+					f._id === fieldId ? updatedField : f
 				)
 			} ) );
 		},
@@ -190,19 +206,19 @@ const getList = id => {
 
 // Parse fields and put into the lists.
 // Recursively put groups' fields into other lists.
-const parseLists = ( obj, listId, baseInputName ) => {
+const parseLists = ( obj, listId ) => {
 	let fields = ensureArray( obj.fields );
 	fields = fields.filter( field => field.type );
 
-	createList( { id: listId, fields, baseInputName } );
+	createList( { id: listId, fields } );
 
 	fields.forEach( field => {
 		if ( field.type === 'group' ) {
-			parseLists( field, field._id, `${ baseInputName }[${ field._id }][fields]` );
+			parseLists( field, field._id );
 		}
 	} );
 };
-parseLists( MbbApp, 'root', 'fields' );
+parseLists( MbbApp, 'root' );
 
 export { lists };
 

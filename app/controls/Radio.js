@@ -7,13 +7,15 @@ const Radio = ( { componentId, label, name, options, defaultValue, updateField, 
 	const toggle = useToggle( componentId );
 	const [ value, setValue ] = useState( defaultValue );
 
+	// useEffect to make useToggle work AFTER DOM is changed.
 	useEffect( () => {
 		toggle();
-		updateField && updateField( name, value );
+		updateField( name, value );
 	}, [ value ] );
 
 	const radioOpions = Object.entries( options ).map( ( [ value, label ] ) => ( { value, label } ) );
 
+	// Use a hidden controlled input to make useToggle work.
 	return <DivRow { ...rest }>
 		<RadioControl
 			label={ label }
@@ -21,7 +23,7 @@ const Radio = ( { componentId, label, name, options, defaultValue, updateField, 
 			options={ radioOpions }
 			selected={ value }
 		/>
-		<input type="hidden" id={ componentId } name={ name } defaultValue={ value } />
+		<input type="hidden" id={ componentId } value={ value } />
 	</DivRow>;
 };
 

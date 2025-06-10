@@ -1,4 +1,4 @@
-import { Flex } from "@wordpress/components";
+import { Button } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from '../../../controls/DivRow';
@@ -8,27 +8,20 @@ import { fetcher } from "../../../functions";
 import useSettings from "../../../hooks/useSettings";
 
 const BlockJSONSettings = () => {
-	const { getSetting } = useSettings();
+	const { getSetting, updateSetting } = useSettings();
 	const block_json = getSetting( 'block_json', {} );
 
-	const [ blockPathError, setBlockPathError ] = useState( MbbApp.data?.block_path_error );
-	const [ isNewer, setIsNewer ] = useState( true );
+	const [ blockPathError, setBlockPathError ] = useState( '' );
+	const [ isNewer, setIsNewer ] = useState( false );
 
-	/**
-	 * Get local path data, including whether the path is writable, block.json version.
-	 *
-	 * @param any _
-	 * @param string path
-	 */
-	const getLocalPathData = async ( _, path ) => {
-		const postName = document.getElementById( 'post_name' ).value;
-
+	const getLocalPathData = async () => {
+		const postName = document.querySelector( '#post_name' ).value;
 		if ( !postName ) {
 			return;
 		}
 
-		const { is_writable, is_newer } = await fetcher( 'local-path-data', {
-			path,
+		const { is_writable, is_newer } = await fetcher( 'blocks/json/check-path', {
+			path: block_json.path,
 			version: block_json.version || 0,
 			postName
 		} );
@@ -40,58 +33,64 @@ const BlockJSONSettings = () => {
 	};
 
 	useEffect( () => {
-		if ( !block_json.path ) {
+		getLocalPathData();
+	}, [ block_json.path ] );
+
+	const handleOverride = async ( e ) => {
+		e.preventDefault();
+
+		if ( !confirm( __( 'Are you sure you want to override the block settings from the block.json file?', 'meta-box-builder' ) ) ) {
 			return;
 		}
 
-		getLocalPathData( null, block_json.path );
-	}, [] );
+		try {
+			const response = await fetcher( 'blocks/json/override', {
+				post_id: document.querySelector( '#post_ID' ).value,
+				post_name: document.querySelector( '#post_name' ).value,
+				path: block_json.path,
+			}, 'POST' );
+
+			if ( response.success ) {
+				window.location.reload();
+			} else {
+				alert( response.message || __( 'Failed to override block.json', 'meta-box-builder' ) );
+			}
+		} catch ( error ) {
+			alert( __( 'Failed to override block.json', 'meta-box-builder' ) );
+		}
+	};
 
 	return <>
 		<Toggle
-			name="settings[block_json][enable]"
+			name="block_json.enable"
 			label={ __( 'Generate block.json', 'meta-box-builder' ) }
 			componentId="settings-block_json_enable"
 			defaultValue={ !!block_json.enable }
+			updateField={ updateSetting }
 		/>
 
 		<Input
-			name="settings[block_json][path]"
+			name="block_json.path"
 			label={ __( 'Block folder', 'meta-box-builder' ) }
 			componentId="settings-block-path"
 			description={ __( 'Enter absolute path to the folder containing the <code>block.json</code> and block asset files. <b>Do not include the block name (e.g. field group ID)</b>. The full path for the block files will be like <code>path/to/folder/block-name/block.json</code>.', 'meta-box-builder' ) }
 			defaultValue={ block_json.path }
 			error={ blockPathError }
-			updateField={ getLocalPathData }
+			updateField={ updateSetting }
 			dependency="block_json_enable:true"
 		/>
 
-		<input type="hidden" name="settings[block_json][version]" value={ block_json.version } />
-
 		{
 			isNewer &&
-			<DivRow dependency="block_json_enable:true" label={ __( 'Synchronize block.json', 'meta-box-builder' ) }>
-				<Flex direction="column">
-					<div className="og-description" dangerouslySetInnerHTML={ {
-						__html: __( 'We detected a newer version of <code>block.json</code> from the current folder, do you want to override settings from this path?', 'meta-box-builder' )
-					} }></div>
-
-					<input
-						name="override_block_json"
-						value={ __( 'Override Block JSON', 'meta-box-builder' ) }
-						type="submit"
-						className="button secondary"
-						onClick={ e => {
-							if ( !confirm( __( 'Are you sure you want to override the block.json settings?', 'meta-box-builder' ) ) ) {
-								e.preventDefault();
-							}
-						} }
-					/>
-				</Flex>
+			<DivRow dependency="block_json_enable:true" label={ __( 'Override from block.json', 'meta-box-builder' ) }>
+				<p className="og-error">
+					{ __( 'We detected a newer version of block.json, do you want to override settings from this file?', 'meta-box-builder' ) }
+				</p>
+				<Button variant="secondary" onClick={ handleOverride } text={ __( 'Yes, override from block.json', 'meta-box-builder' ) } />
 			</DivRow>
 		}
 
-		<DivRow dependency="block_json_enable:true" label={ `<span class="og-indent"></span>${ __( 'Supported variables', 'meta-box-builder' ) }` } >
+		<DivRow dependency="block_json_enable:true" label={ __( 'Supported variables', 'meta-box-builder' ) }>
 			<table className="og-block-description">
 				<tbody>
 					<tr>

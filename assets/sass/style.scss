@@ -5,6 +5,8 @@
 @use "base/wordpress";
 @use "base/react-select";
 
+@use "notification";
+
 // Editor
 @use "editor/empty";
 @use "editor/meta-box";
