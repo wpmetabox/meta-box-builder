@@ -12,7 +12,7 @@ const BlockJSONSettings = () => {
 	const block_json = getSetting( 'block_json', {} );
 
 	const [ blockPathError, setBlockPathError ] = useState( '' );
-	const [ isNewer, setIsNewer ] = useState( true );
+	const [ isNewer, setIsNewer ] = useState( false );
 
 	const getLocalPathData = async () => {
 		const postName = document.querySelector( '#post_name' ).value;
