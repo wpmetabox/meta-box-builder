@@ -32,25 +32,27 @@ const Location = () => {
 						wrapper={ false }
 						options={ MbbApp.postTypes.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
 						defaultValue={ postTypes }
-						onChange={ items => updatePostTypes( items ? items.map( item => item.value ) : [] ) }
+						updateField={ ( name, values ) => updatePostTypes( values ) }
 					/>
 				}
 				{
 					'term' === objectType &&
 					<ReactSelect
+						name="taxonomies"
 						wrapper={ false }
 						options={ MbbApp.taxonomies.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
 						defaultValue={ ensureArray( getSetting( 'taxonomies', [] ) ) }
-						onChange={ items => updateSetting( 'taxonomies', items ? items.map( item => item.value ) : [] ) }
+						updateField={ updateSetting }
 					/>
 				}
 				{
 					'setting' === objectType &&
 					<ReactSelect
+						name="settings_pages"
 						wrapper={ false }
 						options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.id })` } ) ) }
 						defaultValue={ ensureArray( getSetting( 'settings_pages', [] ) ) }
-						onChange={ items => updateSetting( 'settings_pages', items ? items.map( item => item.value ) : [] ) }
+						updateField={ updateSetting }
 					/>
 				}
 			</DivRow>

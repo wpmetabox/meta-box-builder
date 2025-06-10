@@ -237,7 +237,7 @@ class Registry {
 
 			// Taxonomy.
 			Control::ReactSelect( 'taxonomy', [
-				'name'    => 'taxonomy[]',
+				'name'    => 'taxonomy',
 				'label'   => __( 'Taxonomies', 'meta-box-builder' ),
 				'options' => $this->get_taxonomies(),
 			] ),
@@ -496,7 +496,7 @@ class Registry {
 
 			// Post.
 			Control::ReactSelect( 'post_type', [
-				'name'    => 'post_type[]',
+				'name'    => 'post_type',
 				'label'   => __( 'Post types', 'meta-box-builder' ),
 				'options' => $this->get_post_types(),
 			], [ 'post' ] ),

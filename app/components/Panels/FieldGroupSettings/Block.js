@@ -120,7 +120,7 @@ const Block = () => {
 				full: __( 'Full', 'meta-box-builder' ),
 			} }
 			defaultValue={ ensureArray( getSetting( 'supports.align', [] ) ) }
-			onChange={ items => updateSetting( 'supports.align', items ? items.map( item => item.value ) : [] ) }
+			updateField={ updateSetting }
 		/>
 
 		<ToggleControl

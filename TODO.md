@@ -8,10 +8,6 @@
 ## UX
 [ ] Show alert when saving successfully
 
-## Extra checks
-[ ] Update FieldInserter control
-[ ] Update ReactSelect (used for both field settings (post, taxonomy) and field group settings)
-
 ## Final
 [ ] Merge from master and check compatibility with Local JSON feature and recent updates
 
