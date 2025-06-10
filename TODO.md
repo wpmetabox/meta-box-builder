@@ -9,12 +9,11 @@
 [ ] Show alert when saving successfully
 
 ## Extra checks
-[ ] Check all PHP code to hook to save process
 [ ] Update FieldInserter control
 [ ] Update ReactSelect (used for both field settings (post, taxonomy) and field group settings)
 
 ## Final
-[ ] Merge from master and check compatibility with JSON local feature and recent updates
+[ ] Merge from master and check compatibility with Local JSON feature and recent updates
 
 Nice to have:
 

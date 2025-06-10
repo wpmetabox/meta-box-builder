@@ -10,12 +10,12 @@ class Save extends Base {
 	public function register_routes(): void {
 		register_rest_route( 'mbb', 'save', [
 			'methods'             => WP_REST_Server::CREATABLE,
-			'callback'            => [ $this, 'save_data' ],
+			'callback'            => [ $this, 'save' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 	}
 
-	public function save_data( WP_REST_Request $request ): array {
+	public function save( WP_REST_Request $request ): array {
 		$post_id     = (int) $request->get_param( 'post_id' );
 		$post_title  = sanitize_text_field( $request->get_param( 'post_title' ) );
 		$post_name   = sanitize_text_field( $request->get_param( 'post_name' ) );
