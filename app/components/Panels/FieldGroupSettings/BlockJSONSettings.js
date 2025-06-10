@@ -20,7 +20,7 @@ const BlockJSONSettings = () => {
 			return;
 		}
 
-		const { is_writable, is_newer } = await fetcher( 'check-path-writable', {
+		const { is_writable, is_newer } = await fetcher( 'blocks/json/check-path', {
 			path: block_json.path,
 			version: block_json.version || 0,
 			postName
@@ -44,7 +44,7 @@ const BlockJSONSettings = () => {
 		}
 
 		try {
-			const response = await fetcher( 'override-from-block-json', {
+			const response = await fetcher( 'blocks/json/override', {
 				post_id: document.querySelector( '#post_ID' ).value,
 				post_name: document.querySelector( '#post_name' ).value,
 				path: block_json.path,

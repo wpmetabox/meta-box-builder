@@ -21,8 +21,15 @@ if ( Helpers\Data::is_extension_active( 'meta-box-show-hide' ) ) {
 	new RestApi\ShowHide();
 }
 
+if ( Helpers\Data::is_extension_active( 'mb-blocks' ) ) {
+	new Extensions\Blocks\Data();
+	new Extensions\Blocks\Json\Register();
+	new Extensions\Blocks\Json\Generator();
+	new Extensions\Blocks\Json\Overrider();
+	new Extensions\Blocks\Json\Path();
+}
+
 new Extensions\AdminColumns();
-new Extensions\Blocks();
 new Extensions\Columns();
 new Extensions\ConditionalLogic();
 new Extensions\Group();
