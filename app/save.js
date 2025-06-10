@@ -72,7 +72,9 @@ export const initSaveForm = () => {
 		submitButton.disabled = false;
 		submitButton.value = originalText;
 
-		if ( !response.success ) {
+		if ( response.success ) {
+			window.mbbShowNotification?.();
+		} else {
 			alert( response.message );
 		}
 	} );

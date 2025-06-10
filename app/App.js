@@ -4,6 +4,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Header from './components/Header';
 import Main from './components/Main';
 import Nav from "./components/Nav";
+import Notification from './components/Notification';
 import { initSaveForm } from './save';
 
 const Layout = ( { children } ) => (
@@ -21,6 +22,8 @@ const Layout = ( { children } ) => (
 		<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
 		<input type="hidden" name="messages" value="" />
 		<input type="hidden" name="mbb_nonce" value={ MbbApp.nonce_save } />
+
+		<Notification />
 	</ErrorBoundary>
 );
 
