@@ -23,11 +23,15 @@ class Save extends Base {
 		$fields      = $request->get_param( 'fields' );
 		$settings    = $request->get_param( 'settings' );
 
-		if ( ! $post_id || ! $post_title || ! $post_name || ! $post_status ) {
+		if ( ! $post_id || ! $post_title || ! $post_status ) {
 			return [
 				'success' => false,
 				'message' => __( 'Invalid data', 'meta-box-builder' ),
 			];
+		}
+
+		if ( ! $post_name ) {
+			$post_name = sanitize_title( $post_title );
 		}
 
 		wp_update_post( [
