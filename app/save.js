@@ -56,18 +56,6 @@ export const initSaveForm = () => {
 		// Get hierarchical fields
 		const fields = buildFieldsTree();
 
-		// Get form data for other fields
-		const formData = new FormData( form );
-		const data = {};
-
-		// Extract data from form
-		for ( const [ key, value ] of formData.entries() ) {
-			if ( key.startsWith( 'data[' ) ) {
-				const dataKey = key.replace( 'data[', '' ).replace( /\].*$/, '' );
-				data[ dataKey ] = value;
-			}
-		}
-
 		// Get settings from useSettings store
 		const settings = useSettings.getState().settings;
 
@@ -79,7 +67,6 @@ export const initSaveForm = () => {
 			post_status: submitButton.dataset.status,
 			fields,
 			settings,
-			data,
 		}, 'POST' );
 
 		submitButton.disabled = false;
