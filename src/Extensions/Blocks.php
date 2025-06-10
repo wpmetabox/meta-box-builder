@@ -383,13 +383,18 @@ class Blocks {
 			$fields = [];
 		}
 		$attributes = isset( $block_json['attributes'] ) && is_array( $block_json['attributes'] ) ? $block_json['attributes'] : [];
+		$new_fields = [];
 		foreach ( $attributes as $name => $value ) {
-			if ( is_array( $value ) && isset( $value['meta-box-field'] ) ) {
-				$field                   = $value['meta-box-field'];
-				$field['id']             = $name;
-				$fields[ $field['_id'] ] = $field;
+			if ( ! is_array( $value ) || ! isset( $value['meta-box-field'] ) ) {
+				continue;
 			}
+
+			$field       = $value['meta-box-field'];
+			$field['id'] = $name;
+			$new_fields[] = $field;
 		}
+
+		$this->merge_list( $fields, $new_fields );
 		update_post_meta( $post_id, 'fields', $fields );
 
 		// Save parsed data for PHP
@@ -411,6 +416,31 @@ class Blocks {
 			'success' => true,
 			'message' => __( 'Block settings overridden successfully', 'meta-box-builder' ),
 		];
+	}
+
+	private function merge_list( array &$list_one, array $list_two ): void {
+		foreach ( $list_two as $item_two ) {
+			$found = false;
+			foreach ( $list_one as &$item_one ) {
+				if ( $item_one['_id'] !== $item_two['_id'] ) {
+					continue;
+				}
+
+				$item_one = $item_two;
+				$found    = true;
+
+				// Do the same for nested fields.
+				if ( isset( $item_two['fields'] ) ) {
+					$item_one['fields'] = $item_one['fields'] ?? [];
+					$this->merge_list( $item_one['fields'], $item_two['fields'] );
+				}
+				break;
+			}
+
+			if ( ! $found ) {
+				$list_one[] = $item_two;
+			}
+		}
 	}
 
 	private function get_block_metadata( WP_REST_Request $request ): array {
