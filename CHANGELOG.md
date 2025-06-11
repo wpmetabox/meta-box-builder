@@ -1,6 +1,10 @@
+### 4.11.2 - 2025-05-21
+
+Fix error for translating relationship texts
+
 ### 4.11.1 - 2025-05-21
 
-- Fix `fields_translations` settings still available and grows rapidly event when Polylang is not active
+Fix `fields_translations` settings still available and grows rapidly event when Polylang is not active
 
 ### 4.11.0 - 2025-05-08
 
