@@ -1,6 +1,3 @@
-## Blocks
-[ ] Slow load of the block editor when MB Views is enabled. Shows a blank screen and after a long delay, it will show the content.
-
 ## Bugs
 [ ] Fix when add new field, unique _id is updated/generated from name
 [ ] Fix:  I had a group with many fields and then I decided to turn on this feature “Start with no inputs” and it deleted the names of every field in that group. The fields stayed, but without any name.
