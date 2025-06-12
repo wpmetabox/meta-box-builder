@@ -1,10 +1,9 @@
 <?php
 namespace MBB;
 
-use MBB\Extensions\Blocks;
+use MBB\Extensions\Blocks\Json\Path;
 
 class JsonService {
-
 	/**
 	 * Get data from JSON file and format it in a verbose format to use everywhere possible:
 	 * - Compare
@@ -103,7 +102,7 @@ class JsonService {
 			if ( ! isset( $meta_box['id'] ) ) {
 				continue;
 			}
-			
+
 			$id        = $meta_box['id'];
 			$post_id   = $meta_box['post_id'];
 			$post_type = $meta_box['post_type'];
@@ -122,7 +121,7 @@ class JsonService {
 
 				$file         = self::get_future_path( $id );
 				$folder       = dirname( $file );
-				$is_writeable = Blocks::is_future_path_writable( $folder );
+				$is_writeable = Path::is_future_path_writable( $folder );
 
 				$items[ $id ] = [
 					'file'            => $file,
