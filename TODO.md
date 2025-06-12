@@ -1,9 +1,15 @@
 ## Bugs
 [ ] Fix when add new field, unique _id is updated/generated from name
 [ ] Fix:  I had a group with many fields and then I decided to turn on this feature “Start with no inputs” and it deleted the names of every field in that group. The fields stayed, but without any name.
+[ ] 2. Tooltip: Em chọn icon (livepreview có update) nhưng sau đó nếu quay lại sửa/ điền thêm content, thì icon ở live preview từ động về Information (default)
+[ ] 3. Lỗi khi publish field group. Tuy nhiên em tạo lại field group khác thì lại không bị
+[ ] 5. Lỗi Group title trong post editor. Group trong hình em set title = {#} {name}  - em không chụp được setting vì field group bị lỗi 3, giờ em không vào được field group đó nữa
 
 ## UX
 [ ] Double click Cloneable button should close the clone settings dropdown
+[ ] 1. Em cảm giác tốc độ update giữa setting và livepreview không còn được mượt mà như bản Alpha: Khi sửa label ở live-preview, khi điền Choices/placeholder,... (không được ngay lập tức thôi nhưng cũng không gây khó chịu cho em, chữ xuất hiện theo cụm giật cục chứ không mượt như mình typing - cái này bản Alpha làm ổn hơn ạ)
+
+- Replace SWR with useFetch, copied from Slim SEO Schema
 
 ## Final
 [ ] Merge from master and check compatibility with Local JSON feature and recent updates
