@@ -1,5 +1,4 @@
 import { RadioControl, ToggleControl } from "@wordpress/components";
-import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import Color from '../../../controls/Color';
 import DashiconPicker from '../../../controls/DashiconPicker';
@@ -12,10 +11,7 @@ import { ensureArray } from '/functions';
 
 const Block = () => {
 	const { getSetting, updateSetting } = useSettings();
-	const [ iconType, setIconType ] = useState( getSetting( 'icon_type', 'dashicons' ) );
-	const [ context, setContext ] = useState( getSetting( 'block_context', 'side' ) );
-
-	const updateIconType = e => setIconType( e.target.value );
+	const iconType = getSetting( 'icon_type', 'dashicons' );
 
 	return <>
 		<Input
@@ -31,7 +27,6 @@ const Block = () => {
 			componentId="settings-block-icon_type"
 			options={ { dashicons: __( 'Dashicons', 'meta-box-builder' ), svg: __( 'Custom SVG', 'meta-box-builder' ) } }
 			defaultValue={ iconType }
-			onChange={ updateIconType }
 			updateField={ updateSetting }
 		/>
 		{
@@ -102,11 +97,8 @@ const Block = () => {
 					value: 'side',
 				},
 			] }
-			selected={ context }
-			onChange={ value => {
-				setContext( value );
-				updateSetting( 'block_context', value );
-			} }
+			selected={ getSetting( 'block_context', 'side' ) }
+			onChange={ value => updateSetting( 'block_context', value ) }
 		/>
 		<ReactSelect
 			name="supports.align"

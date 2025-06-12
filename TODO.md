@@ -11,8 +11,16 @@
 
 - Replace SWR with useFetch, copied from Slim SEO Schema
 
-## Final
-[ ] Merge from master and check compatibility with Local JSON feature and recent updates
+## Merge
+[ ] Check Local JSON feature
+[ ] Check integration with Polylang and WPML
+[ ] Make code generator work again
+[ ] Check theme code
+[ ] Fix translation is loaded by site language, which should be by user language
+
+## Improvements
+[ ] Remove default `hide_from_rest` and `hide_from_front` if their values are `false`
+[ ] Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
 
 Nice to have:
 
