@@ -96,7 +96,9 @@ class AdminColumns {
 
 		$admin_columns = &$settings['admin_columns'];
 		unset( $admin_columns['enable'] );
-		$admin_columns['position'] = trim( implode( ' ', $admin_columns['position'] ) );
+		if ( is_array( $admin_columns['position'] ) ) {
+			$admin_columns['position'] = trim( implode( ' ', $admin_columns['position'] ) );
+		}
 		$admin_columns             = array_filter( $admin_columns );
 		if ( empty( $admin_columns ) ) {
 			$admin_columns = true;

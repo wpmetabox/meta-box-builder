@@ -28,16 +28,27 @@ const AdminColumnsPosition = ( { componentId, defaultValue, updateField, ...rest
 		updateField( 'admin_columns.position.column', value );
 	};
 
+	let type;
+	let column;
+	if ( typeof defaultValue === 'string' ) {
+		const parts = defaultValue.split( ' ' );
+		type = parts[ 0 ] || 'after';
+		column = parts[ 1 ] || defaultColumn;
+	} else {
+		type = defaultValue.type || 'after';
+		column = defaultValue.column || defaultColumn;
+	}
+
 	return (
 		<DivRow { ...rest }>
-			<select defaultValue={ defaultValue.type || 'after' } onChange={ handleChangeType }>
+			<select defaultValue={ type } onChange={ handleChangeType }>
 				<option value="after">{ __( 'After', 'meta-box-builder' ) }</option>
 				<option value="before">{ __( 'Before', 'meta-box-builder' ) }</option>
 				<option value="replace">{ __( 'Replace', 'meta-box-builder' ) }</option>
 			</select>
 			<FieldInserter
 				id={ componentId }
-				defaultValue={ defaultValue.column || defaultColumn }
+				defaultValue={ column }
 				items={ fields }
 				isID={ true }
 				exclude={ objectTypeFields( objectType ) }
