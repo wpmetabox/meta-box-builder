@@ -49,10 +49,10 @@ new Extensions\RestApi();
 new Extensions\FrontendSubmission();
 new Extensions\TextLimiter();
 
+new LocalJson();
 if ( is_admin() ) {
 	new Import();
 	new Export();
-	new LocalJson();
 	new Edit( 'meta-box', __( 'Field Group ID', 'meta-box-builder' ) );
 	new AdminColumns();
 }
