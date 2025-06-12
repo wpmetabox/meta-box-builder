@@ -1,6 +1,11 @@
 <?php
 namespace MBB;
 
+// Prevent loading this file directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
+
 // Show Meta Box admin menu.
 add_filter( 'rwmb_admin_menu', '__return_true' );
 load_plugin_textdomain( 'meta-box-builder', false, plugin_basename( MBB_DIR ) . '/languages/' );
@@ -29,6 +34,9 @@ if ( Helpers\Data::is_extension_active( 'mb-blocks' ) ) {
 	new Extensions\Blocks\Json\Path();
 }
 
+new Integrations\WPML\Manager();
+new Integrations\Polylang\Manager();
+
 new Extensions\AdminColumns();
 new Extensions\Columns();
 new Extensions\ConditionalLogic();
@@ -42,9 +50,9 @@ new Extensions\FrontendSubmission();
 new Extensions\TextLimiter();
 
 if ( is_admin() ) {
-	new About();
 	new Import();
 	new Export();
+	new LocalJson();
 	new Edit( 'meta-box', __( 'Field Group ID', 'meta-box-builder' ) );
 	new AdminColumns();
 }
