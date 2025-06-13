@@ -12,10 +12,6 @@
 - Replace SWR with useFetch, copied from Slim SEO Schema
 
 ## Merge
-[ ] Check Local JSON feature
-	- If there's an entry in the DB, and a JSON file exists with **older** data (by `modified` key) => ???
-	- If edit the DB, then show a warning to users to overwrite the data in JSON file
-	- Check if DB queries are made if `mb-json` folder exists
 [ ] Check integration with Polylang and WPML
 [ ] Make code generator work again
 [ ] Check theme code
