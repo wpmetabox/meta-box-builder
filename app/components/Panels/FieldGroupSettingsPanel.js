@@ -56,19 +56,13 @@ const FieldGroupSettingsPanel = () => {
 				}
 				{
 					MbbApp.extensions.showHide && objectType !== 'block' &&
-					<PersistentPanelBody
-						title={ __( 'Toggle rules', 'meta-box-builder' ) }
-						className="og-include-exclude"
-					>
+					<PersistentPanelBody title={ __( 'Toggle rules', 'meta-box-builder' ) } className="og-include-exclude">
 						<ShowHide />
 					</PersistentPanelBody>
 				}
 				{
 					MbbApp.extensions.conditionalLogic &&
-					<PersistentPanelBody
-						title={ __( 'Conditional logic', 'meta-box-builder' ) }
-						className="og-include-exclude"
-					>
+					<PersistentPanelBody title={ __( 'Conditional logic', 'meta-box-builder' ) } className="og-include-exclude">
 						<ConditionalLogic />
 					</PersistentPanelBody>
 				}
