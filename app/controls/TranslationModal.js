@@ -1,18 +1,10 @@
 import { Button, Modal, RadioControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import useSettings from '../hooks/useSettings';
 import Tooltip from './Tooltip';
 
-const TranslationModal = ( { isOpen, onClose, settings, updateSettings } ) => {
-	const translations = settings?.fields_translations || {};
-
-	const fields = MbbApp.fields;
-
-	const handleChange = ( fieldId, value ) => {
-		updateSettings( 'fields_translations', {
-			...translations,
-			[ fieldId ]: value
-		} );
-	};
+const TranslationModal = ( { isOpen, onClose } ) => {
+	const fields = MbbApp.fields.filter( field => field.id && ![ 'button', 'custom_html', 'divider', 'heading', 'tab' ].includes( field.type ) );
 
 	return isOpen && (
 		<Modal
@@ -41,40 +33,7 @@ const TranslationModal = ( { isOpen, onClose, settings, updateSettings } ) => {
 						</tr>
 					</thead>
 					<tbody>
-						{
-							fields.map( field => field.id && ![ 'button', 'custom_html', 'divider', 'heading', 'tab' ].includes( field.type ) && (
-								<tr key={ field.id }>
-									<td>{ field.name || field.id }</td>
-									<td>
-										<RadioControl
-											selected={ translations[ field.id ] }
-											options={ [
-												{ label: '', value: 'ignore' }
-											] }
-											onChange={ value => handleChange( field.id, value ) }
-										/>
-									</td>
-									<td>
-										<RadioControl
-											selected={ translations[ field.id ] || 'translate' }
-											options={ [
-												{ label: '', value: 'translate' }
-											] }
-											onChange={ value => handleChange( field.id, value ) }
-										/>
-									</td>
-									<td>
-										<RadioControl
-											selected={ translations[ field.id ] }
-											options={ [
-												{ label: '', value: 'copy' }
-											] }
-											onChange={ value => handleChange( field.id, value ) }
-										/>
-									</td>
-								</tr>
-							) )
-						}
+						{ fields.map( field => <Field key={ field.id } field={ field } /> ) }
 					</tbody>
 				</table>
 			</div>
@@ -82,6 +41,45 @@ const TranslationModal = ( { isOpen, onClose, settings, updateSettings } ) => {
 				<Button isPrimary onClick={ onClose }>{ __( 'Save', 'meta-box-builder' ) }</Button>
 			</div>
 		</Modal>
+	);
+};
+
+const Field = ( { field } ) => {
+	const { getSetting, updateSetting } = useSettings();
+	const mode = getSetting( `fields_translations.${ field.id }`, 'ignore' );
+	const handleChange = value => updateSetting( `fields_translations.${ field.id }`, value );
+
+	return (
+		<tr key={ field.id }>
+			<td>{ field.name || field.id }</td>
+			<td>
+				<RadioControl
+					selected={ mode }
+					options={ [
+						{ label: '', value: 'ignore' }
+					] }
+					onChange={ handleChange }
+				/>
+			</td>
+			<td>
+				<RadioControl
+					selected={ mode }
+					options={ [
+						{ label: '', value: 'translate' }
+					] }
+					onChange={ handleChange }
+				/>
+			</td>
+			<td>
+				<RadioControl
+					selected={ mode }
+					options={ [
+						{ label: '', value: 'copy' }
+					] }
+					onChange={ handleChange }
+				/>
+			</td>
+		</tr>
 	);
 };
 

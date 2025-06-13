@@ -14,6 +14,7 @@ import Post from './FieldGroupSettings/Post';
 import ShowHide from './FieldGroupSettings/ShowHide';
 import Summary from './FieldGroupSettings/Summary';
 import Tabs from './FieldGroupSettings/Tabs';
+import Translation from './FieldGroupSettings/Translation';
 
 const FieldGroupSettingsPanel = () => {
 	const { getObjectType } = useSettings();
@@ -76,6 +77,12 @@ const FieldGroupSettingsPanel = () => {
 					MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) &&
 					<PersistentPanelBody title={ __( 'Custom table', 'meta-box-builder' ) }>
 						<CustomTable />
+					</PersistentPanelBody>
+				}
+				{
+					MbbApp.polylang &&
+					<PersistentPanelBody title={ __( 'Translation', 'meta-box-builder' ) }>
+						<Translation />
 					</PersistentPanelBody>
 				}
 				{
