@@ -1,7 +1,7 @@
 import { Button, Modal, RadioControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import useSettings from '../hooks/useSettings';
-import Tooltip from './Tooltip';
+import useSettings from '../../../hooks/useSettings';
+import Tooltip from '../../../controls/Tooltip';
 
 const TranslationModal = ( { isOpen, onClose } ) => {
 	const fields = MbbApp.fields.filter( field => field.id && ![ 'button', 'custom_html', 'divider', 'heading', 'tab' ].includes( field.type ) );

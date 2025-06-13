@@ -1,8 +1,8 @@
 import { Button, SelectControl } from "@wordpress/components";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import TranslationModal from "../../../controls/TranslationModal";
 import useSettings from "../../../hooks/useSettings";
+import TranslationModal from "./TranslationModal";
 
 const Translation = () => {
 	const { getSetting, updateSetting } = useSettings();
