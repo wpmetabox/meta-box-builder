@@ -12,7 +12,6 @@
 - Replace SWR with useFetch, copied from Slim SEO Schema
 
 ## Merge
-[ ] Check integration with Polylang and WPML
 [ ] Make code generator work again
 [ ] Check theme code
 [ ] Fix translation is loaded by site language, which should be by user language
