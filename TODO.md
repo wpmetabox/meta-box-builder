@@ -4,15 +4,13 @@
 [ ] 2. Tooltip: Em chọn icon (livepreview có update) nhưng sau đó nếu quay lại sửa/ điền thêm content, thì icon ở live preview từ động về Information (default)
 [ ] 3. Lỗi khi publish field group. Tuy nhiên em tạo lại field group khác thì lại không bị. Lỗi số 3 của Lụa "Something went wrong. Please try again!" khi publish field group,  em cũng vừa gặp phải khi tạo field Checkbox list, nếu các option để dạng số và default value cũng để 1 số nào đó thì bị ạ
 [ ] 5. Lỗi Group title trong post editor. Group trong hình em set title = {#} {name}  - em không chụp được setting vì field group bị lỗi 3, giờ em không vào được field group đó nữa
+[ ] Fix translation is loaded by site language, which should be by user language
 
 ## UX
 [ ] Double click Cloneable button should close the clone settings dropdown
 [ ] 1. Em cảm giác tốc độ update giữa setting và livepreview không còn được mượt mà như bản Alpha: Khi sửa label ở live-preview, khi điền Choices/placeholder,... (không được ngay lập tức thôi nhưng cũng không gây khó chịu cho em, chữ xuất hiện theo cụm giật cục chứ không mượt như mình typing - cái này bản Alpha làm ổn hơn ạ)
 
 - Replace SWR with useFetch, copied from Slim SEO Schema
-
-## Merge
-[ ] Fix translation is loaded by site language, which should be by user language
 
 ## Improvements
 [ ] Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
