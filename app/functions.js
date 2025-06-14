@@ -199,13 +199,16 @@ export const isPositiveInteger = value => {
 	return Number.isInteger( number ) && number > 0;
 };
 
-export const getOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
-	if ( !option.includes( ':' ) ) {
-		return option.trim();
-	}
-	const [ value, label ] = option.split( ':' );
-	return label.trim();
-} );
+export const getOptions = text => {
+	text = typeof text === 'number' ? String( text ) : ( typeof text === 'string' ? text : '' );
+	return text === "" ? [] : text.split( "\n" ).map( option => {
+		if ( !option.includes( ':' ) ) {
+			return option.trim();
+		}
+		const [ value, label ] = option.split( ':' );
+		return label.trim();
+	} );
+};
 
 export const getFullOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
 	if ( !option.includes( ':' ) ) {
