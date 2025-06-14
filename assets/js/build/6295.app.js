@@ -1,1 +1,1 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[6295],{6295:(e,l,s)=>{s.r(l),s.d(l,{default:()=>u});var t=s(1609),a=s(6087);const u=({field:e})=>(0,t.createElement)(a.RawHTML,null,e.std)}}]);
+"use strict";(globalThis.webpackChunk=globalThis.webpackChunk||[]).push([[6295],{6295:(e,l,s)=>{s.r(l),s.d(l,{default:()=>d});var t=s(1609),a=s(6087);const d=(0,a.memo)((({field:e})=>(0,t.createElement)(a.RawHTML,null,e.std)),((e,l)=>e.field.std===l.field.std))}}]);

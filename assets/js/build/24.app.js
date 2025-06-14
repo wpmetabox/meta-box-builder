@@ -1,1 +1,1 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[24],{24:(e,l,s)=>{s.r(l),s.d(l,{default:()=>u});var t=s(1609);const u=()=>(0,t.createElement)("hr",null)}}]);
+"use strict";(globalThis.webpackChunk=globalThis.webpackChunk||[]).push([[24],{24:(e,l,a)=>{a.r(l),a.d(l,{default:()=>s});var h=a(1609);const s=(0,a(6087).memo)((()=>(0,h.createElement)("hr",null)))}}]);
