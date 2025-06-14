@@ -1,6 +1,6 @@
 import { fetcher } from './functions';
 import useSettings from './hooks/useSettings';
-import { lists } from './list-functions';
+import { buildFieldsTree } from './list-functions';
 
 export const initSaveForm = () => {
 	const form = document.getElementById( 'post' );
@@ -18,39 +18,6 @@ export const initSaveForm = () => {
 
 		submitButton.disabled = true;
 		submitButton.value = MbbApp.texts.saving;
-
-		// Build fields tree similar to useAllFieldsTree
-		const buildFieldsTree = () => {
-			// Get all root fields first
-			const rootFields = lists.has( 'root' )
-				? [ ...lists.get( 'root' ).getState().fields ]
-				: [];
-
-			// Process each field to include sub-fields for groups
-			const processField = field => {
-				// Deep clone the field to avoid reference issues
-				const processedField = { ...field };
-
-				// Temporary keys used in the builder.
-				delete processedField._new;
-				delete processedField._active;
-				delete processedField._id_changed;
-
-				// Temporary keys used by SortableJS.
-				delete processedField.chosen;
-				delete processedField.selected;
-
-				// If it's a group field, get its sub-fields
-				if ( field.type === 'group' && lists.has( field._id ) ) {
-					processedField.fields = lists.get( field._id ).getState().fields.map( processField );
-				}
-
-				return processedField;
-			};
-
-			// Process all root fields
-			return rootFields.map( processField );
-		};
 
 		// Get hierarchical fields
 		const fields = buildFieldsTree();
