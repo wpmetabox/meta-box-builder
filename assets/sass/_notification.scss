@@ -1,0 +1,7 @@
+.mb-notification {
+	position: fixed;
+	z-index: 99;
+	right: 12px; // Same as header padding right.
+	top: calc(32px + 61px); // 32px is the height of the admin bar, 61px is the height of the header.
+	margin-top: 2px;
+}

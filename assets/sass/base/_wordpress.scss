@@ -1,0 +1,75 @@
+.components-tooltip {
+	max-width: 400px;
+}
+
+.components-modal__header {
+	padding-top: 8px;
+}
+
+// Dropdown
+.components-popover__content {
+	min-width: calc(240px + 2 * 8px); // Min width for content is 240px, 8px padding inline.
+}
+
+// Context menu.
+.components-menu-items__item-icon.components-menu-items__item-icon.components-menu-items__item-icon {
+	width: 16px;
+	height: 16px;
+	opacity: .45;
+}
+
+.components-button.components-dropdown-menu__toggle {
+	height: calc(16px + 2 * 6px); // SVG height: 16px, button pading: 6px.
+}
+
+.components-menu-group+.components-menu-group {
+	border-top-color: var(--color-light);
+}
+
+// Toolbar
+.components-accessible-toolbar,
+.components-toolbar,
+.components-toolbar-group {
+	border-color: var(--color-light);
+}
+
+.components-accessible-toolbar,
+.components-toolbar {
+	border-radius: 4px;
+}
+
+.components-toolbar-group {
+	min-height: auto;
+	padding-inline: 0;
+
+	&:first-child {
+		border-top-left-radius: 4px;
+		border-bottom-left-radius: 4px;
+	}
+
+	&:last-child {
+		border-top-right-radius: 4px;
+		border-bottom-right-radius: 4px;
+	}
+}
+
+.components-accessible-toolbar .components-button.components-button,
+.components-toolbar .components-button.components-button {
+	height: 30px;
+
+	svg {
+		width: 16px;
+		height: 16px;
+		fill: currentColor;
+	}
+}
+
+.components-toolbar-group .components-button.components-button,
+.components-toolbar-group .components-button.has-icon.has-icon {
+	min-width: 30px;
+}
+
+.components-button:focus:not(:disabled) {
+	outline: none;
+	box-shadow: none;
+}

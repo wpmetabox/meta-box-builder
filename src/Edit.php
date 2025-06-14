@@ -114,7 +114,10 @@ class Edit extends BaseEditPage {
 	}
 
 	public function enqueue() {
+		Assets::enqueue();
+
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
+		wp_enqueue_style( 'wp-edit-post' );
 
 		wp_enqueue_style( 'rwmb-modal', RWMB_CSS_URL . 'modal.css', [], RWMB_VER );
 		wp_style_add_data( 'rwmb-modal', 'path', RWMB_CSS_DIR . 'modal.css' );
@@ -134,7 +137,22 @@ class Edit extends BaseEditPage {
 		] );
 
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], filemtime( MBB_DIR . 'assets/css/style.css' ) );
-		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', [ 'jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard', 'wp-color-picker', 'code-editor' ], filemtime( MBB_DIR . 'assets/js/app.js' ), true );
+
+		$asset = require MBB_DIR . "/assets/js/build/app.asset.php";
+
+		// Add extra JS libs for copy code to clipboard & block color picker.
+		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'code-editor', 'wp-color-picker' ] );
+
+		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/build/app.js', $asset['dependencies'], $asset['version'], true );
+
+		// Script to toggle the admin menu.
+		wp_enqueue_script(
+			'mbb-admin-menu',
+			MBB_URL . 'assets/js/admin-menu.js',
+			[],
+			filemtime( MBB_DIR . 'assets/js/admin-menu.js' ),
+			true
+		);
 
 		$fields = get_post_meta( get_the_ID(), 'fields', true ) ?: [];
 		$fields = array_values( $fields );
@@ -145,10 +163,21 @@ class Edit extends BaseEditPage {
 			return $field;
 		}, $fields );
 
+		$post = get_post();
+
 		$data = [
+			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
+			'adminUrl'      => admin_url(),
+			'status'        => $post->post_status,
+			'title'         => $post->post_title,
+			'slug'          => $post->post_name,
+			'author'        => get_the_author_meta( 'display_name', (int) $post->post_author ),
+			'trash'         => get_delete_post_link(),
+			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
+			'modified'      => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
+
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
-			'data'          => get_post_meta( get_the_ID(), 'data', true ),
 
 			'rest'          => untrailingslashit( rest_url() ),
 			'nonce'         => wp_create_nonce( 'wp_rest' ),
@@ -177,6 +206,19 @@ class Edit extends BaseEditPage {
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
 				'views'              => Data::is_extension_active( 'mb-views' ),
 			],
+
+			'assetsBaseUrl' => MBB_URL . 'assets',
+
+			'texts' => [
+				'saving'        => __( 'Saving...', 'meta-box-builder' ),
+				'switchToDraft' => __( 'Switch to draft', 'meta-box-builder' ),
+				'saveDraft'     => __( 'Save draft', 'meta-box-builder' ),
+				'update'        => __( 'Update', 'meta-box-builder' ),
+				'publish'       => __( 'Publish', 'meta-box-builder' ),
+				'draft'         => __( 'Draft', 'meta-box-builder' ),
+				'published'     => __( 'Published', 'meta-box-builder' ),
+				'saveError'     => __( 'Error saving form. Please try again.', 'meta-box-builder' ),
+			],
 		];
 
 		$data = apply_filters( 'mbb_app_data', $data );
@@ -184,37 +226,7 @@ class Edit extends BaseEditPage {
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
 	}
 
+	// Do nothing as all saving is done via REST API.
 	public function save( $post_id, $post ) {
-		// Save data for JavaScript (serialized arrays).
-		$request     = rwmb_request();
-		$base_parser = new BaseParser();
-		$settings    = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
-		$fields      = apply_filters( 'mbb_save_fields', $request->post( 'fields' ), $request );
-		$data        = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
-
-		$base_parser->set_settings( $settings )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'settings', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $fields )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'fields', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $data )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
-
-		// Save parsed data for PHP (serialized array).
-		$submitted_data = compact( 'fields', 'settings' );
-		$submitted_data = apply_filters( 'mbb_save_submitted_data', $submitted_data, $request );
-
-		// Set post title and slug in case they're auto-generated.
-		$submitted_data['post_title'] = $post->post_title;
-		$submitted_data['post_name']  = $post->post_name;
-
-		$parser = new Parser( $submitted_data );
-		$parser->parse();
-
-		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
-
-		// Allow developers to add actions after saving the meta box.
-		do_action( 'mbb_after_save', $parser, $post_id, $submitted_data );
 	}
 }

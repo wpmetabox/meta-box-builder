@@ -1,0 +1,38 @@
+.react-select {
+	&__control.react-select__control {
+		border-color: #7e8993;
+		min-height: 30px;
+		border-radius: 2px;
+	}
+
+	&__menu.react-select__menu {
+		z-index: 99;
+	}
+
+	&__value-container {
+		padding-top: 0;
+		padding-bottom: 0;
+
+		div:last-child {
+			height: 22px;
+		}
+	}
+
+	&__multi-value__label {
+		line-height: 16px;
+		font-style: 12px;
+	}
+
+	& &__input {
+		min-height: 18px;
+		line-height: 1;
+
+		&:focus {
+			box-shadow: none;
+		}
+	}
+
+	&__indicator.react-select__indicator {
+		padding: 4px;
+	}
+}
