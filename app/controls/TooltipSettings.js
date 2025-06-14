@@ -20,22 +20,13 @@ const TooltipSettings = ( { componentId, defaultValue, updateField, ...rest } ) 
 
 	const toggleEnable = e => {
 		setShowSettings( e.target.checked );
-		updateField( 'tooltip', {
-			...defaultValue,
-			enable: e.target.checked
-		} );
+		updateField( 'tooltip.enable', e.target.checked );
 	};
 
 	const toggleShowSettings = () => setShowSettings( prev => !prev );
-	const updateIcon = value => updateField( 'tooltip', {
-		...defaultValue,
-		icon: value,
-	} );
+	const updateIcon = value => updateField( 'tooltip.icon', value );
 
-	const updatePosition = e => updateField( 'tooltip', {
-		...defaultValue,
-		position: e.target.value,
-	} );
+	const updatePosition = e => updateField( 'tooltip.position', e.target.value );
 
 	return (
 		<>
@@ -98,8 +89,8 @@ const TooltipContent = ( { componentId, defaultValue, updateField } ) => {
 	const updateContent = e => setContent( e.target.value );
 
 	const debouncedUpdateContent = useCallback(
-		debounce( content => updateField( 'tooltip', { ...defaultValue, content } ), 100 ),
-		[] // empty deps means it runs once
+		debounce( content => updateField( 'tooltip.content', content ), 100 ),
+		[]
 	);
 
 	useEffect( () => {
