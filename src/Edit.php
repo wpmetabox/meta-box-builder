@@ -145,6 +145,15 @@ class Edit extends BaseEditPage {
 
 		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/build/app.js', $asset['dependencies'], $asset['version'], true );
 
+		// Script to toggle the admin menu.
+		wp_enqueue_script(
+			'mbb-admin-menu',
+			MBB_URL . 'assets/js/admin-menu.js',
+			[],
+			filemtime( MBB_DIR . 'assets/js/admin-menu.js' ),
+			true
+		);
+
 		$fields = get_post_meta( get_the_ID(), 'fields', true ) ?: [];
 		$fields = array_values( $fields );
 

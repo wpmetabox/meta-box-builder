@@ -70,6 +70,3 @@ form.addEventListener( 'keyup', preventSubmitWhenPressEnter );
 
 // Set post status when clicking submit buttons.
 initSaveForm();
-
-// Auto collapse the admin menu.
-document.body.classList.add( 'folded' );
