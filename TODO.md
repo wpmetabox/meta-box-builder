@@ -6,7 +6,6 @@
 [ ] Double click Cloneable button should close the clone settings dropdown
 [ ] Scrollbar issue (firefox on Mac)
 - I don't really like that the wordpress sidebar hides every time I refresh the page, I'd like the plugin to remember my choice, whether to keep it open or closed. => Detect kích cỡ màn hình và tự collapse khi ở màn nhỏ + ghi nhớ state ở local storage. https://helpdesk.elightup.com/conversation/11098?folder_id=7
-- I would keep the main central box (.mb-main) to have a max-width because at a certain point on a wide screen that can get huge! I don’t use full screen because everything get really wide in the first place :) but I have tested some CSS and I think around 80 to 100 rem max-width is good enough. https://helpdesk.elightup.com/conversation/11098?folder_id=7
 - It would be great if you could include under appearance the option on how many rows I can have { "textarea_rows": 10 }, typing this every time for examples 10 times, takes a lot of time. https://helpdesk.elightup.com/conversation/11098?folder_id=7
 
 ## Improvements

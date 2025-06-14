@@ -133,6 +133,7 @@
 
 .mb-main {
 	margin-inline: auto;
+	max-width: 100rem; // Prevent the main area from getting too wide. https://helpdesk.elightup.com/conversation/11098?folder_id=7
 }
 
 // Nav panel
