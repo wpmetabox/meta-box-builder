@@ -1,0 +1,11 @@
+{
+    "$schema": "https://schemas.metabox.io/settings-page.json",
+    "columns": 1,
+    "icon_url": "dashicons-admin-generic",
+    "id": "check",
+    "menu_title": "Check",
+    "position": 25,
+    "style": "no-boxes",
+    "title": "Check",
+    "version": "v0"
+}

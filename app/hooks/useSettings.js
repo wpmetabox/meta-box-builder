@@ -21,7 +21,32 @@ const useSettings = create( ( set, get ) => ( {
 	getPrefix: () => get().getSetting( 'prefix', '' ),
 	updatePrefix: prefix => get().updateSetting( 'prefix', prefix ),
 
-	getObjectType: () => get().getSetting( 'object_type', 'post' ),
+	getObjectType: () => {
+		let objectType = get().getSetting( 'object_type', 'post' );
+		let newObjectType = objectType;
+
+		if ( objectType === 'block' && !MbbApp.extensions.block ) {
+			newObjectType = 'post';
+		}
+		if ( objectType === 'term' && !MbbApp.extensions.termMeta ) {
+			newObjectType = 'post';
+		}
+		if ( objectType === 'user' && !MbbApp.extensions.userMeta ) {
+			newObjectType = 'post';
+		}
+		if ( objectType === 'comment' && !MbbApp.extensions.commentMeta ) {
+			newObjectType = 'post';
+		}
+		if ( objectType === 'setting' && !MbbApp.extensions.settingsPage ) {
+			newObjectType = 'post';
+		}
+
+		if ( newObjectType !== objectType ) {
+			get().updateSetting( 'object_type', newObjectType );
+		}
+
+		return newObjectType;
+	},
 	updateObjectType: value => {
 		const key = 'object_type';
 		const settings = get().settings;

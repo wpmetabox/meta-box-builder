@@ -3,16 +3,15 @@ import { __, sprintf } from "@wordpress/i18n";
 import { htmlDecode } from "../../functions";
 import useApi from "../../hooks/useApi";
 import useSettings from "../../hooks/useSettings";
+import { buildFieldsTree } from "../../list-functions";
 import Content from "./Content";
-
-const $ = jQuery;
 
 const ThemeCode = () => {
 	const { settings, getObjectType } = useSettings();
 	const [ tab, setTab ] = useState( 0 );
 
 	const excludeFieldTypes = [ 'button', 'custom_html', 'divider', 'heading', 'hidden', 'tab' ];
-	const fields = MbbApp.fields.filter( field => !excludeFieldTypes.includes( field.type ) );
+	const fields = buildFieldsTree().filter( field => !excludeFieldTypes.includes( field.type ) );
 
 	// Generate Code
 	const themeCode = useApi( [ 'theme-code-generate', {

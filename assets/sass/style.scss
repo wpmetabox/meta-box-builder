@@ -7,6 +7,8 @@
 
 @use "notification";
 
+@use "php";
+
 // Editor
 @use "editor/empty";
 @use "editor/meta-box";
@@ -42,4 +44,7 @@
 
 	@import "panels/add-field";
 	@import "panels/structure";
+
 }
+
+@import "translation-modal";

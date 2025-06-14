@@ -1,0 +1,30 @@
+.mbb-translation-modal__table {
+    width: 100%;
+    border-collapse: collapse;
+
+    .components-radio-control__option {
+        grid-template-columns: auto;
+        justify-content: center;
+    }
+}
+
+.mbb-translation-modal__table th,
+.mbb-translation-modal__table td {
+    padding-block: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.mbb-translation-modal__table th {
+    font-weight: 600;
+}
+
+.mbb-translation-modal__table th[align="center"] {
+    text-align: center;
+}
+
+.mbb-translation-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+}

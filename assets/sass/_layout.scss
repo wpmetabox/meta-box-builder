@@ -6,7 +6,7 @@
 // Hide WordPress header elements
 #screen-meta-links,
 .wrap h1.wp-heading-inline,
-.wrap .wp-heading-inline+.page-title-action {
+.wrap .wp-heading-inline ~ .page-title-action {
 	display: none;
 }
 
@@ -133,18 +133,6 @@
 
 .mb-main {
 	margin-inline: auto;
-}
-
-.mb-area {
-	display: none;
-
-	&--show {
-		display: block;
-	}
-
-	&--padding {
-		padding: 32px;
-	}
 }
 
 // Nav panel

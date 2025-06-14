@@ -14,6 +14,7 @@ import Post from './FieldGroupSettings/Post';
 import ShowHide from './FieldGroupSettings/ShowHide';
 import Summary from './FieldGroupSettings/Summary';
 import Tabs from './FieldGroupSettings/Tabs';
+import Translation from './FieldGroupSettings/Translation';
 
 const FieldGroupSettingsPanel = () => {
 	const { getObjectType } = useSettings();
@@ -56,19 +57,13 @@ const FieldGroupSettingsPanel = () => {
 				}
 				{
 					MbbApp.extensions.showHide && objectType !== 'block' &&
-					<PersistentPanelBody
-						title={ __( 'Toggle rules', 'meta-box-builder' ) }
-						className="og-include-exclude"
-					>
+					<PersistentPanelBody title={ __( 'Toggle rules', 'meta-box-builder' ) } className="og-include-exclude">
 						<ShowHide />
 					</PersistentPanelBody>
 				}
 				{
 					MbbApp.extensions.conditionalLogic &&
-					<PersistentPanelBody
-						title={ __( 'Conditional logic', 'meta-box-builder' ) }
-						className="og-include-exclude"
-					>
+					<PersistentPanelBody title={ __( 'Conditional logic', 'meta-box-builder' ) } className="og-include-exclude">
 						<ConditionalLogic />
 					</PersistentPanelBody>
 				}
@@ -82,6 +77,12 @@ const FieldGroupSettingsPanel = () => {
 					MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) &&
 					<PersistentPanelBody title={ __( 'Custom table', 'meta-box-builder' ) }>
 						<CustomTable />
+					</PersistentPanelBody>
+				}
+				{
+					MbbApp.polylang &&
+					<PersistentPanelBody title={ __( 'Translation', 'meta-box-builder' ) }>
+						<Translation />
 					</PersistentPanelBody>
 				}
 				{
