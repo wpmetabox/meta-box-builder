@@ -13,10 +13,13 @@
 
 ## Merge
 [ ] Make code generator work again
+	- Remove `block_json` if not needed
+	- Remove default `hide_from_rest` and `hide_from_front` if their values are `false`
+	- Remove default `revision`, `closed`, `modified`
+	- Fix missing `translation` for fields if `translation` mode of the field group is `advanced`
 [ ] Fix translation is loaded by site language, which should be by user language
 
 ## Improvements
-[ ] Remove default `hide_from_rest` and `hide_from_front` if their values are `false`
 [ ] Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
 
 Nice to have:
