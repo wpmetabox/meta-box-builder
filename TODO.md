@@ -1,16 +1,15 @@
 ## Bugs
 [ ] Fix when add new field, unique _id is updated/generated from name
 [ ] Fix:  I had a group with many fields and then I decided to turn on this feature “Start with no inputs” and it deleted the names of every field in that group. The fields stayed, but without any name.
-[ ] 5. Lỗi Group title trong post editor. Group trong hình em set title = {#} {name}  - em không chụp được setting vì field group bị lỗi 3, giờ em không vào được field group đó nữa
 [ ] Fix translation is loaded by site language, which should be by user language
+[ ] Local JSON: alsways show "Your database version is different than the JSON version. Any changes will override the JSON file." after saving a field group.
 
 ## UX
 [ ] Double click Cloneable button should close the clone settings dropdown
 
-- Replace SWR with useFetch, copied from Slim SEO Schema
-
 ## Improvements
 [ ] Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
+- Replace SWR with useFetch, copied from Slim SEO Schema
 
 Nice to have:
 
