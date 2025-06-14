@@ -13,8 +13,6 @@
 
 ## Merge
 [ ] Make code generator work again
-[ ] Polylang: live update with list of fields
-[ ] Check theme code: live update with list of fields
 [ ] Fix translation is loaded by site language, which should be by user language
 
 ## Improvements
