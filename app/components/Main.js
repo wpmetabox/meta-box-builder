@@ -2,6 +2,7 @@ import { Button, Flex, Icon } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { category, code, copy } from '@wordpress/icons';
+import useNavPanel from '../hooks/useNavPanel';
 import Fields from './Editor/Fields';
 import PHP from "./PHP";
 import ThemeCode from "./ThemeCode/ThemeCode";
@@ -16,6 +17,7 @@ const Main = () => (
 
 const MainInner = ( { fields, php, theme_code } ) => {
 	const [ area, setArea ] = useState( 'fields' );
+	const { setNavPanel } = useNavPanel();
 
 	const titles = {
 		fields: __( 'Fields', 'meta-box-builder' ),
@@ -34,6 +36,13 @@ const MainInner = ( { fields, php, theme_code } ) => {
 		window.dispatchEvent( new Event( 'resize' ) );
 	}, [ area ] );
 
+	const switchArea = area => () => {
+		setArea( area );
+		if ( [ 'php', 'theme_code' ].includes( area ) ) {
+			setNavPanel( '' );
+		}
+	};
+
 	return (
 		<div className="mb-main">
 			<div className="wp-header-end" />
@@ -45,21 +54,15 @@ const MainInner = ( { fields, php, theme_code } ) => {
 						{ titles[ area ] }
 					</Flex>
 					<Flex expanded={ false } className="mb-box__actions">
-						<Button size="small" icon={ category } onClick={ () => setArea( 'fields' ) } label={ __( 'Show fields', 'meta-box-builder' ) } showTooltip={ true } />
-						<Button size="small" icon={ code } onClick={ () => setArea( 'php' ) } label={ __( 'Get PHP code to register fields', 'meta-box-builder' ) } showTooltip={ true } />
-						<Button size="small" icon={ copy } onClick={ () => setArea( 'theme_code' ) } label={ __( 'Generate ready-to-copy PHP code to show fields', 'meta-box-builder' ) } showTooltip={ true } />
+						<Button size="small" icon={ category } onClick={ switchArea( 'fields' ) } label={ __( 'Show fields', 'meta-box-builder' ) } showTooltip={ true } />
+						<Button size="small" icon={ code } onClick={ switchArea( 'php' ) } label={ __( 'Get PHP code to register fields', 'meta-box-builder' ) } showTooltip={ true } />
+						<Button size="small" icon={ copy } onClick={ switchArea( 'theme_code' ) } label={ __( 'Generate ready-to-copy PHP code to show fields', 'meta-box-builder' ) } showTooltip={ true } />
 					</Flex>
 				</Flex>
 				<div className="mb-box__body">
-					<div className={ `mb-area mb-editor ${ area === 'fields' ? 'mb-area--show' : '' }` }>
-						{ fields }
-					</div>
-					<div className={ `mb-area mb-area--padding ${ area === 'php' ? 'mb-area--show' : '' }` }>
-						{ php }
-					</div>
-					<div className={ `mb-area og-theme-code ${ area === 'theme_code' ? 'mb-area--show' : '' }` }>
-						{ theme_code }
-					</div>
+					{ area === 'fields' && fields }
+					{ area === 'php' && php }
+					{ area === 'theme_code' && theme_code }
 				</div>
 			</div>
 		</div>

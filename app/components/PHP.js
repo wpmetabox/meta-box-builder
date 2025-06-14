@@ -39,7 +39,7 @@ const PHP = () => {
 	};
 
 	return (
-		<>
+		<div className="mb-php">
 			<Input
 				name="settings[text_domain]"
 				label={ __( 'Text domain', 'meta-box-builder' ) }
@@ -74,7 +74,7 @@ const PHP = () => {
 					</div>
 				</div>
 			}
-		</>
+		</div>
 	);
 };
 

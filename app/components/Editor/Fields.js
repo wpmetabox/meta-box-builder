@@ -34,7 +34,7 @@ const Fields = () => {
 	console.debug( `%cLIST`, "color:red" );
 
 	return (
-		<>
+		<div className="mb-editor">
 			{
 				fields.length === 0
 					? <RawHTML className="mb-editor__empty">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
@@ -64,7 +64,7 @@ const Fields = () => {
 			}
 			<AddFieldButton { ...fieldActions } />
 			<ContextMenu />
-		</>
+		</div>
 	);
 };
 

@@ -135,18 +135,6 @@
 	margin-inline: auto;
 }
 
-.mb-area {
-	display: none;
-
-	&--show {
-		display: block;
-	}
-
-	&--padding {
-		padding: 32px;
-	}
-}
-
 // Nav panel
 .mb-nav .mb-panel {
 	position: fixed;
