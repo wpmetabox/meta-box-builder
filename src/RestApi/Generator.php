@@ -64,6 +64,8 @@ class Generator {
 		$parser->parse();
 
 		$settings = $parser->get_settings();
+		// 'modified' is used only for location JSON, not in PHP code
+		unset( $settings['modified'] );
 		$encoder  = new Encoder( $settings );
 		$encoder->encode();
 

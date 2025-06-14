@@ -2,7 +2,6 @@
 [ ] Fix when add new field, unique _id is updated/generated from name
 [ ] Fix:  I had a group with many fields and then I decided to turn on this feature “Start with no inputs” and it deleted the names of every field in that group. The fields stayed, but without any name.
 [ ] Fix translation is loaded by site language, which should be by user language
-[ ] Local JSON: alsways show "Your database version is different than the JSON version. Any changes will override the JSON file." after saving a field group.
 
 ## UX
 [ ] Double click Cloneable button should close the clone settings dropdown
@@ -10,6 +9,7 @@
 ## Improvements
 [ ] Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
 - Replace SWR with useFetch, copied from Slim SEO Schema
+- Remove `custom_table` key in local JSON if not used
 
 Nice to have:
 
