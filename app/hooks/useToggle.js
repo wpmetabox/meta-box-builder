@@ -12,7 +12,7 @@ const normalizeBool = value => {
 
 
 export const useToggle = name => {
-	const [ handle, setHandle ] = useState( () => () => { } );
+	const [ handle, setHandle ] = useState( () => () => {} );
 
 	const el = getElement( name );
 	const wrapper = el ? el.closest( '.og-field' ) : null;
@@ -22,8 +22,8 @@ export const useToggle = name => {
 		const h = () => el && toggleDependents( el );
 		setHandle( () => h );
 
-		// Kick-off the first time.
-		h();
+		// Kick-off the first time. Use setTimeOut() to ensure DOM is ready.
+		setTimeout( h, 200 );
 	}, [ name, classList ] ); // Depends on classList in case it's set hidden by another field.
 
 	return handle;
@@ -60,7 +60,7 @@ const toggleDependents = el => {
 };
 
 const getDependents = el => {
-	const scope = el.closest( '.og-item' ) || el.closest( '.react-tabs__tab-panel' ) || el.closest( '.og' );
+	const scope = el.closest( '.og-item' ) || el.closest( '.og' );
 	const shortName = getShortName( el.id );
 	return scope ? [ ...scope.querySelectorAll( `[class*="dep:${ shortName }:"]` ) ] : [];
 };
