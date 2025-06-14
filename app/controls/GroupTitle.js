@@ -19,7 +19,7 @@ const GroupTitle = ( { name, componentId, field, updateField, ...rest } ) => {
 	fields = [ [ '{#}', __( 'Entry index (#)', 'meta-box-builder' ) ], ...fields ];
 
 	const handleChange = useCallback(
-		debounce( ( inputRef, value ) => updateField( 'group_title', value ), 300 ),
+		debounce( ( inputRef, value ) => updateField( 'group_title', value ), 100 ),
 		[] // empty deps means it runs once
 	);
 

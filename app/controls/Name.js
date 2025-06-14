@@ -25,7 +25,7 @@ const Name = ( { componentId, field, updateField, ...rest } ) => {
 		debounce( val => {
 			maybeGenerateId( val );
 			updateField( 'name', val );
-		}, 300 ),
+		}, 100 ),
 		[] // empty deps means it runs once
 	);
 	useEffect( () => {

@@ -8,7 +8,6 @@
 
 ## UX
 [ ] Double click Cloneable button should close the clone settings dropdown
-[ ] 1. Em cảm giác tốc độ update giữa setting và livepreview không còn được mượt mà như bản Alpha: Khi sửa label ở live-preview, khi điền Choices/placeholder,... (không được ngay lập tức thôi nhưng cũng không gây khó chịu cho em, chữ xuất hiện theo cụm giật cục chứ không mượt như mình typing - cái này bản Alpha làm ổn hơn ạ)
 
 - Replace SWR with useFetch, copied from Slim SEO Schema
 

@@ -98,7 +98,7 @@ const TooltipContent = ( { componentId, defaultValue, updateField } ) => {
 	const updateContent = e => setContent( e.target.value );
 
 	const debouncedUpdateContent = useCallback(
-		debounce( content => updateField( 'tooltip', { ...defaultValue, content } ), 300 ),
+		debounce( content => updateField( 'tooltip', { ...defaultValue, content } ), 100 ),
 		[] // empty deps means it runs once
 	);
 

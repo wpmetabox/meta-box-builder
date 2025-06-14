@@ -21,7 +21,7 @@ const Id = ( { field, componentId, updateField, ...rest } ) => {
 		debounce( val => {
 			checkDuplicateId( val );
 			updateField( 'id', val );
-		}, 300 ),
+		}, 100 ),
 		[] // empty deps means it runs once
 	);
 	useEffect( () => {

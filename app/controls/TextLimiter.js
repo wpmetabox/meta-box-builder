@@ -8,7 +8,7 @@ const TextLimiter = ( { defaultValue, componentId, updateField, ...rest } ) => {
 		debounce( e => updateField( 'text_limiter', {
 			...defaultValue,
 			limit: e.target.value
-		} ), 300 ),
+		} ), 100 ),
 		[ updateField ]
 	);
 

@@ -13,7 +13,7 @@ const Textarea = ( {
 	...rest
 } ) => {
 	const handleChange = useCallback(
-		debounce( e => updateField( name, e.target.value ), 300 ),
+		debounce( e => updateField( name, e.target.value ), 100 ),
 		[] // empty deps means it runs once
 	);
 

@@ -33,7 +33,7 @@ const CloneSettings = ( { componentId, defaultValue, updateField, ...rest } ) =>
 	const [ add_button, setAddButton ] = useState( defaultValue.add_button );
 	const updateAddButton = e => setAddButton( e.target.value );
 	const debouncedUpdateAddButton = useCallback(
-		debounce( value => updateField( 'add_button', value ), 300 ),
+		debounce( value => updateField( 'add_button', value ), 100 ),
 		[] // empty deps means it runs once
 	);
 	useEffect( () => {

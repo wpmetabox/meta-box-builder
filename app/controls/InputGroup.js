@@ -13,12 +13,12 @@ const InputGroup = ( {
 	...rest
 } ) => {
 	const updateKey1 = useCallback(
-		debounce( e => updateField( key1, e.target.value ), 300 ),
+		debounce( e => updateField( key1, e.target.value ), 100 ),
 		[] // empty deps means it runs once
 	);
 
 	const updateKey2 = useCallback(
-		debounce( e => updateField( key2, e.target.value ), 300 ),
+		debounce( e => updateField( key2, e.target.value ), 100 ),
 		[] // empty deps means it runs once
 	);
 

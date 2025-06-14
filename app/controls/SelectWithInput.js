@@ -38,7 +38,7 @@ const SelectWithInput = ( {
 	// Live update to the input, and debounce update to the field.
 	const update = e => setValue( e.target.value );
 	const debouncedUpdate = useCallback(
-		debounce( val => updateField( name, val ), 300 ),
+		debounce( val => updateField( name, val ), 100 ),
 		[] // empty deps means it runs once
 	);
 	useEffect( () => {

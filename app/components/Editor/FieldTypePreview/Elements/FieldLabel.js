@@ -51,7 +51,7 @@ const FieldLabel = ( { field, updateField } ) => {
 		debounce( val => {
 			updateField( 'name', val );
 			maybeGenerateId( val );
-		}, 300 ),
+		}, 100 ),
 		[] // empty deps means it runs once
 	);
 	useEffect( () => {
