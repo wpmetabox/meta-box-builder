@@ -99,11 +99,11 @@ class AdminColumns {
 		if ( is_array( $admin_columns['position'] ) ) {
 			$admin_columns['position'] = trim( implode( ' ', $admin_columns['position'] ) );
 		}
-		$admin_columns             = array_filter( $admin_columns );
+		$admin_columns = array_filter( $admin_columns );
 		if ( empty( $admin_columns ) ) {
 			$admin_columns = true;
 		}
-		if ( 1 === count( $admin_columns ) && isset( $admin_columns['position'] ) ) {
+		if ( is_array( $admin_columns ) && 1 === count( $admin_columns ) && isset( $admin_columns['position'] ) ) {
 			$admin_columns = $admin_columns['position'];
 		}
 
