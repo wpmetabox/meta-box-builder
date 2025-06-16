@@ -3,18 +3,11 @@ import DivRow from './DivRow';
 
 const Name = ( { componentId, field, updateField, ...rest } ) => {
 	const handleChange = e => {
-		updateField( 'name', e.target.value );
-		maybeGenerateId( e.target.value );
-	};
+		const value = e.target.value;
+		updateField( 'name', value );
 
-	const maybeGenerateId = value => {
-		// No ID?
-		if ( [ 'custom_html', 'divider', 'heading' ].includes( field.type ) ) {
-			return;
-		}
-
-		// Only do for new fields that haven't been manually changed.
-		if ( field._new && !field._id_changed ) {
+		// Only generate ID if it's a new field and hasn't been manually changed
+		if ( field._new && !field._id_changed && ![ 'custom_html', 'divider', 'heading' ].includes( field.type ) ) {
 			updateField( 'id', sanitizeId( value ) );
 		}
 	};
