@@ -1,28 +1,29 @@
 ## Bugs
-[ ] Fix translation is loaded by site language, which should be by user language
+- Fix translation is loaded by site language, which should be by user language
+- When dragging a field into a group, and select that field, the settings of the group is shown instead of the settings of the field
 
 ## UX
-[ ] Double click Cloneable button should close the clone settings dropdown
+- Double click Cloneable button should close the clone settings dropdown
 
 - It would be great if you could include under appearance the option on how many rows I can have { "textarea_rows": 10 }, typing this every time for examples 10 times, takes a lot of time. https://helpdesk.elightup.com/conversation/11098?folder_id=7
 
 ## Improvements
-[ ] Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
+- Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
 - Remove `custom_table` key in local JSON if not used
 - Add `group` and `tab` to the free version, but do not allow to select these field types
 - Add floating mode for structure panel
 
-[ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
-[ ] Thay đổi field type
-[ ] Object field, chuyển chọn field type thành icon
-[ ] Switch to field khi có trường required chưa điền
+- Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
+- Thay đổi field type
+- Object field, chuyển chọn field type thành icon
+- Switch to field khi có trường required chưa điền
 
 ## Other updates
 
-[ ] Update UI for creating settings pages
-[ ] Update UI for creating relationships
-	[ ] Xoá react tabs
-	[ ] Xóa phần collapsible, bao gồm cả CSS
+- Update UI for creating settings pages
+- Update UI for creating relationships
+	- Xoá react tabs
+	- Xóa phần collapsible, bao gồm cả CSS
 
 ## Won't fix
 - Scrollbar issue (firefox on Mac)
