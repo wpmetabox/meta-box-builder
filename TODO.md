@@ -10,6 +10,7 @@
 [ ] Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
 - Remove `custom_table` key in local JSON if not used
 - Add `group` and `tab` to the free version, but do not allow to select these field types
+- Add floating mode for structure panel
 
 [ ] Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 [ ] Column khi enable thì sẽ show label ở trên, input ở dưới
