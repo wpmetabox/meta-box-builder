@@ -1,67 +1,39 @@
-import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
-import { debounce } from 'lodash';
+import { useEffect, useRef } from '@wordpress/element';
 import { sanitizeId } from '../functions';
 import DivRow from './DivRow';
 
 const Name = ( { componentId, field, updateField, ...rest } ) => {
-	const [ value, setValue ] = useState( field.name );
+	const inputRef = useRef();
 
-	// Live update value with incoming change, which can happen when the field is changed from FieldLabel in live preview.
-	useEffect( () => {
-		setValue( field.name );
-	}, [ field.name ] );
+	const handleChange = e => {
+		const value = e.target.value;
+		updateField( 'name', value );
 
-	// Use ref to stored latest `_id_changed` value. When this value changes, don't trigger rerender.
-	const idChangedRef = useRef( field._id_changed );
-
-	// Keep them updated when field changes
-	useEffect( () => {
-		idChangedRef.current = field._id_changed;
-	}, [ field._id_changed ] );
-
-	// Live update to the input, and debounce update to the field.
-	const handleChange = e => setValue( e.target.value );
-	const debouncedUpdate = useCallback(
-		debounce( val => {
-			maybeGenerateId( val );
-			updateField( 'name', val );
-		}, 100 ),
-		[] // empty deps means it runs once
-	);
-	useEffect( () => {
-		debouncedUpdate( value );
-	}, [ value, debouncedUpdate ] );
-
-	const maybeGenerateId = value => {
-		// No ID?
-		if ( [ 'custom_html', 'divider', 'heading' ].includes( field.type ) ) {
-			return;
+		// Only generate ID if it's a new field and hasn't been manually changed
+		if ( field._new && !field._id_changed && ![ 'custom_html', 'divider', 'heading' ].includes( field.type ) ) {
+			updateField( 'id', sanitizeId( value ) );
 		}
-
-		// Only do for new fields.
-		if ( !field._new ) {
-			return;
-		}
-
-		// If ID is already manually changed, do nothing.
-		if ( idChangedRef.current ) {
-			return;
-		}
-
-		updateField( 'id', sanitizeId( value ) );
 	};
 
 	// When done updating "name", don't auto generate ID.
 	const stopGeneratingId = () => updateField( '_id_changed', true );
 
+	// Use ref to manually update its value, avoid React touching the input value directly to avoid cursor jumping to the start.
+	useEffect( () => {
+		if ( inputRef.current && inputRef.current.value !== field.name ) {
+			inputRef.current.value = field.name;
+		}
+	}, [ field.name ] );
+
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
 			<input
+				ref={ inputRef }
 				type="text"
 				id={ componentId }
-				value={ value }
+				defaultValue={ field.name }
 				onBlur={ stopGeneratingId }
-				onInput={ handleChange }
+				onChange={ handleChange }
 			/>
 		</DivRow>
 	);

@@ -1,12 +1,7 @@
-import { useCallback } from '@wordpress/element';
-import { debounce } from 'lodash';
 import DivRow from './DivRow';
 
 const FontAwesome = ( { name, componentId, defaultValue, updateField, ...rest } ) => {
-	const handleChange = useCallback(
-		debounce( e => updateField( name, e.target.value ), 100 ),
-		[ name, updateField ]
-	);
+	const handleChange = e => updateField( name, e.target.value );
 
 	return (
 		<DivRow htmlFor={ componentId } className="og-icon" { ...rest }>

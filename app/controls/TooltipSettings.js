@@ -1,8 +1,7 @@
 import { Button, Flex, RadioControl, Tooltip } from '@wordpress/components';
-import { useCallback, useEffect, useState } from "@wordpress/element";
+import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { settings } from '@wordpress/icons';
-import { debounce } from 'lodash';
 import DashiconPicker from "./DashiconPicker";
 import DivRow from "./DivRow";
 
@@ -85,24 +84,14 @@ const TooltipSettings = ( { componentId, defaultValue, updateField, ...rest } ) 
 };
 
 const TooltipContent = ( { componentId, defaultValue, updateField } ) => {
-	const [ content, setContent ] = useState( defaultValue?.content );
-	const updateContent = e => setContent( e.target.value );
-
-	const debouncedUpdateContent = useCallback(
-		debounce( content => updateField( 'tooltip.content', content ), 100 ),
-		[]
-	);
-
-	useEffect( () => {
-		debouncedUpdateContent( content );
-	}, [ content, debouncedUpdateContent ] );
+	const updateContent = e => updateField( 'tooltip.content', e.target.value );
 
 	return (
 		<DivRow htmlFor={ `${ componentId }-content` } label={ __( 'Content', 'meta-box-builder' ) }>
 			<input
 				type="text"
 				id={ `${ componentId }-content` }
-				value={ content }
+				value={ defaultValue?.content }
 				onChange={ updateContent }
 			/>
 		</DivRow>

@@ -1,5 +1,4 @@
 ## Bugs
-[ ] Fix when add new field, unique _id is updated/generated from name
 [ ] Fix translation is loaded by site language, which should be by user language
 
 ## UX

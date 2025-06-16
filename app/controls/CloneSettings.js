@@ -1,8 +1,7 @@
 import { Button, Dropdown, ToggleControl } from "@wordpress/components";
-import { useCallback, useEffect, useRef, useState } from "@wordpress/element";
+import { useEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { close } from "@wordpress/icons";
-import { debounce } from 'lodash';
 import DivRow from "./DivRow";
 import Tooltip from "./Tooltip";
 
@@ -28,17 +27,6 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 const CloneSettings = ( { componentId, defaultValue, updateField, ...rest } ) => {
 	const toggle = name => value => updateField( name, value );
 	const update = name => e => updateField( name, e.target.value );
-
-	// Live update to the input, and debounce update to the field.
-	const [ add_button, setAddButton ] = useState( defaultValue.add_button );
-	const updateAddButton = e => setAddButton( e.target.value );
-	const debouncedUpdateAddButton = useCallback(
-		debounce( value => updateField( 'add_button', value ), 100 ),
-		[] // empty deps means it runs once
-	);
-	useEffect( () => {
-		debouncedUpdateAddButton( add_button );
-	}, [ add_button, debouncedUpdateAddButton ] );
 
 	return (
 		<>
@@ -122,7 +110,7 @@ const CloneSettings = ( { componentId, defaultValue, updateField, ...rest } ) =>
 							label={ __( 'Add more text', 'meta-box-builder' ) }
 							description={ __( 'Custom text for the the "+ Add more" button. Leave empty to use the default text.', 'meta-box-builder' ) }
 						>
-							<input type="text" id={ `${ componentId }-add_button` } value={ add_button } onChange={ updateAddButton } />
+							<input type="text" id={ `${ componentId }-add_button` } defaultValue={ defaultValue.add_button } onChange={ update( 'add_button' ) } />
 						</DivRow>
 					</OutsideClickDetector>
 				) }
