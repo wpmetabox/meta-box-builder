@@ -1,7 +1,7 @@
 import { RawHTML } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
-import useApi from "../../hooks/useApi";
+import { useFetch } from "../../hooks/useFetch";
 import getList from "../../list-functions";
 import AddFieldButton from "./AddFieldButton";
 import ContextMenu from "./ContextMenu";
@@ -11,8 +11,8 @@ const Fields = () => {
 	const { fields, ...fieldActions } = getList( 'root' )();
 
 	// Don't render any field if fields data is not available.
-	const types = useApi( 'field-types', {} );
-	const categories = useApi( 'field-categories', [] );
+	const { data: types } = useFetch( { api: 'field-types', defaultValue: {} } );
+	const { data: categories } = useFetch( { api: 'field-categories', defaultValue: [] } );
 
 	if ( Object.keys( types ).length === 0 || Object.keys( categories ).length === 0 ) {
 		return <div className="mb-editor__empty">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</div>;

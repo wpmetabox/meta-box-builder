@@ -2,7 +2,7 @@ import { Button, SearchControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { ReactSortable } from 'react-sortablejs';
 import { getFieldIcon } from '../functions';
-import useApi from "../hooks/useApi";
+import { useFetch } from '../hooks/useFetch';
 
 const AddFieldContent = ( { className = '', addField, onSelect } ) => {
 	const [ searchQuery, setSearchQuery ] = useState( '' );
@@ -16,12 +16,12 @@ const AddFieldContent = ( { className = '', addField, onSelect } ) => {
 };
 
 const Categories = props => {
-	const fieldCategories = useApi( 'field-categories', [] );
+	const { data: fieldCategories } = useFetch( { api: 'field-categories', defaultValue: [] } );
 	return fieldCategories.map( category => <Category key={ category.slug } category={ category } { ...props } /> );
 };
 
 const Category = ( { category, searchQuery, onSelect, addField } ) => {
-	const fieldTypes = useApi( 'field-types', {} );
+	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( searchQuery.toLowerCase() ) );
 
 	return fields.length > 0 &&

@@ -1,7 +1,7 @@
 import { RawHTML, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import { htmlDecode } from "../../functions";
-import useApi from "../../hooks/useApi";
+import { useFetch } from "../../hooks/useFetch";
 import useSettings from "../../hooks/useSettings";
 import { buildFieldsTree } from "../../list-functions";
 import Content from "./Content";
@@ -14,10 +14,7 @@ const ThemeCode = () => {
 	const fields = buildFieldsTree().filter( field => !excludeFieldTypes.includes( field.type ) );
 
 	// Generate Code
-	const themeCode = useApi( [ 'theme-code-generate', {
-		fields,
-		settings
-	}, 'POST' ] );
+	const { data: themeCode } = useFetch( { api: 'theme-code-generate', params: { fields, settings }, method: 'POST' } );
 
 	// No fields (with ids) or is a block?
 	if ( fields.length === 0 || getObjectType() === 'block' ) {

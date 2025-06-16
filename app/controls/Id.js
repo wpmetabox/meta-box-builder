@@ -1,10 +1,10 @@
 import { RawHTML, useState } from '@wordpress/element';
 import { __, sprintf } from "@wordpress/i18n";
-import useApi from "../hooks/useApi";
+import { useFetch } from "../hooks/useFetch";
 import DivRow from './DivRow';
 
 const Id = ( { field, componentId, updateField, ...rest } ) => {
-	const ids = useApi( 'fields-ids', [] );
+	const { data: ids } = useFetch( { api: 'fields-ids', defaultValue: [] } );
 	const [ existingFieldGroup, setExistingFieldGroup ] = useState( {} );
 	const [ duplicate, setDuplicate ] = useState( false );
 

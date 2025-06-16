@@ -1,6 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
-import useApi from "../../../hooks/useApi";
+import { useFetch } from "../../../hooks/useFetch";
 import getList from "../../../list-functions";
 import Node from './Node';
 
@@ -8,8 +8,8 @@ const Fields = () => {
 	const { fields, setFields, ...fieldActions } = getList( 'root' )();
 
 	// Don't render any field if fields data is not available.
-	const types = useApi( 'field-types', {} );
-	const categories = useApi( 'field-categories', [] );
+	const { data: types } = useFetch( { api: 'field-types', defaultValue: {} } );
+	const { data: categories } = useFetch( { api: 'field-categories', defaultValue: [] } );
 
 	if ( Object.keys( types ).length === 0 || Object.keys( categories ).length === 0 ) {
 		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;

@@ -1,5 +1,5 @@
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import useApi from '../../../app/hooks/useApi';
+import { useFetch } from '../../../app/hooks/useFetch';
 import Side from './Side';
 import Result from '/components/Tabs/Result';
 import Checkbox from '/controls/Checkbox';
@@ -16,7 +16,7 @@ const App = () => {
 		} );
 	}, [] );
 
-	const sides = useApi( 'relationships-sides', [] );
+	const { data: sides } = useFetch( { api: 'relationships-sides', defaultValue: [] } );
 
 	return (
 		<>

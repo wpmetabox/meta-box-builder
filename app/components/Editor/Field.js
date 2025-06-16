@@ -1,8 +1,8 @@
-import useApi from "../../hooks/useApi";
+import { useFetch } from "../../hooks/useFetch";
 import FieldSettings from "../Panels/FieldSettings/FieldSettings";
 
 const Field = props => {
-	const fieldTypes = useApi( 'field-types', {} );
+	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
 
 	// Safe fallback to 'text' for not-recommended HTML5 field types.
 	const ignore = [ 'datetime-local', 'month', 'tel', 'week' ];
