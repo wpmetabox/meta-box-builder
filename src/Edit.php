@@ -2,8 +2,6 @@
 namespace MBB;
 
 use MBB\Helpers\Template;
-use MBBParser\Parsers\Base as BaseParser;
-use MBBParser\Parsers\MetaBox as Parser;
 use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
@@ -11,16 +9,24 @@ class Edit extends BaseEditPage {
 	public function __construct( $post_type, $slug_meta_box_title ) {
 		parent::__construct( $post_type, $slug_meta_box_title );
 
-		// Add notice if builder version is lower than json version.
-		add_action( 'admin_notices', [ $this, 'version_notice' ] );
+		add_action( 'admin_notices', [ $this, 'admin_notices' ], 1 );
+
+		// Add dialog to review the diff.
 		add_action( 'admin_footer', [ Template::class, 'render_diff_dialog' ] );
 	}
 
-	public function version_notice() {
-		// Only show the notice in the edit screen.
+	public function admin_notices(): void {
 		if ( get_current_screen()->id !== $this->post_type ) {
 			return;
 		}
+
+		// Remove all other notices from other plugins.
+		remove_all_actions( 'admin_notices' );
+
+		$this->show_local_json_notice();
+	}
+
+	public function show_local_json_notice(): void {
 		$action = $_GET['action'] ?? '';
 		if ( 'edit' !== $action ) {
 			return;
