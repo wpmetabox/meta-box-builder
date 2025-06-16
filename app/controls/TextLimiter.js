@@ -1,21 +1,9 @@
-import { useCallback } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
-import { debounce } from 'lodash';
 import DivRow from './DivRow';
 
 const TextLimiter = ( { defaultValue, componentId, updateField, ...rest } ) => {
-	const updateLimit = useCallback(
-		debounce( e => updateField( 'text_limiter', {
-			...defaultValue,
-			limit: e.target.value
-		} ), 100 ),
-		[ updateField ]
-	);
-
-	const updateType = e => updateField( 'text_limiter', {
-		...defaultValue,
-		limit_type: e.target.value
-	} );
+	const updateLimit =  e => updateField( 'text_limiter.limit', e.target.value );
+	const updateType = e => updateField( 'text_limiter.limit_type', e.target.value );
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
