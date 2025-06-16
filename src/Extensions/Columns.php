@@ -27,8 +27,8 @@ class Columns {
 		return Control::insert_before( $controls, 'class', $control );
 	}
 
-	public function parse_field_settings( $settings ) {
-		if ( 12 == Arr::get( $settings, 'columns', 12 ) ) {
+	public function parse_field_settings( array $settings ): array {
+		if ( 12 === (int) Arr::get( $settings, 'columns' ) ) {
 			unset( $settings['columns'] );
 		}
 		return $settings;
