@@ -1,3 +1,11 @@
+.mb-panel--structure .components-panel__header {
+	padding-right: 0;
+
+	h2 {
+		flex: 1;
+	}
+}
+
 &-item__id {
 	font-size: 12px;
 	cursor: pointer;
