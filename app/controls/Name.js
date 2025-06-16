@@ -1,36 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
-import { debounce } from 'lodash';
 import { sanitizeId } from '../functions';
 import DivRow from './DivRow';
 
 const Name = ( { componentId, field, updateField, ...rest } ) => {
-	const [ value, setValue ] = useState( field.name );
-
-	// Live update value with incoming change, which can happen when the field is changed from FieldLabel in live preview.
-	useEffect( () => {
-		setValue( field.name );
-	}, [ field.name ] );
-
-	// Use ref to stored latest `_id_changed` value. When this value changes, don't trigger rerender.
-	const idChangedRef = useRef( field._id_changed );
-
-	// Keep them updated when field changes
-	useEffect( () => {
-		idChangedRef.current = field._id_changed;
-	}, [ field._id_changed ] );
-
-	// Live update to the input, and debounce update to the field.
-	const handleChange = e => setValue( e.target.value );
-	const debouncedUpdate = useCallback(
-		debounce( val => {
-			maybeGenerateId( val );
-			updateField( 'name', val );
-		}, 100 ),
-		[] // empty deps means it runs once
-	);
-	useEffect( () => {
-		debouncedUpdate( value );
-	}, [ value, debouncedUpdate ] );
+	const handleChange = e => {
+		updateField( 'name', e.target.value );
+		maybeGenerateId( e.target.value );
+	};
 
 	const maybeGenerateId = value => {
 		// No ID?
@@ -38,17 +13,10 @@ const Name = ( { componentId, field, updateField, ...rest } ) => {
 			return;
 		}
 
-		// Only do for new fields.
-		if ( !field._new ) {
-			return;
+		// Only do for new fields that haven't been manually changed.
+		if ( field._new && !field._id_changed ) {
+			updateField( 'id', sanitizeId( value ) );
 		}
-
-		// If ID is already manually changed, do nothing.
-		if ( idChangedRef.current ) {
-			return;
-		}
-
-		updateField( 'id', sanitizeId( value ) );
 	};
 
 	// When done updating "name", don't auto generate ID.
@@ -59,9 +27,9 @@ const Name = ( { componentId, field, updateField, ...rest } ) => {
 			<input
 				type="text"
 				id={ componentId }
-				value={ value }
+				value={ field.name }
 				onBlur={ stopGeneratingId }
-				onInput={ handleChange }
+				onChange={ handleChange }
 			/>
 		</DivRow>
 	);
