@@ -1,7 +1,10 @@
+import { useEffect, useRef } from '@wordpress/element';
 import { sanitizeId } from '../functions';
 import DivRow from './DivRow';
 
 const Name = ( { componentId, field, updateField, ...rest } ) => {
+	const inputRef = useRef();
+
 	const handleChange = e => {
 		const value = e.target.value;
 		updateField( 'name', value );
@@ -15,12 +18,20 @@ const Name = ( { componentId, field, updateField, ...rest } ) => {
 	// When done updating "name", don't auto generate ID.
 	const stopGeneratingId = () => updateField( '_id_changed', true );
 
+	// Use ref to manually update its value, avoid React touching the input value directly to avoid cursor jumping to the start.
+	useEffect( () => {
+		if ( inputRef.current && inputRef.current.value !== field.name ) {
+			inputRef.current.value = field.name;
+		}
+	}, [ field.name ] );
+
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
 			<input
+				ref={ inputRef }
 				type="text"
 				id={ componentId }
-				value={ field.name }
+				defaultValue={ field.name }
 				onBlur={ stopGeneratingId }
 				onChange={ handleChange }
 			/>
