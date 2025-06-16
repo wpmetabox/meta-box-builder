@@ -17,6 +17,7 @@
 @use "editor/toolbar";
 @use "editor/sortable";
 @use "editor/add-button";
+@use "editor/columns";
 
 .og {
 	@import "elements";

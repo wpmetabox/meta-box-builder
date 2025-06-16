@@ -27,7 +27,7 @@ const Group = ( { field, parent } ) => {
 			<CollapsibleElements field={ field } />
 
 			<ReactSortable
-				className="mb-field--group__fields"
+				className="mb-field--group__fields mb-fields"
 				delay={ 0 }
 				delayOnTouchOnly={ false }
 				touchStartThreshold={ 0 }

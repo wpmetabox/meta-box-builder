@@ -10,7 +10,7 @@ import Toolbar from "./Toolbar";
 
 const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.target, '.mb-context-menu,.mb-toolbar' );
 
-const OutsideClickDetector = ( { onClickOutside, children } ) => {
+const OutsideClickDetector = ( { onClickOutside, children, ...rest } ) => {
 	const ref = useRef();
 	const isDragging = useRef( false );
 
@@ -47,7 +47,7 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 		};
 	}, [ onClickOutside ] );
 
-	return <div ref={ ref }>{ children }</div>;
+	return <div ref={ ref } { ...rest }>{ children }</div>;
 };
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
@@ -93,8 +93,13 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
+	const classNames = [
+		'mb-field-wrapper',
+		MbbApp.extensions.columns ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '',
+	];
+
 	return (
-		<OutsideClickDetector onClickOutside={ deselect }>
+		<OutsideClickDetector onClickOutside={ deselect } className={ classNames.join( ' ' ) }>
 			<div
 				className={ `
 					mb-field

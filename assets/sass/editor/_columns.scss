@@ -1,0 +1,81 @@
+.mb-fields {
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+
+	&.mb-field--group__fields {
+		column-gap: 24px;
+
+		&:empty:before {
+			grid-column: span 12;
+		}
+	}
+}
+
+.mb-field-wrapper--columns {
+	.rwmb-label,
+	.rwmb-label~.rwmb-input {
+		display: block;
+		width: 100%;
+		padding: 0;
+	}
+
+	.rwmb-label {
+		margin-bottom: 6px;
+	}
+
+	.rwmb-field {
+		display: block;
+	}
+
+	.mb-field--group > .rwmb-field > .rwmb-label {
+		padding-block: 0;
+	}
+}
+
+.mb-field-wrapper {
+	grid-column: span 12;
+}
+
+.mb-field-wrapper--columns-1 {
+	grid-column: span 1;
+}
+
+.mb-field-wrapper--columns-2 {
+	grid-column: span 2;
+}
+
+.mb-field-wrapper--columns-3 {
+	grid-column: span 3;
+}
+
+.mb-field-wrapper--columns-4 {
+	grid-column: span 4;
+}
+
+.mb-field-wrapper--columns-5 {
+	grid-column: span 5;
+}
+
+.mb-field-wrapper--columns-6 {
+	grid-column: span 6;
+}
+
+.mb-field-wrapper--columns-7 {
+	grid-column: span 7;
+}
+
+.mb-field-wrapper--columns-8 {
+	grid-column: span 8;
+}
+
+.mb-field-wrapper--columns-9 {
+	grid-column: span 9;
+}
+
+.mb-field-wrapper--columns-10 {
+	grid-column: span 10;
+}
+
+.mb-field-wrapper--columns-11 {
+	grid-column: span 11;
+}

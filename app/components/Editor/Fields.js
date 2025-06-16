@@ -52,6 +52,7 @@ const Fields = () => {
 						list={ fields }
 						setList={ setList }
 						onAdd={ handleAdd }
+						className="mb-fields"
 					>
 						{
 							fields.map( field => <Node
