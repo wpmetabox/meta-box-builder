@@ -12,6 +12,7 @@
 - Remove `custom_table` key in local JSON if not used
 - Add `group` and `tab` to the free version, but do not allow to select these field types
 - Add floating mode for structure panel
+- Click an item in the structure panel to set it active. If the structure panel is in floating mode, then open the field settings panel in the sidebar.
 
 - Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 - Thay đổi field type

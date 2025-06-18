@@ -11,26 +11,27 @@ const useDraggable = ( enabled = true ) => {
 			return;
 		}
 
-		const element = elementRef.current;
-		const header = element.querySelector( '.components-panel__header' );
-
-		if ( !header ) {
-			return;
-		}
+		const header = elementRef.current.querySelector( '.components-panel__header' );
 
 		const onMouseDown = e => {
+			// Don't start drag if clicking on buttons
 			if ( e.target.closest( 'button' ) ) {
 				return;
 			}
 
 			dragRef.current = {
 				dragging: true,
-				x: e.clientX - position.right,
-				y: e.clientY - position.top
+				x: e.clientX,
+				y: e.clientY,
 			};
 
+			// Add event listeners to document for mouse move and up
+			// Mouse events are attached to the document so dragging continues even if the mouse moves outside the header.
 			document.addEventListener( 'mousemove', onMouseMove );
 			document.addEventListener( 'mouseup', onMouseUp );
+
+			// Prevent text selection during drag
+			e.preventDefault();
 		};
 
 		const onMouseMove = e => {
@@ -38,21 +39,12 @@ const useDraggable = ( enabled = true ) => {
 				return;
 			}
 
-			const newRight = e.clientX - dragRef.current.x;
-			const newTop = e.clientY - dragRef.current.y;
-
-			// Keep panel within viewport bounds
-			const maxRight = window.innerWidth - 50;
-			const maxTop = window.innerHeight - 100;
-			const minRight = 50;
-			const minTop = 50;
-
-			const constrainedRight = Math.max( minRight, Math.min( maxRight, newRight ) );
-			const constrainedTop = Math.max( minTop, Math.min( maxTop, newTop ) );
+			const horizontal = e.clientX - dragRef.current.x;
+			const vertical = e.clientY - dragRef.current.y;
 
 			setPosition( {
-				top: constrainedTop,
-				right: constrainedRight
+				top: position.top + vertical,
+				right: position.right - horizontal,
 			} );
 		};
 
