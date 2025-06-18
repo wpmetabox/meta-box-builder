@@ -1,7 +1,7 @@
 import { Button, Flex, Panel } from '@wordpress/components';
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect, useReducer, useRef } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
-import { arrowLeft, close, external } from '@wordpress/icons';
+import { arrowLeft, chevronDown, chevronUp, close, external } from '@wordpress/icons';
 import useFloatingStructurePanel from '../../hooks/useFloatingStructurePanel';
 import useNavPanel from '../../hooks/useNavPanel';
 import Fields from './Structure/Fields';
@@ -29,7 +29,7 @@ const NormalHeader = () => {
 	);
 };
 
-const FloatingHeader = () => {
+const FloatingHeader = ( { expanded, togglePanel } ) => {
 	const { setFloating, setVisible } = useFloatingStructurePanel();
 	const { setNavPanel } = useNavPanel();
 
@@ -47,6 +47,14 @@ const FloatingHeader = () => {
 				label={ __( 'Back to normal mode', 'meta-box-builder' ) }
 				showTooltip={ true }
 				onClick={ disableFloating }
+				size="small"
+			/>
+			<Button
+				icon={ expanded ? chevronDown : chevronUp }
+				iconSize={ 16 }
+				label={ expanded ? __( 'Collapse panel', 'meta-box-builder' ) : __( 'Expand panel', 'meta-box-builder' ) }
+				showTooltip={ true }
+				onClick={ togglePanel }
 				size="small"
 			/>
 			<Button
@@ -75,6 +83,7 @@ const NormalStructurePanel = () => {
 
 const FloatingStructurePanel = () => {
 	const { visible, position, offsetX, offsetY, move, setPosition } = useFloatingStructurePanel();
+	const [ expanded, togglePanel ] = useReducer( prev => !prev, true );
 	const ref = useRef();
 
 	// Apply position for floating panel
@@ -145,10 +154,8 @@ const FloatingStructurePanel = () => {
 
 	return visible && (
 		<div className="mb-panel--floating" style={ floatingStyle } ref={ ref }>
-			<Panel header={ <FloatingHeader /> } className="mb-panel mb-panel--structure">
-				<div className="mb-panel__inner">
-					<Fields />
-				</div>
+			<Panel header={ <FloatingHeader expanded={ expanded } togglePanel={ togglePanel } /> } className="mb-panel mb-panel--structure">
+				{ expanded && <div className="mb-panel__inner"><Fields /></div> }
 			</Panel>
 		</div>
 	);
