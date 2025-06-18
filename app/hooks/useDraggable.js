@@ -1,29 +1,32 @@
 import { useEffect, useRef } from '@wordpress/element';
 import useFloatingStructurePanel from './useFloatingStructurePanel';
 
-const useDraggable = ( enabled = true ) => {
-	const elementRef = useRef( null );
-	const { position, setPosition } = useFloatingStructurePanel();
-	const dragRef = useRef( { dragging: false, x: 0, y: 0 } );
+const useDraggable = () => {
+	const elementRef = useRef();
+	const { move, setPosition } = useFloatingStructurePanel( state => ( { move: state.move, setPosition: state.setPosition } ) );
 
 	useEffect( () => {
-		if ( !enabled || !elementRef.current ) {
+		if ( !elementRef.current ) {
 			return;
 		}
 
 		const header = elementRef.current.querySelector( '.components-panel__header' );
+		let dragging = false;
+		let startX = 0;
+		let startY = 0;
+		let offsetX = 0;
+		let offsetY = 0;
 
 		const onMouseDown = e => {
-			// Don't start drag if clicking on buttons
-			if ( e.target.closest( 'button' ) ) {
+			if ( e.target.closest( 'button' ) || dragging ) {
 				return;
 			}
 
-			dragRef.current = {
-				dragging: true,
-				x: e.clientX,
-				y: e.clientY,
-			};
+			dragging = true;
+			startX = e.clientX;
+			startY = e.clientY;
+			offsetX = 0;
+			offsetY = 0;
 
 			// Add event listeners to document for mouse move and up
 			// Mouse events are attached to the document so dragging continues even if the mouse moves outside the header.
@@ -35,21 +38,19 @@ const useDraggable = ( enabled = true ) => {
 		};
 
 		const onMouseMove = e => {
-			if ( !dragRef.current.dragging ) {
+			if ( !dragging ) {
 				return;
 			}
-
-			const horizontal = e.clientX - dragRef.current.x;
-			const vertical = e.clientY - dragRef.current.y;
-
-			setPosition( {
-				top: position.top + vertical,
-				right: position.right - horizontal,
-			} );
+			offsetX = e.clientX - startX;
+			offsetY = e.clientY - startY;
+			move( offsetX, offsetY );
 		};
 
 		const onMouseUp = () => {
-			dragRef.current.dragging = false;
+			setPosition( offsetX, offsetY );
+			offsetX = 0;
+			offsetY = 0;
+			dragging = false;
 			document.removeEventListener( 'mousemove', onMouseMove );
 			document.removeEventListener( 'mouseup', onMouseUp );
 		};
@@ -61,7 +62,7 @@ const useDraggable = ( enabled = true ) => {
 			document.removeEventListener( 'mousemove', onMouseMove );
 			document.removeEventListener( 'mouseup', onMouseUp );
 		};
-	}, [ enabled, position, setPosition ] );
+	}, [ move, setPosition ] );
 
 	return elementRef;
 };

@@ -16,7 +16,7 @@ const getInitialState = () => {
 	return {
 		floating: false,
 		visible: true,
-		position: { top: 200, right: 200 }
+		position: { top: 160, right: 90 }
 	};
 };
 
@@ -31,6 +31,8 @@ const useFloatingStructurePanel = create( ( set, get ) => {
 
 	return {
 		...initialState,
+		offsetX: 0,
+		offsetY: 0,
 		setFloating: floating => {
 			set( { floating } );
 			saveToStorage( 'floating', floating );
@@ -39,10 +41,16 @@ const useFloatingStructurePanel = create( ( set, get ) => {
 			set( { visible } );
 			saveToStorage( 'visible', visible );
 		},
-		setPosition: position => {
-			set( { position } );
-			saveToStorage( 'position', position );
-		},
+		move: ( offsetX, offsetY ) => set( { offsetX, offsetY } ),
+		setPosition: ( offsetX, offsetY ) => set( state => {
+			const position = state.position;
+			const newPosition = {
+				top: position.top + offsetY,
+				right: position.right - offsetX,
+			};
+			saveToStorage( 'position', newPosition );
+			return { position: newPosition, offsetX: 0, offsetY: 0 };
+		} ),
 		toggleVisible: () => {
 			set( state => {
 				const visible = !state.visible;
