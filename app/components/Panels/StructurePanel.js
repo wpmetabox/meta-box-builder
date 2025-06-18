@@ -63,11 +63,8 @@ const FloatingHeader = () => {
 
 const NormalStructurePanel = () => {
 	const { navPanel } = useNavPanel();
-	if ( navPanel !== 'structure' ) {
-		return;
-	}
 
-	return (
+	return navPanel === 'structure' && (
 		<Panel header={ <NormalHeader /> } className="mb-panel mb-panel--structure">
 			<div className="mb-panel__inner">
 				<Fields />
@@ -80,10 +77,6 @@ const FloatingStructurePanel = () => {
 	const { visible, position, offsetX, offsetY } = useFloatingStructurePanel();
 	const panelRef = useDraggable();
 
-	if ( !visible ) {
-		return;
-	}
-
 	// Apply position for floating panel
 	const floatingStyle = {
 		top: `${ position.top }px`,
@@ -91,7 +84,7 @@ const FloatingStructurePanel = () => {
 		transform: `translate(${ offsetX }px, ${ offsetY }px)`,
 	};
 
-	return (
+	return visible && (
 		<div className="mb-panel--floating" style={ floatingStyle }>
 			<Panel ref={ panelRef } header={ <FloatingHeader /> } className="mb-panel mb-panel--structure">
 				<div className="mb-panel__inner">
