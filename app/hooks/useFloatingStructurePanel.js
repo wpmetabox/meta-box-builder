@@ -51,13 +51,11 @@ const useFloatingStructurePanel = create( ( set, get ) => {
 			saveToStorage( 'position', newPosition );
 			return { position: newPosition, offsetX: 0, offsetY: 0 };
 		} ),
-		toggleVisible: () => {
-			set( state => {
-				const visible = !state.visible;
-				saveToStorage( 'visible', visible );
-				return { visible };
-			} );
-		}
+		toggleVisible: () => set( state => {
+			const visible = !state.visible;
+			saveToStorage( 'visible', visible );
+			return { visible };
+		} ),
 	};
 } );
 
