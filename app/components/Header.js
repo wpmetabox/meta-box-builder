@@ -1,12 +1,26 @@
 import { Button, Flex } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import { cog, listView, plus } from "@wordpress/icons";
+import useFloatingStructurePanel from '../hooks/useFloatingStructurePanel';
 import useNavPanel from '../hooks/useNavPanel';
 // import { ReactComponent as Logo } from './logo.svg';
 
 const Header = () => {
 	const { navPanel, setNavPanel } = useNavPanel();
+	const { floating, visible, toggleVisible } = useFloatingStructurePanel();
+
 	const updateNavPanel = key => () => setNavPanel( key === navPanel ? '' : key );
+
+	const handleStructureClick = () => {
+		if ( floating ) {
+			toggleVisible();
+		} else {
+			setNavPanel( navPanel === 'structure' ? '' : 'structure' );
+		}
+	};
+
+	// Show structure panel if it's in floating mode and visible, or if it's in normal mode and navPanel is 'structure'
+	const isStructurePressed = floating ? visible : navPanel === 'structure';
 
 	return (
 		<Flex className="mb-header">
@@ -31,8 +45,8 @@ const Header = () => {
 					size="compact"
 					label={ __( 'Show field group structure', 'meta-box-builder' ) }
 					showTooltip={ true }
-					onClick={ updateNavPanel( 'structure' ) }
-					isPressed={ navPanel === 'structure' }
+					onClick={ handleStructureClick }
+					isPressed={ isStructurePressed }
 				/>
 				<Button
 					icon={ cog }

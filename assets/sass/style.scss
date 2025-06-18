@@ -18,6 +18,7 @@
 @use "editor/sortable";
 @use "editor/add-button";
 @use "editor/columns";
+@use "panels/structure";
 
 .og {
 	@import "elements";
@@ -44,8 +45,6 @@
 	@import "panels/attribute";
 
 	@import "panels/add-field";
-	@import "panels/structure";
-
 }
 
 @import "translation-modal";
