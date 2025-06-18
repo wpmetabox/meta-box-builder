@@ -1,6 +1,5 @@
 ## Bugs
 - Fix translation is loaded by site language, which should be by user language
-- When dragging a field into a group, and select that field, the settings of the group is shown instead of the settings of the field
 
 ## UX
 - Double click Cloneable button should close the clone settings dropdown
