@@ -11,6 +11,12 @@
 	margin-right: auto;
 }
 
+.og-item__toggle.components-button.is-small.has-icon:not(.has-text) {
+	min-width: 16px;
+	width: 16px;
+	opacity: .5;
+}
+
 .og-item__id {
 	font-size: 12px;
 	cursor: pointer;
