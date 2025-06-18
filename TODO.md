@@ -1,8 +1,10 @@
 ## Bugs
 - Fix translation is loaded by site language, which should be by user language
+- Do not change column layout when no column settings are set
 
 ## UX
 - Double click Cloneable button should close the clone settings dropdown
+- Drag to resize columns?
 
 - It would be great if you could include under appearance the option on how many rows I can have { "textarea_rows": 10 }, typing this every time for examples 10 times, takes a lot of time. https://helpdesk.elightup.com/conversation/11098?folder_id=7
 
