@@ -28,7 +28,7 @@ const Header = ( { onClose } ) => {
 					<>
 						<Button
 							icon={ arrowLeft }
-							iconSize={ 16 }
+							iconSize={ 12 }
 							label={ __( 'Back to normal mode', 'meta-box-builder' ) }
 							showTooltip={ true }
 							onClick={ disableFloating }
@@ -36,7 +36,7 @@ const Header = ( { onClose } ) => {
 						/>
 						<Button
 							icon={ close }
-							iconSize={ 16 }
+							iconSize={ 12 }
 							label={ __( 'Close panel', 'meta-box-builder' ) }
 							showTooltip={ true }
 							onClick={ () => setVisible( false ) }

@@ -32,16 +32,41 @@
 	box-shadow: var(--shadow-md);
 	border-radius: 4px;
 	border-left-width: 1px;
-	background: #fff;
+
+	// Dark mode.
+	background: #1e1e1e;
+	color: #f0f0f0;
+
+	--color-lighter: #2e2e2e;
+	--color-lightest: #3e3e3e;
+	--border-lighter: 1px solid var(--color-lighter);
 
 	.components-panel__header {
 		cursor: move;
 		user-select: none;
+		height: 40px;
+		margin-top: 0;
+		border-bottom-color: var(--color-lighter);
+		padding-right: 8px;
+
+		button {
+			color: currentColor;
+		}
 	}
 
 	.mb-panel__inner {
 		position: relative;
-		overflow-y: auto;
-		top: -1px;
+		top: 0;
+		width: 100%;
+		max-height: 480px;
+	}
+
+	.og-item__header {
+		grid-template-columns: 16px 1fr 36px;
+		padding-bottom: 2px;
+	}
+
+	.og-item__id {
+		display: none;
 	}
 }
