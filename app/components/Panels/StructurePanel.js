@@ -1,7 +1,7 @@
 import { Button, Flex, Panel } from '@wordpress/components';
+import { useEffect, useRef } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { arrowLeft, close, external } from '@wordpress/icons';
-import useDraggable from '../../hooks/useDraggable';
 import useFloatingStructurePanel from '../../hooks/useFloatingStructurePanel';
 import useNavPanel from '../../hooks/useNavPanel';
 import Fields from './Structure/Fields';
@@ -74,8 +74,8 @@ const NormalStructurePanel = () => {
 };
 
 const FloatingStructurePanel = () => {
-	const { visible, position, offsetX, offsetY } = useFloatingStructurePanel();
-	const panelRef = useDraggable();
+	const { visible, position, offsetX, offsetY, move, setPosition } = useFloatingStructurePanel();
+	const ref = useRef();
 
 	// Apply position for floating panel
 	const floatingStyle = {
@@ -84,9 +84,68 @@ const FloatingStructurePanel = () => {
 		transform: `translate(${ offsetX }px, ${ offsetY }px)`,
 	};
 
+	useEffect( () => {
+		if ( !ref.current ) {
+			return;
+		}
+
+		const header = ref.current.querySelector( '.components-panel__header' );
+		let dragging = false;
+		let startX = 0;
+		let startY = 0;
+		let offsetX = 0;
+		let offsetY = 0;
+
+		const onMouseDown = e => {
+			if ( e.target.closest( 'button' ) || dragging ) {
+				return;
+			}
+
+			dragging = true;
+			startX = e.clientX;
+			startY = e.clientY;
+			offsetX = 0;
+			offsetY = 0;
+
+			// Add event listeners to document for mouse move and up
+			// Mouse events are attached to the document so dragging continues even if the mouse moves outside the header.
+			document.addEventListener( 'mousemove', onMouseMove );
+			document.addEventListener( 'mouseup', onMouseUp );
+
+			// Prevent text selection during drag
+			e.preventDefault();
+		};
+
+		const onMouseMove = e => {
+			if ( !dragging ) {
+				return;
+			}
+			offsetX = e.clientX - startX;
+			offsetY = e.clientY - startY;
+			move( offsetX, offsetY );
+		};
+
+		const onMouseUp = () => {
+			setPosition( offsetX, offsetY );
+			offsetX = 0;
+			offsetY = 0;
+			dragging = false;
+			document.removeEventListener( 'mousemove', onMouseMove );
+			document.removeEventListener( 'mouseup', onMouseUp );
+		};
+
+		header.addEventListener( 'mousedown', onMouseDown );
+
+		return () => {
+			header.removeEventListener( 'mousedown', onMouseDown );
+			document.removeEventListener( 'mousemove', onMouseMove );
+			document.removeEventListener( 'mouseup', onMouseUp );
+		};
+	}, [ visible, move, setPosition ] );
+
 	return visible && (
-		<div className="mb-panel--floating" style={ floatingStyle }>
-			<Panel ref={ panelRef } header={ <FloatingHeader /> } className="mb-panel mb-panel--structure">
+		<div className="mb-panel--floating" style={ floatingStyle } ref={ ref }>
+			<Panel header={ <FloatingHeader /> } className="mb-panel mb-panel--structure">
 				<div className="mb-panel__inner">
 					<Fields />
 				</div>
