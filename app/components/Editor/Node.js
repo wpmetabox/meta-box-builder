@@ -1,54 +1,15 @@
-import { lazy, memo, Suspense, useEffect, useRef } from "@wordpress/element";
+import { lazy, memo, Suspense } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useContextMenu from "../../hooks/useContextMenu";
 import useNavPanel from "../../hooks/useNavPanel";
+import { setFieldActive } from "../../list-functions";
 import Field from './Field';
 import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
 const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.target, '.mb-context-menu,.mb-toolbar' );
-
-const OutsideClickDetector = ( { onClickOutside, children, ...rest } ) => {
-	const ref = useRef();
-	const isDragging = useRef( false );
-
-	const handleDragStart = () => isDragging.current = true;
-	const handleDragEnd = () => isDragging.current = false;
-
-	useEffect( () => {
-		const handleMouseDown = e => {
-			// Because mousedown fires before dragstart, use timeout to delay, so that isDragging.current is updated before checking it.
-			setTimeout( () => {
-				if ( e.button !== 0 || isDragging.current ) {
-					return;
-				}
-
-				if ( !isClickedOnAField( e ) ) {
-					return;
-				}
-
-				const closestField = e.target.matches( '.mb-field' ) ? e.target : e.target.closest( '.mb-field' );
-				if ( ref.current && closestField?.parentElement !== ref.current ) {
-					onClickOutside?.();
-				}
-			}, 200 );
-		};
-
-		document.addEventListener( 'dragstart', handleDragStart );
-		document.addEventListener( 'dragend', handleDragEnd );
-		document.addEventListener( 'mousedown', handleMouseDown );
-
-		return () => {
-			document.removeEventListener( 'dragstart', handleDragStart );
-			document.removeEventListener( 'dragend', handleDragEnd );
-			document.removeEventListener( 'mousedown', handleMouseDown );
-		};
-	}, [ onClickOutside ] );
-
-	return <div ref={ ref } { ...rest }>{ children }</div>;
-};
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const openContextMenu = useContextMenu( state => state.openContextMenu );
@@ -62,16 +23,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		// Make it able to select sub-fields in a group
 		e.stopPropagation();
 
+		setFieldActive( field._id );
 		setNavPanel( 'field-settings' );
-		if ( !field._active ) {
-			update( '_active', true );
-		}
-	};
-
-	const deselect = () => {
-		if ( field._active ) {
-			update( '_active', false );
-		}
 	};
 
 	const update = ( key, value ) => {
@@ -93,13 +46,11 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
-	const classNames = [
-		'mb-field-wrapper',
-		MbbApp.extensions.columns ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '',
-	];
-
 	return (
-		<OutsideClickDetector onClickOutside={ deselect } className={ classNames.join( ' ' ) }>
+		<div className={ `
+			mb-field-wrapper
+			${ MbbApp.extensions.columns ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
+		` }>
 			<div
 				className={ `
 					mb-field
@@ -119,7 +70,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				</Base>
 				<Field field={ field } parent={ parent } updateField={ update } />
 			</div>
-		</OutsideClickDetector>
+		</div>
 	);
 };
 

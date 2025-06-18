@@ -148,7 +148,7 @@
 	transform: translateX(calc(0px - var(--nav-width)));
 
 	margin-top: -1px; // Override to the header's border
-	border-left: 0;
+	border-left-width: 0;
 
 	.folded & {
 		left: 36px;

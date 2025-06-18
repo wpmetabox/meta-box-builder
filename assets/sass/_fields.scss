@@ -120,6 +120,11 @@
 		}
 	}
 
+	&--active > .og-item__header{
+		background: var(--color-primary);
+		color: #fff;
+	}
+
 	.components-button.has-icon {
 		color: inherit;
 	}
