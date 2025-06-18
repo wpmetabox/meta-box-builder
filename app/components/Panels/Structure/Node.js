@@ -5,28 +5,39 @@ import { __ } from "@wordpress/i18n";
 import { chevronDown, chevronUp } from "@wordpress/icons";
 import { isEqual } from 'lodash';
 import { getFieldIcon, scrollIntoView, ucwords } from "../../../functions";
+import useFloatingStructurePanel from "../../../hooks/useFloatingStructurePanel";
+import useNavPanel from "../../../hooks/useNavPanel";
+import { setFieldActive } from "../../../list-functions";
 import Actions from './Actions';
 import Group from './Group';
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ copied, setCopied ] = useState( false );
 	const [ expanded, setExpanded ] = useState( true );
+	const { floating } = useFloatingStructurePanel();
+	const { setNavPanel } = useNavPanel();
 
 	const copyRef = useCopyToClipboard( field.id, () => {
 		setCopied( true );
 		setTimeout( () => setCopied( false ), 2000 );
 	} );
 
-	const scrollToField = () => scrollIntoView( `mb-field-${ field._id }` );
-
 	const toggleGroup = e => {
 		e.stopPropagation();
 		setExpanded( prev => !prev );
 	};
 
+	const handleItemClick = () => {
+		setFieldActive( field._id );
+		scrollIntoView( `mb-field-${ field._id }` );
+		if ( floating ) {
+			setNavPanel( 'field-settings' );
+		}
+	};
+
 	return field.type && (
-		<div className={ `og-item og-item--${ field.type }` }>
-			<div className="og-item__header" onClick={ scrollToField }>
+		<div className={ `og-item og-item--${ field.type } ${ field._active ? 'og-item--active' : '' }` }>
+			<div className="og-item__header" onClick={ handleItemClick }>
 				{
 					field.type === 'group'
 						? (
