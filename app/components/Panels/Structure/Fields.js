@@ -1,3 +1,4 @@
+import { RawHTML } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import { useFetch } from "../../../hooks/useFetch";
@@ -12,11 +13,11 @@ const Fields = () => {
 	const { data: categories } = useFetch( { api: 'field-categories', defaultValue: [] } );
 
 	if ( Object.keys( types ).length === 0 || Object.keys( categories ).length === 0 ) {
-		return <p className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</p>;
+		return <RawHTML className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</RawHTML>;
 	}
 
 	if ( !fields || fields.length === 0 ) {
-		return <p className="og-none">{ __( 'There are no fields here. Add a new field from the list on the right panel.', 'meta-box-builder' ) }</p>;
+		return <RawHTML className="og-none">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>;
 	}
 
 	return (
