@@ -1,6 +1,5 @@
 ## Bugs
 - Fix translation is loaded by site language, which should be by user language
-- Do not change column layout when no column settings are set
 
 ## UX
 - Double click Cloneable button should close the clone settings dropdown

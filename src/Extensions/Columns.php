@@ -21,7 +21,7 @@ class Columns {
 
 		$control = Control::Range( 'columns', [
 			'label'       => __( 'Columns', 'meta-box-builder' ),
-			'description' => __( 'The number of columns for this field in a 12-column grid. IMPORTANT: total columns of a row must be 12.', 'meta-box-builder' ),
+			'description' => __( 'The number of columns for this field in a 12-column grid. IMPORTANT:<br />- If there is at least a field with a custom columns (not 12), then field labels will be displayed above inputs.<br />- Total columns of a row must be 12.', 'meta-box-builder' ),
 		], 12, 'appearance' );
 
 		return Control::insert_before( $controls, 'class', $control );

@@ -2,6 +2,7 @@ import { lazy, memo, Suspense } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
+import useAllFields from "../../hooks/useAllFields";
 import useContextMenu from "../../hooks/useContextMenu";
 import useNavPanel from "../../hooks/useNavPanel";
 import { setFieldActive } from "../../list-functions";
@@ -14,6 +15,9 @@ const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.ta
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const openContextMenu = useContextMenu( state => state.openContextMenu );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
+	const allFields = useAllFields();
+
+	const hasCustomColumns = allFields.some( field => field.columns && field.columns !== 12 );
 
 	const toggleSettings = e => {
 		if ( !isClickedOnAField( e ) ) {
@@ -49,7 +53,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	return (
 		<div className={ `
 			mb-field-wrapper
-			${ MbbApp.extensions.columns ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
+			${ MbbApp.extensions.columns && hasCustomColumns ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
 		` }>
 			<div
 				className={ `
