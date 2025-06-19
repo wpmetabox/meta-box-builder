@@ -1,21 +1,28 @@
 import { Button, Icon, Tooltip } from '@wordpress/components';
 import { useCopyToClipboard } from "@wordpress/compose";
-import { memo, useState } from "@wordpress/element";
+import { memo, useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { chevronDown, chevronUp } from "@wordpress/icons";
+
 import { isEqual } from 'lodash';
 import { getFieldIcon, scrollIntoView, ucwords } from "../../../functions";
 import useFloatingStructurePanel from "../../../hooks/useFloatingStructurePanel";
 import useNavPanel from "../../../hooks/useNavPanel";
+import useStructureCollapse from "../../../hooks/useStructureCollapse";
 import { setFieldActive } from "../../../list-functions";
 import Actions from './Actions';
 import Group from './Group';
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ copied, setCopied ] = useState( false );
-	const [ expanded, setExpanded ] = useState( true );
 	const { floating } = useFloatingStructurePanel();
 	const { setNavPanel } = useNavPanel();
+	const { allExpanded } = useStructureCollapse();
+	const [ expanded, setExpanded ] = useState( allExpanded );
+
+	// Sync local state with global state when allExpanded changes
+	useEffect( () => {
+		setExpanded( allExpanded );
+	}, [ allExpanded ] );
 
 	const copyRef = useCopyToClipboard( field.id, () => {
 		setCopied( true );
@@ -42,7 +49,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 					field.type === 'group'
 						? (
 							<Button
-								icon={ expanded ? chevronUp : chevronDown }
+								icon={ expanded ? `minus` : `plus-alt2` }
 								size="small"
 								iconSize={ 16 }
 								onClick={ toggleGroup }

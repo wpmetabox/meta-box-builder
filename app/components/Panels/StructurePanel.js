@@ -1,14 +1,16 @@
-import { Button, Flex, Panel } from '@wordpress/components';
+import { Button, Panel } from '@wordpress/components';
 import { useEffect, useReducer, useRef } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { arrowLeft, chevronDown, chevronUp, close, external } from '@wordpress/icons';
 import useFloatingStructurePanel from '../../hooks/useFloatingStructurePanel';
 import useNavPanel from '../../hooks/useNavPanel';
+import useStructureCollapse from '../../hooks/useStructureCollapse';
 import Fields from './Structure/Fields';
 
 const NormalHeader = () => {
 	const { setFloating } = useFloatingStructurePanel();
 	const { setNavPanel } = useNavPanel();
+	const { allExpanded, toggleAll } = useStructureCollapse();
 
 	const enableFloating = () => {
 		setFloating( true );
@@ -16,8 +18,16 @@ const NormalHeader = () => {
 	};
 
 	return (
-		<Flex align="center" justify="space-between" gap={ 1 }>
+		<>
 			<span className="mb-panel__header">{ __( 'Structure', 'meta-box-builder' ) }</span>
+			<Button
+				icon={ allExpanded ? `minus` : `plus-alt2` }
+				iconSize={ 16 }
+				label={ allExpanded ? __( 'Collapse all groups', 'meta-box-builder' ) : __( 'Expand all groups', 'meta-box-builder' ) }
+				showTooltip={ true }
+				onClick={ toggleAll }
+				size="small"
+			/>
 			<Button
 				icon={ external }
 				iconSize={ 16 }
@@ -25,13 +35,14 @@ const NormalHeader = () => {
 				showTooltip={ true }
 				onClick={ enableFloating }
 			/>
-		</Flex>
+		</>
 	);
 };
 
 const FloatingHeader = ( { expanded, togglePanel } ) => {
 	const { setFloating, setVisible } = useFloatingStructurePanel();
 	const { setNavPanel } = useNavPanel();
+	const { allExpanded, toggleAll } = useStructureCollapse();
 
 	const disableFloating = () => {
 		setFloating( false );
@@ -39,7 +50,7 @@ const FloatingHeader = ( { expanded, togglePanel } ) => {
 	};
 
 	return (
-		<Flex align="center" justify="space-between" gap={ 1 }>
+		<>
 			<span className="mb-panel__header">{ __( 'Structure', 'meta-box-builder' ) }</span>
 			<Button
 				icon={ arrowLeft }
@@ -47,6 +58,14 @@ const FloatingHeader = ( { expanded, togglePanel } ) => {
 				label={ __( 'Back to normal mode', 'meta-box-builder' ) }
 				showTooltip={ true }
 				onClick={ disableFloating }
+				size="small"
+			/>
+			<Button
+				icon={ allExpanded ? `minus` : `plus-alt2` }
+				iconSize={ 12 }
+				label={ allExpanded ? __( 'Collapse all groups', 'meta-box-builder' ) : __( 'Expand all groups', 'meta-box-builder' ) }
+				showTooltip={ true }
+				onClick={ toggleAll }
 				size="small"
 			/>
 			<Button
@@ -65,7 +84,7 @@ const FloatingHeader = ( { expanded, togglePanel } ) => {
 				onClick={ () => setVisible( false ) }
 				size="small"
 			/>
-		</Flex>
+		</>
 	);
 };
 

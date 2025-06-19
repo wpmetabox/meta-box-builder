@@ -3,6 +3,19 @@
 
 	h2 {
 		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 4px;
+	}
+
+	.components-button,
+	.dashicon {
+		color: var(--color-gray);
+
+		&:hover {
+			color: inherit;
+		}
 	}
 }
 
@@ -15,6 +28,14 @@
 	min-width: 16px;
 	width: 16px;
 	opacity: .5;
+
+	.dashicon {
+		color: inherit;
+	}
+
+	&:hover {
+		opacity: 1;
+	}
 }
 
 .og-item__id {
