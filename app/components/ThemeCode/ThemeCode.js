@@ -14,7 +14,7 @@ const ThemeCode = () => {
 	const fields = buildFieldsTree().filter( field => !excludeFieldTypes.includes( field.type ) );
 
 	// Generate Code
-	const { data: themeCode } = useFetch( { api: 'theme-code-generate', params: { fields, settings }, method: 'POST' } );
+	const { data } = useFetch( { api: 'theme-code-generate', params: { fields, settings }, method: 'POST', defaultValue: [] } );
 
 	// No fields (with ids) or is a block?
 	if ( fields.length === 0 || getObjectType() === 'block' ) {
@@ -29,13 +29,13 @@ const ThemeCode = () => {
 			</div>
 			<div className="og-theme-code__content">
 				{
-					themeCode === undefined || themeCode.length === 0
+					data.length === 0
 						? <p className="og-theme-code__none">{ __( 'No fields available.', 'meta-box-builder' ) }</p>
 						: <>
 							<div className="og-theme-code__header">
 								<div className="og-theme-code__fields">
 									{
-										themeCode.map( ( field, index ) => (
+										data.map( ( field, index ) => (
 											<span
 												key={ `header_${ field._id }` }
 												onClick={ () => setTab( index ) }
@@ -51,7 +51,7 @@ const ThemeCode = () => {
 							</div>
 
 							<div className="og-theme-code__body og-result">
-								{ themeCode[ tab ] && <Content codeValue={ htmlDecode( themeCode[ tab ].theme_code ) } /> }
+								{ data[ tab ] && <Content codeValue={ htmlDecode( data[ tab ].theme_code ) } /> }
 							</div>
 						</>
 				}
