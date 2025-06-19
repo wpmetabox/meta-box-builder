@@ -32,16 +32,16 @@
 
 // Group
 .mb-field--group {
-	// Do not set padding for the group, let subfields handle it.
-	padding-block: 0;
-
 	>.rwmb-field>.rwmb-label {
 		padding-block: var(--spacing);
 	}
 
-	// Remove inline padding for subfields.
-	.mb-field {
-		padding-inline: 0;
+	// Shift the inputs to the left make them vertically aligned with other fields.
+	// - Not cloneable groups
+	// - Cloneable & non-collapsible groups
+	>.rwmb-field > .rwmb-input:not(:has(>.rwmb-clone)),
+	>.rwmb-field:not(.rwmb-group-collapsible) > .rwmb-input > .rwmb-clone {
+		margin-left: calc(0px - var(--spacing));
 	}
 
 	// Add margin-bottom for add clone button to avoid touching the edge.
@@ -51,7 +51,8 @@
 
 	// No subfields, add padding and text
 	&__fields:empty {
-		padding-top: 24px;
+		padding-top: var(--spacing);
+		padding-left: var(--spacing);
 
 		&::before {
 			border: 2px dashed var(--color-light);
