@@ -49,15 +49,11 @@ const MainInner = ( { fields, php, theme_code } ) => {
 
 			<div className="mb-box">
 				<Flex align="center" className="mb-box__header">
-					<Flex align="center" justify="flex-start" gap={ 1 } className="mb-box__title">
-						<Icon icon={ icons[ area ] } />
-						{ titles[ area ] }
-					</Flex>
-					<Flex expanded={ false } className="mb-box__actions">
-						<Button size="small" icon={ category } onClick={ switchArea( 'fields' ) } label={ __( 'Show fields', 'meta-box-builder' ) } showTooltip={ true } />
-						<Button size="small" icon={ code } onClick={ switchArea( 'php' ) } label={ __( 'Get PHP code to register fields', 'meta-box-builder' ) } showTooltip={ true } />
-						<Button size="small" icon={ copy } onClick={ switchArea( 'theme_code' ) } label={ __( 'Generate ready-to-copy PHP code to show fields', 'meta-box-builder' ) } showTooltip={ true } />
-					</Flex>
+					<Icon icon={ icons[ area ] } />
+					<span className="mb-box__title">{ titles[ area ] }</span>
+					<Button size="small" icon={ category } onClick={ switchArea( 'fields' ) } label={ __( 'Show fields', 'meta-box-builder' ) } showTooltip={ true } />
+					<Button size="small" icon={ code } onClick={ switchArea( 'php' ) } label={ __( 'Get PHP code to register fields', 'meta-box-builder' ) } showTooltip={ true } />
+					<Button size="small" icon={ copy } onClick={ switchArea( 'theme_code' ) } label={ __( 'Generate ready-to-copy PHP code to show fields', 'meta-box-builder' ) } showTooltip={ true } />
 				</Flex>
 				<div className="mb-box__body">
 					{ area === 'fields' && fields }

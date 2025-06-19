@@ -10,4 +10,16 @@
 		box-sizing: border-box;
 		border-bottom: var(--border);
 	}
+
+	&__title {
+		margin-right: auto;
+	}
+
+	.components-button:hover {
+		color: inherit;
+
+		svg {
+			fill: currentColor;
+		}
+	}
 }
