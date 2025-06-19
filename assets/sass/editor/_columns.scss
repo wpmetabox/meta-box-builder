@@ -3,8 +3,6 @@
 	grid-template-columns: repeat(12, 1fr);
 
 	&.mb-field--group__fields {
-		column-gap: 24px;
-
 		&:empty:before {
 			grid-column: span 12;
 		}
