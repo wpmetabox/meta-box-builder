@@ -1,3 +1,8 @@
+// Make the cursor col-resize when resizing a field, in case the mouse is dragging outside the field.
+.mb-resizing {
+	cursor: col-resize;
+}
+
 // Basic style
 .mb-field {
 	--spacing: 24px;
@@ -7,13 +12,19 @@
 	position: relative;
 	cursor: grab;
 
-	&:hover {
+	&--hover {
 		outline: 1px solid rgba(0, 0, 0, .1);
 		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
 	}
 
+	// The cursor is still affected by SortableJS, so we need to force it to col-resize again
+	&--resizing {
+		cursor: col-resize;
+		background: #fff !important; // Override the background of SortableJS
+	}
+
 	&--active {
-		outline: 1px solid var(--color-primary) !important; // Override the outline when hovering above
+		outline: 1px solid var(--color-primary); // Override the outline when hovering above
 		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
 	}
 

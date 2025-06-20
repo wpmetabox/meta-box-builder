@@ -1,4 +1,4 @@
-import { lazy, memo, Suspense, useCallback, useRef, useState } from "@wordpress/element";
+import { lazy, memo, Suspense, useCallback, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
@@ -14,8 +14,7 @@ const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.ta
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ hover, setHover ] = useState( false );
-	const [ isResizing, setIsResizing ] = useState( false );
-	const resizeRef = useRef( null );
+	const [ resizing, setResizing ] = useState( false );
 	const openContextMenu = useContextMenu( state => state.openContextMenu );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const allFields = useAllFields();
@@ -51,7 +50,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const handleResizeStart = useCallback( e => {
 		e.preventDefault();
 		e.stopPropagation();
-		setIsResizing( true );
+		setResizing( true );
+		document.body.classList.add( 'mb-resizing' ); // To show the cursor col-resize
 
 		const startX = e.clientX;
 		const startColumns = field.columns || 12;
@@ -71,7 +71,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		};
 
 		const handleMouseUp = () => {
-			setIsResizing( false );
+			setResizing( false );
+			document.body.classList.remove( 'mb-resizing' ); // To hide the cursor col-resize when the cursor is outside the field
 			document.removeEventListener( 'mousemove', handleMouseMove );
 			document.removeEventListener( 'mouseup', handleMouseUp );
 		};
@@ -88,6 +89,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
+	const hovering = hover || resizing;
+
 	return (
 		<div className={ `
 			mb-field-wrapper
@@ -98,6 +101,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 					mb-field
 					mb-field--${ field.type }
 					${ field._active ? 'mb-field--active' : '' }
+					${ hovering ? 'mb-field--hover' : '' }
+					${ resizing ? 'mb-field--resizing' : '' }
 				` }
 				id={ `mb-field-${ field._id }` }
 				onClick={ toggleSettings }
@@ -106,14 +111,13 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				onMouseLeave={ handleMouseLeave }
 				title={ __( 'Click to show field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
-				{ ( field._active || hover ) && <Toolbar field={ field } { ...fieldActions } /> }
+				{ ( field._active || hovering ) && <Toolbar field={ field } { ...fieldActions } /> }
 				{
-					hover && MbbApp.extensions.columns && (
+					MbbApp.extensions.columns && hovering && (
 						<div
-							ref={ resizeRef }
 							className="mb-field-resize-handle"
 							onMouseDown={ handleResizeStart }
-							title={ __( 'Drag to resize field width', 'meta-box-builder' ) }
+							title={ __( 'Drag to resize the field', 'meta-box-builder' ) }
 						/>
 					)
 				}
