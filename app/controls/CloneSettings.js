@@ -5,11 +5,16 @@ import { close } from "@wordpress/icons";
 import DivRow from "./DivRow";
 import Tooltip from "./Tooltip";
 
-const OutsideClickDetector = ( { onClickOutside, children } ) => {
+const OutsideClickDetector = ( { onClickOutside, children, toggleRef } ) => {
 	const ref = useRef();
 
 	useEffect( () => {
 		const handleClickOutside = e => {
+			// Don't close if clicking on the toggle button
+			if ( toggleRef?.current && toggleRef.current.contains( e.target ) ) {
+				return;
+			}
+
 			if ( ref.current && !ref.current.contains( e.target ) ) {
 				onClickOutside?.();
 			}
@@ -19,7 +24,7 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 		return () => {
 			document.removeEventListener( 'mousedown', handleClickOutside );
 		};
-	}, [ onClickOutside ] );
+	}, [ onClickOutside, toggleRef ] );
 
 	return <div ref={ ref }>{ children }</div>;
 };
@@ -27,6 +32,7 @@ const OutsideClickDetector = ( { onClickOutside, children } ) => {
 const CloneSettings = ( { componentId, defaultValue, updateField, ...rest } ) => {
 	const toggle = name => value => updateField( name, value );
 	const update = name => e => updateField( name, e.target.value );
+	const toggleRef = useRef();
 
 	return (
 		<>
@@ -36,12 +42,16 @@ const CloneSettings = ( { componentId, defaultValue, updateField, ...rest } ) =>
 				contentClassName="og og-clone__content"
 				focusOnMount={ false }
 				renderToggle={ ( { onToggle } ) => (
-					<label className={ `og-status ${ defaultValue.clone ? 'og-status--active' : '' }` } onClick={ onToggle }>
+					<label
+						ref={ toggleRef }
+						className={ `og-status ${ defaultValue.clone ? 'og-status--active' : '' }` }
+						onClick={ onToggle }
+					>
 						{ __( 'Cloneable', 'meta-box-builder' ) }
 					</label>
 				) }
 				renderContent={ ( { onClose } ) => (
-					<OutsideClickDetector onClickOutside={ onClose }>
+					<OutsideClickDetector onClickOutside={ onClose } toggleRef={ toggleRef }>
 						<Button icon={ close } onClick={ onClose } iconSize={ 16 } />
 
 						<ToggleControl
