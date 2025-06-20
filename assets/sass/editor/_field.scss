@@ -6,7 +6,7 @@
 // Basic style
 .mb-field {
 	--spacing: 24px;
-	--outline: var(--color-light);
+	--outline: rgba(0, 0, 0, .2); // Use transparent outline to avoid overriding the outline of parent group.
 	border-bottom: none;
 	padding: var(--spacing);
 	position: relative;
