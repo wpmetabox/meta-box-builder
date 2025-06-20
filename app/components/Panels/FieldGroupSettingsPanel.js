@@ -17,7 +17,7 @@ import Tabs from './FieldGroupSettings/Tabs';
 import Translation from './FieldGroupSettings/Translation';
 
 const FieldGroupSettingsPanel = () => {
-	const { getObjectType } = useSettings();
+	const getObjectType = useSettings( state => state.getObjectType );
 	const objectType = getObjectType();
 
 	return (
