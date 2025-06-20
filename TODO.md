@@ -1,9 +1,6 @@
 ## Bugs
 - Fix translation is loaded by site language, which should be by user language
 
-## UX
-- Double click Cloneable button should close the clone settings dropdown
-
 ## Improvements
 - Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
 
