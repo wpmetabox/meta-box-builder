@@ -4,8 +4,8 @@
 ## UX
 - Double click Cloneable button should close the clone settings dropdown
 - Drag to resize columns?
-
-- It would be great if you could include under appearance the option on how many rows I can have { "textarea_rows": 10 }, typing this every time for examples 10 times, takes a lot of time. https://helpdesk.elightup.com/conversation/11098?folder_id=7
+- Hover to show toolbar
+- Hover to show resize handle to change column (similar to Beaver Builder)
 
 ## Improvements
 - Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
@@ -26,6 +26,7 @@
 
 ## Won't fix
 - Scrollbar issue (firefox on Mac)
+- It would be great if you could include under appearance the option on how many rows I can have { "textarea_rows": 10 }, typing this every time for examples 10 times, takes a lot of time. https://helpdesk.elightup.com/conversation/11098?folder_id=7
 
 ## Can't replicate
 - I had a group with many fields and then I decided to turn on this feature “Start with no inputs” and it deleted the names of every field in that group. The fields stayed, but without any name. https://helpdesk.elightup.com/conversation/11098?folder_id=7

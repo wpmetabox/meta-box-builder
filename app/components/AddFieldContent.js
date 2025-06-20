@@ -1,5 +1,6 @@
 import { Button, SearchControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { ReactSortable } from 'react-sortablejs';
 import { getFieldIcon } from '../functions';
 import { useFetch } from '../hooks/useFetch';
@@ -49,20 +50,29 @@ const FieldList = ( { fields, onSelect, addField } ) => (
 		{
 			fields.map( ( [ type, field ] ) =>
 				<div key={ type } data-type={ type } className="og-add-field__item">
-					<FieldButton type={ type } title={ field.title } onSelect={ onSelect } addField={ addField } />
+					<FieldButton type={ type } field={ field } onSelect={ onSelect } addField={ addField } />
 				</div>
 			)
 		}
 	</ReactSortable>
 );
 
-const FieldButton = ( { type, title, onSelect, addField } ) => {
+const FieldButton = ( { type, field, onSelect, addField } ) => {
 	const handleClick = () => {
 		addField( type );
 		onSelect && onSelect();
 	};
 
-	return <Button variant="tertiary" icon={ getFieldIcon( type ) } onClick={ handleClick }>{ title }</Button>;
+	return field.disabled
+		? <Button
+			icon={ getFieldIcon( type ) }
+			disabled={ true }
+			label={ __( 'This field is available in the Meta Box AIO only', 'meta-box-builder' ) }
+			title={ __( 'This field is available in the Meta Box AIO only', 'meta-box-builder' ) }
+			showTooltip={ true }
+			text={ `${ field.title } (${ __( 'Premium', 'meta-box-builder' ) })` }
+		/>
+		: <Button icon={ getFieldIcon( type ) } onClick={ handleClick } text={ field.title } />;
 };
 
 export default AddFieldContent;
