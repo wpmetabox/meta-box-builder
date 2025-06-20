@@ -9,10 +9,24 @@ class Edit extends BaseEditPage {
 	public function __construct( $post_type, $slug_meta_box_title ) {
 		parent::__construct( $post_type, $slug_meta_box_title );
 
+		add_action( 'admin_head', [ $this, 'admin_head' ] );
+
 		add_action( 'admin_notices', [ $this, 'admin_notices' ], 1 );
 
 		// Add dialog to review the diff.
 		add_action( 'admin_footer', [ Template::class, 'render_diff_dialog' ] );
+	}
+
+	/**
+	 * Hide the default WordPress elements. Use `admin_head` to make the CSS apply immediately.
+	 * @return void
+	 */
+	public function admin_head(): void {
+		?>
+		<style>
+			#post-body { display: none; }
+		</style>
+		<?php
 	}
 
 	public function admin_notices(): void {
