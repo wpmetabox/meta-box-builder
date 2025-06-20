@@ -32,6 +32,52 @@
 
 .mb-field-wrapper {
 	grid-column: span 12;
+	position: relative;
+}
+
+.mb-field-resize-handle {
+	position: absolute;
+	right: -4px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 8px;
+	height: 20px;
+	background: #007cba;
+	border-radius: 4px;
+	cursor: col-resize;
+	z-index: 10;
+	opacity: 0.8;
+	transition: opacity 0.2s ease;
+
+	&:hover {
+		opacity: 1;
+		background: #005a87;
+	}
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		width: 2px;
+		height: 12px;
+		background: #fff;
+		border-radius: 1px;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		width: 2px;
+		height: 12px;
+		background: #fff;
+		border-radius: 1px;
+		margin-left: 2px;
+	}
 }
 
 .mb-field-wrapper--columns-1 {

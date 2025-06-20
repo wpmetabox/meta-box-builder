@@ -1,4 +1,4 @@
-import { lazy, memo, Suspense, useState } from "@wordpress/element";
+import { lazy, memo, Suspense, useCallback, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
@@ -14,6 +14,8 @@ const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.ta
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ hover, setHover ] = useState( false );
+	const [ isResizing, setIsResizing ] = useState( false );
+	const resizeRef = useRef( null );
 	const openContextMenu = useContextMenu( state => state.openContextMenu );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const allFields = useAllFields();
@@ -46,6 +48,38 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const handleMouseEnter = () => setHover( true );
 	const handleMouseLeave = () => setHover( false );
 
+	const handleResizeStart = useCallback( e => {
+		e.preventDefault();
+		e.stopPropagation();
+		setIsResizing( true );
+
+		const startX = e.clientX;
+		const startColumns = field.columns || 12;
+		const fieldElement = e.target.closest( '.mb-field-wrapper' );
+		const fieldRect = fieldElement.getBoundingClientRect();
+		const totalWidth = fieldRect.width;
+		const columnWidth = totalWidth / startColumns;
+
+		const handleMouseMove = e => {
+			const deltaX = e.clientX - startX;
+			const deltaColumns = Math.round( deltaX / columnWidth );
+			const newColumns = Math.max( 1, Math.min( 12, startColumns + deltaColumns ) );
+
+			if ( newColumns !== startColumns ) {
+				update( 'columns', newColumns );
+			}
+		};
+
+		const handleMouseUp = () => {
+			setIsResizing( false );
+			document.removeEventListener( 'mousemove', handleMouseMove );
+			document.removeEventListener( 'mouseup', handleMouseUp );
+		};
+
+		document.addEventListener( 'mousemove', handleMouseMove );
+		document.addEventListener( 'mouseup', handleMouseUp );
+	}, [ field.columns, update ] );
+
 	if ( !field.type ) {
 		return;
 	}
@@ -73,6 +107,16 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				title={ __( 'Click to show field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
 				{ ( field._active || hover ) && <Toolbar field={ field } { ...fieldActions } /> }
+				{
+					hover && MbbApp.extensions.columns && (
+						<div
+							ref={ resizeRef }
+							className="mb-field-resize-handle"
+							onMouseDown={ handleResizeStart }
+							title={ __( 'Drag to resize field width', 'meta-box-builder' ) }
+						/>
+					)
+				}
 				<Base field={ field } { ...fieldActions } updateField={ update }>
 					<Suspense fallback={ null }>
 						<FieldType field={ field } parent={ parent } />
