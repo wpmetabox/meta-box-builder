@@ -1,0 +1,12 @@
+html {
+	scrollbar-width: thin;
+}
+
+[contenteditable] {
+	cursor: text;
+	display: inline-block;
+
+	&:focus {
+		outline: none;
+	}
+}

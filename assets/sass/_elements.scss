@@ -1,53 +1,25 @@
 & {
 	margin-top: 24px;
+
+	&.mb {
+		margin-top: 0;
+	}
 }
 
 label {
 	cursor: pointer;
 }
 
-// Admin color schemes.
-.admin-color-blue {
-	--color-primary: #e1a948;
-}
-
-.admin-color-coffee {
-	--color-primary: #c7a589;
-}
-
-.admin-color-ectoplasm {
-	--color-primary: #a3b745;
-}
-
-.admin-color-light {
-	--color-primary: #04a4cc;
-}
-
-.admin-color-midnight {
-	--color-primary: #e14d43;
-}
-
-.admin-color-modern {
-	--color-primary: #3858e9;
-}
-
-.admin-color-ocean {
-	--color-primary: #9ebaa0;
-}
-
-.admin-color-sunrise {
-	--color-primary: #dd823b;
-}
-
 h3 {
 	margin-top: 32px;
 }
 
-input[type="text"],
-input[type="search"],
-input[type="number"],
-textarea,
-select {
+// Set width 100% for inputs not inside Meta Box field preview
+input[type="text"]:not(.rwmb-input input),
+input[type="search"]:not(.rwmb-input input),
+input[type="number"]:not(.rwmb-input input),
+textarea:not(.rwmb-input textarea),
+select:not(.rwmb-input select) {
 	width: 100%;
 	max-width: none;
 }
@@ -57,7 +29,7 @@ input[type=search] {
 	outline-offset: -2px;
 }
 
-svg {
+.mb-main svg {
 	width: 16px;
 	height: 16px;
 	fill: var(--color-gray);
@@ -68,6 +40,11 @@ svg {
 	width: 16px;
 	height: 16px;
 	color: var(--color-gray);
+}
+
+// Block editor components
+.components-tooltip {
+	max-width: 400px;
 }
 
 // Visibility.
@@ -95,31 +72,6 @@ svg {
 	min-width: 255px;
 }
 
-// Collapsible panel
-&-collapsible {
-	&__header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		background: #fff;
-	}
-
-	&__body {
-		overflow-y: hidden;
-		max-height: 0;
-		transition: all 0.2s ease;
-		padding-inline: 36px;
-		background: #fff;
-	}
-
-	&--expanded {
-		>.og-collapsible__body {
-			max-height: 999999px;
-			padding-block: 18px;
-		}
-	}
-}
-
 // Tooltip
 &-tooltip-icon {
 
@@ -142,73 +94,8 @@ svg {
 	}
 }
 
-// React tabs.
-.react-tabs {
-	background: #fff;
-	border: var(--border);
-	position: relative;
-
-	&__tab-list {
-		border-bottom: var(--border);
-		margin: 0;
-		display: flex;
-		align-items: center;
-
-		.button {
-			margin-left: auto;
-			margin-right: 12px;
-			box-shadow: none;
-		}
-	}
-
-	&__tab {
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		box-sizing: border-box;
-		height: 48px;
-		line-height: 42px;
-		padding: 4px 12px;
-		margin-bottom: 0;
-		transition: box-shadow 0.1s linear;
-
-		&--selected {
-			box-shadow: inset 0 0 0 1.5px transparent,
-				inset 0 -4px 0 0 var(--color-primary);
-			color: var(--color-primary);
-		}
-
-		&:hover {
-			color: var(--color-primary);
-		}
-	}
-
-	&__tab-panel {
-		display: none;
-		max-width: none;
-
-		&--selected {
-			display: block;
-		}
-	}
-}
-
-.og-tabs--main .react-tabs__tab {
-	font-weight: 600;
-
-	svg {
-		padding: 4px;
-	}
-}
-
 // React codemirror.
 .react-codemirror2 {
-	border: var(--border);
-	margin-bottom: 12px;
+	border: var(--border-lighter);
 	font-size: 12px;
-}
-
-// Settings tab.
-&-tab-panel--settings {
-	padding: 12px;
 }

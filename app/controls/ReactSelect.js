@@ -10,10 +10,12 @@ const ReactSelect = ( {
 	keyValue,
 	required,
 	dependency,
+	name,
 
 	wrapper = true, // Whether to wrap in DivRow.
 	options,
 	defaultValue,
+	updateField,
 	...rest
 } ) => {
 	if ( !Array.isArray( options ) ) {
@@ -28,12 +30,15 @@ const ReactSelect = ( {
 		newValue = newValue.map( value => options.find( item => item.value === value ) );
 	}
 
+	const handleChange = items => updateField( name, items ? items.map( item => item.value ) : [] );
+
 	const select = <Select
 		className="react-select"
 		classNamePrefix="react-select"
 		isMulti
 		options={ options }
 		defaultValue={ newValue }
+		onChange={ handleChange }
 		{ ...rest }
 	/>;
 

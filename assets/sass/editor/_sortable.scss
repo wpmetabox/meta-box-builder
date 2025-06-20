@@ -1,0 +1,6 @@
+.sortable-chosen,
+.sortable-ghost {
+	z-index: 3; // Make the field on top of other fields when hover
+	outline: 1px solid var(--color-primary);
+	background: var(--color-lightest);
+}

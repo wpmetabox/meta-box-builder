@@ -1,42 +1,95 @@
 import { __ } from "@wordpress/i18n";
-import useObjectType from "../hooks/useObjectType";
+import useAllFields from "../hooks/useAllFields";
+import useSettings from "../hooks/useSettings";
 import DivRow from './DivRow';
-import useFieldIds from '../hooks/useFieldIds';
 import FieldInserter from './FieldInserter';
 
-const AdminColumnsPosition = ( { name, componentId, defaultValue, ...rest } ) => {
-	const objectType = useObjectType( state => state.type );
+const AdminColumnsPosition = ( { componentId, defaultValue, updateField, ...rest } ) => {
+	const { getObjectType } = useSettings();
+	const objectType = getObjectType();
+
 	const defaultColumns = {
 		term: 'name',
 		user: 'username'
-	}
+	};
 	const defaultColumn = defaultColumns[ objectType ] || 'title';
 
-	const ids = useFieldIds( state => state.ids );
-	const fields = [ ...objectTypeFields( objectType ) , ...Array.from( new Set( Object.values( ids ) ) ) ];
+	// Select only text and select fields.
+	let fields = useAllFields()
+		.filter( field => [ 'text', 'select' ].includes( field.type ) )
+		.map( field => [ field.id, `${ field.name } (${ field.id })` ] );
+
+	fields = [ ...objectTypeFields( objectType ), ...fields ];
+
+	const handleChangeType = e => updateField( 'admin_columns.position.type', e.target.value );
+	const handleChangeColumn = ( inputRef, value ) => updateField( 'admin_columns.position.column', value );
+	const handleSelectColumn = ( inputRef, value ) => {
+		inputRef.current.value = value;
+		updateField( 'admin_columns.position.column', value );
+	};
+
+	let type;
+	let column;
+	if ( typeof defaultValue === 'string' ) {
+		const parts = defaultValue.split( ' ' );
+		type = parts[ 0 ] || 'after';
+		column = parts[ 1 ] || defaultColumn;
+	} else {
+		type = defaultValue.type || 'after';
+		column = defaultValue.column || defaultColumn;
+	}
 
 	return (
 		<DivRow { ...rest }>
-			<select name={ `${ name }[type]` } defaultValue={ defaultValue.type || 'after' }>
+			<select defaultValue={ type } onChange={ handleChangeType }>
 				<option value="after">{ __( 'After', 'meta-box-builder' ) }</option>
 				<option value="before">{ __( 'Before', 'meta-box-builder' ) }</option>
 				<option value="replace">{ __( 'Replace', 'meta-box-builder' ) }</option>
 			</select>
-			<FieldInserter id={ componentId } name={ `${ name }[column]` } defaultValue={ defaultValue.column || defaultColumn } items={ fields } isID = { true } exclude={ objectTypeFields( objectType ) } />
+			<FieldInserter
+				id={ componentId }
+				defaultValue={ column }
+				items={ fields }
+				isID={ true }
+				exclude={ objectTypeFields( objectType ) }
+				onChange={ handleChangeColumn }
+				onSelect={ handleSelectColumn }
+			/>
 		</DivRow>
 	);
 };
 
-const objectTypeFields = ( { objectType } ) => {
+const objectTypeFields = objectType => {
 	if ( objectType === 'term' ) {
-		return [ 'cb, name, description, slug, count' ];
+		return [
+			[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
+			[ 'name', __( 'Name', 'meta-box-builder' ) ],
+			[ 'description', __( 'Description', 'meta-box-builder' ) ],
+			[ 'slug', __( 'Slug', 'meta-box-builder' ) ],
+			[ 'count', __( 'Count', 'meta-box-builder' ) ],
+		];
 	}
 
 	if ( objectType === 'user' ) {
-		return [ 'cb, username, name, email, role, posts' ];
+		return [
+			[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
+			[ 'username', __( 'Username', 'meta-box-builder' ) ],
+			[ 'name', __( 'Name', 'meta-box-builder' ) ],
+			[ 'email', __( 'Email', 'meta-box-builder' ) ],
+			[ 'role', __( 'Role', 'meta-box-builder' ) ],
+			[ 'posts', __( 'Posts', 'meta-box-builder' ) ],
+		];
 	}
 
-	return [ 'cb', 'title', 'author', 'categories', 'tags', 'comments', 'date' ];
+	return [
+		[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
+		[ 'title', __( 'Title', 'meta-box-builder' ) ],
+		[ 'author', __( 'Author', 'meta-box-builder' ) ],
+		[ 'categories', __( 'Categories', 'meta-box-builder' ) ],
+		[ 'tags', __( 'Tags', 'meta-box-builder' ) ],
+		[ 'comments', __( 'Comments', 'meta-box-builder' ) ],
+		[ 'date', __( 'Date', 'meta-box-builder' ) ],
+	];
 };
 
 export default AdminColumnsPosition;
