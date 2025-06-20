@@ -1,4 +1,4 @@
-import { lazy, memo, Suspense } from "@wordpress/element";
+import { lazy, memo, Suspense, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
@@ -13,6 +13,7 @@ import Toolbar from "./Toolbar";
 const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.target, '.mb-context-menu,.mb-toolbar' );
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
+	const [ hover, setHover ] = useState( false );
 	const openContextMenu = useContextMenu( state => state.openContextMenu );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const allFields = useAllFields();
@@ -42,6 +43,9 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	const handleContextMenu = e => openContextMenu( e, field, fieldActions );
 
+	const handleMouseEnter = () => setHover( true );
+	const handleMouseLeave = () => setHover( false );
+
 	if ( !field.type ) {
 		return;
 	}
@@ -64,9 +68,11 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				id={ `mb-field-${ field._id }` }
 				onClick={ toggleSettings }
 				onContextMenu={ handleContextMenu }
-				title={ __( 'Click to toggle field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
+				onMouseEnter={ handleMouseEnter }
+				onMouseLeave={ handleMouseLeave }
+				title={ __( 'Click to show field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
-				{ field._active && <Toolbar field={ field } { ...fieldActions } /> }
+				{ ( field._active || hover ) && <Toolbar field={ field } { ...fieldActions } /> }
 				<Base field={ field } { ...fieldActions } updateField={ update }>
 					<Suspense fallback={ null }>
 						<FieldType field={ field } parent={ parent } />

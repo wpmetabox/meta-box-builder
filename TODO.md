@@ -4,13 +4,11 @@
 ## UX
 - Double click Cloneable button should close the clone settings dropdown
 - Drag to resize columns?
-- Hover to show toolbar
 - Hover to show resize handle to change column (similar to Beaver Builder)
 
 ## Improvements
 - Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
 - Remove `custom_table` key in local JSON if not used
-- Add `group` and `tab` to the free version, but do not allow to select these field types
 
 - Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 - Thay đổi field type

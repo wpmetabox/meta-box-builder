@@ -9,17 +9,17 @@
 		height: 48px;
 		box-sizing: border-box;
 		border-bottom: var(--border);
+
+		.components-button:hover {
+			color: inherit;
+
+			svg {
+				fill: currentColor;
+			}
+		}
 	}
 
 	&__title {
 		margin-right: auto;
-	}
-
-	.components-button:hover {
-		color: inherit;
-
-		svg {
-			fill: currentColor;
-		}
 	}
 }
