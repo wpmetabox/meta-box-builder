@@ -6,7 +6,6 @@
 
 ## Improvements
 - Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
-- Remove `custom_table` key in local JSON if not used
 
 - Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 - Thay đổi field type
