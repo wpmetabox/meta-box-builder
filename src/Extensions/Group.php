@@ -6,9 +6,6 @@ use MBB\Helpers\Data;
 
 class Group {
 	public function __construct() {
-		if ( ! Data::is_extension_active( 'meta-box-group' ) ) {
-			return;
-		}
 		add_filter( 'mbb_field_types', [ $this, 'add_field_type' ] );
 	}
 
@@ -16,6 +13,7 @@ class Group {
 		$field_types['group'] = [
 			'title'    => __( 'Group', 'meta-box-builder' ),
 			'category' => 'layout',
+			'disabled' => ! Data::is_extension_active( 'meta-box-group' ),
 			'controls' => [
 				'name',
 				'id',
