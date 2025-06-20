@@ -21,11 +21,13 @@ const useSettings = create( ( set, get ) => ( {
 	getPrefix: () => get().getSetting( 'prefix', '' ),
 	updatePrefix: prefix => get().updateSetting( 'prefix', prefix ),
 
-	getObjectType: () => {
-		let objectType = get().getSetting( 'object_type', 'post' );
+	getObjectType: () => get().getSetting( 'object_type', 'post' ),
+
+	validateAndUpdateObjectType: () => {
+		const objectType = get().getSetting( 'object_type', 'post' );
 		let newObjectType = objectType;
 
-		if ( objectType === 'block' && !MbbApp.extensions.block ) {
+		if ( objectType === 'block' && !MbbApp.extensions.blocks ) {
 			newObjectType = 'post';
 		}
 		if ( objectType === 'term' && !MbbApp.extensions.termMeta ) {

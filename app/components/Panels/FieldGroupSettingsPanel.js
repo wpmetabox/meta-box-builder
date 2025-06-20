@@ -1,4 +1,5 @@
 import { Panel, PanelRow } from '@wordpress/components';
+import { useEffect } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import useSettings from '../../hooks/useSettings';
 import PersistentPanelBody from '../PersistentPanelBody';
@@ -17,8 +18,16 @@ import Tabs from './FieldGroupSettings/Tabs';
 import Translation from './FieldGroupSettings/Translation';
 
 const FieldGroupSettingsPanel = () => {
-	const getObjectType = useSettings( state => state.getObjectType );
+	const { getObjectType, validateAndUpdateObjectType } = useSettings( state => ( {
+		getObjectType: state.getObjectType,
+		validateAndUpdateObjectType: state.validateAndUpdateObjectType,
+	} ) );
 	const objectType = getObjectType();
+
+	// Validate and update object type after component mount to avoid setState during render
+	useEffect( () => {
+		validateAndUpdateObjectType();
+	}, [ objectType ] );
 
 	return (
 		<Panel header={ __( 'Edit field group settings', 'meta-box-builder' ) } className="mb-panel mb-panel--field-group-settings">
