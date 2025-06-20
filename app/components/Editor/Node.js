@@ -124,7 +124,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				}
 				<Base field={ field } { ...fieldActions } updateField={ update }>
 					<Suspense fallback={ null }>
-						<FieldType field={ field } parent={ parent } />
+						<FieldType field={ field } parent={ parent } updateField={ update } />
 					</Suspense>
 				</Base>
 				<Field field={ field } parent={ parent } updateField={ update } />
