@@ -124,6 +124,7 @@
 		left: var(--nav-width);
 		right: 0;
 		overflow-y: auto;
+		scrollbar-width: thin;
 
 		[data-nav-panel=""] & {
 			left: 0;
@@ -162,6 +163,7 @@
 		left: 0;
 		width: var(--nav-width);
 		overflow-y: auto;
+		scrollbar-width: thin;
 	}
 }
 
