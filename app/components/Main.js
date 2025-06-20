@@ -17,7 +17,7 @@ const Main = () => (
 
 const MainInner = ( { fields, php, theme_code } ) => {
 	const [ area, setArea ] = useState( 'fields' );
-	const { setNavPanel } = useNavPanel();
+	const { navPanel, setNavPanel } = useNavPanel();
 
 	const titles = {
 		fields: __( 'Fields', 'meta-box-builder' ),
@@ -38,7 +38,7 @@ const MainInner = ( { fields, php, theme_code } ) => {
 
 	const switchArea = area => () => {
 		setArea( area );
-		if ( [ 'php', 'theme_code' ].includes( area ) ) {
+		if ( [ 'php', 'theme_code' ].includes( area ) && navPanel === 'field-settings' ) {
 			setNavPanel( '' );
 		}
 	};
