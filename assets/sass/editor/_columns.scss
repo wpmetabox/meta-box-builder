@@ -10,6 +10,7 @@
 }
 
 .mb-field-wrapper--columns {
+
 	.rwmb-label,
 	.rwmb-label~.rwmb-input {
 		display: block;
@@ -25,7 +26,7 @@
 		display: block;
 	}
 
-	.mb-field--group > .rwmb-field > .rwmb-label {
+	.mb-field--group>.rwmb-field>.rwmb-label {
 		padding-block: 0;
 	}
 }
@@ -41,43 +42,12 @@
 	top: 50%;
 	transform: translateY(-50%);
 	width: 8px;
-	height: 20px;
-	background: #007cba;
-	border-radius: 4px;
+	height: 24px;
+	border-radius: 8px;
 	cursor: col-resize;
-	z-index: 10;
-	opacity: 0.8;
-	transition: opacity 0.2s ease;
-
-	&:hover {
-		opacity: 1;
-		background: #005a87;
-	}
-
-	&::before {
-		content: '';
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
-		width: 2px;
-		height: 12px;
-		background: #fff;
-		border-radius: 1px;
-	}
-
-	&::after {
-		content: '';
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
-		width: 2px;
-		height: 12px;
-		background: #fff;
-		border-radius: 1px;
-		margin-left: 2px;
-	}
+	border: 1px solid var(--outline);
+	background: #fff;
+	box-sizing: border-box;
 }
 
 .mb-field-wrapper--columns-1 {

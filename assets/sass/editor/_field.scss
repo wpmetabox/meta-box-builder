@@ -6,14 +6,14 @@
 // Basic style
 .mb-field {
 	--spacing: 24px;
-
+	--outline: var(--color-light);
 	border-bottom: none;
 	padding: var(--spacing);
 	position: relative;
 	cursor: grab;
 
 	&--hover {
-		outline: 1px solid rgba(0, 0, 0, .1);
+		outline: 1px solid var(--outline);
 		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
 	}
 
@@ -24,6 +24,7 @@
 	}
 
 	&--active {
+		--outline: var(--color-primary);
 		outline: 1px solid var(--color-primary); // Override the outline when hovering above
 		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
 	}

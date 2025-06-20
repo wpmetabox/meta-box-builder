@@ -3,8 +3,6 @@
 
 ## UX
 - Double click Cloneable button should close the clone settings dropdown
-- Drag to resize columns?
-- Hover to show resize handle to change column (similar to Beaver Builder)
 
 ## Improvements
 - Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`

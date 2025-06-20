@@ -90,6 +90,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
 	const hovering = hover || resizing;
+	const showActions = field._active || hovering;
 
 	return (
 		<div className={ `
@@ -111,9 +112,9 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				onMouseLeave={ handleMouseLeave }
 				title={ __( 'Click to show field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
-				{ ( field._active || hovering ) && <Toolbar field={ field } { ...fieldActions } /> }
+				{ showActions && <Toolbar field={ field } { ...fieldActions } /> }
 				{
-					MbbApp.extensions.columns && hovering && (
+					MbbApp.extensions.columns && showActions && (
 						<div
 							className="mb-field-resize-handle"
 							onMouseDown={ handleResizeStart }
