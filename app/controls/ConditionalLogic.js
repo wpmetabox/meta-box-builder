@@ -11,11 +11,12 @@ const ConditionalLogic = ( { defaultValue, updateField } ) => {
 
 	const addRule = () => {
 		const newRule = { name: '', operator: '=', value: '', id: uniqid() };
+		updateField( `conditional_logic.when.${ newRule.id }`, newRule );
 
-		updateField( 'conditional_logic.when', {
-			...rules,
-			[ newRule.id ]: newRule,
-		} );
+		// Make sure setting.type is always set.
+		if ( setting.type === undefined ) {
+			updateField( 'conditional_logic.type', 'visible' );
+		}
 	};
 
 	const removeRule = id => {
@@ -58,11 +59,11 @@ const Intro = ( { setting, updateField } ) => {
 			/>
 			{ __( 'when', 'meta-box-builder' ) }
 			<SelectControl
-				value={ setting.relation || 'or' }
+				value={ setting.relation || 'and' }
 				onChange={ update( 'relation' ) }
 				options={ [
-					{ label: __( 'any', 'meta-box-builder' ), value: 'or' },
 					{ label: __( 'all', 'meta-box-builder' ), value: 'and' },
+					{ label: __( 'any', 'meta-box-builder' ), value: 'or' },
 				] }
 				__nextHasNoMarginBottom
 			/>

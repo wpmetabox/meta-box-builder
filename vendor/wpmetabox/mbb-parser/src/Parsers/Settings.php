@@ -73,11 +73,13 @@ class Settings extends Base {
 			}
 			$rules[ $rule['name'] ] = $value;
 		}
-		$type = $data['type'];
+		$type     = $data['type'];
+		$relation = isset( $data['relation'] ) ? strtoupper( $data['relation'] ) : 'OR';
 
-		$this->$type = array_merge( [
-			'relation' => $data['relation'],
-		], $rules );
+		$this->$type = $rules;
+		if ( 'AND' === $relation ) {
+			$this->$type = array_merge( $this->$type, [ 'relation' => 'AND' ] );
+		}
 
 		return $this;
 	}

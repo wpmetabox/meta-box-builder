@@ -13,8 +13,12 @@ const ShowHide = () => {
 
 	const addRule = () => {
 		const newRule = { name: 'template', value: '', id: uniqid() };
-		const newRules = { ...rules, [ newRule.id ]: newRule };
-		updateSetting( 'show_hide.rules', newRules );
+		updateSetting( `show_hide.rules.${ newRule.id }`, newRule );
+
+		// Make sure setting.type is always set.
+		if ( setting.type === undefined ) {
+			updateSetting( 'show_hide.type', 'show' );
+		}
 	};
 
 	const removeRule = id => {
