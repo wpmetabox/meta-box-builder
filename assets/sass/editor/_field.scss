@@ -49,10 +49,18 @@
 	}
 
 	// Shift the inputs to the left make them vertically aligned with other fields.
-	// - Not cloneable groups
-	// - Cloneable & non-collapsible groups
-	>.rwmb-field > .rwmb-input:not(:has(>.rwmb-clone)),
-	>.rwmb-field:not(.rwmb-group-collapsible) > .rwmb-input > .rwmb-clone {
+	// - Non-collapsible groups
+	// - Collapsible, non-cloneable, has-label groups
+	// When shifting, if:
+	// - The group is cloneable, shift the .rwmb-clone
+	// - The group is not cloneable, shift the .rwmb-input
+
+	// Non-collapsible, cloneable groups
+	>.rwmb-field:not(.rwmb-group-collapsible)>.rwmb-input>.rwmb-clone,
+	// Non-collapsible, non-cloneable groups
+	>.rwmb-field:not(.rwmb-group-collapsible)>.rwmb-input:not(:has(>.rwmb-clone)),
+	// Collapsible, non-cloneable, has-label groups
+	>.rwmb-field.rwmb-group-collapsible:has(>.rwmb-label)>.rwmb-input:not(:has(>.rwmb-clone)) {
 		margin-left: calc(0px - var(--spacing));
 	}
 
