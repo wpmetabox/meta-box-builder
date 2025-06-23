@@ -22,6 +22,9 @@ class Edit extends BaseEditPage {
 	 * @return void
 	 */
 	public function admin_head(): void {
+		if ( get_current_screen()->id !== $this->post_type ) {
+			return;
+		}
 		?>
 		<style>
 			#post-body { display: none; }
