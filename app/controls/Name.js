@@ -21,7 +21,7 @@ const Name = ( { componentId, field, updateField, ...rest } ) => {
 	// Use ref to manually update its value, avoid React touching the input value directly to avoid cursor jumping to the start.
 	useEffect( () => {
 		if ( inputRef.current && inputRef.current.value !== field.name ) {
-			inputRef.current.value = field.name;
+			inputRef.current.value = field.name || '';
 		}
 	}, [ field.name ] );
 
@@ -31,7 +31,7 @@ const Name = ( { componentId, field, updateField, ...rest } ) => {
 				ref={ inputRef }
 				type="text"
 				id={ componentId }
-				defaultValue={ field.name }
+				defaultValue={ field.name || '' }
 				onBlur={ stopGeneratingId }
 				onChange={ handleChange }
 			/>

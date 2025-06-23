@@ -35,7 +35,7 @@ const FieldLabel = ( { field, updateField } ) => {
 	// Don't use {field.name} because it's directly controlled by React's rendering to avoid cursor jumping to the start.
 	useEffect( () => {
 		if ( spanRef.current && spanRef.current.textContent !== field.name ) {
-			spanRef.current.textContent = field.name;
+			spanRef.current.textContent = field.name || '';
 		}
 	}, [ field.name ] );
 
