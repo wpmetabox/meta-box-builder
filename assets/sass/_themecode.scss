@@ -1,15 +1,11 @@
 &-theme-code {
-	#poststuff & .inside {
-		padding: 0;
-		margin: 0;
-	}
 
 	&__intro,
 	&__none {
 		padding-inline: 12px;
 	}
 
-	&__intro > div,
+	&__intro>div,
 	&__none {
 		margin: 1em 0;
 	}
@@ -36,7 +32,6 @@
 
 	&__field {
 		font-weight: 500;
-		color: var(--color-primary);
 		border-bottom: var(--border-lighter);
 		display: block;
 		cursor: pointer;
@@ -48,11 +43,13 @@
 	}
 
 	&__body {
-		padding: 12px;
-
 		.og-result__body {
 			position: sticky;
-			top: 48px;
+			top: -48px;
 		}
+	}
+
+	.react-codemirror2 {
+		border-width: 0 0 1px;
 	}
 }

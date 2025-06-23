@@ -1,19 +1,50 @@
-@import "variables";
-@import "layout";
-@import "license-warning";
-@import "gutenberg";
+@use "variables";
+@use "layout";
+@use "box";
+@use "base/elements";
+@use "base/wordpress";
+@use "base/react-select";
+
+@use "notification";
+
+@use "php";
+
+// Editor
+@use "editor/empty";
+@use "editor/meta-box";
+@use "editor/field";
+@use "editor/context-menu";
+@use "editor/toolbar";
+@use "editor/sortable";
+@use "editor/add-button";
+@use "editor/columns";
+@use "panels/structure";
 
 .og {
-  @import "elements";
-  @import "fields";
-  @import "group";
-  @import "toggle";
-  @import "inserter";
-  @import "settings";
-  @import "themecode";
-  @import "result";
-  @import "field-inserter";
-  @import "text-limit";
+	@import "elements";
+	@import "fields";
+	@import "group";
+	@import "toggle";
+	@import "settings";
+	@import "themecode";
+	@import "result";
+	@import "field-inserter";
+	@import "input-group";
+	@import "toggle-group";
+	@import "status";
+
+	@import "field-settings/icon";
+	@import "field-settings/header";
+	@import "field-settings/sub-settings";
+	@import "field-settings/select-with-input";
+
+	@import "panels/base";
+	@import "panels/location";
+	@import "panels/include-exclude";
+	@import "panels/field-settings";
+	@import "panels/attribute";
+
+	@import "panels/add-field";
 }
 
 @import "translation-modal";

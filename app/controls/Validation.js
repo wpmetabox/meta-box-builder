@@ -1,37 +1,54 @@
-import { Dashicon } from "@wordpress/components";
-import { useState } from "@wordpress/element";
+import { Button } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
+import { maybeArrayToObject, uniqid } from '../functions';
 import DivRow from './DivRow';
-import { ensureArray, uniqid } from '/functions';
 
-const Validation = ( { defaultValue, name, ...rest } ) => {
-	const [ rules, setRules ] = useState( ensureArray( defaultValue ) );
-	const addRule = () => setRules( prev => [ ...prev, { name: 'required', value: '', message: '', id: uniqid() } ] );
-	const removeRule = id => setRules( prev => prev.filter( rule => rule.id !== id ) );
+const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
+	const rules = maybeArrayToObject( defaultValue, 'id' );
+
+	const addRule = () => {
+		const newRule = { name: 'required', value: true, message: '', id: uniqid() };
+		updateField( name, {
+			...rules,
+			[newRule.id]: newRule,
+		} );
+	};
+
+	const removeRule = id => {
+		const newRules = { ...rules };
+		delete newRules[id];
+		updateField( name, newRules );
+	};
 
 	return (
 		<DivRow className="og-include-exclude" { ...rest }>
 			{
-				rules.map( rule => <Rule
+				Object.values( rules ).map( rule => <Rule
 					key={ rule.id }
 					rule={ rule }
-					baseName={ `${ name }[${ rule.id }]` }
 					removeRule={ removeRule }
+					updateField={ updateField }
 				/> )
 			}
-			<button type="button" className="button" onClick={ addRule }>{ __( '+ Add Rule', 'meta-box-builder' ) }</button>
+			<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 		</DivRow>
 	);
 };
 
-const Rule = ( { rule, baseName, removeRule } ) => {
-	const [ name, setName ] = useState( rule.name );
-	const onChangeName = e => setName( e.target.value );
+const Rule = ( { rule, removeRule, updateField } ) => {
+	const update = key => e => updateField( `validation.${ rule.id }.${ key }`, e.target.value );
+	const updateName = e => {
+		updateField( `validation.${ rule.id }.name`, e.target.value );
+		if ( [ 'required', 'email', 'url', 'date', 'dateISO', 'number', 'digits', 'creditcard', 'phoneUS' ].includes( e.target.value ) ) {
+			updateField( `validation.${ rule.id }.value`, true );
+		} else {
+			updateField( `validation.${ rule.id }.value`, '' );
+		}
+	}
 
 	return (
-		<div className="og-include-exclude__rule og-attribute">
-			<input type="hidden" name={ `${ baseName }[id]` } defaultValue={ rule.id } />
-			<select name={ `${ baseName }[name]` } className="og-include-exclude__name" defaultValue={ rule.name } onChange={ onChangeName }>
+		<div className="og-include-exclude__rule">
+			<select className="og-include-exclude__name" defaultValue={ rule.name } onChange={ updateName }>
 				<option value="required">{ __( 'Required', 'meta-box-builder' ) }</option>
 				<option value="minlength">{ __( 'Min length', 'meta-box-builder' ) }</option>
 				<option value="maxlength">{ __( 'Max length', 'meta-box-builder' ) }</option>
@@ -54,19 +71,15 @@ const Rule = ( { rule, baseName, removeRule } ) => {
 				<option value="remote">{ __( 'Remote', 'meta-box-builder' ) }</option>
 			</select>
 			{
-				[ 'required', 'email', 'url', 'date', 'dateISO', 'number', 'digits', 'creditcard', 'phoneUS' ].includes( name ) &&
-				<input type="checkbox" style={ { display: 'none' } } defaultChecked defaultValue={ true } name={ `${ baseName }[value]` } />
+				[ 'minlength', 'maxlength', 'min', 'max', 'step', 'accept', 'extension', 'equalTo', 'remote' ].includes( rule.name ) &&
+				<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } onChange={ update( 'value' ) } />
 			}
 			{
-				[ 'minlength', 'maxlength', 'min', 'max', 'step', 'accept', 'extension', 'equalTo', 'remote' ].includes( name ) &&
-				<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } name={ `${ baseName }[value]` } />
+				[ 'rangelength', 'range' ].includes( rule.name ) &&
+				<input defaultValue={ rule.value } type="text" placeholder={ __( 'Ex. 2,6', 'meta-box-builder' ) } title={ __( 'Separate values by a comma', 'meta-box-builder' ) } onChange={ update( 'value' ) } />
 			}
-			{
-				[ 'rangelength', 'range' ].includes( name ) &&
-				<input defaultValue={ rule.value } type="text" placeholder={ __( 'Ex. 2,6', 'meta-box-builder' ) } title={ __( 'Separate values by a comma', 'meta-box-builder' ) } name={ `${ baseName }[value]` } />
-			}
-			<input defaultValue={ rule.message } type="text" placeholder={ __( 'Custom error message', 'meta-box-builder' ) } name={ `${ baseName }[message]` } />
-			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => removeRule( rule.id ) }><Dashicon icon="dismiss" /></button>
+			<input defaultValue={ rule.message } type="text" placeholder={ __( 'Custom error message', 'meta-box-builder' ) } onChange={ update( 'message' ) } />
+			<Button variant="link" isDestructive={ true } onClick={ () => removeRule( rule.id ) } text={ __( 'Remove', 'meta-box-builder' ) } />
 		</div>
 	);
 };
