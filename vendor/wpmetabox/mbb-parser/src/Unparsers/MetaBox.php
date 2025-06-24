@@ -1,7 +1,6 @@
 <?php
 namespace MBBParser\Unparsers;
 
-use MetaBox\Support\Arr;
 /**
  * This class is the inverse of the parser.
  * We convert the parsed data back to the format that can be saved to the database.
