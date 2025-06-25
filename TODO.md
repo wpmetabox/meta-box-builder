@@ -1,3 +1,15 @@
+## Settings page
+
+- Remove react-tabs
+- Apply the same layout as the app
+- Restyle it
+- Check if we need to ssave via ajax
+- Add built files when finish
+- Check:
+	- PHP code generator work properly
+	- Parse PHP code for registering to stored in the post meta is correct
+	- Registering settings page work properly
+
 ## Bugs
 - Fix translation is loaded by site language, which should be by user language
 
