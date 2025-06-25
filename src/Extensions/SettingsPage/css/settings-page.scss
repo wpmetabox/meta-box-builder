@@ -3,14 +3,31 @@
 @use "base/elements";
 @use "base/wordpress";
 
-@use "php";
-
 .og {
 	@import "elements";
 	@import "fields";
 	@import "toggle";
 	@import "result";
+	@import "toggle-group";
 	@import "field-inserter";
+
+	@import "field-settings/icon";
+
+	@import "panels/attribute";
+}
+
+.mb-box__body {
+	padding: 32px;
+}
+
+.og-field {
+	display: grid;
+	grid-template-columns: 180px 1fr;
+}
+
+.og-label {
+	text-transform: none;
+	font-size: 13px;
 }
 
 // Hide WordPress elements.
