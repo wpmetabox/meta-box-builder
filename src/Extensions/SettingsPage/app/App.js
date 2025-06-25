@@ -1,8 +1,7 @@
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+// import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import Content from './Content';
-import Result from '/components/Tabs/Result';
-const { render, useEffect } = wp.element;
-const { __ } = wp.i18n;
+// import Result from '/components/Tabs/Result';
+import { render, useEffect } from '@wordpress/element';
 
 const App = () => {
 	useEffect( () => {
@@ -21,6 +20,9 @@ const App = () => {
 			} );
 	} );
 
+	return <Content />;
+
+	/*
 	return (
 		<Tabs forceRenderTabPanel={ true }>
 			<TabList>
@@ -37,6 +39,7 @@ const App = () => {
 			</TabPanel>
 		</Tabs>
 	);
+	*/
 };
 
 render( <App />, document.getElementById( 'root' ) );

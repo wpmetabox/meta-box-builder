@@ -1,7 +1,7 @@
+import { Suspense } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { getControlParams } from '../../../../app/functions';
 import { useFetch } from '../../../../app/hooks/useFetch';
-import { getControlParams } from '/functions';
-const { Suspense, useEffect, useState } = wp.element;
-const { __ } = wp.i18n;
 
 const Content = () => {
 	const { data: controls } = useFetch( { api: 'settings-page-controls', defaultValue: [] } );

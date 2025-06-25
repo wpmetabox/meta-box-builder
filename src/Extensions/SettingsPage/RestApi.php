@@ -39,7 +39,7 @@ class RestApi extends Base {
 				],
 				'dependency' => 'menu_type:top',
 			], 'dashicons' ),
-			Control::Icon( 'icon_dashicons', [
+			Control::DashiconPicker( 'icon_dashicons', [
 				'label'      => __( 'Icon', 'meta-box-builder' ),
 				'dependency' => 'icon_type:dashicons',
 			], 'admin-generic' ),

@@ -52,5 +52,6 @@ const relationships = {
 	resolve,
 };
 
-module.exports = [ main ];
+module.exports = [ settingsPage ];
+// module.exports = [ main, settingsPage ];
 // module.exports = [ main, settingsPage, relationships ];
