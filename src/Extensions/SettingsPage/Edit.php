@@ -37,13 +37,27 @@ class Edit extends BaseEditPage {
 	}
 
 	public function enqueue() {
-		$url = MBB_URL . 'modules/settings-page/assets';
-
-		wp_enqueue_style( 'mb-settings-page-ui', "$url/settings-page.css", [ 'wp-components' ], MBB_VER );
+		wp_enqueue_style(
+			'mb-settings-page-app',
+			MBB_URL . 'src/Extensions/SettingsPage/css/settings-page.css',
+			[ 'wp-components', 'code-editor' ],
+			filemtime( MBB_DIR . 'src/Extensions/SettingsPage/css/settings-page.css' )
+		);
 		wp_enqueue_style( 'font-awesome', MBB_URL . 'assets/fontawesome/css/all.min.css', [], '6.6.0' );
 
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
-		wp_enqueue_script( 'mb-settings-page-ui', "$url/settings-page.js", [ 'jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard' ], MBB_VER, true );
+
+		$asset = require __DIR__ . "/build/settings-page.asset.php";
+
+		// Add extra JS libs for copy code to clipboard & block color picker.
+		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'code-editor' ] );
+		wp_enqueue_script(
+			'mb-settings-page-app',
+			MBB_URL . 'src/Extensions/SettingsPage/build/settings-page.js',
+			$asset['dependencies'],
+			$asset['version'],
+			true
+		);
 
 		$data = [
 			'settings'       => get_post_meta( get_the_ID(), 'settings', true ),
@@ -56,7 +70,7 @@ class Edit extends BaseEditPage {
 			'menu_parents'   => $this->get_menu_parents(),
 		];
 
-		wp_localize_script( 'mb-settings-page-ui', 'MbbApp', $data );
+		wp_localize_script( 'mb-settings-page-app', 'MbbApp', $data );
 	}
 
 	public function save( $post_id, $post ) {
