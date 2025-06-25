@@ -4,7 +4,7 @@ import { render, useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { category, code } from '@wordpress/icons';
 import Content from './Content';
-import Result from './Result';
+import PHP from './PHP';
 
 const App = () => {
 	const [ area, setArea ] = useState( 'settings' );
@@ -45,7 +45,7 @@ const App = () => {
 			</Flex>
 			<div className="mb-box__body">
 				{ area === 'settings' && <Content /> }
-				{ area === 'php' && <Result endPoint='settings-page-generate' /> }
+				{ area === 'php' && <PHP /> }
 			</div>
 		</div>
 	);

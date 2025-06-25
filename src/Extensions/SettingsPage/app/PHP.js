@@ -3,10 +3,14 @@ import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Input from '../../../../app/controls/Input';
+import { fetcher } from "../../../../app/hooks/useFetch";
+import useSettings from "./useSettings";
 
-const Result = ( { endPoint } ) => {
+const PHP = () => {
+	const { getSetting, updateSetting, settings } = useSettings();
+
 	const [ data, setData ] = useState( '' );
-	const [ isGenerating, setIsGenerating ] = useState( false );
+	const [ generating, setGenerating ] = useState( false );
 	const [ copied, setCopied ] = useState( false );
 
 	const copyRef = useCopyToClipboard( data, () => {
@@ -16,42 +20,41 @@ const Result = ( { endPoint } ) => {
 
 	const onClick = () => {
 		setData( '' );
-		setIsGenerating( true );
+		setGenerating( true );
 
-		/**
-		 * Get all form fields, including WordPress fields.
-		 * Remove WordPress nonce to have correct permission.
-		 */
-		const formData = new FormData( document.querySelector( '#post' ) );
-		formData.delete( '_wpnonce' );
-
-		fetch( `${ MbbApp.rest }/mbb/${ endPoint }`, {
+		fetcher( {
+			api: 'settings-page/generate',
+			params: {
+				post_title: document.querySelector( '#title' )?.value,
+				post_name: document.querySelector( '#post_name' )?.value,
+				settings
+			},
 			method: 'POST',
-			body: formData,
-			headers: { 'X-WP-Nonce': MbbApp.nonce }
-		} ).then( response => response.json() ).then( response => {
+		} ).then( response => {
 			setData( response );
-			setIsGenerating( false );
+			setGenerating( false );
 		} );
 	};
 
 	return (
 		<div className="mb-php">
 			<Input
-				name="settings[text_domain]"
+				name="text_domain"
 				label={ __( 'Text domain', 'meta-box-builder' ) }
 				tooltip={ __( 'Required for multilingual website. Used in the exported code only.', 'meta-box-builder' ) }
-				defaultValue='your-text-domain'
+				defaultValue={ getSetting( 'text_domain', 'your-text-domain' ) }
 				componentId="text-domain"
+				updateField={ updateSetting }
 			/>
 			<Input
-				name="settings[function_name]"
+				name="function_name"
 				label={ __( 'Function name', 'meta-box-builder' ) }
-				defaultValue='your_prefix_function_name'
+				defaultValue={ getSetting( 'function_name', 'your_prefix_function_name' ) }
 				componentId="function-name"
+				updateField={ updateSetting }
 			/>
-			<button type="button" className="button" onClick={ onClick } disabled={ isGenerating }>{ __( 'Generate', 'meta-box-builder' ) }</button>
-			{ isGenerating && <p>{ __( 'Generating code, please wait...', 'meta-box-builder' ) }</p> }
+			<button type="button" className="button" onClick={ onClick } disabled={ generating }>{ __( 'Generate', 'meta-box-builder' ) }</button>
+			{ generating && <p>{ __( 'Generating code, please wait...', 'meta-box-builder' ) }</p> }
 			{
 				data.length > 0 &&
 				<div className="og-result">
@@ -75,4 +78,4 @@ const Result = ( { endPoint } ) => {
 	);
 };
 
-export default Result;
+export default PHP;
