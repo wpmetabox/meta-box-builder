@@ -1,4 +1,4 @@
-import { useFetch } from '../../../app/hooks/useFetch';
+import { useFetch } from '../../../../app/hooks/useFetch';
 import { getControlParams } from '/functions';
 const { Suspense, useEffect, useState } = wp.element;
 const { __ } = wp.i18n;

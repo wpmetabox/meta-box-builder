@@ -31,9 +31,9 @@ const main = {
 // Settings page app.
 const settingsPage = {
 	...defaultConfig,
-	entry: './modules/settings-page/app/App.js',
+	entry: './src/Extensions/SettingsPage/app/App.js',
 	output: {
-		path: path.resolve( 'modules/settings-page/assets' ),
+		path: path.resolve( 'src/Extensions/SettingsPage/build' ),
 		filename: 'settings-page.js'
 	},
 	externals,
