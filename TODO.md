@@ -1,6 +1,5 @@
 ## Settings page
 
-- Make controlled input works
 - Apply the same layout as the app
 - Restyle it
 - Check if we need to ssave via ajax
