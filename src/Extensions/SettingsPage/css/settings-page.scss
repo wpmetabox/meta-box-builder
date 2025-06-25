@@ -1,4 +1,9 @@
-@import "variables";
+@use "variables";
+@use "box";
+@use "base/elements";
+@use "base/wordpress";
+
+@use "php";
 
 .og {
 	@import "elements";

@@ -1,9 +1,14 @@
 // import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { Button, Flex, Icon } from '@wordpress/components';
+import { render, useEffect, useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { category, code } from '@wordpress/icons';
 import Content from './Content';
-// import Result from '/components/Tabs/Result';
-import { render, useEffect } from '@wordpress/element';
+import Result from './Result';
 
 const App = () => {
+	const [ area, setArea ] = useState( 'settings' );
+
 	useEffect( () => {
 		// Hide option name by default.
 		jQuery( '.toggle_option_name' ).closest( '.rwmb-field' ).next().hide();
@@ -20,26 +25,30 @@ const App = () => {
 			} );
 	} );
 
-	return <Content />;
+	const titles = {
+		settings: __( 'Settings', 'meta-box-builder' ),
+		php: __( 'Get PHP Code', 'meta-box-builder' ),
+	};
 
-	/*
+	const icons = {
+		settings: category,
+		php: code,
+	};
+
 	return (
-		<Tabs forceRenderTabPanel={ true }>
-			<TabList>
-				<Tab>{ __( 'Settings', 'meta-box-builder' ) }</Tab>
-				<Tab className='button button-small'>
-					{ __( 'Get PHP Code', 'meta-box-builder' ) }
-				</Tab>
-			</TabList>
-			<TabPanel className='react-tabs__tab-panel og-tab-panel--settings'>
-				<Content />
-			</TabPanel>
-			<TabPanel className='react-tabs__tab-panel og-tab-panel--settings'>
-				<Result endPoint='settings-page-generate' />
-			</TabPanel>
-		</Tabs>
+		<div className="mb-box">
+			<Flex align="center" className="mb-box__header">
+				<Icon icon={ icons[ area ] } />
+				<span className="mb-box__title">{ titles[ area ] }</span>
+				<Button size="small" icon={ category } onClick={ () => setArea( 'settings' ) } label={ __( 'Show settings', 'meta-box-builder' ) } showTooltip={ true } />
+				<Button size="small" icon={ code } onClick={ () => setArea( 'php' ) } label={ __( 'Get PHP code to register the settings page', 'meta-box-builder' ) } showTooltip={ true } />
+			</Flex>
+			<div className="mb-box__body">
+				{ area === 'settings' && <Content /> }
+				{ area === 'php' && <Result endPoint='settings-page-generate' /> }
+			</div>
+		</div>
 	);
-	*/
 };
 
 render( <App />, document.getElementById( 'root' ) );

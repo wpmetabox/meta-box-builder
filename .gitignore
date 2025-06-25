@@ -5,3 +5,4 @@ node_modules
 *.LICENSE.txt
 
 src/Extensions/SettingsPage/build
+src/Extensions/SettingsPage/css/settings-page.css

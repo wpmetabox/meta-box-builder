@@ -4,6 +4,7 @@
     "css:main": "sass --no-source-map --style=compressed assets/sass/style.scss assets/css/style.css",
     "css:main:watch": "sass --no-source-map --style=compressed -w assets/sass/style.scss assets/css/style.css",
     "css:settings": "sass --no-source-map --load-path=assets/sass --style=compressed src/Extensions/SettingsPage/css/settings-page.scss src/Extensions/SettingsPage/css/settings-page.css",
+    "css:settings:watch": "sass --no-source-map --load-path=assets/sass --style=compressed -w src/Extensions/SettingsPage/css/settings-page.scss src/Extensions/SettingsPage/css/settings-page.css",
     "css:relationships": "sass --no-source-map --load-path=assets/sass --style=compressed modules/relationships/assets/relationships.scss modules/relationships/assets/relationships.css",
     "css": "npm run css:main && npm run css:settings && npm run css:relationships",
     "build:css": "npm run css:main",
