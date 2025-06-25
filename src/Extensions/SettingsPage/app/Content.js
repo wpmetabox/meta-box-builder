@@ -36,15 +36,6 @@ const Content = () => {
 				/>
 			}
 			{
-				getSetting( 'menu_type', 'top' ) === 'top' &&
-				<Input
-					name="submenu_title"
-					label={ __( 'Default first submenu title', 'meta-box-builder' ) }
-					defaultValue={ getSetting( 'submenu_title' ) }
-					updateField={ updateSetting }
-				/>
-			}
-			{
 				getSetting( 'menu_type', 'top' ) === 'submenu' &&
 				<MenuParent
 					name="parent"
@@ -84,7 +75,7 @@ const Content = () => {
 				<Input
 					name="icon_svg"
 					label={ __( 'Icon SVG', 'meta-box-builder' ) }
-					tooltip={ __( 'Must be in base64 encoded format', 'meta-box-builder' ) }
+					description={ __( 'Must be in base64 encoded format.', 'meta-box-builder' ) }
 					defaultValue={ getSetting( 'icon_svg' ) }
 					updateField={ updateSetting }
 				/>
@@ -103,12 +94,23 @@ const Content = () => {
 				<FontAwesome
 					name="icon_font_awesome"
 					label={ __( 'Icon', 'meta-box-builder' ) }
-					tooltip={ __( 'The icon to be used for the admin menu (FontAwesome)', 'meta-box-builder' ) }
 					description={ __( 'Enter <a target="_blank" href="https://fontawesome.com/search?o=r&m=free">FontAwesome</a> icon class here. Supports FontAwesome free version only.', 'meta-box-builder' ) }
 					defaultValue={ getSetting( 'icon_font_awesome' ) }
 					updateField={ updateSetting }
 				/>
 			}
+
+			{
+				getSetting( 'menu_type', 'top' ) === 'top' &&
+				<Input
+					name="submenu_title"
+					label={ __( 'Default first submenu title', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'submenu_title' ) }
+					updateField={ updateSetting }
+				/>
+			}
+
+			<hr />
 
 			{/* General Settings */ }
 			<Select
@@ -118,13 +120,9 @@ const Content = () => {
 				defaultValue={ getSetting( 'capability', 'edit_theme_options' ) }
 				updateField={ updateSetting }
 			/>
-			<Input
-				name="class"
-				label={ __( 'Custom CSS class', 'meta-box-builder' ) }
-				tooltip={ __( 'Custom CSS for the wrapper div', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'class' ) }
-				updateField={ updateSetting }
-			/>
+
+			<hr />
+
 			<Select
 				name="style"
 				label={ __( 'Style', 'meta-box-builder' ) }
@@ -161,6 +159,16 @@ const Content = () => {
 				updateField={ updateSetting }
 			/>
 
+			<Input
+				name="class"
+				label={ __( 'Custom CSS class', 'meta-box-builder' ) }
+				description={ __( 'Custom CSS for the wrapper div', 'meta-box-builder' ) }
+				defaultValue={ getSetting( 'class' ) }
+				updateField={ updateSetting }
+			/>
+
+			<hr />
+
 			{/* Submit and Messages */ }
 			<Input
 				name="submit_button"
@@ -171,7 +179,7 @@ const Content = () => {
 			<Input
 				name="message"
 				label={ __( 'Custom message', 'meta-box-builder' ) }
-				tooltip={ __( 'The custom message displayed when saving options', 'meta-box-builder' ) }
+				description={ __( 'The custom message displayed when saving options', 'meta-box-builder' ) }
 				defaultValue={ getSetting( 'message' ) }
 				updateField={ updateSetting }
 			/>
@@ -191,21 +199,21 @@ const Content = () => {
 			<Checkbox
 				name="customizer"
 				label={ __( 'Customizer', 'meta-box-builder' ) }
-				tooltip={ __( 'Show this settings page as a panel in the Customizer', 'meta-box-builder' ) }
+				description={ __( 'Show this settings page as a panel in the Customizer', 'meta-box-builder' ) }
 				defaultValue={ !!getSetting( 'customizer', false ) }
 				updateField={ updateSetting }
 			/>
 			<Checkbox
 				name="customizer_only"
 				label={ __( 'Customizer only', 'meta-box-builder' ) }
-				tooltip={ __( 'Show only in the Customizer, no admin settings page', 'meta-box-builder' ) }
+				description={ __( 'Show only in the Customizer, no admin settings page', 'meta-box-builder' ) }
 				defaultValue={ !!getSetting( 'customizer_only', false ) }
 				updateField={ updateSetting }
 			/>
 			<Checkbox
 				name="network"
 				label={ __( 'Network', 'meta-box-builder' ) }
-				tooltip={ __( 'Make the settings page network-wide (in multisite environment)', 'meta-box-builder' ) }
+				description={ __( 'Make the settings page network-wide (in multisite environment)', 'meta-box-builder' ) }
 				defaultValue={ !!getSetting( 'network', false ) }
 				updateField={ updateSetting }
 			/>
