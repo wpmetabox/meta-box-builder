@@ -10,7 +10,6 @@ class Manager {
 		}
 
 		new Register();
-		new RestApi();
 		new Generator();
 
 		if ( is_admin() ) {

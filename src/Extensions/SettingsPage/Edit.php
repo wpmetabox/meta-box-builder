@@ -68,6 +68,7 @@ class Edit extends BaseEditPage {
 
 			'menu_positions' => $this->get_menu_positions(),
 			'menu_parents'   => $this->get_menu_parents(),
+			'capabilities'   => $this->get_capabilities(),
 		];
 
 		wp_localize_script( 'mb-settings-page-app', 'MbbApp', $data );
@@ -112,5 +113,18 @@ class Edit extends BaseEditPage {
 
 	private function strip_span( $html ) {
 		return preg_replace( '@<span .*>.*</span>@si', '', $html );
+	}
+
+	private function get_capabilities() {
+		$caps  = [];
+		$roles = wp_roles();
+		foreach ( $roles->roles as $role ) {
+			$caps = array_merge( $caps, array_keys( $role['capabilities'] ) );
+		}
+
+		$caps = array_unique( $caps );
+		sort( $caps );
+
+		return array_combine( $caps, $caps );
 	}
 }
