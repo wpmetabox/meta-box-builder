@@ -1,5 +1,5 @@
 <?php
-namespace MBB\SettingsPage;
+namespace MBB\Extensions\SettingsPage;
 
 use MBBParser\SettingsTrait;
 use Riimu\Kit\PHPEncoder\PHPEncoder;

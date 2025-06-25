@@ -42,7 +42,7 @@ new Extensions\Columns();
 new Extensions\ConditionalLogic();
 new Extensions\Group();
 new Extensions\Relationships();
-new Extensions\SettingsPage();
+new Extensions\SettingsPage\Manager();
 new Extensions\Tabs();
 new Extensions\Tooltip();
 new Extensions\RestApi();

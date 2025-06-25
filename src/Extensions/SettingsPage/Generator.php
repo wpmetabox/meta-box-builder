@@ -1,5 +1,5 @@
 <?php
-namespace MBB\SettingsPage;
+namespace MBB\Extensions\SettingsPage;
 
 use WP_REST_Server;
 use WP_REST_Request;

@@ -1,5 +1,5 @@
 <?php
-namespace MBB\SettingsPage;
+namespace MBB\Extensions\SettingsPage;
 
 use MBB\RestApi\Base;
 use MBB\Control;

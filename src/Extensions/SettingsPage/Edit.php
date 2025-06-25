@@ -1,5 +1,5 @@
 <?php
-namespace MBB\SettingsPage;
+namespace MBB\Extensions\SettingsPage;
 
 use MBB\BaseEditPage;
 use MetaBox\Support\Data;
