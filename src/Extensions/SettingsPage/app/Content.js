@@ -15,7 +15,7 @@ const Content = () => {
 
 	return (
 		<>
-			{/* Menu */}
+			{/* Menu */ }
 			<ToggleGroup
 				name="menu_type"
 				label={ __( 'Menu type', 'meta-box-builder' ) }
@@ -26,75 +26,91 @@ const Content = () => {
 				defaultValue={ getSetting( 'menu_type', 'top' ) }
 				updateField={ updateSetting }
 			/>
-			<MenuPosition
-				name="position"
-				label={ __( 'Show menu after', 'meta-box-builder' ) }
-				dependency={ 'menu_type:top' }
-				defaultValue={ getSetting( 'position', 25 ) }
-				updateField={ updateSetting }
-			/>
-			<Input
-				name="submenu_title"
-				label={ __( 'Default first submenu title', 'meta-box-builder' ) }
-				dependency={ 'menu_type:top' }
-				defaultValue={ getSetting( 'submenu_title' ) }
-				updateField={ updateSetting }
-			/>
-			<MenuParent
-				name="parent"
-				label={ __( 'Parent menu', 'meta-box-builder' ) }
-				dependency={ 'menu_type:submenu' }
-				defaultValue={ getSetting( 'parent', 'index.php' ) }
-				updateField={ updateSetting }
-			/>
+			{
+				getSetting( 'menu_type', 'top' ) === 'top' &&
+				<MenuPosition
+					name="position"
+					label={ __( 'Show menu after', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'position', 25 ) }
+					updateField={ updateSetting }
+				/>
+			}
+			{
+				getSetting( 'menu_type', 'top' ) === 'top' &&
+				<Input
+					name="submenu_title"
+					label={ __( 'Default first submenu title', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'submenu_title' ) }
+					updateField={ updateSetting }
+				/>
+			}
+			{
+				getSetting( 'menu_type', 'top' ) === 'submenu' &&
+				<MenuParent
+					name="parent"
+					label={ __( 'Parent menu', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'parent', 'index.php' ) }
+					updateField={ updateSetting }
+				/>
+			}
 
-			{/* Icon */}
-			<Select
-				name="icon_type"
-				label={ __( 'Icon type', 'meta-box-builder' ) }
-				options={ {
-					dashicons: __( 'Dashicons', 'meta-box-builder' ),
-					font_awesome: __( 'Font Awesome', 'meta-box-builder' ),
-					svg: __( 'SVG', 'meta-box-builder' ),
-					custom: __( 'Custom URL', 'meta-box-builder' ),
-				} }
-				dependency={ 'menu_type:top' }
-				defaultValue={ getSetting( 'icon_type', 'dashicons' ) }
-				updateField={ updateSetting }
-			/>
-			<DashiconPicker
-				name="icon_dashicons"
-				label={ __( 'Icon', 'meta-box-builder' ) }
-				dependency={ 'icon_type:dashicons' }
-				defaultValue={ getSetting( 'icon_dashicons', 'admin-generic' ) }
-				updateField={ updateSetting }
-			/>
-			<Input
-				name="icon_svg"
-				label={ __( 'Icon SVG', 'meta-box-builder' ) }
-				tooltip={ __( 'Must be in base64 encoded format', 'meta-box-builder' ) }
-				dependency={ 'icon_type:svg' }
-				defaultValue={ getSetting( 'icon_svg' ) }
-				updateField={ updateSetting }
-			/>
-			<Input
-				name="icon_custom"
-				label={ __( 'Icon URL', 'meta-box-builder' ) }
-				dependency={ 'icon_type:custom' }
-				defaultValue={ getSetting( 'icon_custom' ) }
-				updateField={ updateSetting }
-			/>
-			<FontAwesome
-				name="icon_font_awesome"
-				label={ __( 'Icon', 'meta-box-builder' ) }
-				tooltip={ __( 'The icon to be used for the admin menu (FontAwesome)', 'meta-box-builder' ) }
-				description={ __( 'Enter <a target="_blank" href="https://fontawesome.com/search?o=r&m=free">FontAwesome</a> icon class here. Supports FontAwesome free version only.', 'meta-box-builder' ) }
-				dependency={ 'icon_type:font_awesome' }
-				defaultValue={ getSetting( 'icon_font_awesome' ) }
-				updateField={ updateSetting }
-			/>
+			{/* Icon */ }
+			{
+				getSetting( 'menu_type', 'top' ) === 'top' &&
+				<Select
+					name="icon_type"
+					label={ __( 'Icon type', 'meta-box-builder' ) }
+					options={ {
+						dashicons: __( 'Dashicons', 'meta-box-builder' ),
+						font_awesome: __( 'Font Awesome', 'meta-box-builder' ),
+						svg: __( 'SVG', 'meta-box-builder' ),
+						custom: __( 'Custom URL', 'meta-box-builder' ),
+					} }
+					defaultValue={ getSetting( 'icon_type', 'dashicons' ) }
+					updateField={ updateSetting }
+				/>
+			}
+			{
+				getSetting( 'menu_type', 'top' ) === 'top' && getSetting( 'icon_type', 'dashicons' ) === 'dashicons' &&
+				<DashiconPicker
+					name="icon_dashicons"
+					label={ __( 'Icon', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'icon_dashicons', 'admin-generic' ) }
+					updateField={ updateSetting }
+				/>
+			}
+			{
+				getSetting( 'menu_type', 'top' ) === 'top' && getSetting( 'icon_type', 'dashicons' ) === 'svg' &&
+				<Input
+					name="icon_svg"
+					label={ __( 'Icon SVG', 'meta-box-builder' ) }
+					tooltip={ __( 'Must be in base64 encoded format', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'icon_svg' ) }
+					updateField={ updateSetting }
+				/>
+			}
+			{
+				getSetting( 'menu_type', 'top' ) === 'top' && getSetting( 'icon_type', 'dashicons' ) === 'custom' &&
+				<Input
+					name="icon_custom"
+					label={ __( 'Icon URL', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'icon_custom' ) }
+					updateField={ updateSetting }
+				/>
+			}
+			{
+				getSetting( 'menu_type', 'top' ) === 'top' && getSetting( 'icon_type', 'dashicons' ) === 'font_awesome' &&
+				<FontAwesome
+					name="icon_font_awesome"
+					label={ __( 'Icon', 'meta-box-builder' ) }
+					tooltip={ __( 'The icon to be used for the admin menu (FontAwesome)', 'meta-box-builder' ) }
+					description={ __( 'Enter <a target="_blank" href="https://fontawesome.com/search?o=r&m=free">FontAwesome</a> icon class here. Supports FontAwesome free version only.', 'meta-box-builder' ) }
+					defaultValue={ getSetting( 'icon_font_awesome' ) }
+					updateField={ updateSetting }
+				/>
+			}
 
-			{/* General Settings */}
+			{/* General Settings */ }
 			<Select
 				name="capability"
 				label={ __( 'Required capability', 'meta-box-builder' ) }
@@ -127,7 +143,7 @@ const Content = () => {
 				updateField={ updateSetting }
 			/>
 
-			{/* Tabs */}
+			{/* Tabs */ }
 			<KeyValue
 				name="tabs"
 				label={ __( 'Tabs', 'meta-box-builder' ) }
@@ -145,7 +161,7 @@ const Content = () => {
 				updateField={ updateSetting }
 			/>
 
-			{/* Submit and Messages */}
+			{/* Submit and Messages */ }
 			<Input
 				name="submit_button"
 				label={ __( 'Custom submit button', 'meta-box-builder' ) }
@@ -160,7 +176,7 @@ const Content = () => {
 				updateField={ updateSetting }
 			/>
 
-			{/* Help Tabs */}
+			{/* Help Tabs */ }
 			<KeyValue
 				name="help_tabs"
 				label={ __( 'Help tabs', 'meta-box-builder' ) }
@@ -171,7 +187,7 @@ const Content = () => {
 				updateField={ updateSetting }
 			/>
 
-			{/* Extensions */}
+			{/* Extensions */ }
 			<Checkbox
 				name="customizer"
 				label={ __( 'Customizer', 'meta-box-builder' ) }
