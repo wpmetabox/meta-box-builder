@@ -48,7 +48,7 @@ const Content = () => {
 			{/* Icon */ }
 			{
 				getSetting( 'menu_type', 'top' ) === 'top' &&
-				<Select
+				<ToggleGroup
 					name="icon_type"
 					label={ __( 'Icon type', 'meta-box-builder' ) }
 					options={ {
@@ -123,7 +123,7 @@ const Content = () => {
 
 			<hr />
 
-			<Select
+			<ToggleGroup
 				name="style"
 				label={ __( 'Style', 'meta-box-builder' ) }
 				options={ {
@@ -133,7 +133,7 @@ const Content = () => {
 				defaultValue={ getSetting( 'style', 'no-boxes' ) }
 				updateField={ updateSetting }
 			/>
-			<Select
+			<ToggleGroup
 				name="columns"
 				label={ __( 'Columns', 'meta-box-builder' ) }
 				options={ { 1: 1, 2: 2 } }
@@ -148,7 +148,7 @@ const Content = () => {
 				defaultValue={ getSetting( 'tabs' ) }
 				updateField={ updateSetting }
 			/>
-			<Select
+			<ToggleGroup
 				name="tab_style"
 				label={ __( 'Tab style', 'meta-box-builder' ) }
 				options={ {
