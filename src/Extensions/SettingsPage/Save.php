@@ -33,7 +33,7 @@ class Save {
 			];
 		}
 
-		$post_name = $settings['id'] ?? sanitize_title( $post_title );
+		$post_name = sanitize_title( empty( $settings['id'] ) ? $post_title : $settings['id'] );
 
 		wp_update_post( [
 			'ID'          => $post_id,
@@ -42,11 +42,11 @@ class Save {
 			'post_status' => $post_status,
 		] );
 
-		// Set post title and slug in case they're auto-generated.
-		$settings = array_merge( [
-			'menu_title' => $post_title,
-			'id'         => $post_name,
-		], $settings );
+		$settings['menu_title'] = $post_title;
+		$settings['id']         = $post_name;
+		if ( empty( $settings['option_name'] ) ) {
+			$settings['option_name'] = $post_name;
+		}
 
 		$parser = new Parser( $settings );
 		$parser->parse_boolean_values()->parse_numeric_values();

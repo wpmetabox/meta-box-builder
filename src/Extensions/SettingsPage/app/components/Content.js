@@ -5,7 +5,7 @@ import Menu from "./sections/Menu";
 
 const Content = () => {
 	return (
-		<>
+		<div className="mb-content">
 			<General />
 			<hr />
 			<Menu />
@@ -13,7 +13,7 @@ const Content = () => {
 			<Appearance />
 			<hr />
 			<Advanced />
-		</>
+		</div>
 	);
 };
 

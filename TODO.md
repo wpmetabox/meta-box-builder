@@ -1,10 +1,7 @@
 ## Settings page
 
-- Check if we need to save via ajax
 - Add built files when finish
 - Check:
-	- PHP code generator work properly
-	- Parse PHP code for registering to stored in the post meta is correct
 	- Registering settings page work properly
 
 ## Bugs
