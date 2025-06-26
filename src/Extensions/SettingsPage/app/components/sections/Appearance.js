@@ -29,6 +29,8 @@ const Appearance = () => {
 			<KeyValue
 				name="tabs"
 				label={ __( 'Tabs', 'meta-box-builder' ) }
+				keyPlaceholder={ __( 'Tab key', 'meta-box-builder' ) }
+				valuePlaceholder={ __( 'Tab label', 'meta-box-builder' ) }
 				defaultValue={ getSetting( 'tabs' ) }
 				updateField={ updateSetting }
 			/>
