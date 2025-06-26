@@ -1,9 +1,9 @@
 import { Button } from "@wordpress/components";
 import { RawHTML, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import { maybeArrayToObject, uniqid } from "../functions";
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
-import { maybeArrayToObject, uniqid } from "/functions";
 
 const KeyValue = ( {
 	defaultValue,

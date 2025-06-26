@@ -1,6 +1,6 @@
+import { useToggle } from '../hooks/useToggle';
 import DivRow from './DivRow';
 import Tooltip from './Tooltip';
-import { useToggle } from '/hooks/useToggle';
 
 const Toggle = ( { name, componentId, label, defaultValue, tooltip, updateField, ...rest } ) => {
 	const toggleDependencies = useToggle( componentId );

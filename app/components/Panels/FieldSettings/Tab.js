@@ -1,5 +1,5 @@
 import { Suspense, useMemo } from "@wordpress/element";
-import { getControlParams } from '/functions';
+import { getControlParams } from '../../../functions';
 
 const getControlSettings = control => {
 	if ( control.name === 'CloneSettings' ) {

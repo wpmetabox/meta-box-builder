@@ -72,7 +72,7 @@ const bracketsToDots = key => key.replace( '[]', '' ).replace( /\[(.+?)\]/g, '.$
  * - Default value
  */
 export const getControlParams = ( control, objectValue, importFallback, checkNewField = false ) => {
-	const Control = lazy( () => import( `/controls/${ control.name }` ).catch( importFallback ) );
+	const Control = lazy( () => import( `./controls/${ control.name }` ).catch( importFallback ) );
 
 	const name = dotProp.get( control.props, 'name', control.setting );
 
