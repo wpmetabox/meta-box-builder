@@ -34,6 +34,10 @@ if ( Helpers\Data::is_extension_active( 'mb-blocks' ) ) {
 	new Extensions\Blocks\Json\Path();
 }
 
+if ( Helpers\Data::is_extension_active( 'mb-settings-page' ) ) {
+	new Extensions\SettingsPage\Manager();
+}
+
 new Integrations\WPML\Manager();
 new Integrations\Polylang\Manager();
 
@@ -42,7 +46,6 @@ new Extensions\Columns();
 new Extensions\ConditionalLogic();
 new Extensions\Group();
 new Extensions\Relationships();
-new Extensions\SettingsPage\Manager();
 new Extensions\Tabs();
 new Extensions\Tooltip();
 new Extensions\RestApi();

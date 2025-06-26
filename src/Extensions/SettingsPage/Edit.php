@@ -103,19 +103,11 @@ class Edit extends BaseEditPage {
 		wp_localize_script( 'mb-settings-page-app', 'MbbApp', $data );
 	}
 
+	/**
+	 * Do nothing to save because saving is handled via REST API.
+	 * @see Save.php and save.js
+	 */
 	public function save( $post_id, $post ) {
-		// Set post title and slug in case they're auto-generated.
-		$settings = array_merge( [
-			'menu_title' => $post->post_title,
-			'id'         => $post->post_name,
-		], rwmb_request()->post( 'settings' ) );
-
-		$parser = new Parser( $settings );
-		$parser->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'settings', $parser->get_settings() );
-
-		$parser->parse();
-		update_post_meta( $post_id, 'settings_page', $parser->get_settings() );
 	}
 
 	private function get_menu_positions() {

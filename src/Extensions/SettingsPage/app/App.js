@@ -5,6 +5,7 @@ import { updateNewPostUrl } from '../../../../app/functions';
 import Header from './components/Header';
 import Main from './components/Main';
 import Notification from './components/Notification';
+import { initSaveForm } from './save';
 
 const Layout = ( { children } ) => (
 	<ErrorBoundary fallback={ <p>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</p> }>
@@ -41,3 +42,5 @@ updateNewPostUrl();
 
 // Remove .wp-header-end element to properly show notices.
 document.querySelector( '.wp-header-end' ).remove();
+
+initSaveForm();
