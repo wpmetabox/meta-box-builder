@@ -3,5 +3,3 @@
 node_modules
 *.zip
 *.LICENSE.txt
-
-src/Extensions/SettingsPage/build

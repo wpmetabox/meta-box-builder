@@ -1,9 +1,3 @@
-## Settings page
-
-- Add built files when finish
-- Check:
-	- Registering settings page work properly
-
 ## Bugs
 - Fix translation is loaded by site language, which should be by user language
 
