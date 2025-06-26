@@ -47,6 +47,8 @@ class Edit extends BaseEditPage {
 	}
 
 	public function enqueue() {
+		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], filemtime( MBB_DIR . 'assets/css/style.css' ) );
+
 		wp_enqueue_style(
 			'mb-settings-page-app',
 			MBB_URL . 'src/Extensions/SettingsPage/css/settings-page.css',
