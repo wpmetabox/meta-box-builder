@@ -7,8 +7,6 @@ import KeyValue from "../../../../app/controls/KeyValue";
 import Select from "../../../../app/controls/Select";
 import ToggleGroup from "../../../../app/controls/ToggleGroup";
 import useSettings from "../../../../app/hooks/useSettings";
-import MenuParent from "./controls/MenuParent";
-import MenuPosition from "./controls/MenuPosition";
 
 const Content = () => {
 	const { getSetting, updateSetting } = useSettings();
@@ -28,18 +26,20 @@ const Content = () => {
 			/>
 			{
 				getSetting( 'menu_type', 'top' ) === 'top' &&
-				<MenuPosition
+				<Select
 					name="position"
 					label={ __( 'Show menu after', 'meta-box-builder' ) }
+					options={ MbbApp.menu_positions }
 					defaultValue={ getSetting( 'position', 25 ) }
 					updateField={ updateSetting }
 				/>
 			}
 			{
 				getSetting( 'menu_type', 'top' ) === 'submenu' &&
-				<MenuParent
+				<Select
 					name="parent"
 					label={ __( 'Parent menu', 'meta-box-builder' ) }
+					options={ MbbApp.menu_parents }
 					defaultValue={ getSetting( 'parent', 'index.php' ) }
 					updateField={ updateSetting }
 				/>
