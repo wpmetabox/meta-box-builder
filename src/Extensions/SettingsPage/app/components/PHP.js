@@ -2,9 +2,9 @@ import { useCopyToClipboard } from "@wordpress/compose";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
-import Input from '../../../../app/controls/Input';
-import { fetcher } from "../../../../app/hooks/useFetch";
-import useSettings from "../../../../app/hooks/useSettings";
+import Input from '../../../../../app/controls/Input';
+import { fetcher } from "../../../../../app/hooks/useFetch";
+import useSettings from "../../../../../app/hooks/useSettings";
 
 const PHP = () => {
 	const { getSetting, updateSetting, settings } = useSettings();

@@ -5,6 +5,36 @@ use MBB\BaseEditPage;
 use MetaBox\Support\Data;
 
 class Edit extends BaseEditPage {
+	public function __construct( $post_type, $slug_meta_box_title ) {
+		parent::__construct( $post_type, $slug_meta_box_title );
+
+		add_action( 'admin_head', [ $this, 'admin_head' ] );
+		add_action( 'admin_notices', [ $this, 'admin_notices' ], 1 );
+	}
+
+	/**
+	 * Hide the default WordPress elements. Use `admin_head` to make the CSS apply immediately.
+	 */
+	public function admin_head(): void {
+		if ( get_current_screen()->id !== $this->post_type ) {
+			return;
+		}
+		?>
+		<style>
+			#post-body { display: none; }
+		</style>
+		<?php
+	}
+
+	public function admin_notices(): void {
+		if ( get_current_screen()->id !== $this->post_type ) {
+			return;
+		}
+
+		// Remove all other notices from other plugins.
+		remove_all_actions( 'admin_notices' );
+	}
+
 	/**
 	 * Override the parent method to remove the meta box for ID (post_name) and option_name.
 	 *
@@ -39,7 +69,13 @@ class Edit extends BaseEditPage {
 			true
 		);
 
+		$post = get_post();
+
 		$data = [
+			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
+			'status'        => $post->post_status,
+			'title'         => $post->post_title,
+
 			'settings'       => get_post_meta( get_the_ID(), 'settings', true ),
 			'icons'          => Data::get_dashicons(),
 
@@ -49,6 +85,17 @@ class Edit extends BaseEditPage {
 			'menu_positions' => $this->get_menu_positions(),
 			'menu_parents'   => $this->get_menu_parents(),
 			'capabilities'   => $this->get_capabilities(),
+
+			'texts' => [
+				'saving'        => __( 'Saving...', 'meta-box-builder' ),
+				'switchToDraft' => __( 'Switch to draft', 'meta-box-builder' ),
+				'saveDraft'     => __( 'Save draft', 'meta-box-builder' ),
+				'update'        => __( 'Update', 'meta-box-builder' ),
+				'publish'       => __( 'Publish', 'meta-box-builder' ),
+				'draft'         => __( 'Draft', 'meta-box-builder' ),
+				'published'     => __( 'Published', 'meta-box-builder' ),
+				'saveError'     => __( 'Error saving form. Please try again.', 'meta-box-builder' ),
+			],
 		];
 
 		wp_localize_script( 'mb-settings-page-app', 'MbbApp', $data );

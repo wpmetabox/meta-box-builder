@@ -1,8 +1,6 @@
 ## Settings page
 
-- Apply the same layout as the app
-- Restyle it
-- Check if we need to ssave via ajax
+- Check if we need to save via ajax
 - Add built files when finish
 - Check:
 	- PHP code generator work properly

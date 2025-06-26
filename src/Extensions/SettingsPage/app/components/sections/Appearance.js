@@ -1,8 +1,8 @@
 import { __ } from "@wordpress/i18n";
-import Input from "../../../../../app/controls/Input";
-import KeyValue from "../../../../../app/controls/KeyValue";
-import ToggleGroup from "../../../../../app/controls/ToggleGroup";
-import useSettings from "../../../../../app/hooks/useSettings";
+import Input from "../../../../../../app/controls/Input";
+import KeyValue from "../../../../../../app/controls/KeyValue";
+import ToggleGroup from "../../../../../../app/controls/ToggleGroup";
+import useSettings from "../../../../../../app/hooks/useSettings";
 
 const Appearance = () => {
 	const { getSetting, updateSetting } = useSettings();

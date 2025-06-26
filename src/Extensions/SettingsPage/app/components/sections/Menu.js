@@ -1,10 +1,10 @@
 import { __ } from "@wordpress/i18n";
-import DashiconPicker from "../../../../../app/controls/DashiconPicker";
-import FontAwesome from "../../../../../app/controls/Fontawesome";
-import Input from "../../../../../app/controls/Input";
-import Select from "../../../../../app/controls/Select";
-import ToggleGroup from "../../../../../app/controls/ToggleGroup";
-import useSettings from "../../../../../app/hooks/useSettings";
+import DashiconPicker from "../../../../../../app/controls/DashiconPicker";
+import FontAwesome from "../../../../../../app/controls/Fontawesome";
+import Input from "../../../../../../app/controls/Input";
+import Select from "../../../../../../app/controls/Select";
+import ToggleGroup from "../../../../../../app/controls/ToggleGroup";
+import useSettings from "../../../../../../app/hooks/useSettings";
 
 const Menu = () => {
 	const { getSetting, updateSetting } = useSettings();

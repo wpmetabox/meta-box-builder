@@ -1,54 +1,43 @@
-// import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { Button, Flex, Icon } from '@wordpress/components';
-import { render, useEffect, useState } from '@wordpress/element';
+import { render } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { category, code } from '@wordpress/icons';
-import Content from './Content';
-import PHP from './PHP';
+import { ErrorBoundary } from 'react-error-boundary';
+import { updateNewPostUrl } from '../../../../app/functions';
+import Header from './components/Header';
+import Main from './components/Main';
+import Notification from './components/Notification';
 
-const App = () => {
-	const [ area, setArea ] = useState( 'settings' );
+const Layout = ( { children } ) => (
+	<ErrorBoundary fallback={ <p>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</p> }>
+		<Header />
 
-	useEffect( () => {
-		// Hide option name by default.
-		jQuery( '.toggle_option_name' ).closest( '.rwmb-field' ).next().hide();
-		jQuery( '#post' )
-			// Don't submit form when press Enter.
-			.on( 'keypress keydown keyup', 'input', function ( e ) {
-				if ( e.keyCode == 13 ) {
-					e.preventDefault();
-				}
-			} )
-			// Toggle option name.
-			.on( 'click', '.toggle_option_name', function ( e ) {
-				jQuery( this ).closest( '.rwmb-field' ).next().toggle();
-			} );
-	} );
-
-	const titles = {
-		settings: __( 'Settings', 'meta-box-builder' ),
-		php: __( 'Get PHP Code', 'meta-box-builder' ),
-	};
-
-	const icons = {
-		settings: category,
-		php: code,
-	};
-
-	return (
-		<div className="mb-box">
-			<Flex align="center" className="mb-box__header">
-				<Icon icon={ icons[ area ] } />
-				<span className="mb-box__title">{ titles[ area ] }</span>
-				<Button size="small" icon={ category } onClick={ () => setArea( 'settings' ) } label={ __( 'Show settings', 'meta-box-builder' ) } showTooltip={ true } />
-				<Button size="small" icon={ code } onClick={ () => setArea( 'php' ) } label={ __( 'Get PHP code to register the settings page', 'meta-box-builder' ) } showTooltip={ true } />
-			</Flex>
-			<div className="mb-box__body">
-				{ area === 'settings' && <Content /> }
-				{ area === 'php' && <PHP /> }
+		<div className="mb-body">
+			<div className="mb-body__inner">
+				{ children }
 			</div>
-		</div>
-	);
-};
+		</div >
 
-render( <App />, document.getElementById( 'root' ) );
+		<Notification />
+	</ErrorBoundary>
+);
+
+const App = () => (
+	<Layout>
+		<Main />
+	</Layout>
+);
+
+const container = document.getElementById( 'poststuff' );
+container.classList.add( 'mb' );
+container.classList.add( 'og' );
+container.id = 'mb-app';
+
+// Use React 17 to avoid flashing issues when click to expand field settings.
+render( <App />, container );
+// const root = createRoot( container );
+// root.render( <App /> );
+
+// Update URL for new posts
+updateNewPostUrl();
+
+// Remove .wp-header-end element to properly show notices.
+document.querySelector( '.wp-header-end' ).remove();

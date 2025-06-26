@@ -1,8 +1,8 @@
 import { __ } from "@wordpress/i18n";
-import Checkbox from "../../../../../app/controls/Checkbox";
-import Input from "../../../../../app/controls/Input";
-import KeyValue from "../../../../../app/controls/KeyValue";
-import useSettings from "../../../../../app/hooks/useSettings";
+import Checkbox from "../../../../../../app/controls/Checkbox";
+import Input from "../../../../../../app/controls/Input";
+import KeyValue from "../../../../../../app/controls/KeyValue";
+import useSettings from "../../../../../../app/hooks/useSettings";
 
 const Advanced = () => {
 	const { getSetting, updateSetting } = useSettings();

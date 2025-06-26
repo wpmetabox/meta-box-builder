@@ -1,4 +1,5 @@
 @use "variables";
+@use "layout";
 @use "box";
 @use "base/elements";
 @use "base/wordpress";
@@ -14,6 +15,14 @@
 	@import "field-settings/icon";
 
 	@import "panels/attribute";
+}
+
+.mb {
+	--nav-width: 0;
+}
+
+.mb-main {
+	max-width: 60rem;
 }
 
 .mb-box__body {
