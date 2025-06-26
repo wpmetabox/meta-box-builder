@@ -12,10 +12,6 @@ const externals = {
 	clipboard: 'ClipboardJS',
 };
 
-const resolve = {
-	roots: [ path.resolve( 'app' ) ]
-};
-
 // Main Meta Box Builder app.
 const main = {
 	...defaultConfig,
@@ -25,19 +21,17 @@ const main = {
 		filename: 'app.js'
 	},
 	externals,
-	resolve,
 };
 
 // Settings page app.
 const settingsPage = {
 	...defaultConfig,
-	entry: './modules/settings-page/app/App.js',
+	entry: './src/Extensions/SettingsPage/app/App.js',
 	output: {
-		path: path.resolve( 'modules/settings-page/assets' ),
+		path: path.resolve( 'src/Extensions/SettingsPage/build' ),
 		filename: 'settings-page.js'
 	},
 	externals,
-	resolve,
 };
 
 // Relationships app.
@@ -49,8 +43,7 @@ const relationships = {
 		filename: 'relationships.js'
 	},
 	externals,
-	resolve,
 };
 
-module.exports = [ main ];
+module.exports = [ main, settingsPage ];
 // module.exports = [ main, settingsPage, relationships ];

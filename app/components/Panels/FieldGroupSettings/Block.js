@@ -7,7 +7,7 @@ import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
 import Textarea from '../../../controls/Textarea';
 import useSettings from "../../../hooks/useSettings";
-import { ensureArray } from '/functions';
+import { ensureArray } from '../../../functions';
 
 const Block = () => {
 	const { getSetting, updateSetting } = useSettings();

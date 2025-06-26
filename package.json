@@ -3,14 +3,12 @@
   "scripts": {
     "css:main": "sass --no-source-map --style=compressed assets/sass/style.scss assets/css/style.css",
     "css:main:watch": "sass --no-source-map --style=compressed -w assets/sass/style.scss assets/css/style.css",
-    "css:settings": "sass --no-source-map --load-path=assets/sass --style=compressed modules/settings-page/assets/settings-page.scss modules/settings-page/assets/settings-page.css",
     "css:relationships": "sass --no-source-map --load-path=assets/sass --style=compressed modules/relationships/assets/relationships.scss modules/relationships/assets/relationships.css",
     "css": "npm run css:main && npm run css:settings && npm run css:relationships",
     "build:css": "npm run css:main",
     "build:js": "wp-scripts build",
     "build": "npm run build:css && npm run build:js",
-    "start": "wp-scripts start",
-    "scan": "npx react-scan@latest http://mb.test/wp-admin/edit.php?post_type=meta-box"
+    "start": "wp-scripts start"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
