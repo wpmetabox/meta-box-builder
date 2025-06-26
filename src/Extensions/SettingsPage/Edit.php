@@ -5,34 +5,14 @@ use MBB\BaseEditPage;
 use MetaBox\Support\Data;
 
 class Edit extends BaseEditPage {
+	/**
+	 * Override the parent method to remove the meta box for ID (post_name) and option_name.
+	 *
+	 * @param array $meta_boxes
+	 *
+	 * @return array
+	 */
 	public function add_meta_boxes( $meta_boxes ) {
-		$request  = rwmb_request();
-		$settings = get_post_meta( $request->get( 'post' ), 'settings', true );
-
-		$meta_boxes[] = [
-			'title'      => $this->slug_meta_box_title,
-			'post_types' => [ $this->post_type ],
-			'context'    => 'side',
-			'priority'   => 'low',
-			'fields'     => [
-				[
-					'type' => 'text',
-					'id'   => 'post_name',
-					'name' => __( 'ID', 'meta-box-builder' ),
-				],
-				[
-					'type' => 'custom_html',
-					'std'  => '<a class="toggle_option_name" href="javascript:void(0)">' . __( 'Advanced', 'meta-box-builder' ) . '</a>',
-				],
-				[
-					'type'    => 'text',
-					'id'      => 'settings[option_name]',
-					'name'    => __( 'Option name', 'meta-box-builder' ),
-					'tooltip' => __( 'Option name where settings data is saved to. Takes settings page ID if missed. If you want to use theme mods, then set this to <code>theme_mods_$themeslug</code>.', 'meta-box-builder' ),
-					'std'     => ! empty( $settings ) && isset( $settings['option_name'] ) ? $settings['option_name'] : '',
-				],
-			],
-		];
 		return $meta_boxes;
 	}
 

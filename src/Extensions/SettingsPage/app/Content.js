@@ -6,9 +6,9 @@ import Menu from "./components/Menu";
 const Content = () => {
 	return (
 		<>
-			<Menu />
-			<hr />
 			<General />
+			<hr />
+			<Menu />
 			<hr />
 			<Appearance />
 			<hr />

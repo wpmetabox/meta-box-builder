@@ -26,7 +26,6 @@ const PHP = () => {
 			api: 'settings-page/generate',
 			params: {
 				post_title: document.querySelector( '#title' )?.value,
-				post_name: document.querySelector( '#post_name' )?.value,
 				settings
 			},
 			method: 'POST',
