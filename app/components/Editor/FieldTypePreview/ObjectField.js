@@ -17,7 +17,9 @@ const ObjectField = ( { field, defaultPlaceholder, defaultItemTitle } ) => {
 	const FieldType = lazy( () => import( `./${ ucwords( type, '_', '' ) }` ) );
 
 	useEffect( () => {
-		ref.current.querySelector( '.select2-container' )?.remove();
+		if ( ref.current ) {
+			ref.current.querySelector( '.select2-container' )?.remove();
+		}
 	}, [ type ] );
 
 	return (
