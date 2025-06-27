@@ -112,27 +112,14 @@ class Edit extends BaseEditPage {
 		}
 	}
 
+	/**
+	 * Override the parent method to remove the meta box for documentation.
+	 *
+	 * @param array $meta_boxes
+	 *
+	 * @return array
+	 */
 	public function add_meta_boxes( $meta_boxes ) {
-		$meta_boxes = parent::add_meta_boxes( $meta_boxes );
-
-		$meta_boxes[] = [
-			'title'      => esc_html__( 'Documentation', 'meta-box-builder' ),
-			'id'         => 'mbb-documentation',
-			'post_types' => [ $this->post_type ],
-			'context'    => 'side',
-			'priority'   => 'low',
-			'fields'     => [
-				[
-					'type' => 'custom_html',
-					'std'  => '<ul>
-						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-					</ul>',
-				],
-			],
-		];
-
 		return $meta_boxes;
 	}
 
