@@ -11,6 +11,7 @@ const General = () => {
 			<Input
 				name="id"
 				label={ __( 'ID', 'meta-box-builder' ) }
+				description={ __( 'Must be unique between settings pages. Use only lowercase letters, numbers, underscores and dashes.', 'meta-box-builder' ) }
 				defaultValue={ getSetting( 'id' ) }
 				updateField={ updateSetting }
 			/>
@@ -18,7 +19,7 @@ const General = () => {
 				name="option_name"
 				label={ __( 'Option name', 'meta-box-builder' ) }
 				defaultValue={ getSetting( 'option_name', getSetting( 'id' ) ) }
-				description={ __( 'Takes settings page ID if missed. If you want to use theme mods (to compatible with the settings in the Customizer), set it to <code>theme_mods_$themeslug</code>.', 'meta-box-builder' ) }
+				description={ __( 'Used as the object ID when getting settings values with helper functions. Takes settings page ID if missed. If you want to use theme mods (to compatible with the settings in the Customizer), set it to <code>theme_mods_$themeslug</code>.', 'meta-box-builder' ) }
 				updateField={ updateSetting }
 			/>
 			<Select
