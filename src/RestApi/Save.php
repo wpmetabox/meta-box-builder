@@ -23,10 +23,17 @@ class Save extends Base {
 		$fields      = $request->get_param( 'fields' );
 		$settings    = $request->get_param( 'settings' );
 
-		if ( ! $post_id || ! $post_title || ! $post_status ) {
+		if ( ! $post_id || ! $post_status ) {
 			return [
 				'success' => false,
 				'message' => __( 'Invalid data', 'meta-box-builder' ),
+			];
+		}
+
+		if ( ! $post_title ) {
+			return [
+				'success' => false,
+				'message' => __( 'Please enter the field group title', 'meta-box-builder' ),
 			];
 		}
 
