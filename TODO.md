@@ -1,3 +1,6 @@
+## Tasks
+- Use React 18 for the main app
+
 ## Bugs
 - Fix translation is loaded by site language, which should be by user language
 
