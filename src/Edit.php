@@ -176,7 +176,6 @@ class Edit extends BaseEditPage {
 		$post = get_post();
 
 		$data = [
-			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
 			'adminUrl'      => admin_url(),
 			'status'        => $post->post_status,
 			'title'         => $post->post_title,
@@ -188,9 +187,6 @@ class Edit extends BaseEditPage {
 
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
-
-			'rest'          => untrailingslashit( rest_url() ),
-			'nonce'         => wp_create_nonce( 'wp_rest' ),
 
 			'postTypes'     => Data::get_post_types(),
 			'taxonomies'    => Data::get_taxonomies(),

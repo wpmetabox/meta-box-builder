@@ -4,7 +4,7 @@ import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import Input from '../controls/Input';
-import { fetcher } from "../functions";
+import { fetcher } from "../hooks/useFetch";
 import useSettings from "../hooks/useSettings";
 import { buildFieldsTree } from "../list-functions";
 
@@ -24,12 +24,16 @@ const PHP = () => {
 		setData( '' );
 		setGenerating( true );
 
-		fetcher( 'generate', {
-			post_title: document.querySelector( '#post_title' ).value,
-			post_name: document.querySelector( '#post_name' ).value,
-			fields: buildFieldsTree(),
-			settings,
-		}, 'POST' ).then( response => {
+		fetcher( {
+			api: 'generate',
+			params: {
+				post_title: document.querySelector( '#post_title' ).value,
+				post_name: document.querySelector( '#post_name' ).value,
+				fields: buildFieldsTree(),
+				settings,
+			},
+			method: 'POST'
+		} ).then( response => {
 			setData( response );
 			setGenerating( false );
 		} );

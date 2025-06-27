@@ -3,7 +3,8 @@ import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import KeyValue from '../../../controls/KeyValue';
 import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
-import { fetcher, maybeArrayToObject, uniqid } from "../../../functions";
+import { maybeArrayToObject, uniqid } from "../../../functions";
+import { fetcher } from "../../../hooks/useFetch";
 import useSettings from "../../../hooks/useSettings";
 
 const ShowHide = () => {
@@ -82,7 +83,10 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 		updateSetting( `show_hide.rules.${ rule.id }.name`, value );
 	};
 
-	const loadOptions = s => fetcher( 'show-hide', { name, s } );
+	const loadOptions = s => fetcher( {
+		api: 'show-hide',
+		params: { name, s },
+	} );
 
 	// Validate rule name.
 	useEffect( () => {

@@ -10,25 +10,6 @@ export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( 
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
-export const fetcher = ( api, params = {}, method = 'GET' ) => {
-	let options = {
-		headers: { 'X-WP-Nonce': MbbApp.nonce, 'Content-Type': 'application/json' },
-		method
-	};
-	let url = `${ MbbApp.rest }/mbb/${ api }`;
-
-	if ( method === 'GET' ) {
-		const query = ( new URLSearchParams( params ) ).toString();
-		if ( query ) {
-			url += MbbApp.rest.includes( '?' ) ? `&${ query }` : `?${ query }`;
-		}
-	} else {
-		options.body = JSON.stringify( params );
-	}
-
-	return fetch( url, options ).then( response => response.json() );
-};
-
 export const ensureArray = arr => {
 	if ( Array.isArray( arr ) ) {
 		return arr;

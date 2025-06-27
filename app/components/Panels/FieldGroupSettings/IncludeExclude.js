@@ -3,7 +3,8 @@ import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from '../../../controls/DivRow';
 import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
-import { fetcher, maybeArrayToObject, uniqid } from "../../../functions";
+import { maybeArrayToObject, uniqid } from "../../../functions";
+import { fetcher } from "../../../hooks/useFetch";
 import useSettings from "../../../hooks/useSettings";
 
 const IncludeExclude = () => {
@@ -103,7 +104,10 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 		}
 	}, [ objectType ] );
 
-	const loadOptions = s => fetcher( 'include-exclude', { name, s, post_types: postTypes } );
+	const loadOptions = s => fetcher( {
+		api: 'include-exclude',
+		params: { name, s, post_types: postTypes },
+	} );
 
 	const optionsMap = {
 		'post': [

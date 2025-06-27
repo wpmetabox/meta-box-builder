@@ -3,7 +3,6 @@ import { __ } from "@wordpress/i18n";
 import { cog, listView, plus } from "@wordpress/icons";
 import useFloatingStructurePanel from '../hooks/useFloatingStructurePanel';
 import useNavPanel from '../hooks/useNavPanel';
-// import { ReactComponent as Logo } from './logo.svg';
 
 const Header = () => {
 	const { navPanel, setNavPanel } = useNavPanel();
@@ -25,11 +24,6 @@ const Header = () => {
 	return (
 		<Flex className="mb-header">
 			<Flex expanded={ false }>
-				{/* <Tooltip delay={ 0 } text={ __( 'Back to all field groups', 'meta-box-builder' ) } placement='bottom'>
-					<a className="mb-header__logo" href={ MbbApp.url }><Logo /></a>
-				</Tooltip> */}
-				{/* <div className="mb-header__logo" href={ MbbApp.url }><Logo /></div> */ }
-
 				<Button
 					variant="primary"
 					icon={ plus }

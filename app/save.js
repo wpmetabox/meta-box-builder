@@ -1,4 +1,4 @@
-import { fetcher } from './functions';
+import { fetcher } from './hooks/useFetch';
 import useSettings from './hooks/useSettings';
 import { buildFieldsTree } from './list-functions';
 
@@ -29,14 +29,18 @@ export const initSaveForm = () => {
 
 		try {
 			// Send AJAX request
-			const response = await fetcher( 'save', {
-				post_id: document.querySelector( '#post_ID' ).value,
-				post_title: document.querySelector( '#post_title' ).value,
-				post_name: document.querySelector( '#post_name' ).value,
-				post_status: status,
-				fields,
-				settings,
-			}, 'POST' );
+			const response = await fetcher( {
+				api: 'save',
+				params: {
+					post_id: document.querySelector( '#post_ID' ).value,
+					post_title: document.querySelector( '#post_title' ).value,
+					post_name: document.querySelector( '#post_name' ).value,
+					post_status: status,
+					fields,
+					settings,
+				},
+				method: 'POST'
+			} );
 
 			if ( !response.success ) {
 				alert( response.message );

@@ -4,7 +4,7 @@ import { __ } from "@wordpress/i18n";
 import DivRow from '../../../controls/DivRow';
 import Input from '../../../controls/Input';
 import Toggle from "../../../controls/Toggle";
-import { fetcher } from "../../../functions";
+import { fetcher } from "../../../hooks/useFetch";
 import useSettings from "../../../hooks/useSettings";
 
 const BlockJSONSettings = () => {
@@ -20,10 +20,13 @@ const BlockJSONSettings = () => {
 			return;
 		}
 
-		const { is_writable, is_newer } = await fetcher( 'blocks/json/check-path', {
-			path: block_json.path,
-			version: block_json.version || 0,
-			postName
+		const { is_writable, is_newer } = await fetcher( {
+			api: 'blocks/json/check-path',
+			params: {
+				path: block_json.path,
+				version: block_json.version || 0,
+				postName
+			},
 		} );
 
 		const errorMessage = is_writable ? '' : __( 'The path is not writable.', 'meta-box-builder' );
@@ -44,11 +47,15 @@ const BlockJSONSettings = () => {
 		}
 
 		try {
-			const response = await fetcher( 'blocks/json/override', {
-				post_id: document.querySelector( '#post_ID' ).value,
-				post_name: document.querySelector( '#post_name' ).value,
-				path: block_json.path,
-			}, 'POST' );
+			const response = await fetcher( {
+				api: 'blocks/json/override',
+				params: {
+					post_id: document.querySelector( '#post_ID' ).value,
+					post_name: document.querySelector( '#post_name' ).value,
+					path: block_json.path,
+				},
+				method: 'POST'
+			} );
 
 			if ( response.success ) {
 				window.location.reload();
