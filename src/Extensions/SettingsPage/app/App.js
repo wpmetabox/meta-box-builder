@@ -41,4 +41,16 @@ updateNewPostUrl();
 // Remove .wp-header-end element to properly show notices.
 document.querySelector( '.wp-header-end' ).remove();
 
+const form = document.querySelector( '#post' );
+
+// Prevent submit when press Enter.
+const preventSubmitWhenPressEnter = e => {
+	if ( e.target.tagName === 'INPUT' && e.keyCode == 13 ) {
+		e.preventDefault();
+	}
+};
+form.addEventListener( 'keypress', preventSubmitWhenPressEnter );
+form.addEventListener( 'keydown', preventSubmitWhenPressEnter );
+form.addEventListener( 'keyup', preventSubmitWhenPressEnter );
+
 initSaveForm();

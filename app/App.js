@@ -52,12 +52,6 @@ document.querySelector( '.wp-header-end' ).remove();
 
 const form = document.querySelector( '#post' );
 
-// Force form to validate to force users to enter required fields.
-// Use setTimeout because this attribute is dynamically added.
-setTimeout( () => {
-	form.removeAttribute( 'novalidate' );
-}, 100 );
-
 // Prevent submit when press Enter.
 const preventSubmitWhenPressEnter = e => {
 	if ( e.target.tagName === 'INPUT' && e.keyCode == 13 ) {
@@ -68,5 +62,4 @@ form.addEventListener( 'keypress', preventSubmitWhenPressEnter );
 form.addEventListener( 'keydown', preventSubmitWhenPressEnter );
 form.addEventListener( 'keyup', preventSubmitWhenPressEnter );
 
-// Set post status when clicking submit buttons.
 initSaveForm();
