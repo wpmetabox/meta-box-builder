@@ -74,6 +74,7 @@ class Edit extends BaseEditPage {
 		$post = get_post();
 
 		$data = [
+			'adminUrl'      => admin_url(),
 			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
 			'status'        => $post->post_status,
 			'title'         => $post->post_title,
