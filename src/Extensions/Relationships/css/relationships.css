@@ -24,8 +24,30 @@
 	flex-direction: row;
 }
 
-hr {
-	margin: 32px -32px;
-	border-top: 0;
-	border-bottom-color: #e0e0e0;
+.components-panel__body {
+	margin-inline: -32px;
+}
+
+.components-panel__body-title {
+	background: #f0f0f0;
+}
+
+.components-tab-panel__tab-content {
+	padding: 16px;
+}
+
+.components-tab-panel__tabs {
+	border-bottom: 1px solid #e0e0e0;
+	gap: 24px;
+	margin-inline: 16px;
+}
+
+.components-tab-panel__tabs-item {
+	padding-inline: 0;
+}
+
+.components-tab-panel__tabs-item.is-active::after {
+	outline: none;
+	bottom: -1px;
+	height: 3px;
 }
