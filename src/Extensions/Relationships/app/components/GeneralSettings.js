@@ -21,7 +21,7 @@ const GeneralSettings = () => {
 				label={ __( 'Delete data in database?' ) }
 				defaultValue={ !!getSetting( 'delete_data' ) }
 				className="relationships-plain"
-				description={ __( 'Delete data in database if the relationship is deleted.', 'meta-box-builder' ) }
+				description={ __( 'Delete data in database when the relationship is deleted.', 'meta-box-builder' ) }
 				updateField={ updateSetting }
 			/>
 			<Checkbox

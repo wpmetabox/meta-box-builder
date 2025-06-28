@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
 import Checkbox from "../../../../../../app/controls/Checkbox";
 import Input from "../../../../../../app/controls/Input";
-import Select from "../../../../../../app/controls/Select";
+import ToggleGroup from "../../../../../../app/controls/ToggleGroup";
 import useSettings from "../../../../../../app/hooks/useSettings";
 
 const MetaBox = ( { id } ) => {
@@ -15,9 +15,9 @@ const MetaBox = ( { id } ) => {
 				defaultValue={ getSetting( `${ id }.meta_box.title` ) }
 				updateField={ updateSetting }
 			/>
-			<Select
+			<ToggleGroup
 				name={ `${ id }.meta_box.context` }
-				label={ __( 'Context', 'meta-box-builder' ) }
+				label={ __( 'Position', 'meta-box-builder' ) }
 				options={ {
 					normal: __( 'After content', 'meta-box-builder' ),
 					side: __( 'Side', 'meta-box-builder' ),
@@ -25,7 +25,7 @@ const MetaBox = ( { id } ) => {
 				defaultValue={ getSetting( `${ id }.meta_box.context`, 'side' ) }
 				updateField={ updateSetting }
 			/>
-			<Select
+			<ToggleGroup
 				name={ `${ id }.meta_box.priority` }
 				label={ __( 'Priority', 'meta-box-builder' ) }
 				options={ {
@@ -35,7 +35,7 @@ const MetaBox = ( { id } ) => {
 				defaultValue={ getSetting( `${ id }.meta_box.priority`, 'low' ) }
 				updateField={ updateSetting }
 			/>
-			<Select
+			<ToggleGroup
 				name={ `${ id }.meta_box.style` }
 				label={ __( 'Style', 'meta-box-builder' ) }
 				options={ {
