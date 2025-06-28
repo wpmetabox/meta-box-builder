@@ -74,15 +74,13 @@ class Edit extends BaseEditPage {
 		$post = get_post();
 
 		$data = [
+			'adminUrl'      => admin_url(),
 			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
 			'status'        => $post->post_status,
 			'title'         => $post->post_title,
 
 			'settings'       => get_post_meta( get_the_ID(), 'settings', true ),
 			'icons'          => Data::get_dashicons(),
-
-			'rest'           => untrailingslashit( rest_url() ),
-			'nonce'          => wp_create_nonce( 'wp_rest' ),
 
 			'menu_positions' => $this->get_menu_positions(),
 			'menu_parents'   => $this->get_menu_parents(),

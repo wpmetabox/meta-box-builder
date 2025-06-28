@@ -2,7 +2,6 @@ import { useCopyToClipboard } from "@wordpress/compose";
 import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from "react-codemirror2";
-const { withState } = wp.compose;
 
 const Content = ( { codeValue } ) => {
 	const [ copied, setCopied ] = useState( false );

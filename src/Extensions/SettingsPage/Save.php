@@ -26,10 +26,17 @@ class Save {
 		$post_status = sanitize_text_field( $request->get_param( 'post_status' ) );
 		$settings    = $request->get_param( 'settings' );
 
-		if ( ! $post_id || ! $post_title || ! $post_status ) {
+		if ( ! $post_id || ! $post_status ) {
 			return [
 				'success' => false,
 				'message' => __( 'Invalid data', 'meta-box-builder' ),
+			];
+		}
+
+		if ( ! $post_title ) {
+			return [
+				'success' => false,
+				'message' => __( 'Please enter a title for the settings page.', 'meta-box-builder' ),
 			];
 		}
 

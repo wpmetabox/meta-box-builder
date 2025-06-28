@@ -3,8 +3,8 @@
   "scripts": {
     "css:main": "sass --no-source-map --style=compressed assets/sass/style.scss assets/css/style.css",
     "css:main:watch": "sass --no-source-map --style=compressed -w assets/sass/style.scss assets/css/style.css",
-    "css:relationships": "sass --no-source-map --load-path=assets/sass --style=compressed modules/relationships/assets/relationships.scss modules/relationships/assets/relationships.css",
-    "css": "npm run css:main && npm run css:settings && npm run css:relationships",
+    "css:relationships": "sass --no-source-map --load-path=assets/sass --style=compressed src/Extensions/Relationships/css/relationships.scss src/Extensions/Relationships/css/relationships.css",
+    "css": "npm run css:main && npm run css:relationships",
     "build:css": "npm run css:main",
     "build:js": "wp-scripts build",
     "build": "npm run build:css && npm run build:js",
