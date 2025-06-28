@@ -11,7 +11,7 @@ const GeneralSettings = () => {
 			<Input
 				name="id"
 				label={ __( 'ID', 'meta-box-builder' ) }
-				description={ __( 'Must be unique between relationships. Use only lowercase letters, numbers, underscores and dashes.', 'meta-box-builder' ) }
+				description={ __( 'Must be unique between relationships. Use only lowercase letters, numbers, underscores (not recommended dashes).', 'meta-box-builder' ) }
 				defaultValue={ getSetting( 'id' ) }
 				updateField={ updateSetting }
 			/>

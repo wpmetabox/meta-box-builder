@@ -23,6 +23,10 @@ class Generator {
 
 	public function generate( WP_REST_Request $request ) {
 		$post_title = sanitize_text_field( $request->get_param( 'post_title' ) );
+		if ( ! $post_title ) {
+			return __( 'Please enter a title for the relationship.', 'meta-box-builder' );
+		}
+
 		$settings   = $request->get_param( 'settings' );
 
 		$settings['id'] = sanitize_title( empty( $settings['id'] ) ? $post_title : $settings['id'] );

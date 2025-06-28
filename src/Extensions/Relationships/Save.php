@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Extensions\SettingsPage;
+namespace MBB\Extensions\Relationships;
 
 use WP_REST_Request;
 use WP_REST_Server;
@@ -10,12 +10,13 @@ class Save {
 	}
 
 	public function register_routes(): void {
-		register_rest_route( 'mbb', 'settings-page/save', [
+		register_rest_route( 'mbb', 'relationships/save', [
 			'methods'             => WP_REST_Server::CREATABLE,
 			'callback'            => [ $this, 'save' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 		] );
 	}
+
 	public function has_permission(): bool {
 		return current_user_can( 'manage_options' );
 	}
@@ -36,7 +37,7 @@ class Save {
 		if ( ! $post_title ) {
 			return [
 				'success' => false,
-				'message' => __( 'Please enter a title for the settings page.', 'meta-box-builder' ),
+				'message' => __( 'Please enter a title for the relationship.', 'meta-box-builder' ),
 			];
 		}
 
@@ -49,18 +50,14 @@ class Save {
 			'post_status' => $post_status,
 		] );
 
-		$settings['menu_title'] = $post_title;
-		$settings['id']         = $post_name;
-		if ( empty( $settings['option_name'] ) ) {
-			$settings['option_name'] = $post_name;
-		}
+		$settings['id'] = $post_name;
 
-		$parser = new Parser( $settings );
+		$parser = new Parsers\Relationship( $settings );
 		$parser->parse_boolean_values()->parse_numeric_values();
 		update_post_meta( $post_id, 'settings', $parser->get_settings() );
 
 		$parser->parse();
-		update_post_meta( $post_id, 'settings_page', $parser->get_settings() );
+		update_post_meta( $post_id, 'relationship', $parser->get_settings() );
 
 		return [
 			'success' => true,
