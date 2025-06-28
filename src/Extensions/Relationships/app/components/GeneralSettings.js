@@ -1,5 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import Checkbox from "../../../../../app/controls/Checkbox";
+import Input from "../../../../../app/controls/Input";
 import useSettings from "../../../../../app/hooks/useSettings";
 
 const GeneralSettings = () => {
@@ -7,6 +8,13 @@ const GeneralSettings = () => {
 
 	return (
 		<>
+			<Input
+				name="id"
+				label={ __( 'ID', 'meta-box-builder' ) }
+				description={ __( 'Must be unique between relationships. Use only lowercase letters, numbers, underscores and dashes.', 'meta-box-builder' ) }
+				defaultValue={ getSetting( 'id' ) }
+				updateField={ updateSetting }
+			/>
 			<Checkbox
 				name="delete_data"
 				componentId="settings-delete-data"

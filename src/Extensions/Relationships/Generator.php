@@ -22,7 +22,12 @@ class Generator {
 	}
 
 	public function generate( WP_REST_Request $request ) {
-		$parser = new Parsers\Relationship( $request->get_param( 'settings' ) );
+		$post_title = sanitize_text_field( $request->get_param( 'post_title' ) );
+		$settings   = $request->get_param( 'settings' );
+
+		$settings['id'] = sanitize_title( empty( $settings['id'] ) ? $post_title : $settings['id'] );
+
+		$parser = new Parsers\Relationship( $settings );
 		$parser->parse();
 
 		$settings = $parser->get_settings();

@@ -6,11 +6,6 @@ use MBBParser\Parsers\Base;
 
 class Relationship extends Base {
 	public function parse() {
-		// Set extra params from post title and post name.
-		$this->settings = array_merge( [
-			'id' => rwmb_request()->post( 'post_name' ),
-		], $this->settings );
-
 		$this->parse_boolean_values()
 			->parse_side( 'from' )
 			->parse_side( 'to' );
