@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Relationships\Encoders;
+namespace MBB\Extensions\Relationships\Encoders;
 
 use MBBParser\SettingsTrait;
 

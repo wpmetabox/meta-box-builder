@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Relationships;
+namespace MBB\Extensions\Relationships;
 
 class Delete {
 	public function __construct() {

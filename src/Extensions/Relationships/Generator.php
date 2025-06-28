@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Relationships;
+namespace MBB\Extensions\Relationships;
 
 use WP_REST_Server;
 use WP_REST_Request;

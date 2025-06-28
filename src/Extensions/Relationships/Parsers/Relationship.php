@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Relationships\Parsers;
+namespace MBB\Extensions\Relationships\Parsers;
 
 use MetaBox\Support\Arr;
 use MBBParser\Parsers\Base;
