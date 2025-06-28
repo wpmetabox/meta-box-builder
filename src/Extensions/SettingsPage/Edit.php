@@ -81,9 +81,6 @@ class Edit extends BaseEditPage {
 			'settings'       => get_post_meta( get_the_ID(), 'settings', true ),
 			'icons'          => Data::get_dashicons(),
 
-			'rest'           => untrailingslashit( rest_url() ),
-			'nonce'          => wp_create_nonce( 'wp_rest' ),
-
 			'menu_positions' => $this->get_menu_positions(),
 			'menu_parents'   => $this->get_menu_parents(),
 			'capabilities'   => $this->get_capabilities(),

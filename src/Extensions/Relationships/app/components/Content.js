@@ -1,13 +1,14 @@
+import { __ } from "@wordpress/i18n";
 import GeneralSettings from "./GeneralSettings";
 import Side from "./Side";
 
-const Content = ( { sides } ) => {
-	return (
-		<>
-			<GeneralSettings />
-			{ sides.map( side => <Side key={ side.id } { ...side } /> ) }
-		</>
-	);
-};
+const Content = () => (
+	<>
+		<GeneralSettings />
+		<Side id="from" title={ __( 'From', 'meta-box-builder' ) } />
+		<Side id="to" title={ __( 'To', 'meta-box-builder' ) } />
+	</>
+);
+
 
 export default Content;
