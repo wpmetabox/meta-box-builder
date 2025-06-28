@@ -10,7 +10,7 @@ class Generator {
 	}
 
 	public function register_routes() {
-		register_rest_route( 'mbb', 'relationships-generate', [
+		register_rest_route( 'mbb', 'relationships/generate', [
 			'methods'             => WP_REST_Server::CREATABLE,
 			'callback'            => [ $this, 'generate' ],
 			'permission_callback' => [ $this, 'has_permission' ],

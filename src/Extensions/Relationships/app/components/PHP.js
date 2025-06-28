@@ -23,7 +23,7 @@ const PHP = () => {
 		setGenerating( true );
 
 		fetcher( {
-			api: 'settings-page/generate',
+			api: 'relationships/generate',
 			params: {
 				post_title: document.querySelector( '#title' )?.value,
 				settings
