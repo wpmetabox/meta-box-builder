@@ -1,5 +1,5 @@
-import { getControlParams } from '/functions';
-const { memo, Suspense } = wp.element;
+import { memo, Suspense } from '@wordpress/element';
+import { getControlParams } from '../../../../app/functions';
 
 const Content = ( { id, controls } ) => {
 	const getControlComponent = control => {

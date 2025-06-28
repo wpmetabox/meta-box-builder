@@ -1,10 +1,10 @@
+import { render, useEffect } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import { useFetch } from '../../../app/hooks/useFetch';
+import Checkbox from '../../../../../app/controls/Checkbox';
+import { useFetch } from '../../../../app/hooks/useFetch';
+import Result from '../../../../components/Tabs/Result';
 import Side from './Side';
-import Result from '/components/Tabs/Result';
-import Checkbox from '/controls/Checkbox';
-const { render, useEffect, useState } = wp.element;
-const { __ } = wp.i18n;
 
 const App = () => {
 	useEffect( () => {

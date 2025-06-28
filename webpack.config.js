@@ -37,13 +37,13 @@ const settingsPage = {
 // Relationships app.
 const relationships = {
 	...defaultConfig,
-	entry: './modules/relationships/app/App.js',
+	entry: './src/Extensions/Relationships/app/App.js',
 	output: {
-		path: path.resolve( 'modules/relationships/assets' ),
+		path: path.resolve( 'src/Extensions/Relationships/build' ),
 		filename: 'relationships.js'
 	},
 	externals,
 };
 
-module.exports = [ main, settingsPage ];
+module.exports = [ relationships ];
 // module.exports = [ main, settingsPage, relationships ];
