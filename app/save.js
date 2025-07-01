@@ -17,6 +17,7 @@ export const initSaveForm = () => {
 		}
 
 		submitButton.disabled = true;
+		const currentText = submitButton.value;
 		submitButton.value = MbbApp.texts.saving;
 
 		// Get hierarchical fields
@@ -59,8 +60,17 @@ export const initSaveForm = () => {
 			// Update status text.
 			document.querySelector( '#post_status' ).textContent = status === 'publish' ? MbbApp.texts.published : MbbApp.texts.draft;
 		} catch ( error ) {
-			console.error( 'Error saving form:', error );
-			alert( MbbApp.texts.saveError );
+			let message = error.message;
+
+			// Show error message for post title only.
+			if ( error.data?.details && ! Array.isArray( error.data?.details ) ) {
+				message = Object.values( error.data?.details ).map( item => item.message ).join( "\n" );
+			}
+
+			alert( message );
+
+			// Reset the submit button text.
+			submitButton.value = currentText;
 		} finally {
 			// Always re-enable the submit button
 			submitButton.disabled = false;
