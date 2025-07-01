@@ -20,10 +20,6 @@ const Layout = ( { children } ) => (
 			</div>
 		</div >
 
-		<input type="hidden" name="post_status" value={ MbbApp.status || 'draft' } />
-		<input type="hidden" name="messages" value="" />
-		<input type="hidden" name="mbb_nonce" value={ MbbApp.nonce_save } />
-
 		<Notification />
 	</ErrorBoundary>
 );
