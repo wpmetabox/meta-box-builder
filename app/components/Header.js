@@ -56,7 +56,7 @@ const Header = () => {
 				name="post_title"
 				id="post_title"
 				defaultValue={ MbbApp.title }
-				placeholder={ __( 'Field group title', 'meta-box-builder' ) }
+				placeholder={ __( 'Please enter the field group title here...', 'meta-box-builder' ) }
 			/>
 			<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
 				<input
