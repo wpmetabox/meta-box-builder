@@ -22,10 +22,19 @@ class Generator {
 	}
 
 	public function generate( WP_REST_Request $request ) {
-		$settings = array_merge( [
-			'menu_title' => $request->get_param( 'post_title' ),
-			'id'         => sanitize_title( $request->get_param( 'post_title' ) ),
-		], $request->get_param( 'settings' ) );
+		$post_title = sanitize_text_field( $request->get_param( 'post_title' ) );
+		if ( ! $post_title ) {
+			return __( 'Please enter a title for the settings page.', 'meta-box-builder' );
+		}
+
+		$settings  = $request->get_param( 'settings' );
+		$post_name = sanitize_title( empty( $settings['id'] ) ? $post_title : $settings['id'] );
+
+		$settings['menu_title'] = $post_title;
+		$settings['id']         = $post_name;
+		if ( empty( $settings['option_name'] ) ) {
+			$settings['option_name'] = $post_name;
+		}
 
 		$parser = new Parser( $settings );
 		$parser->parse();

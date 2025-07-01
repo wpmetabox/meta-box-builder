@@ -9,38 +9,16 @@ class Edit extends BaseEditPage {
 	public function __construct( $post_type, $slug_meta_box_title ) {
 		parent::__construct( $post_type, $slug_meta_box_title );
 
-		add_action( 'admin_head', [ $this, 'admin_head' ] );
-
-		add_action( 'admin_notices', [ $this, 'admin_notices' ], 1 );
-
 		// Add dialog to review the diff.
 		add_action( 'admin_footer', [ Template::class, 'render_diff_dialog' ] );
 	}
 
-	/**
-	 * Hide the default WordPress elements. Use `admin_head` to make the CSS apply immediately.
-	 * @return void
-	 */
-	public function admin_head(): void {
-		if ( get_current_screen()->id !== $this->post_type ) {
-			return;
+	public function remove_notices(): void {
+		parent::remove_notices();
+
+		if ( $this->is_screen() ) {
+			$this->show_local_json_notice();
 		}
-		?>
-		<style>
-			#post-body { display: none; }
-		</style>
-		<?php
-	}
-
-	public function admin_notices(): void {
-		if ( get_current_screen()->id !== $this->post_type ) {
-			return;
-		}
-
-		// Remove all other notices from other plugins.
-		remove_all_actions( 'admin_notices' );
-
-		$this->show_local_json_notice();
 	}
 
 	public function show_local_json_notice(): void {
@@ -110,17 +88,6 @@ class Edit extends BaseEditPage {
 			</div>
 			<?php
 		}
-	}
-
-	/**
-	 * Override the parent method to remove the meta box for documentation.
-	 *
-	 * @param array $meta_boxes
-	 *
-	 * @return array
-	 */
-	public function add_meta_boxes( $meta_boxes ) {
-		return $meta_boxes;
 	}
 
 	public function enqueue() {
@@ -230,9 +197,5 @@ class Edit extends BaseEditPage {
 		$data = apply_filters( 'mbb_app_data', $data );
 
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
-	}
-
-	// Do nothing as all saving is done via REST API.
-	public function save( $post_id, $post ) {
 	}
 }
