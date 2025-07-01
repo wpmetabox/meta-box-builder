@@ -3,6 +3,7 @@ namespace MBB\Extensions\SettingsPage;
 
 use WP_REST_Request;
 use WP_REST_Server;
+use WP_Error;
 
 class Save {
 	public function __construct() {
@@ -14,6 +15,30 @@ class Save {
 			'methods'             => WP_REST_Server::CREATABLE,
 			'callback'            => [ $this, 'save' ],
 			'permission_callback' => [ $this, 'has_permission' ],
+			'args'                => [
+				'post_id' => [
+					'required' => true,
+					'validate_callback' => function( $param ): bool {
+						return is_numeric( $param );
+					},
+					'sanitize_callback' => 'absint',
+				],
+				'post_status' => [
+					'required' => true,
+					'validate_callback' => function( $param ): bool {
+						return in_array( $param, [ 'publish', 'draft' ] );
+					},
+				],
+				'post_title' => [
+					'validate_callback' => function( $param ) {
+						if ( empty( $param ) ) {
+							return new WP_Error( 'rest_invalid_param', __( 'Please enter the settings page title', 'meta-box-builder' ), [ 'status' => 400 ] );
+						}
+						return true;
+					},
+					'sanitize_callback' => 'sanitize_text_field',
+				],
+			],
 		] );
 	}
 	public function has_permission(): bool {
@@ -21,24 +46,10 @@ class Save {
 	}
 
 	public function save( WP_REST_Request $request ): array {
-		$post_id     = (int) $request->get_param( 'post_id' );
-		$post_title  = sanitize_text_field( $request->get_param( 'post_title' ) );
-		$post_status = sanitize_text_field( $request->get_param( 'post_status' ) );
+		$post_id     = $request->get_param( 'post_id' );
+		$post_title  = $request->get_param( 'post_title' );
+		$post_status = $request->get_param( 'post_status' );
 		$settings    = $request->get_param( 'settings' );
-
-		if ( ! $post_id || ! $post_status ) {
-			return [
-				'success' => false,
-				'message' => __( 'Invalid data', 'meta-box-builder' ),
-			];
-		}
-
-		if ( ! $post_title ) {
-			return [
-				'success' => false,
-				'message' => __( 'Please enter a title for the settings page.', 'meta-box-builder' ),
-			];
-		}
 
 		$post_name = sanitize_title( empty( $settings['id'] ) ? $post_title : $settings['id'] );
 

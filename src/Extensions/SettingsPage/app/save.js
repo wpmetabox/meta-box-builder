@@ -16,6 +16,7 @@ export const initSaveForm = () => {
 		}
 
 		submitButton.disabled = true;
+		const currentText = submitButton.value;
 		submitButton.value = MbbApp.texts.saving;
 
 		// Get settings from useSettings store
@@ -50,8 +51,17 @@ export const initSaveForm = () => {
 			draftButton.value = status === 'publish' ? MbbApp.texts.switchToDraft : MbbApp.texts.saveDraft;
 			publishButton.value = status === 'publish' ? MbbApp.texts.update : MbbApp.texts.publish;
 		} catch ( error ) {
-			console.error( 'Error saving form:', error );
-			alert( MbbApp.texts.saveError );
+			let message = error.message;
+
+			// Show error message for post title only.
+			if ( error.data?.details && ! Array.isArray( error.data?.details ) ) {
+				message = Object.values( error.data?.details ).map( item => item.message ).join( "\n" );
+			}
+
+			alert( message );
+
+			// Reset the submit button text.
+			submitButton.value = currentText;
 		} finally {
 			// Always re-enable the submit button
 			submitButton.disabled = false;
