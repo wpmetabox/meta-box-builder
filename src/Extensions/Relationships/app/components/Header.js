@@ -15,7 +15,7 @@ const Header = () => {
 				name="post_title"
 				id="post_title"
 				defaultValue={ MbbApp.title }
-				placeholder={ __( 'Relationship title', 'meta-box-builder' ) }
+				placeholder={ __( 'Please enter the relationship title...', 'meta-box-builder' ) }
 			/>
 			<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
 				<input
