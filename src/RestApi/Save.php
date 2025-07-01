@@ -3,6 +3,7 @@ namespace MBB\RestApi;
 
 use WP_REST_Server;
 use WP_REST_Request;
+use WP_Error;
 use MBBParser\Parsers\Base as BaseParser;
 use MBBParser\Parsers\MetaBox as MetaBoxParser;
 
@@ -12,30 +13,43 @@ class Save extends Base {
 			'methods'             => WP_REST_Server::CREATABLE,
 			'callback'            => [ $this, 'save' ],
 			'permission_callback' => [ $this, 'has_permission' ],
+			'args'                => [
+				'post_id' => [
+					'required' => true,
+					'validate_callback' => function( $param ): bool {
+						return is_numeric( $param );
+					},
+					'sanitize_callback' => 'absint',
+				],
+				'post_status' => [
+					'required' => true,
+					'validate_callback' => function( $param ): bool {
+						return in_array( $param, [ 'publish', 'draft' ] );
+					},
+				],
+				'post_title' => [
+					'validate_callback' => function( $param ) {
+						if ( empty( $param ) ) {
+							return new WP_Error( 'rest_invalid_param', __( 'Please enter the field group title', 'meta-box-builder' ), [ 'status' => 400 ] );
+						}
+						return true;
+					},
+					'sanitize_callback' => 'sanitize_text_field',
+				],
+				'post_name' => [
+					'sanitize_callback' => 'sanitize_text_field',
+				],
+			],
 		] );
 	}
 
 	public function save( WP_REST_Request $request ): array {
-		$post_id     = (int) $request->get_param( 'post_id' );
-		$post_title  = sanitize_text_field( $request->get_param( 'post_title' ) );
-		$post_name   = sanitize_text_field( $request->get_param( 'post_name' ) );
-		$post_status = sanitize_text_field( $request->get_param( 'post_status' ) );
+		$post_id     = $request->get_param( 'post_id' );
+		$post_title  = $request->get_param( 'post_title' );
+		$post_name   = $request->get_param( 'post_name' );
+		$post_status = $request->get_param( 'post_status' );
 		$fields      = $request->get_param( 'fields' );
 		$settings    = $request->get_param( 'settings' );
-
-		if ( ! $post_id || ! $post_status ) {
-			return [
-				'success' => false,
-				'message' => __( 'Invalid data', 'meta-box-builder' ),
-			];
-		}
-
-		if ( ! $post_title ) {
-			return [
-				'success' => false,
-				'message' => __( 'Please enter the field group title', 'meta-box-builder' ),
-			];
-		}
 
 		if ( ! $post_name ) {
 			$post_name = sanitize_title( $post_title );
