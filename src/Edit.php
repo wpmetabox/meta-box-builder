@@ -190,7 +190,6 @@ class Edit extends BaseEditPage {
 				'publish'       => __( 'Publish', 'meta-box-builder' ),
 				'draft'         => __( 'Draft', 'meta-box-builder' ),
 				'published'     => __( 'Published', 'meta-box-builder' ),
-				'saveError'     => __( 'Error saving form. Please try again.', 'meta-box-builder' ),
 			],
 		];
 
