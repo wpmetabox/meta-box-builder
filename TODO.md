@@ -11,6 +11,3 @@
 - Thay đổi field type
 - Object field, chuyển chọn field type thành icon
 - Switch to field khi có trường required chưa điền
-
-## Other updates
-- Xóa phần collapsible, bao gồm cả CSS
