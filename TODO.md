@@ -13,8 +13,4 @@
 - Switch to field khi có trường required chưa điền
 
 ## Other updates
-
-- Update UI for creating settings pages
-- Update UI for creating relationships
-	- Xoá react tabs
-	- Xóa phần collapsible, bao gồm cả CSS
+- Xóa phần collapsible, bao gồm cả CSS
