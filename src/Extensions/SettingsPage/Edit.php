@@ -5,47 +5,6 @@ use MBB\BaseEditPage;
 use MetaBox\Support\Data;
 
 class Edit extends BaseEditPage {
-	public function __construct( $post_type, $slug_meta_box_title ) {
-		parent::__construct( $post_type, $slug_meta_box_title );
-
-		add_action( 'admin_head', [ $this, 'admin_head' ] );
-		add_action( 'admin_notices', [ $this, 'admin_notices' ], 1 );
-	}
-
-	/**
-	 * Hide the default WordPress elements. Use `admin_head` to make the CSS apply immediately.
-	 */
-	public function admin_head(): void {
-		if ( get_current_screen()->id !== $this->post_type ) {
-			return;
-		}
-		?>
-		<style>
-			#post-body { display: none; }
-		</style>
-		<?php
-	}
-
-	public function admin_notices(): void {
-		if ( get_current_screen()->id !== $this->post_type ) {
-			return;
-		}
-
-		// Remove all other notices from other plugins.
-		remove_all_actions( 'admin_notices' );
-	}
-
-	/**
-	 * Override the parent method to remove the meta box for ID (post_name) and option_name.
-	 *
-	 * @param array $meta_boxes
-	 *
-	 * @return array
-	 */
-	public function add_meta_boxes( $meta_boxes ) {
-		return $meta_boxes;
-	}
-
 	public function enqueue() {
 		wp_enqueue_style( 'wp-edit-post' );
 
@@ -101,13 +60,6 @@ class Edit extends BaseEditPage {
 		];
 
 		wp_localize_script( 'mb-settings-page-app', 'MbbApp', $data );
-	}
-
-	/**
-	 * Do nothing to save because saving is handled via REST API.
-	 * @see Save.php and save.js
-	 */
-	public function save( $post_id, $post ) {
 	}
 
 	private function get_menu_positions() {
