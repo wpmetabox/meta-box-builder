@@ -1,0 +1,31 @@
+&-include-exclude {
+	&__intro {
+		margin-bottom: 12px;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+
+		&.og-include-exclude__intro select {
+			width: auto;
+		}
+	}
+
+	&__rule {
+		border: 1px solid var(--color-gray);
+		padding: 8px;
+		margin-bottom: 8px;
+		border-radius: 4px;
+		background: var(--color-lightest);
+
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	&__remove,
+	&__remove:hover {
+		color: var(--color-red);
+		font-size: 11px;
+		align-self: flex-start;
+	}
+}

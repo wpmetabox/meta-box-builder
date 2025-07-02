@@ -1,9 +1,9 @@
-import { Dashicon } from "@wordpress/components";
-import { useState } from "@wordpress/element";
+import { Button } from "@wordpress/components";
+import { RawHTML, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
+import { maybeArrayToObject, uniqid } from "../functions";
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
-import { uniqid } from "/functions";
 
 const KeyValue = ( {
 	defaultValue,
@@ -12,51 +12,81 @@ const KeyValue = ( {
 	valuePlaceholder = __( 'Enter value', 'meta-box-builder' ),
 	keys = [],
 	values = [],
+	description = '',
+	className = 'og-attribute-wrapper',
+	updateField,
 	...rest
 } ) => {
-	const [ items, setItems ] = useState( Object.values( defaultValue || {} ) );
+	const items = maybeArrayToObject( defaultValue, 'id' );
 
-	const add = () => setItems( prev => [ ...prev, { key: '', value: '', id: uniqid() } ] );
-	const remove = id => setItems( prev => prev.filter( item => item.id !== id ) );
+	const add = () => {
+		const newItem = { key: '', value: '', id: uniqid() };
+
+		updateField( name, {
+			...items,
+			[ newItem.id ]: newItem,
+		} );
+	};
+
+	const remove = id => {
+		const newItems = { ...items };
+		delete newItems[ id ];
+
+		updateField( name, newItems );
+	};
+
+	const updateItem = ( id, prop, value ) => updateField( name, {
+		...items,
+		[ id ]: {
+			...items[ id ],
+			[ prop ]: value,
+		}
+	} );
 
 	return (
-		<DivRow { ...rest }>
+		<DivRow className={ className } { ...rest }>
+			{ description && <RawHTML className="og-description">{ description }</RawHTML> }
 			{
-				items.map( item => (
+				Object.values( items || {} ).map( item => (
 					<Item
 						key={ item.id }
 						item={ item }
 						remove={ remove }
-						name={ `${ name }[${ item.id }]` }
 						keysList={ keys }
 						values={ `${ name }-values` }
 						valuesList={ values }
 						keyPlaceholder={ keyPlaceholder }
 						valuePlaceholder={ valuePlaceholder }
+						updateItem={ updateItem }
 					/>
 				) )
 			}
-			<button type="button" className="button" onClick={ add }>{ __( '+ Add New', 'meta-box-builder' ) }</button>
+			<Button variant="secondary" onClick={ add } text={ __( '+ Add New', 'meta-box-builder' ) } />
 		</DivRow>
 	);
 };
 
-const Item = ( { name, keysList, valuesList, item, remove, keyPlaceholder, valuePlaceholder } ) => {
+const Item = ( { keysList, valuesList, item, remove, keyPlaceholder, valuePlaceholder, updateItem } ) => {
 	const [ values, setValues ] = useState( valuesList );
 
-	const handleSelect = ( inputRef, value ) => {
+	const updateKey = ( inputRef, value ) => {
 		inputRef.current.value = value;
+		updateItem( item.id, 'key', value );
 
-		const newValuesList = objectDepth( valuesList ) == 1 ? valuesList : valuesList[ value ] ? valuesList[ value ] : valuesList['default'];
+		const newValuesList = objectDepth( valuesList ) == 1 ? valuesList : ( Array.isArray( valuesList[ value ] ) ? valuesList[ value ] : valuesList[ 'default' ] );
 		setValues( newValuesList || [] );
+	};
+
+	const updateValue = ( inputRef, value ) => {
+		inputRef.current.value = value;
+		updateItem( item.id, 'value', value );
 	};
 
 	return (
 		<div className="og-attribute">
-			<input type="hidden" name={ `${ name }[id]` } defaultValue={ item.id } />
-			<FieldInserter placeholder={ keyPlaceholder } name={ `${ name }[key]` } defaultValue={ item.key } items={ keysList }  onSelect={ handleSelect } onChange={ handleSelect } />
-			<FieldInserter placeholder={ valuePlaceholder } name={ `${ name }[value]` } defaultValue={ item.value } items={ values } />
-			<button type="button" className="og-remove" title={ __( 'Remove', 'meta-box-builder' ) } onClick={ () => remove( item.id ) }><Dashicon icon="dismiss" /></button>
+			<FieldInserter placeholder={ keyPlaceholder } defaultValue={ item.key } items={ keysList } onSelect={ updateKey } onChange={ updateKey } />
+			<FieldInserter placeholder={ valuePlaceholder } defaultValue={ item.value } items={ values } onSelect={ updateValue } onChange={ updateValue } />
+			<Button variant="link" isDestructive={ true } onClick={ () => remove( item.id ) } text={ __( 'Remove', 'meta-box-builder' ) } />
 		</div>
 	);
 };

@@ -47,7 +47,7 @@ class AdminColumns {
 		}
 
 		if ( $new_status === 'publish' && $old_status === 'draft' ) {
-			// When switching from 'draft' to 'publish', the earlier meta box does not contains id 
+			// When switching from 'draft' to 'publish', the earlier meta box does not contains id
 			// (since draft posts don't have post_name property).
 			// So, we need to set the id for the meta box
 			$meta_box = get_post_meta( $post->ID, 'meta_box', true );
@@ -76,7 +76,7 @@ class AdminColumns {
 
 		if ( $new_status === 'draft' ) {
 			$post = get_post( $post_id );
-			
+
 			if ( $post->post_type !== $this->post_type ) {
 				return $new_status;
 			}
@@ -455,11 +455,9 @@ class AdminColumns {
 		if ( $sync_data['is_newer'] === 0 ) {
 			$status = 'synced';
 		}
-
 		if ( ! $sync_data['is_writable'] ) {
 			$status = 'error_file_permission';
 		}
-
 		if ( $sync_data['local'] === null ) {
 			$status = 'no_json';
 		}
@@ -469,14 +467,13 @@ class AdminColumns {
 		</span>
 
 		<?php
-		if ( $sync_data['is_newer'] <= 0 || ! $sync_data['is_writable'] ) {
+		if ( $status !== 'sync_available' ) {
 			return;
 		}
 		?>
 		<div class="row-actions">
 			<span class="sync">
-				<a class="button-sync" data-use="json" data-id="<?php esc_html_e( $meta_box_id ) ?>" href="javascript:;"
-					role="button">
+				<a class="button-sync" data-use="json" data-id="<?php esc_html_e( $meta_box_id ) ?>" href="javascript:;">
 					<?= esc_html__( 'Sync', 'meta-box-builder' ); ?>
 				</a>
 			</span>

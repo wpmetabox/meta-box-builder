@@ -7,6 +7,16 @@ class Settings extends Base {
 	// Allow these settings to be empty.
 	protected $empty_keys = [ 'post_types', 'taxonomies', 'settings_pages' ];
 
+	/**
+	 * Remove these settings if they are false.
+	 *
+	 * @var array
+	 */
+	protected $remove_false = [
+		'revision',
+		'closed',
+	];
+
 	public function parse() {
 		$this->remove_default( 'context', 'normal' )
 			->parse_boolean_values()
@@ -23,11 +33,25 @@ class Settings extends Base {
 		unset( $this->object_type );
 	}
 
-	private function parse_location() {
+	private function parse_location(): self {
 		$object_type = $this->object_type ?: 'post';
 
-		if ( in_array( $object_type, [ 'user', 'comment', 'block' ], true ) ) {
-			unset( $this->$object_type );
+		if ( $object_type === 'post' ) {
+			unset( $this->taxonomies );
+			unset( $this->settings_pages );
+			unset( $this->type );
+		} else if ( $object_type === 'term' ) {
+			unset( $this->post_types );
+			unset( $this->settings_pages );
+			unset( $this->type );
+		} else if ( $object_type === 'setting' ) {
+			unset( $this->post_types );
+			unset( $this->taxonomies );
+			unset( $this->type );
+		} else if ( in_array( $object_type, [ 'block', 'user', 'comment' ], true ) ) {
+			unset( $this->post_types );
+			unset( $this->taxonomies );
+			unset( $this->settings_pages );
 			$this->type = $object_type;
 		}
 
@@ -63,11 +87,13 @@ class Settings extends Base {
 			}
 			$rules[ $rule['name'] ] = $value;
 		}
-		$type = $data['type'];
+		$type     = $data['type'];
+		$relation = isset( $data['relation'] ) ? strtoupper( $data['relation'] ) : 'OR';
 
-		$this->$type = array_merge( [
-			'relation' => $data['relation'],
-		], $rules );
+		$this->$type = $rules;
+		if ( 'AND' === $relation ) {
+			$this->$type = array_merge( $this->$type, [ 'relation' => 'AND' ] );
+		}
 
 		return $this;
 	}
@@ -109,6 +135,7 @@ class Settings extends Base {
 				'enqueue_style',
 				'enqueue_script',
 				'enqueue_assets',
+				'block_json',
 			];
 			foreach ( $params as $param ) {
 				unset( $this->{$param} );
@@ -165,6 +192,8 @@ class Settings extends Base {
 			if ( ! empty( $this->settings['block_json']['path'] ) ) {
 				$this->settings['block_json']['path'] = $this->replace_variables( $this->settings['block_json']['path'] );
 			}
+		} else {
+			unset( $this->block_json );
 		}
 
 		unset( $this->render_with );

@@ -2,8 +2,6 @@
 namespace MBB;
 
 use MBB\Helpers\Template;
-use MBBParser\Parsers\Base as BaseParser;
-use MBBParser\Parsers\MetaBox as Parser;
 use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
@@ -11,16 +9,19 @@ class Edit extends BaseEditPage {
 	public function __construct( $post_type, $slug_meta_box_title ) {
 		parent::__construct( $post_type, $slug_meta_box_title );
 
-		// Add notice if builder version is lower than json version.
-		add_action( 'admin_notices', [ $this, 'version_notice' ] );
+		// Add dialog to review the diff.
 		add_action( 'admin_footer', [ Template::class, 'render_diff_dialog' ] );
 	}
 
-	public function version_notice() {
-		// Only show the notice in the edit screen.
-		if ( get_current_screen()->id !== $this->post_type ) {
-			return;
+	public function remove_notices(): void {
+		parent::remove_notices();
+
+		if ( $this->is_screen() ) {
+			$this->show_local_json_notice();
 		}
+	}
+
+	public function show_local_json_notice(): void {
 		$action = $_GET['action'] ?? '';
 		if ( 'edit' !== $action ) {
 			return;
@@ -89,32 +90,11 @@ class Edit extends BaseEditPage {
 		}
 	}
 
-	public function add_meta_boxes( $meta_boxes ) {
-		$meta_boxes = parent::add_meta_boxes( $meta_boxes );
-
-		$meta_boxes[] = [
-			'title'      => esc_html__( 'Documentation', 'meta-box-builder' ),
-			'id'         => 'mbb-documentation',
-			'post_types' => [ $this->post_type ],
-			'context'    => 'side',
-			'priority'   => 'low',
-			'fields'     => [
-				[
-					'type' => 'custom_html',
-					'std'  => '<ul>
-						<li><span class="dashicons dashicons-media-document"></span> <a href="https://docs.metabox.io/extensions/meta-box-builder/" target="_blank">' . esc_html__( 'Documentation', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/_DaFUt92kYY" target="_blank">' . esc_html__( 'How to create custom fields', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-						<li><span class="dashicons dashicons-video-alt3"></span> <a href="https://youtu.be/WWeaM5vIAwM" target="_blank">' . esc_html__( 'Understanding field types', 'meta-box-builder' ) /* phpcs:ignore WordPress.WP.I18n.TextDomainMismatch */ . '</a></li>
-					</ul>',
-				],
-			],
-		];
-
-		return $meta_boxes;
-	}
-
 	public function enqueue() {
+		Assets::enqueue();
+
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
+		wp_enqueue_style( 'wp-edit-post' );
 
 		wp_enqueue_style( 'rwmb-modal', RWMB_CSS_URL . 'modal.css', [], RWMB_VER );
 		wp_style_add_data( 'rwmb-modal', 'path', RWMB_CSS_DIR . 'modal.css' );
@@ -134,7 +114,22 @@ class Edit extends BaseEditPage {
 		] );
 
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], filemtime( MBB_DIR . 'assets/css/style.css' ) );
-		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/app.js', [ 'jquery', 'wp-element', 'wp-components', 'wp-i18n', 'clipboard', 'wp-color-picker', 'code-editor' ], filemtime( MBB_DIR . 'assets/js/app.js' ), true );
+
+		$asset = require MBB_DIR . "/assets/js/build/app.asset.php";
+
+		// Add extra JS libs for copy code to clipboard & block color picker.
+		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'code-editor', 'wp-color-picker' ] );
+
+		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/build/app.js', $asset['dependencies'], $asset['version'], true );
+
+		// Script to toggle the admin menu.
+		wp_enqueue_script(
+			'mbb-admin-menu',
+			MBB_URL . 'assets/js/admin-menu.js',
+			[],
+			filemtime( MBB_DIR . 'assets/js/admin-menu.js' ),
+			true
+		);
 
 		$fields = get_post_meta( get_the_ID(), 'fields', true ) ?: [];
 		$fields = array_values( $fields );
@@ -145,13 +140,20 @@ class Edit extends BaseEditPage {
 			return $field;
 		}, $fields );
 
+		$post = get_post();
+
 		$data = [
+			'adminUrl'      => admin_url(),
+			'status'        => $post->post_status,
+			'title'         => $post->post_title,
+			'slug'          => $post->post_name,
+			'author'        => get_the_author_meta( 'display_name', (int) $post->post_author ),
+			'trash'         => get_delete_post_link(),
+			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
+			'modified'      => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
+
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
-			'data'          => get_post_meta( get_the_ID(), 'data', true ),
-
-			'rest'          => untrailingslashit( rest_url() ),
-			'nonce'         => wp_create_nonce( 'wp_rest' ),
 
 			'postTypes'     => Data::get_post_types(),
 			'taxonomies'    => Data::get_taxonomies(),
@@ -177,44 +179,22 @@ class Edit extends BaseEditPage {
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
 				'views'              => Data::is_extension_active( 'mb-views' ),
 			],
+
+			'assetsBaseUrl' => MBB_URL . 'assets',
+
+			'texts' => [
+				'saving'        => __( 'Saving...', 'meta-box-builder' ),
+				'switchToDraft' => __( 'Switch to draft', 'meta-box-builder' ),
+				'saveDraft'     => __( 'Save draft', 'meta-box-builder' ),
+				'update'        => __( 'Update', 'meta-box-builder' ),
+				'publish'       => __( 'Publish', 'meta-box-builder' ),
+				'draft'         => __( 'Draft', 'meta-box-builder' ),
+				'published'     => __( 'Published', 'meta-box-builder' ),
+			],
 		];
 
 		$data = apply_filters( 'mbb_app_data', $data );
 
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
-	}
-
-	public function save( $post_id, $post ) {
-		// Save data for JavaScript (serialized arrays).
-		$request     = rwmb_request();
-		$base_parser = new BaseParser();
-		$settings    = apply_filters( 'mbb_save_settings', $request->post( 'settings' ), $request );
-		$fields      = apply_filters( 'mbb_save_fields', $request->post( 'fields' ), $request );
-		$data        = apply_filters( 'mbb_save_data', $request->post( 'data' ), $request );
-
-		$base_parser->set_settings( $settings )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'settings', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $fields )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'fields', $base_parser->get_settings() );
-
-		$base_parser->set_settings( $data )->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'data', $base_parser->get_settings() );
-
-		// Save parsed data for PHP (serialized array).
-		$submitted_data = compact( 'fields', 'settings' );
-		$submitted_data = apply_filters( 'mbb_save_submitted_data', $submitted_data, $request );
-
-		// Set post title and slug in case they're auto-generated.
-		$submitted_data['post_title'] = $post->post_title;
-		$submitted_data['post_name']  = $post->post_name;
-
-		$parser = new Parser( $submitted_data );
-		$parser->parse();
-
-		update_post_meta( $post_id, 'meta_box', $parser->get_settings() );
-
-		// Allow developers to add actions after saving the meta box.
-		do_action( 'mbb_after_save', $parser, $post_id, $submitted_data );
 	}
 }

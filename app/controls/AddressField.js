@@ -1,22 +1,37 @@
-import useFieldIds from '../hooks/useFieldIds';
+import useAllFields from '../hooks/useAllFields';
+import useSettings from '../hooks/useSettings';
 import DivRow from './DivRow';
-import { useContext } from '@wordpress/element';
-import { SettingsContext } from "../contexts/SettingsContext";
 import FieldInserter from './FieldInserter';
 
-const AddressField = ( { name, componentId, placeholder, defaultValue, ...rest } ) => {
-	const ids = useFieldIds( state => state.ids );
-	const { settings } = useContext( SettingsContext );
-	const fields = Array.from( new Set( Object.values( ids ) ) );
+const AddressField = ( { componentId, placeholder, defaultValue, updateField, ...rest } ) => {
+	const { getPrefix } = useSettings();
 
-	const handleSelectItem = ( inputRef, value ) => {
+	// Select only text and select fields.
+	const fields = useAllFields()
+		.filter( field => [ 'text', 'select' ].includes( field.type ) )
+		.map( field => [ field.id, `${ field.name } (${ field.id })` ] );
+
+	const handleChange = ( inputRef, value ) => updateField( 'address_field', value );
+
+	const handleSelect = ( inputRef, value ) => {
 		const address = !inputRef.current.value ? '' : inputRef.current.value + ',';
-		inputRef.current.value = address + `${ settings.prefix || '' }${ value }`;
+		inputRef.current.value = address + `${ getPrefix() || '' }${ value }`;
+
+		updateField( 'address_field', inputRef.current.value );
 	};
+
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<FieldInserter id={ componentId } name={ name } defaultValue={ defaultValue } placeholder={ placeholder } required={ true } items={ fields } onSelect={ handleSelectItem } />
+			<FieldInserter
+				id={ componentId }
+				defaultValue={ defaultValue }
+				placeholder={ placeholder }
+				required={ true }
+				items={ fields }
+				onChange={ handleChange }
+				onSelect={ handleSelect }
+			/>
 		</DivRow>
 	);
 };

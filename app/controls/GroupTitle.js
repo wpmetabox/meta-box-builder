@@ -1,30 +1,32 @@
-import { useContext } from '@wordpress/element';
-import { SettingsContext } from "../contexts/SettingsContext";
-import useFieldIds from '../hooks/useFieldIds';
+import { __ } from "@wordpress/i18n";
+import useSettings from '../hooks/useSettings';
+import getList from '../list-functions';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
-/**
- * Fix cursor jumping to the end of the `<input>` after typing.
- * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
- */
-const GroupTitle = ( { name, componentId, defaultValue, nameIdData, ...rest } ) => {
-	const { settings } = useContext( SettingsContext );
+const GroupTitle = ( { name, componentId, field, updateField, ...rest } ) => {
+	const { getPrefix } = useSettings();
 
-	const ids = useFieldIds( state => state.ids );
-	const fields = [ '{#}', ...Array.from( new Set( Object.values( ids ) ) ) ];
+	let fields = getList( field._id )( state => state.fields );
 
-	const handleChange = ( inputRef, value ) => nameIdData.updateGroupTitle( value );
+	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
+	fields = fields
+		.filter( f => !ignoreTypes.includes( f.type ) )
+		.map( f => [ f.id, `${ f.name } (${ f.id })` ] );
+
+	fields = [ [ '{#}', __( 'Entry index (#)', 'meta-box-builder' ) ], ...fields ];
+
+	const handleChange = ( inputRef, value ) => updateField( 'group_title', value );
 
 	const handleSelectItem = ( inputRef, value ) => {
-		const title = value === '{#}' ? value : `{${ settings.prefix || '' }${ value }}`;
+		const title = value === '{#}' ? value : `{${ getPrefix() }${ value }}`;
 		inputRef.current.value += title;
-		nameIdData.updateGroupTitle( inputRef.current.value );
+		updateField( 'group_title', inputRef.current.value );
 	};
 
 	return (
 		<DivRow className="og-group-title" htmlFor={ componentId } { ...rest }>
-			<FieldInserter id={ componentId } name={ name } defaultValue={ defaultValue } items={ fields } onChange={ handleChange } onSelect={ handleSelectItem } />
+			<FieldInserter id={ componentId } defaultValue={ field.group_title } items={ fields } onChange={ handleChange } onSelect={ handleSelectItem } />
 		</DivRow>
 	);
 };

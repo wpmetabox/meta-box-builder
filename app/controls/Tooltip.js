@@ -1,8 +1,7 @@
-import { Dashicon, Tooltip as T } from "@wordpress/components";
+import { Dashicon, Tooltip } from "@wordpress/components";
 
-const Tooltip = ( { content } ) => (
-  <T text={ content } delay={ 0 } position="top">
-    <span className="og-tooltip-icon"><Dashicon icon="editor-help" /></span>
-  </T>
+export default ( { content } ) => (
+	<Tooltip text={ content } delay={ 0 } placement="bottom">
+		<span className="og-tooltip-icon"><Dashicon icon="editor-help" /></span>
+	</Tooltip>
 );
-export default Tooltip;

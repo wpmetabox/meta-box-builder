@@ -1,0 +1,7 @@
+.mb-editor__add-field-button {
+	padding: 24px;
+
+	.mb-editor > & {
+		border-top: var(--border-lighter);
+	}
+}

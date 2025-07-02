@@ -1,17 +1,175 @@
-// Sticky sidebar.
-#poststuff #post-body.columns-2 {
-	display: grid;
-	grid-template-columns: 1fr 280px;
-	grid-gap: 20px;
-	margin-right: 0;
-}
-
-#side-sortables {
-	position: sticky;
-	top: 48px;
-}
-
-// Hide WordPress elements.
-.misc-pub-visibility {
+// Do not show update nag
+.update-nag {
 	display: none;
+}
+
+// Hide WordPress header elements
+#screen-meta-links,
+.wrap h1.wp-heading-inline,
+.wrap .wp-heading-inline ~ .page-title-action {
+	display: none;
+}
+
+// Setup margin, padding on wrappers
+.wrap {
+	margin: 0;
+}
+
+#wpcontent {
+	padding-left: 0;
+}
+
+#wpbody-content {
+	padding-bottom: 0;
+}
+
+.mb {
+	--nav-width: 350px;
+
+	display: flex;
+	flex-direction: column;
+
+	// For sticky header.
+	position: fixed;
+	top: 32px;
+	bottom: 0;
+	left: 160px; // Admin menu open
+	right: 0;
+
+	// Admin menu folded.
+	.folded & {
+		left: 36px;
+	}
+}
+
+// Header
+.mb-header {
+	background: #fff;
+	z-index: 99;
+	border-bottom: 1px solid var(--color-light);
+	height: 61px;
+	padding-inline: 12px;
+	box-sizing: border-box;
+
+	// & &__logo {
+	// 	padding: 6px;
+	// 	min-width: fit-content;
+	// }
+
+	// &__logo svg {
+	// 	width: 48px;
+	// 	height: 48px;
+	// 	display: block;
+	// }
+
+	#post_title {
+		background: #f0f0f0;
+		border: none;
+		max-width: 450px;
+		text-align: center;
+
+		&:focus,
+		&:hover {
+			box-shadow: none;
+			background: #e0e0e0;
+		}
+	}
+
+	&__actions {
+		svg {
+			width: auto;
+			height: auto;
+			fill: currentColor;
+		}
+	}
+
+	// Add button
+	&__add {
+		svg {
+			transition: all .25s;
+		}
+
+		&.is-pressed svg {
+			transform: rotate(45deg);
+		}
+	}
+}
+
+// Body: main area
+.mb-body {
+	flex: 1;
+	position: relative;
+
+	// Notices
+	.notice {
+		border-radius: 6px;
+		border-top-color: #e0e0e0;
+		border-bottom-color: #e0e0e0;
+		border-right-color: #e0e0e0;
+		padding-block: 6px;
+	}
+
+	.notice-dismiss {
+		bottom: 0;
+	}
+
+	&__inner {
+		padding: 48px 48px 48px;
+		flex: 1;
+
+		// Show scrollbar inside this area.
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: var(--nav-width);
+		right: 0;
+		overflow-y: auto;
+		scrollbar-width: thin;
+
+		[data-nav-panel=""] & {
+			left: 0;
+		}
+	}
+}
+
+.mb-main {
+	margin-inline: auto;
+	max-width: 100rem; // Prevent the main area from getting too wide. https://helpdesk.elightup.com/conversation/11098?folder_id=7
+}
+
+// Nav panel
+.mb-nav .mb-panel {
+	position: fixed;
+	top: calc(32px + 60px + 1px); // Admin bar + header + border
+	bottom: 0;
+	left: 160px; // WordPress menu
+	width: var(--nav-width);
+	z-index: 99;
+	transition: all .25s;
+	transform: translateX(calc(0px - var(--nav-width)));
+
+	margin-top: -1px; // Override to the header's border
+	border-left-width: 0;
+
+	.folded & {
+		left: 36px;
+	}
+
+	// Only scroll inner content, keep the panel header sticky
+	&__inner {
+		position: absolute;
+		top: calc(48px - 1px); // 48px: header, -1px: margin top
+		bottom: 0;
+		left: 0;
+		width: var(--nav-width);
+		overflow-y: auto;
+		scrollbar-width: thin;
+	}
+}
+
+[data-nav-panel="add"] .mb-panel--add,
+[data-nav-panel="structure"] .mb-panel--structure,
+[data-nav-panel="field-group-settings"] .mb-panel--field-group-settings,
+[data-nav-panel="field-settings"] .mb-panel--field-settings {
+	transform: translateX(0);
 }

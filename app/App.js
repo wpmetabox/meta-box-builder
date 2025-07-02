@@ -1,85 +1,61 @@
-import { render, useContext, useEffect } from "@wordpress/element";
+import { render } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { Icon, category, cog } from "@wordpress/icons";
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
-import Fields from './components/Tabs/Fields';
-import Result from './components/Tabs/Result';
-import Settings from './components/Tabs/Settings';
-import ThemeCode from "./components/Tabs/ThemeCode";
 import { ErrorBoundary } from "react-error-boundary";
-import { SettingsContext, SettingsProvider } from "./contexts/SettingsContext";
+import Header from './components/Header';
+import Main from './components/Main';
+import Nav from "./components/Nav";
+import Notification from './components/Notification';
+import { updateNewPostUrl } from './functions';
+import { initSaveForm } from './save';
 
-const Root = () => {
-	const forceValidate = () => document.querySelector( '#post' ).removeAttribute( 'novalidate' );
+const Layout = ( { children } ) => (
+	<ErrorBoundary fallback={ <p>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</p> }>
+		<Header />
 
-	useEffect( () => {
-		const publishButton = document.querySelector( '#publish' );
-		const saveButton = document.querySelector( '#save-post' );
-		if ( publishButton ) {
-			publishButton.addEventListener( 'click', forceValidate );
-		}
-		if ( saveButton ) {
-			saveButton.addEventListener( 'click', forceValidate );
-		}
+		<div className="mb-body">
+			<Nav />
 
-		// Don't submit form when press Enter.
-		jQuery( '#post' ).on( 'keypress keydown keyup', 'input', function ( e ) {
-			if ( e.keyCode == 13 ) {
-				e.preventDefault();
-			}
-		} );
-	}, [] );
+			<div className="mb-body__inner">
+				{ children }
+			</div>
+		</div >
 
-	return (
-		<SettingsProvider>
-			<App />
-		</SettingsProvider>
-	);
+		<Notification />
+	</ErrorBoundary>
+);
+
+const App = () => (
+	<Layout>
+		<Main />
+	</Layout>
+);
+
+const container = document.getElementById( 'poststuff' );
+container.classList.add( 'mb' );
+container.classList.add( 'og' );
+container.id = 'mb-app';
+
+// Use React 17 to avoid flashing issues when click to expand field settings.
+render( <App />, container );
+// const root = createRoot( container );
+// root.render( <App /> );
+
+// Update URL for new posts
+updateNewPostUrl();
+
+// Remove .wp-header-end element to properly show notices.
+document.querySelector( '.wp-header-end' ).remove();
+
+const form = document.querySelector( '#post' );
+
+// Prevent submit when press Enter.
+const preventSubmitWhenPressEnter = e => {
+	if ( e.target.tagName === 'INPUT' && e.keyCode == 13 ) {
+		e.preventDefault();
+	}
 };
+form.addEventListener( 'keypress', preventSubmitWhenPressEnter );
+form.addEventListener( 'keydown', preventSubmitWhenPressEnter );
+form.addEventListener( 'keyup', preventSubmitWhenPressEnter );
 
-const App = () => {
-	const { settings } = useContext( SettingsContext );
-
-	return (
-		<>
-			<ErrorBoundary fallback={ <h2>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</h2> }>
-				<Tabs forceRenderTabPanel={ true }>
-					<TabList className="react-tabs__tab-list og-tabs--main">
-						<Tab>
-							<Icon icon={ category } />
-							{ __( 'Fields', 'meta-box-builder' ) }
-						</Tab>
-						<Tab>
-							<Icon icon={ cog } />
-							{ __( 'Settings', 'meta-box-builder' ) }
-						</Tab>
-						<Tab className="button button-small">{ __( 'Get PHP Code', 'meta-box-builder' ) }</Tab>
-					</TabList>
-					<TabPanel>
-						<Fields fields={ MbbApp.fields } />
-					</TabPanel>
-					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-						<Settings />
-					</TabPanel>
-					<TabPanel className="react-tabs__tab-panel og-tab-panel--settings">
-						<Result endPoint="generate" />
-					</TabPanel>
-				</Tabs>
-				<br />
-				{
-					MbbApp.fields.length > 0 && settings.object_type !== 'block' &&
-					<div className="postbox og-theme-code">
-						<div className="postbox-header">
-							<h2 className="hndle ui-sortable-handle">{ __( "Theme code", "meta-box-builder" ) }</h2>
-						</div>
-						<div className="inside">
-							<ThemeCode settings={ settings } fields={ MbbApp.fields } />
-						</div>
-					</div>
-				}
-			</ErrorBoundary>
-		</>
-	);
-};
-
-render( <Root />, document.getElementById( 'root' ) );
+initSaveForm();

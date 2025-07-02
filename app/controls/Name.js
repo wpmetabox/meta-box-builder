@@ -1,41 +1,39 @@
-import { useEffect, useLayoutEffect, useRef, useState } from '@wordpress/element';
+import { useEffect, useRef } from '@wordpress/element';
+import { sanitizeId } from '../functions';
 import DivRow from './DivRow';
 
-/**
- * Fix cursor jumping to the end of the `<input>` after typing.
- * @link https://github.com/facebook/react/issues/18404#issuecomment-605294038
- */
-const Name = ( { name, componentId, nameIdData, ...rest } ) => {
-	const ref = useRef();
-	const [ selection, setSelection ] = useState();
+const Name = ( { componentId, field, updateField, ...rest } ) => {
+	const inputRef = useRef();
 
-	const handleChange = e => {		
-		nameIdData.updateName( e.target.value );
-		setSelection( [ e.target.selectionStart, e.target.selectionEnd ] );
+	const handleChange = e => {
+		const value = e.target.value;
+		updateField( 'name', value );
+
+		// Only generate ID if it's a new field and hasn't been manually changed
+		if ( field._new && !field._id_changed && ![ 'custom_html', 'divider', 'heading' ].includes( field.type ) ) {
+			updateField( 'id', sanitizeId( value ) );
+		}
 	};
 
-	useEffect( () => {
-		if ( nameIdData.name ) {
-			ref.current.value = nameIdData.name;
-		}
-	}, [ nameIdData.name ] );
+	// When done updating "name", don't auto generate ID.
+	const stopGeneratingId = () => updateField( '_id_changed', true );
 
-	useLayoutEffect( () => {
-		if ( selection && ref.current ) {
-			[ ref.current.selectionStart, ref.current.selectionEnd ] = selection;
+	// Use ref to manually update its value, avoid React touching the input value directly to avoid cursor jumping to the start.
+	useEffect( () => {
+		if ( inputRef.current && inputRef.current.value !== field.name ) {
+			inputRef.current.value = field.name || '';
 		}
-	}, [ selection ] );
+	}, [ field.name ] );
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
 			<input
-				ref={ ref }
+				ref={ inputRef }
 				type="text"
 				id={ componentId }
-				name={ name }
-				defaultValue={ nameIdData.name }
-				onBlur={ nameIdData.noAutoGenerateId }
-				onInput={ handleChange }
+				defaultValue={ field.name || '' }
+				onBlur={ stopGeneratingId }
+				onChange={ handleChange }
 			/>
 		</DivRow>
 	);
