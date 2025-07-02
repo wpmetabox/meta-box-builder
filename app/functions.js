@@ -111,17 +111,6 @@ export const getFieldIcon = type => {
 	}
 };
 
-export const getOptions = text => {
-	text = typeof text === 'number' ? String( text ) : ( typeof text === 'string' ? text : '' );
-	return text === "" ? [] : text.split( "\n" ).map( option => {
-		if ( !option.includes( ':' ) ) {
-			return option.trim();
-		}
-		const [ value, label ] = option.split( ':' );
-		return label.trim();
-	} );
-};
-
 const arrayUniqueByKey = ( array, key ) => [ ...new Map( array.map( item => [ item[ key ], item ] ) ).values() ];
 
 export const getFullOptions = text => {
