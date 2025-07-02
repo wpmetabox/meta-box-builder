@@ -1,5 +1,9 @@
 import { __ } from "@wordpress/i18n";
-import { isPositiveInteger } from "../../../../functions";
+
+const isPositiveInteger = value => {
+	const number = Number( value );
+	return Number.isInteger( number ) && number > 0;
+};
 
 const TextLimiter = ( { field } ) => {
 	if ( ![ 'text', 'textarea', 'wysiwyg' ].includes( field.type ) ) {

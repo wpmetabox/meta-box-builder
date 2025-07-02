@@ -4,13 +4,27 @@ import { memo, useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 
 import { isEqual } from 'lodash';
-import { getFieldIcon, scrollIntoView, ucwords } from "../../../functions";
+import { getFieldIcon, ucwords } from "../../../functions";
 import useFloatingStructurePanel from "../../../hooks/useFloatingStructurePanel";
 import useNavPanel from "../../../hooks/useNavPanel";
 import useStructureCollapse from "../../../hooks/useStructureCollapse";
 import { setFieldActive } from "../../../list-functions";
 import Actions from './Actions';
 import Group from './Group';
+
+const scrollIntoView = id => {
+	const element = document.getElementById( id );
+	if ( !element ) {
+		return;
+	}
+
+	const rect = element.getBoundingClientRect();
+	const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+	if ( rect.top < 0 || rect.top > viewportHeight ) {
+		element.scrollIntoView( { behavior: 'smooth', block: 'center' } );
+	}
+};
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ copied, setCopied ] = useState( false );
