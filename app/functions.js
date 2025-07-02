@@ -129,3 +129,25 @@ export const sanitizeId = text => slugify( text, { lower: true } )
 	;
 
 export const inside = ( el, selectors ) => el.matches( selectors ) || el.closest( selectors ) !== null;
+
+export const getFullOptions = text => {
+    if (typeof text !== "string") {
+        console.warn("Expected a string input for getFullOptions, but received:", text);
+        return [];
+    }
+
+    if (text === "") {
+        return [];
+    }
+
+    const options = text.split("\n").map(option => {
+        if (!option.includes(":")) {
+            return { value: option.trim(), label: option.trim() };
+        }
+        const parts = option.split(":");
+        return { value: parts[0].trim(), label: parts.slice(1).join(":" ).trim() };
+    });
+
+    // Do not allow duplicate values.
+    return arrayUniqueByKey(options, "value");
+};
