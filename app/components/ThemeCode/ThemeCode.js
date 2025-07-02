@@ -1,10 +1,11 @@
 import { RawHTML, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
-import { htmlDecode } from "../../functions";
 import { useFetch } from "../../hooks/useFetch";
 import useSettings from "../../hooks/useSettings";
 import { buildFieldsTree } from "../../list-functions";
 import Content from "./Content";
+
+const htmlDecode = innerHTML => Object.assign( document.createElement( 'textarea' ), { innerHTML } ).value;
 
 const ThemeCode = () => {
 	const { settings, getObjectType } = useSettings();
