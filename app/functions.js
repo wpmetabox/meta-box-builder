@@ -111,11 +111,6 @@ export const getFieldIcon = type => {
 	}
 };
 
-export const isPositiveInteger = value => {
-	const number = Number( value );
-	return Number.isInteger( number ) && number > 0;
-};
-
 export const getOptions = text => {
 	text = typeof text === 'number' ? String( text ) : ( typeof text === 'string' ? text : '' );
 	return text === "" ? [] : text.split( "\n" ).map( option => {
