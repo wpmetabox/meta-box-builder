@@ -1,10 +1,10 @@
 import { __ } from "@wordpress/i18n";
-import { arrayUniqueByKey, doNothing, getFullOptions } from "../../../functions";
+import { doNothing, getFullOptions } from "../../../functions";
 
 const Select = ( { field } ) => field.multiple ? <MultipleSelect field={ field } /> : <SingleSelect field={ field } />;
 
 const MultipleSelect = ( { field } ) => {
-	const options = arrayUniqueByKey( getFullOptions( field.options || '' ), 'value' );
+	const options = getFullOptions( field.options || '' );
 	let std = getFullOptions( field.std || '' ).map( option => option.value );
 
 	return (
@@ -36,7 +36,7 @@ const SingleSelect = ( { field } ) => {
 		);
 	}
 
-	const options = arrayUniqueByKey( getFullOptions( field.options || '' ), 'value' );
+	const options = getFullOptions( field.options || '' );
 	let std = getFullOptions( field.std || '' ).map( option => option.value );
 
 	std = std[ 0 ];

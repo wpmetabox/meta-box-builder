@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { arrayUniqueByKey, doNothing, getFullOptions } from "../../../functions";
+import { doNothing, getFullOptions } from "../../../functions";
 
 const SelectAdvanced = ( { field } ) => {
-	const options = arrayUniqueByKey( getFullOptions( field.options || '' ), 'value' );
+	const options = getFullOptions( field.options || '' );
 	let std = getFullOptions( field.std || '' ).map( option => option.value );
 	std = field.multiple ? std : std[ 0 ];
 
