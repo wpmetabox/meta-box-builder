@@ -1,9 +1,9 @@
 import { __ } from "@wordpress/i18n";
-import { doNothing, getOptions } from "../../../functions";
+import { doNothing, getFullOptions } from "../../../functions";
 
 const CheckboxList = ( { field } ) => {
-	const options = getOptions( field.options || '' );
-	const std = getOptions( field.std || '' );
+	const options = getFullOptions( field.options || '' );
+	const std = getFullOptions( field.std || '' ).map( option => option.value );
 	return (
 		<>
 			{
@@ -15,9 +15,9 @@ const CheckboxList = ( { field } ) => {
 			<fieldset className={ `rwmb-input-list ${ field.inline ? 'rwmb-inline' : '' }` }>
 				{
 					options.map( option => (
-						<label key={ option }>
-							<input type="checkbox" checked={ std.includes( option ) } onChange={ doNothing } />
-							{ option }
+						<label key={ option.value }>
+							<input type="checkbox" checked={ std.includes( option.value ) } onChange={ doNothing } />
+							{ option.label }
 						</label>
 					) )
 				}

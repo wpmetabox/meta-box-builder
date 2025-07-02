@@ -111,24 +111,24 @@ export const getFieldIcon = type => {
 	}
 };
 
-export const getOptions = text => {
-	text = typeof text === 'number' ? String( text ) : ( typeof text === 'string' ? text : '' );
-	return text === "" ? [] : text.split( "\n" ).map( option => {
-		if ( !option.includes( ':' ) ) {
-			return option.trim();
-		}
-		const [ value, label ] = option.split( ':' );
-		return label.trim();
-	} );
-};
+const arrayUniqueByKey = ( array, key ) => [ ...new Map( array.map( item => [ item[ key ], item ] ) ).values() ];
 
-export const getFullOptions = text => text === "" ? [] : text.split( "\n" ).map( option => {
-	if ( !option.includes( ':' ) ) {
-		return { value: option.trim(), label: option.trim() };
+export const getFullOptions = text => {
+	if ( text === "" ) {
+		return [];
 	}
-	const parts = option.split( ':' );
-	return { value: parts[ 0 ].trim(), label: parts.slice( 1 ).join( ":" ).trim() };
-} );
+
+	const options = text.split( "\n" ).map( option => {
+		if ( !option.includes( ':' ) ) {
+			return { value: option.trim(), label: option.trim() };
+		}
+		const parts = option.split( ':' );
+		return { value: parts[ 0 ].trim(), label: parts.slice( 1 ).join( ":" ).trim() };
+	} );
+
+	// Do not allow duplicate values.
+	return arrayUniqueByKey( options, 'value' );
+};
 
 // Do nothing callback function for field preview inputs
 export const doNothing = () => {};
@@ -155,3 +155,4 @@ export const maybeArrayToObject = ( arr, key ) => {
 
 	return typeof arr === 'object' ? arr : {};
 };
+
