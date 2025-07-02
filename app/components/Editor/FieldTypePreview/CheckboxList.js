@@ -1,8 +1,8 @@
 import { __ } from "@wordpress/i18n";
-import { doNothing, getFullOptions } from "../../../functions";
+import { arrayUniqueByKey, doNothing, getFullOptions } from "../../../functions";
 
 const CheckboxList = ( { field } ) => {
-	const options = getFullOptions( field.options || '' );
+	const options = arrayUniqueByKey( getFullOptions( field.options || '' ), 'value' );
 	const std = getFullOptions( field.std || '' ).map( option => option.value );
 	return (
 		<>

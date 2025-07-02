@@ -155,3 +155,5 @@ export const maybeArrayToObject = ( arr, key ) => {
 
 	return typeof arr === 'object' ? arr : {};
 };
+
+export const arrayUniqueByKey = ( array, key ) => [ ...new Map( array.map( item => [ item[ key ], item ] ) ).values() ];
