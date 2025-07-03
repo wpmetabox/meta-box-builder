@@ -118,6 +118,8 @@ export const getFullOptions = text => {
 		return [];
 	}
 
+	console.log( text );
+
 	const options = text.split( "\n" ).map( option => {
 		if ( !option.includes( ':' ) ) {
 			return { value: option.trim(), label: option.trim() };
