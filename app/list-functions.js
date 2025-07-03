@@ -2,6 +2,7 @@ import { __ } from '@wordpress/i18n';
 import dotProp from 'dot-prop';
 import { create } from 'zustand';
 import { ensureArray, ucwords, uniqid } from './functions';
+import useColumns from './hooks/useColumns';
 import useNavPanel from './hooks/useNavPanel';
 
 const areFieldsEqual = ( a, b ) => a.length === b.length && a.every( ( field, index ) => field._id === b[ index ]._id );
@@ -129,6 +130,7 @@ const createList = ( { id = '', fields = [] } ) => {
 		},
 		removeField: ( fieldId ) => {
 			const { navPanel, setNavPanel } = useNavPanel.getState();
+			const { removeFieldId } = useColumns.getState();
 
 			set( state => ( {
 				fields: state.fields.filter( f => f._id !== fieldId )
@@ -137,6 +139,8 @@ const createList = ( { id = '', fields = [] } ) => {
 			if ( navPanel === 'field-settings' ) {
 				setNavPanel( '' );
 			}
+
+			removeFieldId( fieldId );
 		},
 		updateField: ( fieldId, key, value ) => {
 			const field = get().fields.find( f => f._id === fieldId );
@@ -155,7 +159,7 @@ const createList = ( { id = '', fields = [] } ) => {
 			// Create a deep clone of the field to avoid reference issues
 			const updatedField = structuredClone( field );
 
-			// Set the value using dot notation
+			// Set the value using dot notation to work with nested properties like admin_columns, tooltip, etc.
 			dotProp.set( updatedField, key, value );
 
 			set( state => ( {
@@ -163,6 +167,15 @@ const createList = ( { id = '', fields = [] } ) => {
 					f._id === fieldId ? updatedField : f
 				)
 			} ) );
+
+			if ( key === 'columns' ) {
+				const { removeFieldId, addFieldId } = useColumns.getState();
+				if ( value === 12 || ! value ) {
+					removeFieldId( fieldId );
+				} else {
+					addFieldId( fieldId );
+				}
+			}
 		},
 		moveFieldUp: ( fieldId ) => set( state => {
 			const index = state.fields.findIndex( f => f._id === fieldId );
