@@ -104,20 +104,22 @@ const createList = ( { id = '', fields = [] } ) => {
 			} );
 
 			const updateSubFieldIds = group => lists.get( group._original_id ).getState().fields.map( subField => {
+				const newSubField = structuredClone( subField );
+
 				// For getting list of fields if that's a group.
-				subField._original_id = subField._id;
+				newSubField._original_id = subField._id;
 
 				// Change id
-				const newId = `${ subField.type }_${ uniqid() }`;
-				subField.id = newId;
-				subField._id = newId;
+				const newId = `${ newSubField.type }_${ uniqid() }`;
+				newSubField.id = newId;
+				newSubField._id = newId;
 
 				// Recurring update subfield IDs and create lists.
 				if ( subField.type === 'group' ) {
-					createNewList( subField );
+					createNewList( newSubField );
 				};
 
-				return subField;
+				return newSubField;
 			} );
 
 			// Create a new list for group fields.
