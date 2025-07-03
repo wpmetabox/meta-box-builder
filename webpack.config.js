@@ -45,4 +45,5 @@ const relationships = {
 	externals,
 };
 
-module.exports = [ main, settingsPage, relationships ];
+// module.exports = [ main, settingsPage, relationships ];
+module.exports = [ main ];
