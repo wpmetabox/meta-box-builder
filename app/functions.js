@@ -114,13 +114,11 @@ export const getFieldIcon = type => {
 const arrayUniqueByKey = ( array, key ) => [ ...new Map( array.map( item => [ item[ key ], item ] ) ).values() ];
 
 export const getFullOptions = text => {
-	if ( text === "" ) {
+	if ( ! text ) {
 		return [];
 	}
 
-	console.log( text );
-
-	const options = text.split( "\n" ).map( option => {
+	const options = String( text ).split( "\n" ).map( option => {
 		if ( !option.includes( ':' ) ) {
 			return { value: option.trim(), label: option.trim() };
 		}
