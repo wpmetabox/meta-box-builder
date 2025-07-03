@@ -1,4 +1,4 @@
-import { lazy, memo, Suspense, useCallback, useState } from "@wordpress/element";
+import { lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
@@ -10,7 +10,7 @@ import Field from './Field';
 import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
-const isClickedOnAField = e => inside( e.target, '.mb-field ' ) && !inside( e.target, '.mb-context-menu,.mb-toolbar' );
+const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-context-menu,.mb-toolbar' );
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ hover, setHover ] = useState( false );
@@ -18,13 +18,14 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const openContextMenu = useContextMenu( state => state.openContextMenu );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const { hasCustomColumns } = useColumns();
+	const ref = useRef();
 
 	const toggleSettings = e => {
 		if ( !isClickedOnAField( e ) ) {
 			return;
 		}
 
-		// Make it able to select sub-fields in a group
+		// Make it able to select sub-fields in a group, and do not select parent field.
 		e.stopPropagation();
 
 		setFieldActive( field._id );
@@ -42,8 +43,25 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 	const handleContextMenu = e => openContextMenu( e, field, fieldActions );
 
-	const handleMouseEnter = () => setHover( true );
-	const handleMouseLeave = () => setHover( false );
+	useEffect( () => {
+		const handleMouseMove = e => {
+			if ( !ref.current ) {
+				return;
+			}
+
+			// List all elements from the inside out.
+			const path = e.composedPath?.() || [];
+
+			// Find the first element with class "mb-field" from the inside out
+			const hoveredField = path.find( el => el?.classList?.contains( 'mb-field' ) );
+
+			// Set hover state to true if the hovered field is the current field, not the sub-field.
+			setHover( hoveredField === ref.current );
+		};
+
+		window.addEventListener( 'mousemove', handleMouseMove );
+		return () => window.removeEventListener( 'mousemove', handleMouseMove );
+	}, [] );
 
 	const handleResizeStart = useCallback( e => {
 		e.preventDefault();
@@ -96,6 +114,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 			${ MbbApp.extensions.columns && hasCustomColumns() ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
 		` }>
 			<div
+				ref={ ref }
 				className={ `
 					mb-field
 					mb-field--${ field.type }
@@ -106,11 +125,9 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				id={ `mb-field-${ field._id }` }
 				onClick={ toggleSettings }
 				onContextMenu={ handleContextMenu }
-				onMouseEnter={ handleMouseEnter }
-				onMouseLeave={ handleMouseLeave }
 				title={ __( 'Click to show field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
-				{ showActions && <Toolbar field={ field } { ...fieldActions } /> }
+				{ hovering && <Toolbar field={ field } { ...fieldActions } /> }
 				{
 					MbbApp.extensions.columns && showActions && (
 						<div
