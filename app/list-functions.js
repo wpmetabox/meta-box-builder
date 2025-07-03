@@ -219,6 +219,7 @@ export const buildFieldsTree = () => {
 		delete processedField._new;
 		delete processedField._active;
 		delete processedField._id_changed;
+		delete processedField._original_id;
 
 		// Temporary keys used by SortableJS.
 		delete processedField.chosen;
