@@ -32,6 +32,7 @@ if ( Helpers\Data::is_extension_active( 'mb-blocks' ) ) {
 	new Extensions\Blocks\Json\Generator();
 	new Extensions\Blocks\Json\Overrider();
 	new Extensions\Blocks\Json\Path();
+	new Extensions\Blocks\CodeToCallbackTransformer();
 }
 
 if ( Helpers\Data::is_extension_active( 'mb-settings-page' ) ) {
