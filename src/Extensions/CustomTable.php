@@ -7,7 +7,7 @@ use MBB\LocalJson;
 
 class CustomTable {
 	public function __construct() {
-		add_filter( 'mbb_after_save', [ $this, 'create_custom_table_after_save' ], 10, 3 );
+		add_action( 'mbb_after_save', [ $this, 'create_custom_table_after_save' ], 10, 3 );
 
 		if ( LocalJson::is_enabled() ) {
 			add_action( 'mbb_before_register_meta_box', [ $this, 'create_custom_table' ] );
