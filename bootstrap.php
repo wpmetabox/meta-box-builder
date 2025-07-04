@@ -42,6 +42,10 @@ if ( Helpers\Data::is_extension_active( 'mb-relationships' ) ) {
 	new Extensions\Relationships\Manager();
 }
 
+if ( Helpers\Data::is_extension_active( 'mb-custom-table' ) ) {
+	new Extensions\CustomTable();
+}
+
 new Integrations\WPML\Manager();
 new Integrations\Polylang\Manager();
 

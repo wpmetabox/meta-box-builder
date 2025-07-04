@@ -267,26 +267,32 @@ class JsonService {
 	 * @return string[]
 	 */
 	public static function get_paths(): array {
-		$theme_path    = get_stylesheet_directory();
-		$mb_json_paths = [];
+		// Cache paths to avoid multiple calls to this function.
+		static $paths = [];
 
-		if ( file_exists( "$theme_path/mb-json" ) ) {
-			$mb_json_paths[] = "$theme_path/mb-json";
+		if ( ! empty( $paths ) ) {
+			return $paths;
 		}
 
-		$mb_json_paths = apply_filters( 'mb_json_paths', $mb_json_paths );
+		$theme_path = get_stylesheet_directory();
+
+		if ( file_exists( "$theme_path/mb-json" ) ) {
+			$paths[] = "$theme_path/mb-json";
+		}
+
+		$paths = apply_filters( 'mb_json_paths', $paths );
 
 		// Allow developers to return a single path.
-		if ( is_string( $mb_json_paths ) ) {
-			$mb_json_paths = [ $mb_json_paths ];
+		if ( is_string( $paths ) ) {
+			$paths = [ $paths ];
 		}
 
 		// Remove unwritable paths
-		$mb_json_paths = array_filter( $mb_json_paths, function ( $path ) {
+		$paths = array_filter( $paths, function ( $path ) {
 			return is_writable( $path );
 		} );
 
-		return $mb_json_paths;
+		return $paths;
 	}
 
 	/**

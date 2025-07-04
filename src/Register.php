@@ -14,12 +14,13 @@ class Register {
 		$mbs = LocalJson::is_enabled() ? $this->get_json_meta_boxes() : $this->get_database_meta_boxes();
 
 		foreach ( $mbs as $meta_box ) {
-			$this->transform_for_block( $meta_box['meta_box'] );
-			$this->create_custom_table( $meta_box );
-
 			if ( empty( $meta_box['meta_box'] ) ) {
 				continue;
 			}
+
+			do_action( 'mbb_before_register_meta_box', $meta_box );
+
+			$this->transform_for_block( $meta_box['meta_box'] );
 
 			$settings = $meta_box['settings'] ?? [];
 
@@ -115,43 +116,6 @@ class Register {
 			echo $twig->render( 'block', $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		};
 	}
-
-	private function create_custom_table( $meta_box ): void {
-		if ( ! Helpers\Data::is_extension_active( 'mb-custom-table' ) || empty( $meta_box['meta_box']['table'] ) ) {
-			return;
-		}
-
-		// Get full custom table settings from both meta box settings and JavaScript data.
-		$custom_table_settings = $meta_box['meta_box']['custom_table'] ?? $meta_box['settings']['custom_table'] ?? [];
-
-		if ( empty( $custom_table_settings ) || ! is_array( $custom_table_settings ) ) {
-			return;
-		}
-
-		if ( ! Arr::get( $custom_table_settings, 'create' ) ) {
-			return;
-		}
-
-		$meta_box = $meta_box['meta_box'];
-		$columns = [];
-		$fields  = array_filter( $meta_box['fields'], [ $this, 'has_value' ] );
-		foreach ( $fields as $field ) {
-			$columns[ $field['id'] ] = 'TEXT';
-		}
-
-		$data      = [
-			'table'   => $meta_box['table'],
-			'columns' => $columns,
-		];
-		$cache_key = 'mb_create_table_' . md5( wp_json_encode( $data ) );
-		if ( get_transient( $cache_key ) !== false ) {
-			return;
-		}
-
-		\MB_Custom_Table_API::create( $meta_box['table'], $columns );
-		set_transient( $cache_key, 1, MONTH_IN_SECONDS );
-	}
-
 	public function enqueue_assets(): void {
 		wp_enqueue_style( 'mbb-post', MBB_URL . 'assets/css/post.css', [], MBB_VER );
 		wp_enqueue_script( 'mbb-post', MBB_URL . 'assets/js/post.js', [], MBB_VER, true );
