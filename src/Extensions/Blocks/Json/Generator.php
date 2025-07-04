@@ -1,6 +1,8 @@
 <?php
 namespace MBB\Extensions\Blocks\Json;
 
+use MBB\Helpers\Path;
+
 class Generator {
 	public function __construct() {
 		add_action( 'mbb_after_save', [ $this, 'generate_block_json' ], 10, 3 );

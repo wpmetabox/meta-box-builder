@@ -1,7 +1,7 @@
 <?php
 namespace MBB;
 
-use MBB\Extensions\Blocks\Json\Path;
+use MBB\Helpers\Path;
 
 class JsonService {
 	/**
