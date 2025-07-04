@@ -107,6 +107,10 @@ class Settings extends Base {
 			global $wpdb;
 			$prefix      = Arr::get( $this->settings, 'custom_table.prefix', false );
 			$this->table = ( $prefix ? $wpdb->prefix : '' ) . $name;
+		} else {
+			// Remove custom table settings if it's not enabled.
+			unset( $this->storage_type );
+			unset( $this->table );
 		}
 
 		unset( $this->custom_table );
