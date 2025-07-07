@@ -1,6 +1,8 @@
 import { Button, Flex, SelectControl } from "@wordpress/components";
+import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
-import { maybeArrayToObject, uniqid } from '../functions';
+import { trimStart } from 'lodash';
+import { getFullOptions, maybeArrayToObject, uniqid } from '../functions';
 import useAllFields from "../hooks/useAllFields";
 import useSettings from "../hooks/useSettings";
 import FieldInserter from './FieldInserter';
@@ -74,17 +76,39 @@ const Intro = ( { setting, updateField } ) => {
 
 const Rule = ( { rule, removeRule, updateField } ) => {
 	const { getPrefix } = useSettings();
+	const [ suggestedValues, setSuggestedValues ] = useState( [] );
 
 	const ignoreTypes = [ 'background', 'button', 'custom_html', 'divider', 'heading', 'tab', 'group' ];
-	const fields = useAllFields()
-		.filter( field => !ignoreTypes.includes( field.type ) )
-		.map( field => [ field.id, `${ field.name } (${ field.id })` ] );
+	const fields = useAllFields().filter( field => !ignoreTypes.includes( field.type ) );
 
-	const update = key => e => updateField( `conditional_logic.when.${ rule.id }.${ key }`, e.target.value );
+	const fieldIds = fields.map( field => [ field.id, `${ field.name } (${ field.id })` ] );
+	const plainFieldIds = fields.map( field => field.id ).join( ',' ); // Used for dependency tracking only.
+
+	const choiceFieldTypes = [ 'select', 'radio', 'checkbox_list', 'select_advanced', 'button_group', 'image_select', 'autocomplete' ];
+
+	const updateOperator = e => updateField( `conditional_logic.when.${ rule.id }.operator`, e.target.value );
+
 	const handleChangeName = ( inputRef, value ) => updateField( `conditional_logic.when.${ rule.id }.name`, value );
 	const handleSelectName = ( inputRef, value ) => {
 		inputRef.current.value = `${ getPrefix() || '' }${ value }`;
 		updateField( `conditional_logic.when.${ rule.id }.name`, inputRef.current.value );
+	};
+
+	// Update suggested values when the rule name changes.
+	useEffect( () => {
+		const fieldId = trimStart( rule.name, getPrefix() || '' ); // Remove prefix from the input to get the field ID.
+		const selectedField = fields.find( field => field.id === fieldId );
+		if ( !selectedField || !choiceFieldTypes.includes( selectedField.type ) ) {
+			setSuggestedValues( [] );
+			return;
+		}
+		const options = getFullOptions( selectedField.options || '' ).map( option => [ option.value, `${ option.label } (${ option.value })` ] );
+		setSuggestedValues( options );
+	}, [ rule.name, plainFieldIds ] );
+
+	const updateValue = ( inputRef, value ) => {
+		inputRef.current.value = value;
+		updateField( `conditional_logic.when.${ rule.id }.value`, value );
 	};
 
 	return (
@@ -92,12 +116,12 @@ const Rule = ( { rule, removeRule, updateField } ) => {
 			<FieldInserter
 				defaultValue={ rule.name }
 				placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) }
-				items={ fields }
+				items={ fieldIds }
 				isID={ true }
 				onChange={ handleChangeName }
 				onSelect={ handleSelectName }
 			/>
-			<select className="og-include-exclude__operator" defaultValue={ rule.operator } onChange={ update( 'operator' ) }>
+			<select className="og-include-exclude__operator" defaultValue={ rule.operator } onChange={ updateOperator }>
 				<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
 				<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
 				<option value="<">{ __( '<', 'meta-box-builder' ) }</option>
@@ -117,7 +141,13 @@ const Rule = ( { rule, removeRule, updateField } ) => {
 				<option value="match">{ __( 'match', 'meta-box-builder' ) }</option>
 				<option value="not match">{ __( 'not match', 'meta-box-builder' ) }</option>
 			</select>
-			<input defaultValue={ rule.value } type="text" placeholder={ __( 'Enter a value', 'meta-box-builder' ) } onChange={ update( 'value' ) } />
+			<FieldInserter
+				defaultValue={ rule.value }
+				placeholder={ __( 'Enter a value', 'meta-box-builder' ) }
+				items={ suggestedValues }
+				onChange={ updateValue }
+				onSelect={ updateValue }
+			/>
 			<Button variant="link" isDestructive={ true } onClick={ () => removeRule( rule.id ) } text={ __( 'Remove', 'meta-box-builder' ) } />
 		</div>
 	);
