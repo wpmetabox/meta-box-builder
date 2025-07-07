@@ -3,19 +3,17 @@ import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useColumns from "../../hooks/useColumns";
-import useContextMenu from "../../hooks/useContextMenu";
 import useNavPanel from "../../hooks/useNavPanel";
 import { setFieldActive } from "../../list-functions";
 import Field from './Field';
 import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
-const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-context-menu,.mb-toolbar' );
+const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-toolbar' );
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ hover, setHover ] = useState( false );
 	const [ resizing, setResizing ] = useState( false );
-	const openContextMenu = useContextMenu( state => state.openContextMenu );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const { hasCustomColumns } = useColumns();
 	const ref = useRef();
@@ -40,8 +38,6 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 
 		fieldActions.updateField( field._id, key, value );
 	};
-
-	const handleContextMenu = e => openContextMenu( e, field, fieldActions );
 
 	useEffect( () => {
 		const handleMouseMove = e => {
@@ -124,7 +120,6 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				` }
 				id={ `mb-field-${ field._id }` }
 				onClick={ toggleSettings }
-				onContextMenu={ handleContextMenu }
 				title={ __( 'Click to show field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
 				{ hovering && <Toolbar field={ field } { ...fieldActions } /> }
