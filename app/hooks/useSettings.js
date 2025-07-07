@@ -25,24 +25,24 @@ const useSettings = create( ( set, get ) => ( {
 
 	validateAndUpdateObjectType: () => {
 		const objectType = get().getSetting( 'object_type', 'post' );
-		let newObjectType = objectType;
 
-		if ( objectType === 'block' && !MbbApp.extensions.blocks ) {
-			newObjectType = 'post';
-		}
-		if ( objectType === 'term' && !MbbApp.extensions.termMeta ) {
-			newObjectType = 'post';
-		}
-		if ( objectType === 'user' && !MbbApp.extensions.userMeta ) {
-			newObjectType = 'post';
-		}
-		if ( objectType === 'comment' && !MbbApp.extensions.commentMeta ) {
-			newObjectType = 'post';
-		}
-		if ( objectType === 'setting' && !MbbApp.extensions.settingsPage ) {
-			newObjectType = 'post';
-		}
+		// Map object types to their required extensions
+		const extensionMap = {
+			block: 'blocks',
+			term: 'termMeta',
+			user: 'userMeta',
+			comment: 'commentMeta',
+			setting: 'settingsPage'
+		};
 
+		// Check if the current object type requires an extension that's not available
+		const requiredExtension = extensionMap[objectType];
+		const isValidType = !requiredExtension || MbbApp.extensions[requiredExtension];
+
+		// If invalid, fallback to 'post'
+		const newObjectType = isValidType ? objectType : 'post';
+
+		// Update setting if changed
 		if ( newObjectType !== objectType ) {
 			get().updateSetting( 'object_type', newObjectType );
 		}
