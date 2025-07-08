@@ -61,7 +61,7 @@ const KeyValue = ( {
 					/>
 				) )
 			}
-			<Button variant="secondary" onClick={ add } text={ __( '+ Add New', 'meta-box-builder' ) } />
+			<Button variant="secondary" size="compact" onClick={ add } text={ __( '+ Add New', 'meta-box-builder' ) } />
 		</DivRow>
 	);
 };

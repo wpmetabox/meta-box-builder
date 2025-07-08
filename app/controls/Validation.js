@@ -30,7 +30,7 @@ const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
 					updateField={ updateField }
 				/> )
 			}
-			<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
+			<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 		</DivRow>
 	);
 };
