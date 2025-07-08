@@ -3,6 +3,7 @@ import Before from "./Elements/Before";
 import CloneButton from "./Elements/CloneButton";
 import Description from "./Elements/Description";
 import FieldLabel from "./Elements/FieldLabel";
+import Id from "./Elements/Id";
 import TextLimiter from "./Elements/TextLimiter";
 import Tooltip from "./Elements/Tooltip";
 
@@ -37,6 +38,7 @@ const Base = ( { field: f, updateField, children } ) => {
 							{ field.required && <span className="rwmb-required">*</span> }
 							<Tooltip field={ field } />
 						</label>
+						<Id field={ field } updateField={ updateField } />
 						{
 							field.label_description && <p className="description">{ field.label_description }</p>
 						}
