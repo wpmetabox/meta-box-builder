@@ -122,7 +122,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				onClick={ toggleSettings }
 				title={ __( 'Click to show field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
-				{ hovering && <Toolbar field={ field } { ...fieldActions } /> }
+				<Toolbar show={ hovering } field={ field } { ...fieldActions } />
 				{
 					MbbApp.extensions.columns && showActions && (
 						<div

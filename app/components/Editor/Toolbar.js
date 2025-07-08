@@ -6,6 +6,7 @@ import getList from '../../list-functions';
 import AddFieldContent from '../AddFieldContent';
 
 const Toolbar = ( {
+	show,
 	field,
 	addFieldBefore,
 	addFieldAfter,
@@ -47,7 +48,7 @@ const Toolbar = ( {
 
 	return (
 		<>
-			<div className="mb-toolbar">
+			<div className={ `mb-toolbar ${ show ? 'mb-toolbar--show' : '' }` }>
 				<T label={ __( 'Toolbar', 'meta-box-builder' ) }>
 					<ToolbarGroup>
 						<ToolbarButton size="small" icon={ arrowUp } onClick={ moveUp } label={ __( 'Move up', 'meta-box-builder' ) } />
