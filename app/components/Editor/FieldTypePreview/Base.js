@@ -1,5 +1,6 @@
 import { Tooltip } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
+import { maybeArrayToObject } from '../../../functions';
 import After from "./Elements/After";
 import Before from "./Elements/Before";
 import CloneButton from "./Elements/CloneButton";
@@ -39,7 +40,7 @@ const Base = ( { field: f, updateField, children } ) => {
 							<FieldLabel field={ field } updateField={ updateField } />
 							{ field.required && <span className="rwmb-required">*</span> }
 							{
-								field.conditional_logic && (
+								hasConditionalLogic( field ) && (
 									<Tooltip text={ __( 'Has conditional logic', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
 										<span className="mb-field__icon dashicons dashicons-visibility" />
 									</Tooltip>
@@ -109,5 +110,7 @@ const normalize = f => {
 
 	return field;
 };
+
+const hasConditionalLogic = field => Object.values( maybeArrayToObject( field?.conditional_logic?.when, 'id' ) ).length > 0;
 
 export default Base;
