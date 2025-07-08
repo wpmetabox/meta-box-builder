@@ -1,3 +1,5 @@
+import { Tooltip } from '@wordpress/components';
+import { __ } from "@wordpress/i18n";
 import After from "./Elements/After";
 import Before from "./Elements/Before";
 import CloneButton from "./Elements/CloneButton";
@@ -5,7 +7,7 @@ import Description from "./Elements/Description";
 import FieldLabel from "./Elements/FieldLabel";
 import Id from "./Elements/Id";
 import TextLimiter from "./Elements/TextLimiter";
-import Tooltip from "./Elements/Tooltip";
+import TooltipIcon from "./Elements/TooltipIcon";
 
 const Wrapper = ( { field, children } ) => (
 	<>
@@ -36,7 +38,14 @@ const Base = ( { field: f, updateField, children } ) => {
 						<label>
 							<FieldLabel field={ field } updateField={ updateField } />
 							{ field.required && <span className="rwmb-required">*</span> }
-							<Tooltip field={ field } />
+							{
+								field.conditional_logic && (
+									<Tooltip text={ __( 'Has conditional logic', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
+										<span className="mb-field__icon dashicons dashicons-visibility" />
+									</Tooltip>
+								)
+							}
+							<TooltipIcon field={ field } />
 						</label>
 						<Id field={ field } updateField={ updateField } />
 						{

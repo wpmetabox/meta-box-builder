@@ -120,7 +120,6 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				` }
 				id={ `mb-field-${ field._id }` }
 				onClick={ toggleSettings }
-				title={ __( 'Click to show field settings. Drag and drop to reorder fields.', 'meta-box-builder' ) }
 			>
 				<Toolbar show={ hovering } field={ field } { ...fieldActions } />
 				{
