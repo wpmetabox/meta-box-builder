@@ -1,9 +1,8 @@
 import { archive, atSymbol, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
 import dotProp from 'dot-prop';
-import slugify from "slugify";
+import { deburr, uniqBy, upperFirst } from 'lodash';
 
-const ucfirst = string => string.length > 0 ? string[ 0 ].toUpperCase() + string.slice( 1 ) : string;
-export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
+export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( upperFirst ).join( join );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
@@ -41,7 +40,7 @@ const convert = params => {
 
 export const bracketsToDots = key => key.replace( '[]', '' ).replace( /\[(.+?)\]/g, '.$1' );
 
-export const sanitizeId = text => slugify( text, { lower: true } )
+export const sanitizeId = text => deburr( text ).toLowerCase()
 	.replace( /[^a-z0-9_]/g, '_' )           // Only accepts alphanumeric and underscores.
 	.replace( /[ _]{2,}/g, '_' )             // Remove duplicated `_`.
 	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_`.
@@ -111,8 +110,6 @@ export const getFieldIcon = type => {
 	}
 };
 
-const arrayUniqueByKey = ( array, key ) => [ ...new Map( array.map( item => [ item[ key ], item ] ) ).values() ];
-
 export const getFullOptions = text => {
 	if ( ! text ) {
 		return [];
@@ -127,7 +124,7 @@ export const getFullOptions = text => {
 	} );
 
 	// Do not allow duplicate values.
-	return arrayUniqueByKey( options, 'value' );
+	return uniqBy( options, 'value' );
 };
 
 // Do nothing callback function for field preview inputs
