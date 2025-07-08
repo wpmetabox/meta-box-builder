@@ -1,7 +1,6 @@
 import { archive, atSymbol, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
 import dotProp from 'dot-prop';
-import { upperFirst } from 'lodash';
-import slugify from "slugify";
+import { deburr, upperFirst } from 'lodash';
 
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( upperFirst ).join( join );
 
@@ -41,7 +40,7 @@ const convert = params => {
 
 export const bracketsToDots = key => key.replace( '[]', '' ).replace( /\[(.+?)\]/g, '.$1' );
 
-export const sanitizeId = text => slugify( text, { lower: true } )
+export const sanitizeId = text => deburr( text ).toLowerCase()
 	.replace( /[^a-z0-9_]/g, '_' )           // Only accepts alphanumeric and underscores.
 	.replace( /[ _]{2,}/g, '_' )             // Remove duplicated `_`.
 	.replace( /^_/, '' ).replace( /_$/, '' ) // Trim `_`.
