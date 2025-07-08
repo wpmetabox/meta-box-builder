@@ -32,6 +32,35 @@
 	&__label {
 		word-break: break-all;
 	}
+
+	&__id {
+		font-size: 11px;
+		color: #757575; // Same as .og-description
+		display: block;
+		word-break: break-all;
+	}
+
+	&__icon {
+		opacity: .4;
+		font-size: 13px;
+		width: 13px;
+		height: 13px;
+		position: relative;
+		top: 3px;
+	}
+
+	// Increase the size of the visibility icon a little bit.
+	.dashicons-visibility {
+		font-size: 14px;
+		width: 14px;
+		height: 14px;
+	}
+
+	.rwmb-label > label {
+		display: flex;
+		align-items: flex-start;
+		gap: 4px;
+	}
 }
 
 // Map

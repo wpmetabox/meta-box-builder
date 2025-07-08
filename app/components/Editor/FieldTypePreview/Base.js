@@ -1,10 +1,14 @@
+import { Tooltip } from '@wordpress/components';
+import { __ } from "@wordpress/i18n";
+import { maybeArrayToObject } from '../../../functions';
 import After from "./Elements/After";
 import Before from "./Elements/Before";
 import CloneButton from "./Elements/CloneButton";
 import Description from "./Elements/Description";
 import FieldLabel from "./Elements/FieldLabel";
+import Id from "./Elements/Id";
 import TextLimiter from "./Elements/TextLimiter";
-import Tooltip from "./Elements/Tooltip";
+import TooltipIcon from "./Elements/TooltipIcon";
 
 const Wrapper = ( { field, children } ) => (
 	<>
@@ -35,8 +39,16 @@ const Base = ( { field: f, updateField, children } ) => {
 						<label>
 							<FieldLabel field={ field } updateField={ updateField } />
 							{ field.required && <span className="rwmb-required">*</span> }
-							<Tooltip field={ field } />
+							{
+								hasConditionalLogic( field ) && (
+									<Tooltip text={ __( 'Has conditional logic', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
+										<span className="mb-field__icon dashicons dashicons-visibility" />
+									</Tooltip>
+								)
+							}
+							<TooltipIcon field={ field } />
 						</label>
+						<Id field={ field } updateField={ updateField } />
 						{
 							field.label_description && <p className="description">{ field.label_description }</p>
 						}
@@ -98,5 +110,7 @@ const normalize = f => {
 
 	return field;
 };
+
+const hasConditionalLogic = field => Object.values( maybeArrayToObject( field?.conditional_logic?.when, 'id' ) ).length > 0;
 
 export default Base;

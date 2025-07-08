@@ -2,9 +2,10 @@
 
 .mb-field {
 
-	// Remove margin for the last field
+	// Remove margin for the last field and add gap between label and input
 	.rwmb-field.rwmb-field {
 		margin-bottom: 0;
+		gap: 8px;
 	}
 
 	// Fix the clone background
