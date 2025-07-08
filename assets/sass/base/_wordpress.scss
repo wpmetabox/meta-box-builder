@@ -6,6 +6,15 @@
 	padding-top: 8px;
 }
 
+// Panel
+.components-panel__row {
+	display: block;
+}
+.components-panel__body.is-opened .components-panel__body-title {
+	background: #f0f0f0;
+	margin-bottom: 16px;
+}
+
 // Dropdown
 .components-popover__content {
 	min-width: calc(240px + 2 * 8px); // Min width for content is 240px, 8px padding inline.

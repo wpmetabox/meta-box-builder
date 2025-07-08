@@ -1,7 +1,7 @@
+import { PanelBody } from '@wordpress/components';
 import { createPortal } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
-import PersistentPanelBody from '../../PersistentPanelBody';
 import Tab from './Tab';
 
 const FieldSettings = ( { controls, field, ...rest } ) => {
@@ -58,9 +58,9 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 
 			{
 				tabs.map( tab => tab.controls.length > 0 && (
-					<PersistentPanelBody key={ tab.value } title={ tab.label }>
+					<PanelBody key={ tab.value } title={ tab.label }>
 						<Tab controls={ tab.controls } field={ field } { ...rest } />
-					</PersistentPanelBody>
+					</PanelBody>
 				) )
 			}
 		</div>,
