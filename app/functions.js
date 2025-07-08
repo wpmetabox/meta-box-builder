@@ -1,9 +1,9 @@
 import { archive, atSymbol, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
 import dotProp from 'dot-prop';
+import { upperFirst } from 'lodash';
 import slugify from "slugify";
 
-const ucfirst = string => string.length > 0 ? string[ 0 ].toUpperCase() + string.slice( 1 ) : string;
-export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( ucfirst ).join( join );
+export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( upperFirst ).join( join );
 
 export const uniqid = () => Math.random().toString( 36 ).substr( 2 );
 
