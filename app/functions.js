@@ -1,6 +1,6 @@
 import { archive, atSymbol, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
 import dotProp from 'dot-prop';
-import { deburr, upperFirst } from 'lodash';
+import { deburr, uniqBy, upperFirst } from 'lodash';
 
 export const ucwords = ( string, delimitor = ' ', join = ' ' ) => string.split( delimitor ).map( upperFirst ).join( join );
 
@@ -110,8 +110,6 @@ export const getFieldIcon = type => {
 	}
 };
 
-const arrayUniqueByKey = ( array, key ) => [ ...new Map( array.map( item => [ item[ key ], item ] ) ).values() ];
-
 export const getFullOptions = text => {
 	if ( ! text ) {
 		return [];
@@ -126,7 +124,7 @@ export const getFullOptions = text => {
 	} );
 
 	// Do not allow duplicate values.
-	return arrayUniqueByKey( options, 'value' );
+	return uniqBy( options, 'value' );
 };
 
 // Do nothing callback function for field preview inputs
