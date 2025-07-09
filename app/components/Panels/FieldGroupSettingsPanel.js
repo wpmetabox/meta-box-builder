@@ -70,10 +70,7 @@ const FieldGroupSettingsPanel = () => {
 					</PanelBody>
 				}
 				{
-					MbbApp.extensions.conditionalLogic &&
-					<PanelBody title={ __( 'Conditional logic', 'meta-box-builder' ) }>
-						<ConditionalLogic />
-					</PanelBody>
+					MbbApp.extensions.conditionalLogic && <ConditionalLogic />
 				}
 				{
 					MbbApp.extensions.tabs &&

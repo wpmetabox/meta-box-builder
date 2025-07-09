@@ -27,12 +27,12 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 			label: __( 'Appearance', 'meta-box-builder' ),
 		},
 		{
-			value: 'validation',
-			label: __( 'Validation', 'meta-box-builder' ),
-		},
-		{
 			value: 'conditional_logic',
 			label: __( 'Conditional logic', 'meta-box-builder' ),
+		},
+		{
+			value: 'validation',
+			label: __( 'Validation', 'meta-box-builder' ),
 		},
 		{
 			value: 'admin_columns',
@@ -48,7 +48,7 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 	tabs = tabs.map( tab => ( {
 		...tab,
 		controls: controls.filter( control => control.tab === tab.value )
-	} ) );
+	} ) ).filter( tab => tab.controls.length > 0 );
 
 	return portalElement && createPortal(
 		<div className={ `mb-field-settings ${ field._active ? 'mb-field-settings--show' : '' }` }>
@@ -57,11 +57,14 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 			</div>
 
 			{
-				tabs.map( tab => tab.controls.length > 0 && (
-					<PanelBody key={ tab.value } title={ tab.label } initialOpen={ tab.value !== 'advanced' }>
-						<Tab controls={ tab.controls } field={ field } { ...rest } />
-					</PanelBody>
-				) )
+				tabs.map( tab => tab.value === 'conditional_logic'
+					? <Tab key={ tab.value } controls={ tab.controls } field={ field } { ...rest } />
+					: (
+						<PanelBody key={ tab.value } title={ tab.label } initialOpen={ tab.value !== 'advanced' }>
+							<Tab controls={ tab.controls } field={ field } { ...rest } />
+						</PanelBody>
+					)
+				)
 			}
 		</div>,
 		portalElement

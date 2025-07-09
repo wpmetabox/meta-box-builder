@@ -2,6 +2,7 @@ import { Button, Flex, SelectControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { trimStart } from 'lodash';
+import PanelBody from '../components/Panels/PanelBody';
 import { getFullOptions, maybeArrayToObject, uniqid } from '../functions';
 import useAllFields from "../hooks/useAllFields";
 import useSettings from "../hooks/useSettings";
@@ -29,19 +30,25 @@ const ConditionalLogic = ( { defaultValue, updateField } ) => {
 	};
 
 	return (
-		<div className="mb-ruleset">
-			{ Object.values( rules ).length > 0 && <Intro setting={ setting } updateField={ updateField } /> }
-			{
-				Object.values( rules ).map( rule => <Rule
-					key={ rule.id }
-					rule={ rule }
-					removeRule={ removeRule }
-					updateField={ updateField }
-				/> )
-			}
+		<PanelBody
+			title={ __( 'Conditional logic', 'meta-box-builder' ) }
+			empty={ Object.values( rules ).length === 0 }
+			onAdd={ addRule }
+		>
+			<div className="mb-ruleset">
+				{ Object.values( rules ).length > 0 && <Intro setting={ setting } updateField={ updateField } /> }
+				{
+					Object.values( rules ).map( rule => <Rule
+						key={ rule.id }
+						rule={ rule }
+						removeRule={ removeRule }
+						updateField={ updateField }
+					/> )
+				}
 
-			<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
-		</div>
+				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
+			</div>
+		</PanelBody>
 	);
 };
 
