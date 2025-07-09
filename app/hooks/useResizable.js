@@ -1,38 +1,34 @@
 import { useEffect, useRef, useState } from 'react';
 
-const STORAGE_KEY = 'mbb-structure-panel-width';
-const MIN_WIDTH = 300;
-const MAX_WIDTH = 600;
-const DEFAULT_WIDTH = 350;
-
-const getSavedWidth = () => {
-	const savedWidth = localStorage.getItem( STORAGE_KEY );
+const getSavedWidth = ( storageKey, defaultWidth, minWidth, maxWidth ) => {
+	const savedWidth = localStorage.getItem( storageKey );
 	if ( !savedWidth ) {
-		return DEFAULT_WIDTH;
+		return defaultWidth;
 	}
 
 	const parsedWidth = parseInt( savedWidth, 10 );
-	if ( parsedWidth >= MIN_WIDTH ) {
+	if ( parsedWidth >= minWidth && parsedWidth <= maxWidth ) {
 		return parsedWidth;
 	}
 
-	return DEFAULT_WIDTH;
+	return defaultWidth;
 };
 
-const useResizablePanel = () => {
-	const [ width, setWidth ] = useState( getSavedWidth() );
+const useResizable = ( {
+	storageKey = 'mbb-nav-width',
+	defaultWidth = 350,
+	minWidth = 300,
+	maxWidth = 600,
+	callback,
+} ) => {
+	const [ width, setWidth ] = useState( getSavedWidth( storageKey, defaultWidth, minWidth, maxWidth ) );
 	const [ resizing, setResizing ] = useState( false );
 	const startXRef = useRef( 0 );
 	const startWidthRef = useRef( 0 );
 
 	useEffect( () => {
-		document.querySelector( '.mb' )?.style.setProperty( '--nav-width', `${ width }px` );
-	}, [ width ] );
-
-	const updateWidth = value => {
-		setWidth( value );
-		localStorage.setItem( STORAGE_KEY, value );
-	};
+		callback?.( width );
+	}, [ width, callback ] );
 
 	const handleMouseDown = e => {
 		e.preventDefault();
@@ -47,8 +43,10 @@ const useResizablePanel = () => {
 		}
 
 		const deltaX = e.clientX - startXRef.current;
-		const newWidth = Math.min( MAX_WIDTH, Math.max( MIN_WIDTH, startWidthRef.current + deltaX ) );
-		updateWidth( newWidth );
+		const newWidth = Math.min( maxWidth, Math.max( minWidth, startWidthRef.current + deltaX ) );
+
+		setWidth( newWidth );
+		localStorage.setItem( storageKey, newWidth );
 	};
 
 	const handleMouseUp = () => setResizing( false );
@@ -68,4 +66,4 @@ const useResizablePanel = () => {
 	return { width, handleMouseDown };
 };
 
-export default useResizablePanel;
+export default useResizable;
