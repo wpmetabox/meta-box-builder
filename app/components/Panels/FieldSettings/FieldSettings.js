@@ -51,8 +51,8 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 	} ) );
 
 	return portalElement && createPortal(
-		<div className={ `og-field-settings ${ field._active ? 'og-field-settings--show' : '' }` }>
-			<div className="og-field-settings__header">
+		<div className={ `mb-field-settings ${ field._active ? 'mb-field-settings--show' : '' }` }>
+			<div className="mb-field-settings__header">
 				<Tab controls={ headerControls } field={ field } { ...rest } />
 			</div>
 

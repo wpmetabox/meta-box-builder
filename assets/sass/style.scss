@@ -1,6 +1,5 @@
 @use "variables";
 @use "layout";
-@use "panels/base";
 @use "box";
 @use "base/elements";
 @use "base/wordpress";
@@ -18,10 +17,13 @@
 @use "editor/sortable";
 @use "editor/add-button";
 @use "editor/columns";
+
+@use "panels/base";
 @use "panels/structure";
 @use "panels/add-field";
 @use "panels/location";
 @use "panels/ruleset";
+@use "panels/field-settings";
 
 .og {
 	@import "elements";
@@ -41,7 +43,6 @@
 	@import "field-settings/sub-settings";
 	@import "field-settings/select-with-input";
 
-	@import "panels/field-settings";
 	@import "panels/attribute";
 }
 
