@@ -78,9 +78,7 @@ const FieldGroupSettingsPanel = () => {
 				}
 				{
 					MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) &&
-					<PanelBody title={ __( 'Custom table', 'meta-box-builder' ) }>
-						<CustomTable />
-					</PanelBody>
+					<CustomTable />
 				}
 				{
 					MbbApp.polylang &&

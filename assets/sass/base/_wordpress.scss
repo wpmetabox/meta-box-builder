@@ -15,6 +15,11 @@
 	margin-bottom: 16px;
 }
 
+// For displaying the toggle control in the panel body title.
+.components-panel__arrow .components-toggle-control {
+	margin: 0;
+}
+
 // Dropdown
 .components-popover__content {
 	min-width: calc(240px + 2 * 8px); // Min width for content is 240px, 8px padding inline.

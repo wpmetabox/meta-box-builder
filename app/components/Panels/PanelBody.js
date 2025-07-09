@@ -3,7 +3,7 @@ import { useState } from '@wordpress/element';
 import { chevronDown, chevronUp, plus } from '@wordpress/icons';
 
 const PanelBody = ( {
-	initialOpen = true,
+	initialOpen = false,
 	title,
 	children,
 	onAdd,
