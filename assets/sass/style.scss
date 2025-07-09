@@ -20,6 +20,8 @@
 @use "editor/columns";
 @use "panels/structure";
 @use "panels/add-field";
+@use "panels/location";
+@use "panels/ruleset";
 
 .og {
 	@import "elements";
@@ -39,8 +41,6 @@
 	@import "field-settings/sub-settings";
 	@import "field-settings/select-with-input";
 
-	@import "panels/location";
-	@import "panels/include-exclude";
 	@import "panels/field-settings";
 	@import "panels/attribute";
 }

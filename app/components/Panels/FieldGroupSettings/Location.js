@@ -17,7 +17,7 @@ const Location = () => {
 
 	return (
 		<>
-			<DivRow label={ __( 'Rule', 'meta-box-builder' ) } htmlFor="settings-object_type" className="og-location" tooltip={ __( 'Where to display the field group', 'meta-box-builder' ) }>
+			<DivRow label={ __( 'Rule', 'meta-box-builder' ) } htmlFor="settings-object_type" className="mb-location" tooltip={ __( 'Where to display the field group', 'meta-box-builder' ) }>
 				<select id="settings-object_type" defaultValue={ objectType } onChange={ e => updateObjectType( e.target.value ) }>
 					<option value="post">{ __( 'Post type', 'meta-box-builder' ) }</option>
 					{ MbbApp.extensions.termMeta && <option value="term">{ __( 'Taxonomy', 'meta-box-builder' ) }</option> }
