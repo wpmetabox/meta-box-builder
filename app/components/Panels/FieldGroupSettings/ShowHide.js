@@ -6,11 +6,19 @@ import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
 import { maybeArrayToObject, uniqid } from "../../../functions";
 import { fetcher } from "../../../hooks/useFetch";
 import useSettings from "../../../hooks/useSettings";
+import PanelBody from "../PanelBody";
 
 const ShowHide = () => {
 	const { getSetting, updateSetting } = useSettings();
 	const setting = getSetting( 'show_hide', {} );
 	const rules = maybeArrayToObject( setting.rules, 'id' );
+
+	// Convert `rules` to an object if it's an array, only run once when initializing, just in case it's an empty array.
+	useEffect( () => {
+		if ( Array.isArray( setting.rules ) ) {
+			updateSetting( 'show_hide.rules', {} );
+		}
+	}, [] );
 
 	const addRule = () => {
 		const newRule = { name: 'template', value: '', id: uniqid() };
@@ -29,18 +37,24 @@ const ShowHide = () => {
 	};
 
 	return (
-		<div className="mb-ruleset">
-			{ Object.values( rules ).length > 0 && <Intro setting={ setting } updateSetting={ updateSetting } /> }
-			{
-				Object.values( rules ).map( rule => <Rule
-					key={ rule.id }
-					rule={ rule }
-					removeRule={ removeRule }
-					updateSetting={ updateSetting }
-				/> )
-			}
-			<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
-		</div>
+		<PanelBody
+			title={ __( 'Toggle rules', 'meta-box-builder' ) }
+			empty={ Object.values( rules ).length === 0 }
+			onAdd={ addRule }
+		>
+			<div className="mb-ruleset">
+				{ Object.values( rules ).length > 0 && <Intro setting={ setting } updateSetting={ updateSetting } /> }
+				{
+					Object.values( rules ).map( rule => <Rule
+						key={ rule.id }
+						rule={ rule }
+						removeRule={ removeRule }
+						updateSetting={ updateSetting }
+					/> )
+				}
+				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
+			</div>
+		</PanelBody>
 	);
 };
 

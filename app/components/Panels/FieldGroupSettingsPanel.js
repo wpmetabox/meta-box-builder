@@ -65,9 +65,7 @@ const FieldGroupSettingsPanel = () => {
 				}
 				{
 					MbbApp.extensions.showHide && objectType !== 'block' &&
-					<PanelBody title={ __( 'Toggle rules', 'meta-box-builder' ) }>
-						<ShowHide />
-					</PanelBody>
+					<ShowHide />
 				}
 				{
 					MbbApp.extensions.conditionalLogic && <ConditionalLogic />
