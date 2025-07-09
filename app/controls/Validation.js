@@ -1,5 +1,6 @@
 import { Button } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
+import PanelBody from '../components/Panels/PanelBody';
 import { maybeArrayToObject, uniqid } from '../functions';
 import DivRow from './DivRow';
 
@@ -10,28 +11,34 @@ const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
 		const newRule = { name: 'required', value: true, message: '', id: uniqid() };
 		updateField( name, {
 			...rules,
-			[newRule.id]: newRule,
+			[ newRule.id ]: newRule,
 		} );
 	};
 
 	const removeRule = id => {
 		const newRules = { ...rules };
-		delete newRules[id];
+		delete newRules[ id ];
 		updateField( name, newRules );
 	};
 
 	return (
-		<DivRow className="mb-ruleset" { ...rest }>
-			{
-				Object.values( rules ).map( rule => <Rule
-					key={ rule.id }
-					rule={ rule }
-					removeRule={ removeRule }
-					updateField={ updateField }
-				/> )
-			}
-			<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
-		</DivRow>
+		<PanelBody
+			title={ __( 'Validation', 'meta-box-builder' ) }
+			empty={ Object.values( rules ).length === 0 }
+			onAdd={ addRule }
+		>
+			<DivRow className="mb-ruleset" { ...rest }>
+				{
+					Object.values( rules ).map( rule => <Rule
+						key={ rule.id }
+						rule={ rule }
+						removeRule={ removeRule }
+						updateField={ updateField }
+					/> )
+				}
+				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
+			</DivRow>
+		</PanelBody>
 	);
 };
 
@@ -44,7 +51,7 @@ const Rule = ( { rule, removeRule, updateField } ) => {
 		} else {
 			updateField( `validation.${ rule.id }.value`, '' );
 		}
-	}
+	};
 
 	return (
 		<div className="mb-ruleset__rule">
