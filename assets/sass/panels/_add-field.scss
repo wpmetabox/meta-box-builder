@@ -19,7 +19,7 @@
 
 	&__list {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 
 		.components-modal__content & {
 			grid-template-columns: repeat(auto-fit, 120px);
@@ -42,7 +42,6 @@
 	// Inside add field panel
 	.mb-panel--add & {
 		&__list {
-			grid-template-columns: repeat(2, 1fr);
 			gap: 12px;
 		}
 
@@ -51,6 +50,7 @@
 			padding-block: 8px;
 			background: var(--color-lightest);
 			gap: 4px;
+			text-align: left;
 		}
 	}
 }
