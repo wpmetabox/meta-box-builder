@@ -1,5 +1,5 @@
 document.addEventListener( 'DOMContentLoaded', () => {
-	const key = 'mbb_admin_menu_folded';
+	const key = 'mbb-admin-menu-folded';
 	const body = document.body;
 
 	// Only handle the menu state on small screens.

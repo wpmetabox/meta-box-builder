@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-const STORAGE_KEY = 'mbb_structure_panel';
+const STORAGE_KEY = 'mbb-structure-panel';
 
 const getInitialState = () => {
 	const stored = localStorage.getItem( STORAGE_KEY );
