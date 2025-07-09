@@ -21,11 +21,4 @@
 		flex-direction: column;
 		gap: 8px;
 	}
-
-	&__remove,
-	&__remove:hover {
-		color: var(--color-red);
-		font-size: 11px;
-		align-self: flex-start;
-	}
 }

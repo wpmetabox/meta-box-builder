@@ -83,7 +83,7 @@ const Item = ( { keysList, valuesList, item, remove, keyPlaceholder, valuePlaceh
 	};
 
 	return (
-		<div className="og-attribute">
+		<div className="og-attribute mb-ruleset__rule">
 			<FieldInserter placeholder={ keyPlaceholder } defaultValue={ item.key } items={ keysList } onSelect={ updateKey } onChange={ updateKey } />
 			<FieldInserter placeholder={ valuePlaceholder } defaultValue={ item.value } items={ values } onSelect={ updateValue } onChange={ updateValue } />
 			<Button variant="link" isDestructive={ true } onClick={ () => remove( item.id ) } text={ __( 'Remove', 'meta-box-builder' ) } />
