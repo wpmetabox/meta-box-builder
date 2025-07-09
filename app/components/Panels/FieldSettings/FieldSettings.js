@@ -57,7 +57,7 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 			</div>
 
 			{
-				tabs.map( tab => [ 'conditional_logic', 'validation' ].includes( tab.value )
+				tabs.map( tab => [ 'conditional_logic', 'validation', 'admin_columns' ].includes( tab.value )
 					? <Tab key={ tab.value } controls={ tab.controls } field={ field } { ...rest } />
 					: (
 						<PanelBody key={ tab.value } title={ tab.label } initialOpen={ tab.value !== 'advanced' }>
