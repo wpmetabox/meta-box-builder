@@ -12,6 +12,13 @@ const ConditionalLogic = ( { defaultValue, updateField } ) => {
 	const setting = defaultValue;
 	const rules = maybeArrayToObject( setting.when, 'id' );
 
+	// Convert `when` to an object if it's an array, only run once when initializing, just in case it's an empty array.
+	useEffect( () => {
+		if ( Array.isArray( setting.when ) ) {
+			updateField( 'conditional_logic.when', {} );
+		}
+	}, [] );
+
 	const addRule = () => {
 		const newRule = { name: '', operator: '=', value: '', id: uniqid() };
 		updateField( `conditional_logic.when.${ newRule.id }`, newRule );
