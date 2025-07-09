@@ -4,7 +4,9 @@ import { __ } from "@wordpress/i18n";
 import { arrowLeft, chevronDown, chevronUp, close } from '@wordpress/icons';
 import useFloatingStructurePanel from '../../hooks/useFloatingStructurePanel';
 import useNavPanel from '../../hooks/useNavPanel';
+import useResizable from '../../hooks/useResizable';
 import useStructureCollapse from '../../hooks/useStructureCollapse';
+import HorizontalResizer from '../HorizontalResizer';
 import Fields from './Structure/Fields';
 
 const FloatingHeader = ( { expanded, togglePanel } ) => {
@@ -60,12 +62,27 @@ const FloatingStructurePanel = () => {
 	const { visible, position, offsetX, offsetY, move, setPosition } = useFloatingStructurePanel();
 	const [ expanded, togglePanel ] = useReducer( prev => !prev, true );
 	const ref = useRef();
+	const { width, handleMouseDown } = useResizable( {
+		minWidth: 200,
+		maxWidth: 600,
+		defaultWidth: 300,
+		storageKey: 'mbb-floating-structure-panel-width',
+		position: 'left',
+		callback: width => {
+			if ( width < 300 ) {
+				ref?.current.classList.add( 'mb-panel--narrow' );
+			} else {
+				ref?.current.classList.remove( 'mb-panel--narrow' );
+			}
+		},
+	} );
 
 	// Apply position for floating panel
 	const floatingStyle = {
 		top: `${ position.top }px`,
 		right: `${ position.right }px`,
 		transform: `translate(${ offsetX }px, ${ offsetY }px)`,
+		width: `${ width }px`,
 	};
 
 	useEffect( () => {
@@ -131,6 +148,7 @@ const FloatingStructurePanel = () => {
 		<div className="mb-panel--floating" style={ floatingStyle } ref={ ref }>
 			<Panel header={ <FloatingHeader expanded={ expanded } togglePanel={ togglePanel } /> } className="mb-panel mb-panel--structure">
 				{ expanded && <div className="mb-panel__inner"><Fields /></div> }
+				<HorizontalResizer onMouseDown={ handleMouseDown } />
 			</Panel>
 		</div>
 	);

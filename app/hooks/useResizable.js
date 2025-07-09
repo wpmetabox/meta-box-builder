@@ -19,6 +19,7 @@ const useResizable = ( {
 	defaultWidth = 350,
 	minWidth = 300,
 	maxWidth = 600,
+	position = 'right',
 	callback,
 } ) => {
 	const [ width, setWidth ] = useState( getSavedWidth( storageKey, defaultWidth, minWidth, maxWidth ) );
@@ -42,7 +43,7 @@ const useResizable = ( {
 			return;
 		}
 
-		const deltaX = e.clientX - startXRef.current;
+		const deltaX = position === 'right' ? e.clientX - startXRef.current : startXRef.current - e.clientX;
 		const newWidth = Math.min( maxWidth, Math.max( minWidth, startWidthRef.current + deltaX ) );
 
 		setWidth( newWidth );

@@ -52,10 +52,12 @@
 	white-space: nowrap;
 }
 
+// Floating mode
 .mb-panel--floating {
 	position: fixed;
 	z-index: 999999;
 	box-shadow: var(--shadow-md);
+	font-size: 11px;
 
 	--color-lighter: #2e2e2e;
 	--color-lightest: #3e3e3e;
@@ -63,9 +65,8 @@
 
 	.mb-panel--structure {
 		position: static;
-		width: 300px;
 		transform: none;
-		border-radius: 4px;
+		border-radius: 0 4px 4px 0;
 		border: none;
 
 		// Dark mode.
@@ -100,15 +101,33 @@
 	}
 
 	.og-item__header {
-		grid-template-columns: 16px 1fr 36px;
 		padding-bottom: 2px;
 	}
 
-	.og-item__label {
-		font-size: 12px;
+	.og-item__id {
+		font-size: inherit;
 	}
 
-	.og-item__id {
-		display: none;
+	// Resizer
+	.mb-resizer {
+		right: auto;
+		left: -6px;
+		top: -1px;
+		border-radius: 4px 0 0 4px;
+		background: #2e2e2e;
+
+		&:hover {
+			background: #3e3e3e;
+		}
+	}
+
+	&.mb-panel--narrow {
+		.og-item__id {
+			display: none;
+		}
+
+		.og-item__header {
+			grid-template-columns: 16px 1fr 36px;
+		}
 	}
 }
