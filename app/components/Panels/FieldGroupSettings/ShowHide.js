@@ -2,11 +2,11 @@ import { Button, Flex, SelectControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import KeyValue from '../../../controls/KeyValue';
+import PanelBodyWithAdd from "../../../controls/PanelBodyWithAdd";
 import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
 import { maybeArrayToObject, uniqid } from "../../../functions";
 import { fetcher } from "../../../hooks/useFetch";
 import useSettings from "../../../hooks/useSettings";
-import PanelBodyWithAdd from "../PanelBodyWithAdd";
 
 const ShowHide = () => {
 	const { getSetting, updateSetting } = useSettings();

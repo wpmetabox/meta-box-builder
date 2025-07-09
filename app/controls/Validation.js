@@ -1,8 +1,8 @@
 import { Button } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import PanelBodyWithAdd from '../components/Panels/PanelBodyWithAdd';
 import { maybeArrayToObject, uniqid } from '../functions';
 import DivRow from './DivRow';
+import PanelBodyWithAdd from './PanelBodyWithAdd';
 
 const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
 	const rules = maybeArrayToObject( defaultValue, 'id' );

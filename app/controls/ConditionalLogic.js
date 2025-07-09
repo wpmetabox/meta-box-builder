@@ -2,11 +2,11 @@ import { Button, Flex, SelectControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { trimStart } from 'lodash';
-import PanelBodyWithAdd from '../components/Panels/PanelBodyWithAdd';
 import { getFullOptions, maybeArrayToObject, uniqid } from '../functions';
 import useAllFields from "../hooks/useAllFields";
 import useSettings from "../hooks/useSettings";
 import FieldInserter from './FieldInserter';
+import PanelBodyWithAdd from './PanelBodyWithAdd';
 
 const ConditionalLogic = ( { defaultValue, updateField } ) => {
 	const setting = defaultValue;

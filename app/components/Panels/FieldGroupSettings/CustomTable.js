@@ -1,9 +1,9 @@
 import { Tooltip } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import DivRow from "../../../controls/DivRow";
+import PanelBodyWithToggle from "../../../controls/PanelBodyWithToggle";
 import Toggle from "../../../controls/Toggle";
 import useSettings from "../../../hooks/useSettings";
-import PanelBodyWithToggle from "../PanelBodyWithToggle";
 
 const CustomTable = () => {
 	const { getSetting, updateSetting } = useSettings();

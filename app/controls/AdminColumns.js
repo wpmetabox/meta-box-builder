@@ -1,8 +1,8 @@
 import { __ } from '@wordpress/i18n';
-import PanelBodyWithToggle from '../components/Panels/PanelBodyWithToggle';
 import useSettings from '../hooks/useSettings';
 import AdminColumnsPosition from './AdminColumnsPosition';
 import Input from './Input';
+import PanelBodyWithToggle from './PanelBodyWithToggle';
 import Toggle from './Toggle';
 import ToggleGroup from './ToggleGroup';
 
