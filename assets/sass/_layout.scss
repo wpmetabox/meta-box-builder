@@ -155,12 +155,8 @@
 
 .mb-resizer {
 	position: absolute;
-	right: -6px;
-	top: 0;
-	bottom: 0;
-	width: 6px;
-	cursor: col-resize;
 	z-index: 10;
+
 	background: #e0e0e0;
 	transition: background-color 0.2s ease;
 
@@ -177,6 +173,22 @@
 	}
 }
 
-[data-nav-panel=""] .mb-nav__resize-handle {
+.mb-resizer--horizontal {
+	top: 0;
+	bottom: 0;
+	right: -6px;
+	width: 6px;
+	cursor: col-resize;
+}
+
+.mb-resizer--vertical {
+	left: 0;
+	right: 0;
+	bottom: -6px;
+	height: 6px;
+	cursor: row-resize;
+}
+
+[data-nav-panel=""] .mb-nav > .mb-resizer {
 	display: none;
 }

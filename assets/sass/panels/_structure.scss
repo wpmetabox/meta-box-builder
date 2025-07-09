@@ -66,7 +66,7 @@
 	.mb-panel--structure {
 		position: static;
 		transform: none;
-		border-radius: 0 4px 4px 0;
+		border-radius: 0 4px 0 0;
 		border: none;
 
 		// Dark mode.
@@ -90,7 +90,6 @@
 	.mb-panel__inner {
 		position: static;
 		width: 100%;
-		max-height: 480px;
 
 		scrollbar-width: thin;
 		scrollbar-color: var(--color-lighter) #1e1e1e;
@@ -110,15 +109,18 @@
 
 	// Resizer
 	.mb-resizer {
-		right: auto;
-		left: -6px;
-		top: -1px;
-		border-radius: 4px 0 0 4px;
 		background: #2e2e2e;
 
 		&:hover {
 			background: #3e3e3e;
 		}
+	}
+
+	.mb-resizer--horizontal {
+		left: -6px;
+		top: -1px;
+		bottom: -6px;
+		border-radius: 4px 0 0 4px;
 	}
 
 	&.mb-panel--narrow {
@@ -129,5 +131,9 @@
 		.og-item__header {
 			grid-template-columns: 16px 1fr 36px;
 		}
+	}
+
+	.mb-resizer--vertical {
+		border-radius: 0 0 4px 0;
 	}
 }

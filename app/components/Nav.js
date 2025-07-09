@@ -1,9 +1,9 @@
 import useResizable from "../hooks/useResizable";
-import HorizontalResizer from "./HorizontalResizer";
 import AddFieldPanel from "./Panels/AddFieldPanel";
 import FieldGroupSettingsPanel from "./Panels/FieldGroupSettingsPanel";
 import FieldSettingsPanel from "./Panels/FieldSettingsPanel";
 import StructurePanel from "./Panels/StructurePanel";
+import Resizer from "./Resizer";
 
 const Nav = () => {
 	const { handleMouseDown } = useResizable( {
@@ -17,7 +17,7 @@ const Nav = () => {
 			<FieldGroupSettingsPanel />
 			<FieldSettingsPanel />
 
-			<HorizontalResizer onMouseDown={ handleMouseDown } />
+			<Resizer onMouseDown={ handleMouseDown } />
 		</div>
 	);
 };

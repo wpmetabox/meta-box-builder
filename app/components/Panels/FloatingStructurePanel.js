@@ -6,7 +6,8 @@ import useFloatingStructurePanel from '../../hooks/useFloatingStructurePanel';
 import useNavPanel from '../../hooks/useNavPanel';
 import useResizable from '../../hooks/useResizable';
 import useStructureCollapse from '../../hooks/useStructureCollapse';
-import HorizontalResizer from '../HorizontalResizer';
+import useVerticalResizable from '../../hooks/useVerticalResizable';
+import Resizer from '../Resizer';
 import Fields from './Structure/Fields';
 
 const FloatingHeader = ( { expanded, togglePanel } ) => {
@@ -69,10 +70,16 @@ const FloatingStructurePanel = () => {
 		storageKey: 'mbb-floating-structure-panel-width',
 		position: 'left',
 		callback: width => {
-			if ( width < 300 ) {
-				ref?.current.classList.add( 'mb-panel--narrow' );
-			} else {
-				ref?.current.classList.remove( 'mb-panel--narrow' );
+			if ( ref.current ) {
+				ref.current.classList.toggle( 'mb-panel--narrow', width < 300 );
+			}
+		},
+	} );
+	const { height, handleMouseDown: handleMouseDownVertical } = useVerticalResizable( {
+		storageKey: 'mbb-floating-structure-panel-height',
+		callback: height => {
+			if ( ref.current ) {
+				ref.current.querySelector( '.mb-panel__inner' ).style.maxHeight = `${ height }px`;
 			}
 		},
 	} );
@@ -148,7 +155,8 @@ const FloatingStructurePanel = () => {
 		<div className="mb-panel--floating" style={ floatingStyle } ref={ ref }>
 			<Panel header={ <FloatingHeader expanded={ expanded } togglePanel={ togglePanel } /> } className="mb-panel mb-panel--structure">
 				{ expanded && <div className="mb-panel__inner"><Fields /></div> }
-				<HorizontalResizer onMouseDown={ handleMouseDown } />
+				<Resizer onMouseDown={ handleMouseDown } />
+				<Resizer onMouseDown={ handleMouseDownVertical } type="vertical" />
 			</Panel>
 		</div>
 	);
