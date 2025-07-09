@@ -2,7 +2,7 @@ import { Button, Flex, SelectControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { trimStart } from 'lodash';
-import PanelBody from '../components/Panels/PanelBody';
+import PanelBodyWithAdd from '../components/Panels/PanelBodyWithAdd';
 import { getFullOptions, maybeArrayToObject, uniqid } from '../functions';
 import useAllFields from "../hooks/useAllFields";
 import useSettings from "../hooks/useSettings";
@@ -37,7 +37,7 @@ const ConditionalLogic = ( { defaultValue, updateField } ) => {
 	};
 
 	return (
-		<PanelBody
+		<PanelBodyWithAdd
 			title={ __( 'Conditional logic', 'meta-box-builder' ) }
 			empty={ Object.values( rules ).length === 0 }
 			onAdd={ addRule }
@@ -55,7 +55,7 @@ const ConditionalLogic = ( { defaultValue, updateField } ) => {
 
 				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 			</div>
-		</PanelBody>
+		</PanelBodyWithAdd>
 	);
 };
 

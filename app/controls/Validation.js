@@ -1,6 +1,6 @@
 import { Button } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import PanelBody from '../components/Panels/PanelBody';
+import PanelBodyWithAdd from '../components/Panels/PanelBodyWithAdd';
 import { maybeArrayToObject, uniqid } from '../functions';
 import DivRow from './DivRow';
 
@@ -22,7 +22,7 @@ const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
 	};
 
 	return (
-		<PanelBody
+		<PanelBodyWithAdd
 			title={ __( 'Validation', 'meta-box-builder' ) }
 			empty={ Object.values( rules ).length === 0 }
 			onAdd={ addRule }
@@ -38,7 +38,7 @@ const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
 				}
 				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 			</DivRow>
-		</PanelBody>
+		</PanelBodyWithAdd>
 	);
 };
 

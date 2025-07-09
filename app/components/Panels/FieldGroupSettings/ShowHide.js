@@ -6,7 +6,7 @@ import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
 import { maybeArrayToObject, uniqid } from "../../../functions";
 import { fetcher } from "../../../hooks/useFetch";
 import useSettings from "../../../hooks/useSettings";
-import PanelBody from "../PanelBody";
+import PanelBodyWithAdd from "../PanelBodyWithAdd";
 
 const ShowHide = () => {
 	const { getSetting, updateSetting } = useSettings();
@@ -37,7 +37,7 @@ const ShowHide = () => {
 	};
 
 	return (
-		<PanelBody
+		<PanelBodyWithAdd
 			title={ __( 'Toggle rules', 'meta-box-builder' ) }
 			empty={ Object.values( rules ).length === 0 }
 			onAdd={ addRule }
@@ -54,7 +54,7 @@ const ShowHide = () => {
 				}
 				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 			</div>
-		</PanelBody>
+		</PanelBodyWithAdd>
 	);
 };
 

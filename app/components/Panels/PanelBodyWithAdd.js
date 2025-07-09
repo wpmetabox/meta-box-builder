@@ -2,7 +2,7 @@ import { Button, Icon } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { chevronDown, chevronUp, plus } from '@wordpress/icons';
 
-const PanelBody = ( {
+const PanelBodyWithAdd = ( {
 	initialOpen = false,
 	title,
 	children,
@@ -53,4 +53,4 @@ const PanelBody = ( {
 	);
 };
 
-export default PanelBody;
+export default PanelBodyWithAdd;
