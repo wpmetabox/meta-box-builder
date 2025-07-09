@@ -1,5 +1,6 @@
 @use "variables";
 @use "layout";
+@use "panels/base";
 @use "box";
 @use "base/elements";
 @use "base/wordpress";
@@ -37,7 +38,6 @@
 	@import "field-settings/sub-settings";
 	@import "field-settings/select-with-input";
 
-	@import "panels/base";
 	@import "panels/location";
 	@import "panels/include-exclude";
 	@import "panels/field-settings";

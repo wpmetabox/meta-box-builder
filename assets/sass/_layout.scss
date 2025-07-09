@@ -6,7 +6,7 @@
 // Hide WordPress header elements
 #screen-meta-links,
 .wrap h1.wp-heading-inline,
-.wrap .wp-heading-inline ~ .page-title-action {
+.wrap .wp-heading-inline~.page-title-action {
 	display: none;
 }
 
@@ -46,7 +46,7 @@
 .mb-header {
 	background: #fff;
 	z-index: 99;
-	border-bottom: 1px solid var(--color-light);
+	border-bottom: 1px solid #e0e0e0;
 	height: 61px;
 	padding-inline: 12px;
 	box-sizing: border-box;
@@ -137,39 +137,46 @@
 	max-width: 100rem; // Prevent the main area from getting too wide. https://helpdesk.elightup.com/conversation/11098?folder_id=7
 }
 
-// Nav panel
-.mb-nav .mb-panel {
+// Nav
+.mb-nav {
 	position: fixed;
 	top: calc(32px + 60px + 1px); // Admin bar + header + border
 	bottom: 0;
 	left: 160px; // WordPress menu
 	width: var(--nav-width);
 	z-index: 99;
-	transition: all .25s;
-	transform: translateX(calc(0px - var(--nav-width)));
 
-	margin-top: -1px; // Override to the header's border
 	border-left-width: 0;
 
 	.folded & {
 		left: 36px;
 	}
 
-	// Only scroll inner content, keep the panel header sticky
-	&__inner {
+	&__resize-handle {
 		position: absolute;
-		top: calc(48px - 1px); // 48px: header, -1px: margin top
+		right: -6px;
+		top: 0;
 		bottom: 0;
-		left: 0;
-		width: var(--nav-width);
-		overflow-y: auto;
-		scrollbar-width: thin;
+		width: 6px;
+		cursor: col-resize;
+		z-index: 10;
+		background: #e0e0e0;
+		transition: background-color 0.2s ease;
+
+		&:hover {
+			background: #ccc;
+		}
+
+		svg {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			fill: var(--color-gray);
+		}
 	}
 }
 
-[data-nav-panel="add"] .mb-panel--add,
-[data-nav-panel="structure"] .mb-panel--structure,
-[data-nav-panel="field-group-settings"] .mb-panel--field-group-settings,
-[data-nav-panel="field-settings"] .mb-panel--field-settings {
-	transform: translateX(0);
+[data-nav-panel=""] .mb-nav__resize-handle {
+	display: none;
 }
