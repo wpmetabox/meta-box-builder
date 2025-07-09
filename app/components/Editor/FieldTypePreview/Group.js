@@ -10,7 +10,7 @@ const Group = ( { field, parent } ) => {
 	const handleAdd = e => {
 		// Only handle when drag from the Add Field panel.
 		// We need to add a field manually at the given position.
-		if ( e.from.classList.contains( 'og-add-field__list' ) ) {
+		if ( e.from.classList.contains( 'mb-add-field__list' ) ) {
 			fieldActions.addFieldAt( e.item.dataset.type, e.newDraggableIndex );
 		}
 	};

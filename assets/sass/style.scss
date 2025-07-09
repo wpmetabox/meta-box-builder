@@ -19,6 +19,7 @@
 @use "editor/add-button";
 @use "editor/columns";
 @use "panels/structure";
+@use "panels/add-field";
 
 .og {
 	@import "elements";
@@ -42,8 +43,6 @@
 	@import "panels/include-exclude";
 	@import "panels/field-settings";
 	@import "panels/attribute";
-
-	@import "panels/add-field";
 }
 
 @import "translation-modal";

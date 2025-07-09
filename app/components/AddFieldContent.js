@@ -9,7 +9,7 @@ const AddFieldContent = ( { className = '', addField, onSelect } ) => {
 	const [ searchQuery, setSearchQuery ] = useState( '' );
 
 	return (
-		<div className={ `og-add-field ${ className }` }>
+		<div className={ `mb-add-field ${ className }` }>
 			<SearchControl value={ searchQuery } onChange={ setSearchQuery } __nextHasNoMarginBottom />
 			<Categories searchQuery={ searchQuery } onSelect={ onSelect } addField={ addField } />
 		</div>
@@ -27,14 +27,14 @@ const Category = ( { category, searchQuery, onSelect, addField } ) => {
 
 	return fields.length > 0 &&
 		<>
-			<div className="og-add-field__title">{ category.title }</div>
+			<div className="mb-add-field__title">{ category.title }</div>
 			<FieldList fields={ fields } onSelect={ onSelect } addField={ addField } />
 		</>;
 };
 
 const FieldList = ( { fields, onSelect, addField } ) => (
 	<ReactSortable
-		className="og-add-field__list"
+		className="mb-add-field__list"
 		delay={ 0 }
 		delayOnTouchOnly={ false }
 		touchStartThreshold={ 0 }
@@ -49,7 +49,7 @@ const FieldList = ( { fields, onSelect, addField } ) => (
 	>
 		{
 			fields.map( ( [ type, field ] ) =>
-				<div key={ type } data-type={ type } className="og-add-field__item">
+				<div key={ type } data-type={ type } className="mb-add-field__item">
 					<FieldButton type={ type } field={ field } onSelect={ onSelect } addField={ addField } />
 				</div>
 			)
