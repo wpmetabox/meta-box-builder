@@ -58,7 +58,7 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 
 			{
 				tabs.map( tab => tab.controls.length > 0 && (
-					<PanelBody key={ tab.value } title={ tab.label }>
+					<PanelBody key={ tab.value } title={ tab.label } initialOpen={ tab.value !== 'advanced' }>
 						<Tab controls={ tab.controls } field={ field } { ...rest } />
 					</PanelBody>
 				) )

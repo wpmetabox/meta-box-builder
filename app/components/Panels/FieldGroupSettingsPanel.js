@@ -95,7 +95,7 @@ const FieldGroupSettingsPanel = () => {
 				}
 				{
 					![ 'setting', 'block' ].includes( objectType ) &&
-					<PanelBody title={ __( 'Advanced', 'meta-box-builder' ) }>
+					<PanelBody title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ false }>
 						<Advanced />
 					</PanelBody>
 				}
