@@ -29,7 +29,7 @@ const ShowHide = () => {
 	};
 
 	return (
-		<div className="og-include-exclude">
+		<div className="mb-ruleset">
 			{ Object.values( rules ).length > 0 && <Intro setting={ setting } updateSetting={ updateSetting } /> }
 			{
 				Object.values( rules ).map( rule => <Rule
@@ -48,7 +48,7 @@ const Intro = ( { setting, updateSetting } ) => {
 	const update = key => value => updateSetting( `show_hide.${ key }`, value );
 
 	return (
-		<Flex gap={ 1 } align="center" className="og-include-exclude__intro">
+		<Flex gap={ 1 } align="center" className="mb-ruleset__intro">
 			<SelectControl
 				value={ setting.type || 'show' }
 				onChange={ update( 'type' ) }
@@ -109,7 +109,7 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 	];
 
 	return (
-		<div className={ `og-include-exclude__rule ${ name === 'input_value' ? ' og-show-hide__inputs' : '' }` }>
+		<div className={ `mb-ruleset__rule ${ name === 'input_value' ? ' og-show-hide__inputs' : '' }` }>
 			<SelectControl
 				value={ name }
 				onChange={ onChangeName }
@@ -121,7 +121,7 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 				![ 'is_child', 'input_value' ].includes( name ) &&
 				<ReactAsyncSelect
 					key={ `${ name }-${ objectType }` }
-					className="og-include-exclude__value"
+					className="mb-ruleset__value"
 					defaultValue={ rule }
 					loadOptions={ loadOptions }
 					onChange={ items => {

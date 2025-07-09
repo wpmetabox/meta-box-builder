@@ -1,11 +1,11 @@
-&-include-exclude {
+.mb-ruleset {
 	&__intro {
 		margin-bottom: 12px;
 		display: flex;
 		align-items: center;
 		gap: 4px;
 
-		&.og-include-exclude__intro select {
+		&.mb-ruleset__intro select {
 			width: auto;
 		}
 	}

@@ -21,7 +21,7 @@ const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
 	};
 
 	return (
-		<DivRow className="og-include-exclude" { ...rest }>
+		<DivRow className="mb-ruleset" { ...rest }>
 			{
 				Object.values( rules ).map( rule => <Rule
 					key={ rule.id }
@@ -47,8 +47,8 @@ const Rule = ( { rule, removeRule, updateField } ) => {
 	}
 
 	return (
-		<div className="og-include-exclude__rule">
-			<select className="og-include-exclude__name" defaultValue={ rule.name } onChange={ updateName }>
+		<div className="mb-ruleset__rule">
+			<select className="mb-ruleset__name" defaultValue={ rule.name } onChange={ updateName }>
 				<option value="required">{ __( 'Required', 'meta-box-builder' ) }</option>
 				<option value="minlength">{ __( 'Min length', 'meta-box-builder' ) }</option>
 				<option value="maxlength">{ __( 'Max length', 'meta-box-builder' ) }</option>

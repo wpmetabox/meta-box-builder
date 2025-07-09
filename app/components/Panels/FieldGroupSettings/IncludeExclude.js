@@ -30,7 +30,7 @@ const IncludeExclude = () => {
 
 	return (
 		<DivRow
-			className="og-include-exclude"
+			className="mb-ruleset"
 			label={ `<a href="https://metabox.io/plugins/meta-box-include-exclude/" target="_blank">${ __( 'Advanced rules', 'meta-box-builder' ) }</a>` }
 			tooltip={ __( 'More rules on where to display the field group. For each rule, maximum 10 items are displayed. To select other items, please type to search.', 'meta-box-builder' ) }
 		>
@@ -52,7 +52,7 @@ const Intro = ( { setting, updateSetting } ) => {
 	const update = key => value => updateSetting( `include_exclude.${ key }`, value );
 
 	return (
-		<Flex gap={ 1 } align="center" className="og-include-exclude__intro">
+		<Flex gap={ 1 } align="center" className="mb-ruleset__intro">
 			<SelectControl
 				value={ setting.type || 'include' }
 				onChange={ update( 'type' ) }
@@ -142,7 +142,7 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 	const options = optionsMap[ objectType ] || optionsMap.default;
 
 	return (
-		<div className="og-include-exclude__rule">
+		<div className="mb-ruleset__rule">
 			<SelectControl
 				value={ name }
 				onChange={ onChangeName }
@@ -153,7 +153,7 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 				![ 'is_child', 'custom' ].includes( name ) &&
 				<ReactAsyncSelect
 					key={ `${ name }-${ objectType }-${ JSON.stringify( postTypes ) }` }
-					className="og-include-exclude__value"
+					className="mb-ruleset__value"
 					defaultValue={ rule }
 					loadOptions={ loadOptions }
 					onChange={ items => {

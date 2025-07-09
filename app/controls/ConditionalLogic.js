@@ -29,7 +29,7 @@ const ConditionalLogic = ( { defaultValue, updateField } ) => {
 	};
 
 	return (
-		<div className="og-include-exclude">
+		<div className="mb-ruleset">
 			{ Object.values( rules ).length > 0 && <Intro setting={ setting } updateField={ updateField } /> }
 			{
 				Object.values( rules ).map( rule => <Rule
@@ -49,7 +49,7 @@ const Intro = ( { setting, updateField } ) => {
 	const update = key => value => updateField( `conditional_logic.${ key }`, value );
 
 	return (
-		<Flex gap={ 1 } align="center" className="og-include-exclude__intro">
+		<Flex gap={ 1 } align="center" className="mb-ruleset__intro">
 			<SelectControl
 				value={ setting.type || 'visible' }
 				onChange={ update( 'type' ) }
@@ -112,7 +112,7 @@ const Rule = ( { rule, removeRule, updateField } ) => {
 	};
 
 	return (
-		<div className="og-include-exclude__rule">
+		<div className="mb-ruleset__rule">
 			<FieldInserter
 				defaultValue={ rule.name }
 				placeholder={ __( 'Enter or select a field ID', 'meta-box-builder' ) }
@@ -121,7 +121,7 @@ const Rule = ( { rule, removeRule, updateField } ) => {
 				onChange={ handleChangeName }
 				onSelect={ handleSelectName }
 			/>
-			<select className="og-include-exclude__operator" defaultValue={ rule.operator } onChange={ updateOperator }>
+			<select className="mb-ruleset__operator" defaultValue={ rule.operator } onChange={ updateOperator }>
 				<option value="=">{ __( '=', 'meta-box-builder' ) }</option>
 				<option value=">">{ __( '>', 'meta-box-builder' ) }</option>
 				<option value="<">{ __( '<', 'meta-box-builder' ) }</option>
