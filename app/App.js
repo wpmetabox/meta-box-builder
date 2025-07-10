@@ -18,7 +18,7 @@ const Layout = ( { children } ) => (
 			<div className="mb-body__inner">
 				{ children }
 			</div>
-		</div >
+		</div>
 
 		<Notification />
 	</ErrorBoundary>
