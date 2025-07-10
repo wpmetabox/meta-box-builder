@@ -1,7 +1,7 @@
-import { PanelBody } from '@wordpress/components';
 import { createPortal } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
+import PersistentPanelBody from '../PersistentPanelBody';
 import Tab from './Tab';
 
 const FieldSettings = ( { controls, field, ...rest } ) => {
@@ -60,9 +60,14 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 				tabs.map( tab => [ 'conditional_logic', 'validation', 'admin_columns' ].includes( tab.value )
 					? <Tab key={ tab.value } controls={ tab.controls } field={ field } { ...rest } />
 					: (
-						<PanelBody key={ tab.value } title={ tab.label } initialOpen={ tab.value !== 'advanced' }>
+						<PersistentPanelBody
+							key={ tab.value }
+							panelId={ `field-${ tab.value }` }
+							title={ tab.label }
+							initialOpen={ tab.value !== 'advanced' }
+						>
 							<Tab controls={ tab.controls } field={ field } { ...rest } />
-						</PanelBody>
+						</PersistentPanelBody>
 					)
 				)
 			}

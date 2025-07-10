@@ -1,4 +1,4 @@
-import { Panel, PanelBody, PanelRow } from '@wordpress/components';
+import { Panel, PanelRow } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import useSettings from '../../hooks/useSettings';
@@ -15,6 +15,7 @@ import ShowHide from './FieldGroupSettings/ShowHide';
 import Summary from './FieldGroupSettings/Summary';
 import Tabs from './FieldGroupSettings/Tabs';
 import Translation from './FieldGroupSettings/Translation';
+import PersistentPanelBody from './PersistentPanelBody';
 
 const FieldGroupSettingsPanel = () => {
 	const { getObjectType, validateAndUpdateObjectType } = useSettings( state => ( {
@@ -32,36 +33,36 @@ const FieldGroupSettingsPanel = () => {
 		<Panel header={ __( 'Edit field group settings', 'meta-box-builder' ) } className="mb-panel mb-panel--field-group-settings">
 			<div className="mb-panel__inner">
 				<Summary />
-				<PanelBody title={ __( 'Location', 'meta-box-builder' ) }>
+				<PersistentPanelBody panelId="field-group-location" title={ __( 'Location', 'meta-box-builder' ) }>
 					<PanelRow><Location /></PanelRow>
 					{
 						MbbApp.extensions.includeExclude && objectType !== 'block' &&
 						<PanelRow><IncludeExclude /></PanelRow>
 					}
-				</PanelBody>
+				</PersistentPanelBody>
 				{
 					objectType === 'post' &&
-					<PanelBody title={ __( 'Settings', 'meta-box-builder' ) }>
+					<PersistentPanelBody panelId="field-group-settings" title={ __( 'Settings', 'meta-box-builder' ) }>
 						<Post />
-					</PanelBody>
+					</PersistentPanelBody>
 				}
 				{
 					objectType === 'block' &&
-					<PanelBody title={ __( 'Block settings', 'meta-box-builder' ) }>
+					<PersistentPanelBody panelId="field-group-block-settings" title={ __( 'Block settings', 'meta-box-builder' ) }>
 						<Block />
-					</PanelBody>
+					</PersistentPanelBody>
 				}
 				{
 					objectType === 'block' &&
-					<PanelBody title={ __( 'Block render settings', 'meta-box-builder' ) }>
+					<PersistentPanelBody panelId="field-group-block-render-settings" title={ __( 'Block render settings', 'meta-box-builder' ) }>
 						<BlockRenderSettings />
-					</PanelBody>
+					</PersistentPanelBody>
 				}
 				{
 					objectType === 'block' &&
-					<PanelBody title={ __( 'Block JSON settings', 'meta-box-builder' ) }>
+					<PersistentPanelBody panelId="field-group-block-json-settings" title={ __( 'Block JSON settings', 'meta-box-builder' ) }>
 						<BlockJSONSettings />
-					</PanelBody>
+					</PersistentPanelBody>
 				}
 				{
 					MbbApp.extensions.showHide && objectType !== 'block' &&
@@ -72,9 +73,9 @@ const FieldGroupSettingsPanel = () => {
 				}
 				{
 					MbbApp.extensions.tabs &&
-					<PanelBody title={ __( 'Tab settings', 'meta-box-builder' ) }>
+					<PersistentPanelBody panelId="field-group-tab-settings" title={ __( 'Tab settings', 'meta-box-builder' ) }>
 						<Tabs />
-					</PanelBody>
+					</PersistentPanelBody>
 				}
 				{
 					MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) &&
@@ -82,15 +83,15 @@ const FieldGroupSettingsPanel = () => {
 				}
 				{
 					MbbApp.polylang &&
-					<PanelBody title={ __( 'Translation', 'meta-box-builder' ) }>
+					<PersistentPanelBody panelId="field-group-translation" title={ __( 'Translation', 'meta-box-builder' ) }>
 						<Translation />
-					</PanelBody>
+					</PersistentPanelBody>
 				}
 				{
 					![ 'setting', 'block' ].includes( objectType ) &&
-					<PanelBody title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ false }>
+					<PersistentPanelBody panelId="field-group-advanced" title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ false }>
 						<Advanced />
-					</PanelBody>
+					</PersistentPanelBody>
 				}
 			</div>
 		</Panel>
