@@ -1,4 +1,4 @@
-import { RadioControl, ToggleControl } from "@wordpress/components";
+import { ToggleControl } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import Color from '../../../controls/Color';
 import DashiconPicker from '../../../controls/DashiconPicker';
@@ -6,8 +6,9 @@ import Input from '../../../controls/Input';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
 import Textarea from '../../../controls/Textarea';
-import useSettings from "../../../hooks/useSettings";
+import ToggleGroup from "../../../controls/ToggleGroup";
 import { ensureArray } from '../../../functions';
+import useSettings from "../../../hooks/useSettings";
 
 const Block = () => {
 	const { getSetting, updateSetting } = useSettings();
@@ -84,21 +85,16 @@ const Block = () => {
 			defaultValue={ getSetting( 'keywords', '' ) }
 			updateField={ updateSetting }
 		/>
-		<RadioControl
-			className="og-field"
+		<ToggleGroup
+			name="block_context"
 			label={ __( 'Block settings position', 'meta-box-builder' ) }
-			options={ [
-				{
-					label: __( 'In the content area', 'meta-box-builder' ),
-					value: 'normal',
-				},
-				{
-					label: __( 'On the right sidebar', 'meta-box-builder' ),
-					value: 'side',
-				},
-			] }
-			selected={ getSetting( 'block_context', 'side' ) }
-			onChange={ value => updateSetting( 'block_context', value ) }
+			componentId="settings-block-block_context"
+			options={ {
+				normal: __( 'Content', 'meta-box-builder' ),
+				side: __( 'Sidebar', 'meta-box-builder' ),
+			} }
+			defaultValue={ getSetting( 'block_context', 'side' ) }
+			updateField={ updateSetting }
 		/>
 		<ReactSelect
 			name="supports.align"
