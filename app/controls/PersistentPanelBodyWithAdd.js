@@ -1,24 +1,27 @@
 import { Button, Icon } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { chevronDown, chevronUp, plus } from '@wordpress/icons';
+import usePanelStates from '../hooks/usePanelStates';
 
-const PanelBodyWithAdd = ( {
+const PersistentPanelBodyWithAdd = ( {
+	panelId,
 	initialOpen = false,
 	title,
 	children,
 	onAdd,
-	onToggle,
 	empty,
 } ) => {
-	const [ open, setOpen ] = useState( initialOpen );
+	const { getPanelState, setPanelState } = usePanelStates();
+	const [ open, setOpen ] = useState( getPanelState( panelId, initialOpen ) );
 
 	const toggle = () => {
 		if ( empty ) {
 			return;
 		}
 
-		setOpen( state => !state );
-		onToggle?.( !open );
+		const newState = !open;
+		setOpen( newState );
+		setPanelState( panelId, newState );
 	};
 
 	const addNew = e => {
@@ -28,6 +31,7 @@ const PanelBodyWithAdd = ( {
 
 		e.stopPropagation();
 		setOpen( true );
+		setPanelState( panelId, true );
 		onAdd();
 	};
 
@@ -53,4 +57,4 @@ const PanelBodyWithAdd = ( {
 	);
 };
 
-export default PanelBodyWithAdd;
+export default PersistentPanelBodyWithAdd;

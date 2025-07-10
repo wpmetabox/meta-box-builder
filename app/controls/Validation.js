@@ -2,7 +2,7 @@ import { Button } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import { maybeArrayToObject, uniqid } from '../functions';
 import DivRow from './DivRow';
-import PanelBodyWithAdd from './PanelBodyWithAdd';
+import PersistentPanelBodyWithAdd from './PersistentPanelBodyWithAdd';
 
 const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
 	const rules = maybeArrayToObject( defaultValue, 'id' );
@@ -22,7 +22,8 @@ const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
 	};
 
 	return (
-		<PanelBodyWithAdd
+		<PersistentPanelBodyWithAdd
+			panelId="field-validation"
 			title={ __( 'Validation', 'meta-box-builder' ) }
 			empty={ Object.values( rules ).length === 0 }
 			onAdd={ addRule }
@@ -38,7 +39,7 @@ const Validation = ( { defaultValue, name, updateField, ...rest } ) => {
 				}
 				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 			</DivRow>
-		</PanelBodyWithAdd>
+		</PersistentPanelBodyWithAdd>
 	);
 };
 

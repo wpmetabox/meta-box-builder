@@ -2,7 +2,7 @@ import { Button, Flex, SelectControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import KeyValue from '../../../controls/KeyValue';
-import PanelBodyWithAdd from "../../../controls/PanelBodyWithAdd";
+import PersistentPanelBodyWithAdd from "../../../controls/PersistentPanelBodyWithAdd";
 import ReactAsyncSelect from '../../../controls/ReactAsyncSelect';
 import { maybeArrayToObject, uniqid } from "../../../functions";
 import { fetcher } from "../../../hooks/useFetch";
@@ -37,7 +37,8 @@ const ShowHide = () => {
 	};
 
 	return (
-		<PanelBodyWithAdd
+		<PersistentPanelBodyWithAdd
+			panelId="field-group-show-hide"
 			title={ __( 'Toggle rules', 'meta-box-builder' ) }
 			empty={ Object.values( rules ).length === 0 }
 			onAdd={ addRule }
@@ -54,7 +55,7 @@ const ShowHide = () => {
 				}
 				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 			</div>
-		</PanelBodyWithAdd>
+		</PersistentPanelBodyWithAdd>
 	);
 };
 

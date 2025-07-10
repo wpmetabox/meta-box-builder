@@ -6,9 +6,9 @@ import { getFullOptions, maybeArrayToObject, uniqid } from '../functions';
 import useAllFields from "../hooks/useAllFields";
 import useSettings from "../hooks/useSettings";
 import FieldInserter from './FieldInserter';
-import PanelBodyWithAdd from './PanelBodyWithAdd';
+import PersistentPanelBodyWithAdd from './PersistentPanelBodyWithAdd';
 
-const ConditionalLogic = ( { defaultValue, updateField } ) => {
+const ConditionalLogic = ( { defaultValue, updateField, panelId = 'field-conditional-logic' } ) => {
 	const setting = defaultValue;
 	const rules = maybeArrayToObject( setting.when, 'id' );
 
@@ -37,7 +37,8 @@ const ConditionalLogic = ( { defaultValue, updateField } ) => {
 	};
 
 	return (
-		<PanelBodyWithAdd
+		<PersistentPanelBodyWithAdd
+			panelId={ panelId }
 			title={ __( 'Conditional logic', 'meta-box-builder' ) }
 			empty={ Object.values( rules ).length === 0 }
 			onAdd={ addRule }
@@ -55,7 +56,7 @@ const ConditionalLogic = ( { defaultValue, updateField } ) => {
 
 				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 			</div>
-		</PanelBodyWithAdd>
+		</PersistentPanelBodyWithAdd>
 	);
 };
 
