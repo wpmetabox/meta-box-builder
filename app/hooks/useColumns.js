@@ -5,6 +5,7 @@ const useColumns = create( ( set, get ) => ( {
 	addFieldId: fieldId => set( state => ( { fieldIds: [ ...state.fieldIds, fieldId ] } ) ),
 	removeFieldId: fieldId => set( state => ( { fieldIds: state.fieldIds.filter( id => id !== fieldId ) } ) ),
 	hasCustomColumns: () => get().fieldIds.length > 0,
+	init: fieldIds => set( { fieldIds } ),
 } ) );
 
 export default useColumns;

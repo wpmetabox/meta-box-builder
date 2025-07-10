@@ -170,7 +170,7 @@ const createList = ( { id = '', fields = [] } ) => {
 
 			if ( key === 'columns' ) {
 				const { removeFieldId, addFieldId } = useColumns.getState();
-				if ( value === 12 || ! value ) {
+				if ( value == 12 || !value ) {
 					removeFieldId( fieldId );
 				} else {
 					addFieldId( fieldId );
@@ -287,6 +287,13 @@ export const setFieldActive = fieldId => {
 		}
 	} );
 };
+
+const fieldIdsWithCustomColumns = [ ...lists.values() ]
+	.flatMap( store => store.getState().fields )
+	.filter( field => field.columns && field.columns != 12 )
+	.map( field => field._id );
+
+useColumns.getState().init( fieldIdsWithCustomColumns );
 
 export { lists };
 
