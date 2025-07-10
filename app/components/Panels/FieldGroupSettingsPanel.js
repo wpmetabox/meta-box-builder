@@ -59,10 +59,7 @@ const FieldGroupSettingsPanel = () => {
 					</PersistentPanelBody>
 				}
 				{
-					objectType === 'block' &&
-					<PersistentPanelBody panelId="field-group-block-json-settings" title={ __( 'Block JSON settings', 'meta-box-builder' ) }>
-						<BlockJSONSettings />
-					</PersistentPanelBody>
+					objectType === 'block' && <BlockJSONSettings />
 				}
 				{
 					MbbApp.extensions.showHide && objectType !== 'block' &&
