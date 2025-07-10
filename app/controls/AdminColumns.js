@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import useSettings from '../hooks/useSettings';
 import AdminColumnsPosition from './AdminColumnsPosition';
 import Input from './Input';
-import PanelBodyWithToggle from './PanelBodyWithToggle';
+import PersistentPanelBodyWithToggle from './PersistentPanelBodyWithToggle';
 import Toggle from './Toggle';
 import ToggleGroup from './ToggleGroup';
 
@@ -11,7 +11,8 @@ const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 	const objectType = getObjectType();
 
 	return (
-		<PanelBodyWithToggle
+		<PersistentPanelBodyWithToggle
+			panelId="field-admin-columns"
 			title={ __( 'Admin columns', 'meta-box-builder' ) }
 			value={ !!defaultValue.enable }
 			toggleValue={ value => updateField( 'admin_columns.enable', value ) }
@@ -97,7 +98,7 @@ const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 				defaultValue={ defaultValue.link || 'false' }
 				updateField={ updateField }
 			/>
-		</PanelBodyWithToggle>
+		</PersistentPanelBodyWithToggle>
 	);
 };
 

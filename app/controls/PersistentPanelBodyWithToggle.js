@@ -1,32 +1,36 @@
 import { Button, ToggleControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import usePanelStates from '../hooks/usePanelStates';
 
-const PanelBody = ( {
+const PersistentPanelBodyWithToggle = ( {
+	panelId,
 	title,
 	children,
-	onToggle,
 	value,
 	toggleValue,
 	tooltip,
 } ) => {
-	const [ open, setOpen ] = useState( value );
+	const { getPanelState, setPanelState } = usePanelStates();
+	const [ open, setOpen ] = useState( getPanelState( panelId, value ) );
 
 	const toggle = () => {
 		// Allow toggle only if it's enabled.
 		if ( !value ) {
 			return;
 		}
-		setOpen( state => !state );
-		onToggle?.( !open );
+		const newState = !open;
+		setOpen( newState );
+		setPanelState( panelId, newState );
 	};
 
 	const localToggleValue = value => {
 		setOpen( value );
+		setPanelState( panelId, value );
 		toggleValue( value );
 	};
 
 	return (
-		<div className={ `components-panel__body ${ open ? 'is-opened' : '' }` }>
+		<div className={ `components-panel__body ${ open && value ? 'is-opened' : '' }` }>
 			<h2 className="components-panel__body-title">
 				<Button
 					__next40pxDefaultSize
@@ -46,9 +50,9 @@ const PanelBody = ( {
 					{ title }
 				</Button>
 			</h2>
-			{ open && children }
+			{ open && value && children }
 		</div>
 	);
 };
 
-export default PanelBody;
+export default PersistentPanelBodyWithToggle;

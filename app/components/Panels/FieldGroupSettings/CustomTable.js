@@ -1,7 +1,7 @@
 import { Tooltip } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import DivRow from "../../../controls/DivRow";
-import PanelBodyWithToggle from "../../../controls/PanelBodyWithToggle";
+import PersistentPanelBodyWithToggle from "../../../controls/PersistentPanelBodyWithToggle";
 import Toggle from "../../../controls/Toggle";
 import useSettings from "../../../hooks/useSettings";
 
@@ -10,7 +10,8 @@ const CustomTable = () => {
 	const setting = getSetting( 'custom_table', {} );
 
 	return (
-		<PanelBodyWithToggle
+		<PersistentPanelBodyWithToggle
+			panelId="field-group-custom-table"
 			title={ __( 'Custom table', 'meta-box-builder' ) }
 			value={ !!setting.enable }
 			toggleValue={ value => updateSetting( 'custom_table.enable', value ) }
@@ -48,7 +49,7 @@ const CustomTable = () => {
 					</label>
 				</div>
 			</DivRow>
-		</PanelBodyWithToggle>
+		</PersistentPanelBodyWithToggle>
 	);
 };
 
