@@ -65,19 +65,52 @@ class Relationship extends Base {
 
 		$admin_column = &$settings['admin_column'];
 		unset( $admin_column['enable'] );
-		$admin_column['position'] = trim( implode( ' ', $admin_column['position'] ) );
-		foreach ( $admin_column as $key => $value ) {
-			if ( '' === $value ) {
-				unset( $admin_column[ $key ] );
-			}
-		}
+		$admin_column['position'] = $this->normalize_position( $admin_column['position'] ?? '' );
+		$admin_column = array_filter( $admin_column );
 		if ( empty( $admin_column ) ) {
 			$admin_column = true;
 		}
-		if ( 1 === count( $admin_column ) && isset( $admin_column['position'] ) ) {
+		if ( is_array( $admin_column ) && 1 === count( $admin_column ) && isset( $admin_column['position'] ) ) {
 			$admin_column = $admin_column['position'];
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Normalize the position value.
+	 *
+	 * @param string|array $position Can be array of type and column, or string of type and column separated by space. Both can be empty.
+	 *
+	 * @return string
+	 */
+	private function normalize_position( $position ): string {
+		$types = [ 'after', 'before', 'replace' ];
+		if ( is_array( $position ) ) {
+			$type   = isset( $position['type'] ) && in_array( $position['type'], $types ) ? $position['type'] : 'after';
+			$column = $position['column'] ?? '';
+			return trim( "{$type} {$column}" );
+		}
+
+		if ( ! is_string( $position ) ) {
+			return '';
+		}
+
+		$parts = array_filter( explode( ' ', $position . ' ' ) );
+		if ( empty( $parts ) || count( $parts ) > 2 ) {
+			return '';
+		}
+		if ( count( $parts ) === 1 ) {
+			// Only type.
+			if ( in_array( $parts[0], $types ) ) {
+				return '';
+			}
+
+			// Only column.
+			return "after {$parts[0]}";
+		}
+		$type   = in_array( $parts[0], $types ) ? $parts[0] : 'after';
+		$column = $parts[1];
+		return trim( "{$type} {$column}" );
 	}
 }
