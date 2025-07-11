@@ -189,6 +189,10 @@
 	cursor: row-resize;
 }
 
-[data-nav-panel=""] .mb-nav > .mb-resizer {
-	display: none;
+[data-nav-panel=""] .mb-nav {
+	pointer-events: none;
+
+	> .mb-resizer {
+		display: none;
+	}
 }

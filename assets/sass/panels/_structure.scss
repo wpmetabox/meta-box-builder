@@ -58,6 +58,7 @@
 	z-index: 999999;
 	box-shadow: var(--shadow-md);
 	font-size: 11px;
+	pointer-events: auto;
 
 	--color-lighter: #2e2e2e;
 	--color-lightest: #3e3e3e;
