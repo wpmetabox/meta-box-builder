@@ -8,7 +8,7 @@ class Manager {
 		new Save();
 
 		if ( is_admin() ) {
-			new Edit( 'mb-relationship', __( 'Relationship ID', 'meta-box-builder' ) );
+			new Edit( 'mb-relationship' );
 			new Delete();
 		}
 	}

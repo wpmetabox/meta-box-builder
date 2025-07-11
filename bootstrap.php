@@ -67,6 +67,6 @@ new LocalJson();
 if ( is_admin() ) {
 	new Import();
 	new Export();
-	new Edit( 'meta-box', __( 'Field Group ID', 'meta-box-builder' ) );
+	new Edit( 'meta-box' );
 	new AdminColumns();
 }

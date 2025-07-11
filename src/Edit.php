@@ -6,8 +6,8 @@ use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
 class Edit extends BaseEditPage {
-	public function __construct( $post_type, $slug_meta_box_title ) {
-		parent::__construct( $post_type, $slug_meta_box_title );
+	public function __construct( string $post_type ) {
+		parent::__construct( $post_type );
 
 		// Add dialog to review the diff.
 		add_action( 'admin_footer', [ Template::class, 'render_diff_dialog' ] );

@@ -8,7 +8,7 @@ class Manager {
 		new Save();
 
 		if ( is_admin() ) {
-			new Edit( 'mb-settings-page', __( 'Settings Page', 'meta-box-builder' ) );
+			new Edit( 'mb-settings-page' );
 		}
 	}
 }

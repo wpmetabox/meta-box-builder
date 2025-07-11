@@ -3,11 +3,9 @@ namespace MBB;
 
 abstract class BaseEditPage {
 	protected $post_type;
-	protected $slug_meta_box_title;
 
-	public function __construct( $post_type, $slug_meta_box_title ) {
-		$this->post_type           = $post_type;
-		$this->slug_meta_box_title = $slug_meta_box_title;
+	public function __construct( string $post_type ) {
+		$this->post_type = $post_type;
 
 		// Use `admin_head` to make the CSS apply immediately.
 		add_action( 'admin_head', [ $this, 'hide_wp_elements' ] );
