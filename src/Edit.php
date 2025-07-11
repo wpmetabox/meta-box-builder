@@ -115,12 +115,12 @@ class Edit extends BaseEditPage {
 
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], filemtime( MBB_DIR . 'assets/css/style.css' ) );
 
-		$asset = require MBB_DIR . "/assets/js/build/app.asset.php";
+		$asset = require MBB_DIR . "/assets/build/app.asset.php";
 
 		// Add extra JS libs for copy code to clipboard & block color picker.
 		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'code-editor', 'wp-color-picker' ] );
 
-		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/build/app.js', $asset['dependencies'], $asset['version'], true );
+		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/build/app.js', $asset['dependencies'], $asset['version'], true );
 
 		// Script to toggle the admin menu.
 		wp_enqueue_script(
