@@ -14,11 +14,7 @@ const AdminColumnsPosition = ( { componentId, defaultValue, updateField, ...rest
 	};
 	const defaultColumn = defaultColumns[ objectType ] || 'title';
 
-	// Select only text and select fields.
-	let fields = useAllFields()
-		.filter( field => [ 'text', 'select' ].includes( field.type ) )
-		.map( field => [ field.id, `${ field.name } (${ field.id })` ] );
-
+	let fields = useAllFields().map( field => [ field.id, `${ field.name } (${ field.id })` ] );
 	fields = [ ...objectTypeFields( objectType ), ...fields ];
 
 	const handleChangeType = e => updateField( 'admin_columns.position.type', e.target.value );

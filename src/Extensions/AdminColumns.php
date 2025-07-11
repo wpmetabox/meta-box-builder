@@ -42,9 +42,7 @@ class AdminColumns {
 
 		$admin_columns = &$settings['admin_columns'];
 		unset( $admin_columns['enable'] );
-		if ( is_array( $admin_columns['position'] ) ) {
-			$admin_columns['position'] = trim( implode( ' ', $admin_columns['position'] ) );
-		}
+		$admin_columns['position'] = $this->normalize_position( $admin_columns['position'] ?? '' );
 		$admin_columns = array_filter( $admin_columns );
 		if ( empty( $admin_columns ) ) {
 			$admin_columns = true;
@@ -54,5 +52,42 @@ class AdminColumns {
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Normalize the position value.
+	 *
+	 * @param string|array $position Can be array of type and column, or string of type and column separated by space. Both can be empty.
+	 *
+	 * @return string
+	 */
+	private function normalize_position( $position ): string {
+		$types = [ 'after', 'before', 'replace' ];
+		if ( is_array( $position ) ) {
+			$type   = isset( $position['type'] ) && in_array( $position['type'], $types ) ? $position['type'] : 'after';
+			$column = $position['column'] ?? '';
+			return trim( "{$type} {$column}" );
+		}
+
+		if ( ! is_string( $position ) ) {
+			return '';
+		}
+
+		$parts = array_filter( explode( ' ', $position . ' ' ) );
+		if ( empty( $parts ) || count( $parts ) > 2 ) {
+			return '';
+		}
+		if ( count( $parts ) === 1 ) {
+			// Only type.
+			if ( in_array( $parts[0], $types ) ) {
+				return '';
+			}
+
+			// Only column.
+			return "after {$parts[0]}";
+		}
+		$type   = in_array( $parts[0], $types ) ? $parts[0] : 'after';
+		$column = $parts[1];
+		return trim( "{$type} {$column}" );
 	}
 }
