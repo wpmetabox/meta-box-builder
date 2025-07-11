@@ -1,5 +1,5 @@
-import { fetcher } from '../../../../app/hooks/useFetch';
-import useSettings from '../../../../app/hooks/useSettings';
+import { fetcher } from '../../../../assets/app/hooks/useFetch';
+import useSettings from '../../../../assets/app/hooks/useSettings';
 
 export const initSaveForm = () => {
 	const form = document.getElementById( 'post' );

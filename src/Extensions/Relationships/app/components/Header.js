@@ -1,6 +1,6 @@
 import { Flex, Tooltip } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import { ReactComponent as Logo } from '../../../../../app/components/logo.svg';
+import { ReactComponent as Logo } from '../../../../../assets/app/components/logo.svg';
 
 const Header = () => {
 	return (

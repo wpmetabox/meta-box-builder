@@ -1,8 +1,8 @@
 import { __ } from "@wordpress/i18n";
-import Checkbox from "../../../../../../app/controls/Checkbox";
-import Input from "../../../../../../app/controls/Input";
-import ToggleGroup from "../../../../../../app/controls/ToggleGroup";
-import useSettings from "../../../../../../app/hooks/useSettings";
+import Checkbox from "../../../../../../assets/app/controls/Checkbox";
+import Input from "../../../../../../assets/app/controls/Input";
+import ToggleGroup from "../../../../../../assets/app/controls/ToggleGroup";
+import useSettings from "../../../../../../assets/app/hooks/useSettings";
 
 const MetaBox = ( { id } ) => {
 	const { getSetting, updateSetting } = useSettings();
