@@ -37,7 +37,6 @@ class Edit extends BaseEditPage {
 		$data = [
 			'adminUrl'       => admin_url(),
 			'url'            => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
-			'status'         => $post->post_status,
 			'title'          => $post->post_title,
 
 			'settings'       => get_post_meta( get_the_ID(), 'settings', true ),
