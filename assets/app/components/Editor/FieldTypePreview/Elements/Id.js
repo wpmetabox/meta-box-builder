@@ -26,9 +26,9 @@ const Id = ( { field, updateField } ) => {
 	}, [ field.id ] );
 
 	return (
-		<Tooltip text={ __( 'Click to edit', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
-			<span className="mb-field__id">
-				{ __( 'ID', 'meta-box-builder' ) }:&nbsp;
+		<span className="mb-field__id">
+			{ __( 'ID', 'meta-box-builder' ) }:&nbsp;
+			<Tooltip text={ __( 'Click to edit', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
 				<span
 					ref={ spanRef }
 					contentEditable
@@ -36,8 +36,8 @@ const Id = ( { field, updateField } ) => {
 					onKeyDown={ preventEnter }
 					onInput={ handleChange }
 				/>
-			</span>
-		</Tooltip>
+			</Tooltip>
+		</span>
 	);
 };
 

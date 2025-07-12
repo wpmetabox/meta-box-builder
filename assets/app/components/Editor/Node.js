@@ -9,7 +9,7 @@ import Field from './Field';
 import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
-const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-toolbar' );
+const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-toolbar' ) && !inside( e.target, '[contentEditable]' );
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ hover, setHover ] = useState( false );
