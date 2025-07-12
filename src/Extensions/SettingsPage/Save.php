@@ -46,11 +46,33 @@ class Save {
 
 		$post_name = sanitize_title( empty( $settings['id'] ) ? $post_title : $settings['id'] );
 
-		wp_update_post( [
-			'ID'         => $post_id,
-			'post_title' => $post_title,
-			'post_name'  => $post_name,
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return [
+				'success' => false,
+				'message' => __( 'The relationship might have been deleted. Please refresh the page and try again.', 'meta-box-builder' ),
+			];
+		}
+
+		// Create (publish) the post if it's auto-draft.
+		$post_status = $post->post_status;
+		if ( ! in_array( $post_status, [ 'publish', 'draft' ], true ) ) {
+			$post_status = 'publish';
+		}
+
+		$result = wp_update_post( [
+			'ID'          => $post_id,
+			'post_title'  => $post_title,
+			'post_name'   => $post_name,
+			'post_status' => $post_status,
 		] );
+
+		if ( is_wp_error( $result ) ) {
+			return [
+				'success' => false,
+				'message' => $result->get_error_message(),
+			];
+		}
 
 		$settings['menu_title'] = $post_title;
 		$settings['id']         = $post_name;
