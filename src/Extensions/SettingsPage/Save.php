@@ -16,21 +16,15 @@ class Save {
 			'callback'            => [ $this, 'save' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 			'args'                => [
-				'post_id' => [
-					'required' => true,
-					'validate_callback' => function( $param ): bool {
+				'post_id'    => [
+					'required'          => true,
+					'validate_callback' => function ( $param ): bool {
 						return is_numeric( $param );
 					},
 					'sanitize_callback' => 'absint',
 				],
-				'post_status' => [
-					'required' => true,
-					'validate_callback' => function( $param ): bool {
-						return in_array( $param, [ 'publish', 'draft' ] );
-					},
-				],
 				'post_title' => [
-					'validate_callback' => function( $param ) {
+					'validate_callback' => function ( $param ) {
 						if ( empty( $param ) ) {
 							return new WP_Error( 'rest_invalid_param', __( 'Please enter the settings page title', 'meta-box-builder' ), [ 'status' => 400 ] );
 						}
@@ -46,18 +40,16 @@ class Save {
 	}
 
 	public function save( WP_REST_Request $request ): array {
-		$post_id     = $request->get_param( 'post_id' );
-		$post_title  = $request->get_param( 'post_title' );
-		$post_status = $request->get_param( 'post_status' );
-		$settings    = $request->get_param( 'settings' );
+		$post_id    = $request->get_param( 'post_id' );
+		$post_title = $request->get_param( 'post_title' );
+		$settings   = $request->get_param( 'settings' );
 
 		$post_name = sanitize_title( empty( $settings['id'] ) ? $post_title : $settings['id'] );
 
 		wp_update_post( [
-			'ID'          => $post_id,
-			'post_title'  => $post_title,
-			'post_name'   => $post_name,
-			'post_status' => $post_status,
+			'ID'         => $post_id,
+			'post_title' => $post_title,
+			'post_name'  => $post_name,
 		] );
 
 		$settings['menu_title'] = $post_title;
@@ -75,7 +67,7 @@ class Save {
 
 		return [
 			'success' => true,
-			'message' => __( 'Data saved successfully', 'meta-box-builder' )
+			'message' => __( 'Data saved successfully', 'meta-box-builder' ),
 		];
 	}
 }

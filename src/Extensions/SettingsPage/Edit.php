@@ -20,7 +20,7 @@ class Edit extends BaseEditPage {
 
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
 
-		$asset = require __DIR__ . "/build/settings-page.asset.php";
+		$asset = require __DIR__ . '/build/settings-page.asset.php';
 
 		// Add extra JS libs for copy code to clipboard & block color picker.
 		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'code-editor' ] );
@@ -35,10 +35,10 @@ class Edit extends BaseEditPage {
 		$post = get_post();
 
 		$data = [
-			'adminUrl'      => admin_url(),
-			'url'           => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
-			'status'        => $post->post_status,
-			'title'         => $post->post_title,
+			'adminUrl'       => admin_url(),
+			'url'            => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
+			'status'         => $post->post_status,
+			'title'          => $post->post_title,
 
 			'settings'       => get_post_meta( get_the_ID(), 'settings', true ),
 			'icons'          => Data::get_dashicons(),
@@ -47,14 +47,8 @@ class Edit extends BaseEditPage {
 			'menu_parents'   => $this->get_menu_parents(),
 			'capabilities'   => $this->get_capabilities(),
 
-			'texts' => [
-				'saving'        => __( 'Saving...', 'meta-box-builder' ),
-				'switchToDraft' => __( 'Switch to draft', 'meta-box-builder' ),
-				'saveDraft'     => __( 'Save draft', 'meta-box-builder' ),
-				'update'        => __( 'Update', 'meta-box-builder' ),
-				'publish'       => __( 'Publish', 'meta-box-builder' ),
-				'draft'         => __( 'Draft', 'meta-box-builder' ),
-				'published'     => __( 'Published', 'meta-box-builder' ),
+			'texts'          => [
+				'saving' => __( 'Saving...', 'meta-box-builder' ),
 			],
 		];
 
