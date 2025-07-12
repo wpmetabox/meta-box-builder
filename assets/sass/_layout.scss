@@ -62,16 +62,55 @@
 	// 	display: block;
 	// }
 
-	#post_title {
+	&__info {
+		width: 480px;
+	}
+
+	&__title-location {
 		background: #f0f0f0;
+		border-radius: 4px;
+		padding-right: 6px;
+		box-sizing: border-box;
+	}
+
+	input[type="text"] {
+		background: none;
 		border: none;
-		max-width: 450px;
-		text-align: center;
+		margin: 0;
+		flex: 1;
 
 		&:focus,
 		&:hover {
 			box-shadow: none;
-			background: #e0e0e0;
+		}
+	}
+
+	&__location {
+		display: inline-block;
+		background: #e0e0e0;
+		border-radius: 2px;
+		padding-inline: 8px;
+		font-size: 11px;
+		line-height: 18px;
+	}
+
+	&__id {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+
+		font-size: 11px;
+		color: #757575;
+		line-height: 1;
+		margin-top: 4px;
+
+		input {
+			padding: 0;
+			flex: 1;
+			font-size: inherit;
+			color: inherit;
+			min-height: auto;
+			line-height: 1;
 		}
 	}
 

@@ -26,20 +26,3 @@
 [data-nav-panel="field-settings"] .mb-panel--field-settings {
 	transform: translateX(0);
 }
-
-// Summary
-.mb-summary {
-	padding-inline: 16px;
-
-	p {
-		display: flex;
-	}
-
-	label {
-		min-width: 120px;
-	}
-
-	&__status {
-		text-transform: capitalize;
-	}
-}

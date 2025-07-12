@@ -12,7 +12,6 @@ import IncludeExclude from './FieldGroupSettings/IncludeExclude';
 import Location from './FieldGroupSettings/Location';
 import Post from './FieldGroupSettings/Post';
 import ShowHide from './FieldGroupSettings/ShowHide';
-import Summary from './FieldGroupSettings/Summary';
 import Tabs from './FieldGroupSettings/Tabs';
 import Translation from './FieldGroupSettings/Translation';
 import PersistentPanelBody from './PersistentPanelBody';
@@ -32,7 +31,6 @@ const FieldGroupSettingsPanel = () => {
 	return (
 		<Panel header={ __( 'Edit field group settings', 'meta-box-builder' ) } className="mb-panel mb-panel--field-group-settings">
 			<div className="mb-panel__inner">
-				<Summary />
 				<PersistentPanelBody panelId="field-group-location" title={ __( 'Location', 'meta-box-builder' ) }>
 					<PanelRow><Location /></PanelRow>
 					{

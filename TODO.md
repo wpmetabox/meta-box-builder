@@ -7,7 +7,6 @@
 ## Improvements
 - Only output neccessary for `meta-box-field` of fields (as attributes) in `block.json`
 - Add a warning if leaving field group and it hasn't been saved? Just like WordPress
-- Show field group's location
 
 - Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
 - Thay đổi field type
