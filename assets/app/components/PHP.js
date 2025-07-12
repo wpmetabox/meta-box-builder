@@ -28,7 +28,7 @@ const PHP = () => {
 			api: 'generate',
 			params: {
 				post_title: document.querySelector( '#post_title' ).value,
-				post_name: document.querySelector( '#post_name' ).value,
+				post_name: document.querySelector( '#post_name' ).textContent,
 				fields: buildFieldsTree(),
 				settings,
 			},

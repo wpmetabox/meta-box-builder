@@ -33,7 +33,7 @@ export const initSaveForm = () => {
 				params: {
 					post_id: document.querySelector( '#post_ID' ).value,
 					post_title: document.querySelector( '#post_title' ).value,
-					post_name: document.querySelector( '#post_name' ).value,
+					post_name: document.querySelector( '#post_name' ).textContent,
 					fields,
 					settings,
 				},

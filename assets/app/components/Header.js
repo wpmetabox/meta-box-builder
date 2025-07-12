@@ -69,27 +69,18 @@ const Header = () => {
 					isPressed={ navPanel === 'field-group-settings' }
 				/>
 			</Flex>
-			<div className="mb-header__info">
-				<Flex gap={ 0 } className="mb-header__title-location">
-					<input
-						type="text"
-						name="post_title"
-						id="post_title"
-						className="mb-header__title"
-						defaultValue={ MbbApp.title }
-						placeholder={ __( 'Please enter the field group title here...', 'meta-box-builder' ) }
-					/>
-					<Flex gap={ 1 } expanded={ false } className="mb-header__locations">
-						{ locations.map( location => <span key={ `${ objectType }-${ location }` } className="mb-header__location">{ location }</span> ) }
-					</Flex>
+			<Flex gap={ 0 } expanded={ false } className="mb-header__info">
+				<input
+					type="text"
+					name="post_title"
+					id="post_title"
+					defaultValue={ MbbApp.title }
+					placeholder={ __( 'Please enter the field group title here...', 'meta-box-builder' ) }
+				/>
+				<Flex gap={ 1 } expanded={ false } className="mb-header__locations">
+					{ locations.map( location => <span key={ `${ objectType }-${ location }` } className="mb-header__location">{ location }</span> ) }
 				</Flex>
-				<div className="mb-header__id">
-					{ __( 'ID', 'meta-box-builder' ) }:
-					<Tooltip text={ __( 'Click to edit. Must be unique between field groups. Use only lowercase letters, numbers, underscores.', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
-						<input type="text" name="post_name" id="post_name" defaultValue={ MbbApp.slug } />
-					</Tooltip>
-				</div>
-			</div>
+			</Flex>
 			<input
 				type="submit"
 				className="components-button is-primary"

@@ -64,9 +64,6 @@
 
 	&__info {
 		width: 480px;
-	}
-
-	&__title-location {
 		background: #f0f0f0;
 		border-radius: 4px;
 		padding-right: 6px;
@@ -92,34 +89,6 @@
 		padding-inline: 8px;
 		font-size: 11px;
 		line-height: 18px;
-	}
-
-	&__id {
-		display: flex;
-		align-items: center;
-		gap: 4px;
-
-		font-size: 11px;
-		color: #757575;
-		line-height: 1;
-		margin-top: 4px;
-
-		input {
-			padding: 0;
-			flex: 1;
-			font-size: inherit;
-			color: inherit;
-			min-height: auto;
-			line-height: 1;
-		}
-	}
-
-	&__actions {
-		svg {
-			width: auto;
-			height: auto;
-			fill: currentColor;
-		}
 	}
 
 	// Add button

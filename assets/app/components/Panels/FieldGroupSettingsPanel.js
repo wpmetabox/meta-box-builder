@@ -1,4 +1,4 @@
-import { Panel, PanelRow } from '@wordpress/components';
+import { Panel, PanelRow, Tooltip } from '@wordpress/components';
 import { useEffect } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import useSettings from '../../hooks/useSettings';
@@ -16,6 +16,32 @@ import Tabs from './FieldGroupSettings/Tabs';
 import Translation from './FieldGroupSettings/Translation';
 import PersistentPanelBody from './PersistentPanelBody';
 
+const Header = () => {
+	// Prevent the default behavior of "Enter" key.
+	const preventEnter = e => {
+		if ( e.key === 'Enter' ) {
+			e.preventDefault();
+		}
+	};
+
+	return (
+		<>
+			<span className="mb-panel__header">{ __( 'Field group settings', 'meta-box-builder' ) }</span>
+			<div className="mb-field-group-id">
+				{ __( 'ID', 'meta-box-builder' ) }:&nbsp;
+				<Tooltip text={ __( 'Click to edit. Must be unique between field groups. Use only lowercase letters, numbers, underscores, and dashes.', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
+					<span
+						id="post_name"
+						contentEditable
+						suppressContentEditableWarning={ true }
+						onKeyDown={ preventEnter }
+					>{ MbbApp.slug }</span>
+				</Tooltip>
+			</div>
+		</>
+	);
+};
+
 const FieldGroupSettingsPanel = () => {
 	const { getObjectType, validateAndUpdateObjectType } = useSettings( state => ( {
 		getObjectType: state.getObjectType,
@@ -29,7 +55,7 @@ const FieldGroupSettingsPanel = () => {
 	}, [ objectType ] );
 
 	return (
-		<Panel header={ __( 'Edit field group settings', 'meta-box-builder' ) } className="mb-panel mb-panel--field-group-settings">
+		<Panel header={ <Header /> } className="mb-panel mb-panel--field-group-settings">
 			<div className="mb-panel__inner">
 				<PersistentPanelBody panelId="field-group-location" title={ __( 'Location', 'meta-box-builder' ) }>
 					<PanelRow><Location /></PanelRow>

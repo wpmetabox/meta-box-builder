@@ -15,7 +15,7 @@ const BlockJSONSettings = () => {
 	const [ isNewer, setIsNewer ] = useState( false );
 
 	const getLocalPathData = async () => {
-		const postName = document.querySelector( '#post_name' ).value;
+		const postName = document.querySelector( '#post_name' ).textContent;
 		if ( !postName ) {
 			return;
 		}
@@ -51,7 +51,7 @@ const BlockJSONSettings = () => {
 				api: 'blocks/json/override',
 				params: {
 					post_id: document.querySelector( '#post_ID' ).value,
-					post_name: document.querySelector( '#post_name' ).value,
+					post_name: document.querySelector( '#post_name' ).textContent,
 					path: block_json.path,
 				},
 				method: 'POST'
