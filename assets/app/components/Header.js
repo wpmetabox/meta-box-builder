@@ -61,15 +61,8 @@ const Header = () => {
 			<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
 				<input
 					type="submit"
-					data-status="draft"
-					className="components-button is-compact is-tertiary"
-					value={ MbbApp.status === 'publish' ? MbbApp.texts.switchToDraft : MbbApp.texts.saveDraft }
-				/>
-				<input
-					type="submit"
-					data-status="publish"
 					className="components-button is-primary"
-					value={ MbbApp.status === 'publish' ? MbbApp.texts.update : MbbApp.texts.publish }
+					value={ __( 'Save Changes', 'meta-box-builder' ) }
 				/>
 			</Flex>
 		</Flex>

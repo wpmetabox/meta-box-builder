@@ -26,8 +26,6 @@ export const initSaveForm = () => {
 		// Get settings from useSettings store
 		const settings = useSettings.getState().settings;
 
-		const status = submitButton.dataset.status;
-
 		try {
 			// Send AJAX request
 			const response = await fetcher( {
@@ -36,7 +34,6 @@ export const initSaveForm = () => {
 					post_id: document.querySelector( '#post_ID' ).value,
 					post_title: document.querySelector( '#post_title' ).value,
 					post_name: document.querySelector( '#post_name' ).value,
-					post_status: status,
 					fields,
 					settings,
 				},
@@ -49,16 +46,6 @@ export const initSaveForm = () => {
 			}
 
 			window.mbbShowNotification?.();
-
-			// Update button texts based on new status.
-			const draftButton = document.querySelector( '[data-status="draft"]' );
-			const publishButton = document.querySelector( '[data-status="publish"]' );
-
-			draftButton.value = status === 'publish' ? MbbApp.texts.switchToDraft : MbbApp.texts.saveDraft;
-			publishButton.value = status === 'publish' ? MbbApp.texts.update : MbbApp.texts.publish;
-
-			// Update status text.
-			document.querySelector( '#post_status' ).textContent = status === 'publish' ? MbbApp.texts.published : MbbApp.texts.draft;
 		} catch ( error ) {
 			let message = error.message;
 
@@ -68,11 +55,8 @@ export const initSaveForm = () => {
 			}
 
 			alert( message );
-
-			// Reset the submit button text.
-			submitButton.value = currentText;
 		} finally {
-			// Always re-enable the submit button
+			submitButton.value = currentText;
 			submitButton.disabled = false;
 		}
 	} );

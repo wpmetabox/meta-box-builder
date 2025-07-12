@@ -21,12 +21,6 @@ class Save extends Base {
 					},
 					'sanitize_callback' => 'absint',
 				],
-				'post_status' => [
-					'required' => true,
-					'validate_callback' => function( $param ): bool {
-						return in_array( $param, [ 'publish', 'draft' ] );
-					},
-				],
 				'post_title' => [
 					'validate_callback' => function( $param ) {
 						if ( empty( $param ) ) {
@@ -47,7 +41,6 @@ class Save extends Base {
 		$post_id     = $request->get_param( 'post_id' );
 		$post_title  = $request->get_param( 'post_title' );
 		$post_name   = $request->get_param( 'post_name' );
-		$post_status = $request->get_param( 'post_status' );
 		$fields      = $request->get_param( 'fields' );
 		$settings    = $request->get_param( 'settings' );
 
@@ -55,12 +48,33 @@ class Save extends Base {
 			$post_name = sanitize_title( $post_title );
 		}
 
-		wp_update_post( [
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return [
+				'success' => false,
+				'message' => __( 'The field group might have been deleted. Please refresh the page and try again.', 'meta-box-builder' ),
+			];
+		}
+
+		// Create (publish) the post if it's auto-draft.
+		$post_status = $post->post_status;
+		if ( ! in_array( $post_status, [ 'publish', 'draft' ], true ) ) {
+			$post_status = 'publish';
+		}
+
+		$result = wp_update_post( [
 			'ID'          => $post_id,
 			'post_title'  => $post_title,
 			'post_name'   => $post_name,
 			'post_status' => $post_status,
 		] );
+
+		if ( is_wp_error( $result ) ) {
+			return [
+				'success' => false,
+				'message' => $result->get_error_message(),
+			];
+		}
 
 		// Save fields, settings and data
 		$base_parser = new BaseParser();

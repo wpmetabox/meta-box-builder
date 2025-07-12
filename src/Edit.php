@@ -115,7 +115,7 @@ class Edit extends BaseEditPage {
 
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], filemtime( MBB_DIR . 'assets/css/style.css' ) );
 
-		$asset = require MBB_DIR . "/assets/build/app.asset.php";
+		$asset = require MBB_DIR . '/assets/build/app.asset.php';
 
 		// Add extra JS libs for copy code to clipboard & block color picker.
 		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'code-editor', 'wp-color-picker' ] );
@@ -144,7 +144,6 @@ class Edit extends BaseEditPage {
 
 		$data = [
 			'adminUrl'      => admin_url(),
-			'status'        => $post->post_status,
 			'title'         => $post->post_title,
 			'slug'          => $post->post_name,
 			'author'        => get_the_author_meta( 'display_name', (int) $post->post_author ),
@@ -182,14 +181,8 @@ class Edit extends BaseEditPage {
 
 			'assetsBaseUrl' => MBB_URL . 'assets',
 
-			'texts' => [
-				'saving'        => __( 'Saving...', 'meta-box-builder' ),
-				'switchToDraft' => __( 'Switch to draft', 'meta-box-builder' ),
-				'saveDraft'     => __( 'Save draft', 'meta-box-builder' ),
-				'update'        => __( 'Update', 'meta-box-builder' ),
-				'publish'       => __( 'Publish', 'meta-box-builder' ),
-				'draft'         => __( 'Draft', 'meta-box-builder' ),
-				'published'     => __( 'Published', 'meta-box-builder' ),
+			'texts'         => [
+				'saving' => __( 'Saving...', 'meta-box-builder' ),
 			],
 		];
 

@@ -50,7 +50,7 @@ class Save {
 		if ( ! $post ) {
 			return [
 				'success' => false,
-				'message' => __( 'The relationship might have been deleted. Please refresh the page and try again.', 'meta-box-builder' ),
+				'message' => __( 'The settings page might have been deleted. Please refresh the page and try again.', 'meta-box-builder' ),
 			];
 		}
 
