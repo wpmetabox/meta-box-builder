@@ -146,10 +146,6 @@ class Edit extends BaseEditPage {
 			'adminUrl'      => admin_url(),
 			'title'         => $post->post_title,
 			'slug'          => $post->post_name,
-			'author'        => get_the_author_meta( 'display_name', (int) $post->post_author ),
-			'trash'         => get_delete_post_link(),
-			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
-			'modified'      => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
 
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
