@@ -47,3 +47,7 @@
 	bottom: -1px;
 	height: 3px;
 }
+
+#post_title {
+	text-align: center;
+}

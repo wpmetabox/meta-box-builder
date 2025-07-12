@@ -9,13 +9,15 @@ const Header = () => (
 				<a className="mb-header__logo" href={ MbbApp.url }><Logo /></a>
 			</Tooltip>
 		</Flex>
-		<input
-			type="text"
-			name="post_title"
-			id="post_title"
-			defaultValue={ MbbApp.title }
-			placeholder={ __( 'Please enter the settings page title...', 'meta-box-builder' ) }
-		/>
+		<Flex gap={ 0 } expanded={ false } className="mb-header__info">
+			<input
+				type="text"
+				name="post_title"
+				id="post_title"
+				defaultValue={ MbbApp.title }
+				placeholder={ __( 'Please enter the settings page title...', 'meta-box-builder' ) }
+			/>
+		</Flex>
 		<input
 			type="submit"
 			className="components-button is-primary"

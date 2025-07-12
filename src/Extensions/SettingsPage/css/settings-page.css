@@ -29,3 +29,7 @@ hr {
 	border-top: 0;
 	border-bottom-color: #e0e0e0;
 }
+
+#post_title {
+	text-align: center;
+}
