@@ -58,13 +58,11 @@ const Header = () => {
 				defaultValue={ MbbApp.title }
 				placeholder={ __( 'Please enter the field group title here...', 'meta-box-builder' ) }
 			/>
-			<Flex gap={ 3 } expanded={ false } className="mb-header__actions">
-				<input
-					type="submit"
-					className="components-button is-primary"
-					value={ __( 'Save Changes', 'meta-box-builder' ) }
-				/>
-			</Flex>
+			<input
+				type="submit"
+				className="components-button is-primary"
+				value={ __( 'Save Changes', 'meta-box-builder' ) }
+			/>
 		</Flex>
 	);
 };
