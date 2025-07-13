@@ -9,8 +9,6 @@ return array(
     'eLightUp\\' => array($vendorDir . '/elightup/twig'),
     'Riimu\\Kit\\PHPEncoder\\' => array($vendorDir . '/riimu/kit-phpencoder/src'),
     'MetaBox\\Support\\' => array($vendorDir . '/wpmetabox/support'),
-    'MBB\\SettingsPage\\' => array($baseDir . '/modules/settings-page/src'),
-    'MBB\\Relationships\\' => array($baseDir . '/modules/relationships/src'),
     'MBB\\' => array($baseDir . '/src'),
     'MBBParser\\' => array($vendorDir . '/wpmetabox/mbb-parser/src'),
 );
