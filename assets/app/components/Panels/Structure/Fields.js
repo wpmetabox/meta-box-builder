@@ -1,7 +1,7 @@
 import { RawHTML } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
-import { useFetch } from "../../../hooks/useFetch";
+import useFieldTypes from "../../../hooks/useFieldTypes";
 import getList from "../../../list-functions";
 import Node from './Node';
 
@@ -9,9 +9,9 @@ const Fields = () => {
 	const { fields, setFields, ...fieldActions } = getList( 'root' )();
 
 	// Don't render any field if fields data is not available.
-	const { data: types } = useFetch( { api: 'field-types', defaultValue: {} } );
+	const { fieldTypes } = useFieldTypes();
 
-	if ( Object.keys( types ).length === 0 ) {
+	if ( Object.keys( fieldTypes ).length === 0 ) {
 		return <RawHTML className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</RawHTML>;
 	}
 

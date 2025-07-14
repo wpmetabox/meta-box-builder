@@ -3,7 +3,7 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ReactSortable } from 'react-sortablejs';
 import { getFieldIcon } from '../functions';
-import { useFetch } from '../hooks/useFetch';
+import useFieldTypes from '../hooks/useFieldTypes';
 
 const AddFieldContent = ( { className = '', addField, onSelect } ) => {
 	const [ searchQuery, setSearchQuery ] = useState( '' );
@@ -19,7 +19,7 @@ const AddFieldContent = ( { className = '', addField, onSelect } ) => {
 const Categories = props => MbbApp.fieldCategories.map( category => <Category key={ category.slug } category={ category } { ...props } /> );
 
 const Category = ( { category, searchQuery, onSelect, addField } ) => {
-	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
+	const { fieldTypes } = useFieldTypes();
 	const fields = Object.entries( fieldTypes ).filter( ( [ type, field ] ) => field.category === category.slug && field.title.toLowerCase().includes( searchQuery.toLowerCase() ) );
 
 	return fields.length > 0 &&

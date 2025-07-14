@@ -3,7 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useColumns from "../../hooks/useColumns";
-import { useFetch } from "../../hooks/useFetch";
+import useFieldTypes from "../../hooks/useFieldTypes";
 import useNavPanel from "../../hooks/useNavPanel";
 import { setFieldActive } from "../../list-functions";
 import Base from "./FieldTypePreview/Base";
@@ -12,7 +12,7 @@ import Toolbar from "./Toolbar";
 const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-toolbar' ) && !inside( e.target, '[contentEditable]' );
 
 const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
-	let { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
+	let { fieldTypes } = useFieldTypes();
 	fieldTypes = Object.fromEntries(
 		Object.entries( fieldTypes ).filter( ( [ type, field ] ) => !field.disabled )
 	);
@@ -145,8 +145,6 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 };
 
 const normalize = f => {
-	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
-
 	let field = { ...f };
 
 	// Safe fallback to 'text' for not-recommended HTML5 field types.
