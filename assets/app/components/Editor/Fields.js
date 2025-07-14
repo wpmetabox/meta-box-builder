@@ -4,7 +4,7 @@ import { ReactSortable } from 'react-sortablejs';
 import { useFetch } from "../../hooks/useFetch";
 import getList from "../../list-functions";
 import AddFieldButton from "./AddFieldButton";
-import Node from './Node';
+import Field from './Field';
 
 const Fields = () => {
 	const { fields, ...fieldActions } = getList( 'root' )();
@@ -54,7 +54,7 @@ const Fields = () => {
 						className="mb-fields"
 					>
 						{
-							fields.map( field => <Node
+							fields.map( field => <Field
 								key={ field._id }
 								field={ field }
 								{ ...fieldActions }

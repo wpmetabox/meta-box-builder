@@ -3,15 +3,22 @@ import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useColumns from "../../hooks/useColumns";
+import { useFetch } from "../../hooks/useFetch";
 import useNavPanel from "../../hooks/useNavPanel";
 import { setFieldActive } from "../../list-functions";
-import Field from './Field';
 import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
 const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-toolbar' ) && !inside( e.target, '[contentEditable]' );
 
-const Node = ( { field, parent = '', ...fieldActions } ) => {
+const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
+	let { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
+	fieldTypes = Object.fromEntries(
+		Object.entries( fieldTypes ).filter( ( [ type, field ] ) => !field.disabled )
+	);
+
+	const field = normalize( f );
+
 	const [ hover, setHover ] = useState( false );
 	const [ resizing, setResizing ] = useState( false );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
@@ -93,10 +100,6 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		document.addEventListener( 'mouseup', handleMouseUp );
 	}, [ field.columns, update ] );
 
-	if ( !field.type ) {
-		return;
-	}
-
 	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) );
 
 	console.debug( `%c  Field ${ field._id }`, "color:orange" );
@@ -104,7 +107,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const hovering = hover || resizing;
 	const showActions = field._active || hovering;
 
-	return (
+	return field.type && fieldTypes.hasOwnProperty( field.type ) && (
 		<div className={ `
 			mb-field-wrapper
 			${ MbbApp.extensions.columns && hasCustomColumns() ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
@@ -136,13 +139,49 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 						<FieldType field={ field } parent={ parent } updateField={ update } />
 					</Suspense>
 				</Base>
-				<Field field={ field } parent={ parent } updateField={ update } />
 			</div>
 		</div>
 	);
 };
 
-export default memo( Node, ( prev, next ) => {
+const normalize = f => {
+	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
+
+	let field = { ...f };
+
+	// Safe fallback to 'text' for not-recommended HTML5 field types.
+	const ignore = [ 'datetime-local', 'month', 'tel', 'week' ];
+
+	if ( ignore.includes( field.type ) ) {
+		field.type = 'text';
+	}
+
+	if ( field.type === 'key_value' ) {
+		field.clone = true;
+	}
+
+	let classNames = ( field.class || '' ).split( ' ' );
+
+	if ( field.type === 'group' ) {
+		if ( field.collapsible ) {
+			classNames.push( 'rwmb-group-collapsible' );
+		}
+		if ( !field.clone ) {
+			classNames.push( 'rwmb-group-non-cloneable' );
+		}
+	}
+
+	if ( field.type === 'text_list' && !field.clone ) {
+		classNames.push( 'rwmb-text_list-non-cloneable' );
+	}
+
+	field.class = [ ...new Set( classNames ) ].join( ' ' );
+
+	return field;
+};
+
+// Still need to memoize the field preview because group loads this component separately for each sub-field.
+export default memo( FieldPreview, ( prev, next ) => {
 	delete prev.field.fields;
 	delete next.field.fields;
 

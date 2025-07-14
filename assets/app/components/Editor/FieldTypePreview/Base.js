@@ -20,9 +20,7 @@ const Wrapper = ( { field, children } ) => (
 	</>
 );
 
-const Base = ( { field: f, updateField, children } ) => {
-	const field = normalize( f );
-
+const Base = ( { field, updateField, children } ) => {
 	if ( field.type === 'tab' ) {
 		return children;
 	}
@@ -82,33 +80,6 @@ const Base = ( { field: f, updateField, children } ) => {
 			</div>
 		</Wrapper>
 	);
-};
-
-const normalize = f => {
-	let field = { ...f };
-
-	if ( field.type === 'key_value' ) {
-		field.clone = true;
-	}
-
-	let classNames = ( field.class || '' ).split( ' ' );
-
-	if ( field.type === 'group' ) {
-		if ( field.collapsible ) {
-			classNames.push( 'rwmb-group-collapsible' );
-		}
-		if ( !field.clone ) {
-			classNames.push( 'rwmb-group-non-cloneable' );
-		}
-	}
-
-	if ( field.type === 'text_list' && !field.clone ) {
-		classNames.push( 'rwmb-text_list-non-cloneable' );
-	}
-
-	field.class = [ ...new Set( classNames ) ].join( ' ' );
-
-	return field;
 };
 
 const hasConditionalLogic = field => Object.values( maybeArrayToObject( field?.conditional_logic?.when, 'id' ) ).length > 0;
