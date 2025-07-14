@@ -1,4 +1,4 @@
-import { Button, Flex, Tooltip } from '@wordpress/components';
+import { Button, Flex } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import { cog, listView, plus } from "@wordpress/icons";
 import { ensureArray, ucwords } from '../functions';
@@ -32,11 +32,20 @@ const Header = () => {
 
 	let locations = [ ucwords( objectType ) ];
 	if ( objectType === 'post' ) {
-		locations = getPostTypes().map( type => MbbApp.postTypes.find( p => p.slug === type ) ).map( p => p.name );
+		locations = getPostTypes()
+			.map( type => MbbApp.postTypes.find( p => p.slug === type ) )
+			.filter( Boolean )
+			.map( p => p.name );
 	} else if ( objectType === 'term' ) {
-		locations = ensureArray( getSetting( 'taxonomies', [] ) ).map( tax => MbbApp.taxonomies.find( t => t.slug === tax ) ).map( t => t.name );
+		locations = ensureArray( getSetting( 'taxonomies', [] ) )
+			.map( tax => MbbApp.taxonomies.find( t => t.slug === tax ) )
+			.filter( Boolean )
+			.map( t => t.name );
 	} else if ( objectType === 'setting' ) {
-		locations = ensureArray( getSetting( 'settings_pages', [] ) ).map( page => MbbApp.settingsPages.find( p => p.id === page ) ).map( p => p.title );
+		locations = ensureArray( getSetting( 'settings_pages', [] ) )
+			.map( page => MbbApp.settingsPages.find( p => p.id === page ) )
+			.filter( Boolean )
+			.map( p => p.title );
 	}
 
 	return (
