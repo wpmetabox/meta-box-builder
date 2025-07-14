@@ -17,13 +17,17 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 		Object.entries( fieldTypes ).filter( ( [ type, field ] ) => !field.disabled )
 	);
 
+	const field = normalize( f );
+
+	if ( !field.type || !fieldTypes.hasOwnProperty( field.type ) ) {
+		return;
+	}
+
 	const [ hover, setHover ] = useState( false );
 	const [ resizing, setResizing ] = useState( false );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const { hasCustomColumns } = useColumns();
 	const ref = useRef();
-
-	const field = normalize( f );
 
 	const toggleSettings = e => {
 		if ( !isClickedOnAField( e ) ) {
@@ -107,7 +111,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 	const hovering = hover || resizing;
 	const showActions = field._active || hovering;
 
-	return field.type && fieldTypes.hasOwnProperty( field.type ) && (
+	return (
 		<div className={ `
 			mb-field-wrapper
 			${ MbbApp.extensions.columns && hasCustomColumns() ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
