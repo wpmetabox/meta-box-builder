@@ -28,8 +28,8 @@ const scrollIntoView = id => {
 
 const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ copied, setCopied ] = useState( false );
-	const { floating } = useFloatingStructurePanel();
-	const { setNavPanel } = useNavPanel();
+	const floating = useFloatingStructurePanel( state => state.floating );
+	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const { allExpanded } = useStructureCollapse();
 	const [ expanded, setExpanded ] = useState( allExpanded );
 
