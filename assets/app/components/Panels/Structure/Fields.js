@@ -10,9 +10,8 @@ const Fields = () => {
 
 	// Don't render any field if fields data is not available.
 	const { data: types } = useFetch( { api: 'field-types', defaultValue: {} } );
-	const { data: categories } = useFetch( { api: 'field-categories', defaultValue: [] } );
 
-	if ( Object.keys( types ).length === 0 || Object.keys( categories ).length === 0 ) {
+	if ( Object.keys( types ).length === 0 ) {
 		return <RawHTML className="og-none">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</RawHTML>;
 	}
 

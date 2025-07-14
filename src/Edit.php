@@ -156,6 +156,8 @@ class Edit extends BaseEditPage {
 			'templates'     => Data::get_templates(),
 			'icons'         => DataHelper::get_dashicons(),
 
+			'fieldCategories' => $this->get_field_categories(),
+
 			// Extensions check.
 			'extensions'    => [
 				'blocks'             => Data::is_extension_active( 'mb-blocks' ),
@@ -185,5 +187,34 @@ class Edit extends BaseEditPage {
 		$data = apply_filters( 'mbb_app_data', $data );
 
 		wp_localize_script( 'mbb-app', 'MbbApp', $data );
+	}
+
+	private function get_field_categories(): array {
+		return [
+			[
+				'slug'  => 'basic',
+				'title' => __( 'Basic', 'meta-box-builder' ),
+			],
+			[
+				'slug'  => 'advanced',
+				'title' => __( 'Advanced', 'meta-box-builder' ),
+			],
+			[
+				'slug'  => 'html5',
+				'title' => __( 'HTML5', 'meta-box-builder' ),
+			],
+			[
+				'slug'  => 'wordpress',
+				'title' => __( 'WordPress', 'meta-box-builder' ),
+			],
+			[
+				'slug'  => 'upload',
+				'title' => __( 'Upload', 'meta-box-builder' ),
+			],
+			[
+				'slug'  => 'layout',
+				'title' => __( 'Layout', 'meta-box-builder' ),
+			],
+		];
 	}
 }

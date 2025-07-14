@@ -16,10 +16,7 @@ const AddFieldContent = ( { className = '', addField, onSelect } ) => {
 	);
 };
 
-const Categories = props => {
-	const { data: fieldCategories } = useFetch( { api: 'field-categories', defaultValue: [] } );
-	return fieldCategories.map( category => <Category key={ category.slug } category={ category } { ...props } /> );
-};
+const Categories = props => MbbApp.fieldCategories.map( category => <Category key={ category.slug } category={ category } { ...props } /> );
 
 const Category = ( { category, searchQuery, onSelect, addField } ) => {
 	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
