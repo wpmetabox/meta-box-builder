@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { ReactSortable } from 'react-sortablejs';
 import getList from '../../../list-functions';
 import AddFieldButton from '../AddFieldButton';
-import Node from '../Node';
+import Field from '../Field';
 
 const Group = ( { field, parent } ) => {
 	const { fields, ...fieldActions } = getList( field._id )();
