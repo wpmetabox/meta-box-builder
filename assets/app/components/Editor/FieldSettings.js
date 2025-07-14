@@ -5,7 +5,10 @@ import getList from "../../list-functions";
 import Panel from "../Panels/FieldSettings/Panel";
 
 const FieldSettings = ( { field, parent, updateField } ) => {
-	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
+	let { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
+	fieldTypes = Object.fromEntries(
+		Object.entries( fieldTypes ).filter( ( [ type, field ] ) => !field.disabled )
+	);
 
 	// Safe fallback to 'text' for not-recommended HTML5 field types.
 	const ignore = [ 'datetime-local', 'month', 'tel', 'week' ];

@@ -12,7 +12,10 @@ import Toolbar from "./Toolbar";
 const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-toolbar' ) && !inside( e.target, '[contentEditable]' );
 
 const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
-	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
+	let { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
+	fieldTypes = Object.fromEntries(
+		Object.entries( fieldTypes ).filter( ( [ type, field ] ) => !field.disabled )
+	);
 
 	const [ hover, setHover ] = useState( false );
 	const [ resizing, setResizing ] = useState( false );
