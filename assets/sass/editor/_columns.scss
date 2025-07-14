@@ -7,6 +7,12 @@
 			grid-column: span 12;
 		}
 	}
+
+	// When dragging a field to the editor (from the add field or the structure panel), make it span the whole width
+	.mb-add-field__item,
+	.og-item {
+		grid-column: span 12;
+	}
 }
 
 .mb-field-wrapper--columns {

@@ -8,9 +8,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"MBB\\": "src/",
-			"MBB\\SettingsPage\\": "modules/settings-page/src/",
-			"MBB\\Relationships\\": "modules/relationships/src/"
+			"MBB\\": "src/"
 		}
 	},
 	"require": {

@@ -1,0 +1,29 @@
+.mb-panel--field-group-settings .components-panel__header {
+	h2 {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 4px;
+	}
+}
+
+.mb-field-group-id {
+	font-size: 11px;
+	color: #757575;
+	font-weight: 400;
+	max-width: 140px;
+	word-break: break-all;
+	line-height: 18px;
+	height: 18px;
+	display: flex;
+	align-items: center;
+
+	#post_name {
+		min-width: 40px;
+
+		&:empty {
+			box-shadow: 0 1px 0 currentColor;
+		}
+	}
+}

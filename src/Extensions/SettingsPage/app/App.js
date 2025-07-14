@@ -1,7 +1,7 @@
 import { createRoot } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ErrorBoundary } from 'react-error-boundary';
-import { updateNewPostUrl } from '../../../../app/functions';
+import { updateNewPostUrl } from '../../../../assets/app/functions';
 import Header from './components/Header';
 import Main from './components/Main';
 import Notification from './components/Notification';

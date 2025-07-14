@@ -28,10 +28,6 @@
 	margin-inline: -32px;
 }
 
-.components-panel__body-title {
-	background: #f0f0f0;
-}
-
 .components-tab-panel__tab-content {
 	padding: 16px;
 }
@@ -50,4 +46,8 @@
 	outline: none;
 	bottom: -1px;
 	height: 3px;
+}
+
+#post_title {
+	text-align: center;
 }

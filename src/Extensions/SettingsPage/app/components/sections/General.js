@@ -1,7 +1,7 @@
 import { __ } from "@wordpress/i18n";
-import Input from "../../../../../../app/controls/Input";
-import Select from "../../../../../../app/controls/Select";
-import useSettings from "../../../../../../app/hooks/useSettings";
+import Input from "../../../../../../assets/app/controls/Input";
+import Select from "../../../../../../assets/app/controls/Select";
+import useSettings from "../../../../../../assets/app/hooks/useSettings";
 
 const General = () => {
 	const { getSetting, updateSetting } = useSettings();

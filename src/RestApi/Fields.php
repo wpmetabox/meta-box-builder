@@ -538,7 +538,7 @@ class Fields extends Base {
 				'description' => __( 'For selecting taxonomy terms. Doesn\'t save term IDs in post meta, but set post terms.', 'meta-box-builder' ),
 			],
 			'taxonomy_advanced' => [
-				'title'       => __( 'Taxonomy Advanced', 'meta-box-builder' ),
+				'title'       => __( 'Tax. Advanced', 'meta-box-builder' ),
 				'category'    => 'wordpress',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],

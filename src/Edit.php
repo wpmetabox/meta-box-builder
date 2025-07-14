@@ -6,8 +6,8 @@ use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
 
 class Edit extends BaseEditPage {
-	public function __construct( $post_type, $slug_meta_box_title ) {
-		parent::__construct( $post_type, $slug_meta_box_title );
+	public function __construct( string $post_type ) {
+		parent::__construct( $post_type );
 
 		// Add dialog to review the diff.
 		add_action( 'admin_footer', [ Template::class, 'render_diff_dialog' ] );
@@ -115,12 +115,12 @@ class Edit extends BaseEditPage {
 
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], filemtime( MBB_DIR . 'assets/css/style.css' ) );
 
-		$asset = require MBB_DIR . "/assets/js/build/app.asset.php";
+		$asset = require MBB_DIR . '/assets/build/app.asset.php';
 
 		// Add extra JS libs for copy code to clipboard & block color picker.
 		$asset['dependencies'] = array_merge( $asset['dependencies'], [ 'jquery', 'clipboard', 'code-editor', 'wp-color-picker' ] );
 
-		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/js/build/app.js', $asset['dependencies'], $asset['version'], true );
+		wp_enqueue_script( 'mbb-app', MBB_URL . 'assets/build/app.js', $asset['dependencies'], $asset['version'], true );
 
 		// Script to toggle the admin menu.
 		wp_enqueue_script(
@@ -144,13 +144,8 @@ class Edit extends BaseEditPage {
 
 		$data = [
 			'adminUrl'      => admin_url(),
-			'status'        => $post->post_status,
 			'title'         => $post->post_title,
 			'slug'          => $post->post_name,
-			'author'        => get_the_author_meta( 'display_name', (int) $post->post_author ),
-			'trash'         => get_delete_post_link(),
-			'published'     => get_the_date( 'F d, Y' ) . ' ' . get_the_time( 'g:i a' ),
-			'modified'      => get_post_modified_time( 'F d, Y g:i a', true, null, true ),
 
 			'fields'        => $fields,
 			'settings'      => get_post_meta( get_the_ID(), 'settings', true ),
@@ -182,14 +177,8 @@ class Edit extends BaseEditPage {
 
 			'assetsBaseUrl' => MBB_URL . 'assets',
 
-			'texts' => [
-				'saving'        => __( 'Saving...', 'meta-box-builder' ),
-				'switchToDraft' => __( 'Switch to draft', 'meta-box-builder' ),
-				'saveDraft'     => __( 'Save draft', 'meta-box-builder' ),
-				'update'        => __( 'Update', 'meta-box-builder' ),
-				'publish'       => __( 'Publish', 'meta-box-builder' ),
-				'draft'         => __( 'Draft', 'meta-box-builder' ),
-				'published'     => __( 'Published', 'meta-box-builder' ),
+			'texts'         => [
+				'saving' => __( 'Saving...', 'meta-box-builder' ),
 			],
 		];
 

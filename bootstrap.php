@@ -47,10 +47,13 @@ if ( Helpers\Data::is_extension_active( 'mb-custom-table' ) ) {
 	new Extensions\CustomTable();
 }
 
+if ( Helpers\Data::is_extension_active( 'mb-admin-columns' ) ) {
+	new Extensions\AdminColumns();
+}
+
 new Integrations\WPML\Manager();
 new Integrations\Polylang\Manager();
 
-new Extensions\AdminColumns();
 new Extensions\Columns();
 new Extensions\ConditionalLogic();
 new Extensions\Group();
@@ -64,6 +67,8 @@ new LocalJson();
 if ( is_admin() ) {
 	new Import();
 	new Export();
-	new Edit( 'meta-box', __( 'Field Group ID', 'meta-box-builder' ) );
+	new Edit( 'meta-box' );
 	new AdminColumns();
+
+	new ToggleStatusColumn();
 }

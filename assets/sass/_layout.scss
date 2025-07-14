@@ -6,7 +6,7 @@
 // Hide WordPress header elements
 #screen-meta-links,
 .wrap h1.wp-heading-inline,
-.wrap .wp-heading-inline ~ .page-title-action {
+.wrap .wp-heading-inline~.page-title-action {
 	display: none;
 }
 
@@ -46,7 +46,7 @@
 .mb-header {
 	background: #fff;
 	z-index: 99;
-	border-bottom: 1px solid var(--color-light);
+	border-bottom: 1px solid #e0e0e0;
 	height: 61px;
 	padding-inline: 12px;
 	box-sizing: border-box;
@@ -62,25 +62,33 @@
 	// 	display: block;
 	// }
 
-	#post_title {
+	&__info {
+		width: 480px;
 		background: #f0f0f0;
+		border-radius: 4px;
+		padding-right: 6px;
+		box-sizing: border-box;
+	}
+
+	input[type="text"] {
+		background: none;
 		border: none;
-		max-width: 450px;
-		text-align: center;
+		margin: 0;
+		flex: 1;
 
 		&:focus,
 		&:hover {
 			box-shadow: none;
-			background: #e0e0e0;
 		}
 	}
 
-	&__actions {
-		svg {
-			width: auto;
-			height: auto;
-			fill: currentColor;
-		}
+	&__location {
+		display: inline-block;
+		background: #e0e0e0;
+		border-radius: 2px;
+		padding-inline: 8px;
+		font-size: 11px;
+		line-height: 18px;
 	}
 
 	// Add button
@@ -137,39 +145,62 @@
 	max-width: 100rem; // Prevent the main area from getting too wide. https://helpdesk.elightup.com/conversation/11098?folder_id=7
 }
 
-// Nav panel
-.mb-nav .mb-panel {
+// Nav
+.mb-nav {
 	position: fixed;
 	top: calc(32px + 60px + 1px); // Admin bar + header + border
 	bottom: 0;
 	left: 160px; // WordPress menu
 	width: var(--nav-width);
 	z-index: 99;
-	transition: all .25s;
-	transform: translateX(calc(0px - var(--nav-width)));
 
-	margin-top: -1px; // Override to the header's border
 	border-left-width: 0;
 
 	.folded & {
 		left: 36px;
 	}
+}
 
-	// Only scroll inner content, keep the panel header sticky
-	&__inner {
+.mb-resizer {
+	position: absolute;
+	z-index: 10;
+
+	background: #e0e0e0;
+	transition: background-color 0.2s ease;
+
+	&:hover {
+		background: #ccc;
+	}
+
+	svg {
 		position: absolute;
-		top: calc(48px - 1px); // 48px: header, -1px: margin top
-		bottom: 0;
-		left: 0;
-		width: var(--nav-width);
-		overflow-y: auto;
-		scrollbar-width: thin;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		fill: var(--color-gray);
 	}
 }
 
-[data-nav-panel="add"] .mb-panel--add,
-[data-nav-panel="structure"] .mb-panel--structure,
-[data-nav-panel="field-group-settings"] .mb-panel--field-group-settings,
-[data-nav-panel="field-settings"] .mb-panel--field-settings {
-	transform: translateX(0);
+.mb-resizer--horizontal {
+	top: 0;
+	bottom: 0;
+	right: -6px;
+	width: 6px;
+	cursor: col-resize;
+}
+
+.mb-resizer--vertical {
+	left: 0;
+	right: 0;
+	bottom: -6px;
+	height: 6px;
+	cursor: row-resize;
+}
+
+[data-nav-panel=""] .mb-nav {
+	pointer-events: none;
+
+	> .mb-resizer {
+		display: none;
+	}
 }

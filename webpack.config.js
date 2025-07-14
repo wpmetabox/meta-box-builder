@@ -15,9 +15,9 @@ const externals = {
 // Main Meta Box Builder app.
 const main = {
 	...defaultConfig,
-	entry: './app/App.js',
+	entry: './assets/app/App.js',
 	output: {
-		path: path.resolve( 'assets/js/build' ),
+		path: path.resolve( 'assets/build' ),
 		filename: 'app.js'
 	},
 	externals,
@@ -45,5 +45,5 @@ const relationships = {
 	externals,
 };
 
-// module.exports = [ main, settingsPage, relationships ];
-module.exports = [ main ];
+module.exports = [ main, settingsPage, relationships ];
+// module.exports = [ main ];

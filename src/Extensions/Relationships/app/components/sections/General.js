@@ -1,10 +1,10 @@
 import { __ } from "@wordpress/i18n";
-import AdminColumnsPosition from "../../../../../../app/controls/AdminColumnsPosition";
-import Checkbox from "../../../../../../app/controls/Checkbox";
-import Input from "../../../../../../app/controls/Input";
-import Select from "../../../../../../app/controls/Select";
-import ToggleGroup from "../../../../../../app/controls/ToggleGroup";
-import useSettings from "../../../../../../app/hooks/useSettings";
+import AdminColumnsPosition from "../../../../../../assets/app/controls/AdminColumnsPosition";
+import Checkbox from "../../../../../../assets/app/controls/Checkbox";
+import Input from "../../../../../../assets/app/controls/Input";
+import Select from "../../../../../../assets/app/controls/Select";
+import ToggleGroup from "../../../../../../assets/app/controls/ToggleGroup";
+import useSettings from "../../../../../../assets/app/hooks/useSettings";
 
 const General = ( { id } ) => {
 	const { getSetting, updateSetting } = useSettings();

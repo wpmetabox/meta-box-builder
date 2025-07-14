@@ -17,7 +17,14 @@
 @use "editor/sortable";
 @use "editor/add-button";
 @use "editor/columns";
+
+@use "panels/base";
 @use "panels/structure";
+@use "panels/add-field";
+@use "panels/location";
+@use "panels/ruleset";
+@use "panels/field-settings";
+@use "panels/field-group-settings";
 
 .og {
 	@import "elements";
@@ -36,14 +43,7 @@
 	@import "field-settings/header";
 	@import "field-settings/sub-settings";
 	@import "field-settings/select-with-input";
-
-	@import "panels/base";
-	@import "panels/location";
-	@import "panels/include-exclude";
-	@import "panels/field-settings";
-	@import "panels/attribute";
-
-	@import "panels/add-field";
+	@import "field-settings/attribute";
 }
 
 @import "translation-modal";
