@@ -78,7 +78,7 @@ const FloatingStructurePanel = () => {
 	const { height, handleMouseDown: handleMouseDownVertical } = useVerticalResizable( {
 		storageKey: 'mbb-floating-structure-panel-height',
 		callback: height => {
-			if ( ref.current ) {
+			if ( ref.current && ref.current.querySelector( '.mb-panel__inner' ) ) {
 				ref.current.querySelector( '.mb-panel__inner' ).style.maxHeight = `${ height }px`;
 			}
 		},
