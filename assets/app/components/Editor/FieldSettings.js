@@ -1,3 +1,5 @@
+import { memo } from "@wordpress/element";
+import { isEqual } from 'lodash';
 import { useFetch } from "../../hooks/useFetch";
 import getList from "../../list-functions";
 import Panel from "../Panels/FieldSettings/Panel";
@@ -55,4 +57,10 @@ const SubFieldSettings = ( { field, parent } ) => {
 	) );
 };
 
-export default FieldSettings;
+// Still need to memoize the field settings because group loads this component separately for each sub-field.
+export default memo( FieldSettings, ( prev, next ) => {
+	delete prev.field.fields;
+	delete next.field.fields;
+
+	return prev.parent === next.parent && isEqual( prev.field, next.field );
+} );
