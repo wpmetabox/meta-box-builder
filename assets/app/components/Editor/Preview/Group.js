@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { ReactSortable } from 'react-sortablejs';
 import getList from '../../../list-functions';
 import AddFieldButton from '../AddFieldButton';
-import Field from '../Field';
+import FieldPreview from '../FieldPreview';
 
 const Group = ( { field, parent } ) => {
 	const { fields, ...fieldActions } = getList( field._id )();
@@ -43,7 +43,7 @@ const Group = ( { field, parent } ) => {
 				onAdd={ handleAdd }
 			>
 				{
-					fields.map( f => <Node
+					fields.map( f => <FieldPreview
 						key={ f._id }
 						field={ f }
 						parent={ `${ parent }[${ field._id }][fields]` }

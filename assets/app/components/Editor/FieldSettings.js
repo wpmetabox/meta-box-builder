@@ -1,12 +1,13 @@
 import { useFetch } from "../../hooks/useFetch";
+import getList from "../../list-functions";
 import Panel from "../Panels/FieldSettings/Panel";
 
-export default ( props ) => {
+const FieldSettings = ( { field, parent, updateField } ) => {
 	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
 
 	// Safe fallback to 'text' for not-recommended HTML5 field types.
 	const ignore = [ 'datetime-local', 'month', 'tel', 'week' ];
-	const type = ignore.includes( props.field.type ) ? 'text' : props.field.type;
+	const type = ignore.includes( field.type ) ? 'text' : field.type;
 
 	if ( !type || !fieldTypes.hasOwnProperty( type ) ) {
 		return;
@@ -14,5 +15,40 @@ export default ( props ) => {
 
 	const controls = [ ...fieldTypes[ type ].controls ];
 
-	return <Panel controls={ controls } { ...props } />;
+	const update = ( key, value ) => {
+		if ( key.includes( '[' ) ) {
+			// Get correct key in the last [].
+			key = key.replace( /\]/g, '' ).split( '[' ).pop();
+		}
+
+		updateField( field._id, key, value );
+	};
+
+	return (
+		<>
+			<Panel
+				controls={ controls }
+				field={ field }
+				parent={ parent }
+				updateField={ update }
+			/>
+			{
+				type === 'group' &&
+				<SubFieldSettings
+					field={ field }
+					parent={ `${ parent }[${ field._id }][fields]` }
+				/>
+			}
+		</>
+	);
 };
+
+const SubFieldSettings = ( { field, parent } ) => {
+	const { fields, ...fieldActions } = getList( field._id )();
+
+	return fields.map( f => (
+		<FieldSettings key={ f._id } field={ f } parent={ parent } updateField={ fieldActions.updateField } />
+	) );
+};
+
+export default FieldSettings;
