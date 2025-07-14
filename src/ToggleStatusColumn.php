@@ -2,6 +2,7 @@
 namespace MBB;
 
 use WP_Post;
+use RWMB_Switch_Field;
 
 class ToggleStatusColumn {
 	private $post_types = [ 'meta-box', 'mb-settings-page', 'mb-relationship' ];
@@ -40,16 +41,13 @@ class ToggleStatusColumn {
 		}
 
 		// Use the switch markup and styles from Meta Box.
-		?>
-		<label class="rwmb-switch-label rwmb-switch-label--rounded">
-			<input type="checkbox" class="rwmb-switch" data-id="<?= esc_attr( $post_id ); ?>" <?php checked( $post->post_status === 'publish' ); ?>>
-			<div class="rwmb-switch-status">
-				<span class="rwmb-switch-slider"></span>
-				<span class="rwmb-switch-on"></span>
-				<span class="rwmb-switch-off"></span>
-			</div>
-		</label>
-		<?php
+		$field = RWMB_Switch_Field::normalize( [
+			'type'       => 'switch',
+			'attributes' => [
+				'data-id' => $post_id,
+			],
+		] );
+		echo RWMB_Switch_Field::html( $post->post_status === 'publish', $field );
 	}
 
 	public function enqueue_scripts(): void {
@@ -71,7 +69,7 @@ class ToggleStatusColumn {
 		] );
 
 		// Use the switch styles from Meta Box.
-		wp_enqueue_style( 'rwmb-switch', RWMB_CSS_URL . 'switch.css', [], RWMB_VER );
+		RWMB_Switch_Field::admin_enqueue_scripts();
 	}
 
 	public function handle_toggle_status(): void {
@@ -79,7 +77,9 @@ class ToggleStatusColumn {
 
 		$post_id = intval( $_POST['post_id'] ?? 0 );
 		if ( ! $post_id ) {
-			wp_die( __( 'Invalid post ID', 'meta-box-builder' ) );
+			wp_send_json_error( [
+				'message' => __( 'Invalid post ID', 'meta-box-builder' ),
+			] );
 		}
 
 		$new_status = empty( $_POST['checked'] ) || $_POST['checked'] === 'false' ? 'draft' : 'publish';
