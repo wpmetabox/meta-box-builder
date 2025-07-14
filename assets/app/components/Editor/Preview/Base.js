@@ -20,7 +20,7 @@ const Wrapper = ( { field, children } ) => (
 	</>
 );
 
-export default ( { field: f, updateField, children } ) => {
+const Base = ( { field: f, updateField, children } ) => {
 	const field = normalize( f );
 
 	if ( field.type === 'tab' ) {
@@ -112,3 +112,5 @@ const normalize = f => {
 };
 
 const hasConditionalLogic = field => Object.values( maybeArrayToObject( field?.conditional_logic?.when, 'id' ) ).length > 0;
+
+export default Base;
