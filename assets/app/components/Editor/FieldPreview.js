@@ -4,7 +4,7 @@ import { inside, ucwords } from "../../functions";
 import useColumns from "../../hooks/useColumns";
 import useNavPanel from "../../hooks/useNavPanel";
 import { setFieldActive } from "../../list-functions";
-import Base from "./Preview/Base";
+import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
 const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-toolbar' ) && !inside( e.target, '[contentEditable]' );
@@ -91,7 +91,7 @@ export default ( { field, parent = '', ...fieldActions } ) => {
 		document.addEventListener( 'mouseup', handleMouseUp );
 	}, [ field.columns, update ] );
 
-	const FieldType = lazy( () => import( `./Preview/${ ucwords( field.type, '_', '' ) }` ) );
+	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) );
 
 	console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
