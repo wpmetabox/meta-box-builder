@@ -1,5 +1,5 @@
 import { Button, Panel } from '@wordpress/components';
-import { memo, useEffect, useReducer, useRef } from '@wordpress/element';
+import { memo, useCallback, useEffect, useReducer, useRef } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { arrowLeft, chevronDown, chevronUp, close } from '@wordpress/icons';
 import { useShallow } from 'zustand/react/shallow';
@@ -69,7 +69,7 @@ const FloatingStructurePanel = () => {
 	const { visible, position, offsetX, offsetY, move, setPosition } = useFloatingStructurePanel();
 	const [ expanded, togglePanel ] = useReducer( prev => !prev, true );
 	const ref = useRef();
-	const { width, handleMouseDown } = useResizable( {
+	let { width, handleMouseDown } = useResizable( {
 		minWidth: 200,
 		maxWidth: 600,
 		defaultWidth: 300,
@@ -81,7 +81,7 @@ const FloatingStructurePanel = () => {
 			}
 		},
 	} );
-	const { height, handleMouseDown: handleMouseDownVertical } = useVerticalResizable( {
+	let { height, handleMouseDown: handleMouseDownVertical } = useVerticalResizable( {
 		storageKey: 'mbb-floating-structure-panel-height',
 		callback: height => {
 			if ( ref.current && ref.current.querySelector( '.mb-panel__inner' ) ) {
@@ -156,6 +156,9 @@ const FloatingStructurePanel = () => {
 			document.removeEventListener( 'mouseup', onMouseUp );
 		};
 	}, [ visible, move, setPosition ] );
+
+	handleMouseDown = useCallback( handleMouseDown, [] );
+	handleMouseDownVertical = useCallback( handleMouseDownVertical, [] );
 
 	return visible && (
 		<div className="mb-panel--floating" style={ floatingStyle } ref={ ref }>
