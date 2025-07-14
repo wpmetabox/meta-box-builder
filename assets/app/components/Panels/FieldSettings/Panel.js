@@ -4,7 +4,7 @@ import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
 import PersistentPanelBody from '../PersistentPanelBody';
 import Tab from './Tab';
 
-const FieldSettings = ( { controls, field, ...rest } ) => {
+export default ( { controls, field, ...rest } ) => {
 	const { portalElement } = useFieldSettingsPanel();
 
 	// Render field settings only when the field is active.
@@ -75,5 +75,3 @@ const FieldSettings = ( { controls, field, ...rest } ) => {
 		portalElement
 	);
 };
-
-export default FieldSettings;

@@ -1,7 +1,7 @@
 import { useFetch } from "../../hooks/useFetch";
-import FieldSettings from "../Panels/FieldSettings/FieldSettings";
+import Panel from "../Panels/FieldSettings/Panel";
 
-const Field = props => {
+export default ( props ) => {
 	const { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
 
 	// Safe fallback to 'text' for not-recommended HTML5 field types.
@@ -14,7 +14,5 @@ const Field = props => {
 
 	const controls = [ ...fieldTypes[ type ].controls ];
 
-	return <FieldSettings controls={ controls } { ...props } />;
+	return <Panel controls={ controls } { ...props } />;
 };
-
-export default Field;

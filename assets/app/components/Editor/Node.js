@@ -5,8 +5,8 @@ import { inside, ucwords } from "../../functions";
 import useColumns from "../../hooks/useColumns";
 import useNavPanel from "../../hooks/useNavPanel";
 import { setFieldActive } from "../../list-functions";
-import Field from './Field';
-import Base from "./FieldTypePreview/Base";
+import FieldPreview from "./FieldPreview";
+import FieldSettings from './FieldSettings';
 import Toolbar from "./Toolbar";
 
 const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-toolbar' ) && !inside( e.target, '[contentEditable]' );
@@ -97,7 +97,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		return;
 	}
 
-	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) );
+	const FieldType = lazy( () => import( `./Preview/${ ucwords( field.type, '_', '' ) }` ) );
 
 	console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
@@ -131,12 +131,12 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 						/>
 					)
 				}
-				<Base field={ field } { ...fieldActions } updateField={ update }>
+				<FieldPreview field={ field } { ...fieldActions } updateField={ update }>
 					<Suspense fallback={ null }>
 						<FieldType field={ field } parent={ parent } updateField={ update } />
 					</Suspense>
-				</Base>
-				<Field field={ field } parent={ parent } updateField={ update } />
+				</FieldPreview>
+				<FieldSettings field={ field } parent={ parent } updateField={ update } />
 			</div>
 		</div>
 	);
