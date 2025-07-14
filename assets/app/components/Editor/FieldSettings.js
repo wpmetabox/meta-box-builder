@@ -26,12 +26,16 @@ const FieldSettings = ( { field, parent, updateField } ) => {
 
 	return (
 		<>
-			<Panel
-				controls={ controls }
-				field={ field }
-				parent={ parent }
-				updateField={ update }
-			/>
+			{
+				// Render field settings only when the field is active.
+				field._active &&
+				<Panel
+					controls={ controls }
+					field={ field }
+					parent={ parent }
+					updateField={ update }
+				/>
+			}
 			{
 				type === 'group' &&
 				<SubFieldSettings

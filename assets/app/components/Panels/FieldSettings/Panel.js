@@ -7,11 +7,6 @@ import Tab from './Tab';
 export default ( { controls, field, ...rest } ) => {
 	const { portalElement } = useFieldSettingsPanel();
 
-	// Render field settings only when the field is active.
-	if ( !field._active ) {
-		return;
-	}
-
 	// Extract controls displayed in the panel header.
 	const headerSettings = [ 'required', 'clone_settings' ];
 	const headerControls = controls.filter( control => headerSettings.includes( control.setting ) );
@@ -51,7 +46,7 @@ export default ( { controls, field, ...rest } ) => {
 	} ) ).filter( tab => tab.controls.length > 0 );
 
 	return portalElement && createPortal(
-		<div className={ `mb-field-settings ${ field._active ? 'mb-field-settings--show' : '' }` }>
+		<div className="mb-field-settings">
 			<div className="mb-field-settings__header">
 				<Tab controls={ headerControls } field={ field } { ...rest } />
 			</div>
