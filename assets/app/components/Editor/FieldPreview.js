@@ -22,7 +22,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 	const [ hover, setHover ] = useState( false );
 	const [ resizing, setResizing ] = useState( false );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
-	const { hasCustomColumns } = useColumns();
+	const hasCustomColumns = useColumns( state => state.hasCustomColumns() );
 	const ref = useRef();
 
 	const toggleSettings = e => {
@@ -110,7 +110,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 	return field.type && fieldTypes.hasOwnProperty( field.type ) && (
 		<div className={ `
 			mb-field-wrapper
-			${ MbbApp.extensions.columns && hasCustomColumns() ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
+			${ MbbApp.extensions.columns && hasCustomColumns ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
 		` }>
 			<div
 				ref={ ref }
