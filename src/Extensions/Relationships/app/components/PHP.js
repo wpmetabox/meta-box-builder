@@ -25,7 +25,7 @@ const PHP = () => {
 		fetcher( {
 			api: 'relationships/generate',
 			params: {
-				post_title: document.querySelector( '#title' )?.value,
+				post_title: document.querySelector( '#post_title' )?.value,
 				settings
 			},
 			method: 'POST',
