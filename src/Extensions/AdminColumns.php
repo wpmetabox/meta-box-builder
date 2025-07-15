@@ -57,11 +57,13 @@ class AdminColumns {
 	/**
 	 * Normalize the position value.
 	 *
+	 * Make static to be used in Relationship parser.
+	 *
 	 * @param string|array $position Can be array of type and column, or string of type and column separated by space. Both can be empty.
 	 *
 	 * @return string
 	 */
-	private function normalize_position( $position ): string {
+	public static function normalize_position( $position ): string {
 		$types = [ 'after', 'before', 'replace' ];
 		if ( is_array( $position ) ) {
 			$type   = isset( $position['type'] ) && in_array( $position['type'], $types ) ? $position['type'] : 'after';

@@ -19,7 +19,7 @@ const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 			tooltip={ __( 'Show this field as a column in the table list in the admin area', 'meta-box-builder' ) }
 		>
 			<AdminColumnsPosition
-				componentId={ `${ componentId }-position` }
+				name="admin_columns.position"
 				className="og-admin-columns-position"
 				label={ __( 'Position', 'meta-box-builder' ) }
 				tooltip={ __( 'Where to show the column in the table', 'meta-box-builder' ) }

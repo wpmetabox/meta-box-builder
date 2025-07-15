@@ -1,10 +1,11 @@
+import { useEffect } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import useAllFields from "../hooks/useAllFields";
 import useSettings from "../hooks/useSettings";
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
-const AdminColumnsPosition = ( { componentId, defaultValue, updateField, ...rest } ) => {
+const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) => {
 	const { getObjectType } = useSettings();
 	const objectType = getObjectType();
 
@@ -17,34 +18,52 @@ const AdminColumnsPosition = ( { componentId, defaultValue, updateField, ...rest
 	let fields = useAllFields().map( field => [ field.id, `${ field.name } (${ field.id })` ] );
 	fields = [ ...objectTypeFields( objectType ), ...fields ];
 
-	const handleChangeType = e => updateField( 'admin_columns.position.type', e.target.value );
-	const handleChangeColumn = ( inputRef, value ) => updateField( 'admin_columns.position.column', value );
+	const handleChangeType = e => updateField( `${ name }.type`, e.target.value );
+	const handleChangeColumn = ( inputRef, value ) => updateField( `${ name }.column`, value );
 	const handleSelectColumn = ( inputRef, value ) => {
 		inputRef.current.value = value;
-		updateField( 'admin_columns.position.column', value );
+		updateField( `${ name }.column`, value );
 	};
 
-	let type;
-	let column;
-	if ( typeof defaultValue === 'string' ) {
-		const parts = defaultValue.split( ' ' );
-		type = parts[ 0 ] || 'after';
-		column = parts[ 1 ] || defaultColumn;
-	} else {
-		type = defaultValue.type || 'after';
-		column = defaultValue.column || defaultColumn;
-	}
+	useEffect( () => {
+		let shouldUpdate = false;
+		let type;
+		let column;
+		if ( typeof defaultValue === 'string' ) {
+			const parts = defaultValue.split( ' ' );
+			type = parts[ 0 ] || 'after';
+			column = parts[ 1 ] || defaultColumn;
+			shouldUpdate = true;
+		} else {
+			if ( ! defaultValue.type ) {
+				type = 'after';
+				shouldUpdate = true;
+			}
+			if ( ! defaultValue.column ) {
+				column = defaultColumn;
+				shouldUpdate = true;
+			}
+		}
+
+		if ( shouldUpdate ) {
+			if ( type ) {
+				updateField( `${ name }.type`, type );
+			}
+			if ( column ) {
+				updateField( `${ name }.column`, column );
+			}
+		}
+	}, [ JSON.stringify( defaultValue ) ] );
 
 	return (
 		<DivRow { ...rest }>
-			<select defaultValue={ type } onChange={ handleChangeType }>
+			<select defaultValue={ defaultValue?.type } onChange={ handleChangeType }>
 				<option value="after">{ __( 'After', 'meta-box-builder' ) }</option>
 				<option value="before">{ __( 'Before', 'meta-box-builder' ) }</option>
 				<option value="replace">{ __( 'Replace', 'meta-box-builder' ) }</option>
 			</select>
 			<FieldInserter
-				id={ componentId }
-				defaultValue={ column }
+				defaultValue={ defaultValue?.column }
 				items={ fields }
 				isID={ true }
 				exclude={ objectTypeFields( objectType ) }
