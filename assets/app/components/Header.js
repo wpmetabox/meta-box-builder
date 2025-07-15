@@ -1,6 +1,7 @@
 import { Button, Flex } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import { cog, listView, plus } from "@wordpress/icons";
+import { useShallow } from 'zustand/react/shallow';
 import { ensureArray, ucwords } from '../functions';
 import useFloatingStructurePanel from '../hooks/useFloatingStructurePanel';
 import useNavPanel from '../hooks/useNavPanel';
@@ -8,7 +9,11 @@ import useSettings from '../hooks/useSettings';
 
 const Header = () => {
 	const { navPanel, setNavPanel } = useNavPanel();
-	const { floating, visible, toggleVisible } = useFloatingStructurePanel();
+	const { floating, visible, toggleVisible } = useFloatingStructurePanel( useShallow( state => ( {
+		floating: state.floating,
+		visible: state.visible,
+		toggleVisible: state.toggleVisible,
+	} ) ) );
 	const { getObjectType, getPostTypes, getSetting } = useSettings( state => ( {
 		getObjectType: state.getObjectType,
 		getPostTypes: state.getPostTypes,

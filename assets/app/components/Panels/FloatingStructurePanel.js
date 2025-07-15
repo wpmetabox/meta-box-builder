@@ -1,7 +1,8 @@
 import { Button, Panel } from '@wordpress/components';
-import { useEffect, useReducer, useRef } from '@wordpress/element';
+import { memo, useCallback, useEffect, useReducer, useRef } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { arrowLeft, chevronDown, chevronUp, close } from '@wordpress/icons';
+import { useShallow } from 'zustand/react/shallow';
 import useFloatingStructurePanel from '../../hooks/useFloatingStructurePanel';
 import useNavPanel from '../../hooks/useNavPanel';
 import useResizable from '../../hooks/useResizable';
@@ -11,8 +12,11 @@ import Resizer from '../Resizer';
 import Fields from './Structure/Fields';
 
 const FloatingHeader = ( { expanded, togglePanel } ) => {
-	const { setFloating, setVisible } = useFloatingStructurePanel();
-	const { setNavPanel } = useNavPanel();
+	const { setFloating, setVisible } = useFloatingStructurePanel( useShallow( state => ( {
+		setFloating: state.setFloating,
+		setVisible: state.setVisible,
+	} ) ) );
+	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const { allExpanded, toggleAll } = useStructureCollapse();
 
 	const disableFloating = () => {
@@ -59,11 +63,13 @@ const FloatingHeader = ( { expanded, togglePanel } ) => {
 	);
 };
 
+const FloatingHeaderMemo = memo( FloatingHeader );
+
 const FloatingStructurePanel = () => {
 	const { visible, position, offsetX, offsetY, move, setPosition } = useFloatingStructurePanel();
 	const [ expanded, togglePanel ] = useReducer( prev => !prev, true );
 	const ref = useRef();
-	const { width, handleMouseDown } = useResizable( {
+	let { width, handleMouseDown } = useResizable( {
 		minWidth: 200,
 		maxWidth: 600,
 		defaultWidth: 300,
@@ -75,7 +81,7 @@ const FloatingStructurePanel = () => {
 			}
 		},
 	} );
-	const { height, handleMouseDown: handleMouseDownVertical } = useVerticalResizable( {
+	let { height, handleMouseDown: handleMouseDownVertical } = useVerticalResizable( {
 		storageKey: 'mbb-floating-structure-panel-height',
 		callback: height => {
 			if ( ref.current && ref.current.querySelector( '.mb-panel__inner' ) ) {
@@ -151,9 +157,12 @@ const FloatingStructurePanel = () => {
 		};
 	}, [ visible, move, setPosition ] );
 
+	handleMouseDown = useCallback( handleMouseDown, [] );
+	handleMouseDownVertical = useCallback( handleMouseDownVertical, [] );
+
 	return visible && (
 		<div className="mb-panel--floating" style={ floatingStyle } ref={ ref }>
-			<Panel header={ <FloatingHeader expanded={ expanded } togglePanel={ togglePanel } /> } className="mb-panel mb-panel--structure">
+			<Panel header={ <FloatingHeaderMemo expanded={ expanded } togglePanel={ togglePanel } /> } className="mb-panel mb-panel--structure">
 				{ expanded && <div className="mb-panel__inner"><Fields /></div> }
 				<Resizer onMouseDown={ handleMouseDown } />
 				<Resizer onMouseDown={ handleMouseDownVertical } type="vertical" />

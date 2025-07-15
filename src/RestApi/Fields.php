@@ -36,39 +36,6 @@ class Fields extends Base {
 		return $fields;
 	}
 
-	public function get_field_categories() {
-		$categories = [
-			[
-				'slug'  => 'basic',
-				'title' => __( 'Basic', 'meta-box-builder' ),
-			],
-			[
-				'slug'  => 'advanced',
-				'title' => __( 'Advanced', 'meta-box-builder' ),
-			],
-			[
-				'slug'  => 'html5',
-				'title' => __( 'HTML5', 'meta-box-builder' ),
-			],
-			[
-				'slug'  => 'wordpress',
-				'title' => __( 'WordPress', 'meta-box-builder' ),
-			],
-			[
-				'slug'  => 'upload',
-				'title' => __( 'Upload', 'meta-box-builder' ),
-			],
-			[
-				'slug'  => 'layout',
-				'title' => __( 'Layout', 'meta-box-builder' ),
-			],
-		];
-
-		$categories = apply_filters( 'mbb_field_categories', $categories );
-
-		return $categories;
-	}
-
 	public function get_field_types() {
 		$this->registry->register_default_controls();
 

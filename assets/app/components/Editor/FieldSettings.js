@@ -1,11 +1,11 @@
 import { memo } from "@wordpress/element";
 import { isEqual } from 'lodash';
-import { useFetch } from "../../hooks/useFetch";
+import useFieldTypes from "../../hooks/useFieldTypes";
 import getList from "../../list-functions";
 import Panel from "../Panels/FieldSettings/Panel";
 
 const FieldSettings = ( { field, parent, updateField } ) => {
-	let { data: fieldTypes } = useFetch( { api: 'field-types', defaultValue: {} } );
+	let { fieldTypes } = useFieldTypes();
 	fieldTypes = Object.fromEntries(
 		Object.entries( fieldTypes ).filter( ( [ type, field ] ) => !field.disabled )
 	);
