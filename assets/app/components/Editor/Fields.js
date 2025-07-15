@@ -16,7 +16,7 @@ const Fields = () => {
 		if ( !fetched ) {
 			fetch();
 		}
-	}, [ fetched ] );
+	}, [] );
 
 	if ( Object.keys( fieldTypes ).length === 0 ) {
 		return <div className="mb-editor__empty">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</div>;
