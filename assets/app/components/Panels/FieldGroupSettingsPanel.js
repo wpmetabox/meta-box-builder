@@ -108,12 +108,9 @@ const FieldGroupSettingsPanel = () => {
 						<Translation />
 					</PersistentPanelBody>
 				}
-				{
-					![ 'setting', 'block' ].includes( objectType ) &&
-					<PersistentPanelBody panelId="field-group-advanced" title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ false }>
-						<Advanced />
-					</PersistentPanelBody>
-				}
+				<PersistentPanelBody panelId="field-group-advanced" title={ __( 'Advanced', 'meta-box-builder' ) } initialOpen={ false }>
+					<Advanced />
+				</PersistentPanelBody>
 			</div>
 		</Panel>
 	);
