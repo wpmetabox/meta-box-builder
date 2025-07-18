@@ -112,7 +112,13 @@ const Block = () => {
 		/>
 
 		<ToggleControl
-			label={ __( 'Custom CSS class name', 'meta-box-builder' ) }
+			label={ __( 'HTML anchor', 'meta-box-builder' ) }
+			checked={ !!getSetting( 'supports.anchor' ) }
+			onChange={ value => updateSetting( 'supports.anchor', value ) }
+		/>
+
+		<ToggleControl
+			label={ __( 'Additional CSS class(es)', 'meta-box-builder' ) }
 			checked={ !!getSetting( 'supports.customClassName' ) }
 			onChange={ value => updateSetting( 'supports.customClassName', value ) }
 		/>
