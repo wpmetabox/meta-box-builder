@@ -361,12 +361,6 @@ class AdminColumns {
 			'newer'          => esc_html__( '(newer)', 'meta-box-builder' ),
 			'sync_available' => esc_html__( 'Sync available', 'meta-box-builder' ),
 		] );
-
-		if ( Data::is_extension_active( 'mb-frontend-submission' ) ) {
-			wp_register_script( 'popper', MBB_URL . 'assets/js/popper.js', [], '2.11.6', true );
-			wp_enqueue_script( 'tippy', MBB_URL . 'assets/js/tippy.js', [ 'popper' ], '6.3.7', true );
-			wp_add_inline_script( 'tippy', 'tippy( ".mbb-tooltip", {placement: "top", arrow: true, animation: "fade"} );' );
-		}
 	}
 
 	public function add_columns( $columns ) {
@@ -375,13 +369,9 @@ class AdminColumns {
 			'location' => __( 'Location', 'meta-box-builder' ),
 		];
 
-		if ( Data::is_extension_active( 'mb-frontend-submission' ) && ! $this->is_status( 'sync' ) ) {
-			$new_columns['shortcode'] = __( 'Shortcode', 'meta-box-builder' ) . Data::tooltip( __( 'Embed the field group in the front end for users to submit posts.', 'meta-box-builder' ) );
-		}
-
 		if ( LocalJson::is_enabled() && ! $this->is_status( 'trash' ) ) {
 			$new_columns['path']        = __( 'Path', 'meta-box-builder' );
-			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' ) . Data::tooltip( __( 'You must set the modified time to a Unix timestamp for it to display correctly.', 'meta-box-builder' ) );
+			$new_columns['sync_status'] = __( 'Sync status', 'meta-box-builder' );
 		}
 
 		$columns = array_slice( $columns, 0, 2, true ) + $new_columns + array_slice( $columns, 2, null, true );

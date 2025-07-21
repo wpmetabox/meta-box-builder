@@ -165,8 +165,4 @@ class Data {
 		}
 		return false;
 	}
-
-	public static function tooltip( $content ) {
-		return '<button type="button" class="mbb-tooltip" data-tippy-content="' . esc_attr( $content ) . '"><span class="dashicons dashicons-editor-help"></span></button>';
-	}
 }
