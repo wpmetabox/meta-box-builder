@@ -69,6 +69,7 @@ if ( is_admin() ) {
 	new Export();
 	new Edit( 'meta-box' );
 	new AdminColumns();
+	new AddNewFieldGroup\AddNewFieldGroup();
 
 	new ToggleStatusColumn();
 }

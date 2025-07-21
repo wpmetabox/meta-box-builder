@@ -21,8 +21,8 @@ This task introduces 3 configurable modes to the plugin: **Post Submission Form*
 - Intercept the default behavior of the **“Add New”** button on the Field Groups screen. Do not allow immediate redirection.
 - Instead, display a modal. You may use **vanilla JS (preferred)** or **React**. If using React, use the [`Modal`](https://wordpress.github.io/gutenberg/?path=/docs/components-modal--docs) component from `@wordpress/components`.
 - Inside the modal, display 3 clickable blocks for the 3 modes:
-  - **Post Submission Form** (only if the `mb-frontend-submission` extension is active)
   - **Custom Fields** (always visible)
+  - **Post Submission Form** (only if the `mb-frontend-submission` extension is active)
   - **Block** (only if the `mb-blocks` extension is active)
 - Each block must include:
   - A title

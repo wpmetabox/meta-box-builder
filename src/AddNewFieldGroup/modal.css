@@ -1,0 +1,127 @@
+/* Modal Overlay */
+.mbb-modal-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Modal Content */
+.mbb-modal-content {
+	background: white;
+	border-radius: 8px;
+	padding: 24px;
+	max-width: 600px;
+	width: 90%;
+	max-height: 80vh;
+	overflow-y: auto;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Modal Header */
+.mbb-modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid #ddd;
+}
+
+.mbb-modal-header h2 {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.mbb-modal-close {
+	background: none;
+	border: none;
+	font-size: 20px;
+	cursor: pointer;
+	padding: 0;
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	transition: background-color 0.2s ease;
+}
+
+.mbb-modal-close:hover {
+	background-color: #f0f0f0;
+}
+
+/* Modal Body */
+.mbb-modal-body p {
+	margin: 0 0 24px 0;
+	color: #666;
+}
+
+/* Mode Options Grid */
+.mbb-mode-options {
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* Mode Option Blocks */
+.mbb-mode-option {
+	display: block;
+	padding: 20px;
+	border: 2px solid #e0e0e0;
+	border-radius: 8px;
+	text-decoration: none;
+	color: inherit;
+	transition: all 0.2s ease;
+	text-align: center;
+}
+
+.mbb-mode-option:hover {
+	border-color: #0073aa;
+	background-color: #f8f9fa;
+	text-decoration: none;
+	color: inherit;
+}
+
+.mbb-mode-icon {
+	margin-bottom: 12px;
+}
+
+.mbb-mode-icon svg {
+	width: 32px;
+	height: 32px;
+}
+
+.mbb-mode-option h3 {
+	margin: 0 0 8px 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: #0073aa;
+}
+
+.mbb-mode-option p {
+	margin: 0;
+	font-size: 14px;
+	color: #666;
+	line-height: 1.4;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.mbb-modal-content {
+		width: 95%;
+		padding: 16px;
+	}
+
+	.mbb-mode-options {
+		grid-template-columns: 1fr;
+	}
+}
