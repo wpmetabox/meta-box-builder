@@ -2,14 +2,12 @@
 namespace MBB\Extensions;
 
 use MBB\Control;
-use MBB\Helpers\Data;
 
 class FrontendSubmission {
 	public function __construct() {
-		if ( ! Data::is_extension_active( 'mb-frontend-submission' ) ) {
-			return;
-		}
 		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ], 10, 2 );
+		add_filter( 'mbb_field_types', [ $this, 'add_post_fields' ] );
+		add_filter( 'mbb_field_categories', [ $this, 'add_post_fields_category' ] );
 	}
 
 	public function add_field_controls( array $controls, string $type ): array {
@@ -24,5 +22,67 @@ class FrontendSubmission {
 		], false, 'advanced' );
 
 		return Control::insert_before( $controls, 'save_field', $control );
+	}
+
+	public function add_post_fields_category( array $categories ): array {
+		// Add Post Fields category at the beginning
+		array_unshift( $categories, [
+			'slug'  => 'post-fields',
+			'title' => __( 'Post Fields', 'meta-box-builder' ),
+		] );
+
+		return $categories;
+	}
+
+	public function add_post_fields( array $field_types ): array {
+		$post_fields = [
+			'post_title'     => array_merge( $field_types['text'], [
+				'title'           => __( 'Post Title', 'meta-box-builder' ),
+				'category'        => 'post-fields',
+				'underlying_type' => 'text',
+				'defaults'        => [
+					'name' => __( 'Post Title', 'meta-box-builder' ),
+					'id'   => 'post_title',
+				],
+			] ),
+			'post_content'   => array_merge( $field_types['wysiwyg'], [
+				'title'           => __( 'Post Content', 'meta-box-builder' ),
+				'category'        => 'post-fields',
+				'underlying_type' => 'wysiwyg',
+				'defaults'        => [
+					'name' => __( 'Post Content', 'meta-box-builder' ),
+					'id'   => 'post_content',
+				],
+			] ),
+			'post_excerpt'   => array_merge( $field_types['textarea'], [
+				'title'           => __( 'Post Excerpt', 'meta-box-builder' ),
+				'category'        => 'post-fields',
+				'underlying_type' => 'textarea',
+				'defaults'        => [
+					'name' => __( 'Post Excerpt', 'meta-box-builder' ),
+					'id'   => 'post_excerpt',
+				],
+			] ),
+			'post_date'      => array_merge( $field_types['datetime'], [
+				'title'           => __( 'Post Date', 'meta-box-builder' ),
+				'category'        => 'post-fields',
+				'underlying_type' => 'datetime',
+				'defaults'        => [
+					'name' => __( 'Post Date', 'meta-box-builder' ),
+					'id'   => 'post_date',
+				],
+			] ),
+			'post_thumbnail' => array_merge( $field_types['image'], [
+				'title'           => __( 'Post Thumbnail', 'meta-box-builder' ),
+				'category'        => 'post-fields',
+				'underlying_type' => 'image',
+				'defaults'        => [
+					'name' => __( 'Post Thumbnail', 'meta-box-builder' ),
+					'id'   => 'post_thumbnail',
+				],
+			] ),
+		];
+
+		return array_merge( $post_fields, $field_types );
 	}
 }

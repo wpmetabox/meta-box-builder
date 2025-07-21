@@ -190,7 +190,7 @@ class Edit extends BaseEditPage {
 	}
 
 	private function get_field_categories(): array {
-		return [
+		return apply_filters( 'mbb_field_categories', [
 			[
 				'slug'  => 'basic',
 				'title' => __( 'Basic', 'meta-box-builder' ),
@@ -215,6 +215,6 @@ class Edit extends BaseEditPage {
 				'slug'  => 'layout',
 				'title' => __( 'Layout', 'meta-box-builder' ),
 			],
-		];
+		] );
 	}
 }

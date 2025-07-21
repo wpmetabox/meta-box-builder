@@ -51,6 +51,10 @@ if ( Helpers\Data::is_extension_active( 'mb-admin-columns' ) ) {
 	new Extensions\AdminColumns();
 }
 
+if ( Helpers\Data::is_extension_active( 'mb-frontend-submission' ) ) {
+	new Extensions\FrontendSubmission();
+}
+
 new Integrations\WPML\Manager();
 new Integrations\Polylang\Manager();
 
@@ -60,7 +64,6 @@ new Extensions\Group();
 new Extensions\Tabs();
 new Extensions\Tooltip();
 new Extensions\RestApi();
-new Extensions\FrontendSubmission();
 new Extensions\TextLimiter();
 
 new LocalJson();
