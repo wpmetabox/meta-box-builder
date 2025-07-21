@@ -3,19 +3,38 @@ import dotProp from 'dot-prop';
 import { create } from 'zustand';
 import { ensureArray, ucwords, uniqid } from './functions';
 import useColumns from './hooks/useColumns';
+import useFieldTypes from './hooks/useFieldTypes';
 import useNavPanel from './hooks/useNavPanel';
 
 const areFieldsEqual = ( a, b ) => a.length === b.length && a.every( ( field, index ) => field._id === b[ index ]._id );
 
 const createNewField = type => {
 	const id = `${ type }_${ uniqid() }`;
-	return {
+
+	// Get field types to check for post fields
+	const { fieldTypes } = useFieldTypes.getState();
+	const fieldType = fieldTypes[ type ];
+
+	let field = {
 		_id: id,
 		_new: true,
 		type,
 		id,
 		name: ucwords( type, '_' )
 	};
+
+	// Handle post fields with underlying types and defaults
+	if ( fieldType && fieldType.underlying_type ) {
+		field.type = fieldType.underlying_type;
+		field._original_type = type; // Store the original post field type
+
+		// Set defaults if available
+		if ( fieldType.defaults ) {
+			field = { ...field, ...fieldType.defaults };
+		}
+	}
+
+	return field;
 };
 
 const lists = new Map();

@@ -5,6 +5,9 @@ import { __ } from "@wordpress/i18n";
 const Id = ( { field, updateField } ) => {
 	const spanRef = useRef();
 
+	// Check if this is a post field (has _original_type)
+	const isPostField = field._original_type && field._original_type.startsWith( 'post_' );
+
 	// Prevent the default behavior of "Enter" key.
 	const preventEnter = e => {
 		if ( e.key === 'Enter' ) {
@@ -13,6 +16,11 @@ const Id = ( { field, updateField } ) => {
 	};
 
 	const handleChange = e => {
+		// Don't allow changes for post fields
+		if ( isPostField ) {
+			return;
+		}
+
 		updateField( 'id', e.target.textContent );
 		updateField( '_id_changed', true );
 	};
@@ -28,15 +36,21 @@ const Id = ( { field, updateField } ) => {
 	return (
 		<span className="mb-field__id">
 			{ __( 'ID', 'meta-box-builder' ) }:&nbsp;
-			<Tooltip text={ __( 'Click to edit', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
-				<span
-					ref={ spanRef }
-					contentEditable
-					suppressContentEditableWarning={ true }
-					onKeyDown={ preventEnter }
-					onInput={ handleChange }
-				/>
-			</Tooltip>
+			{
+				isPostField
+					? <span ref={ spanRef } />
+					: (
+						<Tooltip text={ __( 'Click to edit', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
+							<span
+								ref={ spanRef }
+								contentEditable
+								suppressContentEditableWarning={ true }
+								onKeyDown={ preventEnter }
+								onInput={ handleChange }
+							/>
+						</Tooltip>
+					)
+			}
 		</span>
 	);
 };

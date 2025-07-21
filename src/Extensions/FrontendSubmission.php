@@ -41,8 +41,7 @@ class FrontendSubmission {
 				'category'        => 'post-fields',
 				'underlying_type' => 'text',
 				'defaults'        => [
-					'name' => __( 'Post Title', 'meta-box-builder' ),
-					'id'   => 'post_title',
+					'id' => 'post_title',
 				],
 			] ),
 			'post_content'   => array_merge( $field_types['wysiwyg'], [
@@ -50,8 +49,7 @@ class FrontendSubmission {
 				'category'        => 'post-fields',
 				'underlying_type' => 'wysiwyg',
 				'defaults'        => [
-					'name' => __( 'Post Content', 'meta-box-builder' ),
-					'id'   => 'post_content',
+					'id' => 'post_content',
 				],
 			] ),
 			'post_excerpt'   => array_merge( $field_types['textarea'], [
@@ -59,8 +57,7 @@ class FrontendSubmission {
 				'category'        => 'post-fields',
 				'underlying_type' => 'textarea',
 				'defaults'        => [
-					'name' => __( 'Post Excerpt', 'meta-box-builder' ),
-					'id'   => 'post_excerpt',
+					'id' => 'post_excerpt',
 				],
 			] ),
 			'post_date'      => array_merge( $field_types['datetime'], [
@@ -68,8 +65,7 @@ class FrontendSubmission {
 				'category'        => 'post-fields',
 				'underlying_type' => 'datetime',
 				'defaults'        => [
-					'name' => __( 'Post Date', 'meta-box-builder' ),
-					'id'   => 'post_date',
+					'id' => 'post_date',
 				],
 			] ),
 			'post_thumbnail' => array_merge( $field_types['image'], [
@@ -77,8 +73,7 @@ class FrontendSubmission {
 				'category'        => 'post-fields',
 				'underlying_type' => 'image',
 				'defaults'        => [
-					'name' => __( 'Post Thumbnail', 'meta-box-builder' ),
-					'id'   => 'post_thumbnail',
+					'id' => 'post_thumbnail',
 				],
 			] ),
 		];

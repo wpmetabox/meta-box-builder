@@ -8,7 +8,15 @@ const Id = ( { field, componentId, updateField, ...rest } ) => {
 	const [ existingFieldGroup, setExistingFieldGroup ] = useState( {} );
 	const [ duplicate, setDuplicate ] = useState( false );
 
+	// Check if this is a post field (has _original_type)
+	const isPostField = field._original_type && field._original_type.startsWith( 'post_' );
+
 	const handleChange = e => {
+		// Don't allow changes for post fields
+		if ( isPostField ) {
+			return;
+		}
+
 		updateField( 'id', e.target.value );
 		updateField( '_id_changed', true );
 		checkDuplicateId( e.target.value );
@@ -34,6 +42,7 @@ const Id = ( { field, componentId, updateField, ...rest } ) => {
 				value={ field.id }
 				onChange={ handleChange }
 				pattern="[A-Za-z0-9\-_]+"
+				disabled={ isPostField }
 			/>
 			{
 				duplicate &&
