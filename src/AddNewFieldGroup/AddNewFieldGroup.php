@@ -16,11 +16,6 @@ class AddNewFieldGroup {
 		$has_frontend_submission = Data::is_extension_active( 'mb-frontend-submission' );
 		$has_blocks              = Data::is_extension_active( 'mb-blocks' );
 
-		// If neither extension is active, don't show the modal
-		if ( ! $has_frontend_submission && ! $has_blocks ) {
-			return;
-		}
-
 		wp_enqueue_style( 'mbb-add-new-modal', MBB_URL . 'src/AddNewFieldGroup/modal.css', [], MBB_VER );
 		wp_enqueue_script( 'mbb-add-new-modal', MBB_URL . 'src/AddNewFieldGroup/modal.js', [], MBB_VER, true );
 

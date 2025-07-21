@@ -72,7 +72,11 @@ if ( is_admin() ) {
 	new Export();
 	new Edit( 'meta-box' );
 	new AdminColumns();
-	new AddNewFieldGroup\AddNewFieldGroup();
+
+	if ( Helpers\Data::is_extension_active( 'mb-frontend-submission' ) || Helpers\Data::is_extension_active( 'mb-blocks' ) ) {
+		new AddNewFieldGroup\AddNewFieldGroup();
+		new FieldGroupListTableViews();
+	}
 
 	new ToggleStatusColumn();
 }
