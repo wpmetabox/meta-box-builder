@@ -111,7 +111,7 @@ export const getFieldIcon = type => {
 };
 
 export const getFullOptions = text => {
-	if ( ! text ) {
+	if ( !text ) {
 		return [];
 	}
 
@@ -137,9 +137,26 @@ export const updateNewPostUrl = () => {
 	}
 
 	// Only update URL if we're on the new post page.
-	if ( location.href.includes( 'post-new.php' ) ) {
-		history.replaceState( {}, '', `${ MbbApp.adminUrl }post.php?post=${ postId }&action=edit` );
+	if ( !location.href.includes( 'post-new.php' ) ) {
+		return;
 	}
+
+	// Preserve all query parameters except post_type
+	const url = new URL( location.href );
+	const searchParams = url.searchParams;
+
+	// Remove post_type parameter
+	searchParams.delete( 'post_type' );
+
+	// Build new URL with preserved parameters
+	let newUrl = `${ MbbApp.adminUrl }post.php?post=${ postId }&action=edit`;
+
+	// Add all remaining query parameters
+	if ( searchParams.toString() ) {
+		newUrl += `&${ searchParams.toString() }`;
+	}
+
+	history.replaceState( {}, '', newUrl );
 };
 
 export const maybeArrayToObject = ( arr, key ) => {

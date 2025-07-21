@@ -28,7 +28,7 @@ This task introduces 3 configurable modes to the plugin: **Post Submission Form*
   - A title
   - An SVG icon
   - A clickable `<a>` element that links to:
-    `wp-admin/post-new.php?post_type=meta-box&mode=${mode}`
+    `wp-admin/post-new.php?post_type=meta-box&settings[mode]=${mode}`
     where `${mode}` is one of: `post-submission-form`, `custom-fields`, or `block`.
 - **Organize the implementation into separate files** for:
   - JavaScript (modal logic, DOM)
@@ -42,7 +42,7 @@ This task introduces 3 configurable modes to the plugin: **Post Submission Form*
 ## Task 2: Handle `mode` Parameter on Add/Edit Field Group Screen
 
 - Update the `updateNewPostUrl` function in `functions.js` to **preserve additional query parameters**.
-- If the `mode` parameter is present in the URL, store it in the **field group settings context** under the `mode` key to persist its state.
+- If the `settings[mode]` parameter is present in the URL, check if it's automatically stored in the **field group settings context**.
 
 ---
 
