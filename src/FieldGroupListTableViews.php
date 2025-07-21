@@ -24,24 +24,22 @@ class FieldGroupListTableViews {
 			'block'                => 0,
 		];
 		$all_posts = get_posts( [
-			'post_type'      => 'meta-box',
-			'post_status'    => 'any',
-			'posts_per_page' => -1,
-			'fields'         => 'ids',
+			'post_type'              => 'meta-box',
+			'post_status'            => 'any',
+			'posts_per_page'         => -1,
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_term_meta_cache' => false,
 		] );
 		foreach ( $all_posts as $post_id ) {
 			$settings = get_post_meta( $post_id, 'settings', true );
-			$mode     = $settings['mode'] ?? '';
-			if ( $mode === 'post-submission-form' ) {
-				++$counts['post-submission-form'];
-			} elseif ( $mode === 'block' ) {
-				++$counts['block'];
-			} else {
-				++$counts['custom-fields'];
+			$mode     = $settings['mode'] ?? 'custom-fields';
+			if ( isset( $counts[ $mode ] ) ) {
+				++$counts[ $mode ];
 			}
 		}
 
-		$current_mode = isset( $_GET['mode'] ) ? sanitize_key( $_GET['mode'] ) : '';
+		$current_mode = empty( $_GET['mode'] ) ? 'custom-fields' : sanitize_key( $_GET['mode'] );
 		$base_url     = remove_query_arg( [ 'mode', 'post_status', 'paged' ] );
 		$modes        = [
 			'custom-fields'        => __( 'Custom Fields', 'meta-box-builder' ),
@@ -50,8 +48,8 @@ class FieldGroupListTableViews {
 		];
 		$new_views    = [];
 		foreach ( $modes as $key => $label ) {
-			$url           = add_query_arg( 'mode', $key, $base_url );
-			$class         = $current_mode === $key || ( empty( $current_mode ) && $key === 'custom-fields' ) ? 'class="current"' : '';
+			$url               = add_query_arg( 'mode', $key, $base_url );
+			$class             = $current_mode === $key ? 'class="current"' : '';
 			$new_views[ $key ] = sprintf(
 				// Translators: %1$s is the class attribute, %2$s is the URL, %3$s is the label, %4$d is the count.
 				'<a %1$s href="%2$s">%3$s <span class="count">(%4$d)</span></a>',
@@ -72,10 +70,7 @@ class FieldGroupListTableViews {
 			return;
 		}
 
-		$mode = isset( $_GET['mode'] ) ? sanitize_key( $_GET['mode'] ) : '';
-		if ( empty( $mode ) ) {
-			$mode = 'custom-fields';
-		}
+		$mode = empty( $_GET['mode'] ) ? 'custom-fields' : sanitize_key( $_GET['mode'] );
 		if ( $mode === 'custom-fields' ) {
 			$query->set( 'meta_query', [
 				'relation' => 'OR',
