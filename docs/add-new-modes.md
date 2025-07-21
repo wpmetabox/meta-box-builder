@@ -89,7 +89,8 @@ In `Extensions/FrontendSubmission.php`:
 
 In `FieldGroupSettingsPanel.js` and child components:
 
-- Set the `objectType` to `block`, and **hide all other options** in the `Location` component.
+- Set the `objectType` to `block`
+- Hide the `Location` component.
 
 ---
 
@@ -98,7 +99,7 @@ In `FieldGroupSettingsPanel.js` and child components:
 ### Task 1:
 - Modal appears instead of redirecting on "Add New" button click
 - Mode blocks show/hide correctly based on active extensions
-- Links have correct `mode` query parameter
+- Links have correct `settings[mode]` query parameter
 
 ### Task 2:
 - `mode` is persisted in context and retained during save

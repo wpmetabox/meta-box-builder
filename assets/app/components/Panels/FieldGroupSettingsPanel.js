@@ -43,27 +43,40 @@ const Header = () => {
 };
 
 const FieldGroupSettingsPanel = () => {
-	const { getObjectType, validateAndUpdateObjectType } = useSettings( state => ( {
+	const { getObjectType, updateObjectType, validateAndUpdateObjectType, getSetting } = useSettings( state => ( {
 		getObjectType: state.getObjectType,
 		validateAndUpdateObjectType: state.validateAndUpdateObjectType,
+		getSetting: state.getSetting,
+		updateObjectType: state.updateObjectType,
 	} ) );
 	const objectType = getObjectType();
+	const mode = getSetting( 'mode', 'custom-fields' );
 
 	// Validate and update object type after component mount to avoid setState during render
 	useEffect( () => {
 		validateAndUpdateObjectType();
 	}, [ objectType ] );
 
+	// Set object type to 'block' when mode is 'block'
+	useEffect( () => {
+		if ( mode === 'block' && objectType !== 'block' ) {
+			updateObjectType( 'block' );
+		}
+	}, [ mode, objectType, updateObjectType ] );
+
 	return (
 		<Panel header={ <Header /> } className="mb-panel mb-panel--field-group-settings">
 			<div className="mb-panel__inner">
-				<PersistentPanelBody panelId="field-group-location" title={ __( 'Location', 'meta-box-builder' ) }>
-					<PanelRow><Location /></PanelRow>
-					{
-						MbbApp.extensions.includeExclude && objectType !== 'block' &&
-						<PanelRow><IncludeExclude /></PanelRow>
-					}
-				</PersistentPanelBody>
+				{
+					mode !== 'block' &&
+					<PersistentPanelBody panelId="field-group-location" title={ __( 'Location', 'meta-box-builder' ) }>
+						<PanelRow><Location /></PanelRow>
+						{
+							MbbApp.extensions.includeExclude && objectType !== 'block' &&
+							<PanelRow><IncludeExclude /></PanelRow>
+						}
+					</PersistentPanelBody>
+				}
 				{
 					objectType === 'post' &&
 					<PersistentPanelBody panelId="field-group-settings" title={ __( 'Settings', 'meta-box-builder' ) }>
