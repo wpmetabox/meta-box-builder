@@ -5,9 +5,17 @@ import DivRow from './DivRow';
 const Name = ( { componentId, field, updateField, ...rest } ) => {
 	const inputRef = useRef();
 
+	// Check if this is a post field (has _original_type)
+	const isPostField = field._original_type && field._original_type.startsWith( 'post_' );
+
 	const handleChange = e => {
 		const value = e.target.value;
 		updateField( 'name', value );
+
+		// Don't auto generate ID for post fields.
+		if ( isPostField ) {
+			return;
+		}
 
 		// Only generate ID if it's a new field and hasn't been manually changed
 		if ( field._new && !field._id_changed && ![ 'custom_html', 'divider', 'heading' ].includes( field.type ) ) {

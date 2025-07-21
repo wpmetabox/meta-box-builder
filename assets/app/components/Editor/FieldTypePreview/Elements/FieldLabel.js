@@ -7,6 +7,9 @@ import { sanitizeId } from "../../../../functions";
 const FieldLabel = ( { field, updateField } ) => {
 	const spanRef = useRef();
 
+	// Check if this is a post field (has _original_type)
+	const isPostField = field._original_type && field._original_type.startsWith( 'post_' );
+
 	// Release when pressing "Enter" or "Escape".
 	const maybeFinishEditing = e => {
 		if ( ![ 'Enter', 'Escape' ].includes( e.key ) ) {
@@ -21,6 +24,11 @@ const FieldLabel = ( { field, updateField } ) => {
 	const handleChange = e => {
 		const value = e.target.textContent;
 		updateField( 'name', value );
+
+		// Don't auto generate ID for post fields.
+		if ( isPostField ) {
+			return;
+		}
 
 		// Only generate ID if it's a new field and hasn't been manually changed
 		if ( field._new && !field._id_changed && ![ 'custom_html', 'divider', 'heading' ].includes( field.type ) ) {
