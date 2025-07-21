@@ -41,8 +41,8 @@ class FieldGroupListTableViews {
 			}
 		}
 
-		$current_mode = isset( $_GET['mbb_mode'] ) ? sanitize_key( $_GET['mbb_mode'] ) : '';
-		$base_url     = remove_query_arg( [ 'mbb_mode', 'post_status', 'paged' ] );
+		$current_mode = isset( $_GET['mode'] ) ? sanitize_key( $_GET['mode'] ) : '';
+		$base_url     = remove_query_arg( [ 'mode', 'post_status', 'paged' ] );
 		$modes        = [
 			'custom-fields'        => __( 'Custom Fields', 'meta-box-builder' ),
 			'post-submission-form' => __( 'Post Submission Forms', 'meta-box-builder' ),
@@ -50,7 +50,7 @@ class FieldGroupListTableViews {
 		];
 		$new_views    = [];
 		foreach ( $modes as $key => $label ) {
-			$url           = add_query_arg( 'mbb_mode', $key, $base_url );
+			$url           = add_query_arg( 'mode', $key, $base_url );
 			$class         = $current_mode === $key || ( empty( $current_mode ) && $key === 'custom-fields' ) ? 'class="current"' : '';
 			$new_views[ $key ] = sprintf(
 				// Translators: %1$s is the class attribute, %2$s is the URL, %3$s is the label, %4$d is the count.
@@ -72,7 +72,7 @@ class FieldGroupListTableViews {
 			return;
 		}
 
-		$mode = isset( $_GET['mbb_mode'] ) ? sanitize_key( $_GET['mbb_mode'] ) : '';
+		$mode = isset( $_GET['mode'] ) ? sanitize_key( $_GET['mode'] ) : '';
 		if ( empty( $mode ) ) {
 			$mode = 'custom-fields';
 		}
