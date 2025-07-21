@@ -49,7 +49,7 @@ class FieldGroupListTableViews {
 		$new_views    = [];
 		foreach ( $modes as $key => $label ) {
 			$url               = add_query_arg( 'mode', $key, $base_url );
-			$class             = $current_mode === $key ? 'class="current"' : '';
+			$class             = $current_mode === $key && empty( $_GET['post_status'] ) ? 'class="current"' : '';
 			$new_views[ $key ] = sprintf(
 				// Translators: %1$s is the class attribute, %2$s is the URL, %3$s is the label, %4$d is the count.
 				'<a %1$s href="%2$s">%3$s <span class="count">(%4$d)</span></a>',
@@ -67,6 +67,10 @@ class FieldGroupListTableViews {
 			return;
 		}
 		if ( ! $query->is_main_query() || $query->get( 'post_type' ) !== 'meta-box' ) {
+			return;
+		}
+		// Don't filter Trash view.
+		if ( ! empty( $_GET['post_status'] ) ) {
 			return;
 		}
 
