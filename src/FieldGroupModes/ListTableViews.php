@@ -1,9 +1,9 @@
 <?php
-namespace MBB;
+namespace MBB\FieldGroupModes;
 
 use WP_Query;
 
-class FieldGroupListTableViews {
+class ListTableViews {
 	public function __construct() {
 		add_action( 'load-edit.php', [ $this, 'load' ] );
 	}

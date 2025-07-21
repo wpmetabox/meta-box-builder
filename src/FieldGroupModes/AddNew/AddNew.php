@@ -1,9 +1,9 @@
 <?php
-namespace MBB\AddNewFieldGroup;
+namespace MBB\FieldGroupModes\AddNew;
 
 use MBB\Helpers\Data;
 
-class AddNewFieldGroup {
+class AddNew {
 	public function __construct() {
 		add_action( 'admin_print_styles-edit.php', [ $this, 'enqueue_assets' ] );
 	}
@@ -16,8 +16,8 @@ class AddNewFieldGroup {
 		$has_frontend_submission = Data::is_extension_active( 'mb-frontend-submission' );
 		$has_blocks              = Data::is_extension_active( 'mb-blocks' );
 
-		wp_enqueue_style( 'mbb-add-new-modal', MBB_URL . 'src/AddNewFieldGroup/modal.css', [], MBB_VER );
-		wp_enqueue_script( 'mbb-add-new-modal', MBB_URL . 'src/AddNewFieldGroup/modal.js', [], MBB_VER, true );
+		wp_enqueue_style( 'mbb-add-new-modal', MBB_URL . 'src/FieldGroupModes/AddNew/modal.css', [], filemtime( __DIR__ . '/modal.css' ) );
+		wp_enqueue_script( 'mbb-add-new-modal', MBB_URL . 'src/FieldGroupModes/AddNew/modal.js', [], filemtime( __DIR__ . '/modal.js' ), true );
 
 		$for = [ __( 'post types', 'meta-box-builder' ) ];
 		if ( Data::is_extension_active( 'mb-taxonomies' ) ) {
