@@ -7,7 +7,7 @@ use MBB\Helpers\Data;
 
 class Tabs {
 	public function __construct() {
-		add_action( 'mbb_field_types', [ $this, 'add_field_type' ] );
+		add_filter( 'mbb_field_types', [ $this, 'add_field_type' ] );
 		if ( ! Data::is_extension_active( 'meta-box-tabs' ) ) {
 			return;
 		}
@@ -15,7 +15,7 @@ class Tabs {
 		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_meta_box_settings' ] );
 	}
 
-	public function add_field_type( $field_types ) {
+	public function add_field_type( array $field_types ): array {
 		$field_types['tab'] = [
 			'title'    => __( 'Tab', 'meta-box-builder' ),
 			'category' => 'layout',
