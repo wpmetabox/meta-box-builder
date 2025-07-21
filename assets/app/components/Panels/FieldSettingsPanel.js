@@ -16,7 +16,7 @@ const FieldSettingsPanel = () => {
 	const header = (
 		<Flex align="center" gap={ 1 }>
 			{ activeField.type && <Icon icon={ getFieldIcon( activeField.type ) } /> }
-			{ ucwords( activeField.type || '', '_' ) }
+			{ ucwords( activeField._original_type || activeField.type || '', '_' ) }
 		</Flex>
 	);
 
