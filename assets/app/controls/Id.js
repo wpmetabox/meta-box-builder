@@ -11,6 +11,11 @@ const Id = ( { field, componentId, updateField, ...rest } ) => {
 	// Check if this is a post field (has _original_type)
 	const isPostField = field._original_type && field._original_type.startsWith( 'post_' );
 
+	// Don't show the ID control for post fields as it's always fixed.
+	if ( isPostField ) {
+		return null;
+	}
+
 	const handleChange = e => {
 		// Don't allow changes for post fields
 		if ( isPostField ) {
@@ -42,7 +47,6 @@ const Id = ( { field, componentId, updateField, ...rest } ) => {
 				value={ field.id }
 				onChange={ handleChange }
 				pattern="[A-Za-z0-9\-_]+"
-				disabled={ isPostField }
 			/>
 			{
 				duplicate &&

@@ -79,9 +79,8 @@ In `Extensions/FrontendSubmission.php`:
 - For each field:
   - Use the same controls as the original field type.
   - Auto-fill the `name` and `id`.
-  - **Prevent changes to the `id` field** by disabling the `Id` input both:
-    - In the field preview
-    - In the field settings panel
+  - **Prevent changes to the `id` field** by disabling the `Id` input in the field preview
+  - Hide the `Id` control in field settings panel
 
 ---
 
