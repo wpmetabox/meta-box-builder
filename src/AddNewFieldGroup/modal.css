@@ -1,92 +1,78 @@
-/* Modal Overlay */
 .mbb-modal-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(0, 0, 0, 0.7);
+	background: rgba(0, 0, 0, 0.75);
 	z-index: 100000;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
-/* Modal Content */
 .mbb-modal-content {
 	background: white;
 	border-radius: 8px;
-	padding: 24px;
-	max-width: 600px;
+	padding: 24px 32px 32px;
+	max-width: 840px;
 	width: 90%;
 	max-height: 80vh;
 	overflow-y: auto;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 5px 15px #00000014,0 15px 27px #00000012,0 30px 36px #0000000a,0 50px 43px #00000005;
 }
 
-/* Modal Header */
 .mbb-modal-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	margin-bottom: 24px;
-	padding-bottom: 16px;
+	padding-bottom: 24px;
 	border-bottom: 1px solid #ddd;
 }
 
 .mbb-modal-header h2 {
 	margin: 0;
 	font-size: 18px;
-	font-weight: 600;
 }
 
 .mbb-modal-close {
 	background: none;
 	border: none;
-	font-size: 20px;
 	cursor: pointer;
 	padding: 0;
-	width: 30px;
-	height: 30px;
+	width: 32px;
+	height: 32px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 4px;
-	transition: background-color 0.2s ease;
 }
 
-.mbb-modal-close:hover {
-	background-color: #f0f0f0;
+.mbb-modal-close:hover svg {
+	fill: #0073aa;
 }
 
-/* Modal Body */
 .mbb-modal-body p {
 	margin: 0 0 24px 0;
-	color: #666;
 }
 
-/* Mode Options Grid */
 .mbb-mode-options {
 	display: grid;
 	gap: 16px;
 	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 }
 
-/* Mode Option Blocks */
 .mbb-mode-option {
 	display: block;
-	padding: 20px;
-	border: 2px solid #e0e0e0;
+	padding: 24px;
+	border: 1px solid #e0e0e0;
 	border-radius: 8px;
 	text-decoration: none;
-	color: inherit;
-	transition: all 0.2s ease;
 	text-align: center;
 }
 
 .mbb-mode-option:hover {
 	border-color: #0073aa;
-	background-color: #f8f9fa;
 	text-decoration: none;
 	color: inherit;
 }
@@ -109,19 +95,5 @@
 
 .mbb-mode-option p {
 	margin: 0;
-	font-size: 14px;
-	color: #666;
-	line-height: 1.4;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-	.mbb-modal-content {
-		width: 95%;
-		padding: 16px;
-	}
-
-	.mbb-mode-options {
-		grid-template-columns: 1fr;
-	}
+	color: #3c434a;
 }

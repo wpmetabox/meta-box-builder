@@ -18,51 +18,37 @@
 			<div class="mbb-modal-content">
 				<div class="mbb-modal-header">
 					<h2>${ data.title }</h2>
-					<button type="button" class="mbb-modal-close" aria-label="Close modal">×</button>
+					<button type="button" class="mbb-modal-close">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false"><path d="m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z"></path></svg>
+					</button>
 				</div>
 
 				<div class="mbb-modal-body">
 					<p>${ data.description }</p>
 
 					<div class="mbb-mode-options">
+						<a href="${ data.adminUrl }post-new.php?post_type=meta-box&mode=custom-fields" class="mbb-mode-option">
+							<div class="mbb-mode-icon">
+								<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M6 5.5h3a.5.5 0 01.5.5v3a.5.5 0 01-.5.5H6a.5.5 0 01-.5-.5V6a.5.5 0 01.5-.5zM4 6a2 2 0 012-2h3a2 2 0 012 2v3a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm11-.5h3a.5.5 0 01.5.5v3a.5.5 0 01-.5.5h-3a.5.5 0 01-.5-.5V6a.5.5 0 01.5-.5zM13 6a2 2 0 012-2h3a2 2 0 012 2v3a2 2 0 01-2 2h-3a2 2 0 01-2-2V6zm5 8.5h-3a.5.5 0 00-.5.5v3a.5.5 0 00.5.5h3a.5.5 0 00.5-.5v-3a.5.5 0 00-.5-.5zM15 13a2 2 0 00-2 2v3a2 2 0 002 2h3a2 2 0 002-2v-3a2 2 0 00-2-2h-3zm-9 1.5h3a.5.5 0 01.5.5v3a.5.5 0 01-.5.5H6a.5.5 0 01-.5-.5v-3a.5.5 0 01.5-.5zM4 15a2 2 0 012-2h3a2 2 0 012 2v3a2 2 0 01-2 2H6a2 2 0 01-2-2v-3z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+							</div>
+							<h3>${ data.customFields }</h3>
+							<p>${ data.customFieldsDesc }</p>
+						</a>
+
 						${ hasFrontendSubmission ? `
-							<a href="wp-admin/post-new.php?post_type=meta-box&mode=post-submission-form" class="mbb-mode-option">
+							<a href="${ data.adminUrl }post-new.php?post_type=meta-box&mode=post-submission-form" class="mbb-mode-option">
 								<div class="mbb-mode-icon">
-									<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-										<path d="M14 2V8H20" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-										<path d="M16 13H8" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-										<path d="M16 17H8" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-										<path d="M10 9H9H8" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 3H5c-.6 0-1 .4-1 1v7c0 .5.4 1 1 1h14c.5 0 1-.4 1-1V4c0-.6-.4-1-1-1zM5.5 10.5v-.4l1.8-1.3 1.3.8c.3.2.7.2.9-.1L11 8.1l2.4 2.4H5.5zm13 0h-2.9l-4-4c-.3-.3-.8-.3-1.1 0L8.9 8l-1.2-.8c-.3-.2-.6-.2-.9 0l-1.3 1V4.5h13v6zM4 20h9v-1.5H4V20zm0-4h16v-1.5H4V16z"></path></svg>
 								</div>
 								<h3>${ data.postSubmissionForm }</h3>
 								<p>${ data.postSubmissionFormDesc }</p>
 							</a>
 						` : '' }
 
-						<a href="wp-admin/post-new.php?post_type=meta-box&mode=custom-fields" class="mbb-mode-option">
-							<div class="mbb-mode-icon">
-								<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="#0073aa" stroke-width="2"/>
-									<path d="M9 9H15" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-									<path d="M9 13H15" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-									<path d="M9 17H15" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-								</svg>
-							</div>
-							<h3>${ data.customFields }</h3>
-							<p>${ data.customFieldsDesc }</p>
-						</a>
-
 						${ hasBlocks ? `
-							<a href="wp-admin/post-new.php?post_type=meta-box&mode=block" class="mbb-mode-option">
+							<a href="${ data.adminUrl }post-new.php?post_type=meta-box&mode=block" class="mbb-mode-option">
 								<div class="mbb-mode-icon">
-									<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-										<path d="M4 6H20" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-										<path d="M4 12H20" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-										<path d="M4 18H20" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-										<path d="M8 6V18" stroke="#0073aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-									</svg>
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 8h-1V6h-5v2h-2V6H6v2H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm.5 10c0 .3-.2.5-.5.5H5c-.3 0-.5-.2-.5-.5v-8c0-.3.2-.5.5-.5h14c.3 0 .5.2.5.5v8z"></path></svg>
 								</div>
 								<h3>${ data.block }</h3>
 								<p>${ data.blockDesc }</p>
@@ -104,5 +90,4 @@
 			closeModal();
 		}
 	} );
-
 }
