@@ -18,20 +18,24 @@ This task introduces 3 configurable modes to the plugin: **Post Submission Form*
 
 ## Task 1: Display a Modal for Selecting Mode on “Add New” Field Group Screen
 
-- Intercept the default behavior of the **“Add New”** button on the Field Groups screen. Do not redirect immediately.
-- Instead, display a modal using the [`Modal`](https://wordpress.github.io/gutenberg/?path=/docs/components-modal--docs) component from `@wordpress/components`.
-- Within the modal, show 3 clickable blocks representing the 3 modes:
-  - **Post Submission Form** (only if `mb-frontend-submission` is active)
+- Intercept the default behavior of the **“Add New”** button on the Field Groups screen. Do not allow immediate redirection.
+- Instead, display a modal. You may use **vanilla JS (preferred)** or **React**. If using React, use the [`Modal`](https://wordpress.github.io/gutenberg/?path=/docs/components-modal--docs) component from `@wordpress/components`.
+- Inside the modal, display 3 clickable blocks for the 3 modes:
+  - **Post Submission Form** (only if the `mb-frontend-submission` extension is active)
   - **Custom Fields** (always visible)
-  - **Block** (only if `mb-blocks` is active)
+  - **Block** (only if the `mb-blocks` extension is active)
 - Each block must include:
   - A title
-  - A relevant SVG icon
-  - A `<a>` link pointing to the `Add New Field Group` URL with a query string: `wp-admin/post-new.php?post_type=meta-box&mode=${mode}` where `${mode}` is one of: `post-submission-form`, `custom-fields`, or `block`.
-- The implementation can be in **vanilla JS (preferred)** or **React**.
-- Place the code in:
-  - `js/add-new.js` (if single-file solution), or
-  - `js/add-new/` (if using multiple modules)
+  - An SVG icon
+  - A clickable `<a>` element that links to:
+    `wp-admin/post-new.php?post_type=meta-box&mode=${mode}`
+    where `${mode}` is one of: `post-submission-form`, `custom-fields`, or `block`.
+- **Organize the implementation into separate files** for:
+  - JavaScript (modal logic, DOM)
+  - CSS (styling for modal and blocks)
+  - PHP (enqueueing scripts/styles, rendering template if needed)
+- Put **all related code** (JS, CSS, and PHP) inside the folder:
+  `src/AddNewFieldGroup/`
 
 ---
 
