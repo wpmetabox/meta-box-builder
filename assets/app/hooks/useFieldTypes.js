@@ -4,6 +4,7 @@
 
 import { create } from 'zustand';
 import { fetcher } from './useFetch';
+import useSettings from './useSettings';
 
 const useFieldTypes = create( ( set, get ) => ( {
 	fieldTypes: {},
@@ -14,7 +15,7 @@ const useFieldTypes = create( ( set, get ) => ( {
 			return;
 		}
 
-		const fieldTypes = await fetcher( { api: 'field-types' } );
+		const fieldTypes = await fetcher( { api: 'field-types', params: { mode: useSettings.getState().getSetting( 'mode' ) } } );
 		set( { fieldTypes, fetched: true } );
 	},
 } ) );

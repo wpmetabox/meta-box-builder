@@ -6,7 +6,7 @@ use MBB\Control;
 class FrontendSubmission {
 	public function __construct() {
 		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ], 10, 2 );
-		add_filter( 'mbb_field_types', [ $this, 'add_post_fields' ] );
+		add_filter( 'mbb_field_types', [ $this, 'add_post_fields' ], 10, 2 );
 		add_filter( 'mbb_field_categories', [ $this, 'add_post_fields_category' ] );
 	}
 
@@ -34,7 +34,11 @@ class FrontendSubmission {
 		return $categories;
 	}
 
-	public function add_post_fields( array $field_types ): array {
+	public function add_post_fields( array $field_types, string $mode ): array {
+		if ( 'post-submission-form' !== $mode ) {
+			return $field_types;
+		}
+
 		$post_fields = [
 			'post_title'     => array_merge( $field_types['text'], [
 				'title'           => __( 'Post Title', 'meta-box-builder' ),

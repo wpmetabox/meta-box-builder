@@ -1,6 +1,8 @@
 <?php
 namespace MBB\RestApi;
 
+use WP_REST_Request;
+
 class Fields extends Base {
 	private $registry;
 
@@ -36,7 +38,9 @@ class Fields extends Base {
 		return $fields;
 	}
 
-	public function get_field_types() {
+	public function get_field_types( WP_REST_Request $request ) {
+		$mode = $request->get_param( 'mode' ) ?: 'custom-fields';
+
 		$this->registry->register_default_controls();
 
 		$general_tab    = [ 'name', 'id' ];
@@ -614,7 +618,7 @@ class Fields extends Base {
 			],
 		];
 
-		$field_types = apply_filters( 'mbb_field_types', $field_types );
+		$field_types = apply_filters( 'mbb_field_types', $field_types, $mode );
 
 		foreach ( $field_types as $type => $field_type ) {
 			$field_type['controls'] = apply_filters( 'mbb_field_controls', $field_type['controls'], $type );
