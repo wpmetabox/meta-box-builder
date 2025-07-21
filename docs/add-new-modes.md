@@ -82,6 +82,8 @@ In `Extensions/FrontendSubmission.php`:
   - **Prevent changes to the `id` field** by disabling the `Id` input in the field preview
   - Hide the `Id` control in field settings panel
 
+- Auto add `post_title` and `post_content` to the list of field at first
+
 ---
 
 ### 🟥 `mode = block`

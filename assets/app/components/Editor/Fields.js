@@ -1,7 +1,8 @@
-import { RawHTML, useEffect } from "@wordpress/element";
+import { RawHTML, useEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useFieldTypes from "../../hooks/useFieldTypes";
+import useSettings from '../../hooks/useSettings';
 import getList from "../../list-functions";
 import AddFieldButton from "./AddFieldButton";
 import Field from './Field';
@@ -9,14 +10,30 @@ import Field from './Field';
 const Fields = () => {
 	const { fields, ...fieldActions } = getList( 'root' )();
 
-	// Don't render any field if fields data is not available.
 	const { fieldTypes, fetch, fetched } = useFieldTypes();
+	const mode = useSettings( state => state.getSetting( 'mode' ) );
+	const autoAdded = useRef( false );
 
+	// Fetch field types.
 	useEffect( () => {
 		if ( !fetched ) {
 			fetch();
 		}
 	}, [] );
+
+	// Auto-add post_title and post_content if mode is post-submission-form and list is empty
+	useEffect( () => {
+		if (
+			!autoAdded.current &&
+			mode === 'post-submission-form' &&
+			Object.keys( fieldTypes ).length > 0 &&
+			fields.length === 0
+		) {
+			fieldActions.addField( 'post_title' );
+			fieldActions.addField( 'post_content' );
+			autoAdded.current = true;
+		}
+	}, [ mode, fieldTypes, fields.length, fieldActions ] );
 
 	if ( Object.keys( fieldTypes ).length === 0 ) {
 		return <div className="mb-editor__empty">{ __( 'Loading fields, please wait...', 'meta-box-builder' ) }</div>;
