@@ -90,7 +90,8 @@ const FieldGroupSettingsPanel = () => {
 					<ShowHide />
 				}
 				{
-					MbbApp.extensions.conditionalLogic && <ConditionalLogic />
+					MbbApp.extensions.conditionalLogic && objectType !== 'block' &&
+					<ConditionalLogic />
 				}
 				{
 					MbbApp.extensions.tabs &&
