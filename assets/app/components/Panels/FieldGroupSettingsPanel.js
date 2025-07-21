@@ -57,10 +57,13 @@ const FieldGroupSettingsPanel = () => {
 		validateAndUpdateObjectType();
 	}, [ objectType ] );
 
-	// Set object type to 'block' when mode is 'block'
+	// Set object type based on mode
 	useEffect( () => {
 		if ( mode === 'block' && objectType !== 'block' ) {
 			updateObjectType( 'block' );
+		}
+		if ( mode === 'post-submission-form' && objectType !== 'post' ) {
+			updateObjectType( 'post' );
 		}
 	}, [ mode, objectType, updateObjectType ] );
 
@@ -72,7 +75,7 @@ const FieldGroupSettingsPanel = () => {
 					<PersistentPanelBody panelId="field-group-location" title={ __( 'Location', 'meta-box-builder' ) }>
 						<PanelRow><Location /></PanelRow>
 						{
-							MbbApp.extensions.includeExclude && objectType !== 'block' &&
+							MbbApp.extensions.includeExclude && objectType !== 'block' && mode !== 'post-submission-form' &&
 							<PanelRow><IncludeExclude /></PanelRow>
 						}
 					</PersistentPanelBody>
@@ -99,11 +102,11 @@ const FieldGroupSettingsPanel = () => {
 					objectType === 'block' && <BlockJSONSettings />
 				}
 				{
-					MbbApp.extensions.showHide && objectType !== 'block' &&
+					MbbApp.extensions.showHide && objectType !== 'block' && mode !== 'post-submission-form' &&
 					<ShowHide />
 				}
 				{
-					MbbApp.extensions.conditionalLogic && objectType !== 'block' &&
+					MbbApp.extensions.conditionalLogic && objectType !== 'block' && mode !== 'post-submission-form' &&
 					<ConditionalLogic />
 				}
 				{

@@ -10,10 +10,25 @@ const Location = () => {
 	const { getObjectType, updateObjectType, getPostTypes, updatePostTypes, getSetting, updateSetting } = useSettings();
 	const objectType = getObjectType();
 	const postTypes = getPostTypes();
+	const mode = getSetting( 'mode', 'custom-fields' );
 
 	const settingsPages = ensureArray( getSetting( 'settings_pages', [] ) );
 	const selectedSettingsPage = MbbApp.settingsPages.find( p => settingsPages.includes( p.id ) );
 	const tabs = selectedSettingsPage ? selectedSettingsPage.tabs : [];
+
+	// If mode is 'post-submission-form', show only post type option
+	if ( mode === 'post-submission-form' ) {
+		return (
+			<DivRow label={ __( 'Post type', 'meta-box-builder' ) } className="mb-location">
+				<ReactSelect
+					wrapper={ false }
+					options={ MbbApp.postTypes.map( item => ( { value: item.slug, label: `${ item.name } (${ item.slug })` } ) ) }
+					defaultValue={ postTypes }
+					updateField={ ( name, values ) => updatePostTypes( values ) }
+				/>
+			</DivRow>
+		);
+	}
 
 	return (
 		<>
