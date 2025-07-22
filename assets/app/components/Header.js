@@ -69,7 +69,7 @@ const Header = () => {
 				<Button
 					icon={ listView }
 					size="compact"
-					label={ __( 'Show field group structure', 'meta-box-builder' ) }
+					label={ __( 'Show structure', 'meta-box-builder' ) }
 					showTooltip={ true }
 					onClick={ handleStructureClick }
 					isPressed={ isStructurePressed }
@@ -77,7 +77,7 @@ const Header = () => {
 				<Button
 					icon={ cog }
 					size="compact"
-					label={ __( 'Edit field group settings', 'meta-box-builder' ) }
+					label={ __( 'Edit settings', 'meta-box-builder' ) }
 					showTooltip={ true }
 					onClick={ updateNavPanel( 'field-group-settings' ) }
 					isPressed={ navPanel === 'field-group-settings' }
@@ -89,7 +89,7 @@ const Header = () => {
 					name="post_title"
 					id="post_title"
 					defaultValue={ MbbApp.title }
-					placeholder={ __( 'Please enter the field group title here...', 'meta-box-builder' ) }
+					placeholder={ __( 'Please enter the title here...', 'meta-box-builder' ) }
 				/>
 				<Flex gap={ 1 } expanded={ false } className="mb-header__locations">
 					{ locations.map( location => <span key={ `${ objectType }-${ location }` } className="mb-header__location">{ location }</span> ) }
