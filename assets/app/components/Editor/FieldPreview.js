@@ -100,7 +100,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 		document.addEventListener( 'mouseup', handleMouseUp );
 	}, [ field.columns, update ] );
 
-	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) );
+	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field._underlying_type || field.type, '_', '' ) }` ) );
 
 	console.debug( `%c  Field ${ field._id }`, "color:orange" );
 

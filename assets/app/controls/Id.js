@@ -8,8 +8,7 @@ const Id = ( { field, componentId, updateField, ...rest } ) => {
 	const [ existingFieldGroup, setExistingFieldGroup ] = useState( {} );
 	const [ duplicate, setDuplicate ] = useState( false );
 
-	// Check if this is a post field (has _original_type)
-	const isPostField = field._original_type && field._original_type.startsWith( 'post_' );
+	const isPostField = field?.type?.startsWith( 'post_' );
 
 	// Don't show the ID control for post fields as it's always fixed.
 	if ( isPostField ) {

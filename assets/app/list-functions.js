@@ -19,19 +19,14 @@ const createNewField = type => {
 		_id: id,
 		_new: true,
 		type,
+		_underlying_type: fieldType?.underlying_type,
 		id,
 		name: ucwords( type, '_' )
 	};
 
-	// Handle post fields with underlying types and defaults
-	if ( fieldType && fieldType.underlying_type ) {
-		field.type = fieldType.underlying_type;
-		field._original_type = type; // Store the original post field type
-
-		// Set defaults if available
-		if ( fieldType.defaults ) {
-			field = { ...field, ...fieldType.defaults };
-		}
+	// Set defaults if available
+	if ( fieldType.defaults ) {
+		field = { ...field, ...fieldType.defaults };
 	}
 
 	return field;

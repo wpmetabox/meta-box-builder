@@ -82,6 +82,10 @@ class FrontendSubmission {
 			] ),
 		];
 
+		foreach ( $post_fields as &$field ) {
+			$field['controls'] = array_diff( $field['controls'], [ 'clone_settings', 'input_attributes' ] );
+		}
+
 		return array_merge( $post_fields, $field_types );
 	}
 }

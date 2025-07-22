@@ -5,8 +5,7 @@ import { __ } from "@wordpress/i18n";
 const Id = ( { field, updateField } ) => {
 	const spanRef = useRef();
 
-	// Check if this is a post field (has _original_type)
-	const isPostField = field._original_type && field._original_type.startsWith( 'post_' );
+	const isPostField = field?.type?.startsWith( 'post_' );
 
 	// Prevent the default behavior of "Enter" key.
 	const preventEnter = e => {

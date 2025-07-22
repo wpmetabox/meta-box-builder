@@ -5,8 +5,7 @@ import DivRow from './DivRow';
 const Name = ( { componentId, field, updateField, ...rest } ) => {
 	const inputRef = useRef();
 
-	// Check if this is a post field (has _original_type)
-	const isPostField = field._original_type && field._original_type.startsWith( 'post_' );
+	const isPostField = field?.type?.startsWith( 'post_' );
 
 	const handleChange = e => {
 		const value = e.target.value;
