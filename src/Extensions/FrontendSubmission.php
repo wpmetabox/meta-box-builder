@@ -16,7 +16,6 @@ class FrontendSubmission {
 
 		$controls['std_post_excerpt'] = $controls['std_textarea'];
 
-		$controls['save_format_post_date'] = $controls['save_format_datetime'];
 		$controls['inline_post_date'] = $controls['inline_datetime'];
 		$controls['js_options_post_date'] = $controls['js_options_datetime'];
 
@@ -83,6 +82,7 @@ class FrontendSubmission {
 				'underlying_type' => 'datetime',
 				'defaults'        => [
 					'id' => 'post_date',
+					'save_format' => 'Y-m-d H:i:s',
 				],
 			] ),
 			'post_thumbnail' => array_merge( $field_types['image'], [
@@ -95,8 +95,12 @@ class FrontendSubmission {
 			] ),
 		];
 
-		foreach ( $post_fields as &$field ) {
+		foreach ( $post_fields as $id => &$field ) {
 			$field['controls'] = array_diff( $field['controls'], [ 'clone_settings', 'input_attributes' ] );
+
+			if ( 'post_date' === $id ) {
+				$field['controls'] = array_diff( $field['controls'], [ 'save_format', 'timestamp' ] );
+			}
 		}
 
 		return array_merge( $post_fields, $field_types );
