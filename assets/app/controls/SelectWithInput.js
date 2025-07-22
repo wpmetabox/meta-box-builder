@@ -14,7 +14,6 @@ const SelectWithInput = ( {
 } ) => {
 	const [ showOptions, setShowOptions ] = useState( false );
 	const ref = useRef();
-	const [ value, setValue ] = useState( defaultValue );
 
 	const predefinedItem = Object.entries( options ).find( item => item[ 0 ] === defaultValue );
 	const isPredefined = predefinedItem !== undefined;
@@ -25,6 +24,7 @@ const SelectWithInput = ( {
 	const toggle = () => setShowOptions( prev => !prev );
 	const remove = e => {
 		updateField( name, '' );
+		ref.current.value = '';
 		ref.current.focus();
 		show();
 		e.stopPropagation(); // Do not trigger "toggle" event on the parent div
@@ -38,14 +38,13 @@ const SelectWithInput = ( {
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
 		<div className="og-select-with-input">
-			<input type="hidden" name={ name } defaultValue={ defaultValue } />
 			<input
 				ref={ ref }
 				type="text"
 				placeholder={ __( 'Please select or enter a value', 'meta-box-builder' ) }
 				id={ componentId }
 				onFocus={ show }
-				value={ value }
+				defaultValue={ defaultValue }
 				onChange={ update }
 			/>
 			<div className="og-select-with-input__icon" onClick={ toggle }><Icon icon={ chevronDown } /></div>
