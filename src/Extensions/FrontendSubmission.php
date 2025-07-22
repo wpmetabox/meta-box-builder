@@ -5,14 +5,20 @@ use MBB\Control;
 
 class FrontendSubmission {
 	public function __construct() {
-		add_filter( 'mbb_controls', [ $this, 'add_post_content_controls' ] );
+		add_filter( 'mbb_controls', [ $this, 'add_post_fields_controls' ] );
 		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ], 10, 3 );
 		add_filter( 'mbb_field_types', [ $this, 'add_post_fields' ], 10, 2 );
 		add_filter( 'mbb_field_categories', [ $this, 'add_post_fields_category' ] );
 	}
 
-	public function add_post_content_controls( array $controls ): array {
+	public function add_post_fields_controls( array $controls ): array {
 		$controls['options_post_content'] = $controls['options_wysiwyg'];
+
+		$controls['std_post_excerpt'] = $controls['std_textarea'];
+
+		$controls['save_format_post_date'] = $controls['save_format_datetime'];
+		$controls['inline_post_date'] = $controls['inline_datetime'];
+		$controls['js_options_post_date'] = $controls['js_options_datetime'];
 
 		return $controls;
 	}
