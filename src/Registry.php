@@ -819,6 +819,8 @@ class Registry {
 			], [], 'advanced' ),
 		];
 
+		$controls = apply_filters( 'mbb_controls', $controls );
+
 		foreach ( $controls as $id => $control ) {
 			$id = is_string( $id ) ? $id : $control['setting'];
 			$this->add_control( $id, $control );
