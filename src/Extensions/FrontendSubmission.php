@@ -5,13 +5,13 @@ use MBB\Control;
 
 class FrontendSubmission {
 	public function __construct() {
-		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ], 10, 2 );
+		add_filter( 'mbb_field_controls', [ $this, 'add_field_controls' ], 10, 3 );
 		add_filter( 'mbb_field_types', [ $this, 'add_post_fields' ], 10, 2 );
 		add_filter( 'mbb_field_categories', [ $this, 'add_post_fields_category' ] );
 	}
 
-	public function add_field_controls( array $controls, string $type ): array {
-		if ( in_array( $type, [ 'button', 'custom_html', 'divider', 'heading', 'tab' ] ) ) {
+	public function add_field_controls( array $controls, string $type, string $mode ): array {
+		if ( in_array( $type, [ 'button', 'custom_html', 'divider', 'heading', 'tab' ] ) || 'post-submission-form' === $mode ) {
 			return $controls;
 		}
 

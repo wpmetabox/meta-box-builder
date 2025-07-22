@@ -621,7 +621,7 @@ class Fields extends Base {
 		$field_types = apply_filters( 'mbb_field_types', $field_types, $mode );
 
 		foreach ( $field_types as $type => $field_type ) {
-			$field_type['controls'] = apply_filters( 'mbb_field_controls', $field_type['controls'], $type );
+			$field_type['controls'] = apply_filters( 'mbb_field_controls', $field_type['controls'], $type, $mode );
 			$this->registry->add_field_type( $type, $field_type );
 		}
 
