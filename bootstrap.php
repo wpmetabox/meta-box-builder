@@ -76,6 +76,7 @@ if ( is_admin() ) {
 	if ( Helpers\Data::is_extension_active( 'mb-frontend-submission' ) || Helpers\Data::is_extension_active( 'mb-blocks' ) ) {
 		new FieldGroupModes\AddNew\AddNew();
 		new FieldGroupModes\ListTableViews();
+		new FieldGroupModes\ShortcodeAdminColumn();
 	}
 
 	new ToggleStatusColumn();

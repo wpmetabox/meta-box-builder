@@ -385,7 +385,7 @@ class AdminColumns {
 	}
 
 	public function show_column( $column, $post_id ) {
-		if ( ! in_array( $column, [ 'for', 'location', 'shortcode', 'path', 'sync_status' ], true ) ) {
+		if ( ! in_array( $column, [ 'for', 'location', 'path', 'sync_status' ], true ) ) {
 			return;
 		}
 
@@ -573,12 +573,5 @@ class AdminColumns {
 				}
 				break;
 		}
-	}
-
-	private function show_shortcode(): void {
-		global $post;
-
-		$shortcode = "[mb_frontend_form id='{$post->post_name}' post_fields='title,content']";
-		echo '<input type="text" readonly value="' . esc_attr( $shortcode ) . '" onclick="this.select()">';
 	}
 }
