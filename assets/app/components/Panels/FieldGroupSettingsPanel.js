@@ -82,17 +82,12 @@ const FieldGroupSettingsPanel = () => {
 						<BlockRenderSettings />
 					</PersistentPanelBody>
 				}
-				{
-					objectType === 'block' && <BlockJSONSettings />
-				}
+				{ objectType === 'block' && <BlockJSONSettings /> }
 				{
 					MbbApp.extensions.showHide && objectType !== 'block' &&
 					<ShowHide />
 				}
-				{
-					MbbApp.extensions.conditionalLogic && objectType !== 'block' &&
-					<ConditionalLogic />
-				}
+				{ objectType !== 'block' && <ConditionalLogic /> }
 				{
 					MbbApp.extensions.tabs &&
 					<PersistentPanelBody panelId="field-group-tab-settings" title={ __( 'Tab settings', 'meta-box-builder' ) }>

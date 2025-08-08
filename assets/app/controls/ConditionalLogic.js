@@ -7,6 +7,7 @@ import useAllFields from "../hooks/useAllFields";
 import useSettings from "../hooks/useSettings";
 import FieldInserter from './FieldInserter';
 import PersistentPanelBodyWithAdd from './PersistentPanelBodyWithAdd';
+import UpgradePanelBody from './UpgradePanelBody';
 
 const ConditionalLogic = ( { defaultValue, updateField, panelId = 'field-conditional-logic' } ) => {
 	const setting = defaultValue;
@@ -18,6 +19,11 @@ const ConditionalLogic = ( { defaultValue, updateField, panelId = 'field-conditi
 			updateField( 'conditional_logic.when', {} );
 		}
 	}, [] );
+
+
+	if ( !MbbApp.extensions.conditionalLogic ) {
+		return <UpgradePanelBody title={ __( 'Conditional logic', 'meta-box-builder' ) } />;
+	}
 
 	const addRule = () => {
 		const newRule = { name: '', operator: '=', value: '', id: uniqid() };

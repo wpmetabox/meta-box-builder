@@ -1,0 +1,15 @@
+.mb-upgrade-panel-body {
+	color: var(--color-gray);
+
+	.components-panel__body-toggle.components-button,
+	.components-panel__body-toggle.components-button .components-panel__arrow {
+		color: var(--color-gray);
+	}
+}
+
+.mb-upgrade-panel-body-text {
+	.components-button.is-link {
+		color: inherit;
+		font-weight: 600;
+	}
+}
