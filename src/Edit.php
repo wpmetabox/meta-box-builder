@@ -160,6 +160,7 @@ class Edit extends BaseEditPage {
 
 			// Extensions check.
 			'extensions'    => [
+				'aio'                => defined( 'META_BOX_AIO_DIR' ),
 				'blocks'             => Data::is_extension_active( 'mb-blocks' ),
 				'columns'            => Data::is_extension_active( 'meta-box-columns' ),
 				'commentMeta'        => Data::is_extension_active( 'mb-comment-meta' ),
