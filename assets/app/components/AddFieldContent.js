@@ -1,9 +1,10 @@
-import { Button, SearchControl } from '@wordpress/components';
+import { Button, SearchControl, Tooltip } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ReactSortable } from 'react-sortablejs';
 import { getFieldIcon } from '../functions';
 import useFieldTypes from '../hooks/useFieldTypes';
+import UpgradeText from './common/UpgradeText';
 
 const AddFieldContent = ( { className = '', addField, onSelect } ) => {
 	const [ searchQuery, setSearchQuery ] = useState( '' );
@@ -61,14 +62,19 @@ const FieldButton = ( { type, field, onSelect, addField } ) => {
 	};
 
 	return field.disabled
-		? <Button
-			icon={ getFieldIcon( type ) }
-			disabled={ true }
-			label={ __( 'This field is available in the Meta Box AIO only', 'meta-box-builder' ) }
-			title={ __( 'This field is available in the Meta Box AIO only', 'meta-box-builder' ) }
-			showTooltip={ true }
-			text={ `${ field.title } (${ __( 'Premium', 'meta-box-builder' ) })` }
-		/>
+		? <Tooltip delay={ 0 } text={
+			<UpgradeText
+				text={ __( 'This field type is available in Meta Box AIO only.', 'meta-box-builder' ) }
+				utm_source="add_field"
+				utm_medium={ type }
+			/>
+		}>
+			<Button
+				icon={ getFieldIcon( type ) }
+				className="mb-add-field__disabled"
+				text={ `${ field.title } (${ __( 'Premium', 'meta-box-builder' ) })` }
+			/>
+		</Tooltip>
 		: <Button icon={ getFieldIcon( type ) } onClick={ handleClick } text={ field.title } />;
 };
 

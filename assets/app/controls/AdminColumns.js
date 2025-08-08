@@ -5,10 +5,22 @@ import Input from './Input';
 import PersistentPanelBodyWithToggle from './PersistentPanelBodyWithToggle';
 import Toggle from './Toggle';
 import ToggleGroup from './ToggleGroup';
+import UpgradePanelBody from './UpgradePanelBody';
 
 const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 	const { getObjectType } = useSettings();
 	const objectType = getObjectType();
+
+	if ( !MbbApp.extensions.adminColumns ) {
+		return (
+			<UpgradePanelBody
+				title={ __( 'Admin columns', 'meta-box-builder' ) }
+				description={ __( 'Show this field as a column in the list table in the admin area.', 'meta-box-builder' ) }
+				utm_source="field_settings"
+				utm_medium="admin_columns"
+			/>
+		);
+	}
 
 	return (
 		<PersistentPanelBodyWithToggle
@@ -16,7 +28,7 @@ const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 			title={ __( 'Admin columns', 'meta-box-builder' ) }
 			value={ !!defaultValue.enable }
 			toggleValue={ value => updateField( 'admin_columns.enable', value ) }
-			tooltip={ __( 'Show this field as a column in the table list in the admin area', 'meta-box-builder' ) }
+			tooltip={ __( 'Show this field as a column in the list table in the admin area', 'meta-box-builder' ) }
 		>
 			<AdminColumnsPosition
 				name="admin_columns.position"

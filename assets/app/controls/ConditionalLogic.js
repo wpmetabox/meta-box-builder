@@ -7,8 +7,14 @@ import useAllFields from "../hooks/useAllFields";
 import useSettings from "../hooks/useSettings";
 import FieldInserter from './FieldInserter';
 import PersistentPanelBodyWithAdd from './PersistentPanelBodyWithAdd';
+import UpgradePanelBody from './UpgradePanelBody';
 
-const ConditionalLogic = ( { defaultValue, updateField, panelId = 'field-conditional-logic' } ) => {
+const ConditionalLogic = ( {
+	defaultValue,
+	updateField,
+	panelId = 'field-conditional-logic',
+	utm_source = 'field_settings',
+} ) => {
 	const setting = defaultValue;
 	const rules = maybeArrayToObject( setting.when, 'id' );
 
@@ -18,6 +24,18 @@ const ConditionalLogic = ( { defaultValue, updateField, panelId = 'field-conditi
 			updateField( 'conditional_logic.when', {} );
 		}
 	}, [] );
+
+	if ( !MbbApp.extensions.conditionalLogic ) {
+		return (
+			<UpgradePanelBody
+				title={ __( 'Conditional logic', 'meta-box-builder' ) }
+				// Translators: %s is the type of the item: field or field group.
+				description={ sprintf( __( 'Show or hide this %s based on the value of other fields.', 'meta-box-builder' ), utm_source === 'field_settings' ? __( 'field', 'meta-box-builder' ) : __( 'field group', 'meta-box-builder' ) ) }
+				utm_source={ utm_source }
+				utm_medium="conditional_logic"
+			/>
+		);
+	}
 
 	const addRule = () => {
 		const newRule = { name: '', operator: '=', value: '', id: uniqid() };

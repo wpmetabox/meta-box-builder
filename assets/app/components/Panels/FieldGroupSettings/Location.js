@@ -5,6 +5,7 @@ import Select from '../../../controls/Select';
 import Toggle from "../../../controls/Toggle";
 import { ensureArray } from '../../../functions';
 import useSettings from "../../../hooks/useSettings";
+import UpgradeText from '../../common/UpgradeText';
 
 const Location = () => {
 	const { getObjectType, updateObjectType, getPostTypes, updatePostTypes, getSetting, updateSetting } = useSettings();
@@ -14,6 +15,31 @@ const Location = () => {
 	const settingsPages = ensureArray( getSetting( 'settings_pages', [] ) );
 	const selectedSettingsPage = MbbApp.settingsPages.find( p => settingsPages.includes( p.id ) );
 	const tabs = selectedSettingsPage ? selectedSettingsPage.tabs : [];
+
+	let locationText = [];
+	if ( !MbbApp.extensions.termMeta ) {
+		locationText.push( 'terms' );
+	}
+	if ( !MbbApp.extensions.userMeta ) {
+		locationText.push( 'users' );
+	}
+	// Translators: %s is a list of object types (terms, users).
+	locationText = locationText.length > 0 ? sprintf( __( 'create custom fields for %s', 'meta-box-builder' ), locationText.join( ', ' ) ) : '';
+
+	let entities = [];
+	if ( !MbbApp.extensions.settingsPage ) {
+		entities.push( 'settings pages' );
+	}
+	if ( !MbbApp.extensions.blocks ) {
+		entities.push( 'custom blocks' );
+	}
+	if ( !MbbApp.extensions.frontendForm ) {
+		entities.push( 'frontend forms' );
+	}
+	// Translators: %s is a list of entities that Meta Box can create (settings pages, custom blocks, frontend forms).
+	entities = entities.length > 0 ? sprintf( __( 'create %s', 'meta-box-builder' ), entities.join( ', ' ) ) : '';
+
+	let upgradeText = [ locationText, entities ].filter( Boolean ).join( __( ', or ', 'meta-box-builder' ) );
 
 	return (
 		<>
@@ -53,6 +79,15 @@ const Location = () => {
 						options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.id })` } ) ) }
 						defaultValue={ ensureArray( getSetting( 'settings_pages', [] ) ) }
 						updateField={ updateSetting }
+					/>
+				}
+				{
+					!MbbApp.extensions.aio &&
+					<UpgradeText
+						text={ sprintf( __( 'Wanna %s?', 'meta-box-builder' ), upgradeText ) }
+						utm_source="field_group_settings"
+						utm_medium="location"
+						className="og-description"
 					/>
 				}
 			</DivRow>

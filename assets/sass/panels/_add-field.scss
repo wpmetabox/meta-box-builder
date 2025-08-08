@@ -34,8 +34,15 @@
 		gap: 16px;
 		font-size: 12px;
 
-		&:not([disabled]):not(:hover) {
+		&:not(:hover) {
 			color: inherit;
+		}
+
+		&.mb-add-field__disabled {
+			&,
+			&:hover {
+				color: var(--color-gray);
+			}
 		}
 	}
 

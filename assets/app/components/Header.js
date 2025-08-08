@@ -1,6 +1,6 @@
-import { Button, Flex } from '@wordpress/components';
+import { Button, Flex, Tooltip } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import { cog, listView, plus } from "@wordpress/icons";
+import { cog, external, listView, plus } from "@wordpress/icons";
 import { useShallow } from 'zustand/react/shallow';
 import { ensureArray, ucwords } from '../functions';
 import useFloatingStructurePanel from '../hooks/useFloatingStructurePanel';
@@ -95,11 +95,28 @@ const Header = () => {
 					{ locations.map( location => <span key={ `${ objectType }-${ location }` } className="mb-header__location">{ location }</span> ) }
 				</Flex>
 			</Flex>
-			<input
-				type="submit"
-				className="components-button is-primary"
-				value={ __( 'Save Changes', 'meta-box-builder' ) }
-			/>
+			<Flex gap={ 1 } expanded={ false } className="mb-header__actions">
+				{
+					!MbbApp.extensions.aio && (
+						<Tooltip delay={ 0 } text={ __( 'Get access to premium features like conditional logic, custom table, frontend forms, settings pages, and more.', 'meta-box-builder' ) }>
+							<Button
+								variant="link"
+								href="https://metabox.io/aio/?utm_source=header&utm_medium=link&utm_campaign=builder"
+								target="_blank"
+								icon={ external }
+								iconPosition="right"
+								iconSize={ 18 }
+								text={ __( 'Upgrade', 'meta-box-builder' ) }
+							/>
+						</Tooltip>
+					)
+				}
+				<input
+					type="submit"
+					className="components-button is-primary"
+					value={ __( 'Save Changes', 'meta-box-builder' ) }
+				/>
+			</Flex>
 		</Flex>
 	);
 };
