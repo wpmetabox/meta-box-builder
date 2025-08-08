@@ -7,7 +7,7 @@ const UpgradeText = ( { utm_source, utm_medium } ) => (
 		{ __( 'This feature is available in Meta Box AIO only.', 'meta-box-builder' ) }
 		<Button
 			variant="link"
-			href={ `https://metabox.io/pricing/?utm_source=${ utm_source }&utm_medium=${ utm_medium }&utm_campaign=builder` }
+			href={ `https://metabox.io/aio/?utm_source=${ utm_source }&utm_medium=${ utm_medium }&utm_campaign=builder` }
 			target="_blank"
 			icon={ external }
 			iconPosition="right"

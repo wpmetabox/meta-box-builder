@@ -87,7 +87,7 @@ const Location = () => {
 					<div className="mb-upgrade-text og-description">
 						{ sprintf( __( 'Wanna %s?', 'meta-box-builder' ), upgradeText ) }
 						&nbsp;
-						<a href="https://metabox.io/pricing/?utm_source=field_group_settings&utm_medium=location&utm_campaign=builder" target="_blank">
+						<a href="https://metabox.io/aio/?utm_source=field_group_settings&utm_medium=location&utm_campaign=builder" target="_blank">
 							{ __( 'Upgrade now', 'meta-box-builder' ) }
 							<Icon icon={ external } size={ 14 } />
 						</a>
