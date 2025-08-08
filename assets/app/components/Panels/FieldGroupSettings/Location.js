@@ -1,4 +1,6 @@
+import { Icon } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
+import { external } from '@wordpress/icons';
 import DivRow from '../../../controls/DivRow';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
@@ -14,6 +16,31 @@ const Location = () => {
 	const settingsPages = ensureArray( getSetting( 'settings_pages', [] ) );
 	const selectedSettingsPage = MbbApp.settingsPages.find( p => settingsPages.includes( p.id ) );
 	const tabs = selectedSettingsPage ? selectedSettingsPage.tabs : [];
+
+	let locationText = [];
+	if ( !MbbApp.extensions.termMeta ) {
+		locationText.push( 'terms' );
+	}
+	if ( !MbbApp.extensions.userMeta ) {
+		locationText.push( 'users' );
+	}
+	// Translators: %s is a list of object types (terms, users).
+	locationText = locationText.length > 0 ? sprintf( __( 'create custom fields for %s', 'meta-box-builder' ), locationText.join( ', ' ) ) : '';
+
+	let entities = [];
+	if ( !MbbApp.extensions.settingsPage ) {
+		entities.push( 'settings pages' );
+	}
+	if ( !MbbApp.extensions.blocks ) {
+		entities.push( 'custom blocks' );
+	}
+	if ( !MbbApp.extensions.frontendForm ) {
+		entities.push( 'frontend forms' );
+	}
+	// Translators: %s is a list of entities that Meta Box can create (settings pages, custom blocks, frontend forms).
+	entities = entities.length > 0 ? sprintf( __( 'create %s', 'meta-box-builder' ), entities.join( ', ' ) ) : '';
+
+	let upgradeText = [ locationText, entities ].filter( Boolean ).join( __( ', or ', 'meta-box-builder' ) );
 
 	return (
 		<>
@@ -54,6 +81,17 @@ const Location = () => {
 						defaultValue={ ensureArray( getSetting( 'settings_pages', [] ) ) }
 						updateField={ updateSetting }
 					/>
+				}
+				{
+					!MbbApp.extensions.aio &&
+					<div className="mb-upgrade-text og-description">
+						{ sprintf( __( 'Wanna %s?', 'meta-box-builder' ), upgradeText ) }
+						&nbsp;
+						<a href="https://metabox.io/pricing/?utm_source=field_group_settings&utm_medium=location&utm_campaign=builder" target="_blank">
+							{ __( 'Upgrade now', 'meta-box-builder' ) }
+							<Icon icon={ external } size={ 14 } />
+						</a>
+					</div>
 				}
 			</DivRow>
 			{

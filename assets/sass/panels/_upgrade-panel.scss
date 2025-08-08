@@ -7,9 +7,20 @@
 	}
 }
 
-.mb-upgrade-panel-body-text {
+.mb-upgrade-text {
 	.components-button.is-link {
 		color: inherit;
 		font-weight: 600;
+	}
+
+	a {
+		font-weight: 600;
+		display: inline-flex;
+		align-items: center;
+		gap: 2px;
+	}
+
+	svg {
+		fill: currentColor;
 	}
 }
