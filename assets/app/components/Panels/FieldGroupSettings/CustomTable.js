@@ -14,6 +14,7 @@ const CustomTable = () => {
 		return (
 			<UpgradePanelBody
 				title={ __( 'Custom table', 'meta-box-builder' ) }
+				description={ __( 'Save data in a custom table.', 'meta-box-builder' ) }
 				utm_source="field_group_settings"
 				utm_medium="custom_table"
 			/>

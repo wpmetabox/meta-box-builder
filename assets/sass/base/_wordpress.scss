@@ -1,5 +1,13 @@
 .components-tooltip {
 	max-width: 400px;
+
+	a {
+		color: inherit;
+	}
+
+	&:has(a) {
+		padding-block: 8px;
+	}
 }
 
 .components-modal__header {

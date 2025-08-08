@@ -25,11 +25,12 @@ const ConditionalLogic = ( {
 		}
 	}, [] );
 
-
 	if ( !MbbApp.extensions.conditionalLogic ) {
 		return (
 			<UpgradePanelBody
 				title={ __( 'Conditional logic', 'meta-box-builder' ) }
+				// Translators: %s is the type of the item: field or field group.
+				description={ sprintf( __( 'Show or hide this %s based on the value of other fields.', 'meta-box-builder' ), utm_source === 'field_settings' ? __( 'field', 'meta-box-builder' ) : __( 'field group', 'meta-box-builder' ) ) }
 				utm_source={ utm_source }
 				utm_medium="conditional_logic"
 			/>
