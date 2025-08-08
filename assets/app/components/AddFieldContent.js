@@ -1,6 +1,7 @@
-import { Button, SearchControl } from '@wordpress/components';
+import { Button, Flex, SearchControl, Tooltip } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { external } from '@wordpress/icons';
 import { ReactSortable } from 'react-sortablejs';
 import { getFieldIcon } from '../functions';
 import useFieldTypes from '../hooks/useFieldTypes';
@@ -54,6 +55,21 @@ const FieldList = ( { fields, onSelect, addField } ) => (
 	</ReactSortable>
 );
 
+const UpgradeText = ( { utm_source, utm_medium } ) => (
+	<Flex gap={ 0 } align="center" className="mb-upgrade-text">
+		{ __( 'This feature is available in Meta Box AIO only.', 'meta-box-builder' ) }
+		<Button
+			variant="link"
+			href={ `https://metabox.io/aio/?utm_source=${ utm_source }&utm_medium=${ utm_medium }&utm_campaign=builder` }
+			target="_blank"
+			icon={ external }
+			iconPosition="right"
+			iconSize={ 18 }
+			text={ __( 'Upgrade now', 'meta-box-builder' ) }
+		/>
+	</Flex>
+);
+
 const FieldButton = ( { type, field, onSelect, addField } ) => {
 	const handleClick = () => {
 		addField( type );
@@ -61,14 +77,13 @@ const FieldButton = ( { type, field, onSelect, addField } ) => {
 	};
 
 	return field.disabled
-		? <Button
-			icon={ getFieldIcon( type ) }
-			disabled={ true }
-			label={ __( 'This field is available in the Meta Box AIO only', 'meta-box-builder' ) }
-			title={ __( 'This field is available in the Meta Box AIO only', 'meta-box-builder' ) }
-			showTooltip={ true }
-			text={ `${ field.title } (${ __( 'Premium', 'meta-box-builder' ) })` }
-		/>
+		? <Tooltip delay={ 0 } text={ <UpgradeText utm_source="add_field" utm_medium={ type } /> }>
+			<Button
+				icon={ getFieldIcon( type ) }
+				className="mb-add-field__disabled"
+				text={ `${ field.title } (${ __( 'Premium', 'meta-box-builder' ) })` }
+			/>
+		</Tooltip>
 		: <Button icon={ getFieldIcon( type ) } onClick={ handleClick } text={ field.title } />;
 };
 
