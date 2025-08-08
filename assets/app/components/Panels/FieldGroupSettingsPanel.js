@@ -95,7 +95,7 @@ const FieldGroupSettingsPanel = () => {
 					</PersistentPanelBody>
 				}
 				{
-					MbbApp.extensions.customTable && ![ 'setting', 'block' ].includes( objectType ) &&
+					![ 'setting', 'block' ].includes( objectType ) &&
 					<CustomTable />
 				}
 				{

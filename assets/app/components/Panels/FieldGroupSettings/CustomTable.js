@@ -3,11 +3,16 @@ import { __ } from "@wordpress/i18n";
 import DivRow from "../../../controls/DivRow";
 import PersistentPanelBodyWithToggle from "../../../controls/PersistentPanelBodyWithToggle";
 import Toggle from "../../../controls/Toggle";
+import UpgradePanelBody from "../../../controls/UpgradePanelBody";
 import useSettings from "../../../hooks/useSettings";
 
 const CustomTable = () => {
 	const { getSetting, updateSetting } = useSettings();
 	const setting = getSetting( 'custom_table', {} );
+
+	if ( !MbbApp.extensions.customTable ) {
+		return <UpgradePanelBody title={ __( 'Custom table', 'meta-box-builder' ) } />;
+	}
 
 	return (
 		<PersistentPanelBodyWithToggle
