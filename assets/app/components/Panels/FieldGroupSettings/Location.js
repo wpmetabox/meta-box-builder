@@ -1,12 +1,11 @@
-import { Icon } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
-import { external } from '@wordpress/icons';
 import DivRow from '../../../controls/DivRow';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
 import Toggle from "../../../controls/Toggle";
 import { ensureArray } from '../../../functions';
 import useSettings from "../../../hooks/useSettings";
+import UpgradeText from '../../common/UpgradeText';
 
 const Location = () => {
 	const { getObjectType, updateObjectType, getPostTypes, updatePostTypes, getSetting, updateSetting } = useSettings();
@@ -84,14 +83,12 @@ const Location = () => {
 				}
 				{
 					!MbbApp.extensions.aio &&
-					<div className="mb-upgrade-text og-description">
-						{ sprintf( __( 'Wanna %s?', 'meta-box-builder' ), upgradeText ) }
-						&nbsp;
-						<a href="https://metabox.io/aio/?utm_source=field_group_settings&utm_medium=location&utm_campaign=builder" target="_blank">
-							{ __( 'Upgrade now', 'meta-box-builder' ) }
-							<Icon icon={ external } size={ 14 } />
-						</a>
-					</div>
+					<UpgradeText
+						text={ sprintf( __( 'Wanna %s?', 'meta-box-builder' ), upgradeText ) }
+						utm_source="field_group_settings"
+						utm_medium="location"
+						className="og-description"
+					/>
 				}
 			</DivRow>
 			{
