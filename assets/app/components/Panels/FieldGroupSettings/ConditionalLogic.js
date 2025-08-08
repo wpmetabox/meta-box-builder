@@ -5,5 +5,12 @@ export default () => {
 	const { getSetting, updateSetting } = useSettings();
 	const setting = getSetting( 'conditional_logic', {} );
 
-	return <ConditionalLogic panelId="field-group-conditional-logic" defaultValue={ setting } updateField={ updateSetting } />;
+	return (
+		<ConditionalLogic
+			panelId="field-group-conditional-logic"
+			defaultValue={ setting }
+			updateField={ updateSetting }
+			utm_source="field_group_settings"
+		/>
+	);
 };

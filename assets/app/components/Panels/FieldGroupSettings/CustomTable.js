@@ -11,7 +11,13 @@ const CustomTable = () => {
 	const setting = getSetting( 'custom_table', {} );
 
 	if ( !MbbApp.extensions.customTable ) {
-		return <UpgradePanelBody title={ __( 'Custom table', 'meta-box-builder' ) } />;
+		return (
+			<UpgradePanelBody
+				title={ __( 'Custom table', 'meta-box-builder' ) }
+				utm_source="field_group_settings"
+				utm_medium="custom_table"
+			/>
+		);
 	}
 
 	return (
