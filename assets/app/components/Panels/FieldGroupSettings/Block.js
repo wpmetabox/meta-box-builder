@@ -6,7 +6,6 @@ import Input from '../../../controls/Input';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
 import Textarea from '../../../controls/Textarea';
-import ToggleGroup from "../../../controls/ToggleGroup";
 import { ensureArray } from '../../../functions';
 import useSettings from "../../../hooks/useSettings";
 
@@ -83,17 +82,6 @@ const Block = () => {
 			componentId="settings-block-keywords"
 			tooltip={ __( 'Separate by commas', 'meta-box-builder' ) }
 			defaultValue={ getSetting( 'keywords', '' ) }
-			updateField={ updateSetting }
-		/>
-		<ToggleGroup
-			name="block_context"
-			label={ __( 'Block settings position', 'meta-box-builder' ) }
-			componentId="settings-block-block_context"
-			options={ {
-				normal: __( 'Content', 'meta-box-builder' ),
-				side: __( 'Sidebar', 'meta-box-builder' ),
-			} }
-			defaultValue={ getSetting( 'block_context', 'side' ) }
 			updateField={ updateSetting }
 		/>
 		<ReactSelect
