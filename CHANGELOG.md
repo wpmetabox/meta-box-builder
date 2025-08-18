@@ -1,3 +1,7 @@
+### Version 5.0.0 - 2025-08-18
+
+This version introduces a rewritten the builder with a new UI/UX. [Learn more](https://metabox.io/mb-builder-5-0-0-official-release/) about the new UI.
+
 ### 4.11.3 - 2025-06-23
 
 - Fix issue translating empty groups with WPML/Polylang
