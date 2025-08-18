@@ -3,3 +3,5 @@
 node_modules
 *.zip
 *.LICENSE.txt
+
+# assets/js/build

@@ -1,0 +1,155 @@
+// Make the cursor col-resize when resizing a field, in case the mouse is dragging outside the field.
+.mb-resizing {
+	cursor: col-resize;
+}
+
+// Basic style
+.mb-field {
+	--spacing: 24px;
+	--outline: rgba(0, 0, 0, .2); // Use transparent outline to avoid overriding the outline of parent group.
+	border-bottom: none;
+	padding: var(--spacing);
+	position: relative;
+	cursor: grab;
+
+	&--hover {
+		outline: 1px solid var(--outline);
+		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
+	}
+
+	// The cursor is still affected by SortableJS, so we need to force it to col-resize again
+	&--resizing {
+		cursor: col-resize;
+		background: #fff !important; // Override the background of SortableJS
+	}
+
+	&--active {
+		--outline: var(--color-primary);
+		outline: 1px solid var(--color-primary); // Override the outline when hovering above
+		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
+	}
+
+	&__label {
+		word-break: break-all;
+	}
+
+	&__id {
+		font-size: 11px;
+		color: #757575; // Same as .og-description
+		display: block;
+		word-break: break-all;
+	}
+
+	&__icon {
+		opacity: .4;
+		font-size: 13px;
+		width: 13px;
+		height: 13px;
+		position: relative;
+		top: 3px;
+	}
+
+	// Increase the size of the visibility icon a little bit.
+	.dashicons-visibility {
+		font-size: 14px;
+		width: 14px;
+		height: 14px;
+	}
+
+	.rwmb-label > label {
+		display: flex;
+		align-items: flex-start;
+		gap: 4px;
+	}
+}
+
+// Map
+.mb-field .rwmb-map-wrapper img,
+.mb-field .rwmb-osm-wrapper img {
+	width: 100%;
+	height: 400px;
+	object-fit: cover;
+}
+
+// Group
+.mb-field--group {
+	>.rwmb-field>.rwmb-label {
+		padding-block: var(--spacing);
+	}
+
+	// Shift the inputs to the left make them vertically aligned with other fields.
+	// - Non-collapsible groups
+	// - Collapsible, non-cloneable, has-label groups
+	// When shifting, if:
+	// - The group is cloneable, shift the .rwmb-clone
+	// - The group is not cloneable, shift the .rwmb-input
+
+	// Non-collapsible, cloneable groups
+	>.rwmb-field:not(.rwmb-group-collapsible)>.rwmb-input>.rwmb-clone,
+	// Non-collapsible, non-cloneable groups
+	>.rwmb-field:not(.rwmb-group-collapsible)>.rwmb-input:not(:has(>.rwmb-clone)),
+	// Collapsible, non-cloneable, has-label groups
+	>.rwmb-field.rwmb-group-collapsible:has(>.rwmb-label)>.rwmb-input:not(:has(>.rwmb-clone)) {
+		margin-left: calc(0px - var(--spacing));
+	}
+
+	// Add margin-bottom for add clone button to avoid touching the edge.
+	.rwmb-button.add-clone {
+		margin-bottom: var(--spacing);
+	}
+
+	// No subfields, add padding and text
+	&__fields:empty {
+		padding-top: var(--spacing);
+		padding-left: var(--spacing);
+
+		&::before {
+			border: 2px dashed var(--color-light);
+			content: 'No subfields here, click the button below to add a new one or drag other fields into this area.';
+			display: block;
+			color: var(--color-gray);
+			font-size: 16px;
+			padding: var(--spacing);
+		}
+	}
+}
+
+// Tab
+.mb-field--tab {
+	&__wrapper {
+		border-bottom: 1px solid var(--color-light);
+	}
+
+	&__content {
+		display: inline-flex;
+		gap: 4px;
+		border: 1px solid var(--color-light);
+		border-bottom: none;
+		padding: 8px 16px;
+		border-radius: 4px 4px 0 0;
+		align-items: center;
+	}
+
+	.dashicons,
+	img {
+		width: 12px;
+		height: 12px;
+		font-size: 12px;
+	}
+
+	.fa:before,
+	.fas:before,
+	.fa-solid:before,
+	.fab:before,
+	.fa-brand:before,
+	.far:before,
+	.fa-regular:before {
+		font-size: 12px;
+	}
+}
+
+.mb-field--background {
+	select {
+		flex: 1;
+	}
+}

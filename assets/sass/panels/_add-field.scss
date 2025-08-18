@@ -1,0 +1,63 @@
+.mb-add-field {
+
+	.components-search-control,
+	&__list {
+		padding: 16px;
+	}
+
+	&__item {
+		display: flex;
+	}
+
+	&__title {
+		padding: 16px 16px 0;
+		color: #757575;
+		font-size: 11px;
+		font-weight: 500;
+		text-transform: uppercase;
+	}
+
+	&__list {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+
+		.components-modal__content & {
+			grid-template-columns: repeat(auto-fit, 120px);
+		}
+	}
+
+	.components-button.has-text {
+		flex: 1;
+		flex-direction: column;
+		height: auto;
+		padding-block: 20px;
+		gap: 16px;
+		font-size: 12px;
+
+		&:not(:hover) {
+			color: inherit;
+		}
+
+		&.mb-add-field__disabled {
+			&,
+			&:hover {
+				color: var(--color-gray);
+			}
+		}
+	}
+
+	// Inside add field panel
+	.mb-panel--add & {
+		&__list {
+			gap: 12px;
+		}
+
+		.components-button.has-text {
+			flex-direction: row;
+			padding-block: 8px;
+			background: var(--color-lightest);
+			gap: 4px;
+			text-align: left;
+		}
+	}
+}

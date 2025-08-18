@@ -1,82 +1,49 @@
+// Import the original config from the @wordpress/scripts package.
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+
 const path = require( 'path' );
 const webpack = require( 'webpack' );
 
-// https://www.cssigniter.com/how-to-use-external-react-components-in-your-gutenberg-blocks/
 const externals = {
-	react: 'React',
-	'react-dom': 'ReactDOM',
-	'@wordpress/i18n': 'wp.i18n',
-	'@wordpress/element': 'wp.element',
-	'@wordpress/components': 'wp.components',
-	'@wordpress/compose': 'wp.compose',
+	...defaultConfig.externals,
 	'jquery': 'jQuery',
 	'jquery-ui': 'jQuery',
 	codemirror: 'wp.CodeMirror',
 	clipboard: 'ClipboardJS',
 };
 
-const commonModules = {
-	rules: [
-		{
-			test: /\.js$/,
-			exclude: /node_modules/,
-			use: {
-				loader: 'babel-loader',
-				options: {
-					plugins: [ '@babel/plugin-transform-react-jsx' ]
-				}
-			}
-		},
-	]
-};
-
-const resolve = {
-	roots: [ path.resolve( 'app' ) ]
-};
-
-const plugins = [
-	new webpack.optimize.LimitChunkCountPlugin( {
-		maxChunks: 1
-	} )
-];
-
-// Main app.
+// Main Meta Box Builder app.
 const main = {
-	entry: './app/App.js',
+	...defaultConfig,
+	entry: './assets/app/App.js',
 	output: {
-		path: path.resolve( 'assets/js' ),
+		path: path.resolve( 'assets/build' ),
 		filename: 'app.js'
 	},
 	externals,
-	resolve,
-	plugins,
-	module: commonModules
 };
 
 // Settings page app.
 const settingsPage = {
-	entry: './modules/settings-page/app/App.js',
+	...defaultConfig,
+	entry: './src/Extensions/SettingsPage/app/App.js',
 	output: {
-		path: path.resolve( 'modules/settings-page/assets' ),
+		path: path.resolve( 'src/Extensions/SettingsPage/build' ),
 		filename: 'settings-page.js'
 	},
 	externals,
-	resolve,
-	plugins,
-	module: commonModules
 };
 
 // Relationships app.
 const relationships = {
-	entry: './modules/relationships/app/App.js',
+	...defaultConfig,
+	entry: './src/Extensions/Relationships/app/App.js',
 	output: {
-		path: path.resolve( 'modules/relationships/assets' ),
+		path: path.resolve( 'src/Extensions/Relationships/build' ),
 		filename: 'relationships.js'
 	},
 	externals,
-	resolve,
-	plugins,
-	module: commonModules
 };
 
 module.exports = [ main, settingsPage, relationships ];
+// module.exports = [ main ];

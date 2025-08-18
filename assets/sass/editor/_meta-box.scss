@@ -1,0 +1,41 @@
+// Tweaks, overwrite CSS from Meta Box
+
+.mb-field {
+
+	// Remove margin for the last field and add gap between label and input
+	.rwmb-field.rwmb-field {
+		margin-bottom: 0;
+		gap: 8px;
+	}
+
+	// Fix the clone background
+	.rwmb-clone {
+		background: inherit;
+	}
+
+	// Show hidden notes
+	.rwmb-hidden-wrapper {
+		display: block;
+	}
+}
+
+// Disable entering for inputs
+.mb-field .rwmb-input {
+	select,
+	textarea,
+	// For buttons, but not "Add field" button or toolbar buttons
+	button:not(.mb-editor__add-field-button button):not(.mb-toolbar button),
+	// For checkboxes
+	label:has([type="checkbox"]),
+	label:has([type="radio"]),
+	// For links and buttons
+	a,
+	.select2,
+	// For jQueryUI widgets (date, time picker)
+	.ui-widget,
+	// Editor
+	.wp-editor-wrap {
+		pointer-events: none;
+		user-select: none;
+	}
+}

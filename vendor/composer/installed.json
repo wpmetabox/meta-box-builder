@@ -101,19 +101,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/mbb-parser.git",
-                "reference": "a0955241ccca5558c9c49f79ab3bc98fc05ade92"
+                "reference": "b84ebcf2f9740dc43109abcdd8d01f9bb79af00d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/a0955241ccca5558c9c49f79ab3bc98fc05ade92",
-                "reference": "a0955241ccca5558c9c49f79ab3bc98fc05ade92",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/b84ebcf2f9740dc43109abcdd8d01f9bb79af00d",
+                "reference": "b84ebcf2f9740dc43109abcdd8d01f9bb79af00d",
                 "shasum": ""
             },
             "require": {
                 "riimu/kit-phpencoder": "^2.4",
                 "wpmetabox/support": "dev-master"
             },
-            "time": "2025-04-15T09:40:21+00:00",
+            "time": "2025-07-12T11:33:11+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
@@ -140,15 +140,15 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/support.git",
-                "reference": "874318ec497ce7fb918eb0629dec825210155d97"
+                "reference": "01df13797e94310de84143de84b6febc877b47a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/support/zipball/874318ec497ce7fb918eb0629dec825210155d97",
-                "reference": "874318ec497ce7fb918eb0629dec825210155d97",
+                "url": "https://api.github.com/repos/wpmetabox/support/zipball/01df13797e94310de84143de84b6febc877b47a6",
+                "reference": "01df13797e94310de84143de84b6febc877b47a6",
                 "shasum": ""
             },
-            "time": "2025-03-17T08:34:51+00:00",
+            "time": "2025-08-05T01:02:31+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",

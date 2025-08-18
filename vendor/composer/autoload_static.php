@@ -18,8 +18,6 @@ class ComposerStaticInite19679b2c031a0a42c1567343a0d570f
         'M' => 
         array (
             'MetaBox\\Support\\' => 16,
-            'MBB\\SettingsPage\\' => 17,
-            'MBB\\Relationships\\' => 18,
             'MBB\\' => 4,
             'MBBParser\\' => 10,
         ),
@@ -37,14 +35,6 @@ class ComposerStaticInite19679b2c031a0a42c1567343a0d570f
         'MetaBox\\Support\\' => 
         array (
             0 => __DIR__ . '/..' . '/wpmetabox/support',
-        ),
-        'MBB\\SettingsPage\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/settings-page/src',
-        ),
-        'MBB\\Relationships\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/modules/relationships/src',
         ),
         'MBB\\' => 
         array (

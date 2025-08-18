@@ -1,0 +1,38 @@
+.mb-field-settings__header {
+	position: fixed;
+	right: 16px;
+	top: 12px;
+	display: flex;
+	gap: 8px;
+}
+
+&-clone {
+	&__content {
+		margin-top: 0;
+
+		.components-popover__content {
+			width: 300px;
+			padding: 16px;
+
+			&:before {
+				content: "";
+				display: block;
+				width: 8px;
+				height: 8px;
+				border-top: 1px solid #ccc;
+				border-right: 1px solid #ccc;
+				position: absolute;
+				top: -5px;
+				right: 24px;
+				transform: rotate(-45deg);
+				background: #fff;
+			}
+		}
+
+		.components-button {
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
+	}
+}
