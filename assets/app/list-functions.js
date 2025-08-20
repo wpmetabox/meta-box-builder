@@ -57,6 +57,8 @@ const createList = ( { id = '', fields = [] } ) => {
 					fields: [],
 				} );
 			}
+
+			setFieldActive( newField._id );
 		},
 		addField: ( fieldType ) => get().addFieldAt( fieldType, get().fields.length ),
 		prependField: ( fieldType ) => get().addFieldAt( fieldType, 0 ),
