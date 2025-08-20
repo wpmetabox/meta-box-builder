@@ -124,7 +124,7 @@ const BlockRenderSettings = () => {
 			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
 				<CodeMirror
 					options={ { mode: 'php' } }
-					value={ getSetting( 'render_code', '' ) }
+					defaultValue={ getSetting( 'render_code', '' ) }
 					onChange={ ( editor, data, value ) => updateSetting( 'render_code', value ) }
 					editorDidMount={ setCodeEditor }
 				/>
