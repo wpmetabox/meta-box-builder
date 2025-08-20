@@ -58,7 +58,7 @@ const Base = ( { field, updateField, children } ) => {
 					[ 'key_value' ].includes( field.type ) && <Description field={ field } />
 				}
 				{
-					field.clone && !field.clone_empty_start && (
+					field.clone && ( field.type === 'group' || !field.clone_empty_start ) && (
 						<div className={ `rwmb-clone rwmb-${ field.type }-clone` }>
 							{ children }
 							<TextLimiter field={ field } />
