@@ -82,39 +82,46 @@ const getWatchedValue = ( field, control ) => {
 	return JSON.stringify( settings.map( setting => field[ setting ] ) );
 };
 
-const Tab = ( { controls, field, parent = '', updateField } ) => {
-	return controls.map( control => {
-		const watchValue = getWatchedValue( field, control );
+// Separate component for individual control to ensure hooks are called consistently
+const ControlItem = ( { control, field, parent, updateField } ) => {
+	const watchValue = getWatchedValue( field, control );
 
-		const memoizedControl = useMemo( () => {
-			let [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
+	const memoizedControl = useMemo( () => {
+		let [ Control, input, defaultValue ] = getControlParams( control, field, () => {}, true );
 
-			// Safe fallback for specific types.
-			if ( control.setting === 'type' ) {
-				defaultValue = [ 'datetime-local', 'month', 'tel', 'week' ].includes( defaultValue ) ? 'text' : defaultValue;
-			}
+		// Safe fallback for specific types.
+		if ( control.setting === 'type' ) {
+			defaultValue = [ 'datetime-local', 'month', 'tel', 'week' ].includes( defaultValue ) ? 'text' : defaultValue;
+		}
 
-			let props = {
-				componentName: control.setting,
-				componentId: `fields-${ field._id }-${ control.setting }`,
-				...control.props,
-				name: `fields${ parent }[${ field._id }]${ input }`,
-				defaultValue,
-				field,
-				updateField,
-			};
+		let props = {
+			componentName: control.setting,
+			componentId: `fields-${ field._id }-${ control.setting }`,
+			...control.props,
+			name: `fields${ parent }[${ field._id }]${ input }`,
+			defaultValue,
+			field,
+			updateField,
+		};
 
-			console.debug( `    Control: ${ control.setting }` );
+		console.debug( `    Control: ${ control.setting }` );
 
-			return <Control { ...props } />;
-		}, [ control, parent, watchValue ] ); // dependencies
+		return <Control { ...props } />;
+	}, [ control, parent, watchValue ] ); // dependencies
 
-		return (
-			<Suspense fallback={ null } key={ control.setting }>
-				{ memoizedControl }
-			</Suspense>
-		);
-	} );
+	return (
+		<Suspense fallback={ null }>
+			{ memoizedControl }
+		</Suspense>
+	);
 };
 
-export default Tab;
+export default ( { controls, field, parent = '', updateField } ) => controls.map( control => (
+	<ControlItem
+		key={ control.setting }
+		control={ control }
+		field={ field }
+		parent={ parent }
+		updateField={ updateField }
+	/>
+) );
