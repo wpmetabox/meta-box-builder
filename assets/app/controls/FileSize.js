@@ -23,10 +23,10 @@ const FileSize = ( { defaultValue, componentId, name, updateField, ...rest } ) =
 					type="number"
 					min="0"
 					id={ componentId }
-					value={ number }
+					defaultValue={ number }
 					onChange={ updateNumber }
 				/>
-				<select value={ suffix } onChange={ updateSuffix }>
+				<select defaultValue={ suffix } onChange={ updateSuffix }>
 					<option value="kb">KB</option>
 					<option value="mb">MB</option>
 					<option value="gb">GB</option>
