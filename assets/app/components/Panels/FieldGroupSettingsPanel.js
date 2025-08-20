@@ -1,5 +1,5 @@
 import { Panel, PanelRow, Tooltip } from '@wordpress/components';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useRef } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import useSettings from '../../hooks/useSettings';
 import Advanced from './FieldGroupSettings/Advanced';
@@ -16,11 +16,91 @@ import Tabs from './FieldGroupSettings/Tabs';
 import Translation from './FieldGroupSettings/Translation';
 import PersistentPanelBody from './PersistentPanelBody';
 
+// Pattern to match invalid characters (anything not a-z, A-Z, 0-9, dash, underscore)
+const invalidCharacters = /[^a-zA-Z0-9_-]/g;
+
 const Header = () => {
-	// Prevent the default behavior of "Enter" key.
-	const preventEnter = e => {
+	const spanRef = useRef();
+	const preventedKeypressRef = useRef(false);
+
+	// Prevent the default behavior of "Enter" key and restrict character input
+	const handleKeyDown = e => {
+		preventedKeypressRef.current = false; // Reset flag
+
 		if ( e.key === 'Enter' ) {
 			e.preventDefault();
+			preventedKeypressRef.current = true;
+			return;
+		}
+
+		// Allow control keys (backspace, delete, arrow keys, etc.)
+		const controlKeys = [
+			'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight',
+			'Home', 'End'
+		];
+
+		if ( controlKeys.includes( e.key ) ) {
+			return;
+		}
+
+		// Allow Ctrl/Cmd combinations (copy, paste, select all, etc.)
+		if ( e.ctrlKey || e.metaKey ) {
+			return;
+		}
+
+		// Only allow alphanumeric characters, dashes, and underscores
+		if ( invalidCharacters.test( e.key ) ) {
+			e.preventDefault();
+			preventedKeypressRef.current = true;
+		}
+	};
+
+	const handleChange = e => {
+		// If we just prevented a keypress, don't process the input event
+		if ( preventedKeypressRef.current ) {
+			preventedKeypressRef.current = false;
+			return;
+		}
+
+		// Get plain text content (this strips HTML)
+		const content = e.target.textContent || '';
+		const filteredContent = content.replace( invalidCharacters, '' );
+
+		// Check if the element contains any HTML nodes other than text
+		const hasHtmlNodes = Array.from( e.target.childNodes ).some(
+			node => node.nodeType !== Node.TEXT_NODE
+		);
+
+		if ( content !== filteredContent || hasHtmlNodes ) {
+			// Store the current cursor position relative to the text content
+			let cursorPosition = 0;
+			const selection = window.getSelection();
+
+			if ( selection.rangeCount > 0 ) {
+				const range = selection.getRangeAt( 0 );
+				// Get text content before the cursor position
+				const beforeCursor = range.cloneRange();
+				beforeCursor.selectNodeContents( e.target );
+				beforeCursor.setEnd( range.endContainer, range.endOffset );
+				cursorPosition = beforeCursor.toString().length;
+			}
+
+			// Clean the content by setting textContent (removes all HTML)
+			spanRef.current.textContent = filteredContent;
+
+			// Calculate new cursor position after filtering
+			const textBeforeCursor = content.substring( 0, cursorPosition );
+			const filteredTextBeforeCursor = textBeforeCursor.replace( invalidCharacters, '' );
+			const newCursorPosition = Math.min( filteredTextBeforeCursor.length, filteredContent.length );
+
+			// Restore cursor position
+			if ( spanRef.current.firstChild && newCursorPosition >= 0 ) {
+				const range = document.createRange();
+				range.setStart( spanRef.current.firstChild, newCursorPosition );
+				range.collapse( true );
+				selection.removeAllRanges();
+				selection.addRange( range );
+			}
 		}
 	};
 
@@ -32,9 +112,11 @@ const Header = () => {
 				<Tooltip text={ __( 'Click to edit. Must be unique between field groups. Use only lowercase letters, numbers, underscores, and dashes.', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
 					<span
 						id="post_name"
+						ref={ spanRef }
 						contentEditable
 						suppressContentEditableWarning={ true }
-						onKeyDown={ preventEnter }
+						onKeyDown={ handleKeyDown }
+						onInput={ handleChange }
 					>{ MbbApp.slug }</span>
 				</Tooltip>
 			</div>
