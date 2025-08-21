@@ -1,12 +1,13 @@
-// Do not show update nag
-.update-nag {
-	display: none;
-}
+// Hide update nag
+.update-nag,
 
 // Hide WordPress header elements
 #screen-meta-links,
 .wrap h1.wp-heading-inline,
-.wrap .wp-heading-inline~.page-title-action {
+.wrap .wp-heading-inline~.page-title-action,
+
+// Hide footer
+#wpfooter {
 	display: none;
 }
 
@@ -25,6 +26,7 @@
 
 .mb {
 	--nav-width: 350px;
+	--left: 160px;
 
 	display: flex;
 	flex-direction: column;
@@ -33,12 +35,12 @@
 	position: fixed;
 	top: 32px;
 	bottom: 0;
-	left: 160px; // Admin menu open
+	left: var(--left); // Admin menu open
 	right: 0;
 
 	// Admin menu folded.
 	.folded & {
-		left: 36px;
+		--left: 36px !important; // Override the value set inline in setupAdminMenuWidth().
 	}
 }
 
@@ -122,8 +124,7 @@
 	}
 
 	&__inner {
-		padding: 48px 48px 48px;
-		flex: 1;
+		padding: 48px;
 
 		// Show scrollbar inside this area.
 		position: absolute;
@@ -147,18 +148,12 @@
 
 // Nav
 .mb-nav {
-	position: fixed;
-	top: calc(32px + 60px + 1px); // Admin bar + header + border
+	position: absolute;
+	top: 0;
 	bottom: 0;
-	left: 160px; // WordPress menu
+	left: 0;
 	width: var(--nav-width);
 	z-index: 99;
-
-	border-left-width: 0;
-
-	.folded & {
-		left: 36px;
-	}
 }
 
 .mb-resizer {
