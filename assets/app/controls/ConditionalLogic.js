@@ -26,7 +26,7 @@ const ConditionalLogic = ( {
 	}, [] );
 
 	if ( !MbbApp.extensions.conditionalLogic ) {
-		return (
+		return !MbbApp.extensions.aio && (
 			<UpgradePanelBody
 				title={ __( 'Conditional logic', 'meta-box-builder' ) }
 				// Translators: %s is the type of the item: field or field group.

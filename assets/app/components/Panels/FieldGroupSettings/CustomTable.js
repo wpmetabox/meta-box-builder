@@ -11,7 +11,7 @@ const CustomTable = () => {
 	const setting = getSetting( 'custom_table', {} );
 
 	if ( !MbbApp.extensions.customTable ) {
-		return (
+		return !MbbApp.extensions.aio && (
 			<UpgradePanelBody
 				title={ __( 'Custom table', 'meta-box-builder' ) }
 				description={ __( 'Save data in a custom table.', 'meta-box-builder' ) }

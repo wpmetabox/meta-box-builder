@@ -12,7 +12,7 @@ const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 	const objectType = getObjectType();
 
 	if ( !MbbApp.extensions.adminColumns ) {
-		return (
+		return !MbbApp.extensions.aio && (
 			<UpgradePanelBody
 				title={ __( 'Admin columns', 'meta-box-builder' ) }
 				description={ __( 'Show this field as a column in the list table in the admin area.', 'meta-box-builder' ) }

@@ -9,6 +9,5 @@
 - Add a warning if leaving field group and it hasn't been saved? Just like WordPress
 
 - Làm indicator cho các panel, tức là khi có settings thay đổi so với default thì có indicator để nhận diện
-- Thay đổi field type
 - Object field, chuyển chọn field type thành icon
 - Switch to field khi có trường required chưa điền
