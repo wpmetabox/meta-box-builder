@@ -1,4 +1,4 @@
-### Version 5.0.1 - 2025-08-21
+### 5.0.1 - 2025-08-21
 
 - Allow to change field type
 - Allow click to edit tab label
@@ -9,7 +9,7 @@
 - Fix admin menu overlaying the app (caused by ASE)
 - Fix cursor jump for ID, FileSize & block code
 
-### Version 5.0.0 - 2025-08-18
+### 5.0.0 - 2025-08-18
 
 This version introduces a rewritten the builder with a new UI/UX. [Learn more](https://metabox.io/mb-builder-5-0-0-official-release/) about the new UI.
 
