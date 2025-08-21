@@ -1,11 +1,12 @@
 import { Icon } from '@wordpress/components';
 import { archive } from '@wordpress/icons';
+import FieldLabel from './Elements/FieldLabel';
 
-const Tab = ( { field } ) => (
+const Tab = ( { field, updateField } ) => (
 	<div className="mb-field--tab__wrapper">
 		<div className="mb-field--tab__content">
 			<TabIcon field={ field } />
-			{ field.name }
+			<FieldLabel field={ field } updateField={ updateField } />
 		</div>
 	</div>
 );
