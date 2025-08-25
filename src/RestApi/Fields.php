@@ -128,7 +128,7 @@ class Fields extends Base {
 				'title'       => __( 'Custom HTML', 'meta-box-builder' ),
 				'category'    => 'advanced',
 				'controls'    => array_merge(
-					[ 'name', 'std', 'callback' ],
+					[ 'type', 'name', 'std', 'callback' ],
 					$appearance_tab
 				),
 				'description' => __( 'Output custom HTML content', 'meta-box-builder' ),
@@ -160,7 +160,7 @@ class Fields extends Base {
 			'divider'           => [
 				'title'       => __( 'Divider', 'meta-box-builder' ),
 				'category'    => 'layout',
-				'controls'    => [ 'class', 'before', 'after' ],
+				'controls'    => [ 'type', 'class', 'before', 'after' ],
 				'description' => __( 'Simple horizontal line', 'meta-box-builder' ),
 			],
 			'email'             => [
@@ -250,7 +250,7 @@ class Fields extends Base {
 				'title'       => __( 'Heading', 'meta-box-builder' ),
 				'category'    => 'layout',
 				'controls'    => array_merge(
-					[ 'name', 'desc' ],
+					[ 'type', 'name', 'desc' ],
 					[ 'class', 'before', 'after' ],
 				),
 				'description' => __( 'Heading text', 'meta-box-builder' ),
@@ -259,7 +259,7 @@ class Fields extends Base {
 				'title'       => __( 'Hidden', 'meta-box-builder' ),
 				'category'    => 'advanced',
 				'controls'    => array_merge(
-					[ 'id', 'std' ],
+					[ 'type', 'id', 'std' ],
 					[ 'class', 'before', 'after', 'custom_settings' ],
 				),
 				'description' => __( 'For storing a default hidden value', 'meta-box-builder' ),
