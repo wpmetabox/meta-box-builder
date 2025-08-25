@@ -134,15 +134,49 @@ const createList = ( { id = '', fields = [] } ) => {
 			const { navPanel, setNavPanel } = useNavPanel.getState();
 			const { removeFieldId } = useColumns.getState();
 
+			// Get the current list state before removing the field
+			const currentState = get();
+			const currentIndex = currentState.fields.findIndex( f => f._id === fieldId );
+			const isCurrentActive = currentIndex >= 0 && currentState.fields[ currentIndex ]._active;
+			const isCurrentListGroup = currentState.id !== 'root';
+
+			// Remove the field
 			set( state => ( {
 				fields: state.fields.filter( f => f._id !== fieldId )
 			} ) );
+			removeFieldId( fieldId );
 
-			if ( navPanel === 'field-settings' ) {
-				setNavPanel( '' );
+			if ( ! isCurrentActive ) {
+				return;
 			}
 
-			removeFieldId( fieldId );
+			// Handle active field logic after deletion
+			const newState = get();
+			let newActiveFieldId = null;
+
+			if ( newState.fields.length > 0 ) {
+				// If there are remaining fields, try to set the next field as active
+				if ( currentIndex < newState.fields.length ) {
+					// Next field exists
+					newActiveFieldId = newState.fields[ currentIndex ]._id;
+				} else if ( currentIndex > 0 ) {
+					// No next field, but previous field exists
+					newActiveFieldId = newState.fields[ currentIndex - 1 ]._id;
+				}
+			}
+
+			if ( newActiveFieldId ) {
+				// Set the new active field
+				setFieldActive( newActiveFieldId );
+				setNavPanel( 'field-settings' );
+			} else if ( isCurrentListGroup ) {
+				// No fields left in group, set the group as active
+				setFieldActive( currentState.id );
+				setNavPanel( 'field-settings' );
+			} else {
+				// Root list with no fields, set nav panel to field-group-settings
+				setNavPanel( 'field-group-settings' );
+			}
 		},
 		updateField: ( fieldId, key, value ) => {
 			const field = get().fields.find( f => f._id === fieldId );
