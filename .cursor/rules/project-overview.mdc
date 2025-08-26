@@ -1,0 +1,17 @@
+---
+description: Project overview
+globs:
+alwaysApply: true
+---
+
+MB Builder is an extension for Meta Box plugin for WordPress that provides UI to build custom fields, relationships, settings pages.
+
+## Tech stack
+- Frontend: React + Gutenberg components + Zustand
+- Backend: WordPress
+- Styling: SCSS
+
+## File Structure
+- PHP code in `src`
+- React app in `assets/app`
+- SCSS in `assets/sass`

@@ -1,5 +1,5 @@
 ---
-description: WordPress (PHP)
+description: WordPress
 globs: *.php
 alwaysApply: false
 ---

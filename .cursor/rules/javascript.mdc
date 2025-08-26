@@ -1,5 +1,5 @@
 ---
-description: React
+description: JavaScript
 globs: *.js
 alwaysApply: false
 ---
