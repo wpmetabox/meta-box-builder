@@ -6,9 +6,11 @@ import { ensureArray, ucwords } from '../functions';
 import useFloatingStructurePanel from '../hooks/useFloatingStructurePanel';
 import useNavPanel from '../hooks/useNavPanel';
 import useSettings from '../hooks/useSettings';
+import useUnsavedChanges from '../hooks/useUnsavedChanges';
 
 const Header = () => {
 	const { navPanel, setNavPanel } = useNavPanel();
+	const { hasUnsavedChanges } = useUnsavedChanges();
 	const { floating, visible, toggleVisible } = useFloatingStructurePanel( useShallow( state => ( {
 		floating: state.floating,
 		visible: state.visible,
@@ -115,6 +117,7 @@ const Header = () => {
 					type="submit"
 					className="components-button is-primary"
 					value={ __( 'Save Changes', 'meta-box-builder' ) }
+					disabled={ !hasUnsavedChanges }
 				/>
 			</Flex>
 		</Flex>
