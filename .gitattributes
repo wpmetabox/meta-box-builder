@@ -19,3 +19,5 @@ pnpm-lock.yaml export-ignore
 webpack.config.js export-ignore
 
 TODO.md export-ignore
+
+.cursor export-ignore

@@ -1,0 +1,9 @@
+---
+description: React
+globs: *.js
+alwaysApply: false
+---
+
+- Always use WordPress coding standards when writing JavaScript.
+- Use WordPress components as much as possible.
+- Optimize for readability.

@@ -1,0 +1,13 @@
+---
+description: WordPress (PHP)
+globs: *.php
+alwaysApply: false
+---
+
+- Always use WordPress coding standards when writing PHP.
+- Follow PSR-4 naming conventions.
+- Favor object-oriented programming.
+- Add type hints for PHP code as much as possible.
+- Optimize for readability.
+- Compatible with PHP 7.2+ and WordPress 6.5+.
+- Lint command: `phpcs`, format command: `phpcbf`.
