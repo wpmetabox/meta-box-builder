@@ -146,7 +146,7 @@ const createList = ( { id = '', fields = [] } ) => {
 			} ) );
 			removeFieldId( fieldId );
 
-			if ( ! isCurrentActive ) {
+			if ( !isCurrentActive ) {
 				return;
 			}
 
@@ -190,6 +190,14 @@ const createList = ( { id = '', fields = [] } ) => {
 			// Don't update if the value is the same
 			if ( currentValue === value ) {
 				return;
+			}
+
+			// If changing to group type, create a new list for the field
+			if ( key === 'type' && value === 'group' && currentValue !== 'group' ) {
+				createList( {
+					id: fieldId,
+					fields: [],
+				} );
 			}
 
 			// Create a deep clone of the field to avoid reference issues

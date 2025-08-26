@@ -21,6 +21,7 @@ class Tabs {
 			'category' => 'layout',
 			'disabled' => ! Data::is_extension_active( 'meta-box-tabs' ),
 			'controls' => [
+				'type',
 				Control::Name( 'name', [
 					'required' => true,
 					'label'    => __( 'Label', 'meta-box-builder' ),

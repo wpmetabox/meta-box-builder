@@ -26,7 +26,7 @@ const Toolbar = ( {
 	};
 
 	if ( field.type === 'group' ) {
-		const { prependField, addField } = getList( field._id )( state => ( { prependField: state.prependField, addField: state.addField } ) );
+		const { prependField, addField } = getList( field._id ).getState();
 		actionMap.addSubFieldBefore = fieldType => prependField( fieldType );
 		actionMap.addSubFieldAfter = fieldType => addField( fieldType );
 	}
