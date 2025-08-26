@@ -31,6 +31,7 @@ const createList = ( { id = '', fields = [] } ) => {
 
 		addFieldAt: ( fieldType, position ) => {
 			const { fields } = get();
+			const { setNavPanel } = useNavPanel.getState();
 
 			if ( position < 0 || position > fields.length ) {
 				console.error( `%cInvalid position: ${ position }.`, 'color:red' );
@@ -59,6 +60,7 @@ const createList = ( { id = '', fields = [] } ) => {
 			}
 
 			setFieldActive( newField._id );
+			setNavPanel( 'field-settings' );
 		},
 		addField: ( fieldType ) => get().addFieldAt( fieldType, get().fields.length ),
 		prependField: ( fieldType ) => get().addFieldAt( fieldType, 0 ),
