@@ -1,0 +1,38 @@
+---
+description: PHP
+globs: *.php
+alwaysApply: false
+---
+
+# PHP Rules for WordPress Plugin Development
+
+## Coding Standards
+
+- **WordPress Coding Standards**:
+  Follow [WordPress PHP Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/) for consistency.
+  Use `phpcs` with the WordPress ruleset to lint code, and `phpcbf` to auto-fix formatting issues.
+
+- **PSR-4 Autoloading**:
+  Use PSR-4 for class and namespace structure. Keep autoloading consistent with Composer or a custom autoloader.
+
+## Code Style & Structure
+
+- **Object-Oriented Programming**:
+  Favor OOP for new code. Use classes, traits, and interfaces to organize functionality instead of large procedural files.
+  Keep classes small and focused on a single responsibility.
+
+- **Type Safety**:
+  Add type hints (for parameters and return types) and scalar type declarations wherever possible.
+  For compatibility with WordPress, allow nullable or mixed types only when required.
+  Add `@param` and `@return` docblocks when type hints cannot fully describe expected values.
+
+- **Compatibility**:
+  Ensure code runs on **PHP 7.2+** and **WordPress 6.5+**.
+  Avoid features not supported in PHP 7.2 (e.g. union types).
+  Use polyfills or conditional checks where necessary.
+
+- **Prefer built-in/native APIs**:
+  Use WordPress core functions (`wp_remote_get`, `sanitize_text_field`, `esc_html`) and native PHP functions (`array_map`, `json_encode`) before writing custom wrappers or importing packages.
+  Only add external libraries or custom helpers when:
+    1. The built-in solution is missing or insufficient.
+    2. The external library is well-maintained and provides a clear, measurable benefit.

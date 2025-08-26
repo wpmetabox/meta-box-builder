@@ -4,6 +4,32 @@ globs: *.js
 alwaysApply: false
 ---
 
-- Always use WordPress coding standards when writing JavaScript.
-- Use WordPress components as much as possible.
-- Optimize for readability.
+# JavaScript Rules for WordPress Plugin Development
+
+## Coding Standards
+
+- **WordPress Coding Standards**:
+  Follow [WordPress JavaScript Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/javascript/) for consistency.
+
+## Code Style & Structure
+
+- **Prefer built-in/native APIs**:
+	- Use the language or framework's built-in functions and APIs before introducing external libraries or custom implementations.
+		- **JavaScript**: prefer ES standard methods (`map`, `filter`, `reduce`, `URL`, `fetch`) instead of utility libraries.
+		- **React**: use core React hooks (`useState`, `useEffect`, `useMemo`, `useCallback`) and WordPress block packages (`@wordpress/components`, `@wordpress/data`, `@wordpress/i18n`) before adding new dependencies.
+	- Only add external libraries or custom helpers when:
+		1. The built-in solution is missing or insufficient.
+		2. The external library is well-maintained and provides a clear, measurable benefit.
+	- If must use ultilities, use `lodash`
+
+- **Arrow Functions Style**:
+  Prefer arrow functions over traditional function expressions for inline callbacks and short functions.
+  If an arrow function has **only one parameter**, omit parentheses.
+
+  ```js
+  // ✅ Good
+  items.map(item => item.id)
+
+  // ❌ Avoid
+  items.map((item) => { return item.id })
+  ```
