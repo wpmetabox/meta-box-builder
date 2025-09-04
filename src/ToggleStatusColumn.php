@@ -102,7 +102,7 @@ class ToggleStatusColumn {
 	}
 
 	public function remove_draft_state_label( array $states, WP_Post $post ): array {
-		if ( get_post_status( $post ) === 'draft' ) {
+		if ( in_array( $post->post_type, $this->post_types, true ) && get_post_status( $post ) === 'draft' ) {
 			unset( $states['draft'] );
 		}
 		return $states;
