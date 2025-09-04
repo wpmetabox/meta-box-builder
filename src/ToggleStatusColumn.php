@@ -8,6 +8,12 @@ class ToggleStatusColumn {
 	private $post_types = [ 'meta-box', 'mb-settings-page', 'mb-relationship', 'mb-post-type', 'mb-taxonomy', 'mb-views' ];
 
 	public function __construct() {
+		add_action( 'admin_init', [ $this, 'init' ] );
+	}
+
+	public function init(): void {
+		$this->post_types = apply_filters( 'mbb_toggle_status_post_types', $this->post_types );
+
 		foreach ( $this->post_types as $post_type ) {
 			// Priority 20 to ensure the column is added after other columns are added (like in views).
 			add_filter( 'manage_' . $post_type . '_posts_columns', [ $this, 'add_column' ], 20 );
