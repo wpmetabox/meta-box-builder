@@ -1,4 +1,4 @@
-import { __ } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 import DivRow from '../../../controls/DivRow';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
