@@ -47,10 +47,16 @@
 		height: 13px;
 		position: relative;
 		top: 3px;
+
+		&--danger {
+			opacity: 1;
+			color: var(--color-red);
+		}
 	}
 
-	// Increase the size of the visibility icon a little bit.
-	.dashicons-visibility {
+	// Increase the size of the visibility & no save value icon a little bit.
+	.dashicons-visibility,
+	.dashicons-no-alt {
 		font-size: 14px;
 		width: 14px;
 		height: 14px;

@@ -44,6 +44,13 @@ const Base = ( { field, updateField, children } ) => {
 									</Tooltip>
 								)
 							}
+							{
+								field.save_field === false && (
+									<Tooltip text={ __( 'Field is disabled for saving', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
+										<span className="mb-field__icon mb-field__icon--danger dashicons dashicons-no-alt" />
+									</Tooltip>
+								)
+							}
 							<TooltipIcon field={ field } />
 						</label>
 						<Id field={ field } updateField={ updateField } />
