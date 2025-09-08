@@ -21,7 +21,8 @@ const invalidCharacters = /[^a-zA-Z0-9_-]/g;
 
 const Header = () => {
 	const spanRef = useRef();
-	const preventedKeypressRef = useRef(false);
+	const inputRef = useRef();
+	const preventedKeypressRef = useRef( false );
 
 	// Prevent the default behavior of "Enter" key and restrict character input
 	const handleKeyDown = e => {
@@ -71,6 +72,11 @@ const Header = () => {
 			node => node.nodeType !== Node.TEXT_NODE
 		);
 
+		// Update the input value and dispatch the input event to trigger the change detection
+		inputRef.current.value = filteredContent;
+		const event = new Event( 'input' );
+		inputRef.current.dispatchEvent( event );
+
 		if ( content !== filteredContent || hasHtmlNodes ) {
 			// Store the current cursor position relative to the text content
 			let cursorPosition = 0;
@@ -87,6 +93,11 @@ const Header = () => {
 
 			// Clean the content by setting textContent (removes all HTML)
 			spanRef.current.textContent = filteredContent;
+
+			// Update the input value and dispatch the input event to trigger the change detection
+			inputRef.current.value = filteredContent;
+			const event = new Event( 'input' );
+			inputRef.current.dispatchEvent( event );
 
 			// Calculate new cursor position after filtering
 			const textBeforeCursor = content.substring( 0, cursorPosition );
@@ -119,6 +130,8 @@ const Header = () => {
 						onInput={ handleChange }
 					>{ MbbApp.slug }</span>
 				</Tooltip>
+				{/* Hidden input to trigger change detection */ }
+				<input type="hidden" id="post_name_input" ref={ inputRef } value={ MbbApp.slug } />
 			</div>
 		</>
 	);
