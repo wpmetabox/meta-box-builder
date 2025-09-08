@@ -8,11 +8,9 @@
 	font-size: 12px;
 
 	&:before {
-		content: '';
-		width: 6px;
-		height: 6px;
-		display: inline-block;
-		border-radius: 99px;
+		content: "✕";
+		font-size: 10px;
+		font-weight: 700;
 	}
 
 	input {
@@ -23,10 +21,6 @@
 	border-color: var(--color-light);
 	background: var(--color-lighter);
 
-	&:before {
-		background: var(--color-gray);
-	}
-
 	// Active status
 	&:has(input:checked),
 	&--active {
@@ -35,7 +29,7 @@
 		color: #276a52;
 
 		&:before {
-			background: #28b77e;
+			content: "✓";
 		}
 	}
 }
