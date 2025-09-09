@@ -102,7 +102,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 
 	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) );
 
-	console.debug( `%c  Field ${ field._id }`, "color:orange" );
+	// console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
 	const hovering = hover || resizing;
 	const showActions = field._active || hovering;
