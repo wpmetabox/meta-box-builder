@@ -17,8 +17,8 @@ if ( MbbApp.extensions.views ) {
 	renderWithOptions[ 'view' ] = __( 'View', 'meta-box-builder' );
 }
 
-const getRenderViewId = ( renderView ) => {
-	const view = Object.values( MbbApp.views )?.find( view => view.post_name === renderView );
+const getRenderViewId = renderView => {
+	const view = Object.values( MbbApp.views || {} )?.find( view => view.post_name === renderView );
 
 	return view?.ID;
 };
@@ -28,7 +28,7 @@ const BlockRenderSettings = () => {
 	const renderWith = getSetting( 'render_with', 'callback' );
 	const [ codeEditor, setCodeEditor ] = useState();
 
-	const [ views, setViews ] = useState( MbbApp.views );
+	const [ views, setViews ] = useState( MbbApp.views || {} );
 	const [ renderView, setRenderView ] = useState( getSetting( 'render_view' ) );
 
 	const addViewButtonRef = useRef();
