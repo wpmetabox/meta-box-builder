@@ -15,6 +15,8 @@ const useFieldTypes = create( ( set, get ) => ( {
 		}
 
 		const fieldTypes = await fetcher( { api: 'field-types' } );
+		// Store field types in MbbApp to access them globally, e.g. to get icon for custom field types.
+		MbbApp.field_types = fieldTypes;
 		set( { fieldTypes, fetched: true } );
 	},
 } ) );

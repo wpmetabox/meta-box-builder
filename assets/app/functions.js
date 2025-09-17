@@ -1,4 +1,3 @@
-import { applyFilters } from '@wordpress/hooks';
 import { archive, atSymbol, backup, border, brush, button, buttons, calendar, captureVideo, category, check, chevronUpDown, cloudUpload, code, color, commentAuthorAvatar, drawerRight, flipHorizontal, formatListBullets, fullscreen, gallery, grid, group, heading, image, lineDotted, link, mapMarker, page, pages, paragraph, postDate, postFeaturedImage, queryPaginationNumbers, separator, shield, starEmpty, table, tag, textColor, typography, unseen, video } from '@wordpress/icons';
 import dotProp from 'dot-prop';
 import { deburr, uniqBy, upperFirst } from 'lodash';
@@ -106,13 +105,12 @@ export const getFieldIcon = type => {
 		tab: archive,
 	};
 
-	const icon = iconMap[ type ] || 'button';
-
-	return applyFilters( 'mbb_field_icon', icon, type );
+	// Allow to get icon from field types via MbbApp.field_types (for custom field types).
+	return iconMap[ type ] || dotProp.get( MbbApp, `field_types.${ type }.icon`, 'button' );
 };
 
 export const getFullOptions = text => {
-	if ( ! text ) {
+	if ( !text ) {
 		return [];
 	}
 
