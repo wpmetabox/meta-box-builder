@@ -3,6 +3,7 @@ import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
 import useColumns from "../../hooks/useColumns";
+import { useFetch } from "../../hooks/useFetch";
 import useFieldTypes from "../../hooks/useFieldTypes";
 import useNavPanel from "../../hooks/useNavPanel";
 import { setFieldActive } from "../../list-functions";
@@ -24,6 +25,8 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const hasCustomColumns = useColumns( state => state.hasCustomColumns() );
 	const ref = useRef();
+
+	const { data: fieldHTML } = useFetch( { api: 'field-html', params: { field }, method: 'POST' } );
 
 	const toggleSettings = e => {
 		if ( !isClickedOnAField( e ) ) {
@@ -100,9 +103,67 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 		document.addEventListener( 'mouseup', handleMouseUp );
 	}, [ field.columns, update ] );
 
-	const FieldType = lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) );
+	const builtInFieldTypes = [
+		'autocomplete',
+		'background',
+		'button',
+		'button_group',
+		'checkbox',
+		'checkbox_list',
+		'choice',
+		'color',
+		'custom_html',
+		'date',
+		'datetime',
+		'divider',
+		'fieldset_text',
+		'file',
+		'file_input',
+		'file_upload',
+		'heading',
+		'icon',
+		'image',
+		'image_advanced',
+		'image_select',
+		'image_upload',
+		'input',
+		'input_list',
+		'key_value',
+		'map',
+		'media',
+		'multiple_values',
+		'number',
+		'object_choice',
+		'oembed',
+		'osm',
+		'password',
+		'post',
+		'radio',
+		'range',
+		'select',
+		'select_advanced',
+		'select_tree',
+		'sidebar',
+		'single_image',
+		'slider',
+		'switch',
+		'taxonomy',
+		'taxonomy_advanced',
+		'text_list',
+		'textarea',
+		'time',
+		'user',
+		'video',
+		'wysiwyg',
 
-	console.debug( `%c  Field ${ field._id }`, "color:orange" );
+		// Premium field types.
+		'group',
+		'tab',
+	];
+
+	const FieldType = builtInFieldTypes.includes( field.type ) ? lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) ) : null;
+
+	// console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
 	const hovering = hover || resizing;
 	const showActions = field._active || hovering;
@@ -136,7 +197,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 				}
 				<Base field={ field } { ...fieldActions } updateField={ update }>
 					<Suspense fallback={ null }>
-						<FieldType field={ field } parent={ parent } updateField={ update } />
+						{ FieldType ? <FieldType field={ field } parent={ parent } updateField={ update } /> : <div dangerouslySetInnerHTML={ { __html: fieldHTML } } /> }
 					</Suspense>
 				</Base>
 			</div>

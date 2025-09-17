@@ -35,7 +35,7 @@ const Fields = () => {
 	// We need to remove the auto-added item by SortableJS.
 	const setList = list => fieldActions.setFields( [ ...list ].filter( f => f?._id !== undefined ) );
 
-	console.debug( `%cLIST`, "color:red" );
+	// console.debug( `%cLIST`, "color:red" );
 
 	return (
 		<div className="mb-editor">

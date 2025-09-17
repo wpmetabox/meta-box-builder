@@ -20,7 +20,7 @@ const Group = ( { field, parent } ) => {
 	// We need to remove the auto-added item by SortableJS.
 	const setList = list => fieldActions.setFields( [ ...list ].filter( f => f?._id !== undefined ) );
 
-	console.debug( `%c  Group ${ field._id }`, "color:orange" );
+	// console.debug( `%c  Group ${ field._id }`, "color:orange" );
 
 	return (
 		<>

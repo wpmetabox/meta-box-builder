@@ -105,13 +105,12 @@ export const getFieldIcon = type => {
 		tab: archive,
 	};
 
-	if ( iconMap[ type ] ) {
-		return iconMap[ type ];
-	}
+	// Allow to get icon from field types via MbbApp.field_types (for custom field types).
+	return iconMap[ type ] || dotProp.get( MbbApp, `field_types.${ type }.icon`, 'button' );
 };
 
 export const getFullOptions = text => {
-	if ( ! text ) {
+	if ( !text ) {
 		return [];
 	}
 
