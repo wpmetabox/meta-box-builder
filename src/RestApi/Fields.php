@@ -1,6 +1,9 @@
 <?php
 namespace MBB\RestApi;
 
+use WP_REST_Request;
+use RWMB_Field;
+
 class Fields extends Base {
 	private $registry;
 
@@ -625,5 +628,16 @@ class Fields extends Base {
 		$this->registry->transform_controls();
 
 		return $this->registry->get_field_types();
+	}
+
+	public function get_field_html( WP_REST_Request $request ) {
+		$field = $request->get_param( 'field' );
+
+		$field = RWMB_Field::call( 'normalize', $field );
+
+		$meta = RWMB_Field::call( $field, 'meta', 0, false );
+		$html = RWMB_Field::call( $field, 'html', $meta );
+
+		return $html;
 	}
 }
