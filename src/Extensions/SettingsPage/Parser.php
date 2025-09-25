@@ -29,19 +29,33 @@ class Parser extends Base {
 		// Top level menu.
 		unset( $this->parent );
 
-		// Setup icon URL.
-		$type           = Arr::get( $this->settings, 'icon_type', 'dashicons' );
-		$this->icon_url = Arr::get( $this->settings, "icon_$type" );
-
+		// Setup icon URL based on type.
+		$type = Arr::get( $this->settings, 'icon_type', 'dashicons' );
+		
 		if ( 'dashicons' === $type ) {
+			$this->icon_url = Arr::get( $this->settings, 'icon_dashicons' );
+			// Preserve original icon_dashicons value
+			$this->icon_dashicons = $this->icon_url;
 			$this->icon_url = 'dashicons-' . $this->icon_url;
+		} elseif ( 'font_awesome' === $type ) {
+			$this->icon_url = Arr::get( $this->settings, 'icon_font_awesome' );
+			$this->icon_font_awesome = $this->icon_url;
+		} elseif ( 'svg' === $type ) {
+			$this->icon_url = Arr::get( $this->settings, 'icon_svg' );
+			$this->icon_svg = $this->icon_url;
+		} elseif ( 'custom' === $type ) {
+			$this->icon_url = Arr::get( $this->settings, 'icon_custom' );
+			$this->icon_custom = $this->icon_url;
+		} else {
+			// Fallback to icon_url if set
+			$this->icon_url = Arr::get( $this->settings, 'icon_url' );
 		}
 
 		return $this;
 	}
 
 	private function remove_menu_keys(): self {
-		$keys = [ 'menu_type', 'icon_type', 'icon_dashicons', 'icon_svg', 'icon_custom', 'icon_font_awesome' ];
+		$keys = [ 'menu_type' ];
 		foreach ( $keys as $key ) {
 			unset( $this->$key );
 		}
