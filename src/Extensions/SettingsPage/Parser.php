@@ -74,6 +74,9 @@ class Parser extends Base {
 		}
 		$tabs = [];
 		foreach ( $this->tabs as $tab ) {
+			if ( empty( $tab['key'] ) || empty( $tab['value'] ) ) {
+				continue;
+			}
 			$tabs[ $tab['key'] ] = $tab['value'];
 		}
 		$this->tabs = $tabs;
