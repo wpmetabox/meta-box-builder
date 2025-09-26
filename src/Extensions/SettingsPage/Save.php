@@ -44,6 +44,17 @@ class Save {
 		$post_title = $request->get_param( 'post_title' );
 		$settings   = $request->get_param( 'settings' );
 
+		$type     = $settings['icon_type'] ?? '';
+		$default  = 'dashicons-' . ( $settings['icon_dashicons'] ?? '' );
+
+		// If $type is empty ⇒ use default
+		$settings['icon_url'] = empty($type)
+		? $default
+		: ( $type === 'dashicons'
+			? $default
+			: ( $settings['icon_' . $type] ?? $default )
+		);
+		
 		$post_name = sanitize_title( empty( $settings['id'] ) ? $post_title : $settings['id'] );
 
 		$post = get_post( $post_id );
