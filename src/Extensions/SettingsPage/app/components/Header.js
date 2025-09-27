@@ -4,11 +4,9 @@ import { ReactComponent as Logo } from '../../../../../assets/app/components/log
 
 const Header = () => (
 	<Flex className="mb-header">
-		<Flex expanded={ false }>
-			<Tooltip delay={ 0 } text={ __( 'Back to all settings pages', 'meta-box-builder' ) } placement='bottom'>
-				<a className="mb-header__logo" href={ MbbApp.url }><Logo /></a>
-			</Tooltip>
-		</Flex>
+		<Tooltip delay={ 0 } text={ __( 'Back to all settings pages', 'meta-box-builder' ) } placement='bottom'>
+			<a className="mb-header__logo" href={ MbbApp.url }><Logo /></a>
+		</Tooltip>
 		<Flex gap={ 0 } expanded={ false } className="mb-header__info">
 			<input
 				type="text"
