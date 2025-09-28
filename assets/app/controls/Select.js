@@ -41,8 +41,8 @@ const Select = ( { componentId, name, options, defaultValue, onChange, placehold
 	};
 
 	return <DivRow htmlFor={ componentId } { ...rest }>
-		<select placeholder={ placeholder } id={ componentId } defaultValue={ defaultValue } onChange={ handleChange }>
-			<option value=""></option>
+		<select id={ componentId } defaultValue={ defaultValue } onChange={ handleChange }>
+			<option value="">{ placeholder }</option>
 			{ renderOptions() }
 		</select>
 	</DivRow>;

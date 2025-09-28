@@ -27,7 +27,8 @@ const Menu = () => {
 					name="position"
 					label={ __( 'Show menu after', 'meta-box-builder' ) }
 					options={ MbbApp.menu_positions }
-					defaultValue={ getSetting( 'position', 25 ) }
+					defaultValue={ getSetting( 'position' ) }
+					placeholder={ __( 'Show after all menus', 'meta-box-builder' ) }
 					updateField={ updateSetting }
 				/>
 			}
