@@ -22,7 +22,8 @@ class Parser extends Base {
 
 	private function parse_menu_icon(): self {
 		// Submenu.
-		if ( 'top' !== $this->menu_type ) {
+		$menu_type = Arr::get( $this->settings, 'menu_type', 'top' );
+		if ( 'top' !== $menu_type ) {
 			return $this;
 		}
 
