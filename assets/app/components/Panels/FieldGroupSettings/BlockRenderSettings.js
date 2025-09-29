@@ -24,9 +24,11 @@ const getRenderViewId = renderView => {
 };
 
 const BlockRenderSettings = () => {
-	const { getSetting, updateSetting } = useSettings();
+	const { getSetting, updateSetting } = useSettings( state => ( {
+		getSetting: state.getSetting,
+		updateSetting: state.updateSetting,
+	} ) );
 	const renderWith = getSetting( 'render_with', 'callback' );
-	const [ codeEditor, setCodeEditor ] = useState();
 
 	const [ views, setViews ] = useState( MbbApp.views || {} );
 	const [ renderView, setRenderView ] = useState( getSetting( 'render_view' ) );
@@ -75,18 +77,14 @@ const BlockRenderSettings = () => {
 	};
 
 	useEffect( () => {
-		if ( codeEditor ) {
-			setTimeout( () => codeEditor.refresh(), 3000 );
-		}
-	}, [ codeEditor ] );
-
-	useEffect( () => {
 		showAddViewModal( addViewButtonRef?.current );
 	}, [ addViewButtonRef.current, renderWith ] );
 
 	useEffect( () => {
 		showEditViewModal( editViewButtonRef?.current );
 	}, [ editViewButtonRef.current, renderWith, renderView ] );
+
+	console.debug( 'Render block render settings' );
 
 	return <>
 		<Select
@@ -119,41 +117,7 @@ const BlockRenderSettings = () => {
 				updateField={ updateSetting }
 			/>
 		}
-		{
-			renderWith === 'code' &&
-			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
-				<CodeMirror
-					options={ { mode: 'php' } }
-					defaultValue={ getSetting( 'render_code', '' ) }
-					onChange={ ( editor, data, value ) => updateSetting( 'render_code', value ) }
-					editorDidMount={ setCodeEditor }
-				/>
-				<table className="og-block-description">
-					<tbody>
-						<tr>
-							<td><code>{ "{{ attribute }}" }</code></td>
-							<td><RawHTML>{ __( 'Block attribute. Replace <code>attribute</code> with <code>anchor</code>, <code>align</code> or <code>className</code>).', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-						<tr>
-							<td><code>{ "{{ field_id }}" }</code></td>
-							<td><RawHTML>{ __( 'Field value. Replace <code>field_id</code> with a real field ID.', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-						<tr>
-							<td><code>{ "{{ is_preview }}" }</code></td>
-							<td><RawHTML>{ __( 'Whether in preview mode.', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-						<tr>
-							<td><code>{ "{{ post_id }}" }</code></td>
-							<td><RawHTML>{ __( 'Current post ID.', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-						<tr>
-							<td><code>mb.function()</code></td>
-							<td><RawHTML>{ __( 'Run a PHP/WordPress function via <code>mb</code> namespace. Replace <code>function</code> with a valid PHP/WordPress function name.', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-					</tbody>
-				</table>
-			</DivRow>
-		}
+		{ renderWith === 'code' && <RenderWithCode /> }
 
 		{
 			renderWith === 'view' && MbbApp.extensions.views &&
@@ -228,6 +192,47 @@ const BlockRenderSettings = () => {
 			</table>
 		</DivRow>
 	</>;
+};
+
+const RenderWithCode = () => {
+	const { getSetting, updateSetting } = useSettings( state => ( {
+		getSetting: state.getSetting,
+		updateSetting: state.updateSetting,
+	} ) );
+
+	return (
+		<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
+			<CodeMirror
+				options={ { mode: 'php' } }
+				value={ getSetting( 'render_code', '' ) }
+				onChange={ ( editor, data, value ) => updateSetting( 'render_code', value ) }
+			/>
+			<table className="og-block-description">
+				<tbody>
+					<tr>
+						<td><code>{ "{{ attribute }}" }</code></td>
+						<td><RawHTML>{ __( 'Block attribute. Replace <code>attribute</code> with <code>anchor</code>, <code>align</code> or <code>className</code>).', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+					<tr>
+						<td><code>{ "{{ field_id }}" }</code></td>
+						<td><RawHTML>{ __( 'Field value. Replace <code>field_id</code> with a real field ID.', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+					<tr>
+						<td><code>{ "{{ is_preview }}" }</code></td>
+						<td><RawHTML>{ __( 'Whether in preview mode.', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+					<tr>
+						<td><code>{ "{{ post_id }}" }</code></td>
+						<td><RawHTML>{ __( 'Current post ID.', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+					<tr>
+						<td><code>mb.function()</code></td>
+						<td><RawHTML>{ __( 'Run a PHP/WordPress function via <code>mb</code> namespace. Replace <code>function</code> with a valid PHP/WordPress function name.', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+				</tbody>
+			</table>
+		</DivRow>
+	);
 };
 
 export default BlockRenderSettings;
