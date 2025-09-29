@@ -314,7 +314,7 @@ const parseLists = ( obj, listId ) => {
 };
 parseLists( MbbApp, 'root' );
 
-const findFieldList = fieldId => lists.values().find( list => list.getState().fields.some( field => field._id === fieldId ) );
+const findFieldList = fieldId => [ ...lists.values() ].find( list => list.getState().fields.some( field => field._id === fieldId ) );
 
 export const setFieldActive = fieldId => {
 	const list = findFieldList( fieldId );
@@ -322,7 +322,7 @@ export const setFieldActive = fieldId => {
 		list.getState().updateField( fieldId, '_active', true );
 	}
 
-	const allFields = Array.from( lists.values() ).flatMap( store => store.getState().fields );
+	const allFields = [ ...lists.values() ].flatMap( store => store.getState().fields );
 	allFields.forEach( field => {
 		if ( field._id === fieldId || !field._active ) {
 			return;
