@@ -37,7 +37,12 @@ const Toolbar = ( {
 	};
 
 	const remove = () => {
-		if ( confirm( __( 'Do you really want to remove this field?', 'meta-box-builder' ) ) ) {
+		let message = __( 'Do you really want to remove this field? Removing this field does NOT remove its data in the database.', 'meta-box-builder' );
+		if ( MbbApp.extensions.aio ) {
+			message += ' ' + __( 'To remove the data from the database, please go to Meta Box > Tools.', 'meta-box-builder' );
+		}
+
+		if ( confirm( message ) ) {
 			removeField( field._id );
 		}
 	};
