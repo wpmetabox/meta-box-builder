@@ -198,14 +198,16 @@ const BlockRenderSettings = () => {
 
 const RenderWithCode = () => {
 	const updateSetting = useSettings( state => state.updateSetting );
-	const renderCode = useSettings( useShallow( state => state.getSetting( 'render_code', '' ) ) );
+	const renderCode = useSettings( state => state.getSetting( 'render_code', '' ) );
+
+	const saveOnBlur = editor => updateSetting( 'render_code', editor.getValue() );
 
 	return (
 		<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
 			<CodeMirror
 				options={ { mode: 'php' } }
 				value={ renderCode }
-				onChange={ ( editor, data, value ) => updateSetting( 'render_code', value ) }
+				onBlur={ saveOnBlur }
 			/>
 			<table className="og-block-description">
 				<tbody>
