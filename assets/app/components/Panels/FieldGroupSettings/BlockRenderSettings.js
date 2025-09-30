@@ -2,6 +2,7 @@ import { Flex } from "@wordpress/components";
 import { RawHTML, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { useShallow } from "zustand/react/shallow";
 import DivRow from '../../../controls/DivRow';
 import Input from '../../../controls/Input';
 import Select from '../../../controls/Select';
@@ -24,14 +25,17 @@ const getRenderViewId = renderView => {
 };
 
 const BlockRenderSettings = () => {
-	const { getSetting, updateSetting } = useSettings( state => ( {
-		getSetting: state.getSetting,
-		updateSetting: state.updateSetting,
-	} ) );
-	const renderWith = getSetting( 'render_with', 'callback' );
+	const updateSetting = useSettings( state => state.updateSetting );
+	const renderWith = useSettings( useShallow( state => state.getSetting( 'render_with', 'callback' ) ) );
+	const renderView = useSettings( useShallow( state => state.getSetting( 'render_view' ) ) );
+	const renderCallback = useSettings( useShallow( state => state.getSetting( 'render_callback', '' ) ) );
+	const renderTemplate = useSettings( useShallow( state => state.getSetting( 'render_template', '' ) ) );
+	const enqueueStyle = useSettings( useShallow( state => state.getSetting( 'enqueue_style', '' ) ) );
+	const enqueueScript = useSettings( useShallow( state => state.getSetting( 'enqueue_script', '' ) ) );
+	const enqueueAssets = useSettings( useShallow( state => state.getSetting( 'enqueue_assets', '' ) ) );
 
 	const [ views, setViews ] = useState( MbbApp.views || {} );
-	const [ renderView, setRenderView ] = useState( getSetting( 'render_view' ) );
+	const [ localRenderView, setLocalRenderView ] = useState( renderView );
 
 	const addViewButtonRef = useRef();
 	const editViewButtonRef = useRef();
@@ -52,7 +56,7 @@ const BlockRenderSettings = () => {
 				...views,
 				[ postId ]: { ID: postId, post_name: postName, post_title: postTitle }
 			} );
-			setRenderView( postName );
+			setLocalRenderView( postName );
 			updateSetting( 'render_view', postName );
 		},
 	};
@@ -60,7 +64,7 @@ const BlockRenderSettings = () => {
 	const showEditViewModal = e => {
 		const $this = jQuery( e );
 
-		$this.attr( 'data-url', MbbApp.viewEditUrl + getRenderViewId( renderView ) + '&action=edit' );
+		$this.attr( 'data-url', MbbApp.viewEditUrl + getRenderViewId( localRenderView ) + '&action=edit' );
 
 		$this.rwmbModal( { ...modalConfig, isEdit: true } );
 	};
@@ -72,7 +76,7 @@ const BlockRenderSettings = () => {
 	};
 
 	const handleSelectView = e => {
-		setRenderView( e.target.value );
+		setLocalRenderView( e.target.value );
 		updateSetting( 'render_view', e.target.value );
 	};
 
@@ -82,9 +86,7 @@ const BlockRenderSettings = () => {
 
 	useEffect( () => {
 		showEditViewModal( editViewButtonRef?.current );
-	}, [ editViewButtonRef.current, renderWith, renderView ] );
-
-	console.debug( 'Render block render settings' );
+	}, [ editViewButtonRef.current, renderWith, localRenderView ] );
 
 	return <>
 		<Select
@@ -102,7 +104,7 @@ const BlockRenderSettings = () => {
 				label={ __( 'Render callback', 'meta-box-builder' ) }
 				componentId="settings-block-render_callback"
 				placeholder={ __( 'Enter PHP function name', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'render_callback', '' ) }
+				defaultValue={ renderCallback }
 				updateField={ updateSetting }
 			/>
 		}
@@ -113,7 +115,7 @@ const BlockRenderSettings = () => {
 				label={ __( 'Render template', 'meta-box-builder' ) }
 				componentId="settings-block-render_template"
 				placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'render_template', '' ) }
+				defaultValue={ renderTemplate }
 				updateField={ updateSetting }
 			/>
 		}
@@ -124,7 +126,7 @@ const BlockRenderSettings = () => {
 			<DivRow htmlFor="settings-block-render_view" label={ __( 'Select a view', 'meta-box-builder' ) } className="og-field--block-view">
 				<select
 					id="settings-block-render_view"
-					value={ renderView }
+					value={ localRenderView }
 					onChange={ handleSelectView }
 				>
 					<option value="">{ __( 'Select a view', 'meta-box-builder' ) }</option>
@@ -138,7 +140,7 @@ const BlockRenderSettings = () => {
 				<Flex justify="left">
 					<a href="#" ref={ addViewButtonRef } data-url={ MbbApp.viewAddUrl }>{ __( '+ Add View', 'meta-box-builder' ) }</a>
 					{
-						renderView && <a href="#" ref={ editViewButtonRef }>{ __( 'Edit View', 'meta-box-builder' ) }</a>
+						localRenderView && <a href="#" ref={ editViewButtonRef }>{ __( 'Edit View', 'meta-box-builder' ) }</a>
 					}
 				</Flex>
 			</DivRow>
@@ -149,7 +151,7 @@ const BlockRenderSettings = () => {
 			label={ __( 'Custom CSS', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_style"
 			placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
-			defaultValue={ getSetting( 'enqueue_style', '' ) }
+			defaultValue={ enqueueStyle }
 			updateField={ updateSetting }
 		/>
 		<Input
@@ -157,7 +159,7 @@ const BlockRenderSettings = () => {
 			label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_script"
 			placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
-			defaultValue={ getSetting( 'enqueue_script', '' ) }
+			defaultValue={ enqueueScript }
 			updateField={ updateSetting }
 		/>
 		<Input
@@ -165,7 +167,7 @@ const BlockRenderSettings = () => {
 			label={ __( 'Custom assets callback', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_assets"
 			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
-			defaultValue={ getSetting( 'enqueue_assets', '' ) }
+			defaultValue={ enqueueAssets }
 			updateField={ updateSetting }
 		/>
 
@@ -195,16 +197,14 @@ const BlockRenderSettings = () => {
 };
 
 const RenderWithCode = () => {
-	const { getSetting, updateSetting } = useSettings( state => ( {
-		getSetting: state.getSetting,
-		updateSetting: state.updateSetting,
-	} ) );
+	const updateSetting = useSettings( state => state.updateSetting );
+	const renderCode = useSettings( useShallow( state => state.getSetting( 'render_code', '' ) ) );
 
 	return (
 		<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
 			<CodeMirror
 				options={ { mode: 'php' } }
-				value={ getSetting( 'render_code', '' ) }
+				value={ renderCode }
 				onChange={ ( editor, data, value ) => updateSetting( 'render_code', value ) }
 			/>
 			<table className="og-block-description">
