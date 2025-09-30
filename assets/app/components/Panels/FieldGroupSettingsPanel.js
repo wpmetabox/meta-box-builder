@@ -1,6 +1,7 @@
 import { Panel, PanelRow, Tooltip } from '@wordpress/components';
 import { useEffect, useRef } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
+import { useShallow } from 'zustand/react/shallow';
 import useSettings from '../../hooks/useSettings';
 import Advanced from './FieldGroupSettings/Advanced';
 import Block from './FieldGroupSettings/Block';
@@ -138,11 +139,8 @@ const Header = () => {
 };
 
 const FieldGroupSettingsPanel = () => {
-	const { getObjectType, validateAndUpdateObjectType } = useSettings( state => ( {
-		getObjectType: state.getObjectType,
-		validateAndUpdateObjectType: state.validateAndUpdateObjectType,
-	} ) );
-	const objectType = getObjectType();
+	const objectType = useSettings( useShallow( state => state.getObjectType() ) );
+	const validateAndUpdateObjectType = useSettings( state => state.validateAndUpdateObjectType );
 
 	// Validate and update object type after component mount to avoid setState during render
 	useEffect( () => {
