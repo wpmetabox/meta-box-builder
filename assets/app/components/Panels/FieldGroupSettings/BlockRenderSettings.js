@@ -2,6 +2,7 @@ import { Flex } from "@wordpress/components";
 import { RawHTML, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { UnControlled as CodeMirror } from 'react-codemirror2';
+import { useShallow } from "zustand/react/shallow";
 import DivRow from '../../../controls/DivRow';
 import Input from '../../../controls/Input';
 import Select from '../../../controls/Select';
@@ -24,12 +25,17 @@ const getRenderViewId = renderView => {
 };
 
 const BlockRenderSettings = () => {
-	const { getSetting, updateSetting } = useSettings();
-	const renderWith = getSetting( 'render_with', 'callback' );
-	const [ codeEditor, setCodeEditor ] = useState();
+	const updateSetting = useSettings( state => state.updateSetting );
+	const renderWith = useSettings( useShallow( state => state.getSetting( 'render_with', 'callback' ) ) );
+	const renderView = useSettings( useShallow( state => state.getSetting( 'render_view' ) ) );
+	const renderCallback = useSettings( useShallow( state => state.getSetting( 'render_callback', '' ) ) );
+	const renderTemplate = useSettings( useShallow( state => state.getSetting( 'render_template', '' ) ) );
+	const enqueueStyle = useSettings( useShallow( state => state.getSetting( 'enqueue_style', '' ) ) );
+	const enqueueScript = useSettings( useShallow( state => state.getSetting( 'enqueue_script', '' ) ) );
+	const enqueueAssets = useSettings( useShallow( state => state.getSetting( 'enqueue_assets', '' ) ) );
 
 	const [ views, setViews ] = useState( MbbApp.views || {} );
-	const [ renderView, setRenderView ] = useState( getSetting( 'render_view' ) );
+	const [ localRenderView, setLocalRenderView ] = useState( renderView );
 
 	const addViewButtonRef = useRef();
 	const editViewButtonRef = useRef();
@@ -50,7 +56,7 @@ const BlockRenderSettings = () => {
 				...views,
 				[ postId ]: { ID: postId, post_name: postName, post_title: postTitle }
 			} );
-			setRenderView( postName );
+			setLocalRenderView( postName );
 			updateSetting( 'render_view', postName );
 		},
 	};
@@ -58,7 +64,7 @@ const BlockRenderSettings = () => {
 	const showEditViewModal = e => {
 		const $this = jQuery( e );
 
-		$this.attr( 'data-url', MbbApp.viewEditUrl + getRenderViewId( renderView ) + '&action=edit' );
+		$this.attr( 'data-url', MbbApp.viewEditUrl + getRenderViewId( localRenderView ) + '&action=edit' );
 
 		$this.rwmbModal( { ...modalConfig, isEdit: true } );
 	};
@@ -70,15 +76,9 @@ const BlockRenderSettings = () => {
 	};
 
 	const handleSelectView = e => {
-		setRenderView( e.target.value );
+		setLocalRenderView( e.target.value );
 		updateSetting( 'render_view', e.target.value );
 	};
-
-	useEffect( () => {
-		if ( codeEditor ) {
-			setTimeout( () => codeEditor.refresh(), 3000 );
-		}
-	}, [ codeEditor ] );
 
 	useEffect( () => {
 		showAddViewModal( addViewButtonRef?.current );
@@ -86,7 +86,7 @@ const BlockRenderSettings = () => {
 
 	useEffect( () => {
 		showEditViewModal( editViewButtonRef?.current );
-	}, [ editViewButtonRef.current, renderWith, renderView ] );
+	}, [ editViewButtonRef.current, renderWith, localRenderView ] );
 
 	return <>
 		<Select
@@ -104,7 +104,7 @@ const BlockRenderSettings = () => {
 				label={ __( 'Render callback', 'meta-box-builder' ) }
 				componentId="settings-block-render_callback"
 				placeholder={ __( 'Enter PHP function name', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'render_callback', '' ) }
+				defaultValue={ renderCallback }
 				updateField={ updateSetting }
 			/>
 		}
@@ -115,52 +115,18 @@ const BlockRenderSettings = () => {
 				label={ __( 'Render template', 'meta-box-builder' ) }
 				componentId="settings-block-render_template"
 				placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'render_template', '' ) }
+				defaultValue={ renderTemplate }
 				updateField={ updateSetting }
 			/>
 		}
-		{
-			renderWith === 'code' &&
-			<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
-				<CodeMirror
-					options={ { mode: 'php' } }
-					defaultValue={ getSetting( 'render_code', '' ) }
-					onChange={ ( editor, data, value ) => updateSetting( 'render_code', value ) }
-					editorDidMount={ setCodeEditor }
-				/>
-				<table className="og-block-description">
-					<tbody>
-						<tr>
-							<td><code>{ "{{ attribute }}" }</code></td>
-							<td><RawHTML>{ __( 'Block attribute. Replace <code>attribute</code> with <code>anchor</code>, <code>align</code> or <code>className</code>).', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-						<tr>
-							<td><code>{ "{{ field_id }}" }</code></td>
-							<td><RawHTML>{ __( 'Field value. Replace <code>field_id</code> with a real field ID.', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-						<tr>
-							<td><code>{ "{{ is_preview }}" }</code></td>
-							<td><RawHTML>{ __( 'Whether in preview mode.', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-						<tr>
-							<td><code>{ "{{ post_id }}" }</code></td>
-							<td><RawHTML>{ __( 'Current post ID.', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-						<tr>
-							<td><code>mb.function()</code></td>
-							<td><RawHTML>{ __( 'Run a PHP/WordPress function via <code>mb</code> namespace. Replace <code>function</code> with a valid PHP/WordPress function name.', 'meta-box-builder' ) }</RawHTML></td>
-						</tr>
-					</tbody>
-				</table>
-			</DivRow>
-		}
+		{ renderWith === 'code' && <RenderWithCode /> }
 
 		{
 			renderWith === 'view' && MbbApp.extensions.views &&
 			<DivRow htmlFor="settings-block-render_view" label={ __( 'Select a view', 'meta-box-builder' ) } className="og-field--block-view">
 				<select
 					id="settings-block-render_view"
-					value={ renderView }
+					value={ localRenderView }
 					onChange={ handleSelectView }
 				>
 					<option value="">{ __( 'Select a view', 'meta-box-builder' ) }</option>
@@ -174,7 +140,7 @@ const BlockRenderSettings = () => {
 				<Flex justify="left">
 					<a href="#" ref={ addViewButtonRef } data-url={ MbbApp.viewAddUrl }>{ __( '+ Add View', 'meta-box-builder' ) }</a>
 					{
-						renderView && <a href="#" ref={ editViewButtonRef }>{ __( 'Edit View', 'meta-box-builder' ) }</a>
+						localRenderView && <a href="#" ref={ editViewButtonRef }>{ __( 'Edit View', 'meta-box-builder' ) }</a>
 					}
 				</Flex>
 			</DivRow>
@@ -185,7 +151,7 @@ const BlockRenderSettings = () => {
 			label={ __( 'Custom CSS', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_style"
 			placeholder={ __( 'Enter URL to the custom CSS file', 'meta-box-builder' ) }
-			defaultValue={ getSetting( 'enqueue_style', '' ) }
+			defaultValue={ enqueueStyle }
 			updateField={ updateSetting }
 		/>
 		<Input
@@ -193,7 +159,7 @@ const BlockRenderSettings = () => {
 			label={ __( 'Custom JavaScript', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_script"
 			placeholder={ __( 'Enter URL to the custom JavaScript file', 'meta-box-builder' ) }
-			defaultValue={ getSetting( 'enqueue_script', '' ) }
+			defaultValue={ enqueueScript }
 			updateField={ updateSetting }
 		/>
 		<Input
@@ -201,7 +167,7 @@ const BlockRenderSettings = () => {
 			label={ __( 'Custom assets callback', 'meta-box-builder' ) }
 			componentId="settings-block-enqueue_assets"
 			placeholder={ __( 'Enter PHP callback function name', 'meta-box-builder' ) }
-			defaultValue={ getSetting( 'enqueue_assets', '' ) }
+			defaultValue={ enqueueAssets }
 			updateField={ updateSetting }
 		/>
 
@@ -228,6 +194,47 @@ const BlockRenderSettings = () => {
 			</table>
 		</DivRow>
 	</>;
+};
+
+const RenderWithCode = () => {
+	const updateSetting = useSettings( state => state.updateSetting );
+	const renderCode = useSettings( state => state.getSetting( 'render_code', '' ) );
+
+	const saveOnBlur = editor => updateSetting( 'render_code', editor.getValue() );
+
+	return (
+		<DivRow label={ __( 'Render code', 'meta-box-builder' ) }>
+			<CodeMirror
+				options={ { mode: 'php' } }
+				value={ renderCode }
+				onBlur={ saveOnBlur }
+			/>
+			<table className="og-block-description">
+				<tbody>
+					<tr>
+						<td><code>{ "{{ attribute }}" }</code></td>
+						<td><RawHTML>{ __( 'Block attribute. Replace <code>attribute</code> with <code>anchor</code>, <code>align</code> or <code>className</code>).', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+					<tr>
+						<td><code>{ "{{ field_id }}" }</code></td>
+						<td><RawHTML>{ __( 'Field value. Replace <code>field_id</code> with a real field ID.', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+					<tr>
+						<td><code>{ "{{ is_preview }}" }</code></td>
+						<td><RawHTML>{ __( 'Whether in preview mode.', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+					<tr>
+						<td><code>{ "{{ post_id }}" }</code></td>
+						<td><RawHTML>{ __( 'Current post ID.', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+					<tr>
+						<td><code>mb.function()</code></td>
+						<td><RawHTML>{ __( 'Run a PHP/WordPress function via <code>mb</code> namespace. Replace <code>function</code> with a valid PHP/WordPress function name.', 'meta-box-builder' ) }</RawHTML></td>
+					</tr>
+				</tbody>
+			</table>
+		</DivRow>
+	);
 };
 
 export default BlockRenderSettings;
