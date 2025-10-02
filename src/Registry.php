@@ -264,6 +264,7 @@ class Registry {
 				'label'   => __( 'Region', 'meta-box-builder' ),
 				'options' => $this->get_regions(),
 			] ),
+			Control::Toggle( 'draggable', __( 'Marker draggable', 'meta-box-builder' ), true ),
 
 			// Taxonomy.
 			Control::ReactSelect( 'taxonomy', [
