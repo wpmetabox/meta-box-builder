@@ -243,7 +243,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'api_key', 'address_field', 'std', 'language', 'region', 'draggable' ] ),
+					array_merge( $general_tab, [ 'api_key', 'address_field', 'std', 'language', 'region', 'marker_draggable' ] ),
 					$appearance_tab,
 					$advanced_tab
 				),
@@ -367,7 +367,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'address_field', 'language', 'region', 'draggable' ] ),
+					array_merge( $general_tab, [ 'std', 'address_field', 'language', 'region', 'marker_draggable' ] ),
 					$appearance_tab,
 					$advanced_tab
 				),
