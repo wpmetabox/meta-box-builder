@@ -110,6 +110,15 @@ const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 				defaultValue={ defaultValue.link || 'false' }
 				updateField={ updateField }
 			/>
+			<Input
+				type="number"
+				componentId={ `${ componentId }-width` }
+				name="admin_columns.width"
+				label={ __( 'Width (%)', 'meta-box-builder' ) }
+				description={ __( 'Set the column width in percentage of the table.', 'meta-box-builder' ) }
+				defaultValue={ defaultValue.width || '' }
+				updateField={ updateField }
+			/>
 		</PersistentPanelBodyWithToggle>
 	);
 };
