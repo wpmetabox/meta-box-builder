@@ -1,9 +1,22 @@
+import { useState } from 'react';
 import { __ } from "@wordpress/i18n";
 import DivRow from './DivRow';
 
-const AdminColumnsWidth = ( { defaultValue, componentId, updateField, ...rest } ) => {
-	const updateWidth = e => updateField( 'admin_columns.width.number', e.target.value );
-	const updateUnit = e => updateField( 'admin_columns.width.unit', e.target.value );
+const AdminColumnsWidth = ( { defaultValue = '', componentId, updateField, ...rest } ) => {
+
+	const [ number, setNumber ] = useState( parseInt( defaultValue ) || '' );
+	const [ unit, setUnit ] = useState( defaultValue.includes( 'px' ) ? 'px' : '%' );
+
+	const handleChange = ( e ) => {
+		const { name, value } = e.target;
+		const newNumber = ( name === 'number' ) ? value : number;
+		const newUnit = ( name === 'unit' ) ? value : unit;
+
+		setNumber( newNumber );
+		setUnit( newUnit );
+
+		updateField( 'admin_columns.width', `${ newNumber }${ newUnit }` );
+	};
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
@@ -11,11 +24,12 @@ const AdminColumnsWidth = ( { defaultValue, componentId, updateField, ...rest } 
 				<input
 					type="number"
 					min="0"
+					name="number"
 					id={ `${ componentId }-number` }
-					defaultValue={ defaultValue.number || '' }
-					onChange={ updateWidth }
+					value={ number }
+					onChange={ handleChange }
 				/>
-				<select defaultValue={ defaultValue.unit || '%' } onChange={ updateUnit }>
+				<select name="unit" value={ unit } onChange={ handleChange }>
 					<option value="%">{ __( '%', 'meta-box-builder' ) }</option>
 					<option value="px">{ __( 'px', 'meta-box-builder' ) }</option>
 				</select>

@@ -28,10 +28,7 @@ class AdminColumns {
 			'filterable' => false,
 			'sort'       => 'false',
 			'link'       => 'false',
-			'width'      => [
-				'number' =>	'',
-				'unit'   => '%'
-			]
+			'width'      => '',
 		], 'admin_columns' );
 
 		return $controls;

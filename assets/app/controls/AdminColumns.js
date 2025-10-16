@@ -115,7 +115,7 @@ const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 				componentId={ `${ componentId }-width` }
 				label={ __( 'Width', 'meta-box-builder' ) }
 				description={ __( 'Set the column width.', 'meta-box-builder' ) }
-				defaultValue={ defaultValue.width || { number: '', unit: '%' } }
+				defaultValue={ defaultValue.width || '' }
 				updateField={ updateField }
 			/>
 		</PersistentPanelBodyWithToggle >
