@@ -6,6 +6,7 @@ import PersistentPanelBodyWithToggle from './PersistentPanelBodyWithToggle';
 import Toggle from './Toggle';
 import ToggleGroup from './ToggleGroup';
 import UpgradePanelBody from './UpgradePanelBody';
+import AdminColumnsWidth from './AdminCloumnsWidth';
 
 const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 	const { getObjectType } = useSettings();
@@ -110,7 +111,14 @@ const AdminColumns = ( { field, componentId, defaultValue, updateField } ) => {
 				defaultValue={ defaultValue.link || 'false' }
 				updateField={ updateField }
 			/>
-		</PersistentPanelBodyWithToggle>
+			<AdminColumnsWidth
+				componentId={ `${ componentId }-width` }
+				label={ __( 'Width', 'meta-box-builder' ) }
+				description={ __( 'Set the column width.', 'meta-box-builder' ) }
+				defaultValue={ defaultValue.width || '' }
+				updateField={ updateField }
+			/>
+		</PersistentPanelBodyWithToggle >
 	);
 };
 
