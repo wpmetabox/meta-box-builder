@@ -9,8 +9,8 @@ const AdminColumnsWidth = ( { defaultValue = '', componentId, updateField, ...re
 
 	const handleChange = ( e ) => {
 		const { name, value: fieldValue } = e.target;
-		const newValue = ( name === 'value' ) ? fieldValue : value;
-		const newUnit = ( name === 'unit' ) ? fieldValue : unit;
+		const newValue = name === 'value' ? fieldValue : value;
+		const newUnit = name === 'unit' ? fieldValue : unit;
 
 		setValue( newValue );
 		setUnit( newUnit );
