@@ -4,18 +4,18 @@ import DivRow from './DivRow';
 
 const AdminColumnsWidth = ( { defaultValue = '', componentId, updateField, ...rest } ) => {
 
-	const [ number, setNumber ] = useState( parseInt( defaultValue ) || '' );
+	const [ value, setValue ] = useState( parseInt( defaultValue ) || '' );
 	const [ unit, setUnit ] = useState( defaultValue.includes( 'px' ) ? 'px' : '%' );
 
 	const handleChange = ( e ) => {
-		const { name, value } = e.target;
-		const newNumber = ( name === 'number' ) ? value : number;
-		const newUnit = ( name === 'unit' ) ? value : unit;
+		const { name, value: fieldValue } = e.target;
+		const newValue = ( name === 'value' ) ? fieldValue : value;
+		const newUnit = ( name === 'unit' ) ? fieldValue : unit;
 
-		setNumber( newNumber );
+		setValue( newValue );
 		setUnit( newUnit );
 
-		updateField( 'admin_columns.width', `${ newNumber }${ newUnit }` );
+		updateField( 'admin_columns.width', `${ newValue }${ newUnit }` );
 	};
 
 	return (
@@ -24,9 +24,9 @@ const AdminColumnsWidth = ( { defaultValue = '', componentId, updateField, ...re
 				<input
 					type="number"
 					min="0"
-					name="number"
-					id={ `${ componentId }-number` }
-					value={ number }
+					name="value"
+					id={ `${ componentId }-value` }
+					value={ value }
 					onChange={ handleChange }
 				/>
 				<select name="unit" value={ unit } onChange={ handleChange }>
