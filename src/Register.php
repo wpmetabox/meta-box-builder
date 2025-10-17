@@ -62,8 +62,7 @@ class Register {
 
 			$unparser = new \MBBParser\Unparsers\MetaBox( $json );
 			$unparser->unparse();
-			$json     = $unparser->get_settings();
-			$meta_box = $json;
+			$meta_box = $unparser->get_settings();
 
 			if ( empty( $meta_box ) ) {
 				continue;
