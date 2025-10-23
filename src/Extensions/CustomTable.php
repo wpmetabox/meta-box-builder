@@ -52,7 +52,8 @@ class CustomTable {
 			'columns' => $columns,
 		];
 		$cache_key  = 'mb_create_table_' . md5( wp_json_encode( $cache_data ) );
-		if ( get_transient( $cache_key ) !== false ) {
+		// Cache the table creation in production environment only.
+		if ( get_transient( $cache_key ) !== false && wp_get_environment_type() === 'production' ) {
 			return;
 		}
 
