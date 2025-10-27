@@ -31,7 +31,8 @@ export const initSaveForm = () => {
 					post_title: document.querySelector( '#post_title' ).value,
 					settings,
 				},
-				method: 'POST'
+				method: 'POST',
+				cache: false,
 			} );
 
 			if ( !response.success ) {

@@ -37,7 +37,8 @@ export const initSaveForm = () => {
 					fields,
 					settings,
 				},
-				method: 'POST'
+				method: 'POST',
+				cache: false,
 			} );
 
 			if ( !response.success ) {
