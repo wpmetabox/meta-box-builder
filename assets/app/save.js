@@ -46,9 +46,6 @@ export const initSaveForm = () => {
 				return;
 			}
 
-			// Mark changes as saved to prevent unsaved changes warning
-			window.mbbMarkAsSaved?.();
-
 			window.mbbShowNotification?.();
 		} catch ( error ) {
 			let message = error.message;
@@ -60,6 +57,9 @@ export const initSaveForm = () => {
 
 			alert( message );
 		} finally {
+			// Mark changes as saved to prevent unsaved changes warning
+			window.mbbMarkAsSaved?.();
+
 			submitButton.value = currentText;
 		}
 	} );
