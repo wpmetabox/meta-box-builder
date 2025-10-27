@@ -116,6 +116,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 		'date',
 		'datetime',
 		'divider',
+		'email',
 		'fieldset_text',
 		'file',
 		'file_input',
