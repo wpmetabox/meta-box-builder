@@ -153,6 +153,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 		'text_list',
 		'textarea',
 		'time',
+		'url',
 		'user',
 		'video',
 		'wysiwyg',
