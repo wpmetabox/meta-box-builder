@@ -92,7 +92,11 @@ class Tabs {
 				$icon = "dashicons-$icon";
 			}
 
-			$tabs[ $field['id'] ] = compact( 'label', 'icon' );
+			if ( ! $icon ) {
+				$tabs[ $field['id'] ] = $label;
+			} else {
+				$tabs[ $field['id'] ] = compact( 'label', 'icon' );
+			}
 		}
 
 		if ( 'default' === Arr::get( $settings, 'tab_style' ) ) {
