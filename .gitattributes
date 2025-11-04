@@ -21,3 +21,5 @@ webpack.config.js export-ignore
 TODO.md export-ignore
 
 .cursor export-ignore
+
+docs export-ignore
