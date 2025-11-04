@@ -53,7 +53,7 @@ const Base = ( { field, updateField, children } ) => {
 							}
 							<TooltipIcon field={ field } />
 						</label>
-						<Id field={ field } updateField={ updateField } />
+						{ field.type !== 'custom_html' && <Id field={ field } updateField={ updateField } /> }
 						{
 							field.label_description && <p className="description">{ field.label_description }</p>
 						}
