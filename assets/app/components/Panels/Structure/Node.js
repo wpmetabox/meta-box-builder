@@ -56,6 +56,8 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 		}
 	};
 
+	const noIdFieldTypes = [ 'divider', 'heading', 'custom_html' ];
+
 	return field.type && (
 		<div className={ `og-item og-item--${ field.type } ${ field._active ? 'og-item--active' : '' }` }>
 			<div className="og-item__header" onClick={ handleItemClick }>
@@ -76,9 +78,14 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 				}
 				<div className="og-item__label">{ getFieldLabel( field ) }</div>
 				<div className="og-item__id">
-					<Tooltip text={ copied ? __( 'Copied!', 'meta-box-builder' ) : __( 'Click to copy', 'meta-box-builder' ) } delay={ 0 } placement="bottom" hideOnClick={ false }>
-						<span ref={ copyRef }>{ field.id }</span>
-					</Tooltip>
+					{
+						!noIdFieldTypes.includes( field.type ) &&
+						(
+							<Tooltip text={ copied ? __( 'Copied!', 'meta-box-builder' ) : __( 'Click to copy', 'meta-box-builder' ) } delay={ 0 } placement="bottom" hideOnClick={ false }>
+								<span ref={ copyRef }>{ field.id }</span>
+							</Tooltip>
+						)
+					}
 				</div>
 				<Actions field={ field } { ...fieldActions } />
 			</div>
