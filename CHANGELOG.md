@@ -1,3 +1,12 @@
+### 5.1.2 - 2025-11-05
+
+- Remove IDs for custom HTML, divider, heading fields in the structure panel, and for custom HTML field in the preview area
+- Fix parsing prefix for tabs
+- Fix required URL & email fields preventing saving
+- Fix cannot save field group again if saving it without title and ID
+- Local JSON: fix custom table name not containing prefix
+- Add width setting for admin columns
+
 ### 5.1.1 - 2025-10-06
 
 - Let users know when deleting a field, its data remains in the DB
