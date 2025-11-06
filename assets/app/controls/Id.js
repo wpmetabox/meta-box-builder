@@ -1,12 +1,15 @@
 import { RawHTML, useEffect, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from "@wordpress/i18n";
 import { useFetch } from "../hooks/useFetch";
+import useSettings from '../hooks/useSettings';
 import DivRow from './DivRow';
 
 // Pattern to match invalid characters (anything not a-z, A-Z, 0-9, dash, underscore)
 const invalidCharacters = /[^a-zA-Z0-9_-]/g;
 
 const Id = ( { field, componentId, updateField, ...rest } ) => {
+	const getPrefix = useSettings( state => state.getPrefix );
+	const prefix = getPrefix();
 	const { data: ids } = useFetch( { api: 'fields-ids', defaultValue: [] } );
 	const [ existingFieldGroup, setExistingFieldGroup ] = useState( {} );
 	const [ duplicate, setDuplicate ] = useState( false );
@@ -78,9 +81,10 @@ const Id = ( { field, componentId, updateField, ...rest } ) => {
 	};
 
 	const checkDuplicateId = value => {
+		const finalId = prefix + value;
 		// Has a duplicate and not the current field
-		if ( ids[ value ] !== undefined && ids[ value ]?._id !== field._id ) {
-			setExistingFieldGroup( ids[ value ] );
+		if ( ids[ finalId ] !== undefined && ids[ finalId ]?._id !== field._id ) {
+			setExistingFieldGroup( ids[ finalId ] );
 			setDuplicate( true );
 			return;
 		}
