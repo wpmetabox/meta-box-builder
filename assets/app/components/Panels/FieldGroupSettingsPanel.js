@@ -12,6 +12,7 @@ import CustomTable from './FieldGroupSettings/CustomTable';
 import IncludeExclude from './FieldGroupSettings/IncludeExclude';
 import Location from './FieldGroupSettings/Location';
 import Post from './FieldGroupSettings/Post';
+import SettingsPage from './FieldGroupSettings/SettingsPage';
 import ShowHide from './FieldGroupSettings/ShowHide';
 import Tabs from './FieldGroupSettings/Tabs';
 import Translation from './FieldGroupSettings/Translation';
@@ -161,6 +162,12 @@ const FieldGroupSettingsPanel = () => {
 					objectType === 'post' &&
 					<PersistentPanelBody panelId="field-group-settings" title={ __( 'Settings', 'meta-box-builder' ) }>
 						<Post />
+					</PersistentPanelBody>
+				}
+				{
+					objectType === 'setting' &&
+					<PersistentPanelBody panelId="field-group-settings" title={ __( 'Settings', 'meta-box-builder' ) }>
+						<SettingsPage />
 					</PersistentPanelBody>
 				}
 				{
