@@ -1,4 +1,6 @@
-import { __ } from "@wordpress/i18n";
+import { Notice } from "@wordpress/components";
+import { RawHTML } from "@wordpress/element";
+import { __, sprintf } from "@wordpress/i18n";
 import Checkbox from "../../../../../../assets/app/controls/Checkbox";
 import Input from "../../../../../../assets/app/controls/Input";
 import KeyValue from "../../../../../../assets/app/controls/KeyValue";
@@ -8,8 +10,15 @@ import useSettings from "../../../../../../assets/app/hooks/useSettings";
 const Field = ( { id } ) => {
 	const { getSetting, updateSetting } = useSettings();
 
+	const otherSideId = id === 'from' ? __( 'to', 'meta-box-builder' ) : __( 'from', 'meta-box-builder' );
+
 	return (
 		<>
+			<Notice status="warning" isDismissible={ false }>
+				<RawHTML>
+					{ sprintf( __( 'These settings apply to the field that is displayed on the other side ("%s") of the relationship - where you can select entries for this field.', 'meta-box-builder' ), `<strong>${ otherSideId }</strong>` ) }
+				</RawHTML>
+			</Notice>
 			<Input
 				name={ `${ id }.field.name` }
 				label={ __( 'Label', 'meta-box-builder' ) }
