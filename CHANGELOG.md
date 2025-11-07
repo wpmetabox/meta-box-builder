@@ -1,3 +1,10 @@
+### 5.1.3 - 2025-11-07
+
+- Add prefix to field IDs when checking for duplication
+- Add notice for relationship's field settings to let users know they are applied to the field on the other side of the relationship
+- Show field group settings when the location is set for a settings page
+- Fix return type `static` not supported in PHP < 8.0
+
 ### 5.1.2 - 2025-11-05
 
 - Remove IDs for custom HTML, divider, heading fields in the structure panel, and for custom HTML field in the preview area
