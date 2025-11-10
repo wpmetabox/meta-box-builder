@@ -101,6 +101,7 @@ export const getFieldIcon = type => {
 		url: link,
 		video: captureVideo,
 		wysiwyg: typography,
+		block_editor: typography,
 		group: group,
 		tab: archive,
 	};
