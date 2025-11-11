@@ -6,6 +6,7 @@ modules/relationships/assets/*.scss export-ignore
 
 src/Extensions/SettingsPage/app export-ignore
 
+bin export-ignore
 tests export-ignore
 phpunit.xml export-ignore
 
