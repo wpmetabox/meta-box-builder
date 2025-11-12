@@ -8,6 +8,8 @@ export default () => {
 	const { getSetting, updateSetting } = useSettings();
 	const settingsPages = ensureArray( getSetting( 'settings_pages', [] ) );
 	const selectedSettingsPage = MbbApp.settingsPages.find( p => settingsPages.includes( p.id ) );
+	const columns = selectedSettingsPage ? selectedSettingsPage.columns : 2;
+	const style = selectedSettingsPage ? selectedSettingsPage.style : 'boxes';
 
 	const contextOptions = {
 		normal: __( 'Main area', 'meta-box-builder' ),
@@ -16,7 +18,7 @@ export default () => {
 
 	return <>
 		{
-			selectedSettingsPage.columns > 1 &&
+			columns > 1 &&
 			<ToggleGroup
 				name="context"
 				label={ __( 'Position', 'meta-box-builder' ) }
@@ -33,7 +35,7 @@ export default () => {
 			updateField={ updateSetting }
 		/>
 		{
-			selectedSettingsPage.style === 'boxes' &&
+			style === 'boxes' &&
 			<ToggleGroup
 				name="style"
 				label={ __( 'Style', 'meta-box-builder' ) }
@@ -43,7 +45,7 @@ export default () => {
 			/>
 		}
 		{
-			selectedSettingsPage.style === 'boxes' &&
+			style === 'boxes' &&
 			<Toggle
 				name="closed"
 				label={ __( 'Collapsed by default', 'meta-box-builder' ) }
@@ -53,7 +55,7 @@ export default () => {
 			/>
 		}
 		{
-			selectedSettingsPage.style === 'boxes' &&
+			style === 'boxes' &&
 			<Toggle
 				name="default_hidden"
 				label={ __( 'Hidden by default', 'meta-box-builder' ) }
