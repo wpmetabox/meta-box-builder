@@ -1,3 +1,9 @@
+### 5.1.4 - 2025-11-13
+
+- Fix required text field preventing saving
+- Update pt_BR translation
+- Fix no selected settings page causes the field group editor error
+
 ### 5.1.3 - 2025-11-07
 
 - Add prefix to field IDs when checking for duplication
