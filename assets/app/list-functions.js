@@ -334,6 +334,11 @@ export const setFieldActive = fieldId => {
 	} );
 };
 
+export const isInGroup = fieldId => {
+	const list = findFieldList( fieldId );
+	return list && list.getState().id !== 'root';
+};
+
 const fieldIdsWithCustomColumns = [ ...lists.values() ]
 	.flatMap( store => store.getState().fields )
 	.filter( field => field.columns && field.columns != 12 )

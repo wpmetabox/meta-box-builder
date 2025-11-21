@@ -1,6 +1,7 @@
 import { createPortal } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import useFieldSettingsPanel from "../../../hooks/useFieldSettingsPanel";
+import { isInGroup } from "../../../list-functions";
 import PersistentPanelBody from '../PersistentPanelBody';
 import Tab from './Tab';
 
@@ -11,6 +12,11 @@ export default ( { controls, field, ...rest } ) => {
 	const headerSettings = [ 'required', 'clone_settings' ];
 	const headerControls = controls.filter( control => headerSettings.includes( control.setting ) );
 	controls = controls.filter( control => !headerSettings.includes( control.setting ) );
+
+	// Hide controls that are not allowed in a group.
+	if ( isInGroup( field._id ) ) {
+		controls = controls.filter( control => !control?.props?.hide_in_group );
+	}
 
 	let tabs = [
 		{
