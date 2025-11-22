@@ -1,10 +1,7 @@
-import { useEffect, useRef } from '@wordpress/element';
 import { sanitizeId } from '../functions';
 import DivRow from './DivRow';
 
 const Name = ( { componentId, field, updateField, ...rest } ) => {
-	const inputRef = useRef();
-
 	const handleChange = e => {
 		const value = e.target.value;
 		updateField( 'name', value );
@@ -21,10 +18,9 @@ const Name = ( { componentId, field, updateField, ...rest } ) => {
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
 			<input
-				ref={ inputRef }
 				type="text"
 				id={ componentId }
-				defaultValue={ field.name || '' }
+				value={ field.name || '' } // Use controlled input to sync with FieldLabel in the preview
 				onBlur={ stopGeneratingId }
 				onChange={ handleChange }
 			/>
