@@ -4,6 +4,10 @@
 	top: 12px;
 	display: flex;
 	gap: 8px;
+
+	// Add a white space to the left
+	padding-left: 8px;
+	background: #fff;
 }
 
 &-clone {
