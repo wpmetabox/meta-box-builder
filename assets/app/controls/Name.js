@@ -18,13 +18,6 @@ const Name = ( { componentId, field, updateField, ...rest } ) => {
 	// When done updating "name", don't auto generate ID.
 	const stopGeneratingId = () => updateField( '_id_changed', true );
 
-	// Use ref to manually update its value, avoid React touching the input value directly to avoid cursor jumping to the start.
-	useEffect( () => {
-		if ( inputRef.current && inputRef.current.value !== field.name ) {
-			inputRef.current.value = field.name || '';
-		}
-	}, [ field.name ] );
-
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
 			<input
