@@ -170,11 +170,9 @@ const createList = ( { id = '', fields = [] } ) => {
 			if ( newActiveFieldId ) {
 				// Set the new active field
 				setFieldActive( newActiveFieldId );
-				setNavPanel( 'field-settings' );
 			} else if ( isCurrentListGroup ) {
 				// No fields left in group, set the group as active
 				setFieldActive( currentState.id );
-				setNavPanel( 'field-settings' );
 			} else {
 				// Root list with no fields, set nav panel to field-group-settings
 				setNavPanel( 'field-group-settings' );
