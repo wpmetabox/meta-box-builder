@@ -39,7 +39,10 @@ const ConditionalLogic = ( {
 
 	const addRule = () => {
 		const newRule = { name: '', operator: '=', value: '', id: uniqid() };
-		updateField( `conditional_logic.when.${ newRule.id }`, newRule );
+		updateField( 'conditional_logic.when', {
+			...rules,
+			[ newRule.id ]: newRule
+		} );
 
 		// Make sure setting.type is always set.
 		if ( setting.type === undefined ) {

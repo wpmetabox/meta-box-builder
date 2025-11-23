@@ -22,7 +22,10 @@ const ShowHide = () => {
 
 	const addRule = () => {
 		const newRule = { name: 'template', value: '', id: uniqid() };
-		updateSetting( `show_hide.rules.${ newRule.id }`, newRule );
+		updateSetting( 'show_hide.rules', {
+			...rules,
+			[ newRule.id ]: newRule
+		} );
 
 		// Make sure setting.type is always set.
 		if ( setting.type === undefined ) {
