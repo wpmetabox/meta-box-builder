@@ -1,3 +1,14 @@
+### 5.1.5 - 2025-11-24
+
+- Change icon for required/cloneable badge to avoid UX confusion
+- Change tooltip for field label to top to always show the ID
+- Hide date's `save_format` & `timestamp` settings when in a group to avoid confustion as they're not effective when inside groups
+- Fix cannot add rules for Advanced location rules
+- Fix cursor jumping when editing tooltip content
+- Fix typing issue with Vietnamese in the field label in the field settings panel
+- Fix incorrect location when importing field groups for settings pages
+- Fix parsing JSON notation
+
 ### 5.1.4 - 2025-11-13
 
 - Fix required text field preventing saving
