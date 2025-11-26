@@ -57,7 +57,8 @@ const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, remove
 	};
 
 	return (
-		<>
+		// Prevent selecting the field when selecting an action.
+		<div onClick={ e => e.stopPropagation() }>
 			<DropdownMenu className="og-item__actions" icon={ moreVertical } label={ __( 'Select an action', 'meta-box-builder' ) }>
 				{
 					( { onClose } ) => (
@@ -109,7 +110,7 @@ const Actions = ( { field, addFieldBefore, addFieldAfter, duplicateField, remove
 					</Modal>
 				)
 			}
-		</>
+		</div>
 	);
 };
 

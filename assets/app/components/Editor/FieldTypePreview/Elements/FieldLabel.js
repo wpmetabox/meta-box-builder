@@ -40,7 +40,7 @@ const FieldLabel = ( { field, updateField } ) => {
 	}, [ field.name ] );
 
 	return (
-		<Tooltip text={ __( 'Click to edit', 'meta-box-builder' ) } delay={ 0 } placement="bottom">
+		<Tooltip text={ __( 'Click to edit', 'meta-box-builder' ) } delay={ 0 } placement="top">
 			<span
 				ref={ spanRef }
 				contentEditable

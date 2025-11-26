@@ -150,6 +150,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 		'switch',
 		'taxonomy',
 		'taxonomy_advanced',
+		'text',
 		'text_list',
 		'textarea',
 		'time',

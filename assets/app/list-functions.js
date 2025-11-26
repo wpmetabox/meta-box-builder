@@ -170,11 +170,9 @@ const createList = ( { id = '', fields = [] } ) => {
 			if ( newActiveFieldId ) {
 				// Set the new active field
 				setFieldActive( newActiveFieldId );
-				setNavPanel( 'field-settings' );
 			} else if ( isCurrentListGroup ) {
 				// No fields left in group, set the group as active
 				setFieldActive( currentState.id );
-				setNavPanel( 'field-settings' );
 			} else {
 				// Root list with no fields, set nav panel to field-group-settings
 				setNavPanel( 'field-group-settings' );
@@ -332,6 +330,11 @@ export const setFieldActive = fieldId => {
 			list.getState().updateField( field._id, '_active', false );
 		}
 	} );
+};
+
+export const isInGroup = fieldId => {
+	const list = findFieldList( fieldId );
+	return list && list.getState().id !== 'root';
 };
 
 const fieldIdsWithCustomColumns = [ ...lists.values() ]

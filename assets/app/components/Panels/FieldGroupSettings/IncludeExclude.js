@@ -14,7 +14,10 @@ const IncludeExclude = () => {
 
 	const addRule = () => {
 		const newRule = { name: 'ID', value: '', id: uniqid() };
-		updateSetting( `include_exclude.rules.${ newRule.id }`, newRule );
+		updateSetting( 'include_exclude.rules', {
+			...rules,
+			[ newRule.id ]: newRule
+		} );
 
 		// Make sure setting.type is always set.
 		if ( setting.type === undefined ) {

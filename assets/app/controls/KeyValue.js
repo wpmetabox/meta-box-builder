@@ -21,7 +21,6 @@ const KeyValue = ( {
 
 	const add = () => {
 		const newItem = { key: '', value: '', id: uniqid() };
-
 		updateField( name, {
 			...items,
 			[ newItem.id ]: newItem,
