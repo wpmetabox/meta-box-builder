@@ -4,6 +4,25 @@ import getList from '../../../list-functions';
 import AddFieldButton from '../AddFieldButton';
 import FieldPreview from '../FieldPreview';
 
+const CollapsibleElements = ( { field } ) => {
+	if ( !field.collapsible ) {
+		return;
+	}
+
+	const groupTitle = field.group_title || ( field.clone ? __( 'Entry {#}', 'meta-box-builder' ) : __( 'Entry', 'meta-box-builder' ) );
+
+	return (
+		<>
+			<div className="rwmb-group-title-wrapper">
+				<h4 className="rwmb-group-title">{ groupTitle }</h4>
+			</div>
+			<button className="rwmb-group-toggle-handle button-link">
+				<span className="rwmb-group-toggle-indicator" />
+			</button>
+		</>
+	);
+};
+
 const Group = ( { field, parent } ) => {
 	const { fields, ...fieldActions } = getList( field._id )();
 
@@ -52,25 +71,6 @@ const Group = ( { field, parent } ) => {
 				}
 			</ReactSortable>
 			<AddFieldButton text={ __( '+ Add Subfield', 'meta-box-builder' ) } variant='secondary' { ...fieldActions } />
-		</>
-	);
-};
-
-const CollapsibleElements = ( { field } ) => {
-	if ( !field.collapsible ) {
-		return;
-	}
-
-	const groupTitle = field.group_title || ( field.clone ? __( 'Entry {#}', 'meta-box-builder' ) : __( 'Entry', 'meta-box-builder' ) );
-
-	return (
-		<>
-			<div className="rwmb-group-title-wrapper">
-				<h4 className="rwmb-group-title">{ groupTitle }</h4>
-			</div>
-			<button className="rwmb-group-toggle-handle button-link">
-				<span className="rwmb-group-toggle-indicator" />
-			</button>
 		</>
 	);
 };

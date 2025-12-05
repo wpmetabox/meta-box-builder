@@ -1,6 +1,6 @@
 import { Button, Flex, SelectControl } from "@wordpress/components";
 import { useEffect, useState } from "@wordpress/element";
-import { __ } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 import { trimStart } from 'lodash';
 import { getFullOptions, maybeArrayToObject, uniqid } from '../functions';
 import useAllFields from "../hooks/useAllFields";

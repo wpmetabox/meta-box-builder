@@ -1,3 +1,7 @@
+### 5.1.6 - 2025-12-04
+
+Fix `sprintf` not imported, causing "Something is wrong" error
+
 ### 5.1.5 - 2025-11-24
 
 - Change icon for required/cloneable badge to avoid UX confusion
