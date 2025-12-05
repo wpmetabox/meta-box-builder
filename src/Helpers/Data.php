@@ -207,4 +207,31 @@ class Data {
 			],
 		];
 	}
+
+	public static function get_blocks(): array {
+		if ( ! class_exists( '\WP_Block_Type_Registry' ) ) {
+			return [];
+		}
+
+		$registry = \WP_Block_Type_Registry::get_instance();
+		$blocks   = $registry->get_all_registered();
+		$options  = [];
+
+		foreach ( $blocks as $name => $block ) {
+			$title     = isset( $block->title ) && $block->title ? $block->title : $name;
+			$options[] = [
+				'value' => $name,
+				'label' => sprintf( '%s (%s)', $title, $name ),
+			];
+		}
+
+		usort(
+			$options,
+			static function ( $a, $b ) {
+				return strcmp( strtolower( $a['label'] ), strtolower( $b['label'] ) );
+			}
+		);
+
+		return $options;
+	}
 }
