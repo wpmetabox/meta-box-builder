@@ -38,7 +38,13 @@ const CustomTable = () => {
 				defaultValue={ !!setting.create }
 				updateField={ updateSetting }
 			/>
-			<DivRow htmlFor="settings-table_name" dependency="table_enable:true" label={ __( 'Table name', 'meta-box-builder' ) }>
+			<DivRow
+				htmlFor="settings-table_name"
+				dependency="table_enable:true"
+				label={ __( 'Table name', 'meta-box-builder' ) }
+				tooltip={ __( 'The name of the table to save the data.', 'meta-box-builder' ) }
+				description={ __( 'Use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ) }
+			>
 				<div className="og-input-group">
 					<input
 						type="text"
