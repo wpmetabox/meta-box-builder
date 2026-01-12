@@ -632,7 +632,7 @@ class Fields extends Base {
 					$validation_tab,
 					$advanced_tab
 				),
-				'description' => __( 'Gutenberg block editor field', 'meta-box-builder' ),
+				'description' => __( 'Gutenberg block editor', 'meta-box-builder' ),
 			],
 		];
 

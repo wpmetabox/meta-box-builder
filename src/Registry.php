@@ -853,9 +853,9 @@ class Registry {
 					'default'          => [ 'true', 'false', 'tinymce', 'html' ],
 				],
 			], [], 'advanced' ),
-			'allowed_blocks_block_editor'  => Control::ReactSelect( 'allowed_blocks', [
-				'label'       => __( 'Allowed Blocks', 'meta-box-builder' ),
-				'description' => __( 'Choose the blocks that can be inserted. Leave empty to allow all blocks.', 'meta-box-builder' ),
+			'allowed_blocks'  => Control::ReactSelect( 'allowed_blocks', [
+				'label'       => __( 'Allowed blocks', 'meta-box-builder' ),
+				'description' => __( 'Choose blocks that can be inserted. Leave empty to allow all blocks.', 'meta-box-builder' ),
 				'options'     => Data::get_blocks(),
 			] ),
 		];

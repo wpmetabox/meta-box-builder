@@ -2,6 +2,7 @@
 namespace MBB\Helpers;
 
 use MetaBox\Support\Data as DataHelper;
+use WP_Block_Type_Registry;
 
 class Data {
 	public static function get_post_types() {
@@ -209,16 +210,12 @@ class Data {
 	}
 
 	public static function get_blocks(): array {
-		if ( ! class_exists( '\WP_Block_Type_Registry' ) ) {
-			return [];
-		}
-
-		$registry = \WP_Block_Type_Registry::get_instance();
+		$registry = WP_Block_Type_Registry::get_instance();
 		$blocks   = $registry->get_all_registered();
 		$options  = [];
 
 		foreach ( $blocks as $name => $block ) {
-			$title     = isset( $block->title ) && $block->title ? $block->title : $name;
+			$title     = empty( $block->title ) ? $name : $block->title;
 			$options[] = [
 				'value' => $name,
 				'label' => sprintf( '%s (%s)', $title, $name ),
