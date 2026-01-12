@@ -5,4 +5,3 @@ node_modules
 *.LICENSE.txt
 
 # assets/js/build
-*.app.js
