@@ -62,12 +62,21 @@ class Save extends Base {
 			$post_status = 'publish';
 		}
 
-		$result = wp_update_post( [
+		$update_args = [
 			'ID'          => $post_id,
 			'post_title'  => $post_title,
 			'post_name'   => $post_name,
 			'post_status' => $post_status,
-		] );
+		];
+
+		// Fix post date if it's in the future
+		$now = current_time( 'mysql' );
+		if ( $post->post_date > $now ) {
+			$update_args['post_date']     = $now;
+			$update_args['post_date_gmt'] = current_time( 'mysql', true );
+		}
+
+		$result = wp_update_post( $update_args );
 
 		if ( is_wp_error( $result ) ) {
 			return [
