@@ -622,6 +622,18 @@ class Fields extends Base {
 				),
 				'description' => __( 'WordPress editor', 'meta-box-builder' ),
 			],
+			'block_editor'      => [
+				'title'       => __( 'Block Editor', 'meta-box-builder' ),
+				'category'    => 'advanced',
+				'controls'    => array_merge(
+					[ 'required' ],
+					array_merge( $general_tab, [ 'allowed_blocks' ] ),
+					$appearance_tab,
+					$validation_tab,
+					$advanced_tab
+				),
+				'description' => __( 'Gutenberg block editor', 'meta-box-builder' ),
+			],
 		];
 
 		$field_types = apply_filters( 'mbb_field_types', $field_types );

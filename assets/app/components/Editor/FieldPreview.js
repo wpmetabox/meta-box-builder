@@ -158,6 +158,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 		'user',
 		'video',
 		'wysiwyg',
+		'block_editor',
 
 		// Premium field types.
 		'group',
