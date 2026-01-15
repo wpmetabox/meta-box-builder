@@ -1,3 +1,9 @@
+### 5.2.0 - 2026-01-15
+
+- Add new field type: block editor
+- Fix cannot publish a field group if its status is future
+- Clarify table name restriction
+
 ### 5.1.6 - 2025-12-04
 
 Fix `sprintf` not imported, causing "Something is wrong" error
