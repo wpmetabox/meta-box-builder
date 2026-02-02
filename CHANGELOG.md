@@ -1,3 +1,7 @@
+### 5.2.1 - 2026-02-02
+
+- Add height settings for the block field
+
 ### 5.2.0 - 2026-01-15
 
 - Add new field type: block editor
