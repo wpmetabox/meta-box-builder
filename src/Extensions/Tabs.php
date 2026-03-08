@@ -13,6 +13,7 @@ class Tabs {
 		}
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_font_awesome' ] );
 		add_filter( 'mbb_meta_box_settings', [ $this, 'parse_meta_box_settings' ] );
+		add_filter( 'mbb_app_data', [ $this, 'normalize_tab_icons' ] );
 	}
 
 	public function add_field_type( $field_types ) {
@@ -68,6 +69,27 @@ class Tabs {
 		$this->parse_tabs( $settings );
 		$this->set_fields_tab( $settings );
 		return $settings;
+	}
+
+	public function normalize_tab_icons( array $data ): array {
+		if ( empty( $data['fields'] ) || ! is_array( $data['fields'] ) ) {
+			return $data;
+		}
+
+		foreach ( $data['fields'] as &$field ) {
+			if ( 'tab' !== ( $field['type'] ?? '' ) ) {
+				continue;
+			}
+
+			$icon_type = $field['icon_type'] ?? 'dashicons';
+
+			// Strip "dashicons-" prefix from icon value for the dashicon picker.
+			if ( $icon_type === 'dashicons' && ! empty( $field['icon'] ) && str_starts_with( $field['icon'], 'dashicons-' ) ) {
+				$field['icon'] = substr( $field['icon'], strlen( 'dashicons-' ) );
+			}
+		}
+
+		return $data;
 	}
 
 	private function parse_tabs( &$settings ): void {
