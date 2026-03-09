@@ -101,19 +101,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/mbb-parser.git",
-                "reference": "7d9d3ced2045693c8a60439c6260b98820494545"
+                "reference": "6e9de15cbeae655a0e2a935fd07432daf9296150"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/7d9d3ced2045693c8a60439c6260b98820494545",
-                "reference": "7d9d3ced2045693c8a60439c6260b98820494545",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/6e9de15cbeae655a0e2a935fd07432daf9296150",
+                "reference": "6e9de15cbeae655a0e2a935fd07432daf9296150",
                 "shasum": ""
             },
             "require": {
                 "riimu/kit-phpencoder": "^2.4",
                 "wpmetabox/support": "dev-master"
             },
-            "time": "2025-11-23T09:37:49+00:00",
+            "time": "2026-03-09T09:41:05+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
