@@ -1,3 +1,7 @@
+### 5.2.2 - 2026-03-09
+
+- Fix file permissions
+
 ### 5.2.1 - 2026-02-02
 
 - Add height settings for the block field
