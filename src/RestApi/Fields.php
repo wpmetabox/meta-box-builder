@@ -174,7 +174,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'std', 'format', 'timestamp', 'save_format', 'input_attributes' ] ),
+					array_merge( $general_tab, [ 'std', 'datetime_format', 'timestamp', 'save_format', 'input_attributes' ] ),
 					[ 'inline', 'label_description', 'desc', 'placeholder', 'size', 'prepend_append' ],
 					$validation_tab,
 					array_merge( [ 'js_options' ], $advanced_tab )

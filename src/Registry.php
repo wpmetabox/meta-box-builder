@@ -146,6 +146,20 @@ class Registry {
 					'MM dd, yy' => 'March 28, 2024 (MM dd, yy)',
 				],
 			] ),
+			Control::SelectWithInput( 'datetime_format', [
+				'label' => __( 'Display format', 'meta-box-builder' ),
+				// Translators: %1$s - URL to jQueryUI date picker page, %2$s - URL to jQueryUI time picker page.
+				'description' => sprintf( __( '<a href="%s" target="_blank">jQueryUI date format</a> and <a href="%s" target="_blank">time format</a> (not PHP) to show in the input. You can input your own format, but please use only 1 space for separator.', 'meta-box-builder' ), 'https://api.jqueryui.com/datepicker/#utility-formatDate', 'https://trentrichardson.com/examples/timepicker/#tp-formatting' ),
+				'options'     => [
+					'dd-mm-yy'           => '28-03-2024 (dd-mm-yy)',
+					'yy-mm-dd H:m'       => '2024-03-28 14:5 (yy-mm-dd H:m)',
+					'dd-mm-yy HH:mm'     => '28-03-2024 14:05 (dd-mm-yy HH:mm)',
+					'mm/dd/yy h:m t'     => '03/28/2024 2:5 p (mm/dd/yy h:m t)',
+					'dd-MM-yy hh:mm t z' => '28-March-2024 02:05 p +0700 (dd-MM-yy hh:mm t z)',
+					'M,dd,yy H:m tt'     => 'Mar,28,2024 14:5 pm (M,dd,yy H:m tt)',
+					'MM,dd,yy HH:mm TT'  => 'March,28,2024 14:05 PM (MM,dd,yy HH:mm TT)',
+				],
+			] ),
 			'save_format_date' => Control::SelectWithInput( 'save_format', [
 				'label'         => __( 'Save format', 'meta-box-builder' ),
 				// Translators: %s - URL to PHP's date() function page.
