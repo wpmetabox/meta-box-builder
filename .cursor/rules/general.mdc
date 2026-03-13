@@ -4,15 +4,7 @@ globs:
 alwaysApply: true
 ---
 
-- **Readability first**:
-  Write small, single-purpose functions and components. Prefer declarative code.
-  Add comments for *why* (not *what*).
-
-- **Use descriptive names**:
-  Names should communicate purpose and be consistent across languages.
-  Use meaningful names that describe intent (e.g. `useFetchPosts`, `ConfirmDeleteButton`, `sanitize_user_input`).
-  Avoid abbreviations unless widely recognized.
-
-- **Keep changes small and incremental**:
-  Prefer minimal, focused commits and safe refactors.
-  Always add/update tests when making changes.
+- **Readability first**: Write small, single-purpose functions; prefer declarative code
+- **Comments**: Add comments for *why* (not *what*)
+- **Naming**: Use descriptive names; avoid abbreviations unless widely recognized
+- **Incremental changes**: Keep commits minimal and focused; always add/update tests

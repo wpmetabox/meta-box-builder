@@ -4,7 +4,7 @@
     "css": "sass --no-source-map --style=compressed assets/sass/style.scss assets/css/style.css",
     "css:watch": "sass --no-source-map --style=compressed -w assets/sass/style.scss assets/css/style.css",
     "js": "wp-scripts build",
-    "build": "npm run css && npm run js",
+    "build": "pnpm run css && pnpm run js",
     "start": "wp-scripts start"
   },
   "devDependencies": {
