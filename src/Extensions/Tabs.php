@@ -65,9 +65,13 @@ class Tabs {
 	}
 
 	public function parse_meta_box_settings( array $settings ): array {
-		$has_first_field = ! empty( $settings['fields'] ) && is_array( $settings['fields'] );
-		$first_field_type = $has_first_field ? Arr::get( $settings['fields'][0], 'type' ) : '';
+		if ( empty( $settings['fields'] ) || ! is_array( $settings['fields'] ) ) {
+			return $settings;
+		}
 
+		$first_field_type = Arr::get( $settings, 'fields.0.type' );
+
+		// First field must be a tab!
 		if ( 'tab' !== $first_field_type ) {
 			$this->remove_tabs( $settings );
 			return $settings;
@@ -79,14 +83,12 @@ class Tabs {
 	}
 
 	private function remove_tabs( array &$settings ): void {
-		unset( $settings['tabs'] );
-		unset( $settings['tab_style'] );
-		unset( $settings['tab_default_active'] );
-		unset( $settings['tab_remember'] );
-
-		if ( empty( $settings['fields'] ) || ! is_array( $settings['fields'] ) ) {
-			return;
-		}
+		unset( 
+			$settings['tabs'],
+			$settings['tab_style'],
+			$settings['tab_default_active'],
+			$settings['tab_remember']
+		);
 
 		// Remove 'tab' property from all fields.
 		foreach ( $settings['fields'] as &$field ) {
@@ -134,26 +136,18 @@ class Tabs {
 			}
 		}
 
+		$settings['tabs'] = $tabs;
+
 		if ( 'default' === Arr::get( $settings, 'tab_style' ) ) {
 			unset( $settings['tab_style'] );
 		}
 
-		if ( empty( $tabs ) ) {
-			$this->remove_tabs( $settings );
-		} else {
-			$settings['tabs'] = $tabs;
-
-			// Move 'fields' to bottom.
-			unset( $settings['fields'] );
-			$settings['fields'] = $fields;
-		}
+		// Move 'fields' to bottom.
+		unset( $settings['fields'] );
+		$settings['fields'] = $fields;
 	}
 
 	private function set_fields_tab( array &$settings ): void {
-		if ( empty( $settings['fields'] ) || ! is_array( $settings['fields'] ) ) {
-			return;
-		}
-
 		$prefix = $settings['prefix'] ?? '';
 		$fields = &$settings['fields'];
 
