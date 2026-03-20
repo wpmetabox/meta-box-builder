@@ -105,11 +105,13 @@ class AllowedBlockListsController {
 		$id = $request->get_param( 'id' );
 
 		$query = new \WP_Query( [
-			'post_type'      => 'meta-box',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
+			'post_type'              => 'meta-box',
+			'post_status'            => 'publish',
+			'posts_per_page'         => -1,
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-			'meta_key'       => 'fields',
+			'meta_key'               => 'fields',
+			'no_found_rows'          => true,
+			'update_post_term_cache' => false,
 		] );
 
 		foreach ( $query->posts as $post ) {
@@ -149,12 +151,19 @@ class AllowedBlockListsController {
 		$lists = AllowedBlockLists::get_lists();
 
 		foreach ( $data as $id => $item ) {
-			if ( isset( $item['name'], $item['blocks'] ) ) {
-				$lists[ $id ] = [
-					'name'   => sanitize_text_field( $item['name'] ),
-					'blocks' => AllowedBlockLists::filter_valid_blocks( $item['blocks'] ),
-				];
+			if ( empty( $item['name'] ) || empty( $item['blocks'] ) ) {
+				continue;
 			}
+
+			$id = sanitize_key( (string) $id );
+			if ( empty( $id ) ) {
+				$id = AllowedBlockLists::generate_id( $item['name'] );
+			}
+
+			$lists[ $id ] = [
+				'name'   => sanitize_text_field( $item['name'] ),
+				'blocks' => AllowedBlockLists::filter_valid_blocks( $item['blocks'] ),
+			];
 		}
 
 		AllowedBlockLists::update_lists( $lists );
