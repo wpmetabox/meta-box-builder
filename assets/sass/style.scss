@@ -26,6 +26,8 @@
 @use "panels/field-group-settings";
 @use "panels/upgrade-panel";
 
+@use "modals";
+
 .og {
 	@import "elements";
 	@import "fields";

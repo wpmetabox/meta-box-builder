@@ -100,12 +100,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/mbb-parser.git",
-                "reference": "6e9de15cbeae655a0e2a935fd07432daf9296150"
+                "reference": "0d6ca37659aee22372fed252d9f0afd426d5b8dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/6e9de15cbeae655a0e2a935fd07432daf9296150",
-                "reference": "6e9de15cbeae655a0e2a935fd07432daf9296150",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/0d6ca37659aee22372fed252d9f0afd426d5b8dc",
+                "reference": "0d6ca37659aee22372fed252d9f0afd426d5b8dc",
                 "shasum": ""
             },
             "require": {
@@ -128,7 +128,7 @@
                 "issues": "https://github.com/wpmetabox/mbb-parser/issues",
                 "source": "https://github.com/wpmetabox/mbb-parser/tree/master"
             },
-            "time": "2026-03-09T09:41:05+00:00"
+            "time": "2026-03-20T15:02:45+00:00"
         },
         {
             "name": "wpmetabox/support",
