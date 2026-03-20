@@ -8,7 +8,7 @@ class AllowedBlockLists {
 	public const INITIALIZED_OPTION = 'mbb_allowed_block_lists_initialized';
 
 	public static function get_lists(): array {
-		return get_option( self::OPTION_NAME, [] );
+		return (array) get_option( self::OPTION_NAME, [] );
 	}
 
 	public static function update_lists( array $lists ): bool {
@@ -83,7 +83,7 @@ class AllowedBlockLists {
 		update_option( self::INITIALIZED_OPTION, true );
 	}
 
-	private static function filter_valid_blocks( array $blocks ): array {
+	public static function filter_valid_blocks( array $blocks ): array {
 		$registry = WP_Block_Type_Registry::get_instance();
 
 		return array_filter( $blocks, static function ( $block ) use ( $registry ) {

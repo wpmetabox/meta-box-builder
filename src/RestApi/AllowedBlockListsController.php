@@ -70,9 +70,9 @@ class AllowedBlockListsController {
 
 		return array_map(
 			static fn( $block ) => [
-				'name'   => $block->name,
-				'title'  => $block->title,
-				'icon'   => $block->icon,
+				'name'  => $block->name,
+				'title' => $block->title,
+				'icon'  => $block->icon,
 			],
 			$blocks
 		);
@@ -84,8 +84,8 @@ class AllowedBlockListsController {
 	}
 
 	public function update_item( WP_REST_Request $request ) {
-		$id     = $request->get_param( 'id' );
-		$name   = $request->get_param( 'name' );
+		$id     = sanitize_key( $request->get_param( 'id' ) );
+		$name   = sanitize_text_field( $request->get_param( 'name' ) );
 		$blocks = $request->get_param( 'blocks' ) ?: [];
 
 		if ( empty( $name ) ) {
@@ -151,8 +151,8 @@ class AllowedBlockListsController {
 		foreach ( $data as $id => $item ) {
 			if ( isset( $item['name'], $item['blocks'] ) ) {
 				$lists[ $id ] = [
-					'name'   => $item['name'],
-					'blocks' => $item['blocks'],
+					'name'   => sanitize_text_field( $item['name'] ),
+					'blocks' => AllowedBlockLists::filter_valid_blocks( $item['blocks'] ),
 				];
 			}
 		}

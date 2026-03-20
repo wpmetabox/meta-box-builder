@@ -1,20 +1,25 @@
-import { __ } from '@wordpress/i18n';
-import { Modal, Button, Flex } from '@wordpress/components';
-import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
+import { Button, Flex, Modal } from '@wordpress/components';
+import { useEffect, useState } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 const ManageBlockLists = ( { isOpen, onClose, onEdit, onAddNew } ) => {
 	const [ lists, setLists ] = useState( {} );
 	const [ loading, setLoading ] = useState( true );
 	const [ deleting, setDeleting ] = useState( null );
+	const [ error, setError ] = useState( '' );
 
 	const fetchLists = () => {
+		setError( '' );
 		apiFetch( { path: '/mbb/allowed-block-lists' } )
 			.then( data => {
 				setLists( data );
 				setLoading( false );
 			} )
-			.catch( () => setLoading( false ) );
+			.catch( () => {
+				setError( __( 'Failed to load block lists.', 'meta-box-builder' ) );
+				setLoading( false );
+			} );
 	};
 
 	useEffect( () => {
@@ -29,6 +34,7 @@ const ManageBlockLists = ( { isOpen, onClose, onEdit, onAddNew } ) => {
 		}
 
 		setDeleting( id );
+		setError( '' );
 		try {
 			await apiFetch( {
 				path: `/mbb/allowed-block-lists/${ id }`,
@@ -36,8 +42,7 @@ const ManageBlockLists = ( { isOpen, onClose, onEdit, onAddNew } ) => {
 			} );
 			fetchLists();
 		} catch ( e ) {
-			// eslint-disable-next-line no-console
-			console.error( e );
+			setError( e.message || __( 'Failed to delete the list.', 'meta-box-builder' ) );
 		}
 		setDeleting( null );
 	};
@@ -79,8 +84,7 @@ const ManageBlockLists = ( { isOpen, onClose, onEdit, onAddNew } ) => {
 					} );
 					fetchLists();
 				} catch ( err ) {
-					// eslint-disable-next-line no-console
-					console.error( err );
+					setError( err.message || __( 'Failed to import lists.', 'meta-box-builder' ) );
 				}
 			};
 			reader.readAsText( file );
@@ -99,6 +103,8 @@ const ManageBlockLists = ( { isOpen, onClose, onEdit, onAddNew } ) => {
 			className="mbb-modal"
 			size="large"
 		>
+			{ error && <div className="mbb-modal__error">{ error }</div> }
+
 			<Flex className="mbb-modal__header" justify="space-between" align="center">
 				<Button variant="primary" onClick={ onAddNew }>
 					{ __( 'Add New', 'meta-box-builder' ) }

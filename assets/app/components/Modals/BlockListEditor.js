@@ -28,6 +28,7 @@ const BlockListEditor = ( { isOpen, onClose, listId, onSaved } ) => {
 	const [ allBlocks, setAllBlocks ] = useState( {} );
 	const [ selectedBlocks, setSelectedBlocks ] = useState( [] );
 	const [ saving, setSaving ] = useState( false );
+	const [ error, setError ] = useState( '' );
 	const [ availableSearch, setAvailableSearch ] = useState( '' );
 	const [ selectedSearch, setSelectedSearch ] = useState( '' );
 
@@ -67,6 +68,7 @@ const BlockListEditor = ( { isOpen, onClose, listId, onSaved } ) => {
 
 		setAvailableSearch( '' );
 		setSelectedSearch( '' );
+		setError( '' );
 	}, [ isOpen, listId ] );
 
 	const moveToSelected = block => setSelectedBlocks( prev => [ ...prev, block ] );
@@ -74,6 +76,7 @@ const BlockListEditor = ( { isOpen, onClose, listId, onSaved } ) => {
 
 	const handleSave = async ( asNew = false, newName = null ) => {
 		setSaving( true );
+		setError( '' );
 		try {
 			await apiFetch( {
 				path: '/mbb/allowed-block-lists',
@@ -87,8 +90,7 @@ const BlockListEditor = ( { isOpen, onClose, listId, onSaved } ) => {
 			onSaved();
 			onClose();
 		} catch ( e ) {
-			// eslint-disable-next-line no-console
-			console.error( e );
+			setError( e.message || __( 'An error occurred while saving.', 'meta-box-builder' ) );
 		}
 		setSaving( false );
 	};
@@ -154,6 +156,8 @@ const BlockListEditor = ( { isOpen, onClose, listId, onSaved } ) => {
 					</div>
 				</div>
 			</div>
+
+			{ error && <div className="mbb-modal__error">{ error }</div> }
 
 			<Flex gap={ 2 } align="center" justify="flex-end" className="mbb-modal__footer">
 				{
