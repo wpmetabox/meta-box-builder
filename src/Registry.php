@@ -759,7 +759,7 @@ class Registry {
 				'label2' => __( 'Columns', 'meta-box-builder' ),
 				'key1'   => 'rows',
 				'key2'   => 'cols',
-			], [ 'rowls' => '', 'cols' => '' ], 'appearance' ),
+			], [ 'rows' => '', 'cols' => '' ], 'appearance' ),
 
 			// Time.
 			'inline_time'                  => Control::Toggle( 'inline', __( 'Display the time picker inline with the input', 'meta-box-builder' ), false, 'appearance' ),
@@ -778,7 +778,7 @@ class Registry {
 			'query_args_user'              => Control::KeyValue( 'query_args', [
 				'label'       => __( 'Query args', 'meta-box-builder' ),
 				// Translators: %s - URL to the get_users() page.
-				'description' => sprintf( __( 'Query arguments for getting user. Same as in the <a href="%s target="_blank">get_user()</a> function.', 'meta-box-builder' ), 'https://developer.wordpress.org/reference/classes/wp_user_query/prepare_query/' ),
+				'description' => sprintf( __( 'Query arguments for getting user. Same as in the <a href="%s" target="_blank">get_users()</a> function.', 'meta-box-builder' ), 'https://developer.wordpress.org/reference/classes/wp_user_query/prepare_query/' ),
 				'keys'        => [
 					'blog_id',
 					'role',

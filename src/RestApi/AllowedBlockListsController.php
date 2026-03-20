@@ -102,7 +102,7 @@ class AllowedBlockListsController {
 	}
 
 	public function delete_item( WP_REST_Request $request ): array {
-		$id = $request->get_param( 'id' );
+		$id = sanitize_key( $request->get_param( 'id' ) );
 
 		$query = new \WP_Query( [
 			'post_type'              => 'meta-box',
