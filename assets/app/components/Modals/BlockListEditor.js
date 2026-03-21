@@ -23,6 +23,8 @@ const BlockIcon = ( { block } ) => {
 	);
 };
 
+const sortBlocks = ( a, b ) => a.title.localeCompare( b.title );
+
 const BlockListEditor = ( { isOpen, onClose, listId, onSaved } ) => {
 	const [ name, setName ] = useState( '' );
 	const [ allBlocks, setAllBlocks ] = useState( {} );
@@ -35,8 +37,8 @@ const BlockListEditor = ( { isOpen, onClose, listId, onSaved } ) => {
 	const selectedValues = new Set( selectedBlocks.map( block => block.name ) );
 	const available = Object.values( allBlocks ).filter( block => ! selectedValues.has( block.name ) );
 
-	const filteredAvailable = available.filter( block => block.title.toLowerCase().includes( availableSearch.toLowerCase() ) );
-	const filteredSelected = selectedBlocks.filter( block => block.title.toLowerCase().includes( selectedSearch.toLowerCase() ) );
+	const filteredAvailable = available.filter( block => block.title.toLowerCase().includes( availableSearch.toLowerCase() ) ).sort( sortBlocks );
+	const filteredSelected = selectedBlocks.filter( block => block.title.toLowerCase().includes( selectedSearch.toLowerCase() ) ).sort( sortBlocks );
 
 	useEffect( () => {
 		if ( ! isOpen ) {
