@@ -3,6 +3,7 @@ import { __ } from "@wordpress/i18n";
 import Color from '../../../controls/Color';
 import DashiconPicker from '../../../controls/DashiconPicker';
 import Input from '../../../controls/Input';
+import Radio from '../../../controls/Radio';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
 import Textarea from '../../../controls/Textarea';
@@ -109,6 +110,17 @@ const Block = () => {
 			label={ __( 'Additional CSS class(es)', 'meta-box-builder' ) }
 			checked={ !!getSetting( 'supports.customClassName' ) }
 			onChange={ value => updateSetting( 'supports.customClassName', value ) }
+		/>
+
+		<Radio
+			name="block_context"
+			label={ __( 'Where to display the edit form?', 'meta-box-builder' ) }
+			options={ {
+				side: __( 'On the right sidebar', 'meta-box-builder' ),
+				normal: __( 'In the content area', 'meta-box-builder' ),
+			} }
+			defaultValue={ getSetting( 'block_context', 'side' ) }
+			updateField={ updateSetting }
 		/>
 	</>;
 };
