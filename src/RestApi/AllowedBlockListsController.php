@@ -65,8 +65,11 @@ class AllowedBlockListsController {
 	public function get_blocks(): array {
 		$blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
 
-		// Do not get child blocks like accordion-heading
-		$blocks = array_filter( $blocks, fn( $block ) => empty( $block->parent ) );
+		// Do not get child blocks like accordion-heading or blocks without a title
+		$blocks = array_filter( $blocks, fn( $block ) => empty( $block->parent ) && ! empty( $block->title ) );
+
+		// Exclude blocks that have support['inserter'] explicitly set to false
+		$blocks = array_filter( $blocks, fn( $block ) => ! isset( $block->supports['inserter'] ) || $block->supports['inserter'] === true );
 
 		return array_map(
 			static fn( $block ) => [
