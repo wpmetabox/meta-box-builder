@@ -100,17 +100,26 @@ const Block = () => {
 			updateField={ updateSetting }
 		/>
 
-		<ToggleControl
-			label={ __( 'HTML anchor', 'meta-box-builder' ) }
-			checked={ !!getSetting( 'supports.anchor' ) }
-			onChange={ value => updateSetting( 'supports.anchor', value ) }
-		/>
+		<div className="og-field">
+			<div className="og-label">
+				{ __( 'Supports', 'meta-box-builder' ) }
+			</div>
+			<div className="og-input">
+				<ToggleControl
+					label={ __( 'HTML anchor', 'meta-box-builder' ) }
+					checked={ !!getSetting( 'supports.anchor' ) }
+					onChange={ value => updateSetting( 'supports.anchor', value ) }
+				/>
+			</div>
+		</div>
 
-		<ToggleControl
-			label={ __( 'Additional CSS class(es)', 'meta-box-builder' ) }
-			checked={ !!getSetting( 'supports.customClassName' ) }
-			onChange={ value => updateSetting( 'supports.customClassName', value ) }
-		/>
+		<div className="og-field">
+			<ToggleControl
+				label={ __( 'Additional CSS class(es)', 'meta-box-builder' ) }
+				checked={ !!getSetting( 'supports.customClassName' ) }
+				onChange={ value => updateSetting( 'supports.customClassName', value ) }
+			/>
+		</div>
 
 		<Radio
 			name="block_context"
