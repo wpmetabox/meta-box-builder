@@ -54,3 +54,14 @@ form.addEventListener( 'keydown', preventSubmitWhenPressEnter );
 form.addEventListener( 'keyup', preventSubmitWhenPressEnter );
 
 initSaveForm();
+
+// Save field group with Ctrl+S (or Cmd+S on Mac).
+document.addEventListener( 'keydown', e => {
+	if ( ( e.ctrlKey || e.metaKey ) && e.key === 's' ) {
+		e.preventDefault();
+		const submitButton = document.querySelector( '#post [type="submit"]' );
+		if ( submitButton && ! submitButton.disabled ) {
+			submitButton.click();
+		}
+	}
+} );
