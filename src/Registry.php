@@ -86,6 +86,13 @@ class Registry {
 				'label'       => __( 'Editor height', 'meta-box-builder' ),
 				'description' => __( 'Enter a value with a CSS unit (e.g. 300px, 60rem). If no unit is provided, px is used by default.', 'meta-box-builder' ),
 			], '', 'appearance' ),
+			Control::ToggleGroup( 'toolbar_position', [
+				'label'   => __( 'Toolbar position', 'meta-box-builder' ),
+				'options' => [
+					'top'        => __( 'Top', 'meta-box-builder' ),
+					'contextual' => __( 'Contextual', 'meta-box-builder' ),
+				],
+			], 'top', 'appearance' ),
 
 			// Validation.
 			Control::Validation( 'validation', [], [], 'validation' ),

@@ -3,6 +3,7 @@ import { __ } from "@wordpress/i18n";
 import Color from '../../../controls/Color';
 import DashiconPicker from '../../../controls/DashiconPicker';
 import Input from '../../../controls/Input';
+import Radio from '../../../controls/Radio';
 import ReactSelect from '../../../controls/ReactSelect';
 import Select from '../../../controls/Select';
 import Textarea from '../../../controls/Textarea';
@@ -99,16 +100,36 @@ const Block = () => {
 			updateField={ updateSetting }
 		/>
 
-		<ToggleControl
-			label={ __( 'HTML anchor', 'meta-box-builder' ) }
-			checked={ !!getSetting( 'supports.anchor' ) }
-			onChange={ value => updateSetting( 'supports.anchor', value ) }
-		/>
+		<div className="og-field">
+			<div className="og-label">
+				{ __( 'Supports', 'meta-box-builder' ) }
+			</div>
+			<div className="og-input">
+				<ToggleControl
+					label={ __( 'HTML anchor', 'meta-box-builder' ) }
+					checked={ !!getSetting( 'supports.anchor' ) }
+					onChange={ value => updateSetting( 'supports.anchor', value ) }
+				/>
+			</div>
+		</div>
 
-		<ToggleControl
-			label={ __( 'Additional CSS class(es)', 'meta-box-builder' ) }
-			checked={ !!getSetting( 'supports.customClassName' ) }
-			onChange={ value => updateSetting( 'supports.customClassName', value ) }
+		<div className="og-field">
+			<ToggleControl
+				label={ __( 'Additional CSS class(es)', 'meta-box-builder' ) }
+				checked={ !!getSetting( 'supports.customClassName' ) }
+				onChange={ value => updateSetting( 'supports.customClassName', value ) }
+			/>
+		</div>
+
+		<Radio
+			name="block_context"
+			label={ __( 'Where to display the edit form?', 'meta-box-builder' ) }
+			options={ {
+				side: __( 'On the right sidebar', 'meta-box-builder' ),
+				normal: __( 'In the content area', 'meta-box-builder' ),
+			} }
+			defaultValue={ getSetting( 'block_context', 'side' ) }
+			updateField={ updateSetting }
 		/>
 	</>;
 };
