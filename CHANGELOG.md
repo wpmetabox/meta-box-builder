@@ -1,3 +1,12 @@
+### 5.2.3 - 2026-03-24
+
+- Add keyboard shortcut `Ctrl+S` (or `Cmd+S` on Mac) to save field groups/relationships/settings pages
+- Add 'Where to display the edit form?' setting for block location
+- Block editor field: allow users to create/edit/select allowed block lists
+- Block editor field: add `toolbar_position` option
+- Fix not showing tab icons after importing field groups
+- Fix: removed tab fields but code generation still has code for tabs
+
 ### 5.2.2 - 2026-03-09
 
 - Fix file permissions
