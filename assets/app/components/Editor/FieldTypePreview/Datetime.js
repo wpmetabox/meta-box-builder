@@ -1,6 +1,22 @@
 import { useEffect, useRef } from "@wordpress/element";
-import { __ } from "@wordpress/i18n";
+import { __, sprintf } from "@wordpress/i18n";
 import { doNothing } from "../../../functions";
+
+const normalizeJsOptions = ( options ) => {
+	if ( ! options || typeof options !== 'object' ) {
+		return {};
+	}
+
+	const result = {};
+
+	Object.values( options ).forEach( ( item ) => {
+		if ( item && item.key ) {
+			result[ item.key ] = item.value;
+		}
+	} );
+
+	return result;
+};
 
 const Datetime = ( { field } ) => {
 	const inputRef = useRef();
@@ -13,6 +29,12 @@ const Datetime = ( { field } ) => {
 
 		const $ = jQuery;
 		const $inline = $( inlineRef.current );
+
+		// Reset UI
+		if ( $inline.hasClass('hasDatepicker') ) {
+			$inline.datepicker('destroy');
+		}
+
 		$inline.datetimepicker( {
 			showButtonPanel: true,
 			changeYear: true,
@@ -22,14 +44,41 @@ const Datetime = ( { field } ) => {
 			altFieldTimeOnly: false,
 		} );
 
-		const format = field.format || '';
+		// Parse datetime with format "date time"
+		const jsOptions = normalizeJsOptions( field.js_options );
+
+		const separator = jsOptions.separator || ' ';
+		const datetimeFormat = field.datetime_format || '';
+		const pos = datetimeFormat.indexOf( separator );
+
+		const fallbackDateFormat = pos !== -1 ? datetimeFormat.substring( 0, pos ) : datetimeFormat;
+		const fallbackTimeFormat = pos !== -1 ? datetimeFormat.substring( pos + separator.length ) : '';
+
+		const dateFormat = jsOptions.dateFormat || fallbackDateFormat;
+		const timeFormat = jsOptions.timeFormat || fallbackTimeFormat;
+
 		const std = field.std || '';
-		const [ stdDate, stdTime ] = std.split( ' ' );
+		const [ stdDate ] = std.split( separator );
 
 		try {
-			$.datepicker.parseDate( format, stdDate );
-			$inline.datetimepicker( 'option', 'dateFormat', format );
-			$inline.datetimepicker( 'setDate', field.std );
+			// Validate date
+			if ( dateFormat && stdDate ) {
+				$.datepicker.parseDate( dateFormat, stdDate );
+			}
+
+			if ( dateFormat ) {
+				$inline.datetimepicker( 'option', 'dateFormat', dateFormat );
+			}
+
+			if ( timeFormat ) {
+				$inline.datetimepicker( 'option', 'timeFormat', timeFormat );
+			}
+
+			// Set value
+			if ( std ) {
+				$inline.datetimepicker( 'setDate', std );
+			}
+
 		} catch ( error ) {
 			console.debug( sprintf( __( 'Field %s: invalid format for the datetime picker default value', 'meta-box-builder' ), field.name ) );
 		}
