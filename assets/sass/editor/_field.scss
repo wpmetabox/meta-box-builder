@@ -12,9 +12,9 @@
 	position: relative;
 	cursor: grab;
 
-	&--hover {
+	&:hover:not(:has(.mb-field:hover)) {
 		outline: 1px solid var(--outline);
-		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
+		z-index: 2;
 	}
 
 	// The cursor is still affected by SortableJS, so we need to force it to col-resize again
@@ -25,8 +25,8 @@
 
 	&--active {
 		--outline: var(--color-primary);
-		outline: 1px solid var(--color-primary); // Override the outline when hovering above
-		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
+		outline: 1px solid var(--color-primary);
+		z-index: 2;
 	}
 
 	&__label {

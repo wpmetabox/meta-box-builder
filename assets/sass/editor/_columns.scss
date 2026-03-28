@@ -54,6 +54,12 @@
 	border: 1px solid var(--outline);
 	background: #fff;
 	box-sizing: border-box;
+	display: none;
+
+	.mb-field:hover &,
+	.mb-field--active & {
+		display: block;
+	}
 }
 
 .mb-field-wrapper--columns-1 {

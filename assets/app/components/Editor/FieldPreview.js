@@ -1,4 +1,4 @@
-import { flushSync, lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from "@wordpress/element";
+import { flushSync, lazy, memo, Suspense, useCallback, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
@@ -21,12 +21,10 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 
 	const field = normalize( f );
 
-	const [ hover, setHover ] = useState( false );
 	const [ resizing, setResizing ] = useState( false );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const hasCustomColumns = useColumns( state => state.hasCustomColumns() );
 	const isActive = useActiveField( state => state.fieldId === field._id );
-	const ref = useRef();
 
 	const { data: fieldHTML } = useFetch( { api: 'field-html', params: { field }, method: 'POST' } );
 
@@ -46,32 +44,11 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 
 	const update = ( key, value ) => {
 		if ( key.includes( '[' ) ) {
-			// Get correct key in the last [].
 			key = key.replace( /\]/g, '' ).split( '[' ).pop();
 		}
 
 		fieldActions.updateField( field._id, key, value );
 	};
-
-	useEffect( () => {
-		const handleMouseMove = e => {
-			if ( !ref.current ) {
-				return;
-			}
-
-			// List all elements from the inside out.
-			const path = e.composedPath?.() || [];
-
-			// Find the first element with class "mb-field" from the inside out
-			const hoveredField = path.find( el => el?.classList?.contains( 'mb-field' ) );
-
-			// Set hover state to true if the hovered field is the current field, not the sub-field.
-			setHover( hoveredField === ref.current );
-		};
-
-		window.addEventListener( 'mousemove', handleMouseMove );
-		return () => window.removeEventListener( 'mousemove', handleMouseMove );
-	}, [] );
 
 	const handleResizeStart = useCallback( e => {
 		e.preventDefault();
@@ -171,31 +148,24 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 
 	const FieldType = builtInFieldTypes.includes( field.type ) ? lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) ) : null;
 
-	// console.debug( `%c  Field ${ field._id }`, "color:orange" );
-
-	const hovering = hover || resizing;
-	const showActions = isActive || hovering;
-
 	return field.type && fieldTypes.hasOwnProperty( field.type ) && (
 		<div className={ `
 			mb-field-wrapper
 			${ MbbApp.extensions.columns && hasCustomColumns ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
 		` }>
 			<div
-				ref={ ref }
 				className={ `
 					mb-field
 					mb-field--${ field.type }
 					${ isActive ? 'mb-field--active' : '' }
-					${ hovering ? 'mb-field--hover' : '' }
 					${ resizing ? 'mb-field--resizing' : '' }
 				` }
 				id={ `mb-field-${ field._id }` }
 				onClick={ toggleSettings }
 			>
-				<Toolbar show={ hovering } field={ field } { ...fieldActions } />
+				<Toolbar show={ false } field={ field } { ...fieldActions } />
 				{
-					MbbApp.extensions.columns && showActions && (
+					MbbApp.extensions.columns && (
 						<div
 							className="mb-field-resize-handle"
 							onMouseDown={ handleResizeStart }
