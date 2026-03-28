@@ -1,3 +1,4 @@
+import { flushSync } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import dotProp from 'dot-prop';
 import { create } from 'zustand';
@@ -59,8 +60,10 @@ const createList = ( { id = '', fields = [] } ) => {
 				} );
 			}
 
-			setFieldActive( newField._id );
-			setNavPanel( 'field-settings' );
+			flushSync( () => {
+				setFieldActive( newField._id );
+				setNavPanel( 'field-settings' );
+			} );
 		},
 		addField: ( fieldType ) => get().addFieldAt( fieldType, get().fields.length ),
 		prependField: ( fieldType ) => get().addFieldAt( fieldType, 0 ),
@@ -167,16 +170,15 @@ const createList = ( { id = '', fields = [] } ) => {
 				}
 			}
 
-			if ( newActiveFieldId ) {
-				// Set the new active field
-				setFieldActive( newActiveFieldId );
-			} else if ( isCurrentListGroup ) {
-				// No fields left in group, set the group as active
-				setFieldActive( currentState.id );
-			} else {
-				// Root list with no fields, set nav panel to field-group-settings
-				setNavPanel( 'field-group-settings' );
-			}
+			flushSync( () => {
+				if ( newActiveFieldId ) {
+					setFieldActive( newActiveFieldId );
+				} else if ( isCurrentListGroup ) {
+					setFieldActive( currentState.id );
+				} else {
+					setNavPanel( 'field-group-settings' );
+				}
+			} );
 		},
 		updateField: ( fieldId, key, value ) => {
 			const field = get().fields.find( f => f._id === fieldId );
