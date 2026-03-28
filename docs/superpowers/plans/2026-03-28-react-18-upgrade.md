@@ -132,13 +132,11 @@ git commit -m "perf: batch setFieldActive updates per zustand store"
 
 - [ ] **Step 1: Add `flushSync` to imports**
 
-At the top of `list-functions.js`, add `flushSync` to the existing `@wordpress/element` import (or add a new import if none exists). Currently the file does not import from `@wordpress/element` — add:
+At the top of `list-functions.js`, add `flushSync` to the existing `@wordpress/element` import (or add a new import if none exists). Currently the file does not import from `@wordpress/element` — add at the top:
 
 ```js
 import { flushSync } from '@wordpress/element';
 ```
-
-Place this after the existing imports at the top of the file (after line 6).
 
 - [ ] **Step 2: Wrap `addFieldAt` critical section with `flushSync`**
 
