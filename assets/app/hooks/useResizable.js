@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from '@wordpress/element';
 
 const getSavedWidth = ( storageKey, defaultWidth, minWidth, maxWidth ) => {
 	const savedWidth = localStorage.getItem( storageKey );
