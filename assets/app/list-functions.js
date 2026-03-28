@@ -2,6 +2,7 @@ import { flushSync } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import dotProp from 'dot-prop';
 import { create } from 'zustand';
+import useActiveField from './hooks/useActiveField';
 import { ensureArray, ucwords, uniqid } from './functions';
 import useColumns from './hooks/useColumns';
 import useNavPanel from './hooks/useNavPanel';
@@ -142,7 +143,7 @@ const createList = ( { id = '', fields = [] } ) => {
 			// Get the current list state before removing the field
 			const currentState = get();
 			const currentIndex = currentState.fields.findIndex( f => f._id === fieldId );
-			const isCurrentActive = currentIndex >= 0 && currentState.fields[ currentIndex ]._active;
+			const isCurrentActive = useActiveField.getState().fieldId === fieldId;
 			const isCurrentListGroup = currentState.id !== 'root';
 
 			// Remove the field
@@ -317,31 +318,7 @@ parseLists( MbbApp, 'root' );
 const findFieldList = fieldId => [ ...lists.values() ].find( list => list.getState().fields.some( field => field._id === fieldId ) );
 
 export const setFieldActive = fieldId => {
-	// Group field updates by store to batch them into a single set() call per store.
-	const storeUpdates = new Map();
-
-	for ( const [ storeId, store ] of lists ) {
-		const fields = store.getState().fields;
-		const updatedFields = fields.map( field => {
-			if ( field._id === fieldId && !field._active ) {
-				return { ...field, _active: true };
-			}
-			if ( field._id !== fieldId && field._active ) {
-				return { ...field, _active: false };
-			}
-			return field;
-		} );
-
-		// Only update if something changed.
-		if ( updatedFields.some( ( f, i ) => f._active !== fields[ i ]._active ) ) {
-			storeUpdates.set( storeId, updatedFields );
-		}
-	}
-
-	// Apply all updates.
-	for ( const [ storeId, updatedFields ] of storeUpdates ) {
-		lists.get( storeId ).setState( { fields: updatedFields } );
-	}
+	useActiveField.getState().setFieldActive( fieldId );
 };
 
 export const isInGroup = fieldId => {

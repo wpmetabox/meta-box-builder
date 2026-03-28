@@ -2,6 +2,7 @@ import { flushSync, lazy, memo, Suspense, useCallback, useEffect, useRef, useSta
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
+import useActiveField from "../../hooks/useActiveField";
 import useColumns from "../../hooks/useColumns";
 import { useFetch } from "../../hooks/useFetch";
 import useFieldTypes from "../../hooks/useFieldTypes";
@@ -24,6 +25,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 	const [ resizing, setResizing ] = useState( false );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
 	const hasCustomColumns = useColumns( state => state.hasCustomColumns() );
+	const isActive = useActiveField( state => state.fieldId === field._id );
 	const ref = useRef();
 
 	const { data: fieldHTML } = useFetch( { api: 'field-html', params: { field }, method: 'POST' } );
@@ -172,7 +174,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 	// console.debug( `%c  Field ${ field._id }`, "color:orange" );
 
 	const hovering = hover || resizing;
-	const showActions = field._active || hovering;
+	const showActions = isActive || hovering;
 
 	return field.type && fieldTypes.hasOwnProperty( field.type ) && (
 		<div className={ `
@@ -184,7 +186,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 				className={ `
 					mb-field
 					mb-field--${ field.type }
-					${ field._active ? 'mb-field--active' : '' }
+					${ isActive ? 'mb-field--active' : '' }
 					${ hovering ? 'mb-field--hover' : '' }
 					${ resizing ? 'mb-field--resizing' : '' }
 				` }
