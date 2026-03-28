@@ -1,0 +1,10 @@
+.mb-error-boundary {
+	padding-inline: 16px;
+
+	pre {
+		padding: 16px;
+		background: #fff;
+		border: var(--border);
+		border-radius: 2px;
+	}
+}

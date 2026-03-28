@@ -1,6 +1,6 @@
 import { createRoot } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from '../../../../assets/app/components/ErrorFallback';
 import { updateNewPostUrl } from '../../../../assets/app/functions';
 import Header from './components/Header';
 import Main from './components/Main';
@@ -8,7 +8,7 @@ import Notification from './components/Notification';
 import { initSaveForm } from './save';
 
 const Layout = ( { children } ) => (
-	<ErrorBoundary fallback={ <p>{ __( 'Something went wrong. Please try again!', 'meta-box-builder' ) }</p> }>
+	<ErrorBoundary FallbackComponent={ ErrorFallback }>
 		<Header />
 
 		<div className="mb-body">
