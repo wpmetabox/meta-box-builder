@@ -315,21 +315,31 @@ parseLists( MbbApp, 'root' );
 const findFieldList = fieldId => [ ...lists.values() ].find( list => list.getState().fields.some( field => field._id === fieldId ) );
 
 export const setFieldActive = fieldId => {
-	const list = findFieldList( fieldId );
-	if ( list ) {
-		list.getState().updateField( fieldId, '_active', true );
+	// Group field updates by store to batch them into a single set() call per store.
+	const storeUpdates = new Map();
+
+	for ( const [ storeId, store ] of lists ) {
+		const fields = store.getState().fields;
+		const updatedFields = fields.map( field => {
+			if ( field._id === fieldId && !field._active ) {
+				return { ...field, _active: true };
+			}
+			if ( field._id !== fieldId && field._active ) {
+				return { ...field, _active: false };
+			}
+			return field;
+		} );
+
+		// Only update if something changed.
+		if ( updatedFields.some( ( f, i ) => f._active !== fields[ i ]._active ) ) {
+			storeUpdates.set( storeId, updatedFields );
+		}
 	}
 
-	const allFields = [ ...lists.values() ].flatMap( store => store.getState().fields );
-	allFields.forEach( field => {
-		if ( field._id === fieldId || !field._active ) {
-			return;
-		}
-		const list = findFieldList( field._id );
-		if ( list ) {
-			list.getState().updateField( field._id, '_active', false );
-		}
-	} );
+	// Apply all updates.
+	for ( const [ storeId, updatedFields ] of storeUpdates ) {
+		lists.get( storeId ).setState( { fields: updatedFields } );
+	}
 };
 
 export const isInGroup = fieldId => {
