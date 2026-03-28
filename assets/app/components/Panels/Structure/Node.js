@@ -5,6 +5,7 @@ import { __ } from "@wordpress/i18n";
 
 import { isEqual } from 'lodash';
 import { getFieldIcon, ucwords } from "../../../functions";
+import useActiveField from "../../../hooks/useActiveField";
 import useFloatingStructurePanel from "../../../hooks/useFloatingStructurePanel";
 import useNavPanel from "../../../hooks/useNavPanel";
 import useStructureCollapse from "../../../hooks/useStructureCollapse";
@@ -30,6 +31,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const [ copied, setCopied ] = useState( false );
 	const floating = useFloatingStructurePanel( state => state.floating );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
+	const isActive = useActiveField( state => state.fieldId === field._id );
 	const { allExpanded } = useStructureCollapse();
 	const [ expanded, setExpanded ] = useState( allExpanded );
 
@@ -59,7 +61,7 @@ const Node = ( { field, parent = '', ...fieldActions } ) => {
 	const noIdFieldTypes = [ 'divider', 'heading', 'custom_html' ];
 
 	return field.type && (
-		<div className={ `og-item og-item--${ field.type } ${ field._active ? 'og-item--active' : '' }` }>
+		<div className={ `og-item og-item--${ field.type } ${ isActive ? 'og-item--active' : '' }` }>
 			<div className="og-item__header" onClick={ handleItemClick }>
 				{
 					field.type === 'group'

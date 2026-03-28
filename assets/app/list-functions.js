@@ -1,6 +1,8 @@
+import { flushSync } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import dotProp from 'dot-prop';
 import { create } from 'zustand';
+import useActiveField from './hooks/useActiveField';
 import { ensureArray, ucwords, uniqid } from './functions';
 import useColumns from './hooks/useColumns';
 import useNavPanel from './hooks/useNavPanel';
@@ -59,8 +61,10 @@ const createList = ( { id = '', fields = [] } ) => {
 				} );
 			}
 
-			setFieldActive( newField._id );
-			setNavPanel( 'field-settings' );
+			flushSync( () => {
+				setFieldActive( newField._id );
+				setNavPanel( 'field-settings' );
+			} );
 		},
 		addField: ( fieldType ) => get().addFieldAt( fieldType, get().fields.length ),
 		prependField: ( fieldType ) => get().addFieldAt( fieldType, 0 ),
@@ -139,7 +143,7 @@ const createList = ( { id = '', fields = [] } ) => {
 			// Get the current list state before removing the field
 			const currentState = get();
 			const currentIndex = currentState.fields.findIndex( f => f._id === fieldId );
-			const isCurrentActive = currentIndex >= 0 && currentState.fields[ currentIndex ]._active;
+			const isCurrentActive = useActiveField.getState().fieldId === fieldId;
 			const isCurrentListGroup = currentState.id !== 'root';
 
 			// Remove the field
@@ -167,16 +171,15 @@ const createList = ( { id = '', fields = [] } ) => {
 				}
 			}
 
-			if ( newActiveFieldId ) {
-				// Set the new active field
-				setFieldActive( newActiveFieldId );
-			} else if ( isCurrentListGroup ) {
-				// No fields left in group, set the group as active
-				setFieldActive( currentState.id );
-			} else {
-				// Root list with no fields, set nav panel to field-group-settings
-				setNavPanel( 'field-group-settings' );
-			}
+			flushSync( () => {
+				if ( newActiveFieldId ) {
+					setFieldActive( newActiveFieldId );
+				} else if ( isCurrentListGroup ) {
+					setFieldActive( currentState.id );
+				} else {
+					setNavPanel( 'field-group-settings' );
+				}
+			} );
 		},
 		updateField: ( fieldId, key, value ) => {
 			const field = get().fields.find( f => f._id === fieldId );
@@ -315,21 +318,7 @@ parseLists( MbbApp, 'root' );
 const findFieldList = fieldId => [ ...lists.values() ].find( list => list.getState().fields.some( field => field._id === fieldId ) );
 
 export const setFieldActive = fieldId => {
-	const list = findFieldList( fieldId );
-	if ( list ) {
-		list.getState().updateField( fieldId, '_active', true );
-	}
-
-	const allFields = [ ...lists.values() ].flatMap( store => store.getState().fields );
-	allFields.forEach( field => {
-		if ( field._id === fieldId || !field._active ) {
-			return;
-		}
-		const list = findFieldList( field._id );
-		if ( list ) {
-			list.getState().updateField( field._id, '_active', false );
-		}
-	} );
+	useActiveField.getState().setFieldActive( fieldId );
 };
 
 export const isInGroup = fieldId => {
