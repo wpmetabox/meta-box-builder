@@ -7,14 +7,13 @@
 	justify-content: center;
 	z-index: 9; // Ensure toolbar is above the field outline when hovering.
 
-	.mb-field:hover &,
-	&--show {
+	.mb-field:hover & {
 		display: flex;
 	}
 
 	// Hide toolbar when hovering a sub-field in a group.
 	.mb-field:has(.mb-field:hover) & {
-		display: none;
+		display: none !important;
 	}
 
 	&__icon {
