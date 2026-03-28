@@ -29,8 +29,8 @@ const useUnsavedChanges = () => {
 
 		const settingsChanged = !isEqual( currentSettings, initialSettings.current );
 		const fieldsChanged = !isEqual( currentFields, initialFields.current );
-		const titleChanged = currentTitle.current !== initialTitle.current;
-		const nameChanged = currentName.current !== initialName.current;
+		const titleChanged = currentTitle !== initialTitle.current;
+		const nameChanged = currentName !== initialName.current;
 
 		setHasUnsavedChanges( settingsChanged || fieldsChanged || titleChanged || nameChanged );
 	};
