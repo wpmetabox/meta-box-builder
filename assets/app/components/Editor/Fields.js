@@ -22,34 +22,37 @@ const Fields = () => {
 	}, [] );
 
 	// Toolbar visibility via direct DOM manipulation — no React re-renders.
-	const handleMouseMove = useCallback( e => {
-		if ( !editorRef.current ) {
+	const handleMouseOver = useCallback( e => {
+		const field = e.target.closest( '.mb-field' );
+		if ( !field || field === hoveredRef.current ) {
 			return;
 		}
 
-		const path = e.composedPath?.() || [];
-		const field = path.find( el => el?.classList?.contains( 'mb-field' ) && el.closest( '.mb-editor' ) === editorRef.current );
-
-		if ( field === hoveredRef.current ) {
-			return;
-		}
-
+		// Hide previous toolbar.
 		if ( hoveredRef.current ) {
 			hoveredRef.current.querySelector( '.mb-toolbar' )?.classList.remove( 'mb-toolbar--show' );
 		}
 
-		hoveredRef.current = field || null;
+		hoveredRef.current = field;
 
-		if ( field ) {
-			field.querySelector( '.mb-toolbar' )?.classList.add( 'mb-toolbar--show' );
-		}
+		// Show current toolbar.
+		field.querySelector( '.mb-toolbar' )?.classList.add( 'mb-toolbar--show' );
 	}, [] );
 
-	const handleMouseLeave = useCallback( () => {
-		if ( hoveredRef.current ) {
-			hoveredRef.current.querySelector( '.mb-toolbar' )?.classList.remove( 'mb-toolbar--show' );
-			hoveredRef.current = null;
+	const handleMouseOut = useCallback( e => {
+		const field = e.target.closest( '.mb-field' );
+		if ( !field || !hoveredRef.current ) {
+			return;
 		}
+
+		// Only hide if we're leaving this field (not entering a child).
+		const related = e.relatedTarget;
+		if ( field.contains( related ) ) {
+			return;
+		}
+
+		field.querySelector( '.mb-toolbar' )?.classList.remove( 'mb-toolbar--show' );
+		hoveredRef.current = null;
 	}, [] );
 
 	if ( Object.keys( fieldTypes ).length === 0 ) {
@@ -72,7 +75,7 @@ const Fields = () => {
 	// console.debug( `%cLIST`, "color:red" );
 
 	return (
-		<div className="mb-editor" ref={ editorRef } onMouseMove={ handleMouseMove } onMouseLeave={ handleMouseLeave }>
+		<div className="mb-editor" ref={ editorRef } onMouseOver={ handleMouseOver } onMouseOut={ handleMouseOut }>
 			{
 				fields.length === 0
 					? <RawHTML className="mb-editor__empty">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
