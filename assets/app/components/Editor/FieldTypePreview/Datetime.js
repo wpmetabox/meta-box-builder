@@ -31,7 +31,7 @@ const Datetime = ( { field } ) => {
 			$inline.datetimepicker( 'option', 'dateFormat', format );
 			$inline.datetimepicker( 'setDate', field.std );
 		} catch ( error ) {
-			console.debug( sprintf( __( 'Field %s: invalid format for the datetime picker default value', 'meta-box-builder' ), field.name ) );
+			console.error( `ERROR: Field ${ field.name }: invalid format for the datetime picker default value` );
 		}
 	}, [ field.format, field.std, field.inline ] );
 
