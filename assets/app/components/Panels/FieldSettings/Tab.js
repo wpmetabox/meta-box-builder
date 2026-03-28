@@ -2,6 +2,15 @@ import { lazy, Suspense, useMemo } from "@wordpress/element";
 import dotProp from 'dot-prop';
 import { bracketsToDots } from '../../../functions';
 
+// Cache lazy components at module level to preserve identity across re-renders.
+const lazyControlCache = new Map();
+const getLazyControl = ( controlName, importFallback ) => {
+	if ( !lazyControlCache.has( controlName ) ) {
+		lazyControlCache.set( controlName, lazy( () => import( `../../../controls/${ controlName }` ).catch( importFallback ) ) );
+	}
+	return lazyControlCache.get( controlName );
+};
+
 /**
  * Get parameters for a dynamic control.
  *
@@ -11,7 +20,7 @@ import { bracketsToDots } from '../../../functions';
  * - Default value
  */
 const getControlParams = ( control, objectValue, importFallback, checkNewField = false ) => {
-	const Control = lazy( () => import( `../../../controls/${ control.name }` ).catch( importFallback ) );
+	const Control = getLazyControl( control.name, importFallback );
 
 	const name = dotProp.get( control.props, 'name', control.setting );
 
@@ -106,7 +115,7 @@ const ControlItem = ( { control, field, parent, updateField } ) => {
 
 		// console.debug( `    Control: ${ control.setting }` );
 
-		return <Control { ...props } />;
+		return <Control key={ props.componentId } { ...props } />;
 	}, [ control, parent, watchValue ] ); // dependencies
 
 	return (

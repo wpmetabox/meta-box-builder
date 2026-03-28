@@ -1,4 +1,4 @@
-import { lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from "@wordpress/element";
+import { flushSync, lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
@@ -36,8 +36,10 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 		// Make it able to select sub-fields in a group, and do not select parent field.
 		e.stopPropagation();
 
-		setFieldActive( field._id );
-		setNavPanel( 'field-settings' );
+		flushSync( () => {
+			setFieldActive( field._id );
+			setNavPanel( 'field-settings' );
+		} );
 	};
 
 	const update = ( key, value ) => {
