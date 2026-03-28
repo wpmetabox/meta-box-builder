@@ -7,8 +7,6 @@
 	justify-content: center;
 	z-index: 9;
 
-	// Show toolbar on hover, but NOT when a nested subfield is hovered.
-	.mb-field:hover:not(:has(.mb-field:hover)) &,
 	&--show {
 		display: flex;
 	}

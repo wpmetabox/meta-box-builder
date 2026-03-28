@@ -1,4 +1,4 @@
-import { RawHTML, useEffect } from "@wordpress/element";
+import { RawHTML, useCallback, useEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useFieldTypes from "../../hooks/useFieldTypes";
@@ -12,9 +12,43 @@ const Fields = () => {
 	// Don't render any field if fields data is not available.
 	const { fieldTypes, fetch, fetched } = useFieldTypes();
 
+	const editorRef = useRef();
+	const hoveredRef = useRef( null );
+
 	useEffect( () => {
 		if ( !fetched ) {
 			fetch();
+		}
+	}, [] );
+
+	// Toolbar visibility via direct DOM manipulation — no React re-renders.
+	const handleMouseMove = useCallback( e => {
+		if ( !editorRef.current ) {
+			return;
+		}
+
+		const path = e.composedPath?.() || [];
+		const field = path.find( el => el?.classList?.contains( 'mb-field' ) && el.closest( '.mb-editor' ) === editorRef.current );
+
+		if ( field === hoveredRef.current ) {
+			return;
+		}
+
+		if ( hoveredRef.current ) {
+			hoveredRef.current.querySelector( '.mb-toolbar' )?.classList.remove( 'mb-toolbar--show' );
+		}
+
+		hoveredRef.current = field || null;
+
+		if ( field ) {
+			field.querySelector( '.mb-toolbar' )?.classList.add( 'mb-toolbar--show' );
+		}
+	}, [] );
+
+	const handleMouseLeave = useCallback( () => {
+		if ( hoveredRef.current ) {
+			hoveredRef.current.querySelector( '.mb-toolbar' )?.classList.remove( 'mb-toolbar--show' );
+			hoveredRef.current = null;
 		}
 	}, [] );
 
@@ -38,7 +72,7 @@ const Fields = () => {
 	// console.debug( `%cLIST`, "color:red" );
 
 	return (
-		<div className="mb-editor">
+		<div className="mb-editor" ref={ editorRef } onMouseMove={ handleMouseMove } onMouseLeave={ handleMouseLeave }>
 			{
 				fields.length === 0
 					? <RawHTML className="mb-editor__empty">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>
