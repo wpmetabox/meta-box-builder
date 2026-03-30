@@ -31,8 +31,8 @@ const Datetime = ( { field } ) => {
 		const $inline = $( inlineRef.current );
 
 		// Reset UI
-		if ( $inline.hasClass('hasDatepicker') ) {
-			$inline.datepicker('destroy');
+		if ( $inline.hasClass( 'hasDatepicker' ) ) {
+			$inline.datepicker( 'destroy' );
 		}
 
 		$inline.datetimepicker( {
