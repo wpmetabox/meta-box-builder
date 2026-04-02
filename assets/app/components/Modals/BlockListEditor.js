@@ -80,7 +80,7 @@ const BlockListEditor = ( { isOpen, onClose, listId, onSaved } ) => {
 		setSaving( true );
 		setError( '' );
 		try {
-			await apiFetch( {
+			const response = await apiFetch( {
 				path: '/mbb/allowed-block-lists',
 				method: 'POST',
 				data: {
@@ -89,7 +89,7 @@ const BlockListEditor = ( { isOpen, onClose, listId, onSaved } ) => {
 					blocks: selectedBlocks.map( block => block.name ),
 				},
 			} );
-			onSaved();
+			onSaved( response.id );
 			onClose();
 		} catch ( e ) {
 			setError( e.message || __( 'An error occurred while saving.', 'meta-box-builder' ) );

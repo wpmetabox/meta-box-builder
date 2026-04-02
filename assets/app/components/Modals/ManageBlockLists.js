@@ -3,7 +3,7 @@ import { Button, Flex, Modal } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
-const ManageBlockLists = ( { isOpen, onClose, onEdit, onAddNew } ) => {
+const ManageBlockLists = ( { isOpen, onClose, onEdit, onAddNew, onSelect } ) => {
 	const [ lists, setLists ] = useState( {} );
 	const [ loading, setLoading ] = useState( true );
 	const [ deleting, setDeleting ] = useState( null );
@@ -156,6 +156,9 @@ const ManageBlockLists = ( { isOpen, onClose, onEdit, onAddNew } ) => {
 									<td>{ list.blocks?.length || 0 }</td>
 									<td>
 										<Flex gap={ 2 } justify="flex-start">
+											<Button variant="link" onClick={ () => onSelect( id ) }>
+												{ __( 'Select', 'meta-box-builder' ) }
+											</Button>
 											<Button variant="link" onClick={ () => onEdit( id ) }>
 												{ __( 'Edit', 'meta-box-builder' ) }
 											</Button>

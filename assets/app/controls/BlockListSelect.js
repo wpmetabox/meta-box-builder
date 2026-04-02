@@ -7,9 +7,11 @@ import DivRow from './DivRow';
 
 const BlockListSelect = ( { componentId, name, defaultValue, options, updateField, ...rest } ) => {
 	const [ lists, setLists ] = useState( options || {} );
+	const [ selected, setSelected ] = useState( defaultValue || '' );
 	const [ showEditor, setShowEditor ] = useState( false );
 	const [ showManage, setShowManage ] = useState( false );
-	const [ listId, setListId ] = useState( null );
+	const [ editorListId, setEditorListId ] = useState( null );
+	const [ returnToManage, setReturnToManage ] = useState( false );
 
 	const fetchLists = () => {
 		apiFetch( { path: '/mbb/allowed-block-lists' } )
@@ -17,35 +19,58 @@ const BlockListSelect = ( { componentId, name, defaultValue, options, updateFiel
 			.catch( () => {} );
 	};
 
-	const handleChange = e => updateField( name, e.target.value );
+	const handleChange = e => {
+		const value = e.target.value;
+		setSelected( value );
+		updateField( name, value );
+	};
 
 	const handleManageClose = () => {
 		setShowManage( false );
 		fetchLists();
 	};
 
-	const handleEdit = id => {
-		setListId( id );
+	const handleEdit = ( id, fromManage = false ) => {
+		setEditorListId( id );
+		setReturnToManage( fromManage );
 		setShowEditor( true );
 		setShowManage( false );
 	};
 
-	const handleAddNew = () => {
-		setListId( null );
+	const handleAddNew = ( fromManage = false ) => {
+		setEditorListId( null );
+		setReturnToManage( fromManage );
 		setShowEditor( true );
 		setShowManage( false );
 	};
 
 	const handleEditorClose = () => {
 		setShowEditor( false );
-		setListId( null );
+		setEditorListId( null );
+		if ( returnToManage ) {
+			setReturnToManage( false );
+			setShowManage( true );
+		}
 	};
 
-	const handleEditorSaved = () => fetchLists();
+	const handleEditorSaved = savedId => {
+		fetchLists();
+		if ( savedId && ! returnToManage ) {
+			setSelected( savedId );
+			updateField( name, savedId );
+		}
+	};
+
+	const handleSelectList = id => {
+		setSelected( id );
+		updateField( name, id );
+		setShowManage( false );
+		fetchLists();
+	};
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
-			<select id={ componentId } defaultValue={ defaultValue || '' } onChange={ handleChange }>
+			<select id={ componentId } value={ selected } onChange={ handleChange }>
 				<option value="">{ __( 'Allow all blocks', 'meta-box-builder' ) }</option>
 				{
 					Object.entries( lists ).map( ( [ id, list ] ) => <option key={ id } value={ id }>{ list.name }</option> )
@@ -60,10 +85,10 @@ const BlockListSelect = ( { componentId, name, defaultValue, options, updateFiel
 					{ __( 'Add new', 'meta-box-builder' ) }
 				</a>
 				{
-					defaultValue && (
+					selected && (
 						<>
 							<span>|</span>
-							<a href="#" onClick={ e => { e.preventDefault(); handleEdit( defaultValue ); } }>
+							<a href="#" onClick={ e => { e.preventDefault(); handleEdit( selected ); } }>
 								{ __( 'Edit', 'meta-box-builder' ) }
 							</a>
 						</>
@@ -73,13 +98,14 @@ const BlockListSelect = ( { componentId, name, defaultValue, options, updateFiel
 			<ManageBlockLists
 				isOpen={ showManage }
 				onClose={ handleManageClose }
-				onEdit={ handleEdit }
-				onAddNew={ handleAddNew }
+				onEdit={ id => handleEdit( id, true ) }
+				onAddNew={ () => handleAddNew( true ) }
+				onSelect={ handleSelectList }
 			/>
 			<BlockListEditor
 				isOpen={ showEditor }
 				onClose={ handleEditorClose }
-				listId={ listId }
+				listId={ editorListId }
 				onSaved={ handleEditorSaved }
 			/>
 		</DivRow>
