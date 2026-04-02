@@ -153,7 +153,8 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'type', 'name', 'std', 'callback' ],
-					$appearance_tab
+					$appearance_tab,
+					[ 'class', 'before', 'after' ]
 				),
 				'description' => __( 'Output custom HTML content', 'meta-box-builder' ),
 			],
