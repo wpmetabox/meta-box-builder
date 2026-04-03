@@ -113,8 +113,6 @@ const ControlItem = ( { control, field, parent, updateField } ) => {
 			updateField,
 		};
 
-		// console.debug( `    Control: ${ control.setting }` );
-
 		return <Control key={ props.componentId } { ...props } />;
 	}, [ control, parent, watchValue ] ); // dependencies
 

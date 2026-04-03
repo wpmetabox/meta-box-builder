@@ -4,7 +4,7 @@
 
 **Goal:** Switch the main Meta Box Builder app from React 17 `render()` API to React 18 `createRoot()` API, eliminating the field-settings panel flickering issue.
 
-**Architecture:** Four targeted changes: (1) fix inconsistent imports, (2) refactor `setFieldActive` to batch zustand updates per store, (3) add `flushSync` around critical field-expand/delete paths, (4) switch `render` to `createRoot` in entry point.
+**Architecture:** Five targeted changes: (1) fix inconsistent imports, (2) move active field state to a separate zustand store, (3) cache `React.lazy()` at module level, (4) move hover to CSS + DOM manipulation, (5) switch `render` to `createRoot` in entry point.
 
 **Tech Stack:** React 18.3.1 (via `@wordpress/element`), Zustand 4.x, `@wordpress/scripts` 27.x
 
@@ -17,8 +17,16 @@
 | `assets/app/controls/AdminCloumnsWidth.js:1` | Fix import source |
 | `assets/app/hooks/useVerticalResizable.js:1` | Fix import source |
 | `assets/app/hooks/useResizable.js:1` | Fix import source |
-| `assets/app/list-functions.js` | Refactor `setFieldActive` + add `flushSync` |
 | `assets/app/App.js` | Switch `render` → `createRoot` |
+| `assets/app/hooks/useActiveField.js` | **New** — dedicated active field store |
+| `assets/app/list-functions.js` | Remove `_active` from field objects, use `useActiveField` store |
+| `assets/app/components/Editor/FieldPreview.js` | Remove hover state, cache lazy, use `useActiveField` |
+| `assets/app/components/Editor/FieldTypePreview/ObjectField.js` | Cache lazy components |
+| `assets/app/components/Panels/FieldSettings/Tab.js` | Cache lazy components (already done) |
+| `assets/app/components/Editor/Fields.js` | Add delegated hover handlers |
+| `assets/sass/editor/_field.scss` | Change `&--hover` to `&:hover:not(:has(.mb-field:hover))` |
+| `assets/sass/editor/_columns.scss` | Add resize handle visibility via direct child combinator |
+| `assets/sass/editor/_toolbar.scss` | Minor comment cleanup |
 
 ---
 
@@ -71,126 +79,169 @@ git commit -m "fix: import React hooks from @wordpress/element instead of react"
 
 ---
 
-### Task 2: Refactor `setFieldActive` to batch updates per store
+### Task 2: Move active field state to a separate zustand store
 
 **Files:**
-- Modify: `assets/app/list-functions.js:317-333`
+- Create: `assets/app/hooks/useActiveField.js`
+- Modify: `assets/app/list-functions.js`
 
-- [ ] **Step 1: Replace `setFieldActive` function**
-
-Replace the current implementation (lines 317-333) with:
+- [ ] **Step 1: Create `useActiveField` store**
 
 ```js
-export const setFieldActive = fieldId => {
-	// Group field updates by store to batch them into a single set() call per store.
-	const storeUpdates = new Map();
+import { create } from 'zustand';
 
-	for ( const [ storeId, store ] of lists ) {
-		const fields = store.getState().fields;
-		const updatedFields = fields.map( field => {
-			if ( field._id === fieldId && !field._active ) {
-				return { ...field, _active: true };
-			}
-			if ( field._id !== fieldId && field._active ) {
-				return { ...field, _active: false };
-			}
-			return field;
-		} );
+const useActiveField = create( set => ( {
+	fieldId: null,
+	setFieldActive: fieldId => set( { fieldId } ),
+} ) );
 
-		// Only update if something changed.
-		if ( updatedFields.some( ( f, i ) => f._active !== fields[ i ]._active ) ) {
-			storeUpdates.set( storeId, updatedFields );
-		}
+export default useActiveField;
+```
+
+This replaces the previous approach of storing `_active` as a property on every field object across all per-list zustand stores.
+
+- [ ] **Step 2: Update `list-functions.js`**
+
+Remove `setFieldActive` export (it was a wrapper that mutated `_active` on field objects across all stores). The `useActiveField` store is now used directly by components via `useActiveField(state => state.setFieldActive)`.
+
+Remove `delete field._active` statements from `duplicateField` and `buildFieldsTree` since `_active` is no longer set on field objects.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add assets/app/hooks/useActiveField.js assets/app/list-functions.js
+git commit -m "perf: move active field state to separate store to prevent re-renders"
+```
+
+---
+
+### Task 3: Cache `React.lazy()` at module level
+
+**Files:**
+- Modify: `assets/app/components/Editor/FieldPreview.js`
+- Modify: `assets/app/components/Editor/FieldTypePreview/ObjectField.js`
+
+- [ ] **Step 1: Add lazy cache to `FieldPreview.js`**
+
+At module level, before the component:
+```js
+const lazyFieldTypeCache = new Map();
+const getLazyFieldType = type => {
+	if ( !lazyFieldTypeCache.has( type ) ) {
+		lazyFieldTypeCache.set( type, lazy( () => import( `./FieldTypePreview/${ ucwords( type, '_', '' ) }` ) ) );
 	}
-
-	// Apply all updates.
-	for ( const [ storeId, updatedFields ] of storeUpdates ) {
-		lists.get( storeId ).setState( { fields: updatedFields } );
-	}
+	return lazyFieldTypeCache.get( type );
 };
 ```
 
-Key changes:
-- Iterates per store instead of per individual field
-- Batches all `_active` changes for a store into a single `setState()` call
-- Only updates stores that actually have changes (avoids unnecessary re-renders)
-- Eliminates the expensive `findFieldList` → `updateField` loop (which called `set()` N times)
+Replace inline `lazy()` call with `getLazyFieldType(field.type)`.
 
-- [ ] **Step 2: Commit**
+Also move `builtInFieldTypes` array outside the component body (static constant).
+
+- [ ] **Step 2: Add lazy cache to `ObjectField.js`**
+
+Same pattern:
+```js
+const lazyObjectFieldCache = new Map();
+const getLazyObjectField = type => {
+	if ( !lazyObjectFieldCache.has( type ) ) {
+		lazyObjectFieldCache.set( type, lazy( () => import( `./${ ucwords( type, '_', '' ) }` ) ) );
+	}
+	return lazyObjectFieldCache.get( type );
+};
+```
+
+- [ ] **Step 3: Commit**
 
 ```bash
-git add assets/app/list-functions.js
-git commit -m "perf: batch setFieldActive updates per zustand store"
+git add assets/app/components/Editor/FieldPreview.js assets/app/components/Editor/FieldTypePreview/ObjectField.js
+git commit -m "perf: cache React.lazy() at module level to prevent Suspense flash"
 ```
 
 ---
 
-### Task 3: Add `flushSync` around critical paths
+### Task 4: Move hover to CSS + DOM manipulation
 
 **Files:**
-- Modify: `assets/app/list-functions.js` (import + `addFieldAt` + `removeField`)
+- Modify: `assets/app/components/Editor/Fields.js`
+- Modify: `assets/app/components/Editor/FieldPreview.js`
+- Modify: `assets/sass/editor/_field.scss`
+- Modify: `assets/sass/editor/_columns.scss`
+- Modify: `assets/sass/editor/_toolbar.scss`
 
-- [ ] **Step 1: Add `flushSync` to imports**
+- [ ] **Step 1: Border/outline — pure CSS**
 
-At the top of `list-functions.js`, add `flushSync` to the existing `@wordpress/element` import (or add a new import if none exists). Currently the file does not import from `@wordpress/element` — add at the top:
-
-```js
-import { flushSync } from '@wordpress/element';
-```
-
-- [ ] **Step 2: Wrap `addFieldAt` critical section with `flushSync`**
-
-Change lines 62-63 from:
-```js
-			setFieldActive( newField._id );
-			setNavPanel( 'field-settings' );
+In `_field.scss`, change:
+```scss
+&--hover {
+    outline: 1px solid var(--outline);
+    z-index: 2;
+}
 ```
 to:
-```js
-			flushSync( () => {
-				setFieldActive( newField._id );
-				setNavPanel( 'field-settings' );
-			} );
+```scss
+&:hover:not(:has(.mb-field:hover)) {
+    outline: 1px solid var(--outline);
+    z-index: 2;
+}
 ```
 
-- [ ] **Step 3: Wrap `removeField` critical section with `flushSync`**
+The `:has(.mb-field:hover)` selector excludes parent fields when a child field is hovered, so only the innermost field gets the outline.
 
-Change lines 170-179 from:
-```js
-			if ( newActiveFieldId ) {
-				// Set the new active field
-				setFieldActive( newActiveFieldId );
-			} else if ( isCurrentListGroup ) {
-				// No fields left in group, set the group as active
-				setFieldActive( currentState.id );
-			} else {
-				// Root list with no fields, set nav panel to field-group-settings
-				setNavPanel( 'field-group-settings' );
-			}
-```
-to:
-```js
-			flushSync( () => {
-				if ( newActiveFieldId ) {
-					setFieldActive( newActiveFieldId );
-				} else if ( isCurrentListGroup ) {
-					setFieldActive( currentState.id );
-				} else {
-					setNavPanel( 'field-group-settings' );
-				}
-			} );
+- [ ] **Step 2: Resize handle — CSS with direct child combinator**
+
+In `_columns.scss`, add `display: none` to `.mb-field-resize-handle`, then:
+```scss
+.mb-field--hover > .mb-field-resize-handle,
+.mb-field--active > .mb-field-resize-handle {
+    display: block;
+}
 ```
 
-- [ ] **Step 4: Commit**
+The `>` (direct child combinator) prevents a group's hover/active state from cascading to resize handles inside nested subfields.
+
+- [ ] **Step 3: Toolbar — delegated DOM handlers**
+
+In `Fields.js`, add `handleMouseOver` and `handleMouseOut` callbacks on the `.mb-editor` container:
+
+```js
+const handleMouseOver = useCallback( e => {
+    const field = e.target.closest( '.mb-field' );
+    if ( !field || field === hoveredRef.current ) return;
+
+    if ( hoveredRef.current ) {
+        hoveredRef.current.querySelector( ':scope > .mb-toolbar' )?.classList.remove( 'mb-toolbar--show' );
+        hoveredRef.current.classList.remove( 'mb-field--hover' );
+    }
+
+    hoveredRef.current = field;
+    field.querySelector( ':scope > .mb-toolbar' )?.classList.add( 'mb-toolbar--show' );
+    field.classList.add( 'mb-field--hover' );
+}, [] );
+```
+
+Use `:scope > .mb-toolbar` to target only the direct child toolbar, not toolbars of nested subfields.
+
+- [ ] **Step 4: Remove hover state from `FieldPreview.js`**
+
+Remove:
+- `const [ hover, setHover ] = useState( false )`
+- `const [ resizing, setResizing ] = useState( false )` → keep this (still needed for resize cursor)
+- The `useEffect` that registers `window.addEventListener('mousemove')`
+- `hovering` and `showActions` derived variables
+- Pass `show={ false }` to `<Toolbar>` (visibility now controlled by DOM class)
+- Always render the resize handle (visibility now controlled by CSS)
+
+- [ ] **Step 5: Commit**
 
 ```bash
-git add assets/app/list-functions.js
-git commit -m "fix: use flushSync for field add/delete to prevent flickering"
+git add assets/app/components/Editor/Fields.js assets/app/components/Editor/FieldPreview.js assets/sass/editor/_field.scss assets/sass/editor/_columns.scss assets/sass/editor/_toolbar.scss
+git commit -m "perf: move hover to CSS + DOM manipulation, fix nested group hover"
 ```
 
 ---
 
-### Task 4: Switch `App.js` from `render` to `createRoot`
+### Task 5: Switch `App.js` from `render` to `createRoot`
 
 **Files:**
 - Modify: `assets/app/App.js`
@@ -229,7 +280,39 @@ git commit -m "feat: switch main app from React 17 render to React 18 createRoot
 
 ---
 
-### Task 5: Build and verify
+### Task 6: Update components to use `useActiveField` store
+
+**Files:**
+- Modify: `assets/app/components/Editor/FieldPreview.js`
+- Modify: `assets/app/components/Panels/Structure/Node.js`
+
+- [ ] **Step 1: Update `FieldPreview.js`**
+
+Replace:
+```js
+import { setFieldActive } from "../../list-functions";
+```
+with:
+```js
+const setFieldActive = useActiveField( state => state.setFieldActive );
+```
+
+Replace `field._active` with `useActiveField( state => state.fieldId === field._id )`.
+
+- [ ] **Step 2: Update `Node.js`**
+
+Same pattern — replace `import { setFieldActive } from "../../../list-functions"` with direct hook usage.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add assets/app/components/Editor/FieldPreview.js assets/app/components/Panels/Structure/Node.js assets/app/list-functions.js
+git commit -m "perf: remove flushSync, use setFieldActive from hook, cache React.lazy at module level"
+```
+
+---
+
+### Task 7: Build and verify
 
 - [ ] **Step 1: Build the app**
 
@@ -247,6 +330,9 @@ Test in the WordPress admin:
 - [ ] Add a group field — group expands with no flicker
 - [ ] Delete a field — next field becomes active smoothly
 - [ ] Duplicate a field — new field appears without flicker
+- [ ] Hover over fields — toolbar, outline, and resize handle appear correctly
+- [ ] Hover over nested group subfields — parent group outline does NOT show, subfield toolbar shows
+- [ ] Resize handle shows only for the hovered/active field, NOT for subfields inside a hovered group
 - [ ] Switch between Fields / PHP / Theme Code tabs
 - [ ] Resize the nav panel (drag the resizer)
 - [ ] Reorder fields via drag-and-drop
