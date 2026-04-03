@@ -1,16 +1,89 @@
-import { lazy, memo, Suspense, useCallback, useEffect, useRef, useState } from "@wordpress/element";
+import { lazy, memo, Suspense, useCallback, useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { isEqual } from 'lodash';
 import { inside, ucwords } from "../../functions";
+import useActiveField from "../../hooks/useActiveField";
 import useColumns from "../../hooks/useColumns";
 import { useFetch } from "../../hooks/useFetch";
 import useFieldTypes from "../../hooks/useFieldTypes";
 import useNavPanel from "../../hooks/useNavPanel";
-import { setFieldActive } from "../../list-functions";
 import Base from "./FieldTypePreview/Base";
 import Toolbar from "./Toolbar";
 
 const isClickedOnAField = e => inside( e.target, '.mb-field' ) && !inside( e.target, '.mb-toolbar' ) && !inside( e.target, '[contentEditable]' );
+
+// Cache lazy components at module level to preserve identity across re-renders.
+// Without this, React.lazy() called inside the render body creates a new component
+// reference each time, causing Suspense to unmount/remount and flash null.
+const lazyFieldTypeCache = new Map();
+const getLazyFieldType = type => {
+	if ( !lazyFieldTypeCache.has( type ) ) {
+		lazyFieldTypeCache.set( type, lazy( () => import( `./FieldTypePreview/${ ucwords( type, '_', '' ) }` ) ) );
+	}
+	return lazyFieldTypeCache.get( type );
+};
+
+const builtInFieldTypes = [
+	'autocomplete',
+	'background',
+	'button',
+	'button_group',
+	'checkbox',
+	'checkbox_list',
+	'choice',
+	'color',
+	'custom_html',
+	'date',
+	'datetime',
+	'divider',
+	'email',
+	'fieldset_text',
+	'file',
+	'file_input',
+	'file_upload',
+	'heading',
+	'icon',
+	'image',
+	'image_advanced',
+	'image_select',
+	'image_upload',
+	'input',
+	'input_list',
+	'key_value',
+	'map',
+	'media',
+	'multiple_values',
+	'number',
+	'object_choice',
+	'oembed',
+	'osm',
+	'password',
+	'post',
+	'radio',
+	'range',
+	'select',
+	'select_advanced',
+	'select_tree',
+	'sidebar',
+	'single_image',
+	'slider',
+	'switch',
+	'taxonomy',
+	'taxonomy_advanced',
+	'text',
+	'text_list',
+	'textarea',
+	'time',
+	'url',
+	'user',
+	'video',
+	'wysiwyg',
+	'block_editor',
+
+	// Premium field types.
+	'group',
+	'tab',
+];
 
 const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 	let { fieldTypes } = useFieldTypes();
@@ -20,11 +93,11 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 
 	const field = normalize( f );
 
-	const [ hover, setHover ] = useState( false );
 	const [ resizing, setResizing ] = useState( false );
 	const setNavPanel = useNavPanel( state => state.setNavPanel );
+	const setFieldActive = useActiveField( state => state.setFieldActive );
 	const hasCustomColumns = useColumns( state => state.hasCustomColumns() );
-	const ref = useRef();
+	const isActive = useActiveField( state => state.fieldId === field._id );
 
 	const { data: fieldHTML } = useFetch( { api: 'field-html', params: { field }, method: 'POST' } );
 
@@ -48,26 +121,6 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 
 		fieldActions.updateField( field._id, key, value );
 	};
-
-	useEffect( () => {
-		const handleMouseMove = e => {
-			if ( !ref.current ) {
-				return;
-			}
-
-			// List all elements from the inside out.
-			const path = e.composedPath?.() || [];
-
-			// Find the first element with class "mb-field" from the inside out
-			const hoveredField = path.find( el => el?.classList?.contains( 'mb-field' ) );
-
-			// Set hover state to true if the hovered field is the current field, not the sub-field.
-			setHover( hoveredField === ref.current );
-		};
-
-		window.addEventListener( 'mousemove', handleMouseMove );
-		return () => window.removeEventListener( 'mousemove', handleMouseMove );
-	}, [] );
 
 	const handleResizeStart = useCallback( e => {
 		e.preventDefault();
@@ -103,74 +156,7 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 		document.addEventListener( 'mouseup', handleMouseUp );
 	}, [ field.columns, update ] );
 
-	const builtInFieldTypes = [
-		'autocomplete',
-		'background',
-		'button',
-		'button_group',
-		'checkbox',
-		'checkbox_list',
-		'choice',
-		'color',
-		'custom_html',
-		'date',
-		'datetime',
-		'divider',
-		'email',
-		'fieldset_text',
-		'file',
-		'file_input',
-		'file_upload',
-		'heading',
-		'icon',
-		'image',
-		'image_advanced',
-		'image_select',
-		'image_upload',
-		'input',
-		'input_list',
-		'key_value',
-		'map',
-		'media',
-		'multiple_values',
-		'number',
-		'object_choice',
-		'oembed',
-		'osm',
-		'password',
-		'post',
-		'radio',
-		'range',
-		'select',
-		'select_advanced',
-		'select_tree',
-		'sidebar',
-		'single_image',
-		'slider',
-		'switch',
-		'taxonomy',
-		'taxonomy_advanced',
-		'text',
-		'text_list',
-		'textarea',
-		'time',
-		'url',
-		'user',
-		'video',
-		'wysiwyg',
-		'block_editor',
-
-		// Premium field types.
-		'group',
-		'tab',
-	];
-
-	const FieldType = builtInFieldTypes.includes( field.type ) ? lazy( () => import( `./FieldTypePreview/${ ucwords( field.type, '_', '' ) }` ) ) : null;
-
-	// console.debug( `%c  Field ${ field._id }`, "color:orange" );
-
-	const hovering = hover || resizing;
-	const showActions = field._active || hovering;
+	const FieldType = builtInFieldTypes.includes( field.type ) ? getLazyFieldType( field.type ) : null;
 
 	return field.type && fieldTypes.hasOwnProperty( field.type ) && (
 		<div className={ `
@@ -178,20 +164,18 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 			${ MbbApp.extensions.columns && hasCustomColumns ? `mb-field-wrapper--columns mb-field-wrapper--columns-${ field.columns || 12 }` : '' }
 		` }>
 			<div
-				ref={ ref }
 				className={ `
 					mb-field
 					mb-field--${ field.type }
-					${ field._active ? 'mb-field--active' : '' }
-					${ hovering ? 'mb-field--hover' : '' }
+					${ isActive ? 'mb-field--active' : '' }
 					${ resizing ? 'mb-field--resizing' : '' }
 				` }
 				id={ `mb-field-${ field._id }` }
 				onClick={ toggleSettings }
 			>
-				<Toolbar show={ hovering } field={ field } { ...fieldActions } />
+				<Toolbar show={ false } field={ field } { ...fieldActions } />
 				{
-					MbbApp.extensions.columns && showActions && (
+					MbbApp.extensions.columns && (
 						<div
 							className="mb-field-resize-handle"
 							onMouseDown={ handleResizeStart }

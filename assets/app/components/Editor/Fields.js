@@ -1,4 +1,4 @@
-import { RawHTML, useEffect } from "@wordpress/element";
+import { RawHTML, useCallback, useEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ReactSortable } from 'react-sortablejs';
 import useFieldTypes from "../../hooks/useFieldTypes";
@@ -12,10 +12,50 @@ const Fields = () => {
 	// Don't render any field if fields data is not available.
 	const { fieldTypes, fetch, fetched } = useFieldTypes();
 
+	const editorRef = useRef();
+	const hoveredRef = useRef( null );
+
 	useEffect( () => {
 		if ( !fetched ) {
 			fetch();
 		}
+	}, [] );
+
+	// Toolbar & resize handle visibility via direct DOM manipulation — no React re-renders.
+	const handleMouseOver = useCallback( e => {
+		const field = e.target.closest( '.mb-field' );
+		if ( !field || field === hoveredRef.current ) {
+			return;
+		}
+
+		// Hide previous field's toolbar and resize handle.
+		if ( hoveredRef.current ) {
+			hoveredRef.current.querySelector( ':scope > .mb-toolbar' )?.classList.remove( 'mb-toolbar--show' );
+			hoveredRef.current.classList.remove( 'mb-field--hover' );
+		}
+
+		hoveredRef.current = field;
+
+		// Show current field's toolbar and resize handle.
+		field.querySelector( ':scope > .mb-toolbar' )?.classList.add( 'mb-toolbar--show' );
+		field.classList.add( 'mb-field--hover' );
+	}, [] );
+
+	const handleMouseOut = useCallback( e => {
+		const field = e.target.closest( '.mb-field' );
+		if ( !field || !hoveredRef.current ) {
+			return;
+		}
+
+		// Only hide if we're leaving this field (not entering a child).
+		const related = e.relatedTarget;
+		if ( field.contains( related ) ) {
+			return;
+		}
+
+		field.querySelector( ':scope > .mb-toolbar' )?.classList.remove( 'mb-toolbar--show' );
+		field.classList.remove( 'mb-field--hover' );
+		hoveredRef.current = null;
 	}, [] );
 
 	if ( Object.keys( fieldTypes ).length === 0 ) {
@@ -35,10 +75,8 @@ const Fields = () => {
 	// We need to remove the auto-added item by SortableJS.
 	const setList = list => fieldActions.setFields( [ ...list ].filter( f => f?._id !== undefined ) );
 
-	// console.debug( `%cLIST`, "color:red" );
-
 	return (
-		<div className="mb-editor">
+		<div className="mb-editor" ref={ editorRef } onMouseOver={ handleMouseOver } onMouseOut={ handleMouseOut }>
 			{
 				fields.length === 0
 					? <RawHTML className="mb-editor__empty">{ __( 'There are no fields here. Click the <strong>+ Add Field</strong> to add a new field.', 'meta-box-builder' ) }</RawHTML>

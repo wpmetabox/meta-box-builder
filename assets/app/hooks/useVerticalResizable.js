@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from '@wordpress/element';
 
 const getSavedHeight = ( storageKey, defaultHeight, minHeight, maxHeight ) => {
 	const savedHeight = localStorage.getItem( storageKey );

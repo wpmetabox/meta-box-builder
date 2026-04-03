@@ -54,6 +54,15 @@
 	border: 1px solid var(--outline);
 	background: #fff;
 	box-sizing: border-box;
+	display: none;
+}
+
+// Show handle only for the directly hovered/active field, not for nested subfields.
+// Use direct child combinator (>) so that a group's hover/active state
+// does not cascade to resize handles inside its subfields.
+.mb-field--hover > .mb-field-resize-handle,
+.mb-field--active > .mb-field-resize-handle {
+	display: block;
 }
 
 .mb-field-wrapper--columns-1 {

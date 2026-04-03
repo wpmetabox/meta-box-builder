@@ -1,10 +1,12 @@
 import { memo } from "@wordpress/element";
 import { isEqual } from 'lodash';
+import useActiveField from "../../hooks/useActiveField";
 import useFieldTypes from "../../hooks/useFieldTypes";
 import getList from "../../list-functions";
 import Panel from "../Panels/FieldSettings/Panel";
 
 const FieldSettings = ( { field, parent, updateField } ) => {
+	const isActive = useActiveField( state => state.fieldId === field._id );
 	let { fieldTypes } = useFieldTypes();
 	fieldTypes = Object.fromEntries(
 		Object.entries( fieldTypes ).filter( ( [ type, field ] ) => !field.disabled )
@@ -33,7 +35,7 @@ const FieldSettings = ( { field, parent, updateField } ) => {
 		<>
 			{
 				// Render field settings only when the field is active.
-				field._active &&
+				isActive &&
 				<Panel
 					controls={ controls }
 					field={ field }
