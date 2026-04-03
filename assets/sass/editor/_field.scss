@@ -12,7 +12,7 @@
 	position: relative;
 	cursor: grab;
 
-	&--hover {
+	&:hover:not(:has(.mb-field:hover)) {
 		outline: 1px solid var(--outline);
 		z-index: 2; // Make sure the outline show above the group title (which has z-index: 1)
 	}
