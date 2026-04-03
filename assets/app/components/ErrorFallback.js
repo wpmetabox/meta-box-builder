@@ -19,7 +19,7 @@ export default ( { error } ) => {
 			<RawHTML>
 				{
 					sprintf(
-						__( 'Please copy the following error message and <a href="%s" target="_blank">send us</a> a support ticket.', 'meta-box-builder' ),
+						__( 'Please try pressing <kbd>Ctrl+F5</kbd> (Windows/Linux) or <kbd>Cmd+Shift+R</kbd> (Mac) to clear your browser cache and refresh the page. If the error persists, please copy the error message and <a href="%s" target="_blank">send us</a> a support ticket.', 'meta-box-builder' ),
 						'https://metabox.io/contact/'
 					)
 				}
