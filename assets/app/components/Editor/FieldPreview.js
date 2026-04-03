@@ -158,8 +158,6 @@ const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
 
 	const FieldType = builtInFieldTypes.includes( field.type ) ? getLazyFieldType( field.type ) : null;
 
-	// console.debug( `%c  Field ${ field._id }`, "color:orange" );
-
 	return field.type && fieldTypes.hasOwnProperty( field.type ) && (
 		<div className={ `
 			mb-field-wrapper
