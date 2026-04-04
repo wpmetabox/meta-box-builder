@@ -4,23 +4,22 @@ namespace MBB\Helpers;
 use MBB\RestApi\Fields;
 
 /**
- * Provides native field setting keys per field type, used by mbb-parser to detect custom keys on import.
+ * Provide field setting keys per field type, used by mbb-parser to detect custom keys on import.
  */
 class FieldKeys {
 
 	/**
-	 * @var array<string, string[]>|null Cache: [ type => [key, ...] ]
+	 * List of field setting keys per field type [ type => [key, ...] ].
+	 * @var array<string, string[]>|null 
 	 */
 	private static ?array $keys_by_type = null;
 
 	/**
-	 * @var string[]|null Cache: union of all keys across every field type.
+	 * All keys across every field type.
+	 * @var string[]|null
 	 */
 	private static ?array $all_keys = null;
 
-	/**
-	 * @var Fields|null
-	 */
 	private static ?Fields $fields_api = null;
 
 	/**
@@ -30,41 +29,26 @@ class FieldKeys {
 		self::$fields_api = $fields_api;
 	}
 
-	/**
-	 * Get native keys for a specific field type (e.g. 'text', 'select').
-	 */
-	public static function get_native_keys( string $field_type ): array {
-		self::maybe_build();
-		return self::$keys_by_type[ $field_type ] ?? [];
-	}
-
-	/**
-	 * Get the union of native keys across every registered field type.
-	 */
-	public static function get_all_native_keys(): array {
-		self::maybe_build();
+	public static function all(): array {
 
 		if ( self::$all_keys !== null ) {
 			return self::$all_keys;
 		}
 
+		self::build();
+
 		self::$all_keys = array_values( array_unique( array_merge( ...array_values( self::$keys_by_type ) ) ) );
 		return self::$all_keys;
 	}
 
-	/**
-	 * Build the cache lazily.
-	 */
-	private static function maybe_build(): void {
-		if ( self::$keys_by_type !== null ) {
+
+	private static function build(): void {
+		if ( self::$fields_api === null ) {
 			return;
 		}
-		self::$keys_by_type = self::build();
-	}
 
-	private static function build(): array {
-		if ( self::$fields_api === null ) {
-			return [];
+		if ( self::$keys_by_type !== null ) {
+			return;
 		}
 
 		$field_types  = self::$fields_api->get_field_types();
@@ -96,7 +80,7 @@ class FieldKeys {
 			$keys_by_type[ $type ] = array_unique( $keys );
 		}
 
-		return $keys_by_type;
+		self::$keys_by_type = $keys_by_type;
 	}
 
 	/**
