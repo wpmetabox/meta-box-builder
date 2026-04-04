@@ -23,6 +23,27 @@ class FieldKeys {
 	private static ?array $all_keys = null;
 
 	/**
+	 * The already-instantiated Fields API instance, injected from bootstrap
+	 * to avoid creating a duplicate instance (which would re-register REST routes).
+	 *
+	 * @var \MBB\RestApi\Fields|null
+	 */
+	private static ?\MBB\RestApi\Fields $fields_api = null;
+
+	/**
+	 * Inject the existing Fields REST API instance.
+	 *
+	 * Should be called once from bootstrap, right after the instance is created:
+	 *   $fields = new RestApi\Fields( new Registry() );
+	 *   Helpers\FieldKeys::init( $fields );
+	 *
+	 * @param \MBB\RestApi\Fields $fields_api
+	 */
+	public static function init( \MBB\RestApi\Fields $fields_api ): void {
+		self::$fields_api = $fields_api;
+	}
+
+	/**
 	 * Get native setting keys for a specific field type.
 	 *
 	 * @param string $field_type  E.g. 'text', 'select', 'email'.
@@ -68,15 +89,22 @@ class FieldKeys {
 	}
 
 	/**
-	 * Instantiate a fresh Registry + Fields, call get_field_types() to get
-	 * the fully-resolved controls (after transform_controls), then extract
-	 * all setting keys per field type.
+	 * Extract all setting keys per field type from the Fields API.
+	 *
+	 * Uses the already-instantiated Fields API injected via init() to avoid
+	 * creating a duplicate instance (which would re-register REST routes).
+	 * Falls back to creating a fresh instance if init() was never called
+	 * (e.g. in unit tests or standalone usage).
 	 */
 	private static function build(): array {
-		$registry    = new \MBB\Registry();
-		$fields_api  = new \MBB\RestApi\Fields( $registry );
-		$field_types = $fields_api->get_field_types();
+		if ( self::$fields_api !== null ) {
+			$fields_api = self::$fields_api;
+		} else {
+			// Fallback: create a temporary instance (REST routes may be re-registered).
+			$fields_api = new \MBB\RestApi\Fields( new \MBB\Registry() );
+		}
 
+		$field_types  = $fields_api->get_field_types();
 		$keys_by_type = [];
 
 		foreach ( $field_types as $type => $field_type ) {
