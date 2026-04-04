@@ -1,53 +1,37 @@
 <?php
 namespace MBB\Helpers;
 
+use MBB\RestApi\Fields;
+
 /**
- * Provides a registry of native field setting keys, extracted dynamically
- * from the Builder's field type definitions. Used by mbb-parser to detect
- * which JSON keys are "custom" (not native) during import.
+ * Provides native field setting keys per field type, used by mbb-parser to detect custom keys on import.
  */
 class FieldKeys {
 
 	/**
-	 * Cache: [ 'text' => ['id', 'name', 'std', ...], 'select' => [...], ... ]
-	 *
-	 * @var array<string, string[]>|null
+	 * @var array<string, string[]>|null Cache: [ type => [key, ...] ]
 	 */
 	private static ?array $keys_by_type = null;
 
 	/**
-	 * Cache: union of all native keys across every field type.
-	 *
-	 * @var string[]|null
+	 * @var string[]|null Cache: union of all keys across every field type.
 	 */
 	private static ?array $all_keys = null;
 
 	/**
-	 * The already-instantiated Fields API instance, injected from bootstrap
-	 * to avoid creating a duplicate instance (which would re-register REST routes).
-	 *
-	 * @var \MBB\RestApi\Fields|null
+	 * @var Fields|null
 	 */
-	private static ?\MBB\RestApi\Fields $fields_api = null;
+	private static ?Fields $fields_api = null;
 
 	/**
-	 * Inject the existing Fields REST API instance.
-	 *
-	 * Should be called once from bootstrap, right after the instance is created:
-	 *   $fields = new RestApi\Fields( new Registry() );
-	 *   Helpers\FieldKeys::init( $fields );
-	 *
-	 * @param \MBB\RestApi\Fields $fields_api
+	 * Inject the existing Fields instance.
 	 */
-	public static function init( \MBB\RestApi\Fields $fields_api ): void {
+	public static function init( Fields $fields_api ): void {
 		self::$fields_api = $fields_api;
 	}
 
 	/**
-	 * Get native setting keys for a specific field type.
-	 *
-	 * @param string $field_type  E.g. 'text', 'select', 'email'.
-	 * @return string[]
+	 * Get native keys for a specific field type (e.g. 'text', 'select').
 	 */
 	public static function get_native_keys( string $field_type ): array {
 		self::maybe_build();
@@ -55,12 +39,7 @@ class FieldKeys {
 	}
 
 	/**
-	 * Get the union of all native setting keys across EVERY registered field type.
-	 *
-	 * Useful for building a global "known keys" list so that no native key
-	 * from any field type ends up being classified as a custom setting.
-	 *
-	 * @return string[]
+	 * Get the union of native keys across every registered field type.
 	 */
 	public static function get_all_native_keys(): array {
 		self::maybe_build();
@@ -69,17 +48,12 @@ class FieldKeys {
 			return self::$all_keys;
 		}
 
-		$merged = [];
-		foreach ( self::$keys_by_type as $keys ) {
-			$merged = array_merge( $merged, $keys );
-		}
-
-		self::$all_keys = array_values( array_unique( $merged ) );
+		self::$all_keys = array_values( array_unique( array_merge( ...array_values( self::$keys_by_type ) ) ) );
 		return self::$all_keys;
 	}
 
 	/**
-	 * Build the cache lazily (only on first call).
+	 * Build the cache lazily.
 	 */
 	private static function maybe_build(): void {
 		if ( self::$keys_by_type !== null ) {
@@ -88,38 +62,25 @@ class FieldKeys {
 		self::$keys_by_type = self::build();
 	}
 
-	/**
-	 * Extract all setting keys per field type from the Fields API.
-	 *
-	 * Uses the already-instantiated Fields API injected via init() to avoid
-	 * creating a duplicate instance (which would re-register REST routes).
-	 * Falls back to creating a fresh instance if init() was never called
-	 * (e.g. in unit tests or standalone usage).
-	 */
 	private static function build(): array {
-		if ( self::$fields_api !== null ) {
-			$fields_api = self::$fields_api;
-		} else {
-			// Fallback: create a temporary instance (REST routes may be re-registered).
-			$fields_api = new \MBB\RestApi\Fields( new \MBB\Registry() );
+		if ( self::$fields_api === null ) {
+			return [];
 		}
 
-		$field_types  = $fields_api->get_field_types();
+		$field_types  = self::$fields_api->get_field_types();
 		$keys_by_type = [];
 
 		foreach ( $field_types as $type => $field_type ) {
 			$keys = [];
 
-			foreach ( $field_type['controls'] as $control ) {
+			foreach ( $field_type['controls'] ?? [] as $control ) {
 				if ( ! is_array( $control ) || ! isset( $control['setting'] ) ) {
 					continue;
 				}
 
-				// 1. The primary setting key mapped to JSON.
 				$keys[] = $control['setting'];
 
-				// 2. Compound controls (InputGroup) store actual JSON keys in props.
-				//    e.g. minmax → min + max, prepend_append → prepend + append.
+				// Compound controls (InputGroup) expose actual JSON keys via props (e.g. min, max).
 				$props = $control['props'] ?? [];
 				if ( isset( $props['key1'] ) ) {
 					$keys[] = $props['key1'];
@@ -129,8 +90,7 @@ class FieldKeys {
 				}
 			}
 
-			// 3. Expand special "virtual" controls whose setting key doesn't
-			//    appear in JSON directly (only their sub-keys do).
+			// Expand virtual control keys to their actual JSON sub-keys.
 			$keys = self::expand_virtual_keys( $keys );
 
 			$keys_by_type[ $type ] = array_unique( $keys );
@@ -140,12 +100,7 @@ class FieldKeys {
 	}
 
 	/**
-	 * Some controls are "virtual" — their `setting` key in the Registry
-	 * doesn't appear in JSON output. Expand them to the actual JSON keys.
-	 *
-	 * clone_settings → clone, sort_clone, clone_default, clone_as_multiple,
-	 *                  min_clone, max_clone, add_button, clone_empty_start
-	 * text_limiter   → limit, limit_type
+	 * Expand virtual control keys (e.g. clone_settings, text_limiter) to their actual JSON keys.
 	 */
 	private static function expand_virtual_keys( array $keys ): array {
 		$virtual_map = [
