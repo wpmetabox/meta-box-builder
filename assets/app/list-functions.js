@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import dotProp from 'dot-prop';
 import { create } from 'zustand';
+import useActiveField from './hooks/useActiveField';
 import { ensureArray, ucwords, uniqid } from './functions';
 import useColumns from './hooks/useColumns';
 import useNavPanel from './hooks/useNavPanel';
@@ -80,7 +81,6 @@ const createList = ( { id = '', fields = [] } ) => {
 			const newId = `${ newField.type }_${ uniqid() }`;
 
 			// Temporary keys used in the builder.
-			delete newField._active;
 			delete newField._id_changed;
 
 			// Temporary keys used by SortableJS.
@@ -139,7 +139,7 @@ const createList = ( { id = '', fields = [] } ) => {
 			// Get the current list state before removing the field
 			const currentState = get();
 			const currentIndex = currentState.fields.findIndex( f => f._id === fieldId );
-			const isCurrentActive = currentIndex >= 0 && currentState.fields[ currentIndex ]._active;
+			const isCurrentActive = useActiveField.getState().fieldId === fieldId;
 			const isCurrentListGroup = currentState.id !== 'root';
 
 			// Remove the field
@@ -276,7 +276,6 @@ export const buildFieldsTree = () => {
 
 		// Temporary keys used in the builder.
 		delete processedField._new;
-		delete processedField._active;
 		delete processedField._id_changed;
 		delete processedField._original_id;
 
@@ -314,23 +313,7 @@ parseLists( MbbApp, 'root' );
 
 const findFieldList = fieldId => [ ...lists.values() ].find( list => list.getState().fields.some( field => field._id === fieldId ) );
 
-export const setFieldActive = fieldId => {
-	const list = findFieldList( fieldId );
-	if ( list ) {
-		list.getState().updateField( fieldId, '_active', true );
-	}
-
-	const allFields = [ ...lists.values() ].flatMap( store => store.getState().fields );
-	allFields.forEach( field => {
-		if ( field._id === fieldId || !field._active ) {
-			return;
-		}
-		const list = findFieldList( field._id );
-		if ( list ) {
-			list.getState().updateField( field._id, '_active', false );
-		}
-	} );
-};
+const setFieldActive = fieldId => useActiveField.getState().setFieldActive( fieldId );
 
 export const isInGroup = fieldId => {
 	const list = findFieldList( fieldId );

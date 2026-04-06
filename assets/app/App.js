@@ -1,4 +1,4 @@
-import { render } from "@wordpress/element";
+import { createRoot } from "@wordpress/element";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from './components/ErrorFallback';
 import Header from './components/Header';
@@ -35,10 +35,7 @@ container.classList.add( 'mb' );
 container.classList.add( 'og' );
 container.id = 'mb-app';
 
-// Use React 17 to avoid flashing issues when click to expand field settings.
-render( <App />, container );
-// const root = createRoot( container );
-// root.render( <App /> );
+createRoot( container ).render( <App /> );
 
 // Update URL for new posts
 updateNewPostUrl();
