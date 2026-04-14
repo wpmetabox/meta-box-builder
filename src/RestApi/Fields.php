@@ -84,7 +84,7 @@ class Fields extends Base {
 				'category'    => 'advanced',
 				'controls'    => array_merge(
 					[ 'required' ],
-					array_merge( $general_tab, [ 'allowed_block_list' ] ),
+					array_merge( $general_tab, [ 'allowed_block_list', '_callback' ] ),
 					array_merge( $appearance_tab, [ 'height', 'toolbar_position' ] ),
 					$validation_tab,
 					$advanced_tab

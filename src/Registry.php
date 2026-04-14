@@ -875,9 +875,15 @@ class Registry {
 					'default'          => [ 'true', 'false', 'tinymce', 'html' ],
 				],
 			], [], 'advanced' ),
-			'allowed_block_list' => Control::BlockListSelect( 'allowed_block_list', [
+			
+			// Block editor
+			Control::BlockListSelect( 'allowed_block_list', [
 				'label'   => __( 'Allowed block list', 'meta-box-builder' ),
 				'options' => AllowedBlockLists::get_lists(),
+			] ),
+			Control::Input( '_callback', [
+				'label'       => __( 'Allowed blocks callback', 'meta-box-builder' ),
+				'description' => __( 'PHP callback that returns the list of allowed blocks (the function must exist). If set, it overrides the allowed blocks list configured above.', 'meta-box-builder' ),
 			] ),
 		];
 
