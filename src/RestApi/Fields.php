@@ -364,7 +364,7 @@ class Fields extends Base {
 				'title'       => __( 'Link', 'meta-box-builder' ),
 				'category'    => 'advanced',
 				'controls'    => array_merge(
-					[ 'required', 'clone_settings' ],
+					[ 'clone_settings' ],
 					$general_tab,
 					$appearance_tab,
 					$advanced_tab
