@@ -360,6 +360,17 @@ class Fields extends Base {
 				),
 				'description' => __( 'Add an unlimited group of key-value pairs', 'meta-box-builder' ),
 			],
+			'link'              => [
+				'title'       => __( 'Link', 'meta-box-builder' ),
+				'category'    => 'advanced',
+				'controls'    => array_merge(
+					[ 'required', 'clone_settings' ],
+					$general_tab,
+					$appearance_tab,
+					$advanced_tab
+				),
+				'description' => __( 'Input for link with title and target', 'meta-box-builder' ),
+			],
 			'number'            => [
 				'title'       => __( 'Number', 'meta-box-builder' ),
 				'category'    => 'html5',

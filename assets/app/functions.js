@@ -78,6 +78,7 @@ export const getFieldIcon = type => {
 		image_select: fullscreen,
 		image_upload: cloudUpload,
 		key_value: category,
+		link,
 		number: chevronUpDown,
 		oembed: video,
 		osm: mapMarker,

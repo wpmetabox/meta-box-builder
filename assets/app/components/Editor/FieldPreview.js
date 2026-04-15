@@ -50,6 +50,7 @@ const builtInFieldTypes = [
 	'input',
 	'input_list',
 	'key_value',
+	'link',
 	'map',
 	'media',
 	'multiple_values',
