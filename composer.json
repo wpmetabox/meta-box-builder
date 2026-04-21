@@ -12,9 +12,9 @@
 		}
 	},
 	"require": {
-		"wpmetabox/support": "dev-master",
-		"wpmetabox/mbb-parser": "dev-master",
-		"elightup/twig": "dev-master"
+		"wpmetabox/support": "^1",
+		"elightup/twig": "dev-master",
+		"wpmetabox/mbb-parser": "^2.0"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^11.3",

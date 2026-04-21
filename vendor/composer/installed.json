@@ -96,25 +96,24 @@
         },
         {
             "name": "wpmetabox/mbb-parser",
-            "version": "dev-master",
-            "version_normalized": "dev-master",
+            "version": "2.0.3",
+            "version_normalized": "2.0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/mbb-parser.git",
-                "reference": "0d6ca37659aee22372fed252d9f0afd426d5b8dc"
+                "reference": "642171b1c08eb4892d85e1418d1191fd26c15e14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/0d6ca37659aee22372fed252d9f0afd426d5b8dc",
-                "reference": "0d6ca37659aee22372fed252d9f0afd426d5b8dc",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/642171b1c08eb4892d85e1418d1191fd26c15e14",
+                "reference": "642171b1c08eb4892d85e1418d1191fd26c15e14",
                 "shasum": ""
             },
             "require": {
                 "riimu/kit-phpencoder": "^2.4",
-                "wpmetabox/support": "dev-master"
+                "wpmetabox/support": "^1"
             },
-            "time": "2026-03-20T15:02:45+00:00",
-            "default-branch": true,
+            "time": "2026-04-21T01:39:41+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -129,14 +128,14 @@
             "description": "Parse meta box settings from JSON",
             "support": {
                 "issues": "https://github.com/wpmetabox/mbb-parser/issues",
-                "source": "https://github.com/wpmetabox/mbb-parser/tree/master"
+                "source": "https://github.com/wpmetabox/mbb-parser/tree/2.0.3"
             },
             "install-path": "../wpmetabox/mbb-parser"
         },
         {
             "name": "wpmetabox/support",
-            "version": "dev-master",
-            "version_normalized": "dev-master",
+            "version": "1.0.0",
+            "version_normalized": "1.0.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/support.git",
@@ -149,7 +148,6 @@
                 "shasum": ""
             },
             "time": "2025-09-12T23:29:48+00:00",
-            "default-branch": true,
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -165,7 +163,7 @@
             "homepage": "https://metabox.io",
             "support": {
                 "issues": "https://github.com/wpmetabox/support/issues",
-                "source": "https://github.com/wpmetabox/support/tree/master"
+                "source": "https://github.com/wpmetabox/support/tree/1.0.0"
             },
             "install-path": "../wpmetabox/support"
         }
