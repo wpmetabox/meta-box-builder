@@ -1,3 +1,16 @@
+### 5.3.0 - 2026-04-21
+
+- Add new `link` field type
+- Add allowed blocks callback that must return a list of blocks for the `block_editor` field
+- Improve the UX of allowed block lists for the `block_editor` field
+- Add missing `class`, `before`, `after` controls for the `custom_html` field
+- Add time format support for the `datetime` field
+- Remove all tabs settings when there are no fields
+- Update the React app to React 18
+- Fix detecting title and name changes
+- Fix missing `sprintf` import for date time field preview
+- Fix custom settings not available in the builder after import
+
 ### 5.2.3 - 2026-03-24
 
 - Add keyboard shortcut `Ctrl+S` (or `Cmd+S` on Mac) to save field groups/relationships/settings pages
