@@ -10,6 +10,7 @@ class Manager {
 		new SettingsPage();
 		new FieldGroup();
 		new Relationship();
+		new LocationSearch();
 	}
 
 	private function is_active(): bool {

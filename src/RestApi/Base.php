@@ -59,9 +59,10 @@ class Base {
 
 		$options = [];
 		foreach ( $posts as $post ) {
+			$label     = apply_filters( 'mbb_builder_post_label', $post->post_title, $post );
 			$options[] = [
 				'value' => $post->ID,
-				'label' => $post->post_title,
+				'label' => $label,
 			];
 		}
 
