@@ -1,6 +1,9 @@
 import { Flex, Tooltip } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import { ReactComponent as Logo } from '../../../../../assets/app/components/logo.svg';
+import { isMac } from '../../../../../assets/app/functions';
+
+const shortcut = isMac() ? '⌘S' : 'Ctrl+S';
 
 const Header = () => (
 	<Flex className="mb-header">
@@ -19,7 +22,7 @@ const Header = () => (
 		<input
 			type="submit"
 			className="components-button is-primary"
-			value={ __( 'Save Changes', 'meta-box-builder' ) }
+			value={ `${ __( 'Save Changes', 'meta-box-builder' )} (${ shortcut })` }
 		/>
 	</Flex>
 );

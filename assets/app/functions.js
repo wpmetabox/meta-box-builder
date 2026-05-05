@@ -154,3 +154,11 @@ export const maybeArrayToObject = ( arr, key ) => {
 	return typeof arr === 'object' ? arr : {};
 };
 
+export const isMac = () => {
+	// Modern (Chromium-based browsers)
+	if ( navigator.userAgentData?.platform ) {
+		return navigator.userAgentData.platform === 'macOS';
+	}
+	// Fallback (desktop-focused)
+	return navigator.platform === 'MacIntel';
+}

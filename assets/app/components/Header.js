@@ -2,11 +2,13 @@ import { Button, Flex, Tooltip } from '@wordpress/components';
 import { __ } from "@wordpress/i18n";
 import { cog, external, listView, plus } from "@wordpress/icons";
 import { useShallow } from 'zustand/react/shallow';
-import { ensureArray, ucwords } from '../functions';
+import { ensureArray, isMac, ucwords } from '../functions';
 import useFloatingStructurePanel from '../hooks/useFloatingStructurePanel';
 import useNavPanel from '../hooks/useNavPanel';
 import useSettings from '../hooks/useSettings';
 import useUnsavedChanges from '../hooks/useUnsavedChanges';
+
+const shortcut = isMac() ? '⌘S' : 'Ctrl+S';
 
 const Header = () => {
 	const { navPanel, setNavPanel } = useNavPanel();
@@ -116,7 +118,7 @@ const Header = () => {
 				<input
 					type="submit"
 					className="components-button is-primary"
-					value={ __( 'Save Changes', 'meta-box-builder' ) }
+					value={ `${ __( 'Save Changes', 'meta-box-builder' )} (${ shortcut })` }
 					disabled={ !hasUnsavedChanges }
 				/>
 			</Flex>
