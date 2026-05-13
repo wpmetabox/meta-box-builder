@@ -1,3 +1,9 @@
+### 5.3.1 - 2026-05-13
+
+- Update style for toggle-group when there is only 1 item
+- Show Cmd+S/Ctrl+S shortcut in the Save button
+- Fix error in FieldKeys::all()
+
 ### 5.3.0 - 2026-04-21
 
 - Add new `link` field type
