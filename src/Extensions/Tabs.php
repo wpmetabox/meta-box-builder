@@ -16,7 +16,7 @@ class Tabs {
 		add_filter( 'mbb_field_keys', [ $this, 'add_field_key' ] );
 	}
 
-	public function add_field_type( $field_types ) {
+	public function add_field_type( array $field_types ): array {
 		$field_types['tab'] = [
 			'title'    => __( 'Tab', 'meta-box-builder' ),
 			'category' => 'layout',
@@ -177,6 +177,6 @@ class Tabs {
 	}
 
 	public function add_field_key( array $keys ): array {
-		return array_merge( $keys, ['tab'] );
+		return array_merge( $keys, [ 'tab' ] );
 	}
 }

@@ -33,8 +33,8 @@ class FieldKeys {
 		self::build();
 
 		if ( self::$keys_by_type === null ) {
-	        return [];
-	    }
+			return [];
+		}
 
 		self::$all_keys = array_merge( ...array_values( self::$keys_by_type ) );
 		self::$all_keys = apply_filters( 'mbb_field_keys', self::$all_keys );
