@@ -53,12 +53,21 @@ class Base {
 	protected function get_posts( $s, $name = '', $post_types = '' ): array {
 		$post_types = Arr::from_csv( $post_types );
 
-		global $wpdb;
-		$sql   = "SELECT ID, post_title FROM $wpdb->posts WHERE post_type IN ('" . implode( "','", $post_types ) . "') AND post_title LIKE '%%" . esc_sql( $s ) . "%%' ORDER BY post_title ASC LIMIT 10";
-		$posts = $wpdb->get_results( $sql );
+		// Use WP_Query so WPML/Polylang hooks can filter by language properly.
+		$query = new \WP_Query( [
+			'post_type'              => $post_types,
+			'post_status'            => 'publish',
+			's'                      => $s,
+			'posts_per_page'         => 10,
+			'orderby'                => 'title',
+			'order'                  => 'ASC',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		] );
 
 		$options = [];
-		foreach ( $posts as $post ) {
+		foreach ( $query->posts as $post ) {
 			$options[] = [
 				'value' => $post->ID,
 				'label' => $post->post_title,
@@ -78,6 +87,8 @@ class Base {
 				'name__like' => $s,
 				'orderby'    => 'name',
 				'number'     => 10,
+				'suppress_filters' => true,
+				'lang'       => '',
 			],
 		];
 
