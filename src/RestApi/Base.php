@@ -82,8 +82,6 @@ class Base {
 				'name__like' => $s,
 				'orderby'    => 'name',
 				'number'     => 10,
-				'suppress_filters' => true,
-				'lang'       => '',
 			],
 		];
 
