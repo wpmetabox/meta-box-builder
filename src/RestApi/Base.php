@@ -3,6 +3,7 @@ namespace MBB\RestApi;
 
 use WP_REST_Server;
 use ReflectionMethod;
+use RWMB_Post_Field;
 use RWMB_Taxonomy_Field;
 use RWMB_User_Field;
 use MBB\Helpers\Data;
@@ -53,28 +54,22 @@ class Base {
 	protected function get_posts( $s, $name = '', $post_types = '' ): array {
 		$post_types = Arr::from_csv( $post_types );
 
-		// Use WP_Query so WPML/Polylang hooks can filter by language properly.
-		$query = new \WP_Query( [
-			'post_type'              => $post_types,
-			'post_status'            => 'publish',
-			's'                      => $s,
-			'posts_per_page'         => 10,
-			'orderby'                => 'title',
-			'order'                  => 'ASC',
-			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
-			'update_post_term_cache' => false,
-		] );
+		$field = [
+			'id'         => 'mbb_api_post',
+			'type'       => 'post',
+			'clone'      => false,
+			'query_args' => [
+				's'              => $s,
+				'post_type'      => $post_types,
+				'post_status'    => 'publish',
+				'posts_per_page' => 10,
+				'orderby'        => 'title',
+				'order'          => 'ASC',
+			],
+		];
 
-		$options = [];
-		foreach ( $query->posts as $post ) {
-			$options[] = [
-				'value' => $post->ID,
-				'label' => $post->post_title,
-			];
-		}
-
-		return $options;
+		$data = RWMB_Post_Field::query( null, $field );
+		return array_values( $data );
 	}
 
 	protected function get_terms( $s, $taxonomy ) {
