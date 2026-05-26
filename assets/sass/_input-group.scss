@@ -7,7 +7,7 @@
 		align-items: center;
 		gap: 4px;
 		padding-inline: 8px;
-		border: 1px solid #8c8f94;
+		border: 1px solid #949494;
 		background: var(--color-lightest);
 		white-space: nowrap;
 
@@ -28,7 +28,8 @@
 	}
 
 	:first-child {
-		border-radius: 4px 0 0 4px;
+		border-top-left-radius: 2px;
+		border-bottom-left-radius: 2px;
 	}
 
 	:not(:first-child) {
@@ -37,7 +38,8 @@
 	}
 
 	:last-child {
-		border-radius: 0 4px 4px 0;
+		border-top-right-radius: 2px;
+		border-bottom-right-radius: 2px;
 	}
 
 	input[type="checkbox"] {
@@ -79,7 +81,7 @@
 		align-items: center;
 		gap: 4px;
 		padding-inline: 8px;
-		border: 1px solid #8c8f94;
+		border: 1px solid #949494;
 		background: var(--color-lightest);
 		white-space: nowrap;
 
@@ -100,11 +102,13 @@
 	}
 
 	:nth-child(2n+1) {
-		border-radius: 4px 0 0 4px;
+		border-top-left-radius: 2px;
+		border-bottom-left-radius: 2px;
 	}
 
 	:nth-child(2n) {
-		border-radius: 0 4px 4px 0;
+		border-top-right-radius: 2px;
+		border-bottom-right-radius: 2px;
 		margin-left: -1px;
 	}
 
@@ -113,9 +117,9 @@
 	}
 
 	.dashicons {
-		width: 12px;
-		height: 12px;
-		font-size: 12px;
+		width: 14px;
+		height: 14px;
+		font-size: 14px;
 		color: var(--color-light);
 		line-height: 1;
 	}
