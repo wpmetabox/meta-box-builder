@@ -37,11 +37,6 @@
 	bottom: 0;
 	left: var(--left); // Admin menu open
 	right: 0;
-
-	// Admin menu folded.
-	.folded & {
-		--left: 36px !important; // Override the value set inline in setupAdminMenuWidth().
-	}
 }
 
 // Header
