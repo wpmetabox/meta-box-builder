@@ -56,7 +56,7 @@ const ShowHide = () => {
 						updateSetting={ updateSetting }
 					/> )
 				}
-				<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
+				<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 			</div>
 		</PersistentPanelBodyWithAdd>
 	);
@@ -133,6 +133,7 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 				onChange={ onChangeName }
 				options={ options }
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 			/>
 			{
 				// Using an unused "key" prop to force re-rendering, which makes the loadOptions callback work.
@@ -158,6 +159,7 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 						{ label: __( 'No', 'meta-box-builder' ), value: 'false' },
 					] }
 					__nextHasNoMarginBottom
+					__next40pxDefaultSize
 				/>
 			}
 			{
