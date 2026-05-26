@@ -15,24 +15,19 @@
 	}
 
 	&__content {
-		border-top: var(--border-lighter);
+		border-top: var(--border);
 		display: grid;
 		grid-template-columns: 180px minmax(0, 1fr);
 	}
 
 	&__header {
 		cursor: pointer;
-		border-right: var(--border-lighter);
-	}
-
-	&__fields {
-		position: sticky;
-		top: 48px;
+		border-right: var(--border);
 	}
 
 	&__field {
 		font-weight: 500;
-		border-bottom: var(--border-lighter);
+		border-bottom: var(--border);
 		display: block;
 		cursor: pointer;
 		padding: 12px;
@@ -43,13 +38,13 @@
 	}
 
 	&__body {
-		.og-result__body {
-			position: sticky;
-			top: -48px;
+		.react-codemirror2 {
+			border-width: 0 0 1px;
 		}
-	}
 
-	.react-codemirror2 {
-		border-width: 0 0 1px;
+		button.button {
+			top: -1px;
+			right: -1px;
+		}
 	}
 }
