@@ -2,6 +2,8 @@
 	&__pick.button {
 		border-color: var(--color-gray);
 		color: inherit;
+		width: 40px;
+		padding: 0;
 	}
 
 	&__dropdown .components-popover__content {
