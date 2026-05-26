@@ -18,11 +18,12 @@ const Header = () => {
 		visible: state.visible,
 		toggleVisible: state.toggleVisible,
 	} ) ) );
-	const { getObjectType, getPostTypes, getSetting } = useSettings( state => ( {
+	const { settings, getObjectType, getPostTypes, getSetting } = useSettings( useShallow( state => ( {
+		settings: state.settings, // Triggers useShallow to re-evaluate when settings change (not referenced directly).
 		getObjectType: state.getObjectType,
 		getPostTypes: state.getPostTypes,
 		getSetting: state.getSetting,
-	} ) );
+	} ) ) );
 
 	const updateNavPanel = key => () => setNavPanel( key === navPanel ? '' : key );
 

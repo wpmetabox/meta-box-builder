@@ -46,7 +46,7 @@ const IncludeExclude = () => {
 					updateSetting={ updateSetting }
 				/> )
 			}
-			<Button variant="secondary" size="compact" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
+			<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 		</DivRow>
 	);
 };
@@ -151,6 +151,7 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 				onChange={ onChangeName }
 				options={ options }
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 			/>
 			{
 				![ 'is_child', 'custom' ].includes( name ) &&
@@ -175,6 +176,7 @@ const Rule = ( { rule, removeRule, updateSetting } ) => {
 						{ label: __( 'No', 'meta-box-builder' ), value: 'false' },
 					] }
 					__nextHasNoMarginBottom
+					__next40pxDefaultSize
 				/>
 			}
 			{
