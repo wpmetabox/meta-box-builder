@@ -1,6 +1,6 @@
 .react-select {
 	&__control.react-select__control {
-		border-color: #949494;
+		border-color: var(--color-gray);
 		min-height: 40px;
 		border-radius: 2px;
 	}
