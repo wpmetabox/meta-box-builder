@@ -48,6 +48,13 @@ class Generator {
 			$metadata['render'] = $settings['render_callback'];
 		}
 
+		// Render a block with a template:
+		// - Relative path (e.g. `file:./template.php`): declared in block.json (thus write to block.json file), handled by WordPress
+		// - Absolute path: rendered by MB Blocks - do not write to block.json file
+		if ( isset( $settings['render_template'] ) && ! str_starts_with( $settings['render_template'], '.' )) {
+			$metadata['render'] = "file:{$settings['render_template']}";
+		}
+
 		// Add fields to block metadata attributes.
 		$attributes = [];
 		if ( isset( $raw_data['fields'] ) && is_array( $raw_data['fields'] ) ) {

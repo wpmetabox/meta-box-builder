@@ -35,16 +35,33 @@ class Register {
 
 			if ( empty( $meta_box['block_json']['enable'] )
 				|| ! file_exists( $meta_box['block_json']['path'] )
-				// Do not register block.json if its rendering method is via a callback, template or code.
-				|| isset( $meta_box['function_name'] )
-				|| isset( $meta_box['render_template'] )
+				// Do not register block.json if its rendering method is via code.
 				|| isset( $meta_box['render_code'] )
 			) {
 				continue;
 			}
 
+			// Render a block with a template:
+			// - Relative path (e.g. `file:./template.php`): generated in block.json (see Generator.php), handled by WordPress
+			// - Absolute path: rendered by MB Blocks
+			if ( isset( $meta_box['render_template'] ) && ! str_starts_with( $meta_box['render_template'], '.' ) ) {
+				continue;
+			}
+
+			$args = [];
+
+			// Render a block with a callback:
+			// render_callback must return a string, but we echo => capture via output buffering.
+			if ( isset( $meta_box['render_callback'] ) && is_callable( $meta_box['render_callback'] ) ) {
+				$args['render_callback'] = function( $attributes, $content, $block ) use ( $meta_box ) {
+					ob_start();
+					call_user_func( $meta_box['render_callback'], $attributes, $content, $block );
+					return ob_get_clean();
+				};
+			}
+
 			// Now we register the block with the provided path
-			register_block_type( trailingslashit( $meta_box['block_json']['path'] ) . $meta_box['id'] );
+			register_block_type( trailingslashit( $meta_box['block_json']['path'] ) . $meta_box['id'], $args );
 		}
 	}
 }
