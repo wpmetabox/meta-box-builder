@@ -45,7 +45,7 @@ class Generator {
 		// Render a block with a template:
 		// - Relative path (e.g. `file:./template.php`): write to block.json, handled by WordPress
 		// - Absolute path: do not write to block.json, rendered by MB Blocks
-		if ( isset( $settings['render_template'] ) && ! str_starts_with( $settings['render_template'], '.' ) ) {
+		if ( isset( $settings['render_template'] ) && str_starts_with( $settings['render_template'], '.' ) ) {
 			$metadata['render'] = "file:{$settings['render_template']}";
 		}
 
