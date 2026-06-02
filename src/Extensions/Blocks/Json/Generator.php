@@ -15,7 +15,7 @@ class Generator {
 			return;
 		}
 
-		$this->generate_block_package( $settings, $post_id, $raw_data );
+		$this->write_block_json_file( $settings, $post_id, $raw_data );
 	}
 
 	private function generate_block_metadata( array $settings, array $raw_data ): array {
@@ -43,9 +43,9 @@ class Generator {
 		}
 
 		// Render a block with a template:
-		// - Relative path (e.g. `file:./template.php`): declared in block.json (thus write to block.json file), handled by WordPress
-		// - Absolute path: rendered by MB Blocks - do not write to block.json file
-		if ( isset( $settings['render_template'] ) && ! str_starts_with( $settings['render_template'], '.' )) {
+		// - Relative path (e.g. `file:./template.php`): write to block.json, handled by WordPress
+		// - Absolute path: do not write to block.json, rendered by MB Blocks
+		if ( isset( $settings['render_template'] ) && ! str_starts_with( $settings['render_template'], '.' ) ) {
 			$metadata['render'] = "file:{$settings['render_template']}";
 		}
 
@@ -78,7 +78,7 @@ class Generator {
 	 *
 	 * @todo: Add support for other field types. For example, enum.
 	 */
-	private function generate_block_attributes( ?array $fields ) {
+	private function generate_block_attributes( ?array $fields ): array {
 		if ( ! is_array( $fields ) ) {
 			return [];
 		}
@@ -108,7 +108,7 @@ class Generator {
 		return $attributes;
 	}
 
-	private function get_field_type_and_default_value( $field ) {
+	private function get_field_type_and_default_value( $field ): ?array {
 		$type = 'string';
 		$std  = $field['std'] ?? null;
 
@@ -129,27 +129,27 @@ class Generator {
 		$field['id'] = $field['id'] ?? $field['_id'] ?? null;
 
 		if ( ! isset( $field['type'] ) || ! isset( $field['id'] ) ) {
-			return;
+			return null;
 		}
 
-		if ( in_array( $field['type'], [ 'number', 'slider', 'range' ] ) ) {
+		if ( in_array( $field['type'], [ 'number', 'slider', 'range' ], true ) ) {
 			$type = 'number';
 			$std  = is_numeric( $field['std'] ) ? $field['std'] : 0;
 		}
 
-		if ( in_array( $field['type'], [ 'checkbox', 'switch' ] ) ) {
+		if ( in_array( $field['type'], [ 'checkbox', 'switch' ], true ) ) {
 			$type = 'boolean';
 			$std  = isset( $field['std'] ) ? (bool) $field['std'] : false;
 		}
 
-		if ( in_array( $field['type'], [ 'single_image', 'file_input', 'user', 'post' ] ) ) {
+		if ( in_array( $field['type'], [ 'single_image', 'file_input', 'user', 'post' ], true ) ) {
 			$type = 'object';
 			$std  = new \stdClass();
 		}
 
-		$is_multiple = ( isset( $field['multiple'] ) && $field['multiple'] )
-			|| ( isset( $field['type'] ) && in_array( $field['type'], $array_fields ) )
-			|| ( isset( $field['field_type'] ) && in_array( $field['field_type'], [ 'select_tree', 'checkbox_tree', 'checkbox_list', 'checkbox_tree' ] ) );
+		$is_multiple = ! empty( $field['multiple'] )
+			|| in_array( $field['type'], $array_fields, true )
+			|| ( isset( $field['field_type'] ) && in_array( $field['field_type'], [ 'select_tree', 'checkbox_tree', 'checkbox_list', 'checkbox_tree' ], true ) );
 
 		$is_cloneable = $field['clone'] ?? false;
 
@@ -161,7 +161,7 @@ class Generator {
 		return [ $type, $std ];
 	}
 
-	private function generate_block_package( array $settings, $post_id, $raw_data ): void {
+	private function write_block_json_file( array $settings, $post_id, $raw_data ): void {
 		$block_id          = $settings['id'];
 		$block_path        = trailingslashit( $settings['block_json']['path'] ) . $block_id;
 		$parent_block_path = dirname( $block_path );
