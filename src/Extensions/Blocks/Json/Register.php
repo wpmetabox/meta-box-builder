@@ -20,48 +20,66 @@ class Register {
 
 		foreach ( $query->posts as $post_id ) {
 			$meta_box = get_post_meta( $post_id, 'meta_box', true );
-
-			if ( empty( $meta_box ) ) {
+			if ( ! $this->use_block_json( $meta_box ) ) {
 				continue;
 			}
 
 			$path = Arr::get( $meta_box, 'block_json.path' );
 
-			if (
-				Arr::get( $meta_box, 'type' ) !== 'block'
-				|| ! Arr::get( $meta_box, 'block_json.enable' )
-				|| ! $path
-				|| ! file_exists( $path )
-			) {
-				continue;
-			}
-
-			// Do not register block.json if its rendering method is via code.
-			if ( isset( $meta_box['render_code'] ) ) {
-				continue;
-			}
-
-			// Render a block with a template:
-			// - Relative path (e.g. `file:./template.php`): generated in block.json (see Generator.php), handled by WordPress
-			// - Absolute path: rendered by MB Blocks
-			if ( isset( $meta_box['render_template'] ) && ! str_starts_with( $meta_box['render_template'], '.' ) ) {
-				continue;
-			}
-
 			$args = [];
+			$this->set_render_callback_param( $args, $meta_box );
+			$this->set_render_template_param( $args, $meta_box );
 
-			// Render a block with a callback:
-			// render_callback must return a string, but we echo => capture via output buffering.
-			if ( isset( $meta_box['render_callback'] ) && is_callable( $meta_box['render_callback'] ) ) {
-				$args['render_callback'] = function( $attributes, $content, $block ) use ( $meta_box ) {
-					ob_start();
-					call_user_func( $meta_box['render_callback'], $attributes, $content, $block );
-					return ob_get_clean();
-				};
-			}
-
-			// Now we register the block with the provided path
 			register_block_type( trailingslashit( $path ) . $meta_box['id'], $args );
 		}
+	}
+
+	private function use_block_json( $meta_box ): bool {
+		if ( ! is_array( $meta_box ) ) {
+			return false;
+		}
+
+		$path = Arr::get( $meta_box, 'block_json.path' );
+
+		return Arr::get( $meta_box, 'type' ) === 'block'
+			&& Arr::get( $meta_box, 'block_json.enable' )
+			&& $path
+			&& file_exists( $path );
+	}
+
+	private function set_render_callback_param( array &$args, array $meta_box ): void {
+		$callback = Arr::get( $meta_box, 'render_callback' );
+		if ( ! $callback || ! is_callable( $callback ) ) {
+			return;
+		}
+
+		// render_callback must return a string, but we echo => capture via output buffering.
+		$args['render_callback'] = static function( $attributes, $content, $block ) use ( $callback ) {
+			ob_start();
+			call_user_func( $callback, $attributes, $content, $block );
+			return ob_get_clean();
+		};
+	}
+
+	private function set_render_template_param( array &$args, array $meta_box ): void {
+		$template = Arr::get( $meta_box, 'render_template' );
+		if ( ! $template || ! is_string( $template ) ) {
+			return;
+		}
+
+		// Template with relative path to block.json: handled by WordPress
+		if ( str_starts_with( $template, '.' ) ) {
+			return;
+		}
+
+		// Template with absolute path: include it inside a custom render_callback
+		if ( ! file_exists( $template ) ) {
+			return;
+		}
+		$args['render_callback'] = static function( $attributes, $content, $block ) use ( $template ) {
+			ob_start();
+			include $template;
+			return ob_get_clean();
+		};
 	}
 }
