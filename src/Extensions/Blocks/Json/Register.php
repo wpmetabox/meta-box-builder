@@ -1,6 +1,8 @@
 <?php
 namespace MBB\Extensions\Blocks\Json;
 
+use MetaBox\Support\Arr;
+
 class Register {
 	public function __construct() {
 		add_action( 'init', [ $this, 'register_blocks' ] );
@@ -23,21 +25,19 @@ class Register {
 				continue;
 			}
 
-			// Bail if this is not a block.
-			if ( empty( $meta_box['type'] ) || 'block' !== $meta_box['type'] ) {
-				continue;
-			}
+			$path = Arr::get( $meta_box, 'block_json.path' );
 
-			// Bail if block path is empty.
-			if ( empty( $meta_box['block_json'] ) || empty( $meta_box['block_json']['path'] ) ) {
-				continue;
-			}
-
-			if ( empty( $meta_box['block_json']['enable'] )
-				|| ! file_exists( $meta_box['block_json']['path'] )
-				// Do not register block.json if its rendering method is via code.
-				|| isset( $meta_box['render_code'] )
+			if (
+				Arr::get( $meta_box, 'type' ) !== 'block'
+				|| ! Arr::get( $meta_box, 'block_json.enable' )
+				|| ! $path
+				|| ! file_exists( $path )
 			) {
+				continue;
+			}
+
+			// Do not register block.json if its rendering method is via code.
+			if ( isset( $meta_box['render_code'] ) ) {
 				continue;
 			}
 
@@ -61,7 +61,7 @@ class Register {
 			}
 
 			// Now we register the block with the provided path
-			register_block_type( trailingslashit( $meta_box['block_json']['path'] ) . $meta_box['id'], $args );
+			register_block_type( trailingslashit( $path ) . $meta_box['id'], $args );
 		}
 	}
 }
