@@ -2,6 +2,7 @@
 namespace MBB\Extensions\Blocks\Json;
 
 use MetaBox\Support\Arr;
+use MBB\Extensions\Blocks\CodeToCallbackTransformer;
 
 class Register {
 	public function __construct() {
@@ -29,6 +30,7 @@ class Register {
 			$args = [];
 			$this->set_render_callback_param( $args, $meta_box );
 			$this->set_render_template_param( $args, $meta_box );
+			$this->set_render_callback_param_for_code( $args, $meta_box );
 
 			register_block_type( trailingslashit( $path ) . $meta_box['id'], $args );
 		}
@@ -79,6 +81,20 @@ class Register {
 		$args['render_callback'] = static function( $attributes, $content, $block ) use ( $template ) {
 			ob_start();
 			include $template;
+			return ob_get_clean();
+		};
+	}
+
+	private function set_render_callback_param_for_code( array &$args, array $meta_box ): void {
+		if ( empty( $meta_box['render_code'] ) ) {
+			return;
+		}
+
+		// render_callback must return a string, but we echo => capture via output buffering.
+		$callback = CodeToCallbackTransformer::get_render_callback( $meta_box );
+		$args['render_callback'] = static function( $attributes, $content, $block ) use ( $callback ) {
+			ob_start();
+			call_user_func( $callback, $attributes, $content, $block );
 			return ob_get_clean();
 		};
 	}
