@@ -38,14 +38,13 @@ class Generator {
 			],
 		];
 
+		// Render with MB Views
 		if ( ! empty( $settings['render_callback'] ) && str_starts_with( $settings['render_callback'], 'view:' ) ) {
 			$metadata['render'] = $settings['render_callback'];
 		}
 
-		// Render a block with a template:
-		// - Relative path (e.g. `file:./template.php`): write to block.json, handled by WordPress
-		// - Absolute path: do not write to block.json, rendered by MB Blocks
-		if ( isset( $settings['render_template'] ) && str_starts_with( $settings['render_template'], '.' ) ) {
+		// Render with a template.
+		if ( ! empty( $settings['render_template'] ) ) {
 			$metadata['render'] = "file:{$settings['render_template']}";
 		}
 
