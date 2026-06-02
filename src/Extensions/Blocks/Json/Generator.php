@@ -174,43 +174,17 @@ class Generator {
 			wp_mkdir_p( $block_path );
 		}
 
-		$new_metadata = $this->generate_block_metadata( $settings, $raw_data );
+		$metadata = $this->generate_block_metadata( $settings, $raw_data );
 
-		// Compare old and new block metadata, and save the new one if it's newer.
-		$block_json_path = $block_path . '/block.json';
-
-		$is_newer = false;
-
-		if ( ! file_exists( $block_json_path ) ) {
-			$is_newer = true;
-		} else {
-			$current_metadata = wp_json_file_decode( $block_json_path, [ 'associative' => true ] );
-
-			foreach ( $new_metadata as $key => $value ) {
-				if ( $key === 'version' ) {
-					continue;
-				}
-
-				if ( ! isset( $current_metadata[ $key ] ) || $current_metadata[ $key ] !== $value ) {
-					$is_newer = true;
-					break;
-				}
-			}
-		}
-
-		if ( ! $is_newer ) {
-			return;
-		}
-
-		// Save the new version back to the post meta.
+		// Save the new version back to the post meta
 		$settings                          = get_post_meta( $post_id, 'settings', true );
-		$settings['block_json']['version'] = $new_metadata['version'];
+		$settings['block_json']['version'] = $metadata['version'];
 		update_post_meta( $post_id, 'settings', $settings );
 
-		// phpcs:disable
-		$new_metadata = json_encode( $new_metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
-		file_put_contents( $block_json_path, $new_metadata );
-		chmod( $block_json_path, 0664 );
-		// phpcs:enable
+		// Write to block.json file
+		$metadata        = wp_json_encode( $metadata, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+		$block_json_path = $block_path . '/block.json';
+		file_put_contents( $block_json_path, $metadata ); // phpcs:ignore
+		chmod( $block_json_path, 0664 );                  // phpcs:ignore
 	}
 }
