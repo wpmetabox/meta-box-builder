@@ -2,6 +2,7 @@
 namespace MBB\Extensions\Blocks\Json;
 
 use MBB\Helpers\Path;
+use MetaBox\Support\Arr;
 
 class Generator {
 	public function __construct() {
@@ -10,14 +11,7 @@ class Generator {
 
 	public function generate_block_json( $parser, $post_id, $raw_data ): void {
 		$settings = $parser->get_settings();
-
-		// Bail if this is not a block.
-		if ( ! isset( $settings['type'] ) || $settings['type'] !== 'block' ) {
-			return;
-		}
-
-		// Bail if block path is empty.
-		if ( empty( $settings['block_json'] ) || ! $settings['block_json']['enable'] ) {
+		if ( Arr::get( $settings, 'type' ) !== 'block' || ! Arr::get( $settings, 'block_json.enable' ) ) {
 			return;
 		}
 
@@ -190,7 +184,7 @@ class Generator {
 		if ( ! file_exists( $block_json_path ) ) {
 			$is_newer = true;
 		} else {
-			$current_metadata = json_decode( file_get_contents( $block_json_path ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$current_metadata = wp_json_file_decode( $block_json_path, [ 'associative' => true ] );
 
 			foreach ( $new_metadata as $key => $value ) {
 				if ( $key === 'version' ) {
