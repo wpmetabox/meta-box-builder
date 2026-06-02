@@ -4,6 +4,8 @@ node_modules
 *.zip
 *.LICENSE.txt
 
+.commandcode
+
 # assets/js/build
 src/Extensions/Relationships/build/relationships.js.map
 src/Extensions/SettingsPage/build/settings-page.js.map
