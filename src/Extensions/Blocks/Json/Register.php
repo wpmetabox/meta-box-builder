@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Extensions\Blocks\Json;
 
+use WP_Query;
 use MetaBox\Support\Arr;
 use MBB\Extensions\Blocks\CodeToCallbackTransformer;
 
@@ -10,7 +11,7 @@ class Register {
 	}
 
 	public function register_blocks(): void {
-		$query = new \WP_Query( [
+		$query = new WP_Query( [
 			'post_type'              => 'meta-box',
 			'post_status'            => 'publish',
 			'posts_per_page'         => -1,
@@ -26,14 +27,27 @@ class Register {
 			}
 
 			$path = Arr::get( $meta_box, 'block_json.path' );
-
-			$args = [];
-			$this->set_render_callback_param( $args, $meta_box );
-			$this->set_render_template_param( $args, $meta_box );
-			$this->set_render_callback_param_for_code( $args, $meta_box );
-
+			$args = $this->get_block_type_args( $post_id, $meta_box );
 			register_block_type( trailingslashit( $path ) . $meta_box['id'], $args );
 		}
+	}
+
+	private function get_block_type_args( int $post_id, array $meta_box ): array {
+		$settings    = get_post_meta( $post_id, 'settings', true );
+		$render_with = Arr::get( $settings, 'render_with' );
+
+		$args = [];
+		if ( $render_with === 'callback' ) {
+			$this->set_render_callback_param( $args, $meta_box );
+		}
+		if ( $render_with === 'template' ) {
+			$this->set_render_template_param( $args, $meta_box );
+		}
+		if ( $render_with === 'code' ) {
+			$this->set_render_callback_param_for_code( $args, $meta_box );
+		}
+
+		return $args;
 	}
 
 	private function use_block_json( $meta_box ): bool {
