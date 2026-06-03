@@ -32,24 +32,6 @@ class Register {
 		}
 	}
 
-	private function get_block_type_args( int $post_id, array $meta_box ): array {
-		$settings    = get_post_meta( $post_id, 'settings', true );
-		$render_with = Arr::get( $settings, 'render_with' );
-
-		$args = [];
-		if ( $render_with === 'callback' ) {
-			$this->set_render_callback_param( $args, $meta_box );
-		}
-		if ( $render_with === 'template' ) {
-			$this->set_render_template_param( $args, $meta_box );
-		}
-		if ( $render_with === 'code' ) {
-			$this->set_render_callback_param_for_code( $args, $meta_box );
-		}
-
-		return $args;
-	}
-
 	private function use_block_json( $meta_box ): bool {
 		if ( ! is_array( $meta_box ) ) {
 			return false;
@@ -63,50 +45,68 @@ class Register {
 			&& file_exists( $path );
 	}
 
-	private function set_render_callback_param( array &$args, array $meta_box ): void {
+	private function get_block_type_args( int $post_id, array $meta_box ): array {
+		$settings    = get_post_meta( $post_id, 'settings', true );
+		$render_with = Arr::get( $settings, 'render_with' );
+
+		$render_callback = null;
+		if ( $render_with === 'callback' ) {
+			$render_callback = $this->get_render_callback_for_callback( $meta_box );
+		}
+		if ( $render_with === 'template' ) {
+			$render_callback = $this->get_render_callback_for_template( $meta_box );
+		}
+		if ( $render_with === 'code' ) {
+			$render_callback = $this->get_render_callback_for_code( $meta_box );
+		}
+
+		return $render_callback ? compact( 'render_callback' ) : [];
+	}
+
+	private function get_render_callback_for_callback( array $meta_box ): ?callable {
 		$callback = Arr::get( $meta_box, 'render_callback' );
 		if ( ! $callback || ! is_callable( $callback ) ) {
-			return;
+			return null;
 		}
 
 		// render_callback must return a string, but we echo => capture via output buffering.
-		$args['render_callback'] = static function( $attributes, $content, $block ) use ( $callback ) {
+		return static function( $attributes, $content, $block ) use ( $callback ) {
 			ob_start();
 			call_user_func( $callback, $attributes, $content, $block );
 			return ob_get_clean();
 		};
 	}
 
-	private function set_render_template_param( array &$args, array $meta_box ): void {
+	private function get_render_callback_for_template( array $meta_box ): ?callable {
 		$template = Arr::get( $meta_box, 'render_template' );
 		if ( ! $template || ! is_string( $template ) ) {
-			return;
+			return null;
 		}
 
 		// Template with relative path to block.json: handled by WordPress
 		if ( str_starts_with( $template, '.' ) ) {
-			return;
+			return null;
 		}
 
 		// Template with absolute path: include it inside a custom render_callback
 		if ( ! file_exists( $template ) ) {
-			return;
+			return null;
 		}
-		$args['render_callback'] = static function( $attributes, $content, $block ) use ( $template ) {
+		return static function( $attributes, $content, $block ) use ( $template ) {
 			ob_start();
 			include $template;
 			return ob_get_clean();
 		};
 	}
 
-	private function set_render_callback_param_for_code( array &$args, array $meta_box ): void {
+	private function get_render_callback_for_code( array $meta_box ): ?callable {
 		if ( empty( $meta_box['render_code'] ) ) {
-			return;
+			return null;
 		}
 
 		// render_callback must return a string, but we echo => capture via output buffering.
 		$callback = CodeToCallbackTransformer::get_render_callback( $meta_box );
-		$args['render_callback'] = static function( $attributes, $content, $block ) use ( $callback ) {
+		return static function( $attributes, $content, $block ) use ( $callback ) {
 			ob_start();
 			call_user_func( $callback, $attributes, $content, $block );
 			return ob_get_clean();

@@ -25,3 +25,4 @@ Thực hiện trong file `src/Extensions/Blocks/Register.php`.
 	- Nếu template path relative tới file `block.json` (path có bắt đầu bằng `.`) thì việc render block do WordPress xử lý.
 	- Ngược lại thì tạo 1 tham số `render_callback` để load file template của block.
 - Khi block được render qua code: plugin sẽ tự tạo tham số `render_callback` để gọi Twig để render code. Phần này được xử lý trong file `src/Extensions/Blocks/CodeToCallbackTransformer.php`. Phần xử lý này dùng cả cho block dùng `block.json` hoặc không.
+- Khi block được render qua view: MB Blocks khi prepare data sẽ tự render view đó, builder không phải làm gì.
