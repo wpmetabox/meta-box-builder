@@ -117,6 +117,7 @@ const BlockRenderSettings = () => {
 				placeholder={ __( 'Enter absolute path to the template file', 'meta-box-builder' ) }
 				defaultValue={ renderTemplate }
 				updateField={ updateSetting }
+				description={ __( 'Use a relative path to <code>block.json</code> (if enabled) like <code>./template.php</code> or an absolute path using the variables below.', 'meta-box-builder' ) }
 			/>
 		}
 		{ renderWith === 'code' && <RenderWithCode /> }
