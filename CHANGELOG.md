@@ -1,3 +1,12 @@
+### 5.3.2 - 2026-06-11
+
+- Update style to match WordPress 7 (#188)
+- Improve admin menu width detection (#189)
+- Fix showing block json path in admin columns when it's not enabled
+- Fix prefix in field ids when importing
+- Fix error when creating block with block.json and render_callback (#191)
+- Fix missing tabs, sub-groups, default_state when importing
+
 ### 5.3.1 - 2026-05-13
 
 - Update style for toggle-group when there is only 1 item
