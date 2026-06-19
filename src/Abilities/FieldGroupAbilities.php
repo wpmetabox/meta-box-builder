@@ -41,6 +41,7 @@ class FieldGroupAbilities {
 		$this->register_create_field();
 		$this->register_update_field();
 		$this->register_delete_field();
+		$this->register_move_field();
 	}
 
 	private function register_list_field_groups(): void {
@@ -537,6 +538,55 @@ class FieldGroupAbilities {
 		] );
 	}
 
+	private function register_move_field(): void {
+		wp_register_ability( 'meta-box/move-field', [
+			'label'               => __( 'Move field', 'meta-box-builder' ),
+			'description'         => __( 'Move a field to a new position within a field group. Specify before or after a reference field ID.', 'meta-box-builder' ),
+			'category'            => self::CATEGORY,
+			'input_schema'        => [
+				'type'       => 'object',
+				'properties' => [
+					'field_group_id' => [
+						'type' => 'integer',
+					],
+					'field_id'       => [
+						'type'        => 'string',
+						'description' => __( 'The field ID to move.', 'meta-box-builder' ),
+					],
+					'before'         => [
+						'type'        => 'string',
+						'description' => __( 'Move before this field ID.', 'meta-box-builder' ),
+					],
+					'after'          => [
+						'type'        => 'string',
+						'description' => __( 'Move after this field ID.', 'meta-box-builder' ),
+					],
+				],
+				'required'   => [ 'field_group_id', 'field_id' ],
+			],
+			'output_schema'       => [
+				'type'       => 'object',
+				'properties' => [
+					'success' => [ 'type' => 'boolean' ],
+					'message' => [ 'type' => 'string' ],
+				],
+			],
+			'execute_callback'    => [ $this, 'move_field' ],
+			'permission_callback' => [ $this, 'permission_callback' ],
+			'meta'                => [
+				'annotations' => [
+					'readonly'    => false,
+					'destructive' => false,
+					'idempotent'  => true,
+				],
+				'mcp'         => [
+					'public' => true,
+					'type'   => 'tool',
+				],
+			],
+		] );
+	}
+
 	/**
 	 * Execute callbacks.
 	 */
@@ -832,6 +882,64 @@ class FieldGroupAbilities {
 		return [
 			'success' => true,
 			'message' => __( 'Field deleted successfully.', 'meta-box-builder' ),
+		];
+	}
+
+	public function move_field( array $input ): array {
+		$post = get_post( $input['field_group_id'] );
+		if ( ! $post || $post->post_type !== 'meta-box' ) {
+			return [
+				'success' => false,
+				'message' => __( 'Field group not found.', 'meta-box-builder' ),
+			];
+		}
+
+		$fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
+		$settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
+
+		$field_to_move = null;
+		$field_index   = -1;
+		foreach ( $fields as $index => $f ) {
+			if ( ( $f['id'] ?? '' ) === $input['field_id'] ) {
+				$field_to_move = $f;
+				$field_index   = $index;
+				break;
+			}
+		}
+
+		if ( ! $field_to_move ) {
+			return [
+				'success' => false,
+				'message' => __( 'Field not found.', 'meta-box-builder' ),
+			];
+		}
+
+		// Remove the field from its current position.
+		array_splice( $fields, $field_index, 1 );
+
+		// Find the target position.
+		$target_id = $input['before'] ?? $input['after'] ?? '';
+		$position  = -1;
+		foreach ( $fields as $index => $f ) {
+			if ( ( $f['id'] ?? '' ) === $target_id ) {
+				$position = $input['before'] ?? '' ? $index : $index + 1;
+				break;
+			}
+		}
+
+		// If target not found or not specified, append to end.
+		if ( $position === -1 ) {
+			$position = count( $fields );
+		}
+
+		// Insert at the target position.
+		array_splice( $fields, $position, 0, [ $field_to_move ] );
+
+		Save::parse( $post, $fields, $settings );
+
+		return [
+			'success' => true,
+			'message' => __( 'Field moved successfully.', 'meta-box-builder' ),
 		];
 	}
 
