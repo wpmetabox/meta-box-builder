@@ -691,7 +691,7 @@ class FieldGroupAbilities {
 		$unparsed   = $this->unparse_input( $input );
 		$title      = $unparsed['title'] ?: $post->post_title;
 		$slug       = $unparsed['slug'] ?: $post->post_name;
-		$has_status = array_key_exists( 'status', $input ) || array_key_exists( 'status', $unparsed );
+		$has_status = array_key_exists( 'status', $input );
 		$status     = $unparsed['status'] ?? null;
 
 		$existing_fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
@@ -790,7 +790,8 @@ class FieldGroupAbilities {
 
 		$fields = get_post_meta( $post->ID, 'fields', true ) ?: [];
 		foreach ( $fields as $field ) {
-			if ( ( $field['id'] ?? '' ) === $input['field_id'] ) {
+			$id = $field['id'] ?? $field['_id'] ?? '';
+			if ( $id === $input['field_id'] ) {
 				return [ 'field' => $field ];
 			}
 		}
@@ -907,7 +908,8 @@ class FieldGroupAbilities {
 
 		$original_count = count( $fields );
 		$fields         = array_values( array_filter( $fields, function ( $f ) use ( $input ) {
-			return ( $f['id'] ?? '' ) !== $input['field_id'];
+			$id = $f['id'] ?? $f['_id'] ?? '';
+			return $id !== $input['field_id'];
 		} ) );
 
 		if ( count( $fields ) === $original_count ) {
@@ -940,7 +942,8 @@ class FieldGroupAbilities {
 		$field_to_move = null;
 		$field_index   = -1;
 		foreach ( $fields as $index => $f ) {
-			if ( ( $f['id'] ?? '' ) === $input['field_id'] ) {
+			$id = $f['id'] ?? $f['_id'] ?? '';
+			if ( $id === $input['field_id'] ) {
 				$field_to_move = $f;
 				$field_index   = $index;
 				break;
@@ -966,7 +969,8 @@ class FieldGroupAbilities {
 
 		if ( $target_id !== null ) {
 			foreach ( $fields as $index => $f ) {
-				if ( ( $f['id'] ?? '' ) === $target_id ) {
+				$id = $f['id'] ?? $f['_id'] ?? '';
+				if ( $id === $target_id ) {
 					$position = isset( $input['before'] ) ? $index : $index + 1;
 					break;
 				}
