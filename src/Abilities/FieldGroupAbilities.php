@@ -616,7 +616,8 @@ class FieldGroupAbilities {
 			if ( ! $this->is_database_only( $post ) ) {
 				continue;
 			}
-			$groups[] = $this->build_field_group_summary( $post );
+			$fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
+			$groups[] = $this->build_field_group_summary( $post, $fields );
 		}
 
 		return [
@@ -687,10 +688,11 @@ class FieldGroupAbilities {
 			];
 		}
 
-		$unparsed = $this->unparse_input( $input );
-		$title    = $unparsed['title'] ?: $post->post_title;
-		$slug     = $unparsed['slug'] ?: $post->post_name;
-		$status   = $unparsed['status'] ?? null;
+		$unparsed   = $this->unparse_input( $input );
+		$title      = $unparsed['title'] ?: $post->post_title;
+		$slug       = $unparsed['slug'] ?: $post->post_name;
+		$has_status = array_key_exists( 'status', $input ) || array_key_exists( 'status', $unparsed );
+		$status     = $unparsed['status'] ?? null;
 
 		$existing_fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
 		$existing_settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
@@ -708,7 +710,7 @@ class FieldGroupAbilities {
 		$save   = new Save();
 		$result = $save->save( $request );
 
-		if ( ! empty( $result['success'] ) && $status !== null && $status !== $post->post_status ) {
+		if ( ! empty( $result['success'] ) && $has_status && $status !== $post->post_status ) {
 			wp_update_post( [
 				'ID'          => $post_id,
 				'post_status' => $status,
@@ -727,7 +729,15 @@ class FieldGroupAbilities {
 			];
 		}
 
-		$force  = $input['force'] ?? false;
+		$force = $input['force'] ?? false;
+
+		if ( ! $force && $post->post_status === 'trash' ) {
+			return [
+				'success' => false,
+				'message' => __( 'Field group is already in trash.', 'meta-box-builder' ),
+			];
+		}
+
 		$result = wp_delete_post( $post->ID, $force );
 
 		if ( ! $result ) {
@@ -809,7 +819,8 @@ class FieldGroupAbilities {
 		$settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
 
 		foreach ( $fields as $f ) {
-			if ( ( $f['id'] ?? '' ) === $field_data['id'] ) {
+			$existing_id = $f['id'] ?? $f['_id'] ?? '';
+			if ( $existing_id === $field_data['id'] ) {
 				return [
 					'success' => false,
 					'message' => __( 'Field with this ID already exists. Use update field instead.', 'meta-box-builder' ),
@@ -819,14 +830,6 @@ class FieldGroupAbilities {
 
 		$fields[] = $field_data;
 		Save::parse( $post, $fields, $settings );
-
-		$updated = get_post( $post->ID );
-		if ( ! $updated ) {
-			return [
-				'success' => false,
-				'message' => __( 'Failed to save field.', 'meta-box-builder' ),
-			];
-		}
 
 		return [
 			'success' => true,
@@ -852,7 +855,7 @@ class FieldGroupAbilities {
 		$found = false;
 		foreach ( $fields as &$f ) {
 			if ( ( $f['id'] ?? '' ) === $field_id ) {
-				$f     = array_merge( $f, $field_data );
+				$f     = $this->merge_settings( $f, $field_data );
 				$found = true;
 				break;
 			}
@@ -866,15 +869,23 @@ class FieldGroupAbilities {
 			];
 		}
 
-		Save::parse( $post, $fields, $settings );
-
-		$updated = get_post( $post->ID );
-		if ( ! $updated ) {
-			return [
-				'success' => false,
-				'message' => __( 'Failed to save field.', 'meta-box-builder' ),
-			];
+		$new_id = $field_data['id'] ?? $field_id;
+		if ( $new_id !== $field_id ) {
+			foreach ( $fields as $f ) {
+				if ( ( $f['id'] ?? '' ) === $new_id ) {
+					return [
+						'success' => false,
+						'message' => sprintf(
+							/* translators: %s: The new field ID. */
+							__( 'Another field with ID %s already exists.', 'meta-box-builder' ),
+							$new_id
+						),
+					];
+				}
+			}
 		}
+
+		Save::parse( $post, $fields, $settings );
 
 		return [
 			'success' => true,
@@ -908,14 +919,6 @@ class FieldGroupAbilities {
 
 		Save::parse( $post, $fields, $settings );
 
-		$updated = get_post( $post->ID );
-		if ( ! $updated ) {
-			return [
-				'success' => false,
-				'message' => __( 'Failed to delete field.', 'meta-box-builder' ),
-			];
-		}
-
 		return [
 			'success' => true,
 			'message' => __( 'Field deleted successfully.', 'meta-box-builder' ),
@@ -948,6 +951,13 @@ class FieldGroupAbilities {
 			return [
 				'success' => false,
 				'message' => __( 'Field not found.', 'meta-box-builder' ),
+			];
+		}
+
+		if ( isset( $input['before'] ) && isset( $input['after'] ) ) {
+			return [
+				'success' => false,
+				'message' => __( 'Only one of before or after may be specified.', 'meta-box-builder' ),
 			];
 		}
 
@@ -996,14 +1006,6 @@ class FieldGroupAbilities {
 		array_splice( $fields, $target_index, 0, [ $field_to_move ] );
 
 		Save::parse( $post, $fields, $settings );
-
-		$updated = get_post( $post->ID );
-		if ( ! $updated ) {
-			return [
-				'success' => false,
-				'message' => __( 'Failed to move field.', 'meta-box-builder' ),
-			];
-		}
 
 		return [
 			'success' => true,
