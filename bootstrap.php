@@ -16,6 +16,7 @@ new Register();
 new RestApi\Generator();
 new RestApi\Save();
 new RestApi\ThemeCode\ThemeCode();
+new Abilities\FieldGroupAbilities();
 
 $fields_api = new RestApi\Fields( new Registry() );
 Helpers\FieldKeys::init( $fields_api );
