@@ -593,8 +593,8 @@ class FieldGroupAbilities {
 	public function list_field_groups( array $input ): array {
 		$search   = $input['search'] ?? '';
 		$status   = $input['status'] ?? 'publish';
-		$per_page = $input['per_page'] ?? 20;
-		$page     = $input['page'] ?? 1;
+		$per_page = max( 1, min( 100, (int) ( $input['per_page'] ?? 20 ) ) );
+		$page     = max( 1, (int) ( $input['page'] ?? 1 ) );
 
 		$args = [
 			'post_type'              => 'meta-box',
@@ -853,15 +853,18 @@ class FieldGroupAbilities {
 		$fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
 		$settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
 
-		$found = false;
-		foreach ( $fields as &$f ) {
-			if ( ( $f['id'] ?? '' ) === $field_id ) {
-				$f     = $this->merge_settings( $f, $field_data );
-				$found = true;
+		$new_id = $field_data['id'] ?? $field_id;
+
+		$found       = false;
+		$found_index = -1;
+		foreach ( $fields as $index => $f ) {
+			$existing_id = $f['id'] ?? $f['_id'] ?? '';
+			if ( $existing_id === $field_id ) {
+				$found       = true;
+				$found_index = $index;
 				break;
 			}
 		}
-		unset( $f );
 
 		if ( ! $found ) {
 			return [
@@ -870,10 +873,13 @@ class FieldGroupAbilities {
 			];
 		}
 
-		$new_id = $field_data['id'] ?? $field_id;
 		if ( $new_id !== $field_id ) {
-			foreach ( $fields as $f ) {
-				if ( ( $f['id'] ?? '' ) === $new_id ) {
+			foreach ( $fields as $index => $f ) {
+				if ( $index === $found_index ) {
+					continue;
+				}
+				$existing_id = $f['id'] ?? $f['_id'] ?? '';
+				if ( $existing_id === $new_id ) {
 					return [
 						'success' => false,
 						'message' => sprintf(
@@ -884,6 +890,14 @@ class FieldGroupAbilities {
 					];
 				}
 			}
+		}
+
+		if ( ( $field_data['type'] ?? '' ) === 'group' && isset( $field_data['fields'] ) ) {
+			$existing_sub                     = $fields[ $found_index ]['fields'] ?? [];
+			$fields[ $found_index ]           = $this->merge_settings( $fields[ $found_index ], $field_data );
+			$fields[ $found_index ]['fields'] = $this->merge_fields( $existing_sub, $field_data['fields'] );
+		} else {
+			$fields[ $found_index ] = $this->merge_settings( $fields[ $found_index ], $field_data );
 		}
 
 		Save::parse( $post, $fields, $settings );
@@ -965,7 +979,15 @@ class FieldGroupAbilities {
 		}
 
 		$target_id = $input['before'] ?? $input['after'] ?? null;
-		$position  = -1;
+
+		if ( $target_id !== null && $target_id === $input['field_id'] ) {
+			return [
+				'success' => false,
+				'message' => __( 'Cannot move a field relative to itself.', 'meta-box-builder' ),
+			];
+		}
+
+		$position = -1;
 
 		if ( $target_id !== null ) {
 			foreach ( $fields as $index => $f ) {
@@ -1149,9 +1171,13 @@ class FieldGroupAbilities {
 			$id = $field['id'] ?? $field['_id'] ?? '';
 			if ( isset( $new_by_id[ $id ] ) ) {
 				$merged_field = $new_by_id[ $id ];
-				if ( ( $merged_field['type'] ?? '' ) === 'group' && isset( $merged_field['fields'] ) ) {
-					$existing_sub           = $field['fields'] ?? [];
-					$merged_field['fields'] = $this->merge_fields( $existing_sub, $merged_field['fields'] );
+				if ( ( $merged_field['type'] ?? '' ) === 'group' ) {
+					$existing_sub = $field['fields'] ?? [];
+					if ( isset( $merged_field['fields'] ) ) {
+						$merged_field['fields'] = $this->merge_fields( $existing_sub, $merged_field['fields'] );
+					} else {
+						$merged_field['fields'] = $existing_sub;
+					}
 				}
 				$merged[] = $merged_field;
 				unset( $new_by_id[ $id ] );
