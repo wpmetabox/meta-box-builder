@@ -4,6 +4,8 @@ namespace MBB\Abilities;
 use MBB\RestApi\Save;
 use MBB\JsonService;
 use MBB\LocalJson;
+use MBBParser\Unparsers\MetaBox;
+use MBBParser\Unparsers\Field as FieldUnparser;
 use WP_REST_Request;
 use WP_Error;
 
@@ -410,10 +412,11 @@ class FieldGroupAbilities {
 					],
 					'field'          => [
 						'type'                 => 'object',
-						'description'          => __( 'Field definition. Must include id, type. Accepts all Meta Box field properties (e.g. address_field, options, std, placeholder, required, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
+						'description'          => __( 'Field definition. Must include id, type. Accepts all Meta Box field properties (e.g. options, std, placeholder, required, desc, clone, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
 						'properties'           => [
 							'id'   => [ 'type' => 'string' ],
 							'type' => [ 'type' => 'string' ],
+							'name' => [ 'type' => 'string' ],
 						],
 						'additionalProperties' => true,
 					],
@@ -456,10 +459,11 @@ class FieldGroupAbilities {
 					],
 					'field'          => [
 						'type'                 => 'object',
-						'description'          => __( 'Field definition. Must include id, type. Accepts all Meta Box field properties (e.g. address_field, options, std, placeholder, required, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
+						'description'          => __( 'Field definition. Must include id, type. Accepts all Meta Box field properties (e.g. options, std, placeholder, required, desc, clone, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
 						'properties'           => [
 							'id'   => [ 'type' => 'string' ],
 							'type' => [ 'type' => 'string' ],
+							'name' => [ 'type' => 'string' ],
 						],
 						'additionalProperties' => true,
 					],
@@ -578,10 +582,11 @@ class FieldGroupAbilities {
 	}
 
 	public function create_field_group( array $input ): array {
-		$title    = $input['title'];
-		$slug     = $input['slug'] ?? '';
-		$fields   = $input['fields'] ?? [];
-		$settings = $input['settings'] ?? [];
+		$unparsed = $this->unparse_input( $input );
+		$title    = $unparsed['title'];
+		$slug     = $unparsed['slug'];
+		$fields   = $unparsed['fields'];
+		$settings = $unparsed['settings'];
 
 		$post_id = wp_insert_post( [
 			'post_type'   => 'meta-box',
@@ -608,10 +613,10 @@ class FieldGroupAbilities {
 		$save   = new Save();
 		$result = $save->save( $request );
 
-		if ( ! empty( $input['status'] ) && ! empty( $result['success'] ) ) {
+		if ( ! empty( $unparsed['status'] ) && ! empty( $result['success'] ) && $unparsed['status'] !== 'publish' ) {
 			wp_update_post( [
 				'ID'          => $post_id,
-				'post_status' => $input['status'],
+				'post_status' => $unparsed['status'],
 			] );
 		}
 
@@ -628,10 +633,15 @@ class FieldGroupAbilities {
 			];
 		}
 
-		$title    = $input['title'] ?? $post->post_title;
-		$slug     = $input['slug'] ?? $post->post_name;
-		$fields   = $input['fields'] ?? [];
-		$settings = $input['settings'] ?? [];
+		$unparsed = $this->unparse_input( $input );
+		$title    = $unparsed['title'] ?: $post->post_title;
+		$slug     = $unparsed['slug'] ?: $post->post_name;
+
+		$existing_fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
+		$existing_settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
+
+		$fields   = $this->merge_fields( $existing_fields, $unparsed['fields'] );
+		$settings = $this->merge_settings( $existing_settings, $unparsed['settings'] );
 
 		$request = new WP_REST_Request( 'POST', '/mbb/save' );
 		$request->set_param( 'post_id', $post_id );
@@ -643,10 +653,10 @@ class FieldGroupAbilities {
 		$save   = new Save();
 		$result = $save->save( $request );
 
-		if ( ! empty( $input['status'] ) && ! empty( $result['success'] ) ) {
+		if ( ! empty( $unparsed['status'] ) && ! empty( $result['success'] ) && $unparsed['status'] !== 'publish' ) {
 			wp_update_post( [
 				'ID'          => $post_id,
-				'post_status' => $input['status'],
+				'post_status' => $unparsed['status'],
 			] );
 		}
 
@@ -720,7 +730,7 @@ class FieldGroupAbilities {
 			];
 		}
 
-		$field_data = $input['field'];
+		$field_data = $this->unparse_field( $input['field'] );
 		if ( empty( $field_data['id'] ) || empty( $field_data['type'] ) ) {
 			return [
 				'success' => false,
@@ -758,7 +768,7 @@ class FieldGroupAbilities {
 			];
 		}
 
-		$field_data = $input['field'];
+		$field_data = $this->unparse_field( $input['field'] );
 		if ( empty( $field_data['id'] ) ) {
 			return [
 				'success' => false,
@@ -867,5 +877,93 @@ class FieldGroupAbilities {
 			'fields'   => array_values( get_post_meta( $post->ID, 'fields', true ) ?: [] ),
 			'settings' => get_post_meta( $post->ID, 'settings', true ) ?: [],
 		] );
+	}
+
+	/**
+	 * Unparse input data from parsed format to builder format.
+	 *
+	 * Accepts input in the schema format (https://github.com/wpmetabox/schema/blob/main/field-group.json)
+	 * and converts it to the builder format used internally.
+	 */
+	private function unparse_input( array $input ): array {
+		$unparser = new MetaBox( $input );
+		$unparser->unparse();
+
+		$settings = $unparser->get_settings();
+
+		return [
+			'title'    => $settings['post_title'] ?? $input['title'] ?? '',
+			'slug'     => $settings['post_name'] ?? $input['slug'] ?? '',
+			'fields'   => $settings['fields'] ?? $input['fields'] ?? [],
+			'settings' => $settings['settings'] ?? $input['settings'] ?? [],
+			'status'   => $settings['post_status'] ?? $input['status'] ?? 'publish',
+		];
+	}
+
+	/**
+	 * Unparse a single field from parsed format to builder format.
+	 */
+	private function unparse_field( array $field ): array {
+		$unparser = new FieldUnparser( $field );
+		$unparser->unparse();
+
+		return $unparser->get_settings();
+	}
+
+	/**
+	 * Merge new settings into existing settings recursively.
+	 *
+	 * Existing keys not in the new settings are preserved.
+	 * Nested arrays are merged recursively.
+	 */
+	private function merge_settings( array $existing, array $new ): array {
+		foreach ( $new as $key => $value ) {
+			if ( is_array( $value ) && isset( $existing[ $key ] ) && is_array( $existing[ $key ] ) ) {
+				$existing[ $key ] = $this->merge_settings( $existing[ $key ], $value );
+			} else {
+				$existing[ $key ] = $value;
+			}
+		}
+
+		return $existing;
+	}
+
+	/**
+	 * Merge new fields into existing fields by ID.
+	 *
+	 * Existing fields not in the new list are preserved.
+	 * Fields with matching IDs are updated.
+	 * New fields are appended.
+	 */
+	private function merge_fields( array $existing, array $new ): array {
+		if ( empty( $new ) ) {
+			return $existing;
+		}
+
+		$new_by_id = [];
+		foreach ( $new as $field ) {
+			$id = $field['_id'] ?? $field['id'] ?? '';
+			if ( $id ) {
+				$new_by_id[ $id ] = $field;
+			}
+		}
+
+		$merged = [];
+		foreach ( $existing as $field ) {
+			$id = $field['_id'] ?? $field['id'] ?? '';
+			if ( isset( $new_by_id[ $id ] ) ) {
+				$merged[] = $new_by_id[ $id ];
+				unset( $new_by_id[ $id ] );
+			} else {
+				$merged[] = $field;
+			}
+		}
+
+		// Append remaining new fields.
+		foreach ( $new_by_id as $field ) {
+			$merged[] = $field;
+		}
+
+		return $merged;
 	}
 }
