@@ -626,7 +626,13 @@ class FieldGroupAbilities {
 		];
 	}
 
-	public function get_field_group( array $input ): array {
+	/**
+	 * Get a field group with all its fields and settings.
+	 *
+	 * @param array{id: int} $input The input arguments.
+	 * @return array|WP_Error
+	 */
+	public function get_field_group( array $input ) {
 		$post = get_post( $input['id'] );
 		if ( ! $post || $post->post_type !== 'meta-box' ) {
 			return new WP_Error( 'not_found', __( 'Field group not found.', 'meta-box-builder' ) );
@@ -641,12 +647,13 @@ class FieldGroupAbilities {
 		$slug     = $unparsed['slug'];
 		$fields   = $unparsed['fields'];
 		$settings = $unparsed['settings'];
+		$status   = $unparsed['status'] ?? 'publish';
 
 		$post_id = wp_insert_post( [
 			'post_type'   => 'meta-box',
 			'post_title'  => $title,
 			'post_name'   => $slug ? $slug : sanitize_title( $title ),
-			'post_status' => 'publish',
+			'post_status' => $status,
 		] );
 
 		if ( is_wp_error( $post_id ) ) {
@@ -667,13 +674,6 @@ class FieldGroupAbilities {
 		$save   = new Save();
 		$result = $save->save( $request );
 
-		if ( ! empty( $unparsed['status'] ) && ! empty( $result['success'] ) && $unparsed['status'] !== 'publish' ) {
-			wp_update_post( [
-				'ID'          => $post_id,
-				'post_status' => $unparsed['status'],
-			] );
-		}
-
 		return array_merge( $result, [ 'id' => $post_id ] );
 	}
 
@@ -690,6 +690,7 @@ class FieldGroupAbilities {
 		$unparsed = $this->unparse_input( $input );
 		$title    = $unparsed['title'] ?: $post->post_title;
 		$slug     = $unparsed['slug'] ?: $post->post_name;
+		$status   = $unparsed['status'] ?? null;
 
 		$existing_fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
 		$existing_settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
@@ -707,10 +708,10 @@ class FieldGroupAbilities {
 		$save   = new Save();
 		$result = $save->save( $request );
 
-		if ( ! empty( $unparsed['status'] ) && ! empty( $result['success'] ) && $unparsed['status'] !== 'publish' ) {
+		if ( ! empty( $result['success'] ) && $status !== null && $status !== $post->post_status ) {
 			wp_update_post( [
 				'ID'          => $post_id,
-				'post_status' => $unparsed['status'],
+				'post_status' => $status,
 			] );
 		}
 
@@ -744,7 +745,13 @@ class FieldGroupAbilities {
 		];
 	}
 
-	public function list_fields( array $input ): array {
+	/**
+	 * List all fields within a specific field group.
+	 *
+	 * @param array{field_group_id: int} $input The input arguments.
+	 * @return array|WP_Error
+	 */
+	public function list_fields( array $input ) {
 		$post = get_post( $input['field_group_id'] );
 		if ( ! $post || $post->post_type !== 'meta-box' ) {
 			return new WP_Error( 'not_found', __( 'Field group not found.', 'meta-box-builder' ) );
@@ -759,7 +766,13 @@ class FieldGroupAbilities {
 		];
 	}
 
-	public function get_field( array $input ): array {
+	/**
+	 * Get a single field definition from a field group by its field ID.
+	 *
+	 * @param array{field_group_id: int, field_id: string} $input The input arguments.
+	 * @return array|WP_Error
+	 */
+	public function get_field( array $input ) {
 		$post = get_post( $input['field_group_id'] );
 		if ( ! $post || $post->post_type !== 'meta-box' ) {
 			return new WP_Error( 'not_found', __( 'Field group not found.', 'meta-box-builder' ) );
@@ -807,6 +820,14 @@ class FieldGroupAbilities {
 		$fields[] = $field_data;
 		Save::parse( $post, $fields, $settings );
 
+		$updated = get_post( $post->ID );
+		if ( ! $updated ) {
+			return [
+				'success' => false,
+				'message' => __( 'Failed to save field.', 'meta-box-builder' ),
+			];
+		}
+
 		return [
 			'success' => true,
 			'message' => __( 'Field added successfully.', 'meta-box-builder' ),
@@ -847,6 +868,14 @@ class FieldGroupAbilities {
 
 		Save::parse( $post, $fields, $settings );
 
+		$updated = get_post( $post->ID );
+		if ( ! $updated ) {
+			return [
+				'success' => false,
+				'message' => __( 'Failed to save field.', 'meta-box-builder' ),
+			];
+		}
+
 		return [
 			'success' => true,
 			'message' => __( 'Field updated successfully.', 'meta-box-builder' ),
@@ -878,6 +907,14 @@ class FieldGroupAbilities {
 		}
 
 		Save::parse( $post, $fields, $settings );
+
+		$updated = get_post( $post->ID );
+		if ( ! $updated ) {
+			return [
+				'success' => false,
+				'message' => __( 'Failed to delete field.', 'meta-box-builder' ),
+			];
+		}
 
 		return [
 			'success' => true,
@@ -914,28 +951,59 @@ class FieldGroupAbilities {
 			];
 		}
 
-		// Remove the field from its current position.
-		array_splice( $fields, $field_index, 1 );
-
-		// Find the target position.
-		$target_id = $input['before'] ?? $input['after'] ?? '';
+		$target_id = $input['before'] ?? $input['after'] ?? null;
 		$position  = -1;
-		foreach ( $fields as $index => $f ) {
-			if ( ( $f['id'] ?? '' ) === $target_id ) {
-				$position = $input['before'] ?? '' ? $index : $index + 1;
-				break;
-			}
-		}
 
-		// If target not found or not specified, append to end.
-		if ( $position === -1 ) {
+		if ( $target_id !== null ) {
+			foreach ( $fields as $index => $f ) {
+				if ( ( $f['id'] ?? '' ) === $target_id ) {
+					$position = isset( $input['before'] ) ? $index : $index + 1;
+					break;
+				}
+			}
+
+			if ( $position === -1 ) {
+				return [
+					'success' => false,
+					'message' => sprintf(
+						/* translators: %s: The field ID to move before/after. */
+						__( 'Target field %s not found.', 'meta-box-builder' ),
+						$target_id
+					),
+				];
+			}
+		} else {
 			$position = count( $fields );
 		}
 
+		// Check if the field is already at the target position (no-op).
+		$current_index = $field_index;
+		$target_index  = $position;
+		if ( $target_index > $current_index ) {
+			--$target_index;
+		}
+		if ( $current_index === $target_index ) {
+			return [
+				'success' => true,
+				'message' => __( 'Field is already at the target position.', 'meta-box-builder' ),
+			];
+		}
+
+		// Remove the field from its current position.
+		array_splice( $fields, $field_index, 1 );
+
 		// Insert at the target position.
-		array_splice( $fields, $position, 0, [ $field_to_move ] );
+		array_splice( $fields, $target_index, 0, [ $field_to_move ] );
 
 		Save::parse( $post, $fields, $settings );
+
+		$updated = get_post( $post->ID );
+		if ( ! $updated ) {
+			return [
+				'success' => false,
+				'message' => __( 'Failed to move field.', 'meta-box-builder' ),
+			];
+		}
 
 		return [
 			'success' => true,
@@ -963,9 +1031,14 @@ class FieldGroupAbilities {
 		return empty( $json );
 	}
 
-	private function build_field_group_summary( \WP_Post $post ): array {
-		$fields = get_post_meta( $post->ID, 'fields', true ) ?: [];
-
+	/**
+	 * Build a lightweight summary array for a field group.
+	 *
+	 * @param \WP_Post $post   The field group post object.
+	 * @param array    $fields The field definitions.
+	 * @return array
+	 */
+	private function build_field_group_summary( \WP_Post $post, array $fields = [] ): array {
 		return [
 			'id'          => $post->ID,
 			'title'       => $post->post_title,
@@ -978,10 +1051,11 @@ class FieldGroupAbilities {
 	}
 
 	private function build_field_group_response( \WP_Post $post ): array {
-		$summary = $this->build_field_group_summary( $post );
+		$fields  = get_post_meta( $post->ID, 'fields', true ) ?: [];
+		$summary = $this->build_field_group_summary( $post, $fields );
 
 		return array_merge( $summary, [
-			'fields'   => array_values( get_post_meta( $post->ID, 'fields', true ) ?: [] ),
+			'fields'   => array_values( $fields ),
 			'settings' => get_post_meta( $post->ID, 'settings', true ) ?: [],
 		] );
 	}
@@ -1022,9 +1096,13 @@ class FieldGroupAbilities {
 	 *
 	 * Existing keys not in the new settings are preserved.
 	 * Nested arrays are merged recursively.
+	 *
+	 * @param array $existing The existing settings.
+	 * @param array $incoming The new settings to merge.
+	 * @return array
 	 */
-	private function merge_settings( array $existing, array $new ): array {
-		foreach ( $new as $key => $value ) {
+	private function merge_settings( array $existing, array $incoming ): array {
+		foreach ( $incoming as $key => $value ) {
 			if ( is_array( $value ) && isset( $existing[ $key ] ) && is_array( $existing[ $key ] ) ) {
 				$existing[ $key ] = $this->merge_settings( $existing[ $key ], $value );
 			} else {
@@ -1041,15 +1119,20 @@ class FieldGroupAbilities {
 	 * Existing fields not in the new list are preserved.
 	 * Fields with matching IDs are updated.
 	 * New fields are appended.
+	 * For group-type fields, sub-fields are merged recursively.
+	 *
+	 * @param array $existing The existing fields.
+	 * @param array $incoming The new fields to merge.
+	 * @return array
 	 */
-	private function merge_fields( array $existing, array $new ): array {
-		if ( empty( $new ) ) {
+	private function merge_fields( array $existing, array $incoming ): array {
+		if ( empty( $incoming ) ) {
 			return $existing;
 		}
 
 		$new_by_id = [];
-		foreach ( $new as $field ) {
-			$id = $field['_id'] ?? $field['id'] ?? '';
+		foreach ( $incoming as $field ) {
+			$id = $field['id'] ?? $field['_id'] ?? '';
 			if ( $id ) {
 				$new_by_id[ $id ] = $field;
 			}
@@ -1057,9 +1140,14 @@ class FieldGroupAbilities {
 
 		$merged = [];
 		foreach ( $existing as $field ) {
-			$id = $field['_id'] ?? $field['id'] ?? '';
+			$id = $field['id'] ?? $field['_id'] ?? '';
 			if ( isset( $new_by_id[ $id ] ) ) {
-				$merged[] = $new_by_id[ $id ];
+				$merged_field = $new_by_id[ $id ];
+				if ( ( $merged_field['type'] ?? '' ) === 'group' && isset( $merged_field['fields'] ) ) {
+					$existing_sub           = $field['fields'] ?? [];
+					$merged_field['fields'] = $this->merge_fields( $existing_sub, $merged_field['fields'] );
+				}
+				$merged[] = $merged_field;
 				unset( $new_by_id[ $id ] );
 			} else {
 				$merged[] = $field;
