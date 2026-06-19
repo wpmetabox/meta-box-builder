@@ -176,8 +176,12 @@ class FieldGroupAbilities {
 						'enum'        => [ 'publish', 'draft' ],
 					],
 					'fields'   => [
-						'type'  => 'array',
-						'items' => [ 'type' => 'object' ],
+						'type'        => 'array',
+						'description' => __( 'Array of field definitions. See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
+						'items'       => [
+							'type'                 => 'object',
+							'additionalProperties' => true,
+						],
 					],
 					'settings' => [
 						'type' => 'object',
@@ -235,8 +239,12 @@ class FieldGroupAbilities {
 						'enum'        => [ 'publish', 'draft' ],
 					],
 					'fields'   => [
-						'type'  => 'array',
-						'items' => [ 'type' => 'object' ],
+						'type'        => 'array',
+						'description' => __( 'Array of field definitions. See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
+						'items'       => [
+							'type'                 => 'object',
+							'additionalProperties' => true,
+						],
 					],
 					'settings' => [
 						'type' => 'object',
@@ -401,13 +409,14 @@ class FieldGroupAbilities {
 						'type' => 'integer',
 					],
 					'field'          => [
-						'type'        => 'object',
-						'description' => __( 'The field definition. Must include id, type, and name.', 'meta-box-builder' ),
-						'properties'  => [
+						'type'                 => 'object',
+						'description'          => __( 'Field definition. Must include id, type, name. Accepts all Meta Box field properties (e.g. address_field, options, std, placeholder, required, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
+						'properties'           => [
 							'id'   => [ 'type' => 'string' ],
 							'type' => [ 'type' => 'string' ],
 							'name' => [ 'type' => 'string' ],
 						],
+						'additionalProperties' => true,
 					],
 				],
 				'required'   => [ 'field_group_id', 'field' ],
@@ -447,13 +456,14 @@ class FieldGroupAbilities {
 						'type' => 'integer',
 					],
 					'field'          => [
-						'type'        => 'object',
-						'description' => __( 'The field definition. Must include id.', 'meta-box-builder' ),
-						'properties'  => [
+						'type'                 => 'object',
+						'description'          => __( 'Field definition. Must include id. Accepts all Meta Box field properties (e.g. address_field, options, std, placeholder, required, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
+						'properties'           => [
 							'id'   => [ 'type' => 'string' ],
 							'type' => [ 'type' => 'string' ],
 							'name' => [ 'type' => 'string' ],
 						],
+						'additionalProperties' => true,
 					],
 				],
 				'required'   => [ 'field_group_id', 'field' ],
