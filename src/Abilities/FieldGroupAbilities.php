@@ -449,7 +449,7 @@ class FieldGroupAbilities {
 	private function register_update_field(): void {
 		wp_register_ability( 'meta-box/update-field', [
 			'label'               => __( 'Update field', 'meta-box-builder' ),
-			'description'         => __( 'Update an existing field in a field group.', 'meta-box-builder' ),
+			'description'         => __( 'Update an existing field in a field group. Use field_id to identify the field to update. The field.id in the field object can be changed to rename the field.', 'meta-box-builder' ),
 			'category'            => self::CATEGORY,
 			'input_schema'        => [
 				'type'       => 'object',
@@ -457,9 +457,13 @@ class FieldGroupAbilities {
 					'field_group_id' => [
 						'type' => 'integer',
 					],
+					'field_id'       => [
+						'type'        => 'string',
+						'description' => __( 'The current field ID to identify which field to update.', 'meta-box-builder' ),
+					],
 					'field'          => [
 						'type'                 => 'object',
-						'description'          => __( 'Field definition. Must include id, type. Accepts all Meta Box field properties (e.g. options, std, placeholder, required, desc, clone, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
+						'description'          => __( 'Field definition. Accepts all Meta Box field properties. The id property can be changed to rename the field. See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
 						'properties'           => [
 							'id'   => [ 'type' => 'string' ],
 							'type' => [ 'type' => 'string' ],
@@ -468,7 +472,7 @@ class FieldGroupAbilities {
 						'additionalProperties' => true,
 					],
 				],
-				'required'   => [ 'field_group_id', 'field' ],
+				'required'   => [ 'field_group_id', 'field_id', 'field' ],
 			],
 			'output_schema'       => [
 				'type'       => 'object',
@@ -769,19 +773,14 @@ class FieldGroupAbilities {
 		}
 
 		$field_data = $this->unparse_field( $input['field'] );
-		if ( empty( $field_data['id'] ) ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field must have an id.', 'meta-box-builder' ),
-			];
-		}
+		$field_id   = $input['field_id'];
 
 		$fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
 		$settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
 
 		$found = false;
 		foreach ( $fields as &$f ) {
-			if ( ( $f['id'] ?? '' ) === $field_data['id'] ) {
+			if ( ( $f['id'] ?? '' ) === $field_id ) {
 				$f     = array_merge( $f, $field_data );
 				$found = true;
 				break;
