@@ -410,11 +410,10 @@ class FieldGroupAbilities {
 					],
 					'field'          => [
 						'type'                 => 'object',
-						'description'          => __( 'Field definition. Must include id, type, name. Accepts all Meta Box field properties (e.g. address_field, options, std, placeholder, required, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
+						'description'          => __( 'Field definition. Must include id, type. Accepts all Meta Box field properties (e.g. address_field, options, std, placeholder, required, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
 						'properties'           => [
 							'id'   => [ 'type' => 'string' ],
 							'type' => [ 'type' => 'string' ],
-							'name' => [ 'type' => 'string' ],
 						],
 						'additionalProperties' => true,
 					],
@@ -457,11 +456,10 @@ class FieldGroupAbilities {
 					],
 					'field'          => [
 						'type'                 => 'object',
-						'description'          => __( 'Field definition. Must include id. Accepts all Meta Box field properties (e.g. address_field, options, std, placeholder, required, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
+						'description'          => __( 'Field definition. Must include id, type. Accepts all Meta Box field properties (e.g. address_field, options, std, placeholder, required, etc.). See https://github.com/wpmetabox/schema/blob/main/field-group.json for full schema.', 'meta-box-builder' ),
 						'properties'           => [
 							'id'   => [ 'type' => 'string' ],
 							'type' => [ 'type' => 'string' ],
-							'name' => [ 'type' => 'string' ],
 						],
 						'additionalProperties' => true,
 					],
