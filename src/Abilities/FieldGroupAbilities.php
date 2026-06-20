@@ -784,7 +784,8 @@ class FieldGroupAbilities {
 			return $this->error( __( 'Field with this ID already exists. Use update field instead.', 'meta-box-builder' ) );
 		}
 
-		$fields[] = $field_data;
+		$field_data = $this->ensure_unique_field_id( $field_data, $fields );
+		$fields[]   = $field_data;
 		Save::parse( $post, $fields, $settings );
 
 		return $this->success( __( 'Field added successfully.', 'meta-box-builder' ) );
@@ -802,7 +803,7 @@ class FieldGroupAbilities {
 		$fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
 		$settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
 
-		$new_id = $field_data['id'] ?? $field_id;
+		$new_id      = empty( $field_data['id'] ) ? $field_id : $field_data['id'];
 		$found_index = $this->find_field_index( $fields, $field_id );
 
 		if ( $found_index === -1 ) {
@@ -822,6 +823,7 @@ class FieldGroupAbilities {
 		}
 
 		$fields[ $found_index ] = $this->merge_settings( $fields[ $found_index ], $field_data );
+		$fields[ $found_index ] = $this->ensure_unique_field_id( $fields[ $found_index ], $fields, $found_index );
 		if ( ( $field_data['type'] ?? '' ) === 'group' && isset( $field_data['fields'] ) ) {
 			$existing_sub                     = $fields[ $found_index ]['fields'] ?? [];
 			$fields[ $found_index ]['fields'] = $this->merge_fields( $existing_sub, $field_data['fields'] );
@@ -926,6 +928,24 @@ class FieldGroupAbilities {
 		}
 
 		return -1;
+	}
+
+	private function ensure_unique_field_id( array $field_data, array $existing_fields, ?int $exclude_index = null ): array {
+		$existing_ids = [];
+		foreach ( $existing_fields as $index => $field ) {
+			if ( $exclude_index !== null && $index === $exclude_index ) {
+				continue;
+			}
+			if ( ! empty( $field['_id'] ) ) {
+				$existing_ids[] = $field['_id'];
+			}
+		}
+
+		while ( in_array( $field_data['_id'] ?? '', $existing_ids, true ) ) {
+			$field_data['_id'] = ( $field_data['type'] ?? 'field' ) . '_' . uniqid();
+		}
+
+		return $field_data;
 	}
 
 	private function save_field_group( int $post_id, string $title, string $slug, array $fields, array $settings ): array {
