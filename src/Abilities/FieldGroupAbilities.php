@@ -31,20 +31,20 @@ class FieldGroupAbilities {
 	}
 
 	public function register_abilities(): void {
-		$this->register_list_field_groups();
-		$this->register_get_field_group();
-		$this->register_create_field_group();
-		$this->register_update_field_group();
-		$this->register_delete_field_group();
-		$this->register_list_fields();
-		$this->register_get_field();
-		$this->register_create_field();
-		$this->register_update_field();
-		$this->register_delete_field();
-		$this->register_move_field();
+		$this->register_list_field_groups_ability();
+		$this->register_get_field_group_ability();
+		$this->register_create_field_group_ability();
+		$this->register_update_field_group_ability();
+		$this->register_delete_field_group_ability();
+		$this->register_list_fields_ability();
+		$this->register_get_field_ability();
+		$this->register_create_field_ability();
+		$this->register_update_field_ability();
+		$this->register_delete_field_ability();
+		$this->register_move_field_ability();
 	}
 
-	private function register_list_field_groups(): void {
+	private function register_list_field_groups_ability(): void {
 		wp_register_ability( 'meta-box/list-field-groups', [
 			'label'               => __( 'List field groups', 'meta-box-builder' ),
 			'description'         => __( 'List all custom field groups stored in the database.', 'meta-box-builder' ),
@@ -110,7 +110,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_get_field_group(): void {
+	private function register_get_field_group_ability(): void {
 		wp_register_ability( 'meta-box/get-field-group', [
 			'label'               => __( 'Get field group', 'meta-box-builder' ),
 			'description'         => __( 'Get a field group with all its fields and settings.', 'meta-box-builder' ),
@@ -157,7 +157,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_create_field_group(): void {
+	private function register_create_field_group_ability(): void {
 		wp_register_ability( 'meta-box/create-field-group', [
 			'label'               => __( 'Create field group', 'meta-box-builder' ),
 			'description'         => __( 'Create a new field group.', 'meta-box-builder' ),
@@ -216,7 +216,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_update_field_group(): void {
+	private function register_update_field_group_ability(): void {
 		wp_register_ability( 'meta-box/update-field-group', [
 			'label'               => __( 'Update field group', 'meta-box-builder' ),
 			'description'         => __( 'Update an existing field group.', 'meta-box-builder' ),
@@ -279,7 +279,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_delete_field_group(): void {
+	private function register_delete_field_group_ability(): void {
 		wp_register_ability( 'meta-box/delete-field-group', [
 			'label'               => __( 'Delete field group', 'meta-box-builder' ),
 			'description'         => __( 'Delete a field group. Supports trashing or permanent deletion.', 'meta-box-builder' ),
@@ -320,7 +320,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_list_fields(): void {
+	private function register_list_fields_ability(): void {
 		wp_register_ability( 'meta-box/list-fields', [
 			'label'               => __( 'List fields', 'meta-box-builder' ),
 			'description'         => __( 'List all fields within a specific field group.', 'meta-box-builder' ),
@@ -360,7 +360,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_get_field(): void {
+	private function register_get_field_ability(): void {
 		wp_register_ability( 'meta-box/get-field', [
 			'label'               => __( 'Get field', 'meta-box-builder' ),
 			'description'         => __( 'Get a single field definition from a field group by its field ID.', 'meta-box-builder' ),
@@ -400,7 +400,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_create_field(): void {
+	private function register_create_field_ability(): void {
 		wp_register_ability( 'meta-box/create-field', [
 			'label'               => __( 'Create field', 'meta-box-builder' ),
 			'description'         => __( 'Add a new field to a field group.', 'meta-box-builder' ),
@@ -447,7 +447,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_update_field(): void {
+	private function register_update_field_ability(): void {
 		wp_register_ability( 'meta-box/update-field', [
 			'label'               => __( 'Update field', 'meta-box-builder' ),
 			'description'         => __( 'Update an existing field in a field group. Use field_id to identify the field to update. The field.id in the field object can be changed to rename the field.', 'meta-box-builder' ),
@@ -498,7 +498,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_delete_field(): void {
+	private function register_delete_field_ability(): void {
 		wp_register_ability( 'meta-box/delete-field', [
 			'label'               => __( 'Delete field', 'meta-box-builder' ),
 			'description'         => __( 'Remove a field from a field group by its field ID.', 'meta-box-builder' ),
@@ -538,7 +538,7 @@ class FieldGroupAbilities {
 		] );
 	}
 
-	private function register_move_field(): void {
+	private function register_move_field_ability(): void {
 		wp_register_ability( 'meta-box/move-field', [
 			'label'               => __( 'Move field', 'meta-box-builder' ),
 			'description'         => __( 'Move a field to a new position within a field group. Specify before or after a reference field ID.', 'meta-box-builder' ),
@@ -873,31 +873,31 @@ class FieldGroupAbilities {
 			];
 		}
 
+		// Check if update field id to an existing field id.
 		if ( $new_id !== $field_id ) {
 			foreach ( $fields as $index => $f ) {
 				if ( $index === $found_index ) {
 					continue;
 				}
 				$existing_id = $f['id'] ?? $f['_id'] ?? '';
-				if ( $existing_id === $new_id ) {
-					return [
-						'success' => false,
-						'message' => sprintf(
-							/* translators: %s: The new field ID. */
-							__( 'Another field with ID %s already exists.', 'meta-box-builder' ),
-							$new_id
-						),
-					];
+				if ( $existing_id !== $new_id ) {
+					continue;
 				}
+				return [
+					'success' => false,
+					'message' => sprintf(
+						/* translators: %s: The new field ID. */
+						__( 'Another field with ID %s already exists.', 'meta-box-builder' ),
+						$new_id
+					),
+				];
 			}
 		}
 
+		$fields[ $found_index ] = $this->merge_settings( $fields[ $found_index ], $field_data );
 		if ( ( $field_data['type'] ?? '' ) === 'group' && isset( $field_data['fields'] ) ) {
 			$existing_sub                     = $fields[ $found_index ]['fields'] ?? [];
-			$fields[ $found_index ]           = $this->merge_settings( $fields[ $found_index ], $field_data );
 			$fields[ $found_index ]['fields'] = $this->merge_fields( $existing_sub, $field_data['fields'] );
-		} else {
-			$fields[ $found_index ] = $this->merge_settings( $fields[ $found_index ], $field_data );
 		}
 
 		Save::parse( $post, $fields, $settings );
