@@ -132,6 +132,7 @@ class FieldGroupAbilities {
 					'title'       => [ 'type' => 'string' ],
 					'slug'        => [ 'type' => 'string' ],
 					'status'      => [ 'type' => 'string' ],
+					'field_count' => [ 'type' => 'integer' ],
 					'fields'      => [
 						'type'  => 'array',
 						'items' => [ 'type' => 'object' ],
@@ -658,11 +659,7 @@ class FieldGroupAbilities {
 		] );
 
 		if ( is_wp_error( $post_id ) ) {
-			return [
-				'success' => false,
-				'message' => $post_id->get_error_message(),
-				'id'      => 0,
-			];
+			return $this->error( $post_id->get_error_message(), [ 'id' => 0 ] );
 		}
 
 		$request = new WP_REST_Request( 'POST', '/mbb/save' );
@@ -682,10 +679,7 @@ class FieldGroupAbilities {
 		$post_id = $input['id'];
 		$post    = get_post( $post_id );
 		if ( ! $post || $post->post_type !== 'meta-box' ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field group not found.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field group not found.', 'meta-box-builder' ) );
 		}
 
 		$unparsed   = $this->unparse_input( $input );
@@ -723,36 +717,25 @@ class FieldGroupAbilities {
 	public function delete_field_group( array $input ): array {
 		$post = get_post( $input['id'] );
 		if ( ! $post || $post->post_type !== 'meta-box' ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field group not found.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field group not found.', 'meta-box-builder' ) );
 		}
 
 		$force = $input['force'] ?? false;
 
 		if ( ! $force && $post->post_status === 'trash' ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field group is already in trash.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field group is already in trash.', 'meta-box-builder' ) );
 		}
 
 		$result = wp_delete_post( $post->ID, $force );
 
 		if ( ! $result ) {
-			return [
-				'success' => false,
-				'message' => __( 'Failed to delete field group.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Failed to delete field group.', 'meta-box-builder' ) );
 		}
 
-		return [
-			'success' => true,
-			'message' => $force
-				? __( 'Field group permanently deleted.', 'meta-box-builder' )
-				: __( 'Field group moved to trash.', 'meta-box-builder' ),
-		];
+		return $this->success( $force
+			? __( 'Field group permanently deleted.', 'meta-box-builder' )
+			: __( 'Field group moved to trash.', 'meta-box-builder' )
+		);
 	}
 
 	/**
@@ -802,18 +785,12 @@ class FieldGroupAbilities {
 	public function create_field( array $input ): array {
 		$post = get_post( $input['field_group_id'] );
 		if ( ! $post || $post->post_type !== 'meta-box' ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field group not found.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field group not found.', 'meta-box-builder' ) );
 		}
 
 		$field_data = $this->unparse_field( $input['field'] );
 		if ( empty( $field_data['id'] ) || empty( $field_data['type'] ) ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field must have id and type.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field must have id and type.', 'meta-box-builder' ) );
 		}
 
 		$fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
@@ -822,29 +799,20 @@ class FieldGroupAbilities {
 		foreach ( $fields as $f ) {
 			$existing_id = $f['id'] ?? $f['_id'] ?? '';
 			if ( $existing_id === $field_data['id'] ) {
-				return [
-					'success' => false,
-					'message' => __( 'Field with this ID already exists. Use update field instead.', 'meta-box-builder' ),
-				];
+				return $this->error( __( 'Field with this ID already exists. Use update field instead.', 'meta-box-builder' ) );
 			}
 		}
 
 		$fields[] = $field_data;
 		Save::parse( $post, $fields, $settings );
 
-		return [
-			'success' => true,
-			'message' => __( 'Field added successfully.', 'meta-box-builder' ),
-		];
+		return $this->success( __( 'Field added successfully.', 'meta-box-builder' ) );
 	}
 
 	public function update_field( array $input ): array {
 		$post = get_post( $input['field_group_id'] );
 		if ( ! $post || $post->post_type !== 'meta-box' ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field group not found.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field group not found.', 'meta-box-builder' ) );
 		}
 
 		$field_data = $this->unparse_field( $input['field'] );
@@ -867,10 +835,7 @@ class FieldGroupAbilities {
 		}
 
 		if ( ! $found ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field not found. Use create field instead.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field not found. Use create field instead.', 'meta-box-builder' ) );
 		}
 
 		// Check if update field id to an existing field id.
@@ -883,14 +848,11 @@ class FieldGroupAbilities {
 				if ( $existing_id !== $new_id ) {
 					continue;
 				}
-				return [
-					'success' => false,
-					'message' => sprintf(
-						/* translators: %s: The new field ID. */
-						__( 'Another field with ID %s already exists.', 'meta-box-builder' ),
-						$new_id
-					),
-				];
+				return $this->error( sprintf(
+					/* translators: %s: The new field ID. */
+					__( 'Another field with ID %s already exists.', 'meta-box-builder' ),
+					$new_id
+				) );
 			}
 		}
 
@@ -902,19 +864,13 @@ class FieldGroupAbilities {
 
 		Save::parse( $post, $fields, $settings );
 
-		return [
-			'success' => true,
-			'message' => __( 'Field updated successfully.', 'meta-box-builder' ),
-		];
+		return $this->success( __( 'Field updated successfully.', 'meta-box-builder' ) );
 	}
 
 	public function delete_field( array $input ): array {
 		$post = get_post( $input['field_group_id'] );
 		if ( ! $post || $post->post_type !== 'meta-box' ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field group not found.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field group not found.', 'meta-box-builder' ) );
 		}
 
 		$fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
@@ -927,27 +883,18 @@ class FieldGroupAbilities {
 		} ) );
 
 		if ( count( $fields ) === $original_count ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field not found.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field not found.', 'meta-box-builder' ) );
 		}
 
 		Save::parse( $post, $fields, $settings );
 
-		return [
-			'success' => true,
-			'message' => __( 'Field deleted successfully.', 'meta-box-builder' ),
-		];
+		return $this->success( __( 'Field deleted successfully.', 'meta-box-builder' ) );
 	}
 
 	public function move_field( array $input ): array {
 		$post = get_post( $input['field_group_id'] );
 		if ( ! $post || $post->post_type !== 'meta-box' ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field group not found.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field group not found.', 'meta-box-builder' ) );
 		}
 
 		$fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
@@ -965,26 +912,17 @@ class FieldGroupAbilities {
 		}
 
 		if ( ! $field_to_move ) {
-			return [
-				'success' => false,
-				'message' => __( 'Field not found.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Field not found.', 'meta-box-builder' ) );
 		}
 
 		if ( isset( $input['before'] ) && isset( $input['after'] ) ) {
-			return [
-				'success' => false,
-				'message' => __( 'Only one of before or after may be specified.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Only one of before or after may be specified.', 'meta-box-builder' ) );
 		}
 
 		$target_id = $input['before'] ?? $input['after'] ?? null;
 
 		if ( $target_id !== null && $target_id === $input['field_id'] ) {
-			return [
-				'success' => false,
-				'message' => __( 'Cannot move a field relative to itself.', 'meta-box-builder' ),
-			];
+			return $this->error( __( 'Cannot move a field relative to itself.', 'meta-box-builder' ) );
 		}
 
 		$position = -1;
@@ -999,14 +937,11 @@ class FieldGroupAbilities {
 			}
 
 			if ( $position === -1 ) {
-				return [
-					'success' => false,
-					'message' => sprintf(
-						/* translators: %s: The field ID to move before/after. */
-						__( 'Target field %s not found.', 'meta-box-builder' ),
-						$target_id
-					),
-				];
+				return $this->error( sprintf(
+					/* translators: %s: The field ID to move before/after. */
+					__( 'Target field %s not found.', 'meta-box-builder' ),
+					$target_id
+				) );
 			}
 		} else {
 			$position = count( $fields );
@@ -1019,10 +954,7 @@ class FieldGroupAbilities {
 			--$target_index;
 		}
 		if ( $current_index === $target_index ) {
-			return [
-				'success' => true,
-				'message' => __( 'Field is already at the target position.', 'meta-box-builder' ),
-			];
+			return $this->success( __( 'Field is already at the target position.', 'meta-box-builder' ) );
 		}
 
 		// Remove the field from its current position.
@@ -1033,15 +965,26 @@ class FieldGroupAbilities {
 
 		Save::parse( $post, $fields, $settings );
 
-		return [
-			'success' => true,
-			'message' => __( 'Field moved successfully.', 'meta-box-builder' ),
-		];
+		return $this->success( __( 'Field moved successfully.', 'meta-box-builder' ) );
 	}
 
 	/**
 	 * Helpers.
 	 */
+	private function success( string $message, array $extra = [] ): array {
+		return array_merge( [
+			'success' => true,
+			'message' => $message,
+		], $extra );
+	}
+
+	private function error( string $message, array $extra = [] ): array {
+		return array_merge( [
+			'success' => false,
+			'message' => $message,
+		], $extra );
+	}
+
 	public function permission_callback(): bool {
 		return current_user_can( 'manage_options' );
 	}
