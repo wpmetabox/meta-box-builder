@@ -1,5 +1,5 @@
 <?php
-namespace MBB\Abilities;
+namespace MBB;
 
 use MBB\RestApi\Save;
 use MBB\JsonService;
@@ -9,7 +9,7 @@ use MBBParser\Unparsers\Field as FieldUnparser;
 use WP_REST_Request;
 use WP_Error;
 
-class FieldGroupAbilities {
+class Abilities {
 	private const CATEGORY = 'meta-box';
 
 	public function __construct() {
