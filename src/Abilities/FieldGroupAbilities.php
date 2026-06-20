@@ -822,12 +822,12 @@ class FieldGroupAbilities {
 			}
 		}
 
-		$fields[ $found_index ] = $this->merge_settings( $fields[ $found_index ], $field_data );
-		$fields[ $found_index ] = $this->ensure_unique_field_id( $fields[ $found_index ], $fields, $found_index );
-		if ( ( $field_data['type'] ?? '' ) === 'group' && isset( $field_data['fields'] ) ) {
-			$existing_sub                     = $fields[ $found_index ]['fields'] ?? [];
-			$fields[ $found_index ]['fields'] = $this->merge_fields( $existing_sub, $field_data['fields'] );
+		$replaced = array_replace( $fields[ $found_index ], $field_data );
+		if ( isset( $field_data['fields'] ) ) {
+			$existing_sub       = $fields[ $found_index ]['fields'] ?? [];
+			$replaced['fields'] = $this->merge_fields( $existing_sub, $field_data['fields'] );
 		}
+		$fields[ $found_index ] = $this->ensure_unique_field_id( $replaced, $fields, $found_index );
 
 		Save::parse( $post, $fields, $settings );
 
