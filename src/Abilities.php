@@ -674,17 +674,21 @@ class Abilities {
 			return $this->error( __( 'Field group not found.', 'meta-box-builder' ) );
 		}
 
-		$unparsed   = $this->unparse_input( $input );
-		$title      = $unparsed['title'] ?: $post->post_title;
-		$slug       = $unparsed['slug'] ?: $post->post_name;
-		$has_status = array_key_exists( 'status', $input );
-		$status     = $unparsed['status'] ?? null;
-
 		$existing_fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
 		$existing_settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
 
-		$fields   = $this->merge_fields( $existing_fields, $unparsed['fields'] );
-		$settings = $this->merge_settings( $existing_settings, $unparsed['settings'] );
+		$title      = empty( $input['title'] ) ? $post->post_title : $input['title'];
+		$slug       = empty( $input['slug'] ) ? $post->post_name : $input['slug'];
+		$has_status = array_key_exists( 'status', $input );
+		$status     = $input['status'] ?? null;
+
+		$unparsed = $this->unparse_input( $input );
+		$fields   = array_key_exists( 'fields', $input )
+			? $this->merge_fields( $existing_fields, $unparsed['fields'] )
+			: $existing_fields;
+		$settings = array_key_exists( 'settings', $input )
+			? $this->merge_settings( $existing_settings, $unparsed['settings'] )
+			: $existing_settings;
 
 		$result = $this->save_field_group( $post_id, $title, $slug, $fields, $settings );
 
