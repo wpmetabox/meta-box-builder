@@ -803,18 +803,20 @@ class Abilities {
 
 		$field_data = $this->unparse_field( $input['field'] );
 		$field_id   = $input['field_id'];
+		if ( empty( $input['field']['id'] ) ) {
+			$field_data['id'] = $field_id;
+		}
 
 		$fields   = get_post_meta( $post->ID, 'fields', true ) ?: [];
 		$settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
 
-		$new_id      = empty( $field_data['id'] ) ? $field_id : $field_data['id'];
 		$found_index = $this->find_field_index( $fields, $field_id );
 
 		if ( $found_index === -1 ) {
 			return $this->error( __( 'Field not found. Use create field instead.', 'meta-box-builder' ) );
 		}
 
-		// Check if renaming to an existing field ID.
+		$new_id = $field_data['id'];
 		if ( $new_id !== $field_id ) {
 			$collision_index = $this->find_field_index( $fields, $new_id );
 			if ( $collision_index !== -1 && $collision_index !== $found_index ) {
