@@ -26,7 +26,8 @@ class Abilities {
 		}
 
 		wp_register_ability_category( self::CATEGORY, [
-			'label' => __( 'Meta Box', 'meta-box-builder' ),
+			'label'       => __( 'Meta Box', 'meta-box-builder' ),
+			'description' => __( 'Abilities for Meta Box data (post types, taxonomies, fields, etc.).', 'mb-custom-post-type' ),
 		] );
 	}
 
