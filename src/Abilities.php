@@ -763,7 +763,7 @@ class Abilities {
 		$fields = get_post_meta( $post->ID, 'fields', true ) ?: [];
 		$index  = $this->find_field_index( $fields, $input['field_id'] );
 
-		if ( $index === -1 ) {
+		if ( ! $index ) {
 			return new WP_Error( 'not_found', __( 'Field not found.', 'meta-box-builder' ) );
 		}
 
@@ -785,7 +785,7 @@ class Abilities {
 		$settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
 
 		$existing_index = $this->find_field_index( $fields, $field_data['id'] );
-		if ( $existing_index !== -1 ) {
+		if ( $existing_index ) {
 			return $this->error( __( 'Field with this ID already exists. Use update field instead.', 'meta-box-builder' ) );
 		}
 
@@ -813,14 +813,14 @@ class Abilities {
 
 		$found_index = $this->find_field_index( $fields, $field_id );
 
-		if ( $found_index === -1 ) {
+		if ( ! $found_index ) {
 			return $this->error( __( 'Field not found. Use create field instead.', 'meta-box-builder' ) );
 		}
 
 		$new_id = $field_data['id'];
 		if ( $new_id !== $field_id ) {
 			$collision_index = $this->find_field_index( $fields, $new_id );
-			if ( $collision_index !== -1 && $collision_index !== $found_index ) {
+			if ( $collision_index && $collision_index !== $found_index ) {
 				return $this->error( sprintf(
 					/* translators: %s: The new field ID. */
 					__( 'Another field with ID %s already exists.', 'meta-box-builder' ),
@@ -851,7 +851,7 @@ class Abilities {
 		$settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
 
 		$index = $this->find_field_index( $fields, $input['field_id'] );
-		if ( $index === -1 ) {
+		if ( ! $index ) {
 			return $this->error( __( 'Field not found.', 'meta-box-builder' ) );
 		}
 
@@ -871,7 +871,7 @@ class Abilities {
 		$settings = get_post_meta( $post->ID, 'settings', true ) ?: [];
 
 		$field_index = $this->find_field_index( $fields, $input['field_id'] );
-		if ( $field_index === -1 ) {
+		if ( ! $field_index ) {
 			return $this->error( __( 'Field not found.', 'meta-box-builder' ) );
 		}
 
@@ -887,7 +887,7 @@ class Abilities {
 
 		if ( $target_id !== null ) {
 			$target_index = $this->find_field_index( $fields, $target_id );
-			if ( $target_index === -1 ) {
+			if ( ! $target_index ) {
 				return $this->error( sprintf(
 					/* translators: %s: The field ID to move before/after. */
 					__( 'Target field %s not found.', 'meta-box-builder' ),
@@ -926,7 +926,7 @@ class Abilities {
 		return $post && $post->post_type === 'meta-box' ? $post : null;
 	}
 
-	private function find_field_index( array $fields, string $field_id ): int {
+	private function find_field_index( array $fields, string $field_id ) {
 		foreach ( $fields as $index => $field ) {
 			$id = $field['id'] ?? $field['_id'] ?? '';
 			if ( $id === $field_id ) {
@@ -934,7 +934,7 @@ class Abilities {
 			}
 		}
 
-		return -1;
+		return null;
 	}
 
 	private function ensure_unique_field_id( array $field_data, array $existing_fields, ?int $exclude_index = null ): array {
