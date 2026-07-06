@@ -1,5 +1,5 @@
 import apiFetch from '@wordpress/api-fetch';
-import { useState } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import BlockListEditor from '../components/Modals/BlockListEditor';
 import ManageBlockLists from '../components/Modals/ManageBlockLists';
@@ -67,6 +67,10 @@ const BlockListSelect = ( { componentId, name, defaultValue, options, updateFiel
 		setShowManage( false );
 		fetchLists();
 	};
+
+	useEffect( () => {
+		fetchLists();
+	}, [] );
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
