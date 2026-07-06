@@ -74,7 +74,6 @@ const BlockListSelect = ( { componentId, name, defaultValue, options, updateFiel
 	};
 
 	useEffect( () => {
-		isMounted.current = true;
 		fetchLists();
 		return () => {
 			isMounted.current = false;
