@@ -1,3 +1,15 @@
+### 5.4.0 - 2026-07-06
+
+**Highlights:**
+
+This release introduces **Abilities**, enabling you to manage custom post types and taxonomies, as well as create, retrieve, update, and delete posts and terms.
+
+See our [blog post](https://metabox.io/introducing-abilities/) for an overview or the [documentation](https://docs.metabox.io/abilities/) for usage details.
+
+**Other changes:**
+
+- Fix stale block lists when switching between block editor fields (#195)
+
 ### 5.3.2 - 2026-06-11
 
 - Update style to match WordPress 7 (#188)
