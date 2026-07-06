@@ -1,5 +1,5 @@
 import apiFetch from '@wordpress/api-fetch';
-import { useState } from '@wordpress/element';
+import { useEffect, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import BlockListEditor from '../components/Modals/BlockListEditor';
 import ManageBlockLists from '../components/Modals/ManageBlockLists';
@@ -12,10 +12,15 @@ const BlockListSelect = ( { componentId, name, defaultValue, options, updateFiel
 	const [ showManage, setShowManage ] = useState( false );
 	const [ editorListId, setEditorListId ] = useState( null );
 	const [ returnToManage, setReturnToManage ] = useState( false );
+	const isMounted = useRef( true );
 
 	const fetchLists = () => {
 		apiFetch( { path: '/mbb/allowed-block-lists' } )
-			.then( setLists )
+			.then( data => {
+				if ( isMounted.current ) {
+					setLists( data );
+				}
+			} )
 			.catch( () => {} );
 	};
 
@@ -67,6 +72,14 @@ const BlockListSelect = ( { componentId, name, defaultValue, options, updateFiel
 		setShowManage( false );
 		fetchLists();
 	};
+
+	useEffect( () => {
+		isMounted.current = true;
+		fetchLists();
+		return () => {
+			isMounted.current = false;
+		};
+	}, [] );
 
 	return (
 		<DivRow htmlFor={ componentId } { ...rest }>
