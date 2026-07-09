@@ -18,7 +18,7 @@ const GeneralSettings = () => {
 			<Checkbox
 				name="delete_data"
 				componentId="settings-delete-data"
-				label={ __( 'Delete data in database?' ) }
+				label={ __( 'Delete data in database?', 'meta-box-builder' ) }
 				defaultValue={ !!getSetting( 'delete_data' ) }
 				className="relationships-plain"
 				description={ __( 'Delete data in database when the relationship is deleted.', 'meta-box-builder' ) }
@@ -27,10 +27,19 @@ const GeneralSettings = () => {
 			<Checkbox
 				name="reciprocal"
 				componentId="settings-reciprocal"
-				label={ __( 'Reciprocal relationship' ) }
+				label={ __( 'Reciprocal relationship', 'meta-box-builder' ) }
 				defaultValue={ !!getSetting( 'reciprocal' ) }
 				className="relationships-plain"
 				description={ __( 'Enable only if two sides of the relationship are the same.', 'meta-box-builder' ) }
+				updateField={ updateSetting }
+			/>
+			<Checkbox
+				name="single_connection"
+				componentId="settings-single-connection"
+				label={ __( 'Single connection only', 'meta-box-builder' ) }
+				defaultValue={ !!getSetting( 'single_connection' ) }
+				className="relationships-plain"
+				description={ __( 'Exclude connected items from the selection list.', 'meta-box-builder' ) }
 				updateField={ updateSetting }
 			/>
 		</>
