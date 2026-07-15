@@ -39,6 +39,13 @@ const General = ( { id } ) => {
 					/>
 				)
 			}
+			<Checkbox
+				name={ `${ id }.has_one_relationship` }
+				label={ __( 'Has one relationship', 'meta-box-builder' ) }
+				description={ __( 'Each item can connect to only one item on the other side.', 'meta-box-builder' ) }
+				defaultValue={ getSetting( `${ id }.has_one_relationship` ) }
+				updateField={ updateSetting }
+			/>
 			<Input
 				name={ `${ id }.empty_message` }
 				label={ __( 'Empty message', 'meta-box-builder' ) }
