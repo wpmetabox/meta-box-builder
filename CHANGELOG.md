@@ -1,3 +1,7 @@
+### 5.4.1 - 2026-07-16
+
+- Add "has one relationship" setting to relationship sides
+
 ### 5.4.0 - 2026-07-06
 
 **Highlights:**
