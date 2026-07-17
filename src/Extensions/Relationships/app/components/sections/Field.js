@@ -62,7 +62,7 @@ const Field = ( { id } ) => {
 			<Input
 				name={ `${ id }.field.max_clone` }
 				label={ __( 'Max items', 'meta-box-builder' ) }
-				description={ __( 'Set to 1 to set 1-n relationship or 1-1 relationship. Leave empty for unlimited items, e.g. n-n relationship.', 'meta-box-builder' ) }
+				description={ __( 'The maximum number of selected items.', 'meta-box-builder' ) }
 				type="number"
 				defaultValue={ getSetting( `${ id }.field.max_clone` ) }
 				updateField={ updateSetting }
