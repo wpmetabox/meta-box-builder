@@ -13,8 +13,8 @@ const useUnsavedChanges = () => {
 	const captureInitialState = () => {
 		initialSettings.current = useSettings.getState().settings;
 		initialFields.current = buildFieldsTree();
-		initialTitle.current = document.querySelector( '#post_title' ).value;
-		initialName.current = document.querySelector( '#post_name' ).textContent;
+		initialTitle.current = document.querySelector( '#post_title' )?.value;
+		initialName.current = document.querySelector( '#post_name' )?.textContent;
 		setHasUnsavedChanges( false );
 	};
 
@@ -24,8 +24,8 @@ const useUnsavedChanges = () => {
 	const detectChanges = () => {
 		const currentSettings = useSettings.getState().settings;
 		const currentFields = buildFieldsTree();
-		const currentTitle = document.querySelector( '#post_title' ).value;
-		const currentName = document.querySelector( '#post_name' ).textContent;
+		const currentTitle = document.querySelector( '#post_title' )?.value;
+		const currentName = document.querySelector( '#post_name' )?.textContent;
 
 		const settingsChanged = !isEqual( currentSettings, initialSettings.current );
 		const fieldsChanged = !isEqual( currentFields, initialFields.current );
@@ -68,13 +68,15 @@ const useUnsavedChanges = () => {
 			const unsubscribe = store.subscribe( detectChanges );
 			unsubscribes.push( unsubscribe );
 		} );
-		document.querySelector( '#post_title' ).addEventListener( 'input', detectChanges );
-		document.querySelector( '#post_name_input' ).addEventListener( 'input', detectChanges );
+		const postTitle = document.querySelector( '#post_title' );
+		const postName = document.querySelector( '#post_name_input' );
+		postTitle?.addEventListener( 'input', detectChanges );
+		postName?.addEventListener( 'input', detectChanges );
 
 		return () => {
 			unsubscribes.forEach( unsubscribe => unsubscribe() );
-			document.querySelector( '#post_title' ).removeEventListener( 'input', detectChanges );
-			document.querySelector( '#post_name_input' ).removeEventListener( 'input', detectChanges );
+			postTitle?.removeEventListener( 'input', detectChanges );
+			postName?.removeEventListener( 'input', detectChanges );
 		};
 	}, [] );
 
