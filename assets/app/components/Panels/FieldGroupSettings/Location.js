@@ -51,7 +51,7 @@ const Location = () => {
 					{ MbbApp.extensions.commentMeta && <option value="comment">{ __( 'Comment', 'meta-box-builder' ) }</option> }
 					{ MbbApp.extensions.settingsPage && <option value="setting">{ __( 'Settings page', 'meta-box-builder' ) }</option> }
 					{ MbbApp.extensions.blocks && <option value="block">{ __( 'Block', 'meta-box-builder' ) }</option> }
-					{ MbbApp.wcOrders && <option value="order">{ __( 'WooCommerce Order (HPOS)', 'meta-box-builder' ) }</option> }
+					{ MbbApp.wcOrders.length > 0 && <option value="order">{ __( 'WooCommerce Order (HPOS)', 'meta-box-builder' ) }</option> }
 				</select>
 				{
 					'post' === objectType &&
