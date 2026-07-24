@@ -54,6 +54,7 @@ new Extensions\AdminColumns();
 
 new Integrations\WPML\Manager();
 new Integrations\Polylang\Manager();
+new Integrations\WooCommerce();
 
 new Extensions\Columns();
 new Extensions\ConditionalLogic();
