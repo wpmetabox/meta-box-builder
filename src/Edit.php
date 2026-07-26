@@ -5,6 +5,7 @@ use MBB\Helpers\AllowedBlockLists;
 use MBB\Helpers\Template;
 use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
+use MBB\Integrations\WooCommerce;
 
 class Edit extends BaseEditPage {
 	public function __construct( string $post_type ) {
@@ -175,7 +176,6 @@ class Edit extends BaseEditPage {
 			'postTypes'       => Data::get_post_types(),
 			'taxonomies'      => Data::get_taxonomies(),
 			'settingsPages'   => Data::get_setting_pages(),
-			'wcOrders'        => function_exists( 'wc_get_order_types' ) ? array_values( wc_get_order_types( 'view-orders' ) ) : [],
 			'templates'       => Data::get_templates(),
 			'icons'           => DataHelper::get_dashicons(),
 
@@ -200,6 +200,7 @@ class Edit extends BaseEditPage {
 				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
 				'views'              => Data::is_extension_active( 'mb-views' ),
+				'wcOrders'           => WooCommerce::is_active(),
 			],
 
 			'assetsBaseUrl'   => MBB_URL . 'assets',

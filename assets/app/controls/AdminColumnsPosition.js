@@ -11,7 +11,8 @@ const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) =>
 
 	const defaultColumns = {
 		term: 'name',
-		user: 'username'
+		user: 'username',
+		order: 'order_number'
 	};
 	const defaultColumn = defaultColumns[ objectType ] || 'title';
 
@@ -93,6 +94,30 @@ const objectTypeFields = objectType => {
 			[ 'email', __( 'Email', 'meta-box-builder' ) ],
 			[ 'role', __( 'Role', 'meta-box-builder' ) ],
 			[ 'posts', __( 'Posts', 'meta-box-builder' ) ],
+		];
+	}
+
+	// Columns of the WooCommerce Orders screen (both legacy CPT and HPOS) and Subscription screen
+	if ( objectType === 'order' ) {
+		return [
+			[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
+			[ 'order_number', __( 'Order: Order', 'meta-box-builder' ) ],
+			[ 'order_date', __( 'Order: Date', 'meta-box-builder' ) ],
+			[ 'order_status', __( 'Order: Status', 'meta-box-builder' ) ],
+			[ 'billing_address', __( 'Order: Billing address', 'meta-box-builder' ) ],
+			[ 'shipping_address', __( 'Order: Shipping address', 'meta-box-builder' ) ],
+			[ 'order_total', __( 'Order: Total', 'meta-box-builder' ) ],
+			[ 'wc_actions', __( 'Order: Actions', 'meta-box-builder' ) ],
+			[ 'status', __( 'Subscription: Status', 'meta-box-builder' ) ],
+			[ 'order_title', __( 'Subscription: Subscription', 'meta-box-builder' ) ],
+			[ 'order_items', __( 'Subscription: Items', 'meta-box-builder' ) ],
+			[ 'recurring_total', __( 'Subscription: Total', 'meta-box-builder' ) ],
+			[ 'start_date', __( 'Subscription: Start Date', 'meta-box-builder' ) ],
+			[ 'trial_end_date', __( 'Subscription: Trial End', 'meta-box-builder' ) ],
+			[ 'next_payment_date', __( 'Subscription: Next Payment', 'meta-box-builder' ) ],
+			[ 'last_payment_date', __( 'Subscription: Last Order Date', 'meta-box-builder' ) ],
+			[ 'end_date', __( 'Subscription: End Date', 'meta-box-builder' ) ],
+			[ 'orders', __( 'Subscription: Related Orders', 'meta-box-builder' ) ],
 		];
 	}
 
