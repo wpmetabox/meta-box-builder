@@ -110,9 +110,9 @@ class Registry {
 				'label'       => __( 'HTML after', 'meta-box-builder' ),
 				'description' => __( 'Custom HTML displayed after the field wrapper HTML.', 'meta-box-builder' ),
 			], '', 'advanced' ),
-			Control::Toggle( 'block_bindings', [
-				'label'       => __( 'Enable block bindings?', 'meta-box-builder' ),
-				'description' => __( 'Allow this field to be used as a block binding source in the block editor.', 'meta-box-builder' ),
+			Control::Toggle( 'hide_from_block_bindings', [
+				'label'       => __( 'Hide from block bindings?', 'meta-box-builder' ),
+				'description' => __( 'Do not show this field as a block binding source in the block editor.', 'meta-box-builder' ),
 			], false, 'advanced' ),
 			Control::Toggle( 'save_field', [
 				'label'       => __( 'Save field value', 'meta-box-builder' ),
