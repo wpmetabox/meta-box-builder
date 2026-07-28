@@ -83,7 +83,7 @@ const Location = () => {
 					/>
 				}
 				{
-					'order' === objectType &&
+					MbbApp.extensions.wcOrders && 'order' === objectType &&
 					<ReactSelect
 						wrapper={ false }
 						options={ MbbApp.wcOrders.map( item => ( { value: item.slug, label: item.name } ) ) }
