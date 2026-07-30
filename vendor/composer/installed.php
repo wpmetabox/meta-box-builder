@@ -3,7 +3,7 @@
         'name' => 'wpmetabox/meta-box-builder',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '0fac573f68f192eadc8543c3cf7c5e40556c9a0f',
+        'reference' => '5372cd72c6ab79abc4d82fcaca92cda091f3ad1d',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,14 +11,12 @@
     ),
     'versions' => array(
         'elightup/twig' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '588a9d55508d383de47cade5cb0049c809f4750f',
+            'pretty_version' => '3.11.3',
+            'version' => '3.11.3.0',
+            'reference' => '0ec60b18b7c2299b7f0a7e09aa46fce15c634d4e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../elightup/twig',
-            'aliases' => array(
-                0 => '9999999-dev',
-            ),
+            'aliases' => array(),
             'dev_requirement' => false,
         ),
         'riimu/kit-phpencoder' => array(
@@ -31,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'wpmetabox/mbb-parser' => array(
-            'pretty_version' => '2.0.9',
-            'version' => '2.0.9.0',
-            'reference' => 'e0663efe56b260c0ec81debc029ef68cdde511b0',
+            'pretty_version' => '2.0.11',
+            'version' => '2.0.11.0',
+            'reference' => '0a41cbad52c33b819e676e67bba984218c1bd03d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wpmetabox/mbb-parser',
             'aliases' => array(),
@@ -42,7 +40,7 @@
         'wpmetabox/meta-box-builder' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '0fac573f68f192eadc8543c3cf7c5e40556c9a0f',
+            'reference' => '5372cd72c6ab79abc4d82fcaca92cda091f3ad1d',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

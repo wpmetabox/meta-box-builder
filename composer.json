@@ -13,7 +13,7 @@
 	},
 	"require": {
 		"wpmetabox/support": "^1",
-		"elightup/twig": "dev-master",
+		"elightup/twig": "^3",
 		"wpmetabox/mbb-parser": "^2.0"
 	},
 	"require-dev": {

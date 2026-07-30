@@ -6,6 +6,14 @@ namespace Composer\Autoload;
 
 class ComposerStaticInite19679b2c031a0a42c1567343a0d570f
 {
+    public static $files = array (
+        'a5c46146abbe604d5c1093a7f3da03bd' => __DIR__ . '/..' . '/elightup/twig/src/deprecation-contracts.php',
+        '8b498914ceeb1108203e7c7885f7bba3' => __DIR__ . '/..' . '/elightup/twig/Symfony/Polyfill/Ctype/bootstrap.php',
+        '730a5433db5cc4599c79c4eb3c61d9b6' => __DIR__ . '/..' . '/elightup/twig/Symfony/Polyfill/Mbstring/bootstrap.php',
+        '7c1a54178937151a8c6b81415aef6d0e' => __DIR__ . '/..' . '/elightup/twig/Symfony/Polyfill/Php80/bootstrap.php',
+        '7a7f251a7840ae3e0424fbb9fde67f81' => __DIR__ . '/..' . '/elightup/twig/Symfony/Polyfill/Php81/bootstrap.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'e' =>
         array (
