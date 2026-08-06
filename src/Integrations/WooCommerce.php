@@ -1,6 +1,8 @@
 <?php
 namespace MBB\Integrations;
 
+use Automattic\WooCommerce\Utilities\OrderUtil;
+
 class WooCommerce {
 	public function __construct() {
 		if ( ! self::is_active() ) {
@@ -11,15 +13,16 @@ class WooCommerce {
 	}
 
 	public static function is_active(): bool {
-		return class_exists( 'WooCommerce' );
+		// Check WooCommerce and HPOS must be enabled
+		// If HPOS disabled, we select over WC post-types
+		if( class_exists( 'WooCommerce' ) && class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' ) ) {
+			return OrderUtil::custom_orders_table_usage_is_enabled();
+		}
+
+		return false;
 	}
  
 	public function add_app_data( array $data ): array {
-		$data['wcOrders'] = $this->get_order_types();
-		return $data;
-	}
- 
-	private function get_order_types(): array { 
 		$order_types = [
 			[ 'slug' => 'shop_order', 'name' => __( 'Order', 'meta-box-builder' ) ],
 		];
@@ -28,7 +31,12 @@ class WooCommerce {
 		if ( class_exists( 'WC_Subscriptions' ) ) {
 			$order_types[] = [ 'slug' => 'shop_subscription', 'name' => __( 'Subscription', 'meta-box-builder' ) ];
 		}
- 
-		return $order_types;
+
+		$data['wcOrders'] = $order_types;
+
+		$data['extensions']             = is_array( $data['extensions'] ?? null ) ? $data['extensions'] : [];
+		$data['extensions']['wcOrders'] = ! empty( $order_types );
+
+		return $data;
 	}
 }

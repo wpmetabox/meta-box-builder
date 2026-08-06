@@ -79,7 +79,7 @@ const useSettings = create( ( set, get ) => ( {
 			dotProp.delete( updatedSettings, 'post_types' );
 			dotProp.delete( updatedSettings, 'taxonomies' );
 			dotProp.delete( updatedSettings, 'type' );
-		} else if ( [ 'block', 'user', 'comment', 'order' ].includes( value ) ) {
+		} else if ( [ 'block', 'user', 'comment' ].includes( value ) ) {
 			dotProp.delete( updatedSettings, 'post_types' );
 			dotProp.delete( updatedSettings, 'taxonomies' );
 			dotProp.delete( updatedSettings, 'settings_pages' );
