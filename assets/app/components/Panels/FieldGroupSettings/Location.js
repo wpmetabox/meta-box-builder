@@ -85,6 +85,7 @@ const Location = () => {
 				{
 					MbbApp.extensions.wcOrders && 'order' === objectType &&
 					<ReactSelect
+						name="order"
 						wrapper={ false }
 						options={ MbbApp.wcOrders.map( item => ( { value: item.slug, label: item.name } ) ) }
 						defaultValue={ postTypes }
