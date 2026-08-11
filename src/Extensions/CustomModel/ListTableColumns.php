@@ -35,8 +35,19 @@ class ListTableColumns {
 			$new_columns[ self::PREFIX . $column ] = $labels[ $column ];
 		}
 
-		// Insert new columns after the checkbox and title columns.
-		return array_merge( array_slice( $columns, 0, 2 ), $new_columns, array_slice( $columns, 2 ) );
+		$result = [];
+		foreach ( $columns as $key => $label ) {
+			$result[ $key ] = $label;
+			if ( 'title' === $key ) {
+				$result += $new_columns;
+			}
+		}
+
+		if ( ! isset( $columns['title'] ) ) {
+			$result += $new_columns;
+		}
+
+		return $result;
 	}
 
 	public function output( string $column, int $post_id ): void {

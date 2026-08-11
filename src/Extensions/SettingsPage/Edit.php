@@ -2,6 +2,7 @@
 namespace MBB\Extensions\SettingsPage;
 
 use MBB\BaseEditPage;
+use MBB\Assets;
 use MetaBox\Support\Data;
 
 class Edit extends BaseEditPage {
@@ -16,7 +17,7 @@ class Edit extends BaseEditPage {
 			[ 'wp-components', 'code-editor' ],
 			filemtime( MBB_DIR . 'src/Extensions/SettingsPage/css/settings-page.css' )
 		);
-		wp_enqueue_style( 'font-awesome', 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css', [], ' 6.7.2' );
+		Assets::enqueue_font_awesome();
 
 		wp_enqueue_code_editor( [ 'type' => 'application/x-httpd-php' ] );
 

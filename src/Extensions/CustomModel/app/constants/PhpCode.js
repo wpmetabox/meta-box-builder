@@ -4,8 +4,9 @@ import DefaultSettings from './DefaultSettings';
 const PhpCode = settings => {
 	const slug = ( settings.slug || '' ).replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" );
 	const functionName = settings.function_name || DefaultSettings.function_name;
-	const menuPosition = settings.menu_position !== '' && settings.show_in_menu === true
-		? `\n\t\t'menu_position' => ${ Number( settings.menu_position ) || 'null' },`
+	const position = Number( settings.menu_position );
+	const menuPosition = true === settings.show_in_menu && '' !== settings.menu_position && Number.isFinite( position )
+		? `\n\t\t'menu_position' => ${ position },`
 		: '';
 	const supports = settings.supports?.length
 		? `\n\t\t${ checkboxList( settings, 'supports', '[]' ) },`

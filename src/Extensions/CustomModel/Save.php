@@ -52,6 +52,7 @@ class Save {
 		}
 
 		$post_name = sanitize_title( empty( $settings['slug'] ) ? $post_title : $settings['slug'] );
+		$settings['table'] = $this->sanitize_table_name( $settings['table'] ?? '' );
 
 		$post = get_post( $post_id );
 		if ( ! $post ) {
@@ -83,13 +84,20 @@ class Save {
 		];
 		$update_args = SaveRestApi::fix_post_date( $update_args );
 
-		$result = wp_update_post( $update_args );
+		$needs_update = $post->post_title !== $post_title
+			|| $post->post_name !== $post_name
+			|| $post->post_status !== $post_status
+			|| $update_args['post_date'] !== $post->post_date;
 
-		if ( is_wp_error( $result ) ) {
-			return [
-				'success' => false,
-				'message' => $result->get_error_message(),
-			];
+		if ( $needs_update ) {
+			$result = wp_update_post( $update_args );
+
+			if ( is_wp_error( $result ) ) {
+				return [
+					'success' => false,
+					'message' => $result->get_error_message(),
+				];
+			}
 		}
 
 		$settings['slug'] = $post_name;
@@ -115,9 +123,15 @@ class Save {
 		$model['name'] = $post_name;
 		update_post_meta( $post_id, 'model', $model );
 
+		Register::clear_cache();
+
 		return [
 			'success' => true,
 			'message' => __( 'Custom model is updated.', 'meta-box-builder' ),
 		];
+	}
+
+	private function sanitize_table_name( $table ): string {
+		return str_replace( '-', '_', sanitize_key( (string) $table ) );
 	}
 }

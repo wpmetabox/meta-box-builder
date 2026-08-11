@@ -2,10 +2,17 @@
 namespace MBB\Extensions\CustomModel;
 
 class Register {
+	private const CACHE_OPTION = 'mbb_models';
+
 	public function __construct() {
 		$this->register_post_type();
 
 		add_action( 'init', [ $this, 'register_models' ] );
+
+		add_action( 'save_post_mb-model', [ __CLASS__, 'clear_cache' ] );
+		add_action( 'before_delete_post', [ $this, 'clear_cache_on_delete' ] );
+		add_action( 'wp_trash_post', [ $this, 'clear_cache_on_delete' ] );
+		add_action( 'untrash_post', [ $this, 'clear_cache_on_delete' ] );
 	}
 
 	private function register_post_type(): void {
@@ -62,6 +69,18 @@ class Register {
 	}
 
 	public function register_models(): void {
+		$models = get_option( self::CACHE_OPTION, false );
+		if ( ! is_array( $models ) ) {
+			$models = $this->query_models();
+			update_option( self::CACHE_OPTION, $models, true );
+		}
+
+		foreach ( $models as $name => $args ) {
+			mb_register_model( $name, $args );
+		}
+	}
+
+	private function query_models(): array {
 		$query = new \WP_Query( [
 			'posts_per_page'         => -1,
 			'post_status'            => 'publish',
@@ -70,6 +89,7 @@ class Register {
 			'update_post_term_cache' => false,
 		] );
 
+		$models = [];
 		foreach ( $query->posts as $post ) {
 			$model = get_post_meta( $post->ID, 'model', true );
 			if ( empty( $model ) || ! is_array( $model ) || empty( $model['name'] ) || empty( $model['table'] ) ) {
@@ -78,8 +98,19 @@ class Register {
 
 			$name = $model['name'];
 			unset( $model['name'] );
+			$models[ $name ] = $model;
+		}
 
-			mb_register_model( $name, $model );
+		return $models;
+	}
+
+	public static function clear_cache(): void {
+		delete_option( self::CACHE_OPTION );
+	}
+
+	public function clear_cache_on_delete( int $post_id ): void {
+		if ( 'mb-model' === get_post_type( $post_id ) ) {
+			self::clear_cache();
 		}
 	}
 }
