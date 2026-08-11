@@ -21,6 +21,7 @@
     "react-select": "^5.10.2",
     "react-sortablejs": "^6.1.4",
     "react-textarea-autosize": "^8.5.9",
+    "slugify": "^1.6.9",
     "sortablejs": "^1.15.7",
     "zustand": "^5.0.13"
   }

@@ -9,3 +9,4 @@ node_modules
 # assets/js/build
 src/Extensions/Relationships/build/relationships.js.map
 src/Extensions/SettingsPage/build/settings-page.js.map
+.pnpm-store

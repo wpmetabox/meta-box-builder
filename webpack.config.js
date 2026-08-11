@@ -45,5 +45,16 @@ const relationships = {
 	externals,
 };
 
-module.exports = [ main, settingsPage, relationships ];
+// Custom model app.
+const customModel = {
+	...defaultConfig,
+	entry: './src/Extensions/CustomModel/app/App.js',
+	output: {
+		path: path.resolve( 'src/Extensions/CustomModel/build' ),
+		filename: 'custom-model.js'
+	},
+	externals,
+};
+
+module.exports = [ main, settingsPage, relationships, customModel ];
 // module.exports = [ main ];

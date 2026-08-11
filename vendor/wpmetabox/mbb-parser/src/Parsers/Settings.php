@@ -8,7 +8,7 @@ class Settings extends Base {
 	 * Allow these settings to be empty.
 	 * @var array
 	 */
-	protected $empty_keys = [ 'post_types', 'taxonomies', 'settings_pages' ];
+	protected $empty_keys = [ 'post_types', 'taxonomies', 'settings_pages', 'models' ];
 
 	/**
 	 * Remove these settings if they are false.
@@ -42,19 +42,31 @@ class Settings extends Base {
 		if ( $object_type === 'post' ) {
 			unset( $this->taxonomies );
 			unset( $this->settings_pages );
+			unset( $this->models );
 			unset( $this->type );
 		} elseif ( $object_type === 'term' ) {
 			unset( $this->post_types );
 			unset( $this->settings_pages );
+			unset( $this->models );
 			unset( $this->type );
 		} elseif ( $object_type === 'setting' ) {
 			unset( $this->post_types );
 			unset( $this->taxonomies );
+			unset( $this->models );
 			unset( $this->type );
+		} elseif ( $object_type === 'model' ) {
+			unset( $this->post_types );
+			unset( $this->taxonomies );
+			unset( $this->settings_pages );
+			unset( $this->type );
+			if ( isset( $this->models ) ) {
+				$this->models = array_filter( (array) $this->models );
+			}
 		} elseif ( in_array( $object_type, [ 'block', 'user', 'comment' ], true ) ) {
 			unset( $this->post_types );
 			unset( $this->taxonomies );
 			unset( $this->settings_pages );
+			unset( $this->models );
 			$this->type = $object_type;
 		}
 

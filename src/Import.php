@@ -16,7 +16,7 @@ class Import {
 	}
 
 	public function output_js_templates(): void {
-		if ( ! in_array( get_current_screen()->id, [ 'edit-meta-box', 'edit-mb-relationship', 'edit-mb-settings-page' ], true ) ) {
+		if ( ! in_array( get_current_screen()->id, [ 'edit-meta-box', 'edit-mb-relationship', 'edit-mb-settings-page', 'edit-mb-model' ], true ) ) {
 			return;
 		}
 		?>

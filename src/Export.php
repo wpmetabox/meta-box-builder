@@ -15,7 +15,7 @@ class Export {
 	 * @return array
 	 */
 	public function add_export_link( $actions, $post ): array {
-		if ( ! in_array( $post->post_type, [ 'meta-box', 'mb-relationship', 'mb-settings-page' ], true ) ) {
+		if ( ! in_array( $post->post_type, [ 'meta-box', 'mb-relationship', 'mb-settings-page', 'mb-model' ], true ) ) {
 			return $actions;
 		}
 
@@ -96,6 +96,7 @@ class Export {
 			'meta-box'         => [ 'settings', 'fields', 'meta_box' ],
 			'mb-relationship'  => [ 'settings', 'relationship' ],
 			'mb-settings-page' => [ 'settings', 'settings_page' ],
+			'mb-model'         => [ 'settings', 'model' ],
 		];
 
 		return $meta_keys[ $post_type ] ?? [];

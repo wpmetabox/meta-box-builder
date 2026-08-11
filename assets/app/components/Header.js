@@ -56,6 +56,11 @@ const Header = () => {
 			.map( page => MbbApp.settingsPages.find( p => p.id === page ) )
 			.filter( Boolean )
 			.map( p => p.title );
+	} else if ( objectType === 'model' ) {
+		locations = ensureArray( getSetting( 'models', [] ) )
+			.map( model => ( MbbApp.models || [] ).find( m => m.name === model ) )
+			.filter( Boolean )
+			.map( m => m.label );
 	}
 
 	return (

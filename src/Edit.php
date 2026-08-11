@@ -175,6 +175,7 @@ class Edit extends BaseEditPage {
 			'postTypes'       => Data::get_post_types(),
 			'taxonomies'      => Data::get_taxonomies(),
 			'settingsPages'   => Data::get_setting_pages(),
+			'models'          => Data::get_models(),
 			'templates'       => Data::get_templates(),
 			'icons'           => DataHelper::get_dashicons(),
 

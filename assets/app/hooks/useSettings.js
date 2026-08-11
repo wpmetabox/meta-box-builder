@@ -32,7 +32,8 @@ const useSettings = create( ( set, get ) => ( {
 			term: 'termMeta',
 			user: 'userMeta',
 			comment: 'commentMeta',
-			setting: 'settingsPage'
+			setting: 'settingsPage',
+			model: 'customTable',
 		};
 
 		// Check if the current object type requires an extension that's not available
@@ -69,19 +70,30 @@ const useSettings = create( ( set, get ) => ( {
 		if ( value === 'post' ) {
 			dotProp.delete( updatedSettings, 'taxonomies' );
 			dotProp.delete( updatedSettings, 'settings_pages' );
+			dotProp.delete( updatedSettings, 'models' );
 			dotProp.delete( updatedSettings, 'type' );
 		} else if ( value === 'term' ) {
 			dotProp.delete( updatedSettings, 'post_types' );
 			dotProp.delete( updatedSettings, 'settings_pages' );
+			dotProp.delete( updatedSettings, 'models' );
 			dotProp.delete( updatedSettings, 'type' );
 		} else if ( value === 'setting' ) {
 			dotProp.delete( updatedSettings, 'post_types' );
 			dotProp.delete( updatedSettings, 'taxonomies' );
+			dotProp.delete( updatedSettings, 'models' );
 			dotProp.delete( updatedSettings, 'type' );
+		} else if ( value === 'model' ) {
+			dotProp.delete( updatedSettings, 'post_types' );
+			dotProp.delete( updatedSettings, 'taxonomies' );
+			dotProp.delete( updatedSettings, 'settings_pages' );
+			dotProp.delete( updatedSettings, 'type' );
+			dotProp.set( updatedSettings, 'custom_table.enable', true );
+			dotProp.set( updatedSettings, 'custom_table.create', true );
 		} else if ( [ 'block', 'user', 'comment' ].includes( value ) ) {
 			dotProp.delete( updatedSettings, 'post_types' );
 			dotProp.delete( updatedSettings, 'taxonomies' );
 			dotProp.delete( updatedSettings, 'settings_pages' );
+			dotProp.delete( updatedSettings, 'models' );
 		}
 
 		set( { settings: updatedSettings } );

@@ -350,7 +350,7 @@ class AdminColumns {
 	}
 
 	public function enqueue() {
-		if ( ! in_array( get_current_screen()->id, [ 'edit-meta-box', 'edit-mb-relationship', 'edit-mb-settings-page' ], true ) ) {
+		if ( ! in_array( get_current_screen()->id, [ 'edit-meta-box', 'edit-mb-relationship', 'edit-mb-settings-page', 'edit-mb-model' ], true ) ) {
 			return;
 		}
 
@@ -504,6 +504,7 @@ class AdminColumns {
 			'post'    => __( 'Posts', 'meta-box-builder' ),
 			'term'    => __( 'Taxonomies', 'meta-box-builder' ),
 			'block'   => __( 'Blocks', 'meta-box-builder' ),
+			'model'   => __( 'Custom Models', 'meta-box-builder' ),
 		];
 
 		esc_html_e( $labels[ $object_type ] ?? '' );
@@ -570,6 +571,12 @@ class AdminColumns {
 				$settings_pages = wp_list_pluck( $settings_pages, 'title', 'id' );
 				$ids            = Arr::get( $data, 'settings_pages', [] );
 				$saved          = array_intersect_key( $settings_pages, array_flip( $ids ) );
+				echo wp_kses_post( implode( '<br>', $saved ) );
+				break;
+			case 'model':
+				$models = wp_list_pluck( Data::get_models(), 'label', 'name' );
+				$ids    = Arr::get( $data, 'models', [] );
+				$saved  = array_intersect_key( $models, array_flip( $ids ) );
 				echo wp_kses_post( implode( '<br>', $saved ) );
 				break;
 			case 'post':

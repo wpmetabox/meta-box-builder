@@ -1,0 +1,135 @@
+<?php
+namespace MBB\Extensions\CustomModel;
+
+use MBBParser\Parsers\Base;
+use MetaBox\Support\Arr;
+
+class Parser extends Base {
+	public function parse(): void {
+		$this->parse_table()
+			->parse_menu()
+			->parse_menu_icon()
+			->parse_labels()
+			->parse_supports()
+			->parse_boolean_values()
+			->parse_numeric_values()
+			->remove_empty_values()
+			->remove_default( 'capability', 'edit_posts' )
+			->remove_default( 'show_in_menu', true )
+			->remove_default( 'menu_icon', 'dashicons-admin-post' );
+	}
+
+	private function parse_table(): self {
+		$table = Arr::get( $this->settings, 'table', '' );
+		if ( empty( $table ) ) {
+			return $this;
+		}
+
+		global $wpdb;
+		$prefix      = Arr::get( $this->settings, 'prefix', false );
+		$this->table = ( $prefix ? $wpdb->prefix : '' ) . $table;
+		unset( $this->prefix );
+
+		return $this;
+	}
+
+	private function parse_menu(): self {
+		$show_in_menu = Arr::get( $this->settings, 'show_in_menu', true );
+
+		// Submenu: show_in_menu holds the parent slug.
+		if ( is_string( $show_in_menu ) && ! in_array( $show_in_menu, [ 'true', 'false', '' ], true ) ) {
+			$this->parent       = $show_in_menu;
+			$this->show_in_menu = true;
+			unset( $this->menu_position );
+			unset( $this->menu_icon );
+		} elseif ( false === $show_in_menu || 'false' === $show_in_menu ) {
+			$this->show_in_menu = false;
+			unset( $this->parent );
+			unset( $this->menu_position );
+			unset( $this->menu_icon );
+		} else {
+			$this->show_in_menu = true;
+			unset( $this->parent );
+			$position = Arr::get( $this->settings, 'menu_position', '' );
+			if ( '' === $position || null === $position ) {
+				unset( $this->menu_position );
+			} else {
+				$this->menu_position = (int) $position;
+			}
+		}
+
+		return $this;
+	}
+
+	private function parse_menu_icon(): self {
+		if ( empty( $this->show_in_menu ) || ! empty( $this->parent ) ) {
+			unset( $this->menu_icon );
+			unset( $this->icon_type );
+			unset( $this->icon );
+			unset( $this->icon_svg );
+			unset( $this->icon_custom );
+			unset( $this->font_awesome );
+			return $this;
+		}
+
+		$type = Arr::get( $this->settings, 'icon_type', 'dashicons' );
+
+		if ( 'dashicons' === $type ) {
+			$icon              = (string) Arr::get( $this->settings, 'icon', 'admin-post' );
+			$icon              = preg_replace( '/^dashicons-/', '', $icon );
+			$this->menu_icon   = 'dashicons-' . $icon;
+		} elseif ( 'svg' === $type ) {
+			$this->menu_icon = Arr::get( $this->settings, 'icon_svg', '' );
+		} elseif ( 'custom' === $type ) {
+			$this->menu_icon = Arr::get( $this->settings, 'icon_custom', '' );
+		} elseif ( 'font_awesome' === $type ) {
+			$this->menu_icon = Arr::get( $this->settings, 'font_awesome', '' );
+		}
+
+		unset( $this->icon_type );
+		unset( $this->icon );
+		unset( $this->icon_svg );
+		unset( $this->icon_custom );
+		unset( $this->font_awesome );
+
+		return $this;
+	}
+
+	private function parse_labels(): self {
+		$labels = Arr::get( $this->settings, 'labels', [] );
+		if ( ! is_array( $labels ) ) {
+			$labels = [];
+		}
+
+		// Keep only non-empty labels.
+		$labels = array_filter( $labels, function ( $value ): bool {
+			return '' !== $value && null !== $value;
+		} );
+
+		$this->labels = $labels;
+
+		return $this;
+	}
+
+	private function parse_supports(): self {
+		$supports = Arr::get( $this->settings, 'supports', [] );
+		if ( ! is_array( $supports ) ) {
+			$supports = [];
+		}
+		$this->supports = array_values( array_unique( array_filter( $supports ) ) );
+
+		if ( empty( $this->supports ) ) {
+			unset( $this->supports );
+		}
+
+		// Remove UI-only keys.
+		unset( $this->slug );
+		unset( $this->id );
+		unset( $this->text_domain );
+		unset( $this->function_name );
+		unset( $this->_slug_changed );
+		unset( $this->_table_changed );
+
+		return $this;
+	}
+}

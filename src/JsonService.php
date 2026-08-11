@@ -186,6 +186,7 @@ class JsonService {
 			'meta-box'         => [ 'meta_box' ],
 			'mb-relationship'  => [ 'relationship' ],
 			'mb-settings-page' => [ 'settings_page' ],
+			'mb-model'         => [ 'model' ],
 		];
 
 		return $meta_keys[ $post_type ] ?? [];

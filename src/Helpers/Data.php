@@ -141,6 +141,24 @@ class Data {
 		return $pages;
 	}
 
+	public static function get_models(): array {
+		if ( ! class_exists( '\MetaBox\CustomTable\Model\Factory' ) ) {
+			return [];
+		}
+
+		$models = [];
+		foreach ( \MetaBox\CustomTable\Model\Factory::get() as $name => $model ) {
+			$label = $model->labels['singular_name'] ?? $model->labels['name'] ?? $name;
+			$models[] = [
+				'name'  => $name,
+				'label' => $label,
+				'table' => $model->table,
+			];
+		}
+
+		return $models;
+	}
+
 	public static function is_extension_active( $extension ) {
 		$functions = [
 			'mb-admin-columns'           => 'mb_admin_columns_load',
