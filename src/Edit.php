@@ -5,7 +5,6 @@ use MBB\Helpers\AllowedBlockLists;
 use MBB\Helpers\Template;
 use MetaBox\Support\Data as DataHelper;
 use MBB\Helpers\Data;
-use MBB\Integrations\WooCommerce;
 
 class Edit extends BaseEditPage {
 	public function __construct( string $post_type ) {
@@ -200,7 +199,6 @@ class Edit extends BaseEditPage {
 				'userMeta'           => Data::is_extension_active( 'mb-user-meta' ),
 				'revision'           => Data::is_extension_active( 'mb-revision' ),
 				'views'              => Data::is_extension_active( 'mb-views' ),
-				'wcOrders'           => WooCommerce::is_active(),
 			],
 
 			'assetsBaseUrl'   => MBB_URL . 'assets',

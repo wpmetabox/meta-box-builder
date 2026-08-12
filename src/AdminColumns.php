@@ -504,7 +504,6 @@ class AdminColumns {
 			'post'    => __( 'Posts', 'meta-box-builder' ),
 			'term'    => __( 'Taxonomies', 'meta-box-builder' ),
 			'block'   => __( 'Blocks', 'meta-box-builder' ),
-			'order'   => __( 'WooCommerce Order', 'meta-box-builder' ),
 		];
 
 		esc_html_e( $labels[ $object_type ] ?? '' );
@@ -590,12 +589,6 @@ class AdminColumns {
 					echo esc_html( Arr::get( $data, 'block_json.path' ) );
 				}
 				break;
-			case 'order':
-				echo wp_kses_post( implode( '<br>', array_filter( array_map( function ( $post_type ) {
-					$post_type_object = get_post_type_object( $post_type );
-					return $post_type_object ? $post_type_object->labels->singular_name : '';
-				}, Arr::get( $data, 'post_types', [ 'order' ] ) ) ) ) );
-				break;
 		}
 	}
 
@@ -605,4 +598,6 @@ class AdminColumns {
 		$shortcode = "[mb_frontend_form id='{$post->post_name}' post_fields='title,content']";
 		echo '<input type="text" readonly value="' . esc_attr( $shortcode ) . '" onclick="this.select()">';
 	}
+
+
 }

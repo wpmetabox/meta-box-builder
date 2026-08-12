@@ -51,7 +51,6 @@ const Location = () => {
 					{ MbbApp.extensions.commentMeta && <option value="comment">{ __( 'Comment', 'meta-box-builder' ) }</option> }
 					{ MbbApp.extensions.settingsPage && <option value="setting">{ __( 'Settings page', 'meta-box-builder' ) }</option> }
 					{ MbbApp.extensions.blocks && <option value="block">{ __( 'Block', 'meta-box-builder' ) }</option> }
-					{ MbbApp.extensions.wcOrders && <option value="order">{ __( 'WooCommerce Order', 'meta-box-builder' ) }</option> }
 				</select>
 				{
 					'post' === objectType &&
@@ -80,16 +79,6 @@ const Location = () => {
 						options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.id })` } ) ) }
 						defaultValue={ ensureArray( getSetting( 'settings_pages', [] ) ) }
 						updateField={ updateSetting }
-					/>
-				}
-				{
-					MbbApp.extensions.wcOrders && 'order' === objectType &&
-					<ReactSelect
-						name="order"
-						wrapper={ false }
-						options={ MbbApp.wcOrders.map( item => ( { value: item.slug, label: item.name } ) ) }
-						defaultValue={ postTypes }
-						updateField={ ( name, values ) => updatePostTypes( values ) }
 					/>
 				}
 				{
