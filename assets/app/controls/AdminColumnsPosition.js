@@ -18,7 +18,7 @@ const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) =>
 	const defaultColumn = defaultColumns[ objectType ] || 'title';
 
 	let fields = useAllFields().map( field => [ field.id, `${ field.name } (${ field.id })` ] );
-	fields = [ ...objectTypeFields( objectType ), ...fields ];
+	fields = [ ...objectTypeFields( objectType, postTypes ), ...fields ];
 
 	const handleChangeType = e => updateField( `${ name }.type`, e.target.value );
 	const handleChangeColumn = ( inputRef, value ) => updateField( `${ name }.column`, value );
