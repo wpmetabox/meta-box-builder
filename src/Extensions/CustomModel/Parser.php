@@ -7,6 +7,7 @@ use MetaBox\Support\Arr;
 class Parser extends Base {
 	public function parse(): void {
 		$this->parse_table()
+			->parse_columns()
 			->parse_menu()
 			->parse_menu_icon()
 			->parse_labels()
@@ -31,6 +32,58 @@ class Parser extends Base {
 		unset( $this->prefix );
 
 		return $this;
+	}
+
+	private function parse_columns(): self {
+		$raw = Arr::get( $this->settings, 'columns', [] );
+		if ( ! is_array( $raw ) ) {
+			$raw = [];
+		}
+
+		$columns = [];
+		$keys    = [];
+
+		foreach ( $raw as $item ) {
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+
+			$name = str_replace( '-', '_', sanitize_key( (string) ( $item['name'] ?? '' ) ) );
+			if ( '' === $name || 'id' === $name ) {
+				continue;
+			}
+
+			$type = (string) ( $item['type'] ?? 'TEXT' );
+			if ( 'custom' === $type ) {
+				$type = trim( (string) ( $item['custom_type'] ?? '' ) );
+			}
+			$type = $this->sanitize_column_type( $type );
+			if ( '' === $type ) {
+				$type = 'TEXT';
+			}
+
+			$columns[ $name ] = $type;
+
+			$wants_index = ! empty( $item['index'] );
+			if ( $wants_index && 'TEXT' !== strtoupper( $type ) ) {
+				$keys[] = $name;
+			}
+		}
+
+		$this->columns = $columns;
+		if ( ! empty( $keys ) ) {
+			$this->keys = array_values( array_unique( $keys ) );
+		} else {
+			unset( $this->keys );
+		}
+
+		return $this;
+	}
+
+	private function sanitize_column_type( string $type ): string {
+		// Allow common SQL type characters while stripping dangerous input.
+		$type = preg_replace( '/[^a-zA-Z0-9_(),\s]/', '', $type );
+		return is_string( $type ) ? trim( $type ) : '';
 	}
 
 	private function parse_menu(): self {
@@ -75,9 +128,9 @@ class Parser extends Base {
 		$type = Arr::get( $this->settings, 'icon_type', 'dashicons' );
 
 		if ( 'dashicons' === $type ) {
-			$icon              = (string) Arr::get( $this->settings, 'icon', 'admin-post' );
-			$icon              = preg_replace( '/^dashicons-/', '', $icon );
-			$this->menu_icon   = 'dashicons-' . $icon;
+			$icon            = (string) Arr::get( $this->settings, 'icon', 'admin-post' );
+			$icon            = preg_replace( '/^dashicons-/', '', $icon );
+			$this->menu_icon = 'dashicons-' . $icon;
 		} elseif ( 'svg' === $type ) {
 			$this->menu_icon = Arr::get( $this->settings, 'icon_svg', '' );
 		} elseif ( 'custom' === $type ) {

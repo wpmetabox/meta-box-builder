@@ -22,6 +22,7 @@ const DefaultSettings = {
 
 	table: '',
 	prefix: false,
+	columns: {},
 
 	show_in_menu: true,
 	menu_position: '',

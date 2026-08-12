@@ -1,4 +1,4 @@
-import { checkboxList, labels, menuIcon, showInMenu, table, text } from './code';
+import { checkboxList, columnsCode, keysCode, labels, menuIcon, showInMenu, tableVar, text } from './code';
 import DefaultSettings from './DefaultSettings';
 
 const PhpCode = settings => {
@@ -12,12 +12,17 @@ const PhpCode = settings => {
 		? `\n\t\t${ checkboxList( settings, 'supports', '[]' ) },`
 		: '';
 	const globalWpdb = settings.prefix ? '\n\tglobal $wpdb;\n' : '\n';
+	const tableExpression = tableVar( settings );
 
 	return `<?php
 add_action( 'init', '${ functionName }' );
 function ${ functionName }() {${ globalWpdb }
+	$table = ${ tableExpression };
+
+	MetaBox\\CustomTable\\API::create( $table, ${ columnsCode( settings ) }, ${ keysCode( settings ) } );
+
 	mb_register_model( '${ slug }', [
-		${ table( settings ) },
+		'table' => $table,
 		'labels' => [
 			${ labels( settings ) },
 		],

@@ -60,7 +60,7 @@
 	// }
 
 	&__info {
-		width: 480px;
+		width: min(720px, 50vw);
 		background: #f0f0f0;
 		border-radius: 4px;
 		padding-right: 6px;

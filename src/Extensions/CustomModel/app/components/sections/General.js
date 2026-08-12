@@ -1,5 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import Checkbox from '../../../../../../assets/app/controls/Checkbox';
 import DashiconPicker from '../../../../../../assets/app/controls/DashiconPicker';
 import FontAwesome from '../../../../../../assets/app/controls/Fontawesome';
 import Input from '../../../../../../assets/app/controls/Input';
@@ -37,7 +36,6 @@ const General = () => {
 	const menuParent = getMenuParent( getSetting );
 	const singularName = getSetting( 'labels.singular_name', '' );
 	const slugKey = getSetting( '_slug_changed' ) ? 'slug-manual' : singularName;
-	const tableKey = getSetting( '_table_changed' ) ? 'table-manual' : singularName;
 	const capabilityOptions = Object.fromEntries( ( MbbApp.capabilities || [] ).map( cap => [ cap, cap ] ) );
 
 	const updateMenuType = ( name, value ) => {
@@ -89,24 +87,6 @@ const General = () => {
 				required
 			/>
 			<hr />
-			<Input
-				key={ tableKey }
-				name="table"
-				componentId="table"
-				label={ __( 'Custom table', 'meta-box-builder' ) }
-				tooltip={ __( 'The custom table used to store model data', 'meta-box-builder' ) }
-				defaultValue={ getSetting( 'table' ) }
-				updateField={ updateWithAutofill }
-				required
-			/>
-			<Checkbox
-				name="prefix"
-				componentId="prefix"
-				label={ __( 'Table prefix', 'meta-box-builder' ) }
-				description={ __( 'Include the table prefix set in wp-config.php', 'meta-box-builder' ) }
-				defaultValue={ !! getSetting( 'prefix', false ) }
-				updateField={ updateWithAutofill }
-			/>
 			<Select
 				name="capability"
 				componentId="capability"

@@ -1,8 +1,10 @@
 <?php
 namespace MBB\Helpers;
 
+use MetaBox\CustomTable\Model\Factory;
 use MetaBox\Support\Data as DataHelper;
 use WP_Block_Type_Registry;
+use WP_Query;
 
 class Data {
 	public static function get_post_types() {
@@ -58,7 +60,7 @@ class Data {
 	}
 
 	public static function get_views(): array {
-		$query = new \WP_Query( [
+		$query = new WP_Query( [
 			'post_type'              => 'mb-views',
 			'posts_per_page'         => -1,
 			'orderby'                => 'title',
@@ -142,17 +144,27 @@ class Data {
 	}
 
 	public static function get_models(): array {
-		if ( ! class_exists( '\MetaBox\CustomTable\Model\Factory' ) ) {
+		if ( ! class_exists( Factory::class ) ) {
 			return [];
 		}
 
+		$cache = get_option( 'mbb_models', [] );
+		if ( ! is_array( $cache ) ) {
+			$cache = [];
+		}
+
 		$models = [];
-		foreach ( \MetaBox\CustomTable\Model\Factory::get() as $name => $model ) {
-			$label = $model->labels['singular_name'] ?? $model->labels['name'] ?? $name;
+		foreach ( Factory::get() as $name => $model ) {
+			$label  = $model->labels['singular_name'] ?? $model->labels['name'] ?? $name;
+			$cached = $cache[ $name ] ?? [];
+
 			$models[] = [
-				'name'  => $name,
-				'label' => $label,
-				'table' => $model->table,
+				'name'    => $name,
+				'label'   => $label,
+				'table'   => $model->table,
+				'columns' => isset( $cached['columns'] ) && is_array( $cached['columns'] ) ? $cached['columns'] : [],
+				'keys'    => isset( $cached['keys'] ) && is_array( $cached['keys'] ) ? $cached['keys'] : [],
+				'post_id' => isset( $cached['post_id'] ) ? (int) $cached['post_id'] : 0,
 			];
 		}
 

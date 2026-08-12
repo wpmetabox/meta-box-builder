@@ -2,6 +2,8 @@
 namespace MBB;
 
 use MBB\RestApi\Save;
+use MBBParser\Unparsers\MetaBox;
+use WP_Error;
 
 class LocalJson {
 	public function __construct() {
@@ -51,7 +53,7 @@ class LocalJson {
 	/**
 	 * Import from .json file
 	 *
-	 * @return \WP_Error|boolean
+	 * @return WP_Error|boolean
 	 */
 	public static function import( array $data ): bool {
 		return self::sync_json( $data );
@@ -119,7 +121,7 @@ class LocalJson {
 
 		$post_array = [ 'ID' => $data['post_id'] ];
 		$data       = $data['local'];
-		$unparser   = new \MBBParser\Unparsers\MetaBox( $data );
+		$unparser   = new MetaBox( $data );
 		$unparser->unparse();
 		$data        = $unparser->get_settings();
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
@@ -177,7 +179,7 @@ class LocalJson {
 		$settings              = get_post_meta( $post->ID, 'settings', true );
 		$post_data['settings'] = (array) $settings;
 
-		$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
+		$unparser = new MetaBox( $post_data );
 		$unparser->unparse();
 		$post_data = $unparser->to_minimal_format();
 
@@ -193,7 +195,7 @@ class LocalJson {
 				continue;
 			}
 
-			$unparser = new \MBBParser\Unparsers\MetaBox( $raw_json );
+			$unparser = new MetaBox( $raw_json );
 			$unparser->unparse();
 			$json = $unparser->get_settings();
 

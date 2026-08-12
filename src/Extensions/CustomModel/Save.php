@@ -36,6 +36,22 @@ class Save {
 				],
 			],
 		] );
+
+		register_rest_route( 'mbb', 'custom-model/columns', [
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => [ $this, 'save_columns' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+			'show_in_index'       => false,
+			'args'                => [
+				'post_id' => [
+					'required'          => true,
+					'validate_callback' => function ( $param ): bool {
+						return is_numeric( $param );
+					},
+					'sanitize_callback' => 'absint',
+				],
+			],
+		] );
 	}
 
 	public function has_permission(): bool {
@@ -51,7 +67,7 @@ class Save {
 			$settings = [];
 		}
 
-		$post_name = sanitize_title( empty( $settings['slug'] ) ? $post_title : $settings['slug'] );
+		$post_name         = sanitize_title( empty( $settings['slug'] ) ? $post_title : $settings['slug'] );
 		$settings['table'] = $this->sanitize_table_name( $settings['table'] ?? '' );
 
 		$post = get_post( $post_id );
@@ -111,6 +127,53 @@ class Save {
 			$settings['labels']['menu_name'] = $settings['labels']['name'];
 		}
 
+		return $this->persist_model( $post_id, $post_name, $settings );
+	}
+
+	/**
+	 * Update only the columns schema for an existing model (used by field group modal).
+	 */
+	public function save_columns( WP_REST_Request $request ): array {
+		$post_id  = (int) $request->get_param( 'post_id' );
+		$columns  = $request->get_param( 'columns' );
+		$post     = get_post( $post_id );
+
+		if ( ! $post || 'mb-model' !== $post->post_type ) {
+			return [
+				'success' => false,
+				'message' => __( 'The custom model might have been deleted. Please refresh the page and try again.', 'meta-box-builder' ),
+			];
+		}
+
+		$settings = get_post_meta( $post_id, 'settings', true );
+		if ( ! is_array( $settings ) ) {
+			$settings = [];
+		}
+
+		$settings['columns'] = is_array( $columns ) ? $columns : [];
+		$post_name           = $post->post_name ?: sanitize_title( $post->post_title );
+
+		$result = $this->persist_model( $post_id, $post_name, $settings );
+		if ( ! $result['success'] ) {
+			return $result;
+		}
+
+		$model = get_post_meta( $post_id, 'model', true );
+		return [
+			'success' => true,
+			'message' => __( 'Model table schema updated.', 'meta-box-builder' ),
+			'model'   => [
+				'name'    => $post_name,
+				'label'   => $model['labels']['singular_name'] ?? $model['labels']['name'] ?? $post_name,
+				'table'   => $model['table'] ?? '',
+				'columns' => $model['columns'] ?? [],
+				'keys'    => $model['keys'] ?? [],
+				'post_id' => $post_id,
+			],
+		];
+	}
+
+	private function persist_model( int $post_id, string $post_name, array $settings ): array {
 		// Store raw UI settings.
 		$ui_parser = new Parser( $settings );
 		$ui_parser->parse_boolean_values()->parse_numeric_values();
@@ -124,6 +187,10 @@ class Save {
 		update_post_meta( $post_id, 'model', $model );
 
 		Register::clear_cache();
+
+		$model['post_id'] = $post_id;
+		Register::register_and_create( $post_name, $model );
+		Register::rebuild_cache();
 
 		return [
 			'success' => true,

@@ -1,13 +1,17 @@
 <?php
 namespace MBB\Extensions\CustomModel;
 
+use MetaBox\CustomTable\API;
+use MetaBox\CustomTable\Model\Factory;
+use WP_Query;
+
 class Register {
 	private const CACHE_OPTION = 'mbb_models';
 
 	public function __construct() {
 		$this->register_post_type();
 
-		add_action( 'init', [ $this, 'register_models' ] );
+		add_action( 'init', [ $this, 'register_models' ], 5 );
 
 		add_action( 'save_post_mb-model', [ __CLASS__, 'clear_cache' ] );
 		add_action( 'before_delete_post', [ $this, 'clear_cache_on_delete' ] );
@@ -71,17 +75,44 @@ class Register {
 	public function register_models(): void {
 		$models = get_option( self::CACHE_OPTION, false );
 		if ( ! is_array( $models ) ) {
-			$models = $this->query_models();
+			$models = self::query_models();
 			update_option( self::CACHE_OPTION, $models, true );
 		}
 
 		foreach ( $models as $name => $args ) {
+			if ( empty( $args ) || ! is_array( $args ) ) {
+				continue;
+			}
+
+			self::register_and_create( $name, $args );
+		}
+	}
+
+	/**
+	 * Register a model and create/update its custom table.
+	 *
+	 * @param string $name  Model name (slug).
+	 * @param array  $model Parsed model args including optional columns, keys, post_id.
+	 */
+	public static function register_and_create( string $name, array $model ): void {
+		$columns = isset( $model['columns'] ) && is_array( $model['columns'] ) ? $model['columns'] : [];
+		$keys    = isset( $model['keys'] ) && is_array( $model['keys'] ) ? $model['keys'] : [];
+		$table   = (string) ( $model['table'] ?? '' );
+
+		$args = $model;
+		unset( $args['columns'], $args['keys'], $args['post_id'], $args['name'] );
+
+		if ( '' !== $table ) {
+			API::create( $table, $columns, $keys );
+		}
+
+		if ( ! Factory::get( $name ) ) {
 			mb_register_model( $name, $args );
 		}
 	}
 
-	private function query_models(): array {
-		$query = new \WP_Query( [
+	public static function query_models(): array {
+		$query = new WP_Query( [
 			'posts_per_page'         => -1,
 			'post_status'            => 'publish',
 			'post_type'              => 'mb-model',
@@ -96,7 +127,8 @@ class Register {
 				continue;
 			}
 
-			$name = $model['name'];
+			$name             = $model['name'];
+			$model['post_id'] = (int) $post->ID;
 			unset( $model['name'] );
 			$models[ $name ] = $model;
 		}
@@ -106,6 +138,13 @@ class Register {
 
 	public static function clear_cache(): void {
 		delete_option( self::CACHE_OPTION );
+	}
+
+	/**
+	 * Rebuild the full models cache from published mb-model posts.
+	 */
+	public static function rebuild_cache(): void {
+		update_option( self::CACHE_OPTION, self::query_models(), true );
 	}
 
 	public function clear_cache_on_delete( int $post_id ): void {

@@ -5,6 +5,7 @@ import General from './sections/General';
 import Labels from './sections/Labels';
 import PHP from './PHP';
 import Supports from './sections/Supports';
+import Table from './sections/Table';
 
 const tabs = [
 	{
@@ -20,6 +21,10 @@ const tabs = [
 		title: __( 'Supports', 'meta-box-builder' ),
 	},
 	{
+		name: 'table',
+		title: __( 'DB Table', 'meta-box-builder' ),
+	},
+	{
 		name: 'code',
 		icon: <Icon icon={ code } />,
 		title: __( 'Get PHP Code', 'meta-box-builder' ),
@@ -31,6 +36,7 @@ const panels = {
 	general: <General />,
 	labels: <Labels />,
 	supports: <Supports />,
+	table: <Table />,
 	code: <PHP />,
 };
 

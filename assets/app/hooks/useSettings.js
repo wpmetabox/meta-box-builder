@@ -87,13 +87,17 @@ const useSettings = create( ( set, get ) => ( {
 			dotProp.delete( updatedSettings, 'taxonomies' );
 			dotProp.delete( updatedSettings, 'settings_pages' );
 			dotProp.delete( updatedSettings, 'type' );
-			dotProp.set( updatedSettings, 'custom_table.enable', true );
-			dotProp.set( updatedSettings, 'custom_table.create', true );
+			dotProp.delete( updatedSettings, 'custom_table' );
 		} else if ( [ 'block', 'user', 'comment' ].includes( value ) ) {
 			dotProp.delete( updatedSettings, 'post_types' );
 			dotProp.delete( updatedSettings, 'taxonomies' );
 			dotProp.delete( updatedSettings, 'settings_pages' );
 			dotProp.delete( updatedSettings, 'models' );
+		}
+
+		// Table settings belong to the model, not the field group.
+		if ( currentValue === 'model' && value !== 'model' ) {
+			dotProp.delete( updatedSettings, 'custom_table' );
 		}
 
 		set( { settings: updatedSettings } );

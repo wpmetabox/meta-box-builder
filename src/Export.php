@@ -1,6 +1,8 @@
 <?php
 namespace MBB;
 
+use WP_Post;
+
 class Export {
 	public function __construct() {
 		add_filter( 'post_row_actions', [ $this, 'add_export_link' ], 10, 2 );
@@ -11,7 +13,7 @@ class Export {
 	 * Add export link to the post row actions.
 	 *
 	 * @param array<string, string> $actions
-	 * @param \WP_Post              $post
+	 * @param WP_Post               $post
 	 * @return array
 	 */
 	public function add_export_link( $actions, $post ): array {

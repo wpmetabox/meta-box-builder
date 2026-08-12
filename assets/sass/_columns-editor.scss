@@ -1,0 +1,137 @@
+.mb-columns-editor {
+	.og-input {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		align-items: flex-start;
+	}
+
+	&__table {
+		width: 100%;
+		border-collapse: collapse;
+		table-layout: auto;
+	}
+
+	&__table th,
+	&__table td {
+		padding: 4px 8px 4px 0;
+		vertical-align: middle;
+		text-align: left;
+	}
+
+	&__table th {
+		font-weight: 600;
+		font-size: 12px;
+		color: #646970;
+	}
+
+	&__handle-col {
+		width: 1%;
+		padding-right: 4px;
+		white-space: nowrap;
+	}
+
+	&__handle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		color: #787c82;
+		cursor: grab;
+		font-size: 16px;
+		line-height: 1;
+		vertical-align: middle;
+	}
+
+	&__handle:active {
+		cursor: grabbing;
+	}
+
+	&__table td:nth-child(2) {
+		width: 28%;
+	}
+
+	&__table td:nth-child(3) {
+		width: auto;
+	}
+
+	&__table th:nth-child(4),
+	&__table td:nth-child(4) {
+		width: 4em;
+		text-align: center;
+		padding-inline: 4px;
+	}
+
+	&__table th:nth-child(5),
+	&__table td:nth-child(5) {
+		width: 1%;
+		white-space: nowrap;
+		padding-right: 0;
+	}
+
+	&__table input[type="text"],
+	&__table select {
+		width: 100%;
+		margin: 0;
+	}
+
+	&__type {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 4px;
+		align-items: center;
+	}
+
+	&__type select,
+	&__type input[type="text"] {
+		flex: 1 1 0;
+		min-width: 0;
+		width: 100%;
+	}
+
+	&__row--unused {
+		background: #fcf9e8;
+	}
+
+	&__add {
+		align-self: start;
+	}
+}
+
+.mb-header__schema-warning {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin-left: 8px;
+	padding: 2px 8px;
+	border: 1px solid #dba617;
+	border-radius: 4px;
+	background: #fcf9e8;
+	color: #996800;
+	font-size: 12px;
+	line-height: 1.4;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.mb-header__schema-warning:hover {
+	background: #f5e6b3;
+}
+
+.mb-header__schema-warning-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: #dba617;
+	color: #fff;
+	font-weight: 700;
+	font-size: 11px;
+}
+
+.mb-schema-modal__footer {
+	margin-top: 16px;
+}

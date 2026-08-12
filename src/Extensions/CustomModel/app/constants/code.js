@@ -64,4 +64,53 @@ const table = settings => {
 	return text( settings, 'table' );
 };
 
-export { checkboxList, general, labels, menuIcon, showInMenu, spaces, table, text, translatableText };
+const escapeSql = value => String( value || '' ).replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" );
+
+const columnsCode = settings => {
+	const columns = settings.columns || {};
+	const entries = Object.values( columns ).filter( col => ( col.name || '' ).trim() );
+
+	if ( ! entries.length ) {
+		return '[]';
+	}
+
+	const lines = entries.map( col => {
+		const name = ( col.name || '' ).trim().replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" );
+		let type = col.type || 'TEXT';
+		if ( 'custom' === type ) {
+			type = ( col.custom_type || '' ).trim() || 'TEXT';
+		}
+		return `\t\t'${ name }' => '${ escapeSql( type ) }'`;
+	} );
+
+	return `[\n${ lines.join( ",\n" ) },\n\t]`;
+};
+
+const keysCode = settings => {
+	const columns = settings.columns || {};
+	const keys = Object.values( columns )
+		.filter( col => {
+			if ( ! col.index || ! ( col.name || '' ).trim() ) {
+				return false;
+			}
+			const type = 'custom' === col.type ? ( ( col.custom_type || '' ).trim() || 'TEXT' ) : ( col.type || 'TEXT' );
+			return 'TEXT' !== String( type ).toUpperCase();
+		} )
+		.map( col => `'${ ( col.name || '' ).trim().replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" ) }'` );
+
+	if ( ! keys.length ) {
+		return '[]';
+	}
+
+	return `[ ${ keys.join( ', ' ) } ]`;
+};
+
+const tableVar = settings => {
+	const name = settings.table || '';
+	if ( settings.prefix ) {
+		return `$wpdb->prefix . '${ name.replace( /'/g, "\\'" ) }'`;
+	}
+	return `'${ name.replace( /'/g, "\\'" ) }'`;
+};
+
+export { checkboxList, columnsCode, general, keysCode, labels, menuIcon, showInMenu, spaces, table, tableVar, text, translatableText };

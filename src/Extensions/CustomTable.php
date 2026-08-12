@@ -2,6 +2,7 @@
 
 namespace MBB\Extensions;
 
+use MetaBox\CustomTable\API;
 use MetaBox\Support\Arr;
 use MBB\LocalJson;
 
@@ -27,6 +28,12 @@ class CustomTable {
 	 */
 	public function create_custom_table( array &$data ): void {
 		$settings = $data['settings'] ?? [];
+
+		// Models own the table schema — do not auto-create TEXT columns from field IDs.
+		if ( ! empty( $settings['models'] ) || 'model' === ( $settings['object_type'] ?? '' ) ) {
+			return;
+		}
+
 		if ( ! Arr::get( $settings, 'custom_table.enable' ) || ! Arr::get( $settings, 'custom_table.create' ) ) {
 			return;
 		}
@@ -57,7 +64,7 @@ class CustomTable {
 			return;
 		}
 
-		\MB_Custom_Table_API::create( $table, $columns );
+		API::create( $table, $columns );
 		set_transient( $cache_key, 1, MONTH_IN_SECONDS );
 	}
 

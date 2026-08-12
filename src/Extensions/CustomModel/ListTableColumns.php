@@ -27,7 +27,7 @@ class ListTableColumns {
 
 		$labels = [
 			'slug'  => __( 'Slug', 'meta-box-builder' ),
-			'table' => __( 'Custom table', 'meta-box-builder' ),
+			'table' => __( 'Table name', 'meta-box-builder' ),
 		];
 
 		$new_columns = [];

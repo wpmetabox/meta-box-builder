@@ -44,17 +44,20 @@ const Location = () => {
 	const updateModels = ( name, values ) => {
 		updateSetting( name, values );
 
-		// Models require a custom table. Auto-fill from the first selected model.
 		const models = ensureArray( values );
-		const first = ( MbbApp.models || [] ).find( model => models.includes( model.name ) );
-		if ( !first ) {
+		const selected = models
+			.map( modelName => ( MbbApp.models || [] ).find( model => model.name === modelName ) )
+			.filter( Boolean );
+
+		if ( selected.length < 2 ) {
 			return;
 		}
 
-		updateSetting( 'custom_table.enable', true );
-		updateSetting( 'custom_table.create', true );
-		updateSetting( 'custom_table.name', first.table );
-		updateSetting( 'custom_table.prefix', false );
+		const tables = [ ...new Set( selected.map( model => model.table ) ) ];
+		if ( tables.length > 1 ) {
+			alert( __( 'All selected models must use the same custom table.', 'meta-box-builder' ) );
+			updateSetting( name, [ selected[ 0 ].name ] );
+		}
 	};
 
 	return (

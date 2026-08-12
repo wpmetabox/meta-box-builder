@@ -2,6 +2,8 @@
 namespace MBB;
 
 use MBB\Helpers\Path;
+use MBBParser\Unparsers\MetaBox;
+use WP_Query;
 
 class JsonService {
 	/**
@@ -54,7 +56,7 @@ class JsonService {
 				continue;
 			}
 
-			$unparser = new \MBBParser\Unparsers\MetaBox( $raw_json );
+			$unparser = new MetaBox( $raw_json );
 			$unparser->unparse();
 			$json            = $unparser->get_settings();
 			$local_minimized = $unparser->to_minimal_format();
@@ -202,7 +204,7 @@ class JsonService {
 		];
 
 		$query_params = wp_parse_args( $query_params, $defaults );
-		$query        = new \WP_Query( $query_params );
+		$query        = new WP_Query( $query_params );
 
 		$meta_boxes = [];
 		foreach ( $query->posts as $post ) {
@@ -223,7 +225,7 @@ class JsonService {
 			$settings              = get_post_meta( $post->ID, 'settings', true );
 			$post_data['settings'] = (array) $settings;
 
-			$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
+			$unparser = new MetaBox( $post_data );
 			$unparser->unparse();
 			$post_data = $format === 'minimal' ? $unparser->to_minimal_format() : $unparser->get_settings();
 

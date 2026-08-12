@@ -195,7 +195,7 @@ const FieldGroupSettingsPanel = () => {
 					</PersistentPanelBody>
 				}
 				{
-					![ 'setting', 'block' ].includes( objectType ) &&
+					![ 'setting', 'block', 'model' ].includes( objectType ) &&
 					<CustomTable />
 				}
 				{
