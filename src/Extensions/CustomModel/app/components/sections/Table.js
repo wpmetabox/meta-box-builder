@@ -45,12 +45,13 @@ const Table = () => {
 			</DivRow>
 			<hr />
 			<p className="og-description">
-				{ __( 'Add one column per custom field, using the field ID as the name. Skip the ID and support columns (author, dates); they are added automatically. Removing a column here does not delete it from the database - you must drop it yourself.', 'meta-box-builder' ) }
+				{ __( 'Add one column per custom field, using the field ID as the name. Skip the ID and support columns (author, dates); they are added automatically.', 'meta-box-builder' ) }
 			</p>
 			<ColumnsEditor
 				name="columns"
 				defaultValue={ getSetting( 'columns', {} ) }
 				updateField={ updateWithAutofill }
+				postId={ Number( document.querySelector( '#post_ID' )?.value ) || 0 }
 			/>
 		</div>
 	);

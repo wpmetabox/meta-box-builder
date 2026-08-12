@@ -80,6 +80,31 @@ export const columnsObjectToMap = columns => {
 	return map;
 };
 
+export const dbTypeToEditorColumn = ( sqlType = '' ) => {
+	const type = String( sqlType ).trim();
+	const upper = type.toUpperCase();
+
+	if ( isPresetColumnType( upper ) ) {
+		return {
+			type: upper,
+			custom_type: '',
+		};
+	}
+
+	if ( upper.startsWith( 'VARCHAR' ) ) {
+		return { type: 'VARCHAR(255)', custom_type: '' };
+	}
+
+	if ( upper.startsWith( 'TINYINT(1)' ) ) {
+		return { type: 'TINYINT(1)', custom_type: '' };
+	}
+
+	return {
+		type: CUSTOM_COLUMN_TYPE,
+		custom_type: type,
+	};
+};
+
 export const parsedColumnsToEditor = ( columns = {}, keys = [] ) => {
 	const keySet = new Set( keys );
 	const items = {};

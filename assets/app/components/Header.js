@@ -1,6 +1,6 @@
 import { Button, Flex, Tooltip } from '@wordpress/components';
 import { useEffect, useMemo, useState } from '@wordpress/element';
-import { __, _n, sprintf } from "@wordpress/i18n";
+import { __ } from "@wordpress/i18n";
 import { cog, external, listView, plus } from "@wordpress/icons";
 import { useShallow } from 'zustand/react/shallow';
 import { ensureArray, isMac, ucwords } from '../functions';
@@ -51,9 +51,7 @@ const Header = () => {
 	const setModels = useModelSchema( state => state.setModels );
 	const setMismatch = useModelSchema( state => state.setMismatch );
 	const schemaOpen = useModelSchema( state => state.schemaOpen );
-	const openSchema = useModelSchema( state => state.openSchema );
 	const closeSchema = useModelSchema( state => state.closeSchema );
-	const missingFieldIds = useModelSchema( state => state.missingFieldIds );
 	const selectedModel = useModelSchema( state => state.selectedModel );
 	const fieldIdsForModal = useModelSchema( state => state.fieldIds );
 
@@ -136,19 +134,6 @@ const Header = () => {
 		setModels( next );
 	};
 
-	const warningLabel = missingFieldIds.length > 0
-		? sprintf(
-			/* translators: %d: number of field IDs */
-			_n(
-				'%d field ID does not match the model table',
-				'%d field IDs do not match the model table',
-				missingFieldIds.length,
-				'meta-box-builder'
-			),
-			missingFieldIds.length
-		)
-		: '';
-
 	return (
 		<>
 			<Flex className="mb-header">
@@ -191,20 +176,6 @@ const Header = () => {
 					<Flex gap={ 1 } expanded={ false } className="mb-header__locations">
 						{ locations.map( location => <span key={ `${ objectType }-${ location }` } className="mb-header__location">{ location }</span> ) }
 					</Flex>
-					{
-						missingFieldIds.length > 0 && (
-							<Tooltip text={ warningLabel } delay={ 0 } placement="bottom">
-								<button
-									type="button"
-									className="mb-header__schema-badge"
-									onClick={ openSchema }
-									aria-label={ warningLabel }
-								>
-									<span className="dashicons dashicons-warning" aria-hidden="true" />
-								</button>
-							</Tooltip>
-						)
-					}
 				</Flex>
 				<Flex gap={ 1 } expanded={ false } className="mb-header__actions">
 					{

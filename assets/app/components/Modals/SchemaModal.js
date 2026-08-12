@@ -78,13 +78,14 @@ const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
 			size="large"
 		>
 			<p className="og-description">
-				{ __( 'Adjust column types and indexes before saving. Removing a column here only updates the schema. It does not delete the column from the database.', 'meta-box-builder' ) }
+				{ __( 'Adjust column types and indexes before saving. Remove from schema keeps the column in the database. Drop column permanently deletes it and its data.', 'meta-box-builder' ) }
 			</p>
 			<ColumnsEditor
 				value={ columns }
 				onChange={ setColumns }
 				usedColumnNames={ fieldIds }
 				existingColumnNames={ Object.keys( model.columns || {} ) }
+				postId={ model.post_id }
 			/>
 			<Flex justify="flex-end" gap={ 2 } className="mb-schema-modal__footer">
 				<Button variant="tertiary" onClick={ onClose } disabled={ saving }>

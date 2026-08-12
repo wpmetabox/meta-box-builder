@@ -39,16 +39,35 @@ class Save {
 
 		register_rest_route( 'mbb', 'custom-model/columns', [
 			'methods'             => WP_REST_Server::CREATABLE,
-			'callback'            => [ $this, 'save_columns' ],
+			'callback'            => [ $this, 'update_columns' ],
 			'permission_callback' => [ $this, 'has_permission' ],
 			'show_in_index'       => false,
 			'args'                => [
-				'post_id' => [
-					'required'          => true,
-					'validate_callback' => function ( $param ): bool {
-						return is_numeric( $param );
-					},
-					'sanitize_callback' => 'absint',
+				'post_id' => $this->get_post_id_arg(),
+			],
+		] );
+
+		register_rest_route( 'mbb', 'custom-model/table-columns', [
+			[
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'get_table_columns' ],
+				'permission_callback' => [ $this, 'has_permission' ],
+				'show_in_index'       => false,
+				'args'                => [
+					'post_id' => $this->get_post_id_arg(),
+				],
+			],
+			[
+				'methods'             => WP_REST_Server::DELETABLE,
+				'callback'            => [ $this, 'drop_table_column' ],
+				'permission_callback' => [ $this, 'has_permission' ],
+				'show_in_index'       => false,
+				'args'                => [
+					'post_id' => $this->get_post_id_arg(),
+					'column'  => [
+						'required'          => true,
+						'sanitize_callback' => 'sanitize_text_field',
+					],
 				],
 			],
 		] );
@@ -133,10 +152,10 @@ class Save {
 	/**
 	 * Update only the columns schema for an existing model (used by field group modal).
 	 */
-	public function save_columns( WP_REST_Request $request ): array {
-		$post_id  = (int) $request->get_param( 'post_id' );
-		$columns  = $request->get_param( 'columns' );
-		$post     = get_post( $post_id );
+	public function update_columns( WP_REST_Request $request ): array {
+		$post_id = (int) $request->get_param( 'post_id' );
+		$columns = $request->get_param( 'columns' );
+		$post    = get_post( $post_id );
 
 		if ( ! $post || 'mb-model' !== $post->post_type ) {
 			return [
@@ -173,6 +192,14 @@ class Save {
 		];
 	}
 
+	public function get_table_columns( WP_REST_Request $request ): array {
+		return TableColumns::list_for_post( (int) $request->get_param( 'post_id' ) );
+	}
+
+	public function drop_table_column( WP_REST_Request $request ): array {
+		return TableColumns::drop( (int) $request->get_param( 'post_id' ), (string) $request->get_param( 'column' ) );
+	}
+
 	private function persist_model( int $post_id, string $post_name, array $settings ): array {
 		// Store raw UI settings.
 		$ui_parser = new Parser( $settings );
@@ -200,5 +227,20 @@ class Save {
 
 	private function sanitize_table_name( $table ): string {
 		return str_replace( '-', '_', sanitize_key( (string) $table ) );
+	}
+
+	/**
+	 * REST route argument schema for a model post ID.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function get_post_id_arg(): array {
+		return [
+			'required'          => true,
+			'validate_callback' => function ( $param ): bool {
+				return is_numeric( $param );
+			},
+			'sanitize_callback' => 'absint',
+		];
 	}
 }
