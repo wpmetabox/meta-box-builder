@@ -14,7 +14,6 @@ class Parser extends Base {
 			'term'    => 'get_queried_object_id()',
 			'comment' => '$comment_id',
 			'user'    => 'get_current_user_id()',
-			'order' => 'isset( $order ) && $order instanceof \WC_Order ? $order->get_id() : ( isset( $_GET["id"] ) ? absint( $_GET["id"] ) : get_the_ID() )',
 		];
 		$this->theme_code = [
 			'args'        => $object_type === 'post' ? [] : [ 'object_type' => $object_type ],

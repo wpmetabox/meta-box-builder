@@ -6,8 +6,9 @@ import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
 const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) => {
-	const { getObjectType } = useSettings();
+	const { getObjectType, getPostTypes } = useSettings();
 	const objectType = getObjectType();
+	const postTypes = getPostTypes();
 
 	const defaultColumns = {
 		term: 'name',
@@ -67,7 +68,7 @@ const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) =>
 				defaultValue={ defaultValue?.column }
 				items={ fields }
 				isID={ true }
-				exclude={ objectTypeFields( objectType ) }
+				exclude={ objectTypeFields( objectType, postTypes ) }
 				onChange={ handleChangeColumn }
 				onSelect={ handleSelectColumn }
 			/>
@@ -75,7 +76,7 @@ const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) =>
 	);
 };
 
-const objectTypeFields = objectType => {
+const objectTypeFields = ( objectType, postTypes ) => {
 	if ( objectType === 'term' ) {
 		return [
 			[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
@@ -97,10 +98,21 @@ const objectTypeFields = objectType => {
 		];
 	}
 
-	// Columns of the WooCommerce Orders screen (both legacy CPT and HPOS) and Subscription screen
-	if ( objectType === 'order' ) {
-		return [
-			[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
+	const fields = [
+		[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
+		[ 'title', __( 'Title', 'meta-box-builder' ) ],
+		[ 'author', __( 'Author', 'meta-box-builder' ) ],
+		[ 'categories', __( 'Categories', 'meta-box-builder' ) ],
+		[ 'tags', __( 'Tags', 'meta-box-builder' ) ],
+		[ 'comments', __( 'Comments', 'meta-box-builder' ) ],
+		[ 'date', __( 'Date', 'meta-box-builder' ) ],
+	];
+
+	const types = Array.isArray( postTypes ) ? postTypes : [ postTypes ];
+
+	// WooCommerce Order columns
+	if ( types.includes( 'shop_order' ) ) {
+		fields.push(
 			[ 'order_number', __( 'Order: Order', 'meta-box-builder' ) ],
 			[ 'order_date', __( 'Order: Date', 'meta-box-builder' ) ],
 			[ 'order_status', __( 'Order: Status', 'meta-box-builder' ) ],
@@ -108,6 +120,12 @@ const objectTypeFields = objectType => {
 			[ 'shipping_address', __( 'Order: Shipping address', 'meta-box-builder' ) ],
 			[ 'order_total', __( 'Order: Total', 'meta-box-builder' ) ],
 			[ 'wc_actions', __( 'Order: Actions', 'meta-box-builder' ) ],
+		);
+	}
+
+	// WooCommerce Subscription columns
+	if ( types.includes( 'shop_subscription' ) ) {
+		fields.push(
 			[ 'status', __( 'Subscription: Status', 'meta-box-builder' ) ],
 			[ 'order_title', __( 'Subscription: Subscription', 'meta-box-builder' ) ],
 			[ 'order_items', __( 'Subscription: Items', 'meta-box-builder' ) ],
@@ -118,18 +136,10 @@ const objectTypeFields = objectType => {
 			[ 'last_payment_date', __( 'Subscription: Last Order Date', 'meta-box-builder' ) ],
 			[ 'end_date', __( 'Subscription: End Date', 'meta-box-builder' ) ],
 			[ 'orders', __( 'Subscription: Related Orders', 'meta-box-builder' ) ],
-		];
+		);
 	}
 
-	return [
-		[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
-		[ 'title', __( 'Title', 'meta-box-builder' ) ],
-		[ 'author', __( 'Author', 'meta-box-builder' ) ],
-		[ 'categories', __( 'Categories', 'meta-box-builder' ) ],
-		[ 'tags', __( 'Tags', 'meta-box-builder' ) ],
-		[ 'comments', __( 'Comments', 'meta-box-builder' ) ],
-		[ 'date', __( 'Date', 'meta-box-builder' ) ],
-	];
+	return fields;
 };
 
 export default AdminColumnsPosition;
