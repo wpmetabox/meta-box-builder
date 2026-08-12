@@ -1,78 +1,73 @@
 .mb-columns-editor {
+	// Handle hangs into the left gutter so Name / Add align with sibling fields (e.g. Table name).
 	.og-input {
 		display: flex;
 		flex-direction: column;
 		gap: 8px;
-		align-items: flex-start;
+		align-items: stretch;
 	}
 
 	&__table {
-		width: 100%;
+		width: calc(100% + 28px);
+		margin-left: -28px;
 		border-collapse: collapse;
-		table-layout: auto;
 	}
 
 	&__table th,
 	&__table td {
-		padding: 4px 8px 4px 0;
+		padding: 4px;
 		vertical-align: middle;
-		text-align: left;
 	}
 
 	&__table th {
 		font-weight: 600;
 		font-size: 12px;
 		color: #646970;
+		text-align: left;
 	}
 
-	&__handle-col {
-		width: 1%;
-		padding-right: 4px;
-		white-space: nowrap;
+	&__table &__reorder {
+		width: 28px;
+		padding-right: 0;
+		box-sizing: border-box;
 	}
 
 	&__handle {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 20px;
-		height: 20px;
-		color: #787c82;
+		display: block;
+		color: var(--color-gray);
 		cursor: grab;
-		font-size: 16px;
-		line-height: 1;
-		vertical-align: middle;
 	}
 
 	&__handle:active {
 		cursor: grabbing;
 	}
 
-	&__table td:nth-child(2) {
-		width: 28%;
+	&__table &__name {
+		width: 30%;
+		padding-left: 0;
 	}
 
-	&__table td:nth-child(3) {
-		width: auto;
-	}
-
-	&__table th:nth-child(4),
-	&__table td:nth-child(4) {
+	&__table &__index {
 		width: 4em;
 		text-align: center;
-		padding-inline: 4px;
 	}
 
-	&__table th:nth-child(5),
-	&__table td:nth-child(5) {
+	&__table &__action {
 		width: 1%;
 		white-space: nowrap;
 		padding-right: 0;
 	}
 
+	&__table &__status {
+		width: 1%;
+		text-align: center;
+	}
+
 	&__table input[type="text"],
 	&__table select {
+		box-sizing: border-box;
 		width: 100%;
+		max-width: 100%;
 		margin: 0;
 	}
 
@@ -90,8 +85,50 @@
 		width: 100%;
 	}
 
-	&__row--unused {
-		background: #fcf9e8;
+	&__status-indicator {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		cursor: help;
+	}
+
+	&__status-icon {
+		flex-shrink: 0;
+		width: 18px;
+		height: 18px;
+		font-size: 18px;
+
+		&--matched {
+			color: #00a32a;
+		}
+
+		&--missing,
+		&--no-field {
+			color: #dba617;
+		}
+	}
+
+	&__status-legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px 16px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-size: 12px;
+		color: #646970;
+
+		li {
+			display: inline-flex;
+			align-items: center;
+		}
+	}
+
+	&__status-legend-item {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		cursor: help;
 	}
 
 	&__add {
@@ -99,37 +136,36 @@
 	}
 }
 
-.mb-header__schema-warning {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
-	margin-left: 8px;
-	padding: 2px 8px;
-	border: 1px solid #dba617;
-	border-radius: 4px;
-	background: #fcf9e8;
-	color: #996800;
-	font-size: 12px;
-	line-height: 1.4;
-	cursor: pointer;
-	white-space: nowrap;
-}
-
-.mb-header__schema-warning:hover {
-	background: #f5e6b3;
-}
-
-.mb-header__schema-warning-icon {
+.mb-header__schema-badge {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 16px;
-	height: 16px;
-	border-radius: 50%;
-	background: #dba617;
-	color: #fff;
-	font-weight: 700;
-	font-size: 11px;
+	margin-left: 8px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: #dba617;
+	cursor: pointer;
+	line-height: 1;
+}
+
+.mb-header__schema-badge .dashicons {
+	width: 20px;
+	height: 20px;
+	font-size: 20px;
+}
+
+.mb-header__schema-badge:hover {
+	color: #b8900d;
+}
+
+.mb-schema-notice {
+	margin: 0 0 16px;
+}
+
+// Modal has no side padding to borrow — keep handle inside via padding so it is not clipped.
+.mb-schema-modal .mb-columns-editor .og-input {
+	padding-left: 24px;
 }
 
 .mb-schema-modal__footer {

@@ -78,12 +78,13 @@ const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
 			size="large"
 		>
 			<p className="og-description">
-				{ __( 'Missing field IDs are prefilled as TEXT columns. Adjust types and indexes before saving. If you remove a column from this list, it is not deleted from the database. You must delete unused columns from the database yourself.', 'meta-box-builder' ) }
+				{ __( 'Adjust column types and indexes before saving. Removing a column here only updates the schema. It does not delete the column from the database.', 'meta-box-builder' ) }
 			</p>
 			<ColumnsEditor
 				value={ columns }
 				onChange={ setColumns }
 				usedColumnNames={ fieldIds }
+				existingColumnNames={ Object.keys( model.columns || {} ) }
 			/>
 			<Flex justify="flex-end" gap={ 2 } className="mb-schema-modal__footer">
 				<Button variant="tertiary" onClick={ onClose } disabled={ saving }>

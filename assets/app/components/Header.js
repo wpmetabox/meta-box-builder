@@ -5,6 +5,7 @@ import { cog, external, listView, plus } from "@wordpress/icons";
 import { useShallow } from 'zustand/react/shallow';
 import { ensureArray, isMac, ucwords } from '../functions';
 import useFloatingStructurePanel from '../hooks/useFloatingStructurePanel';
+import useModelSchema from '../hooks/useModelSchema';
 import useNavPanel from '../hooks/useNavPanel';
 import useSettings from '../hooks/useSettings';
 import useUnsavedChanges from '../hooks/useUnsavedChanges';
@@ -46,8 +47,15 @@ const Header = () => {
 		getSetting: state.getSetting,
 	} ) ) );
 	const fields = useRootFields();
-	const [ models, setModels ] = useState( () => MbbApp.models || [] );
-	const [ schemaOpen, setSchemaOpen ] = useState( false );
+	const models = useModelSchema( state => state.models );
+	const setModels = useModelSchema( state => state.setModels );
+	const setMismatch = useModelSchema( state => state.setMismatch );
+	const schemaOpen = useModelSchema( state => state.schemaOpen );
+	const openSchema = useModelSchema( state => state.openSchema );
+	const closeSchema = useModelSchema( state => state.closeSchema );
+	const missingFieldIds = useModelSchema( state => state.missingFieldIds );
+	const selectedModel = useModelSchema( state => state.selectedModel );
+	const fieldIdsForModal = useModelSchema( state => state.fieldIds );
 
 	const updateNavPanel = key => () => setNavPanel( key === navPanel ? '' : key );
 
@@ -94,7 +102,7 @@ const Header = () => {
 		[ fields ]
 	);
 
-	const selectedModel = useMemo( () => {
+	const nextSelectedModel = useMemo( () => {
 		if ( objectType !== 'model' ) {
 			return null;
 		}
@@ -104,13 +112,21 @@ const Header = () => {
 		return selected[ 0 ] || null;
 	}, [ objectType, settings, models, getSetting ] );
 
-	const missingFieldIds = useMemo( () => {
-		if ( ! selectedModel ) {
+	const nextMissingFieldIds = useMemo( () => {
+		if ( ! nextSelectedModel ) {
 			return [];
 		}
-		const columnNames = Object.keys( selectedModel.columns || {} );
+		const columnNames = Object.keys( nextSelectedModel.columns || {} );
 		return fieldIds.filter( id => ! columnNames.includes( id ) );
-	}, [ selectedModel, fieldIds ] );
+	}, [ nextSelectedModel, fieldIds ] );
+
+	useEffect( () => {
+		setMismatch( {
+			missingFieldIds: nextMissingFieldIds,
+			selectedModel: nextSelectedModel,
+			fieldIds,
+		} );
+	}, [ nextMissingFieldIds, nextSelectedModel, fieldIds, setMismatch ] );
 
 	const onSchemaSaved = updatedModel => {
 		const next = models.map( model => model.name === updatedModel.name ? { ...model, ...updatedModel } : model );
@@ -118,8 +134,20 @@ const Header = () => {
 			next.push( updatedModel );
 		}
 		setModels( next );
-		MbbApp.models = next;
 	};
+
+	const warningLabel = missingFieldIds.length > 0
+		? sprintf(
+			/* translators: %d: number of field IDs */
+			_n(
+				'%d field ID does not match the model table',
+				'%d field IDs do not match the model table',
+				missingFieldIds.length,
+				'meta-box-builder'
+			),
+			missingFieldIds.length
+		)
+		: '';
 
 	return (
 		<>
@@ -165,23 +193,16 @@ const Header = () => {
 					</Flex>
 					{
 						missingFieldIds.length > 0 && (
-							<button
-								type="button"
-								className="mb-header__schema-warning"
-								onClick={ () => setSchemaOpen( true ) }
-							>
-								<span className="mb-header__schema-warning-icon" aria-hidden="true">!</span>
-								{ sprintf(
-									/* translators: %d: number of field IDs */
-									_n(
-										'%d field ID is missing from the model table',
-										'%d field IDs are missing from the model table',
-										missingFieldIds.length,
-										'meta-box-builder'
-									),
-									missingFieldIds.length
-								) }
-							</button>
+							<Tooltip text={ warningLabel } delay={ 0 } placement="bottom">
+								<button
+									type="button"
+									className="mb-header__schema-badge"
+									onClick={ openSchema }
+									aria-label={ warningLabel }
+								>
+									<span className="dashicons dashicons-warning" aria-hidden="true" />
+								</button>
+							</Tooltip>
 						)
 					}
 				</Flex>
@@ -213,8 +234,8 @@ const Header = () => {
 				schemaOpen && selectedModel && (
 					<SchemaModal
 						model={ selectedModel }
-						fieldIds={ fieldIds }
-						onClose={ () => setSchemaOpen( false ) }
+						fieldIds={ fieldIdsForModal }
+						onClose={ closeSchema }
 						onSaved={ onSchemaSaved }
 					/>
 				)

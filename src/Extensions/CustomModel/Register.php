@@ -11,7 +11,7 @@ class Register {
 	public function __construct() {
 		$this->register_post_type();
 
-		add_action( 'init', [ $this, 'register_models' ], 5 );
+		add_action( 'init', [ $this, 'register_models' ] );
 
 		add_action( 'save_post_mb-model', [ __CLASS__, 'clear_cache' ] );
 		add_action( 'before_delete_post', [ $this, 'clear_cache_on_delete' ] );

@@ -22,7 +22,7 @@ const tabs = [
 	},
 	{
 		name: 'table',
-		title: __( 'DB Table', 'meta-box-builder' ),
+		title: __( 'Table', 'meta-box-builder' ),
 	},
 	{
 		name: 'code',

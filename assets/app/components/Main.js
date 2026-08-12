@@ -4,6 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { category, code, copy } from '@wordpress/icons';
 import useNavPanel from '../hooks/useNavPanel';
 import Fields from './Editor/Fields';
+import SchemaMismatchBanner from './Editor/SchemaMismatchBanner';
 import PHP from "./PHP";
 import ThemeCode from "./ThemeCode/ThemeCode";
 
@@ -46,6 +47,8 @@ const MainInner = ( { fields, php, theme_code } ) => {
 	return (
 		<div className="mb-main">
 			<div className="wp-header-end" />
+
+			{ area === 'fields' && <SchemaMismatchBanner /> }
 
 			<div className="mb-box">
 				<Flex align="center" className="mb-box__header">

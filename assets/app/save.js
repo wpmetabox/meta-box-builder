@@ -1,4 +1,6 @@
+import { __, _n, sprintf } from '@wordpress/i18n';
 import { fetcher } from './hooks/useFetch';
+import useModelSchema from './hooks/useModelSchema';
 import useSettings from './hooks/useSettings';
 import { buildFieldsTree } from './list-functions';
 
@@ -14,6 +16,25 @@ export const initSaveForm = () => {
 		const submitButton = e.submitter;
 		if ( !submitButton ) {
 			return;
+		}
+
+		const missingCount = useModelSchema.getState().missingFieldIds.length;
+		if ( missingCount > 0 ) {
+			const confirmed = window.confirm(
+				sprintf(
+					/* translators: %d: number of field IDs */
+					_n(
+						'%d field ID does not match the model table. Save anyway?',
+						'%d field IDs do not match the model table. Save anyway?',
+						missingCount,
+						'meta-box-builder'
+					),
+					missingCount
+				)
+			);
+			if ( ! confirmed ) {
+				return;
+			}
 		}
 
 		submitButton.disabled = true;
