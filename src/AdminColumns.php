@@ -598,6 +598,4 @@ class AdminColumns {
 		$shortcode = "[mb_frontend_form id='{$post->post_name}' post_fields='title,content']";
 		echo '<input type="text" readonly value="' . esc_attr( $shortcode ) . '" onclick="this.select()">';
 	}
-
-
 }

@@ -32,8 +32,7 @@ const useSettings = create( ( set, get ) => ( {
 			term: 'termMeta',
 			user: 'userMeta',
 			comment: 'commentMeta',
-			setting: 'settingsPage',
-			order: 'wcOrders'
+			setting: 'settingsPage'
 		};
 
 		// Check if the current object type requires an extension that's not available
