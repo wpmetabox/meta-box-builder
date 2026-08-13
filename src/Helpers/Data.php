@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Helpers;
 
+use MBB\Extensions\CustomModel\TableColumns;
 use MetaBox\CustomTable\Model\Factory;
 use MetaBox\Support\Data as DataHelper;
 use WP_Block_Type_Registry;
@@ -144,10 +145,6 @@ class Data {
 	}
 
 	public static function get_models(): array {
-		if ( ! class_exists( Factory::class ) ) {
-			return [];
-		}
-
 		$cache = get_option( 'mbb_models', [] );
 		if ( ! is_array( $cache ) ) {
 			$cache = [];
@@ -155,16 +152,37 @@ class Data {
 
 		$models = [];
 		foreach ( Factory::get() as $name => $model ) {
-			$label  = $model->labels['singular_name'] ?? $model->labels['name'] ?? $name;
-			$cached = $cache[ $name ] ?? [];
+			$label   = $model->labels['singular_name'] ?? $model->labels['name'] ?? $name;
+			$cached  = $cache[ $name ] ?? [];
+			$post_id = isset( $cached['post_id'] ) ? (int) $cached['post_id'] : 0;
+			$columns = isset( $cached['columns'] ) && is_array( $cached['columns'] ) ? $cached['columns'] : [];
+			$keys    = isset( $cached['keys'] ) && is_array( $cached['keys'] ) ? $cached['keys'] : [];
+
+			$db_columns = [];
+			if ( ! empty( $model->table ) ) {
+				$supports  = isset( $model->supports ) && is_array( $model->supports ) ? $model->supports : [];
+				$inspected = TableColumns::inspect( (string) $model->table, $supports );
+				$db_columns = $inspected['columns'];
+
+				// Code-registered models: schema comes from the live table.
+				if ( $post_id <= 0 ) {
+					$columns = $db_columns;
+					$keys    = $inspected['keys'];
+
+					if ( empty( $columns ) && isset( $model->columns ) && is_array( $model->columns ) ) {
+						$columns = $model->columns;
+					}
+				}
+			}
 
 			$models[] = [
-				'name'    => $name,
-				'label'   => $label,
-				'table'   => $model->table,
-				'columns' => isset( $cached['columns'] ) && is_array( $cached['columns'] ) ? $cached['columns'] : [],
-				'keys'    => isset( $cached['keys'] ) && is_array( $cached['keys'] ) ? $cached['keys'] : [],
-				'post_id' => isset( $cached['post_id'] ) ? (int) $cached['post_id'] : 0,
+				'name'       => $name,
+				'label'      => $label,
+				'table'      => $model->table,
+				'columns'    => $columns,
+				'db_columns' => $db_columns,
+				'keys'       => $keys,
+				'post_id'    => $post_id,
 			];
 		}
 

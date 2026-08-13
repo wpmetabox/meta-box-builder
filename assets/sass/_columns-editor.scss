@@ -22,7 +22,6 @@
 	&__table th {
 		font-weight: 600;
 		font-size: 12px;
-		color: #646970;
 		text-align: left;
 	}
 
@@ -57,18 +56,28 @@
 		white-space: nowrap;
 		padding-right: 0;
 		vertical-align: middle;
-		text-align: center;
+		text-align: left;
 	}
 
-	&__table--db-only {
+	&__table--db-only,
+	&__table--read-only {
 		width: 100%;
 		margin-left: 0;
+
+		tr {
+			border-bottom: var(--border);
+		}
+
+		th,
+		td {
+			padding-block: 6px;
+		}
 	}
 
 	&__db-section {
 		margin-top: 8px;
 		padding-top: 16px;
-		border-top: 1px solid #dcdcde;
+		border-top: var(--border);
 	}
 
 	&__db-heading {
@@ -83,20 +92,13 @@
 		color: #646970;
 	}
 
-	&__actions {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-		gap: 2px;
-	}
-
 	&__action-btn {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		width: 24px;
 		height: 24px;
+		margin: 0 2px 0 0;
 		padding: 0;
 		border: 0;
 		border-radius: 2px;
@@ -104,6 +106,10 @@
 		color: var(--color-gray);
 		cursor: pointer;
 		line-height: 1;
+
+		&:last-child {
+			margin-right: 0;
+		}
 
 		.dashicons {
 			width: 16px;
@@ -129,12 +135,6 @@
 		}
 	}
 
-	&__db-type {
-		font-size: 12px;
-		color: #646970;
-		word-break: break-word;
-	}
-
 	&__table &__status {
 		width: 1%;
 		text-align: center;
@@ -148,15 +148,17 @@
 		margin: 0;
 	}
 
-	&__type {
+	&__table &__type {
 		display: flex;
 		flex-wrap: nowrap;
 		gap: 4px;
 		align-items: center;
+		font-size: 12px;
+		word-break: break-word;
 	}
 
-	&__type select,
-	&__type input[type="text"] {
+	&__table &__type select,
+	&__table &__type input[type="text"] {
 		flex: 1 1 0;
 		min-width: 0;
 		width: 100%;
@@ -218,7 +220,7 @@
 }
 
 // Modal has no side padding to borrow — keep handle inside via padding so it is not clipped.
-.mb-schema-modal .mb-columns-editor .og-input {
+.mb-schema-modal:not(.mb-schema-modal--read-only) .mb-columns-editor .og-input {
 	padding-left: 24px;
 }
 

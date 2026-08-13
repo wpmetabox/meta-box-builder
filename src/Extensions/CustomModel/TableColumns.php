@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Extensions\CustomModel;
 
+use MetaBox\CustomTable\Model\Factory;
 use MetaBox\Support\Arr;
 
 class TableColumns {
@@ -23,6 +24,64 @@ class TableColumns {
 		return [
 			'success' => true,
 			'columns' => self::filter_protected( self::fetch( $table ), $settings ),
+		];
+	}
+
+	/**
+	 * List columns for a registered model (Builder or code).
+	 *
+	 * Prefer the Factory-registered table; fall back to a client-provided
+	 * table name when the model is not available on the REST request
+	 * (e.g. registered only in is_admin()).
+	 *
+	 * @return array{success: bool, message?: string, columns?: array<string, string>, keys?: string[]}
+	 */
+	public static function list_for_model( string $model_name, string $table = '' ): array {
+		$supports = [];
+
+		if ( '' !== $model_name ) {
+			$model = Factory::get( $model_name );
+			if ( $model ) {
+				if ( ! empty( $model->table ) ) {
+					$table = (string) $model->table;
+				}
+				if ( isset( $model->supports ) && is_array( $model->supports ) ) {
+					$supports = $model->supports;
+				}
+			}
+		}
+
+		$table = self::sanitize_table_identifier( $table );
+		if ( '' === $table ) {
+			return [
+				'success' => false,
+				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
+			];
+		}
+
+		$inspected = self::inspect( $table, $supports );
+
+		return [
+			'success' => true,
+			'columns' => $inspected['columns'],
+			'keys'    => $inspected['keys'],
+		];
+	}
+
+	/**
+	 * Read columns and indexes from a database table.
+	 *
+	 * @param string   $table    Table name.
+	 * @param string[] $supports Model supports used to skip protected columns.
+	 *
+	 * @return array{columns: array<string, string>, keys: string[]}
+	 */
+	public static function inspect( string $table, array $supports = [] ): array {
+		$settings = [ 'supports' => $supports ];
+
+		return [
+			'columns' => self::filter_protected( self::fetch( $table ), $settings ),
+			'keys'    => self::fetch_keys( $table ),
 		];
 	}
 
@@ -91,6 +150,8 @@ class TableColumns {
 	}
 
 	/**
+	 * Get raw model settings for a Builder-managed model post.
+	 *
 	 * @return array<string, mixed>
 	 */
 	private static function get_settings( int $post_id ): array {
@@ -112,6 +173,15 @@ class TableColumns {
 	}
 
 	/**
+	 * Allow only safe SQL table identifiers.
+	 */
+	private static function sanitize_table_identifier( string $table ): string {
+		$table = str_replace( '-', '_', $table );
+
+		return preg_match( '/^[A-Za-z0-9_]+$/', $table ) ? $table : '';
+	}
+
+	/**
 	 * Read column definitions from the database table.
 	 *
 	 * @return array<string, string> Column name => SQL type.
@@ -119,9 +189,7 @@ class TableColumns {
 	private static function fetch( string $table ): array {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from parsed model settings.
-		$exists = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
-		if ( $exists !== $table ) {
+		if ( ! self::table_exists( $table ) ) {
 			return [];
 		}
 
@@ -142,6 +210,45 @@ class TableColumns {
 		}
 
 		return $columns;
+	}
+
+	/**
+	 * Read non-primary index column names from the database table.
+	 *
+	 * @return string[]
+	 */
+	private static function fetch_keys( string $table ): array {
+		global $wpdb;
+
+		if ( ! self::table_exists( $table ) ) {
+			return [];
+		}
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name from parsed model settings.
+		$rows = $wpdb->get_results( "SHOW INDEX FROM `{$table}`", ARRAY_A );
+		if ( ! is_array( $rows ) ) {
+			return [];
+		}
+
+		$keys = [];
+		foreach ( $rows as $row ) {
+			$key_name = (string) ( $row['Key_name'] ?? '' );
+			$column   = (string) ( $row['Column_name'] ?? '' );
+			if ( '' === $column || 'PRIMARY' === $key_name ) {
+				continue;
+			}
+			$keys[] = $column;
+		}
+
+		return array_values( array_unique( $keys ) );
+	}
+
+	private static function table_exists( string $table ): bool {
+		global $wpdb;
+
+		$like = $wpdb->esc_like( $table );
+
+		return $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $like ) ) === $table;
 	}
 
 	private static function is_protected( string $column, array $settings ): bool {

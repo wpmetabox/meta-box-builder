@@ -99,6 +99,11 @@ export const dbTypeToEditorColumn = ( sqlType = '' ) => {
 		return { type: 'TINYINT(1)', custom_type: '' };
 	}
 
+	const base = upper.replace( /\s+UNSIGNED$/, '' ).replace( /\(\d+(,\d+)?\)/, '' );
+	if ( isPresetColumnType( base ) ) {
+		return { type: base, custom_type: '' };
+	}
+
 	return {
 		type: CUSTOM_COLUMN_TYPE,
 		custom_type: type,
@@ -111,12 +116,14 @@ export const parsedColumnsToEditor = ( columns = {}, keys = [] ) => {
 
 	Object.entries( columns || {} ).forEach( ( [ name, sqlType ] ) => {
 		const id = `col_${ name }`;
-		const isPreset = isPresetColumnType( sqlType );
+		const rawType = String( sqlType || '' ).trim();
+		const editorType = dbTypeToEditorColumn( rawType );
 		items[ id ] = {
 			id,
 			name,
-			type: isPreset ? sqlType : CUSTOM_COLUMN_TYPE,
-			custom_type: isPreset ? '' : sqlType,
+			type: editorType.type,
+			custom_type: editorType.custom_type,
+			db_type: rawType.toUpperCase(),
 			index: keySet.has( name ),
 		};
 	} );

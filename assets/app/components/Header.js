@@ -1,5 +1,4 @@
 import { Button, Flex, Tooltip } from '@wordpress/components';
-import { useEffect, useMemo, useState } from '@wordpress/element';
 import { __ } from "@wordpress/i18n";
 import { cog, external, listView, plus } from "@wordpress/icons";
 import { useShallow } from 'zustand/react/shallow';
@@ -9,28 +8,8 @@ import useModelSchema from '../hooks/useModelSchema';
 import useNavPanel from '../hooks/useNavPanel';
 import useSettings from '../hooks/useSettings';
 import useUnsavedChanges from '../hooks/useUnsavedChanges';
-import { lists } from '../list-functions';
-import SchemaModal, { IGNORE_FIELD_TYPES } from './Modals/SchemaModal';
 
 const shortcut = isMac() ? '⌘S' : 'Ctrl+S';
-
-const useRootFields = () => {
-	const [ fields, setFields ] = useState( [] );
-
-	useEffect( () => {
-		if ( ! lists.has( 'root' ) ) {
-			setFields( [] );
-			return undefined;
-		}
-
-		const store = lists.get( 'root' );
-		const update = () => setFields( [ ...store.getState().fields ] );
-		update();
-		return store.subscribe( update );
-	}, [] );
-
-	return fields;
-};
 
 const Header = () => {
 	const { navPanel, setNavPanel } = useNavPanel();
@@ -41,19 +20,12 @@ const Header = () => {
 		toggleVisible: state.toggleVisible,
 	} ) ) );
 	const { settings, getObjectType, getPostTypes, getSetting } = useSettings( useShallow( state => ( {
-		settings: state.settings, // Triggers useShallow to re-evaluate when settings change (not referenced directly).
+		settings: state.settings,
 		getObjectType: state.getObjectType,
 		getPostTypes: state.getPostTypes,
 		getSetting: state.getSetting,
 	} ) ) );
-	const fields = useRootFields();
 	const models = useModelSchema( state => state.models );
-	const setModels = useModelSchema( state => state.setModels );
-	const setMismatch = useModelSchema( state => state.setMismatch );
-	const schemaOpen = useModelSchema( state => state.schemaOpen );
-	const closeSchema = useModelSchema( state => state.closeSchema );
-	const selectedModel = useModelSchema( state => state.selectedModel );
-	const fieldIdsForModal = useModelSchema( state => state.fieldIds );
 
 	const updateNavPanel = key => () => setNavPanel( key === navPanel ? '' : key );
 
@@ -65,9 +37,7 @@ const Header = () => {
 		}
 	};
 
-	// Show structure panel if it's in floating mode and visible, or if it's in normal mode and navPanel is 'structure'
 	const isStructurePressed = floating ? visible : navPanel === 'structure';
-
 	const objectType = getObjectType();
 
 	let locations = [ ucwords( objectType ) ];
@@ -93,125 +63,72 @@ const Header = () => {
 			.map( m => m.label );
 	}
 
-	const fieldIds = useMemo(
-		() => fields
-			.filter( field => field.id && ! IGNORE_FIELD_TYPES.includes( field.type ) )
-			.map( field => field.id ),
-		[ fields ]
-	);
-
-	const nextSelectedModel = useMemo( () => {
-		if ( objectType !== 'model' ) {
-			return null;
-		}
-		const selected = ensureArray( getSetting( 'models', [] ) )
-			.map( name => models.find( model => model.name === name ) )
-			.filter( Boolean );
-		return selected[ 0 ] || null;
-	}, [ objectType, settings, models, getSetting ] );
-
-	const nextMissingFieldIds = useMemo( () => {
-		if ( ! nextSelectedModel ) {
-			return [];
-		}
-		const columnNames = Object.keys( nextSelectedModel.columns || {} );
-		return fieldIds.filter( id => ! columnNames.includes( id ) );
-	}, [ nextSelectedModel, fieldIds ] );
-
-	useEffect( () => {
-		setMismatch( {
-			missingFieldIds: nextMissingFieldIds,
-			selectedModel: nextSelectedModel,
-			fieldIds,
-		} );
-	}, [ nextMissingFieldIds, nextSelectedModel, fieldIds, setMismatch ] );
-
-	const onSchemaSaved = updatedModel => {
-		const next = models.map( model => model.name === updatedModel.name ? { ...model, ...updatedModel } : model );
-		if ( ! next.find( model => model.name === updatedModel.name ) ) {
-			next.push( updatedModel );
-		}
-		setModels( next );
-	};
-
 	return (
-		<>
-			<Flex className="mb-header">
-				<Flex expanded={ false }>
-					<Button
-						variant="primary"
-						icon={ plus }
-						size="compact"
-						className="mb-header__add"
-						label={ __( 'Add a new field', 'meta-box-builder' ) }
-						showTooltip={ true }
-						onClick={ updateNavPanel( 'add' ) }
-						isPressed={ navPanel === 'add' }
-					/>
-					<Button
-						icon={ listView }
-						size="compact"
-						label={ __( 'Show field group structure', 'meta-box-builder' ) }
-						showTooltip={ true }
-						onClick={ handleStructureClick }
-						isPressed={ isStructurePressed }
-					/>
-					<Button
-						icon={ cog }
-						size="compact"
-						label={ __( 'Edit field group settings', 'meta-box-builder' ) }
-						showTooltip={ true }
-						onClick={ updateNavPanel( 'field-group-settings' ) }
-						isPressed={ navPanel === 'field-group-settings' }
-					/>
-				</Flex>
-				<Flex gap={ 0 } expanded={ false } className="mb-header__info">
-					<input
-						type="text"
-						name="post_title"
-						id="post_title"
-						defaultValue={ MbbApp.title }
-						placeholder={ __( 'Please enter the field group title here...', 'meta-box-builder' ) }
-					/>
-					<Flex gap={ 1 } expanded={ false } className="mb-header__locations">
-						{ locations.map( location => <span key={ `${ objectType }-${ location }` } className="mb-header__location">{ location }</span> ) }
-					</Flex>
-				</Flex>
-				<Flex gap={ 1 } expanded={ false } className="mb-header__actions">
-					{
-						!MbbApp.extensions.aio && (
-							<Tooltip delay={ 0 } text={ __( 'Get access to premium features like conditional logic, custom table, frontend forms, settings pages, and more.', 'meta-box-builder' ) }>
-								<Button
-									variant="link"
-									href="https://metabox.io/aio/?utm_source=header&utm_medium=link&utm_campaign=builder"
-									target="_blank"
-									icon={ external }
-									iconPosition="right"
-									iconSize={ 18 }
-									text={ __( 'Upgrade', 'meta-box-builder' ) }
-								/>
-							</Tooltip>
-						)
-					}
-					<input
-						type="submit"
-						className="components-button is-primary"
-						value={ `${ __( 'Save Changes', 'meta-box-builder' )} (${ shortcut })` }
-						disabled={ !hasUnsavedChanges }
-					/>
+		<Flex className="mb-header">
+			<Flex expanded={ false }>
+				<Button
+					variant="primary"
+					icon={ plus }
+					size="compact"
+					className="mb-header__add"
+					label={ __( 'Add a new field', 'meta-box-builder' ) }
+					showTooltip={ true }
+					onClick={ updateNavPanel( 'add' ) }
+					isPressed={ navPanel === 'add' }
+				/>
+				<Button
+					icon={ listView }
+					size="compact"
+					label={ __( 'Show field group structure', 'meta-box-builder' ) }
+					showTooltip={ true }
+					onClick={ handleStructureClick }
+					isPressed={ isStructurePressed }
+				/>
+				<Button
+					icon={ cog }
+					size="compact"
+					label={ __( 'Edit field group settings', 'meta-box-builder' ) }
+					showTooltip={ true }
+					onClick={ updateNavPanel( 'field-group-settings' ) }
+					isPressed={ navPanel === 'field-group-settings' }
+				/>
+			</Flex>
+			<Flex gap={ 0 } expanded={ false } className="mb-header__info">
+				<input
+					type="text"
+					name="post_title"
+					id="post_title"
+					defaultValue={ MbbApp.title }
+					placeholder={ __( 'Please enter the field group title here...', 'meta-box-builder' ) }
+				/>
+				<Flex gap={ 1 } expanded={ false } className="mb-header__locations">
+					{ locations.map( location => <span key={ `${ objectType }-${ location }` } className="mb-header__location">{ location }</span> ) }
 				</Flex>
 			</Flex>
-			{
-				schemaOpen && selectedModel && (
-					<SchemaModal
-						model={ selectedModel }
-						fieldIds={ fieldIdsForModal }
-						onClose={ closeSchema }
-						onSaved={ onSchemaSaved }
-					/>
-				)
-			}
-		</>
+			<Flex gap={ 1 } expanded={ false } className="mb-header__actions">
+				{
+					!MbbApp.extensions.aio && (
+						<Tooltip delay={ 0 } text={ __( 'Get access to premium features like conditional logic, custom table, frontend forms, settings pages, and more.', 'meta-box-builder' ) }>
+							<Button
+								variant="link"
+								href="https://metabox.io/aio/?utm_source=header&utm_medium=link&utm_campaign=builder"
+								target="_blank"
+								icon={ external }
+								iconPosition="right"
+								iconSize={ 18 }
+								text={ __( 'Upgrade', 'meta-box-builder' ) }
+							/>
+						</Tooltip>
+					)
+				}
+				<input
+					type="submit"
+					className="components-button is-primary"
+					value={ `${ __( 'Save Changes', 'meta-box-builder' )} (${ shortcut })` }
+					disabled={ !hasUnsavedChanges }
+				/>
+			</Flex>
+		</Flex>
 	);
 };
 

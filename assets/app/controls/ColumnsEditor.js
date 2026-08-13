@@ -32,6 +32,12 @@ const FIELD_STATUS = {
 		label: __( 'Field exists, column missing', 'meta-box-builder' ),
 		tooltip: __( 'A field in this group uses this name, but the column is not in the schema yet. Save schema to add it.', 'meta-box-builder' ),
 	},
+	'missing-code': {
+		type: 'missing',
+		icon: 'plus-alt2',
+		label: __( 'Field exists, column missing', 'meta-box-builder' ),
+		tooltip: __( 'A field in this group uses this name, but the table has no matching column. Change the field ID, or add the column in the PHP that registers this model.', 'meta-box-builder' ),
+	},
 	'no-field': {
 		type: 'no-field',
 		icon: 'editor-unlink',
@@ -40,13 +46,7 @@ const FIELD_STATUS = {
 	},
 };
 
-const FIELD_STATUS_LEGEND = [
-	FIELD_STATUS.matched,
-	FIELD_STATUS.missing,
-	FIELD_STATUS[ 'no-field' ],
-];
-
-const getFieldStatus = ( name, fieldIds, existingColumnNames ) => {
+const getFieldStatus = ( name, fieldIds, existingColumnNames, readOnly ) => {
 	if ( ! name ) {
 		return null;
 	}
@@ -59,7 +59,7 @@ const getFieldStatus = ( name, fieldIds, existingColumnNames ) => {
 	}
 
 	if ( inFields ) {
-		return FIELD_STATUS.missing;
+		return readOnly ? FIELD_STATUS[ 'missing-code' ] : FIELD_STATUS.missing;
 	}
 
 	if ( inSchema ) {
@@ -112,7 +112,7 @@ const ActionButton = ( { icon, label, onClick, isDestructive = false, disabled =
 );
 
 const ColumnActions = ( { columnName, inDb, isDropping, onRemove, onDrop } ) => (
-	<div className="mb-columns-editor__actions">
+	<>
 		<ActionButton
 			icon="remove"
 			label={ ACTION_TOOLTIPS.removeFromSchema }
@@ -131,8 +131,125 @@ const ColumnActions = ( { columnName, inDb, isDropping, onRemove, onDrop } ) => 
 				/>
 			)
 		}
-	</div>
+	</>
 );
+
+const SchemaRow = ( {
+	item,
+	readOnly,
+	showFieldContext,
+	usedColumnNames,
+	existingColumnNames,
+	dbColumnNames,
+	dropping,
+	updateItem,
+	removeFromSchema,
+	dropColumn,
+} ) => {
+	const id = item.id;
+	const sqlType = resolveColumnSqlType( item );
+	const canIndex = isIndexableType( sqlType );
+	const inDb = dbColumnNames.has( item.name );
+	const status = showFieldContext
+		? getFieldStatus( item.name, usedColumnNames, existingColumnNames, readOnly )
+		: null;
+	const isDropping = dropping === item.name;
+
+	return (
+		<tr>
+			{
+				! readOnly && (
+					<td className="mb-columns-editor__reorder">
+						<span
+							className="mb-columns-editor__handle dashicons dashicons-menu"
+							title={ __( 'Drag to reorder', 'meta-box-builder' ) }
+							aria-label={ __( 'Drag to reorder', 'meta-box-builder' ) }
+						/>
+					</td>
+				)
+			}
+			<td className="mb-columns-editor__name">
+				{
+					readOnly
+						? item.name
+						: (
+							<input
+								type="text"
+								placeholder={ __( 'column_name', 'meta-box-builder' ) }
+								value={ item.name || '' }
+								onChange={ e => updateItem( id, 'name', e.target.value ) }
+							/>
+						)
+				}
+			</td>
+			<td className="mb-columns-editor__type">
+				{
+					readOnly
+						? ( item.db_type || existingColumnNames.includes( item.name ) ? ( item.db_type || sqlType ) : '—' )
+						: (
+							<>
+								<select
+									value={ item.type || DEFAULT_COLUMN_TYPE }
+									onChange={ e => updateItem( id, 'type', e.target.value ) }
+								>
+									{
+										COLUMN_TYPE_GROUPS.map( group => (
+											<optgroup key={ group.label } label={ group.label }>
+												{
+													Object.entries( group.options ).map( ( [ typeValue, typeLabel ] ) => (
+														<option key={ typeValue } value={ typeValue }>{ typeLabel }</option>
+													) )
+												}
+											</optgroup>
+										) )
+									}
+									<option value={ CUSTOM_COLUMN_TYPE }>{ __( 'Custom…', 'meta-box-builder' ) }</option>
+								</select>
+								{
+									CUSTOM_COLUMN_TYPE === item.type && (
+										<input
+											type="text"
+											placeholder={ __( 'e.g. ENUM(\'a\',\'b\')', 'meta-box-builder' ) }
+											value={ item.custom_type || '' }
+											onChange={ e => updateItem( id, 'custom_type', e.target.value ) }
+										/>
+									)
+								}
+							</>
+						)
+				}
+			</td>
+			<td className="mb-columns-editor__index">
+				<input
+					type="checkbox"
+					checked={ !! item.index && canIndex }
+					disabled={ readOnly || ! canIndex }
+					onChange={ e => updateItem( id, 'index', e.target.checked ) }
+				/>
+			</td>
+			{
+				showFieldContext && (
+					<td className="mb-columns-editor__status">
+						<ColumnStatus status={ status } />
+					</td>
+				)
+			}
+			{
+				! readOnly && (
+					<td className="mb-columns-editor__action">
+						<ColumnActions
+							columnName={ item.name }
+							inDb={ inDb }
+							isDropping={ isDropping }
+							onRemove={ () => removeFromSchema( id, item.name ) }
+							onDrop={ dropColumn }
+						/>
+					</td>
+				)
+			}
+		</tr>
+	);
+};
 
 const ColumnsEditor = ( {
 	name = 'columns',
@@ -145,6 +262,7 @@ const ColumnsEditor = ( {
 	usedColumnNames = [],
 	existingColumnNames = [],
 	postId = 0,
+	readOnly = false,
 } ) => {
 	const isControlled = value !== undefined;
 	const [ localItems, setLocalItems ] = useState( () => maybeArrayToObject( defaultValue, 'id' ) );
@@ -153,7 +271,7 @@ const ColumnsEditor = ( {
 
 	const items = maybeArrayToObject( isControlled ? value : localItems, 'id' );
 	const showFieldContext = usedColumnNames.length > 0;
-	const showDbSync = postId > 0;
+	const showDbSync = ! readOnly && postId > 0;
 
 	const dbColumnNames = useMemo(
 		() => new Set( Object.keys( dbColumns ) ),
@@ -335,120 +453,82 @@ const ColumnsEditor = ( {
 		} );
 	};
 
-	const legendItems = showFieldContext ? FIELD_STATUS_LEGEND : [];
+	const legendItems = showFieldContext
+		? [
+			FIELD_STATUS.matched,
+			readOnly ? FIELD_STATUS[ 'missing-code' ] : FIELD_STATUS.missing,
+			FIELD_STATUS[ 'no-field' ],
+		]
+		: [];
 
 	return (
 		<DivRow label={ label } className="mb-columns-editor" description={ description }>
 			{
 				schemaColumns.length > 0 && (
-					<table className={ `mb-columns-editor__table${ showFieldContext ? ' mb-columns-editor__table--with-status' : '' }` }>
+					<table className={
+						`mb-columns-editor__table${ showFieldContext ? ' mb-columns-editor__table--with-status' : '' }${ readOnly ? ' mb-columns-editor__table--read-only' : '' }`
+					}>
 						<thead>
 							<tr>
-								<th className="mb-columns-editor__reorder" aria-hidden="true" />
+								{ ! readOnly && <th className="mb-columns-editor__reorder" aria-hidden="true" /> }
 								<th className="mb-columns-editor__name">{ __( 'Name', 'meta-box-builder' ) }</th>
 								<th className="mb-columns-editor__type">{ __( 'Type', 'meta-box-builder' ) }</th>
 								<th className="mb-columns-editor__index">{ __( 'Index', 'meta-box-builder' ) }</th>
 								{ showFieldContext && <th className="mb-columns-editor__status">{ __( 'Status', 'meta-box-builder' ) }</th> }
-								<th className="mb-columns-editor__action">{ __( 'Action', 'meta-box-builder' ) }</th>
+								{ ! readOnly && <th className="mb-columns-editor__action">{ __( 'Action', 'meta-box-builder' ) }</th> }
 							</tr>
 						</thead>
-						<ReactSortable
-							tag="tbody"
-							list={ schemaColumns }
-							setList={ reorder }
-							handle=".mb-columns-editor__handle"
-							animation={ 200 }
-						>
-							{
-								schemaColumns.map( item => {
-									const id = item.id;
-									const sqlType = resolveColumnSqlType( item );
-									const canIndex = isIndexableType( sqlType );
-									const inDb = dbColumnNames.has( item.name );
-									const status = showFieldContext
-										? getFieldStatus( item.name, usedColumnNames, existingColumnNames )
-										: null;
-									const isDropping = dropping === item.name;
-
-									return (
-										<tr key={ id }>
-											<td className="mb-columns-editor__reorder">
-												<span
-													className="mb-columns-editor__handle dashicons dashicons-menu"
-													title={ __( 'Drag to reorder', 'meta-box-builder' ) }
-													aria-label={ __( 'Drag to reorder', 'meta-box-builder' ) }
-												/>
-											</td>
-											<td className="mb-columns-editor__name">
-												<input
-													type="text"
-													placeholder={ __( 'column_name', 'meta-box-builder' ) }
-													value={ item.name || '' }
-													onChange={ e => updateItem( id, 'name', e.target.value ) }
-												/>
-											</td>
-											<td className="mb-columns-editor__type">
-												<select
-													value={ item.type || DEFAULT_COLUMN_TYPE }
-													onChange={ e => updateItem( id, 'type', e.target.value ) }
-												>
-													{
-														COLUMN_TYPE_GROUPS.map( group => (
-															<optgroup key={ group.label } label={ group.label }>
-																{
-																	Object.entries( group.options ).map( ( [ typeValue, typeLabel ] ) => (
-																		<option key={ typeValue } value={ typeValue }>{ typeLabel }</option>
-																	) )
-																}
-															</optgroup>
-														) )
-													}
-													<option value={ CUSTOM_COLUMN_TYPE }>{ __( 'Custom…', 'meta-box-builder' ) }</option>
-												</select>
-												{
-													CUSTOM_COLUMN_TYPE === item.type && (
-														<input
-															type="text"
-															placeholder={ __( 'e.g. ENUM(\'a\',\'b\')', 'meta-box-builder' ) }
-															value={ item.custom_type || '' }
-															onChange={ e => updateItem( id, 'custom_type', e.target.value ) }
-														/>
-													)
-												}
-											</td>
-											<td className="mb-columns-editor__index">
-												<input
-													type="checkbox"
-													checked={ !! item.index && canIndex }
-													disabled={ ! canIndex }
-													onChange={ e => updateItem( id, 'index', e.target.checked ) }
-												/>
-											</td>
-											{
-												showFieldContext && (
-													<td className="mb-columns-editor__status">
-														<ColumnStatus status={ status } />
-													</td>
-												)
-											}
-											<td className="mb-columns-editor__action">
-												<ColumnActions
-													columnName={ item.name }
-													inDb={ inDb }
-													isDropping={ isDropping }
-													onRemove={ () => removeFromSchema( id, item.name ) }
-													onDrop={ dropColumn }
-												/>
-											</td>
-										</tr>
-									);
-								} )
-							}
-						</ReactSortable>
+						{
+							readOnly
+								? (
+									<tbody>
+										{ schemaColumns.map( item => (
+											<SchemaRow
+												key={ item.id }
+												item={ item }
+												readOnly
+												showFieldContext={ showFieldContext }
+												usedColumnNames={ usedColumnNames }
+												existingColumnNames={ existingColumnNames }
+												dbColumnNames={ dbColumnNames }
+												dropping={ dropping }
+												updateItem={ updateItem }
+												removeFromSchema={ removeFromSchema }
+												dropColumn={ dropColumn }
+											/>
+										) ) }
+									</tbody>
+								)
+								: (
+									<ReactSortable
+										tag="tbody"
+										list={ schemaColumns }
+										setList={ reorder }
+										handle=".mb-columns-editor__handle"
+										animation={ 200 }
+									>
+										{ schemaColumns.map( item => (
+											<SchemaRow
+												key={ item.id }
+												item={ item }
+												readOnly={ false }
+												showFieldContext={ showFieldContext }
+												usedColumnNames={ usedColumnNames }
+												existingColumnNames={ existingColumnNames }
+												dbColumnNames={ dbColumnNames }
+												dropping={ dropping }
+												updateItem={ updateItem }
+												removeFromSchema={ removeFromSchema }
+												dropColumn={ dropColumn }
+											/>
+										) ) }
+									</ReactSortable>
+								)
+						}
 					</table>
 				)
 			}
-			<Button className="mb-columns-editor__add" variant="secondary" onClick={ add } text={ __( '+ Add column', 'meta-box-builder' ) } />
+			{ ! readOnly && <Button className="mb-columns-editor__add" variant="secondary" onClick={ add } text={ __( '+ Add column', 'meta-box-builder' ) } /> }
 			{
 				showDbSync && orphanColumns.length > 0 && (
 					<div className="mb-columns-editor__db-section">
@@ -478,27 +558,25 @@ const ColumnsEditor = ( {
 													{ item.name }
 												</td>
 												<td className="mb-columns-editor__type">
-													<span className="mb-columns-editor__db-type">{ item.db_type }</span>
+													{ item.db_type }
 												</td>
 												<td className="mb-columns-editor__index">
 													<input type="checkbox" checked={ false } disabled />
 												</td>
 												<td className="mb-columns-editor__action">
-													<div className="mb-columns-editor__actions">
-														<ActionButton
-															icon="plus-alt2"
-															label={ ACTION_TOOLTIPS.addToSchema }
-															onClick={ () => addToSchema( item ) }
-														/>
-														<ActionButton
-															icon="trash"
-															label={ ACTION_TOOLTIPS.dropColumn }
-															isDestructive
-															disabled={ isDropping }
-															isBusy={ isDropping }
-															onClick={ () => dropColumn( item.name ) }
-														/>
-													</div>
+													<ActionButton
+														icon="plus-alt2"
+														label={ ACTION_TOOLTIPS.addToSchema }
+														onClick={ () => addToSchema( item ) }
+													/>
+													<ActionButton
+														icon="trash"
+														label={ ACTION_TOOLTIPS.dropColumn }
+														isDestructive
+														disabled={ isDropping }
+														isBusy={ isDropping }
+														onClick={ () => dropColumn( item.name ) }
+													/>
 												</td>
 											</tr>
 										);
