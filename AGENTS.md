@@ -13,6 +13,8 @@ MB Builder is a WordPress plugin that extends Meta Box. It lets you create custo
 
 Always run the matching build after editing JS or (S)CSS.
 
+When changing files under `vendor/wpmetabox/mbb-parser`, always upstream those changes to the [mbb-parser](https://github.com/wpmetabox/mbb-parser) repository (commit and push to the `master` branch).
+
 ## Code style
 
 ### General principles

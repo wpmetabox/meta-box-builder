@@ -10,6 +10,14 @@ const CustomTable = () => {
 	const { getSetting, updateSetting } = useSettings();
 	const setting = getSetting( 'custom_table', {} );
 
+	const enableCustomTable = value => {
+		updateSetting( 'custom_table.enable', value );
+		// New tables default to include prefix; existing saves keep their stored value.
+		if ( value && setting.prefix === undefined ) {
+			updateSetting( 'custom_table.prefix', true );
+		}
+	};
+
 	if ( !MbbApp.extensions.customTable ) {
 		return !MbbApp.extensions.aio && (
 			<UpgradePanelBody
@@ -26,7 +34,7 @@ const CustomTable = () => {
 			panelId="field-group-custom-table"
 			title={ __( 'Custom table', 'meta-box-builder' ) }
 			value={ !!setting.enable }
-			toggleValue={ value => updateSetting( 'custom_table.enable', value ) }
+			toggleValue={ enableCustomTable }
 			tooltip={ __( 'Save data in a custom table', 'meta-box-builder' ) }
 		>
 			<Toggle
@@ -55,8 +63,9 @@ const CustomTable = () => {
 					/>
 					<label>
 						<input
+							key={ `prefix-${ setting.prefix ? '1' : '0' }` }
 							type="checkbox"
-							defaultChecked={ !!setting.prefix }
+							defaultChecked={ !! setting.prefix }
 							value={ true }
 							onChange={ e => updateSetting( 'custom_table.prefix', e.target.checked ) }
 						/>

@@ -12,7 +12,7 @@ const Table = () => {
 	const model = getSetting( 'slug', '' );
 	const table = resolveTableName(
 		getSetting( 'table', '' ),
-		!! getSetting( 'prefix', false ),
+		!! getSetting( 'prefix' ),
 		MbbApp.tablePrefix || ''
 	);
 	const postId = Number( document.querySelector( '#post_ID' )?.value ) || 0;
@@ -40,7 +40,7 @@ const Table = () => {
 					<label>
 						<input
 							type="checkbox"
-							defaultChecked={ !! getSetting( 'prefix', false ) }
+							defaultChecked={ !! getSetting( 'prefix' ) }
 							value={ true }
 							onChange={ e => updateWithAutofill( 'prefix', e.target.checked ) }
 						/>

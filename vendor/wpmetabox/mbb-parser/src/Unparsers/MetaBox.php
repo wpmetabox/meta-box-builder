@@ -32,6 +32,7 @@ class MetaBox extends Base {
 		'meta-box'         => 'https://schemas.metabox.io/field-group.json',
 		'mb-relationship'  => 'https://schemas.metabox.io/relationships.json',
 		'mb-settings-page' => 'https://schemas.metabox.io/settings-page.json',
+		'mb-model'         => 'https://schemas.metabox.io/custom-model.json',
 	];
 
 	/**
@@ -43,6 +44,7 @@ class MetaBox extends Base {
 		'meta-box'         => 'meta_box',
 		'mb-relationship'  => 'relationship',
 		'mb-settings-page' => 'settings_page',
+		'mb-model'         => 'model',
 	];
 
 	public function unparse() {
@@ -50,6 +52,7 @@ class MetaBox extends Base {
 		$this->unparse_meta_box();
 		$this->unparse_relationship();
 		$this->unparse_settings_page()->unparse_settings_page_tabs();
+		$this->unparse_model();
 		$this->unparse_post_fields();
 		$this->unparse_modified();
 		$this->unparse_settings();
@@ -391,6 +394,48 @@ class MetaBox extends Base {
 		return $this;
 	}
 
+	public function unparse_model(): self {
+		if ( $this->detect_post_type() !== 'mb-model' ) {
+			return $this;
+		}
+
+		if ( isset( $this->model ) ) {
+			$model = $this->settings['model'];
+			if ( empty( $model['id'] ) && ! empty( $model['name'] ) ) {
+				$model['id'] = $model['name'];
+			} elseif ( empty( $model['name'] ) && ! empty( $model['id'] ) ) {
+				$model['name'] = $model['id'];
+			}
+			$this->settings['model'] = $model;
+			$this->post_title        = $this->lookup( [
+				'post_title',
+				'model.labels.name',
+				'model.labels.singular_name',
+				'model.id',
+				'id',
+			] );
+
+			return $this;
+		}
+
+		$model = $this->get_settings();
+
+		foreach ( $this->get_unneeded_keys() as $key ) {
+			unset( $model[ $key ] );
+		}
+
+		if ( empty( $model['id'] ) && ! empty( $model['name'] ) ) {
+			$model['id'] = $model['name'];
+		} elseif ( empty( $model['name'] ) && ! empty( $model['id'] ) ) {
+			$model['name'] = $model['id'];
+		}
+
+		$this->model      = $model;
+		$this->post_title = $this->lookup( [ 'post_title', 'labels.name', 'labels.singular_name', 'id' ] );
+
+		return $this;
+	}
+
 	public function unparse_settings() {
 		$settings = $this->settings['settings'] ?? [];
 
@@ -449,7 +494,7 @@ class MetaBox extends Base {
 		$post_type        = $this->post_type ?? $this->detect_post_type();
 
 		$this->post_type    = $post_type;
-		$this->post_name    = $this->lookup( [ 'post_name', 'settings.id', 'relationship.id', 'meta_box.id', 'id' ] );
+		$this->post_name    = $this->lookup( [ 'post_name', 'settings.id', 'relationship.id', 'meta_box.id', 'model.id', 'model.name', 'id' ] );
 		$this->post_date    = $this->lookup( [ 'post_date' ], gmdate( 'Y-m-d H:i:s' ) );
 		$this->post_status  = $this->lookup( [ 'post_status' ], 'publish' );
 		$this->post_content = $this->lookup( [ 'post_content' ], '' );
@@ -688,9 +733,10 @@ class MetaBox extends Base {
 
 		// Add extra keys for other post types
 		$extras = [
-			'meta-box'         => [ 'relationship' ],
-			'mb-relationship'  => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data' ],
-			'mb-settings-page' => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data' ],
+			'meta-box'         => [ 'relationship', 'model' ],
+			'mb-relationship'  => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data', 'model' ],
+			'mb-settings-page' => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data', 'model' ],
+			'mb-model'         => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data', 'model' ],
 		];
 
 		return array_merge( $default, $extras[ $post_type ] ?? [] );

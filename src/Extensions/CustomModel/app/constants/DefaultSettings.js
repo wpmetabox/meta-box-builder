@@ -21,7 +21,7 @@ const DefaultSettings = {
 	},
 
 	table: '',
-	prefix: false,
+	prefix: true,
 	columns: {},
 
 	show_in_menu: true,
