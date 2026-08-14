@@ -245,10 +245,9 @@ class MetaBox extends Base {
 			return $this;
 		}
 
-		// Generate extra props for meta box settings.
+		// Generate extra props for meta box settings (survive minimal export).
 		$meta_box_custom_table = [];
 
-		// We need those keys on meta box only for minimal format, other keys can be retrieved from meta box settings itself.
 		$extra_keys = [
 			'prefix',
 			'create',
@@ -258,6 +257,10 @@ class MetaBox extends Base {
 			if ( ! empty( $custom_table[ $key ] ) ) {
 				$meta_box_custom_table[ $key ] = true;
 			}
+		}
+
+		if ( ! empty( $custom_table['columns'] ) && is_array( $custom_table['columns'] ) ) {
+			$meta_box_custom_table['columns'] = $custom_table['columns'];
 		}
 
 		if ( ! empty( $meta_box_custom_table ) ) {
