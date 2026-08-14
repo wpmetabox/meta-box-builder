@@ -19,8 +19,8 @@ const Header = () => {
 		visible: state.visible,
 		toggleVisible: state.toggleVisible,
 	} ) ) );
-	const { settings, getObjectType, getPostTypes, getSetting } = useSettings( useShallow( state => ( {
-		settings: state.settings,
+	const { getObjectType, getPostTypes, getSetting } = useSettings( useShallow( state => ( {
+		settings: state.settings, // Subscribe so location labels update when settings change.
 		getObjectType: state.getObjectType,
 		getPostTypes: state.getPostTypes,
 		getSetting: state.getSetting,

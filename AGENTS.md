@@ -4,43 +4,38 @@
 
 MB Builder is a WordPress plugin that extends Meta Box. It lets you create custom fields with a drag-and-drop interface.
 
-## Build & Lint Commands
+## Commands
+- PHP linting: `composer phpcs src`
+- Auto-fix PHP formatting: `composer phpcbf src`
+- Build CSS: `pnpm run css`
+- Build JavaScript: `pnpm run js`
+- Full build (CSS + JS): `pnpm run build`
 
-```bash
-# Lint with WordPress Coding Standards
-composer phpcs src
-
-# Auto-fix PHP formatting
-composer phpcbf src
-
-# Build CSS (compressed, no source maps)
-pnpm run css
-
-# Build JavaScript (uses @wordpress/scripts)
-pnpm run js
-
-# Full build (CSS + JS)
-pnpm run build
-```
+Always run the matching build after editing JS or (S)CSS.
 
 ## Code style
 
 ### General principles
-- Write small functions that do one thing. Prefer declarative code.
-- Add comments that explain why the code exists. Do not describe what the code does.
-- Use descriptive names. Avoid abbreviations unless they are widely recognized.
+- Make changes as minimal as possible
+- Write small, single-purpose functions, prefer declarative code
+- Add comments for why (not what)
+- Use descriptive names, avoid abbreviations unless widely recognized
+- Avoid one-off internal constants or variables used only once when inlining stays short, keep a named variable when it clarifies intent, especially in complex code
 - Keep commits minimal and focused
+- Prefer the language or framework's built-in functions and APIs over custom solutions
 - Use American English
 
 ### PHP
 - Follow the [WordPress PHP Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/)
 - Use PSR-4 for autoloading
 - Import classes at the top of the file with `use`, not `\FQCN`
-- Do not add unnecessary checks such as `function_exists` and `class_exists`
-- When possible, use type hints and return types
-- When type hints are insufficient, add `@param` and `@return` docblocks
+- Add type hints (for parameters and return values) wherever possible
+- Add `@param` and `@return` docblocks when type hints are insufficient
+- Use WordPress core functions before custom solutions
+- Avoids unnecessary defensive existence checks (e.g., function_exists) when the dependency is guaranteed to exist
 - Support PHP 7.4+ and WordPress 6.6+
 
 ### JavaScript (WordPress Standards)
 - Follow the [WordPress JavaScript Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/javascript/)
-- For an arrow function with one parameter, omit the parentheses
+- Prefer arrow functions over traditional function expressions for inline callbacks and short functions.
+- Omit the parentheses for arrow functions with one parameter

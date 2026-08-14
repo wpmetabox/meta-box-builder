@@ -2,31 +2,29 @@ import { Button, Flex, Modal } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { DEFAULT_COLUMN_TYPE, parsedColumnsToEditor } from '../../constants/columnTypes';
-import { IGNORE_SCHEMA_FIELD_TYPES } from '../../constants/schemaFieldTypes';
 import ColumnsEditor from '../../controls/ColumnsEditor';
 import { uniqid } from '../../functions';
 import { fetcher } from '../../hooks/useFetch';
 
 const buildColumns = ( schemaColumns, schemaKeys, fieldIds ) => {
 	const existing = parsedColumnsToEditor( schemaColumns || {}, schemaKeys || [] );
-	const next = { ...existing };
-	const existingNames = new Set( Object.values( next ).map( col => col.name ) );
+	const existingNames = new Set( Object.values( existing ).map( col => col.name ) );
+	const missing = Object.fromEntries(
+		fieldIds
+			.filter( id => ! existingNames.has( id ) )
+			.map( id => {
+				const itemId = uniqid();
+				return [ itemId, {
+					id: itemId,
+					name: id,
+					type: DEFAULT_COLUMN_TYPE,
+					custom_type: '',
+					index: false,
+				} ];
+			} )
+	);
 
-	fieldIds.forEach( id => {
-		if ( existingNames.has( id ) ) {
-			return;
-		}
-		const itemId = uniqid();
-		next[ itemId ] = {
-			id: itemId,
-			name: id,
-			type: DEFAULT_COLUMN_TYPE,
-			custom_type: '',
-			index: false,
-		};
-	} );
-
-	return next;
+	return { ...existing, ...missing };
 };
 
 const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
@@ -151,6 +149,8 @@ const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
 							onChange={ setColumns }
 							usedColumnNames={ fieldIds }
 							existingColumnNames={ schemaColumnNames }
+							model={ model.name }
+							table={ model.table }
 							postId={ model.post_id }
 							readOnly={ readOnly }
 						/>

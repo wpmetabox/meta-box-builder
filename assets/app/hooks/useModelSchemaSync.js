@@ -33,32 +33,26 @@ const useModelSchemaSync = () => {
 			return null;
 		}
 
-		const selected = ensureArray( getSetting( 'models', [] ) )
+		return ensureArray( getSetting( 'models', [] ) )
 			.map( name => models.find( model => model.name === name ) )
-			.filter( Boolean );
-
-		return selected[ 0 ] || null;
+			.filter( Boolean )[ 0 ] || null;
 	}, [ objectType, settings, models, getSetting ] );
 
 	useEffect( () => {
 		let cancelled = false;
 
 		const loadTableColumns = async () => {
-			if ( ! selectedModel?.name && ! selectedModel?.post_id ) {
+			if ( ! selectedModel?.name || ! selectedModel?.table ) {
 				return;
 			}
-
-			const params = selectedModel.post_id > 0
-				? { post_id: selectedModel.post_id }
-				: {
-					model: selectedModel.name,
-					table: selectedModel.table,
-				};
 
 			try {
 				const response = await fetcher( {
 					api: 'custom-model/table-columns',
-					params,
+					params: {
+						model: selectedModel.name,
+						table: selectedModel.table,
+					},
 					method: 'GET',
 					cache: false,
 				} );
@@ -92,17 +86,16 @@ const useModelSchemaSync = () => {
 		return () => {
 			cancelled = true;
 		};
-	}, [ selectedModel?.name, selectedModel?.post_id, selectedModel?.table, setModels ] );
+	}, [ selectedModel?.name, selectedModel?.table, setModels ] );
 
 	const missingFieldIds = useMemo( () => {
 		if ( ! selectedModel ) {
 			return [];
 		}
 
+		const hasDbColumns = Object.keys( selectedModel.db_columns || {} ).length > 0;
 		const columnNames = getColumnNames(
-			selectedModel.db_columns && Object.keys( selectedModel.db_columns ).length > 0
-				? selectedModel.db_columns
-				: selectedModel.columns
+			hasDbColumns ? selectedModel.db_columns : selectedModel.columns
 		);
 
 		return fieldIds.filter( id => ! columnNames.includes( id ) );

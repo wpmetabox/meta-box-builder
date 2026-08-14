@@ -14,3 +14,15 @@ export const getColumnNames = columns => {
 
 	return Object.keys( columns );
 };
+
+/**
+ * Resolve the full database table name from UI settings.
+ */
+export const resolveTableName = ( table, usePrefix = false, prefix = '' ) => {
+	const name = String( table || '' ).trim();
+	if ( ! name ) {
+		return '';
+	}
+
+	return usePrefix ? `${ prefix }${ name }` : name;
+};

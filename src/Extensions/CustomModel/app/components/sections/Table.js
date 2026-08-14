@@ -2,12 +2,20 @@ import { Tooltip } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import ColumnsEditor from '../../../../../../assets/app/controls/ColumnsEditor';
 import DivRow from '../../../../../../assets/app/controls/DivRow';
+import { resolveTableName } from '../../../../../../assets/app/utils/modelColumns';
 import useAutofill from '../../hooks/useAutofill';
 
 const Table = () => {
 	const { getSetting, updateWithAutofill } = useAutofill();
 	const singularName = getSetting( 'labels.singular_name', '' );
 	const tableKey = getSetting( '_table_changed' ) ? 'table-manual' : singularName;
+	const model = getSetting( 'slug', '' );
+	const table = resolveTableName(
+		getSetting( 'table', '' ),
+		!! getSetting( 'prefix', false ),
+		MbbApp.tablePrefix || ''
+	);
+	const postId = Number( document.querySelector( '#post_ID' )?.value ) || 0;
 
 	return (
 		<div className="mb-content">
@@ -51,7 +59,9 @@ const Table = () => {
 				name="columns"
 				defaultValue={ getSetting( 'columns', {} ) }
 				updateField={ updateWithAutofill }
-				postId={ Number( document.querySelector( '#post_ID' )?.value ) || 0 }
+				model={ model }
+				table={ table }
+				postId={ postId }
 			/>
 		</div>
 	);

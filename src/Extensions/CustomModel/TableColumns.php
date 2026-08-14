@@ -6,33 +6,10 @@ use MetaBox\Support\Arr;
 
 class TableColumns {
 	/**
-	 * List columns in the model table from the database.
-	 *
-	 * @return array{success: bool, message?: string, columns?: array<string, string>}
-	 */
-	public static function list_for_post( int $post_id ): array {
-		$settings = self::get_settings( $post_id );
-		$table    = self::resolve_table_name( $settings );
-
-		if ( null === $table ) {
-			return [
-				'success' => false,
-				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
-			];
-		}
-
-		return [
-			'success' => true,
-			'columns' => self::filter_protected( self::fetch( $table ), $settings ),
-		];
-	}
-
-	/**
 	 * List columns for a registered model (Builder or code).
 	 *
-	 * Prefer the Factory-registered table; fall back to a client-provided
-	 * table name when the model is not available on the REST request
-	 * (e.g. registered only in is_admin()).
+	 * Use the client-provided table when set. Fall back to the Factory table
+	 * and supports when the model is registered.
 	 *
 	 * @return array{success: bool, message?: string, columns?: array<string, string>, keys?: string[]}
 	 */
@@ -42,7 +19,7 @@ class TableColumns {
 		if ( '' !== $model_name ) {
 			$model = Factory::get( $model_name );
 			if ( $model ) {
-				if ( ! empty( $model->table ) ) {
+				if ( '' === $table && ! empty( $model->table ) ) {
 					$table = (string) $model->table;
 				}
 				if ( isset( $model->supports ) && is_array( $model->supports ) ) {
@@ -51,7 +28,7 @@ class TableColumns {
 			}
 		}
 
-		$table = self::sanitize_table_identifier( $table );
+		$table = str_replace( '-', '_', sanitize_key( $table ) );
 		if ( '' === $table ) {
 			return [
 				'success' => false,
@@ -173,15 +150,6 @@ class TableColumns {
 	}
 
 	/**
-	 * Allow only safe SQL table identifiers.
-	 */
-	private static function sanitize_table_identifier( string $table ): string {
-		$table = str_replace( '-', '_', $table );
-
-		return preg_match( '/^[A-Za-z0-9_]+$/', $table ) ? $table : '';
-	}
-
-	/**
 	 * Read column definitions from the database table.
 	 *
 	 * @return array<string, string> Column name => SQL type.
@@ -230,17 +198,14 @@ class TableColumns {
 			return [];
 		}
 
-		$keys = [];
-		foreach ( $rows as $row ) {
-			$key_name = (string) ( $row['Key_name'] ?? '' );
-			$column   = (string) ( $row['Column_name'] ?? '' );
-			if ( '' === $column || 'PRIMARY' === $key_name ) {
-				continue;
+		$rows = array_filter(
+			$rows,
+			static function ( array $row ): bool {
+				return ! empty( $row['Column_name'] ) && 'PRIMARY' !== ( $row['Key_name'] ?? '' );
 			}
-			$keys[] = $column;
-		}
+		);
 
-		return array_values( array_unique( $keys ) );
+		return array_values( array_unique( array_column( $rows, 'Column_name' ) ) );
 	}
 
 	private static function table_exists( string $table ): bool {
@@ -264,11 +229,7 @@ class TableColumns {
 	 * @return array<string, string>
 	 */
 	private static function filter_protected( array $columns, array $settings ): array {
-		foreach ( self::get_protected_columns( $settings ) as $column ) {
-			unset( $columns[ $column ] );
-		}
-
-		return $columns;
+		return array_diff_key( $columns, array_flip( self::get_protected_columns( $settings ) ) );
 	}
 
 	/**
@@ -279,19 +240,14 @@ class TableColumns {
 	 * @return string[]
 	 */
 	private static function get_protected_columns( array $settings ): array {
-		$protected = [ 'ID' ];
-
 		$supports = Arr::get( $settings, 'supports', [] );
 		if ( ! is_array( $supports ) ) {
 			$supports = [];
 		}
 
-		foreach ( [ 'author', 'published_date', 'modified_date' ] as $column ) {
-			if ( in_array( $column, $supports, true ) ) {
-				$protected[] = $column;
-			}
-		}
-
-		return $protected;
+		return array_merge(
+			[ 'ID' ],
+			array_values( array_intersect( [ 'author', 'published_date', 'modified_date' ], $supports ) )
+		);
 	}
 }

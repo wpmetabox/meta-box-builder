@@ -17,18 +17,15 @@ const ModelSchemaController = () => {
 			...updatedModel,
 			db_columns: updatedModel.db_columns || updatedModel.columns || {},
 		};
-		const next = models.map( model => model.name === withDb.name ? { ...model, ...withDb } : model );
-		if ( ! next.find( model => model.name === withDb.name ) ) {
-			next.push( withDb );
-		}
-		setModels( next );
+		const exists = models.some( model => model.name === withDb.name );
+		setModels(
+			exists
+				? models.map( model => model.name === withDb.name ? { ...model, ...withDb } : model )
+				: [ ...models, withDb ]
+		);
 	};
 
-	if ( ! schemaOpen || ! selectedModel ) {
-		return null;
-	}
-
-	return (
+	return schemaOpen && selectedModel && (
 		<SchemaModal
 			model={ selectedModel }
 			fieldIds={ fieldIds }

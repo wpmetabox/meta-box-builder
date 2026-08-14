@@ -145,6 +145,10 @@ class Data {
 	}
 
 	public static function get_models(): array {
+		if ( ! class_exists( Factory::class ) ) {
+			return [];
+		}
+
 		$cache = get_option( 'mbb_models', [] );
 		if ( ! is_array( $cache ) ) {
 			$cache = [];
@@ -160,8 +164,8 @@ class Data {
 
 			$db_columns = [];
 			if ( ! empty( $model->table ) ) {
-				$supports  = isset( $model->supports ) && is_array( $model->supports ) ? $model->supports : [];
-				$inspected = TableColumns::inspect( (string) $model->table, $supports );
+				$supports   = isset( $model->supports ) && is_array( $model->supports ) ? $model->supports : [];
+				$inspected  = TableColumns::inspect( (string) $model->table, $supports );
 				$db_columns = $inspected['columns'];
 
 				// Code-registered models: schema comes from the live table.

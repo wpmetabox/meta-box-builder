@@ -42,15 +42,18 @@ class Edit extends BaseEditPage {
 			true
 		);
 
+		global $wpdb;
+
 		$data = [
-			'settings'             => get_post_meta( get_the_ID(), 'settings', true ) ?: [],
-			'icons'                => Data::get_dashicons(),
-			'action'               => get_current_screen()->action,
-			'url'                  => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
-			'menu_positions'       => $this->get_menu_position_options(),
-			'menu_parents'         => $this->get_menu_parents(),
-			'capabilities'         => $this->get_capabilities(),
-			'texts'                => [
+			'settings'       => get_post_meta( get_the_ID(), 'settings', true ) ?: [],
+			'icons'          => Data::get_dashicons(),
+			'action'         => get_current_screen()->action,
+			'url'            => admin_url( 'edit.php?post_type=' . get_current_screen()->id ),
+			'menu_positions' => $this->get_menu_position_options(),
+			'menu_parents'   => $this->get_menu_parents(),
+			'capabilities'   => $this->get_capabilities(),
+			'tablePrefix'    => $wpdb->prefix,
+			'texts'          => [
 				'saving' => __( 'Saving...', 'meta-box-builder' ),
 			],
 		];

@@ -41,23 +41,9 @@ const Location = () => {
 
 	let upgradeText = [ locationText, entities ].filter( Boolean ).join( __( ', or ', 'meta-box-builder' ) );
 
-	const updateModels = ( name, values ) => {
-		updateSetting( name, values );
-
-		const models = ensureArray( values );
-		const selected = models
-			.map( modelName => ( MbbApp.models || [] ).find( model => model.name === modelName ) )
-			.filter( Boolean );
-
-		if ( selected.length < 2 ) {
-			return;
-		}
-
-		const tables = [ ...new Set( selected.map( model => model.table ) ) ];
-		if ( tables.length > 1 ) {
-			alert( __( 'All selected models must use the same custom table.', 'meta-box-builder' ) );
-			updateSetting( name, [ selected[ 0 ].name ] );
-		}
+	const updateModels = ( name, value ) => {
+		// Keep models as a one-item array for settings compatibility.
+		updateSetting( name, value ? [ value ] : [] );
 	};
 
 	return (
@@ -106,8 +92,9 @@ const Location = () => {
 					<ReactSelect
 						name="models"
 						wrapper={ false }
+						isMulti={ false }
 						options={ ( MbbApp.models || [] ).map( item => ( { value: item.name, label: `${ item.label } (${ item.name })` } ) ) }
-						defaultValue={ ensureArray( getSetting( 'models', [] ) ) }
+						defaultValue={ ensureArray( getSetting( 'models', [] ) )[ 0 ] || '' }
 						updateField={ updateModels }
 					/>
 				}

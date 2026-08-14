@@ -50,9 +50,7 @@ export const COLUMN_TYPE_PRESETS = COLUMN_TYPE_GROUPS.reduce( ( presets, group )
 
 export const DEFAULT_COLUMN_TYPE = 'TEXT';
 
-const NON_INDEXABLE = /^(TINY|MEDIUM|LONG)?TEXT$/i;
-
-export const isIndexableType = type => ! NON_INDEXABLE.test( String( type || '' ).trim() );
+export const isIndexableType = type => ! /^(TINY|MEDIUM|LONG)?TEXT$/i.test( String( type || '' ).trim() );
 
 export const isPresetColumnType = type => Object.prototype.hasOwnProperty.call( COLUMN_TYPE_PRESETS, type );
 
@@ -66,18 +64,6 @@ export const resolveColumnSqlType = column => {
 	}
 
 	return column.type || DEFAULT_COLUMN_TYPE;
-};
-
-export const columnsObjectToMap = columns => {
-	const map = {};
-	Object.values( columns || {} ).forEach( column => {
-		const name = ( column.name || '' ).trim();
-		if ( ! name ) {
-			return;
-		}
-		map[ name ] = resolveColumnSqlType( column );
-	} );
-	return map;
 };
 
 export const dbTypeToEditorColumn = ( sqlType = '' ) => {
@@ -112,21 +98,21 @@ export const dbTypeToEditorColumn = ( sqlType = '' ) => {
 
 export const parsedColumnsToEditor = ( columns = {}, keys = [] ) => {
 	const keySet = new Set( keys );
-	const items = {};
 
-	Object.entries( columns || {} ).forEach( ( [ name, sqlType ] ) => {
-		const id = `col_${ name }`;
-		const rawType = String( sqlType || '' ).trim();
-		const editorType = dbTypeToEditorColumn( rawType );
-		items[ id ] = {
-			id,
-			name,
-			type: editorType.type,
-			custom_type: editorType.custom_type,
-			db_type: rawType.toUpperCase(),
-			index: keySet.has( name ),
-		};
-	} );
+	return Object.fromEntries(
+		Object.entries( columns || {} ).map( ( [ name, sqlType ] ) => {
+			const id = `col_${ name }`;
+			const rawType = String( sqlType || '' ).trim();
+			const editorType = dbTypeToEditorColumn( rawType );
 
-	return items;
+			return [ id, {
+				id,
+				name,
+				type: editorType.type,
+				custom_type: editorType.custom_type,
+				db_type: rawType.toUpperCase(),
+				index: keySet.has( name ),
+			} ];
+		} )
+	);
 };

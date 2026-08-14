@@ -54,18 +54,11 @@ class Save {
 				'permission_callback' => [ $this, 'has_permission' ],
 				'show_in_index'       => false,
 				'args'                => [
-					'post_id' => [
-						'required'          => false,
-						'validate_callback' => function ( $param ): bool {
-							return '' === $param || is_numeric( $param );
-						},
-						'sanitize_callback' => 'absint',
-					],
-					'model'   => [
+					'model' => [
 						'required'          => false,
 						'sanitize_callback' => 'sanitize_key',
 					],
-					'table'   => [
+					'table' => [
 						'required'          => false,
 						'sanitize_callback' => 'sanitize_text_field',
 					],
@@ -207,11 +200,6 @@ class Save {
 	}
 
 	public function get_table_columns( WP_REST_Request $request ): array {
-		$post_id = (int) $request->get_param( 'post_id' );
-		if ( $post_id > 0 ) {
-			return TableColumns::list_for_post( $post_id );
-		}
-
 		return TableColumns::list_for_model(
 			(string) $request->get_param( 'model' ),
 			(string) $request->get_param( 'table' )
