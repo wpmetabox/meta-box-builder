@@ -1,3 +1,5 @@
+import { createColumnItem } from '../constants/columnTypes';
+
 /**
  * Column names from a model schema or database map.
  * Supports parsed `{ name: sqlType }` and editor `{ id: { name } }` shapes.
@@ -16,6 +18,17 @@ export const getColumnNames = columns => {
 };
 
 /**
+ * Field IDs that are not yet present as table columns.
+ * Prefers live DB columns when the table exists.
+ */
+export const getMissingColumnIds = ( fieldIds, dbColumns, editorColumns ) => {
+	const source = Object.keys( dbColumns || {} ).length ? dbColumns : editorColumns;
+	const columnNames = getColumnNames( source );
+
+	return ( fieldIds || [] ).filter( id => ! columnNames.includes( id ) );
+};
+
+/**
  * Resolve the full database table name from UI settings.
  */
 export const resolveTableName = ( table, usePrefix = false, prefix = '' ) => {
@@ -30,7 +43,7 @@ export const resolveTableName = ( table, usePrefix = false, prefix = '' ) => {
 /**
  * Merge stored editor columns with missing field IDs as TEXT columns.
  */
-export const seedEditorColumns = ( editorColumns, fieldIds, createColumn ) => {
+export const seedEditorColumns = ( editorColumns, fieldIds, createColumn = createColumnItem ) => {
 	const existing = editorColumns && typeof editorColumns === 'object' ? { ...editorColumns } : {};
 	const existingNames = new Set(
 		Object.values( existing )

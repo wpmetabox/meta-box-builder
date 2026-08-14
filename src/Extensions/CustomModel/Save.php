@@ -4,6 +4,7 @@ namespace MBB\Extensions\CustomModel;
 use WP_REST_Request;
 use WP_REST_Server;
 use WP_Error;
+use MBB\Helpers\Data;
 use MBB\Helpers\TableSchema;
 use MBB\LocalJson;
 use MBB\RestApi\Save as SaveRestApi;
@@ -89,18 +90,15 @@ class Save {
 				'permission_callback' => [ $this, 'has_permission' ],
 				'show_in_index'       => false,
 				'args'                => [
-					'post_id' => [
-						'required'          => false,
-						'validate_callback' => function ( $param ): bool {
-							return null === $param || '' === $param || is_numeric( $param );
-						},
-						'sanitize_callback' => 'absint',
-					],
-					'table'   => [
-						'required'          => false,
+					'table'  => [
+						'required'          => true,
 						'sanitize_callback' => 'sanitize_text_field',
 					],
-					'column'  => [
+					'model'  => [
+						'required'          => false,
+						'sanitize_callback' => 'sanitize_key',
+					],
+					'column' => [
 						'required'          => true,
 						'sanitize_callback' => 'sanitize_text_field',
 					],
@@ -213,30 +211,21 @@ class Save {
 			return $result;
 		}
 
-		$model     = get_post_meta( $post_id, 'model', true );
-		$table     = (string) ( $model['table'] ?? '' );
-		$supports  = isset( $model['supports'] ) && is_array( $model['supports'] ) ? $model['supports'] : [];
-		$inspected = [
-			'columns' => [],
-			'keys'    => [],
-		];
-		if ( $table ) {
-			$inspected = TableColumns::inspect( $table, $supports );
+		$payload = Data::format_model( $post_name );
+		if ( ! empty( $payload['table'] ) ) {
+			$model                 = get_post_meta( $post_id, 'model', true );
+			$supports              = isset( $model['supports'] ) && is_array( $model['supports'] ) ? $model['supports'] : [];
+			$inspected             = TableColumns::inspect( $payload['table'], $supports );
+			$payload['db_columns'] = $inspected['columns'];
+			if ( empty( $payload['keys'] ) ) {
+				$payload['keys'] = $inspected['keys'];
+			}
 		}
-		$db_columns = $inspected['columns'];
 
 		return [
 			'success' => true,
 			'message' => __( 'Model table schema updated.', 'meta-box-builder' ),
-			'model'   => [
-				'name'       => $post_name,
-				'label'      => $model['labels']['singular_name'] ?? $model['labels']['name'] ?? $post_name,
-				'table'      => $table,
-				'columns'    => $model['columns'] ?? [],
-				'db_columns' => $db_columns,
-				'keys'       => $model['keys'] ?? ( $inspected['keys'] ?? [] ),
-				'post_id'    => $post_id,
-			],
+			'model'   => $payload,
 		];
 	}
 
@@ -258,43 +247,37 @@ class Save {
 	}
 
 	public function drop_table_column( WP_REST_Request $request ): array {
-		$column  = (string) $request->get_param( 'column' );
-		$post_id = (int) $request->get_param( 'post_id' );
-		$table   = (string) $request->get_param( 'table' );
-
-		if ( $post_id > 0 ) {
-			return TableColumns::drop( $post_id, $column );
+		$table = (string) $request->get_param( 'table' );
+		if ( ! $table ) {
+			return [
+				'success' => false,
+				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
+			];
 		}
 
-		if ( $table ) {
-			return TableColumns::drop_table_column( $table, $column );
-		}
-
-		return [
-			'success' => false,
-			'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
-		];
+		$model = (string) $request->get_param( 'model' );
+		return TableColumns::drop_table_column(
+			$table,
+			(string) $request->get_param( 'column' ),
+			TableColumns::supports_for( $model )
+		);
 	}
 
 	private function persist_model( int $post_id, string $post_name, array $settings ): array {
 		$settings['modified'] = time();
 
-		// Store raw UI settings.
-		$ui_parser = new Parser( $settings );
-		$ui_parser->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'settings', $ui_parser->get_settings() );
-
-		// Store parsed model args for registration.
 		$parser = new Parser( $settings );
+		$parser->parse_boolean_values()->parse_numeric_values();
+		update_post_meta( $post_id, 'settings', $parser->get_settings() );
+
 		$parser->parse();
 		$model         = $parser->get_settings();
 		$model['name'] = $post_name;
 		update_post_meta( $post_id, 'model', $model );
 
-		Register::clear_cache();
-
 		$model['post_id'] = $post_id;
-		Register::register_and_create( $post_name, $model );
+		Register::register( $post_name, $model );
+		Register::create_table( $model );
 		Register::rebuild_cache();
 
 		LocalJson::use_database( [

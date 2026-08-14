@@ -1,4 +1,5 @@
 import dotProp from 'dot-prop';
+import { isIndexableType } from '../../../../../assets/app/constants/columnTypes';
 
 const maxKeyLength = object => Math.max.apply( null, Object.keys( object ).map( key => key.length ) );
 const spaces = ( settings, key ) => ' '.repeat( Math.max( 0, maxKeyLength( settings ) - key.length ) );
@@ -94,7 +95,7 @@ const keysCode = settings => {
 				return false;
 			}
 			const type = 'custom' === col.type ? ( ( col.custom_type || '' ).trim() || 'TEXT' ) : ( col.type || 'TEXT' );
-			return 'TEXT' !== String( type ).toUpperCase();
+			return isIndexableType( type );
 		} )
 		.map( col => `'${ ( col.name || '' ).trim().replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" ) }'` );
 

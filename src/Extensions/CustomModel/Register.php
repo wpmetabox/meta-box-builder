@@ -2,7 +2,6 @@
 namespace MBB\Extensions\CustomModel;
 
 use MetaBox\CustomTable\API;
-use MetaBox\CustomTable\Model\Factory;
 use MBB\LocalJson;
 use MBB\JsonService;
 use MBBParser\Unparsers\MetaBox;
@@ -90,32 +89,47 @@ class Register {
 				continue;
 			}
 
-			self::register_and_create( $name, $args );
+			self::register( $name, $args );
 		}
 	}
 
 	/**
-	 * Register a model and create/update its custom table.
+	 * Register a model with MB Custom Table (no table create).
 	 *
 	 * @param string $name  Model name (slug).
 	 * @param array  $model Parsed model args including optional columns, keys, post_id.
 	 */
-	public static function register_and_create( string $name, array $model ): void {
-		$columns = isset( $model['columns'] ) && is_array( $model['columns'] ) ? $model['columns'] : [];
-		$keys    = isset( $model['keys'] ) && is_array( $model['keys'] ) ? $model['keys'] : [];
-		$table   = (string) ( $model['table'] ?? '' );
-
+	public static function register( string $name, array $model ): void {
 		$args = $model;
 		unset( $args['columns'], $args['keys'], $args['post_id'], $args['name'], $args['modified'] );
 
-		// Register first so TableSchema can add AUTO_INCREMENT + supports columns on create.
-		if ( ! Factory::get( $name ) ) {
-			mb_register_model( $name, $args );
+		mb_register_model( $name, $args );
+	}
+
+	/**
+	 * Create or update the model's custom table.
+	 *
+	 * @param array $model Parsed model args including table, columns, keys.
+	 */
+	public static function create_table( array $model ): void {
+		$table = (string) ( $model['table'] ?? '' );
+		if ( '' === $table ) {
+			return;
 		}
 
-		if ( '' !== $table ) {
-			API::create( $table, $columns, $keys );
-		}
+		$columns = isset( $model['columns'] ) && is_array( $model['columns'] ) ? $model['columns'] : [];
+		$keys    = isset( $model['keys'] ) && is_array( $model['keys'] ) ? $model['keys'] : [];
+
+		API::create( $table, $columns, $keys );
+	}
+
+	/**
+	 * Whether a Builder mb-model post exists for this slug.
+	 */
+	public static function has_post( string $name ): bool {
+		$cache = get_option( self::CACHE_OPTION, [] );
+
+		return is_array( $cache ) && ! empty( $cache[ $name ]['post_id'] );
 	}
 
 	public static function query_models(): array {

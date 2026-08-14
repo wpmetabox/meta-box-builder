@@ -1,8 +1,7 @@
 import { createRoot } from "@wordpress/element";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from './components/ErrorFallback';
-import ModelSchemaController from './components/Editor/ModelSchemaController';
-import CustomTableSchemaController from './components/Editor/CustomTableSchemaController';
+import SchemaController from './components/Editor/SchemaController';
 import Header from './components/Header';
 import Main from './components/Main';
 import Nav from "./components/Nav";
@@ -13,8 +12,7 @@ import { initSaveForm } from './save';
 const Layout = ( { children } ) => (
 	<ErrorBoundary FallbackComponent={ ErrorFallback }>
 		<Header />
-		<ModelSchemaController />
-		<CustomTableSchemaController />
+		<SchemaController />
 
 		<div className="mb-body">
 			<Nav />

@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { uniqid } from '../functions';
 
 export const COLUMN_TYPE_GROUPS = [
 	{
@@ -49,6 +50,15 @@ export const COLUMN_TYPE_PRESETS = COLUMN_TYPE_GROUPS.reduce( ( presets, group )
 } ), {} );
 
 export const DEFAULT_COLUMN_TYPE = 'TEXT';
+
+export const createColumnItem = ( overrides = {} ) => ( {
+	id: uniqid(),
+	name: '',
+	type: DEFAULT_COLUMN_TYPE,
+	custom_type: '',
+	index: false,
+	...overrides,
+} );
 
 export const isIndexableType = type => ! /^(TINY|MEDIUM|LONG)?TEXT$/i.test( String( type || '' ).trim() );
 

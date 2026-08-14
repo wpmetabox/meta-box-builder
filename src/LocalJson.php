@@ -150,7 +150,8 @@ class LocalJson {
 			$model = $data['model'] ?? [];
 			if ( is_array( $model ) && ! empty( $model['name'] ) && ! empty( $model['table'] ) ) {
 				$model['post_id'] = $post_id;
-				Register::register_and_create( $model['name'], $model );
+				Register::register( $model['name'], $model );
+				Register::create_table( $model );
 				Register::rebuild_cache();
 			}
 		}

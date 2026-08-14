@@ -5,7 +5,6 @@ use MBB\Helpers\TableSchema;
 use MetaBox\CustomTable\API;
 use MetaBox\CustomTable\Model\Factory;
 use MetaBox\CustomTable\Model\Model;
-use MetaBox\Support\Arr;
 
 class TableColumns {
 	/**
@@ -22,26 +21,20 @@ class TableColumns {
 	 * @return array{success: bool, message?: string, columns?: array<string, string>, keys?: string[]}
 	 */
 	public static function create( string $table, array $column_items, string $model_name = '' ): array {
-		$table = str_replace( '-', '_', $table );
 		$table = TableSchema::sanitize_name( $table );
 		if ( ! $table ) {
-			return [
-				'success' => false,
-				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
-			];
+			return self::table_error();
 		}
 
-		if ( ! class_exists( API::class ) ) {
-			return [
-				'success' => false,
-				'message' => __( 'MB Custom Table is not active.', 'meta-box-builder' ),
-			];
+		// Register first so TableSchema can add AUTO_INCREMENT + supports columns on create.
+		if ( $model_name && ! Factory::get( $model_name ) ) {
+			mb_register_model( $model_name, [ 'table' => $table ] );
 		}
 
 		$parsed = TableSchema::parse_columns( $column_items );
 		API::create( $table, $parsed['columns'], $parsed['keys'] );
 
-		$inspected = self::inspect( $table, self::resolve_supports( $model_name, $table ) );
+		$inspected = self::inspect( $table, self::supports_for( $model_name ) );
 
 		return [
 			'success' => true,
@@ -57,7 +50,7 @@ class TableColumns {
 	 * @return array{success: bool, message?: string, columns?: array<string, string>, keys?: string[]}
 	 */
 	public static function list_for_model( string $model_name, string $table = '' ): array {
-		if ( $model_name && class_exists( Factory::class ) ) {
+		if ( $model_name ) {
 			$model = Factory::get( $model_name );
 			if ( $model && ! $table && ! empty( $model->table ) ) {
 				$table = (string) $model->table;
@@ -66,13 +59,10 @@ class TableColumns {
 
 		$table = TableSchema::sanitize_name( $table );
 		if ( ! $table ) {
-			return [
-				'success' => false,
-				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
-			];
+			return self::table_error();
 		}
 
-		$inspected = self::inspect( $table, self::resolve_supports( $model_name, $table ) );
+		$inspected = self::inspect( $table, self::supports_for( $model_name ) );
 
 		return [
 			'success' => true,
@@ -89,85 +79,43 @@ class TableColumns {
 	 * @return array{columns: array<string, string>, keys: string[]}
 	 */
 	public static function inspect( string $table, array $supports = [] ): array {
-		$settings = [ 'supports' => $supports ];
+		$protected = self::get_protected_columns( $supports );
 
 		return [
-			'columns' => self::filter_protected( self::fetch( $table ), $settings ),
+			'columns' => array_diff_key( self::fetch( $table ), array_flip( $protected ) ),
 			'keys'    => self::fetch_keys( $table ),
 		];
 	}
 
 	/**
-	 * Drop a column from a Builder-managed model table.
-	 *
-	 * @return array{success: bool, message?: string, columns?: array<string, string>}
-	 */
-	public static function drop( int $post_id, string $column ): array {
-		$post = get_post( $post_id );
-		if ( ! $post || 'mb-model' !== $post->post_type ) {
-			return [
-				'success' => false,
-				'message' => __( 'The custom model might have been deleted. Please refresh the page and try again.', 'meta-box-builder' ),
-			];
-		}
-
-		$settings = self::get_settings( $post_id );
-		$table    = self::resolve_table_name( $settings );
-		if ( ! $table ) {
-			return [
-				'success' => false,
-				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
-			];
-		}
-
-		return self::drop_table_column( $table, $column, self::get_protected_columns( $settings ) );
-	}
-
-	/**
 	 * Drop a column from a database table.
 	 *
-	 * @param string   $table             Table name.
-	 * @param string   $column            Column name.
-	 * @param string[] $protected_columns Column names that cannot be dropped.
+	 * @param string   $table    Table name.
+	 * @param string   $column   Column name.
+	 * @param string[] $supports Model supports used to skip protected columns.
 	 * @return array{success: bool, message?: string, columns?: array<string, string>}
 	 */
-	public static function drop_table_column( string $table, string $column, array $protected_columns = [] ): array {
+	public static function drop_table_column( string $table, string $column, array $supports = [] ): array {
 		$column = TableSchema::sanitize_name( $column );
 		$table  = TableSchema::sanitize_name( $table );
 
 		if ( ! $column ) {
-			return [
-				'success' => false,
-				'message' => __( 'Invalid column name.', 'meta-box-builder' ),
-			];
+			return self::fail( __( 'Invalid column name.', 'meta-box-builder' ) );
 		}
 
 		if ( ! $table ) {
-			return [
-				'success' => false,
-				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
-			];
+			return self::table_error();
 		}
 
-		if ( empty( $protected_columns ) ) {
-			$protected_columns = self::get_protected_columns( [
-				'supports' => self::resolve_supports( '', $table ),
-			] );
-		}
+		$protected = self::get_protected_columns( $supports );
 
-		if ( in_array( $column, $protected_columns, true ) ) {
-			return [
-				'success' => false,
-				'message' => __( 'This column cannot be dropped.', 'meta-box-builder' ),
-			];
+		if ( in_array( $column, $protected, true ) ) {
+			return self::fail( __( 'This column cannot be dropped.', 'meta-box-builder' ) );
 		}
 
 		$db_columns = self::fetch( $table );
 		if ( ! isset( $db_columns[ $column ] ) ) {
-			return [
-				'success' => false,
-				'message' => __( 'This column does not exist in the database.', 'meta-box-builder' ),
-			];
+			return self::fail( __( 'This column does not exist in the database.', 'meta-box-builder' ) );
 		}
 
 		global $wpdb;
@@ -175,39 +123,14 @@ class TableColumns {
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- identifiers validated above.
 		$result = $wpdb->query( "ALTER TABLE `{$table}` DROP COLUMN `{$column}`" );
 		if ( false === $result ) {
-			return [
-				'success' => false,
-				'message' => __( 'Could not drop the column from the database.', 'meta-box-builder' ),
-			];
+			return self::fail( __( 'Could not drop the column from the database.', 'meta-box-builder' ) );
 		}
 
 		return [
 			'success' => true,
 			'message' => __( 'Column dropped from the database.', 'meta-box-builder' ),
-			'columns' => array_diff_key( self::fetch( $table ), array_flip( $protected_columns ) ),
+			'columns' => array_diff_key( self::fetch( $table ), array_flip( $protected ) ),
 		];
-	}
-
-	/**
-	 * Get raw model settings for a Builder-managed model post.
-	 *
-	 * @return array<string, mixed>
-	 */
-	private static function get_settings( int $post_id ): array {
-		$settings = get_post_meta( $post_id, 'settings', true );
-
-		return is_array( $settings ) ? $settings : [];
-	}
-
-	private static function resolve_table_name( array $settings ): string {
-		if ( empty( $settings['table'] ) ) {
-			return '';
-		}
-
-		$parser = new Parser( $settings );
-		$parser->parse();
-
-		return (string) ( $parser->get_settings()['table'] ?? '' );
 	}
 
 	/**
@@ -277,21 +200,13 @@ class TableColumns {
 		return $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $like ) ) === $table;
 	}
 
-	private static function filter_protected( array $columns, array $settings ): array {
-		return array_diff_key( $columns, array_flip( self::get_protected_columns( $settings ) ) );
-	}
-
 	/**
 	 * Get column names that cannot be dropped or listed.
 	 *
+	 * @param string[] $supports Model support features.
 	 * @return string[]
 	 */
-	private static function get_protected_columns( array $settings ): array {
-		$supports = Arr::get( $settings, 'supports', [] );
-		if ( ! is_array( $supports ) ) {
-			$supports = [];
-		}
-
+	private static function get_protected_columns( array $supports = [] ): array {
 		return array_merge(
 			[ 'ID' ],
 			array_values( array_intersect( self::SUPPORT_FEATURES, $supports ) )
@@ -299,49 +214,22 @@ class TableColumns {
 	}
 
 	/**
-	 * Resolve model supports from a registered model name and/or table.
+	 * Resolve model supports from a registered model name.
 	 *
+	 * @param string $model_name Model slug.
 	 * @return string[]
 	 */
-	public static function resolve_supports( string $model_name = '', string $table = '' ): array {
-		if ( ! class_exists( Factory::class ) ) {
-			return [];
-		}
-
+	public static function supports_for( string $model_name ): array {
 		$model_name = trim( $model_name );
-		if ( '' !== $model_name ) {
-			$model = Factory::get( $model_name );
-			if ( $model instanceof Model ) {
-				return self::get_model_support_features( $model );
-			}
-		}
-
-		$table = self::normalize_table_name( $table );
-		if ( '' === $table ) {
+		if ( '' === $model_name ) {
 			return [];
 		}
 
-		foreach ( Factory::get() as $model ) {
-			if ( ! $model instanceof Model || empty( $model->table ) ) {
-				continue;
-			}
-
-			if ( self::normalize_table_name( (string) $model->table ) === $table ) {
-				return self::get_model_support_features( $model );
-			}
+		$model = Factory::get( $model_name );
+		if ( ! $model instanceof Model ) {
+			return [];
 		}
 
-		return [];
-	}
-
-	/**
-	 * Read enabled support features from a registered model.
-	 *
-	 * Do not use isset( $model->supports ): Model defines supports() so isset is always false.
-	 *
-	 * @return string[]
-	 */
-	private static function get_model_support_features( Model $model ): array {
 		$features = [];
 		foreach ( self::SUPPORT_FEATURES as $feature ) {
 			if ( $model->supports( $feature ) ) {
@@ -352,7 +240,14 @@ class TableColumns {
 		return $features;
 	}
 
-	private static function normalize_table_name( string $table ): string {
-		return TableSchema::sanitize_name( str_replace( '-', '_', $table ) );
+	private static function table_error(): array {
+		return self::fail( __( 'Could not resolve the model table.', 'meta-box-builder' ) );
+	}
+
+	private static function fail( string $message ): array {
+		return [
+			'success' => false,
+			'message' => $message,
+		];
 	}
 }

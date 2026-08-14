@@ -4,6 +4,7 @@ namespace MBB\Extensions;
 
 use MetaBox\CustomTable\API;
 use MetaBox\Support\Arr;
+use MBB\Extensions\CustomModel\Register;
 use MBB\Helpers\TableSchema;
 use MBB\LocalJson;
 
@@ -40,13 +41,12 @@ class CustomTable {
 			return;
 		}
 
-		$table = Arr::get( $settings, 'custom_table.name' );
-		if ( Arr::get( $settings, 'custom_table.prefix' ) ) {
-			global $wpdb;
-			$table = $wpdb->prefix . $table;
-			Arr::set( $data, 'meta_box.table', $table );
+		$table = TableSchema::resolve_custom_table( (array) Arr::get( $settings, 'custom_table', [] ) );
+		if ( '' === $table ) {
+			return;
 		}
 
+		Arr::set( $data, 'meta_box.table', $table );
 		$this->create_table( $table, $settings, $data['fields'] ?? [] );
 	}
 
@@ -62,7 +62,7 @@ class CustomTable {
 
 		$models = array_filter( (array) ( $settings['models'] ?? [] ) );
 		$first  = reset( $models );
-		if ( $first && $this->is_builder_model( (string) $first ) ) {
+		if ( $first && Register::has_post( (string) $first ) ) {
 			return;
 		}
 
@@ -74,18 +74,6 @@ class CustomTable {
 		Arr::set( $data, 'meta_box.table', $table );
 
 		$this->create_table( $table, $settings, $data['fields'] ?? [] );
-	}
-
-	/**
-	 * Whether the model is managed by MB Builder (has an mb-model post).
-	 */
-	private function is_builder_model( string $name ): bool {
-		$cache = get_option( 'mbb_models', [] );
-		if ( ! is_array( $cache ) ) {
-			return false;
-		}
-
-		return ! empty( $cache[ $name ]['post_id'] );
 	}
 
 	/**

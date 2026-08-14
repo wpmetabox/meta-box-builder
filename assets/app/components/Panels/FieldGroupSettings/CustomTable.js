@@ -11,7 +11,7 @@ const CustomTable = () => {
 	const { getSetting, updateSetting, getObjectType } = useSettings();
 	const setting = getSetting( 'custom_table', {} );
 	const objectType = getObjectType();
-	const openSchema = useModelSchema( state => state.openCustomTableSchema );
+	const openSchema = useModelSchema( state => state.openSchema );
 
 	const enableCustomTable = value => {
 		updateSetting( 'custom_table.enable', value );

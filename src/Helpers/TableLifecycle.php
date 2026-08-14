@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Helpers;
 
+use MBB\Extensions\CustomModel\Register;
 use MBB\Extensions\CustomModel\TableColumns;
 use MetaBox\Support\Arr;
 use WP_Post;
@@ -50,7 +51,7 @@ class TableLifecycle {
 		if ( 'model' === $object_type ) {
 			$models = array_filter( (array) Arr::get( $settings, 'models', [] ) );
 			$first  = reset( $models );
-			if ( $first && $this->is_builder_model( (string) $first ) ) {
+			if ( $first && Register::has_post( (string) $first ) ) {
 				return;
 			}
 			$table = TableSchema::resolve_model_table( $settings );
@@ -76,14 +77,5 @@ class TableLifecycle {
 		$result = $wpdb->query( "DROP TABLE IF EXISTS `{$table}`" );
 
 		return false !== $result;
-	}
-
-	private function is_builder_model( string $name ): bool {
-		$cache = get_option( 'mbb_models', [] );
-		if ( ! is_array( $cache ) ) {
-			return false;
-		}
-
-		return ! empty( $cache[ $name ]['post_id'] );
 	}
 }

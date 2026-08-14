@@ -1,10 +1,20 @@
 <?php
 namespace MBB\Helpers;
 
-use MBB\Extensions\CustomModel\Parser;
-use MetaBox\Support\Arr;
-
 class TableSchema {
+	/**
+	 * Sanitize a table or column name and optionally prepend $wpdb->prefix.
+	 */
+	public static function apply_prefix( string $name, $use_prefix = false ): string {
+		$name = self::sanitize_name( $name );
+		if ( '' === $name || ! $use_prefix ) {
+			return $name;
+		}
+
+		global $wpdb;
+		return $wpdb->prefix . $name;
+	}
+
 	/**
 	 * Resolve a model table name from field-group settings.
 	 *
@@ -19,68 +29,31 @@ class TableSchema {
 		if ( $first && class_exists( \MetaBox\CustomTable\Model\Factory::class ) ) {
 			$model = \MetaBox\CustomTable\Model\Factory::get( $first );
 			if ( $model && ! empty( $model->table ) ) {
-				// Keep the model table name as registered (API only normalizes hyphens).
-				return str_replace( '-', '_', (string) $model->table );
+				return self::sanitize_name( (string) $model->table );
 			}
 		}
 
-		$custom_table = (array) ( $settings['custom_table'] ?? [] );
-		$name         = (string) ( $custom_table['name'] ?? '' );
-		if ( '' === $name ) {
-			return '';
-		}
-
-		if ( ! empty( $custom_table['prefix'] ) ) {
-			global $wpdb;
-			$name = $wpdb->prefix . $name;
-		}
-
-		return str_replace( '-', '_', $name );
-	}
-
-	/**
-	 * Resolve the database table for a field group from its settings.
-	 */
-	public static function resolve_field_group_table( array $settings ): string {
-		$object_type = (string) Arr::get( $settings, 'object_type', 'post' );
-		if ( 'model' === $object_type || ! empty( $settings['models'] ) ) {
-			return self::sanitize_name( self::resolve_model_table( $settings ) );
-		}
-
-		$custom_table = (array) Arr::get( $settings, 'custom_table', [] );
-		if ( empty( $custom_table['enable'] ) ) {
-			return '';
-		}
-
-		return self::resolve_custom_table( $custom_table );
+		return self::resolve_custom_table( (array) ( $settings['custom_table'] ?? [] ) );
 	}
 
 	/**
 	 * Resolve a field group custom table name (not model location).
 	 */
 	public static function resolve_custom_table( array $custom_table ): string {
-		$name = (string) ( $custom_table['name'] ?? '' );
-		if ( '' === $name ) {
-			return '';
-		}
-
-		if ( ! empty( $custom_table['prefix'] ) ) {
-			global $wpdb;
-			$name = $wpdb->prefix . $name;
-		}
-
-		return self::sanitize_name( $name );
+		return self::apply_prefix(
+			(string) ( $custom_table['name'] ?? '' ),
+			! empty( $custom_table['prefix'] )
+		);
 	}
 
 	/**
 	 * Resolve the database table for a Builder custom model from stored settings.
 	 */
 	public static function resolve_model_table_from_settings( array $settings ): string {
-		$parser = new Parser( $settings );
-		$parser->parse();
-		$model = $parser->get_settings();
-
-		return self::sanitize_name( (string) ( $model['table'] ?? '' ) );
+		return self::apply_prefix(
+			(string) ( $settings['table'] ?? '' ),
+			! empty( $settings['prefix'] )
+		);
 	}
 
 	/**

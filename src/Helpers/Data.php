@@ -1,7 +1,6 @@
 <?php
 namespace MBB\Helpers;
 
-use MBB\Extensions\CustomModel\TableColumns;
 use MetaBox\CustomTable\Model\Factory;
 use MetaBox\Support\Data as DataHelper;
 use WP_Block_Type_Registry;
@@ -156,41 +155,55 @@ class Data {
 
 		$models = [];
 		foreach ( Factory::get() as $name => $model ) {
-			$label   = $model->labels['singular_name'] ?? $model->labels['name'] ?? $name;
-			$cached  = $cache[ $name ] ?? [];
-			$post_id = isset( $cached['post_id'] ) ? (int) $cached['post_id'] : 0;
-			$columns = isset( $cached['columns'] ) && is_array( $cached['columns'] ) ? $cached['columns'] : [];
-			$keys    = isset( $cached['keys'] ) && is_array( $cached['keys'] ) ? $cached['keys'] : [];
-
-			$db_columns = [];
-			if ( ! empty( $model->table ) ) {
-				$supports   = TableColumns::resolve_supports( $name, (string) $model->table );
-				$inspected  = TableColumns::inspect( (string) $model->table, $supports );
-				$db_columns = $inspected['columns'];
-
-				// Code-registered models: schema comes from the live table.
-				if ( $post_id <= 0 ) {
-					$columns = $db_columns;
-					$keys    = $inspected['keys'];
-
-					if ( empty( $columns ) && isset( $model->columns ) && is_array( $model->columns ) ) {
-						$columns = $model->columns;
-					}
-				}
-			}
-
-			$models[] = [
-				'name'       => $name,
-				'label'      => $label,
-				'table'      => $model->table,
-				'columns'    => $columns,
-				'db_columns' => $db_columns,
-				'keys'       => $keys,
-				'post_id'    => $post_id,
-			];
+			$models[] = self::format_model( $name, $model, $cache );
 		}
 
 		return $models;
+	}
+
+	/**
+	 * Build the editor payload for one registered model (no database inspect).
+	 *
+	 * @param string                    $name  Model slug.
+	 * @param object|null               $model Factory model instance.
+	 * @param array<string, mixed>|null $cache mbb_models option.
+	 * @return array<string, mixed>
+	 */
+	public static function format_model( string $name, $model = null, ?array $cache = null ): array {
+		if ( ! class_exists( Factory::class ) ) {
+			return [];
+		}
+
+		if ( null === $model ) {
+			$model = Factory::get( $name );
+		}
+		if ( ! $model ) {
+			return [];
+		}
+
+		if ( ! is_array( $cache ) ) {
+			$cache = get_option( 'mbb_models', [] );
+			$cache = is_array( $cache ) ? $cache : [];
+		}
+
+		$cached  = $cache[ $name ] ?? [];
+		$post_id = isset( $cached['post_id'] ) ? (int) $cached['post_id'] : 0;
+		$columns = isset( $cached['columns'] ) && is_array( $cached['columns'] ) ? $cached['columns'] : [];
+		$keys    = isset( $cached['keys'] ) && is_array( $cached['keys'] ) ? $cached['keys'] : [];
+
+		if ( $post_id <= 0 && empty( $columns ) && isset( $model->columns ) && is_array( $model->columns ) ) {
+			$columns = $model->columns;
+		}
+
+		return [
+			'name'       => $name,
+			'label'      => $model->labels['singular_name'] ?? $model->labels['name'] ?? $name,
+			'table'      => $model->table,
+			'columns'    => $columns,
+			'db_columns' => [],
+			'keys'       => $keys,
+			'post_id'    => $post_id,
+		];
 	}
 
 	public static function is_extension_active( $extension ) {

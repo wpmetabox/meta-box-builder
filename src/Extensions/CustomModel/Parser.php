@@ -7,14 +7,15 @@ use MetaBox\Support\Arr;
 
 class Parser extends Base {
 	public function parse(): void {
-		$this->parse_table()
+		$this->parse_boolean_values()
+			->parse_numeric_values()
+			->parse_table()
 			->parse_columns()
 			->parse_menu()
 			->parse_menu_icon()
 			->parse_labels()
 			->parse_supports()
-			->parse_boolean_values()
-			->parse_numeric_values()
+			->strip_ui_keys()
 			->remove_empty_values()
 			->remove_default( 'capability', 'edit_posts' )
 			->remove_default( 'show_in_menu', true )
@@ -27,9 +28,7 @@ class Parser extends Base {
 			return $this;
 		}
 
-		global $wpdb;
-		$prefix      = Arr::get( $this->settings, 'prefix', false );
-		$this->table = ( $prefix ? $wpdb->prefix : '' ) . $table;
+		$this->table = TableSchema::apply_prefix( $table, Arr::get( $this->settings, 'prefix', false ) );
 		unset( $this->prefix );
 
 		return $this;
@@ -52,25 +51,26 @@ class Parser extends Base {
 		$show_in_menu = Arr::get( $this->settings, 'show_in_menu', true );
 
 		// Submenu: show_in_menu holds the parent slug.
-		if ( is_string( $show_in_menu ) && ! in_array( $show_in_menu, [ 'true', 'false', '' ], true ) ) {
+		if ( is_string( $show_in_menu ) && '' !== $show_in_menu ) {
 			$this->parent       = $show_in_menu;
 			$this->show_in_menu = true;
-			unset( $this->menu_position );
-			unset( $this->menu_icon );
-		} elseif ( false === $show_in_menu || 'false' === $show_in_menu ) {
+			unset( $this->menu_position, $this->menu_icon );
+			return $this;
+		}
+
+		if ( false === $show_in_menu ) {
 			$this->show_in_menu = false;
-			unset( $this->parent );
+			unset( $this->parent, $this->menu_position, $this->menu_icon );
+			return $this;
+		}
+
+		$this->show_in_menu = true;
+		unset( $this->parent );
+		$position = Arr::get( $this->settings, 'menu_position', '' );
+		if ( '' === $position || null === $position ) {
 			unset( $this->menu_position );
-			unset( $this->menu_icon );
 		} else {
-			$this->show_in_menu = true;
-			unset( $this->parent );
-			$position = Arr::get( $this->settings, 'menu_position', '' );
-			if ( '' === $position || null === $position ) {
-				unset( $this->menu_position );
-			} else {
-				$this->menu_position = (int) $position;
-			}
+			$this->menu_position = (int) $position;
 		}
 
 		return $this;
@@ -78,34 +78,28 @@ class Parser extends Base {
 
 	private function parse_menu_icon(): self {
 		if ( empty( $this->show_in_menu ) || ! empty( $this->parent ) ) {
-			unset( $this->menu_icon );
-			unset( $this->icon_type );
-			unset( $this->icon );
-			unset( $this->icon_svg );
-			unset( $this->icon_custom );
-			unset( $this->font_awesome );
+			unset( $this->menu_icon, $this->icon_type, $this->icon, $this->icon_svg, $this->icon_custom, $this->font_awesome );
 			return $this;
 		}
 
 		$type = Arr::get( $this->settings, 'icon_type', 'dashicons' );
+		$map  = [
+			'dashicons'    => 'icon',
+			'svg'          => 'icon_svg',
+			'custom'       => 'icon_custom',
+			'font_awesome' => 'font_awesome',
+		];
+		$key  = $map[ $type ] ?? 'icon';
 
 		if ( 'dashicons' === $type ) {
-			$icon            = (string) Arr::get( $this->settings, 'icon', 'admin-post' );
+			$icon            = (string) Arr::get( $this->settings, $key, 'admin-post' );
 			$icon            = preg_replace( '/^dashicons-/', '', $icon );
 			$this->menu_icon = 'dashicons-' . $icon;
-		} elseif ( 'svg' === $type ) {
-			$this->menu_icon = Arr::get( $this->settings, 'icon_svg', '' );
-		} elseif ( 'custom' === $type ) {
-			$this->menu_icon = Arr::get( $this->settings, 'icon_custom', '' );
-		} elseif ( 'font_awesome' === $type ) {
-			$this->menu_icon = Arr::get( $this->settings, 'font_awesome', '' );
+		} else {
+			$this->menu_icon = Arr::get( $this->settings, $key, '' );
 		}
 
-		unset( $this->icon_type );
-		unset( $this->icon );
-		unset( $this->icon_svg );
-		unset( $this->icon_custom );
-		unset( $this->font_awesome );
+		unset( $this->icon_type, $this->icon, $this->icon_svg, $this->icon_custom, $this->font_awesome );
 
 		return $this;
 	}
@@ -137,15 +131,20 @@ class Parser extends Base {
 			unset( $this->supports );
 		}
 
-		// Remove UI-only keys.
-		unset( $this->slug );
-		unset( $this->id );
-		unset( $this->text_domain );
-		unset( $this->function_name );
-		unset( $this->_slug_changed );
-		unset( $this->_table_changed );
-		unset( $this->modified );
-		unset( $this->drop_table_on_delete );
+		return $this;
+	}
+
+	private function strip_ui_keys(): self {
+		unset(
+			$this->slug,
+			$this->id,
+			$this->text_domain,
+			$this->function_name,
+			$this->_slug_changed,
+			$this->_table_changed,
+			$this->modified,
+			$this->drop_table_on_delete
+		);
 
 		return $this;
 	}

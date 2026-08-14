@@ -8,7 +8,6 @@ const useModelSchema = create( set => ( {
 	schemaSource: null, // 'model' | 'custom_table' | null
 	customTableDbColumns: {},
 	schemaOpen: false,
-	customTableSchemaOpen: false,
 
 	setModels: models => {
 		MbbApp.models = models;
@@ -24,14 +23,8 @@ const useModelSchema = create( set => ( {
 		schemaSource: schemaSource || null,
 	} ),
 
-	openSchema: () => set( state => (
-		state.schemaSource === 'custom_table'
-			? { customTableSchemaOpen: true }
-			: { schemaOpen: true }
-	) ),
+	openSchema: () => set( { schemaOpen: true } ),
 	closeSchema: () => set( { schemaOpen: false } ),
-	openCustomTableSchema: () => set( { customTableSchemaOpen: true } ),
-	closeCustomTableSchema: () => set( { customTableSchemaOpen: false } ),
 } ) );
 
 export default useModelSchema;

@@ -2,7 +2,7 @@ import { useEffect, useMemo } from '@wordpress/element';
 import { useShallow } from 'zustand/react/shallow';
 import { IGNORE_SCHEMA_FIELD_TYPES } from '../constants/schemaFieldTypes';
 import { ensureArray } from '../functions';
-import { getColumnNames, resolveTableName } from '../utils/modelColumns';
+import { getMissingColumnIds, resolveTableName } from '../utils/modelColumns';
 import { fetcher } from './useFetch';
 import useModelSchema from './useModelSchema';
 import useRootFields from './useRootFields';
@@ -84,20 +84,20 @@ const useModelSchemaSync = () => {
 				}
 
 				const dbColumns = response.columns || {};
+				const keys = response.keys || [];
 				const current = useModelSchema.getState().models;
-				const existing = current.find( model => model.name === selectedModel.name );
-				if (
-					existing
-					&& JSON.stringify( existing.db_columns || {} ) === JSON.stringify( dbColumns )
-				) {
-					return;
-				}
 
-				setModels( current.map( model => (
-					model.name === selectedModel.name
-						? { ...model, db_columns: dbColumns }
-						: model
-				) ) );
+				setModels( current.map( model => {
+					if ( model.name !== selectedModel.name ) {
+						return model;
+					}
+
+					const next = { ...model, db_columns: dbColumns };
+					if ( ! model.post_id ) {
+						next.keys = keys;
+					}
+					return next;
+				} ) );
 			} catch ( error ) {
 				// Keep page-load columns when the table cannot be read.
 			}
@@ -111,14 +111,13 @@ const useModelSchemaSync = () => {
 	}, [ selectedModel?.name, selectedModel?.table, setModels ] );
 
 	useEffect( () => {
+		if ( ! customTableEnabled || ! customTableName ) {
+			setCustomTableDbColumns( {} );
+			return;
+		}
+
 		let cancelled = false;
-
-		const loadCustomTableColumns = async () => {
-			if ( ! customTableEnabled || ! customTableName ) {
-				setCustomTableDbColumns( {} );
-				return;
-			}
-
+		const timer = setTimeout( async () => {
 			try {
 				const response = await fetcher( {
 					api: 'custom-model/table-columns',
@@ -131,50 +130,30 @@ const useModelSchemaSync = () => {
 					return;
 				}
 
-				const dbColumns = response.columns || {};
-				const current = useModelSchema.getState().customTableDbColumns;
-				if ( JSON.stringify( current ) === JSON.stringify( dbColumns ) ) {
-					return;
-				}
-
-				setCustomTableDbColumns( dbColumns );
+				setCustomTableDbColumns( response.columns || {} );
 			} catch ( error ) {
 				if ( ! cancelled ) {
 					setCustomTableDbColumns( {} );
 				}
 			}
-		};
-
-		loadCustomTableColumns();
+		}, 400 );
 
 		return () => {
 			cancelled = true;
+			clearTimeout( timer );
 		};
 	}, [ customTableEnabled, customTableName, setCustomTableDbColumns ] );
 
 	const missingFieldIds = useMemo( () => {
 		if ( selectedModel ) {
-			if ( manageCodeModelTable ) {
-				const hasDbColumns = Object.keys( selectedModel.db_columns || {} ).length > 0;
-				const columnNames = getColumnNames(
-					hasDbColumns ? selectedModel.db_columns : ( customTable.columns || {} )
-				);
-				return fieldIds.filter( id => ! columnNames.includes( id ) );
-			}
-
-			const hasDbColumns = Object.keys( selectedModel.db_columns || {} ).length > 0;
-			const columnNames = getColumnNames(
-				hasDbColumns ? selectedModel.db_columns : selectedModel.columns
-			);
-			return fieldIds.filter( id => ! columnNames.includes( id ) );
+			const editorColumns = manageCodeModelTable
+				? ( customTable.columns || {} )
+				: selectedModel.columns;
+			return getMissingColumnIds( fieldIds, selectedModel.db_columns, editorColumns );
 		}
 
 		if ( customTableEnabled ) {
-			const hasDbColumns = Object.keys( customTableDbColumns ).length > 0;
-			const columnNames = getColumnNames(
-				hasDbColumns ? customTableDbColumns : ( customTable.columns || {} )
-			);
-			return fieldIds.filter( id => ! columnNames.includes( id ) );
+			return getMissingColumnIds( fieldIds, customTableDbColumns, customTable.columns || {} );
 		}
 
 		return [];

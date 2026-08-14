@@ -15,7 +15,6 @@ const Table = () => {
 		!! getSetting( 'prefix' ),
 		MbbApp.tablePrefix || ''
 	);
-	const postId = Number( document.querySelector( '#post_ID' )?.value ) || 0;
 
 	return (
 		<div className="mb-content">
@@ -76,7 +75,6 @@ const Table = () => {
 				updateField={ updateWithAutofill }
 				model={ model }
 				table={ table }
-				postId={ postId }
 			/>
 		</div>
 	);

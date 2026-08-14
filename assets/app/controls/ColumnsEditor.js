@@ -6,11 +6,12 @@ import {
 	COLUMN_TYPE_GROUPS,
 	CUSTOM_COLUMN_TYPE,
 	DEFAULT_COLUMN_TYPE,
+	createColumnItem,
 	dbTypeToEditorColumn,
 	isIndexableType,
 	resolveColumnSqlType,
 } from '../constants/columnTypes';
-import { maybeArrayToObject, uniqid } from '../functions';
+import { maybeArrayToObject } from '../functions';
 import { fetcher } from '../hooks/useFetch';
 import DivRow from './DivRow';
 
@@ -18,15 +19,6 @@ const stripSortableMeta = item => {
 	const { chosen, selected, ...column } = item;
 	return column;
 };
-
-const createColumnItem = ( overrides = {} ) => ( {
-	id: uniqid(),
-	name: '',
-	type: DEFAULT_COLUMN_TYPE,
-	custom_type: '',
-	index: false,
-	...overrides,
-} );
 
 const FIELD_STATUS = {
 	matched: {
@@ -296,10 +288,8 @@ const ColumnsEditor = ( {
 	existingColumnNames = [],
 	model = '',
 	table = '',
-	postId = 0,
 	readOnly = false,
 	allowDrop,
-	dropByTable = false,
 } ) => {
 	const isControlled = value !== undefined;
 	const [ localItems, setLocalItems ] = useState( () => maybeArrayToObject( defaultValue, 'id' ) );
@@ -309,7 +299,7 @@ const ColumnsEditor = ( {
 	const items = maybeArrayToObject( isControlled ? value : localItems, 'id' );
 	const showFieldContext = usedColumnNames.length > 0;
 	const showDbSync = ! readOnly && !! table;
-	const canDrop = allowDrop !== undefined ? allowDrop : postId > 0;
+	const canDrop = allowDrop !== undefined ? allowDrop : !! table;
 	const dbColumnNames = useMemo( () => new Set( Object.keys( dbColumns ) ), [ dbColumns ] );
 	const schemaColumns = useMemo( () => Object.values( items ), [ items ] );
 
@@ -415,11 +405,9 @@ const ColumnsEditor = ( {
 
 		setDropping( columnName );
 		try {
-			const params = { column: columnName };
-			if ( dropByTable || ! postId ) {
-				params.table = table;
-			} else {
-				params.post_id = postId;
+			const params = { column: columnName, table };
+			if ( model ) {
+				params.model = model;
 			}
 
 			const response = await fetcher( {
