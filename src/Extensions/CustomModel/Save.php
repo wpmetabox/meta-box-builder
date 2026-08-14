@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Server;
 use WP_Error;
 use MBB\Helpers\TableSchema;
+use MBB\LocalJson;
 use MBB\RestApi\Save as SaveRestApi;
 
 class Save {
@@ -276,6 +277,8 @@ class Save {
 	}
 
 	private function persist_model( int $post_id, string $post_name, array $settings ): array {
+		$settings['modified'] = time();
+
 		// Store raw UI settings.
 		$ui_parser = new Parser( $settings );
 		$ui_parser->parse_boolean_values()->parse_numeric_values();
@@ -293,6 +296,11 @@ class Save {
 		$model['post_id'] = $post_id;
 		Register::register_and_create( $post_name, $model );
 		Register::rebuild_cache();
+
+		LocalJson::use_database( [
+			'post_id'   => $post_id,
+			'post_type' => 'mb-model',
+		] );
 
 		return [
 			'success' => true,

@@ -34,7 +34,8 @@ class Edit extends BaseEditPage {
 		}
 
 		$json = JsonService::get_json( [
-			'post_id' => get_the_ID(),
+			'post_id'   => get_the_ID(),
+			'post_type' => 'meta-box',
 		] );
 
 		if ( empty( $json ) ) {
@@ -112,6 +113,7 @@ class Edit extends BaseEditPage {
 			'syncing'        => esc_html__( 'Syncing...', 'meta-box-builder' ),
 			'newer'          => esc_html__( '(newer)', 'meta-box-builder' ),
 			'sync_available' => esc_html__( 'Sync available', 'meta-box-builder' ),
+			'postType'       => 'meta-box',
 		] );
 
 		wp_enqueue_style( 'mbb-app', MBB_URL . 'assets/css/style.css', [ 'wp-components', 'code-editor' ], filemtime( MBB_DIR . 'assets/css/style.css' ) );

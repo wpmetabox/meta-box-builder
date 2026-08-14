@@ -51,6 +51,21 @@ const Table = () => {
 					</label>
 				</div>
 			</DivRow>
+			<DivRow
+				label={ __( 'Drop table', 'meta-box-builder' ) }
+				htmlFor="settings-drop_table_on_delete"
+			>
+				<label className="og-toggle">
+					<input
+						type="checkbox"
+						id="settings-drop_table_on_delete"
+						defaultChecked={ !! getSetting( 'drop_table_on_delete' ) }
+						onChange={ e => updateWithAutofill( 'drop_table_on_delete', e.target.checked ) }
+					/>
+					<div className="og-toggle__switch"></div>
+					{ __( 'Drop this table when deleting the custom model', 'meta-box-builder' ) }
+				</label>
+			</DivRow>
 			<hr />
 			<p className="og-description">
 				{ __( 'Add one column per custom field, using the field ID as the name. Skip the ID and support columns (author, dates); they are added automatically.', 'meta-box-builder' ) }

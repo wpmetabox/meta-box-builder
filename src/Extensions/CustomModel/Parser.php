@@ -144,6 +144,8 @@ class Parser extends Base {
 		unset( $this->function_name );
 		unset( $this->_slug_changed );
 		unset( $this->_table_changed );
+		unset( $this->modified );
+		unset( $this->drop_table_on_delete );
 
 		return $this;
 	}

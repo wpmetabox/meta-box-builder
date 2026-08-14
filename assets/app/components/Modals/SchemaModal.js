@@ -237,12 +237,24 @@ const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
 			</p>
 			{
 				isCodeModel && (
-					<ToggleControl
-						className="mb-schema-modal__manage"
-						label={ __( 'Edit table columns', 'meta-box-builder' ) }
-						checked={ manage }
-						onChange={ toggleManage }
-					/>
+					<div className="mb-schema-modal__options">
+						<ToggleControl
+							className="mb-schema-modal__manage"
+							label={ __( 'Edit table columns', 'meta-box-builder' ) }
+							checked={ manage }
+							onChange={ toggleManage }
+						/>
+						{
+							manage && (
+								<ToggleControl
+									className="mb-schema-modal__drop-table"
+									label={ __( 'Drop this table when deleting the field group', 'meta-box-builder' ) }
+									checked={ !! getSetting( 'custom_table.drop_on_delete', false ) }
+									onChange={ value => updateSetting( 'custom_table.drop_on_delete', value ) }
+								/>
+							)
+						}
+					</div>
 				)
 			}
 			{

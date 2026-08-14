@@ -4,9 +4,15 @@ namespace MBB\Extensions\CustomModel;
 use MBB\Helpers\TableSchema;
 use MetaBox\CustomTable\API;
 use MetaBox\CustomTable\Model\Factory;
+use MetaBox\CustomTable\Model\Model;
 use MetaBox\Support\Arr;
 
 class TableColumns {
+	/**
+	 * Model features that add protected table columns (see mb-custom-table TableSchema).
+	 */
+	private const SUPPORT_FEATURES = [ 'author', 'published_date', 'modified_date' ];
+
 	/**
 	 * Create or update a database table from editor column items.
 	 *
@@ -35,15 +41,7 @@ class TableColumns {
 		$parsed = TableSchema::parse_columns( $column_items );
 		API::create( $table, $parsed['columns'], $parsed['keys'] );
 
-		$supports = [];
-		if ( $model_name && class_exists( Factory::class ) ) {
-			$model = Factory::get( $model_name );
-			if ( $model && isset( $model->supports ) && is_array( $model->supports ) ) {
-				$supports = $model->supports;
-			}
-		}
-
-		$inspected = self::inspect( $table, $supports );
+		$inspected = self::inspect( $table, self::resolve_supports( $model_name, $table ) );
 
 		return [
 			'success' => true,
@@ -59,17 +57,10 @@ class TableColumns {
 	 * @return array{success: bool, message?: string, columns?: array<string, string>, keys?: string[]}
 	 */
 	public static function list_for_model( string $model_name, string $table = '' ): array {
-		$supports = [];
-
-		if ( $model_name ) {
+		if ( $model_name && class_exists( Factory::class ) ) {
 			$model = Factory::get( $model_name );
-			if ( $model ) {
-				if ( ! $table && ! empty( $model->table ) ) {
-					$table = (string) $model->table;
-				}
-				if ( isset( $model->supports ) && is_array( $model->supports ) ) {
-					$supports = $model->supports;
-				}
+			if ( $model && ! $table && ! empty( $model->table ) ) {
+				$table = (string) $model->table;
 			}
 		}
 
@@ -81,7 +72,7 @@ class TableColumns {
 			];
 		}
 
-		$inspected = self::inspect( $table, $supports );
+		$inspected = self::inspect( $table, self::resolve_supports( $model_name, $table ) );
 
 		return [
 			'success' => true,
@@ -140,7 +131,7 @@ class TableColumns {
 	 * @param string[] $protected_columns Column names that cannot be dropped.
 	 * @return array{success: bool, message?: string, columns?: array<string, string>}
 	 */
-	public static function drop_table_column( string $table, string $column, array $protected_columns = [ 'ID' ] ): array {
+	public static function drop_table_column( string $table, string $column, array $protected_columns = [] ): array {
 		$column = TableSchema::sanitize_name( $column );
 		$table  = TableSchema::sanitize_name( $table );
 
@@ -156,6 +147,12 @@ class TableColumns {
 				'success' => false,
 				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
 			];
+		}
+
+		if ( empty( $protected_columns ) ) {
+			$protected_columns = self::get_protected_columns( [
+				'supports' => self::resolve_supports( '', $table ),
+			] );
 		}
 
 		if ( in_array( $column, $protected_columns, true ) ) {
@@ -272,7 +269,7 @@ class TableColumns {
 		return array_values( array_unique( array_column( $rows, 'Column_name' ) ) );
 	}
 
-	private static function table_exists( string $table ): bool {
+	public static function table_exists( string $table ): bool {
 		global $wpdb;
 
 		$like = $wpdb->esc_like( $table );
@@ -297,7 +294,65 @@ class TableColumns {
 
 		return array_merge(
 			[ 'ID' ],
-			array_values( array_intersect( [ 'author', 'published_date', 'modified_date' ], $supports ) )
+			array_values( array_intersect( self::SUPPORT_FEATURES, $supports ) )
 		);
+	}
+
+	/**
+	 * Resolve model supports from a registered model name and/or table.
+	 *
+	 * @return string[]
+	 */
+	public static function resolve_supports( string $model_name = '', string $table = '' ): array {
+		if ( ! class_exists( Factory::class ) ) {
+			return [];
+		}
+
+		$model_name = trim( $model_name );
+		if ( '' !== $model_name ) {
+			$model = Factory::get( $model_name );
+			if ( $model instanceof Model ) {
+				return self::get_model_support_features( $model );
+			}
+		}
+
+		$table = self::normalize_table_name( $table );
+		if ( '' === $table ) {
+			return [];
+		}
+
+		foreach ( Factory::get() as $model ) {
+			if ( ! $model instanceof Model || empty( $model->table ) ) {
+				continue;
+			}
+
+			if ( self::normalize_table_name( (string) $model->table ) === $table ) {
+				return self::get_model_support_features( $model );
+			}
+		}
+
+		return [];
+	}
+
+	/**
+	 * Read enabled support features from a registered model.
+	 *
+	 * Do not use isset( $model->supports ): Model defines supports() so isset is always false.
+	 *
+	 * @return string[]
+	 */
+	private static function get_model_support_features( Model $model ): array {
+		$features = [];
+		foreach ( self::SUPPORT_FEATURES as $feature ) {
+			if ( $model->supports( $feature ) ) {
+				$features[] = $feature;
+			}
+		}
+
+		return $features;
+	}
+
+	private static function normalize_table_name( string $table ): string {
+		return TableSchema::sanitize_name( str_replace( '-', '_', $table ) );
 	}
 }

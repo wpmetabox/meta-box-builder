@@ -164,7 +164,7 @@ class Data {
 
 			$db_columns = [];
 			if ( ! empty( $model->table ) ) {
-				$supports   = isset( $model->supports ) && is_array( $model->supports ) ? $model->supports : [];
+				$supports   = TableColumns::resolve_supports( $name, (string) $model->table );
 				$inspected  = TableColumns::inspect( (string) $model->table, $supports );
 				$db_columns = $inspected['columns'];
 

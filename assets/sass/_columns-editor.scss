@@ -224,8 +224,17 @@
 	padding-left: 24px;
 }
 
-.mb-schema-modal__manage {
+.mb-schema-modal__options {
 	margin-bottom: 16px;
+}
+
+.mb-schema-modal__manage {
+	margin-bottom: 0;
+}
+
+.mb-schema-modal__drop-table {
+	margin-top: 12px;
+	margin-bottom: 0;
 }
 
 .mb-schema-modal__footer {

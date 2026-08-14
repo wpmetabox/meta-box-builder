@@ -3,6 +3,9 @@ namespace MBB\Extensions\CustomModel;
 
 use MetaBox\CustomTable\API;
 use MetaBox\CustomTable\Model\Factory;
+use MBB\LocalJson;
+use MBB\JsonService;
+use MBBParser\Unparsers\MetaBox;
 use WP_Query;
 
 class Register {
@@ -73,10 +76,13 @@ class Register {
 	}
 
 	public function register_models(): void {
-		$models = get_option( self::CACHE_OPTION, false );
+		$models = LocalJson::is_enabled() ? self::query_models_from_json() : null;
 		if ( ! is_array( $models ) ) {
-			$models = self::query_models();
-			update_option( self::CACHE_OPTION, $models, true );
+			$models = get_option( self::CACHE_OPTION, false );
+			if ( ! is_array( $models ) ) {
+				$models = self::query_models();
+				update_option( self::CACHE_OPTION, $models, true );
+			}
 		}
 
 		foreach ( $models as $name => $args ) {
@@ -100,7 +106,7 @@ class Register {
 		$table   = (string) ( $model['table'] ?? '' );
 
 		$args = $model;
-		unset( $args['columns'], $args['keys'], $args['post_id'], $args['name'] );
+		unset( $args['columns'], $args['keys'], $args['post_id'], $args['name'], $args['modified'] );
 
 		// Register first so TableSchema can add AUTO_INCREMENT + supports columns on create.
 		if ( ! Factory::get( $name ) ) {
@@ -131,6 +137,44 @@ class Register {
 			$name             = $model['name'];
 			$model['post_id'] = (int) $post->ID;
 			unset( $model['name'] );
+			$models[ $name ] = $model;
+		}
+
+		return $models;
+	}
+
+	/**
+	 * Load published models from Local JSON files (source of truth when enabled).
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	public static function query_models_from_json(): array {
+		$models = self::query_models();
+
+		foreach ( JsonService::get_files() as $file ) {
+			$raw = LocalJson::read_file( $file );
+			if ( empty( $raw ) ) {
+				continue;
+			}
+
+			$unparser = new MetaBox( $raw );
+			$unparser->unparse();
+			$data = $unparser->get_settings();
+
+			if ( ( $data['post_type'] ?? '' ) !== 'mb-model' ) {
+				continue;
+			}
+
+			$model = $data['model'] ?? [];
+			if ( ! is_array( $model ) || empty( $model['name'] ) || empty( $model['table'] ) ) {
+				continue;
+			}
+
+			$name = $model['name'];
+			unset( $model['name'] );
+			if ( isset( $models[ $name ]['post_id'] ) ) {
+				$model['post_id'] = $models[ $name ]['post_id'];
+			}
 			$models[ $name ] = $model;
 		}
 

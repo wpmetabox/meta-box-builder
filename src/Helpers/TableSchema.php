@@ -1,6 +1,9 @@
 <?php
 namespace MBB\Helpers;
 
+use MBB\Extensions\CustomModel\Parser;
+use MetaBox\Support\Arr;
+
 class TableSchema {
 	/**
 	 * Resolve a model table name from field-group settings.
@@ -33,6 +36,51 @@ class TableSchema {
 		}
 
 		return str_replace( '-', '_', $name );
+	}
+
+	/**
+	 * Resolve the database table for a field group from its settings.
+	 */
+	public static function resolve_field_group_table( array $settings ): string {
+		$object_type = (string) Arr::get( $settings, 'object_type', 'post' );
+		if ( 'model' === $object_type || ! empty( $settings['models'] ) ) {
+			return self::sanitize_name( self::resolve_model_table( $settings ) );
+		}
+
+		$custom_table = (array) Arr::get( $settings, 'custom_table', [] );
+		if ( empty( $custom_table['enable'] ) ) {
+			return '';
+		}
+
+		return self::resolve_custom_table( $custom_table );
+	}
+
+	/**
+	 * Resolve a field group custom table name (not model location).
+	 */
+	public static function resolve_custom_table( array $custom_table ): string {
+		$name = (string) ( $custom_table['name'] ?? '' );
+		if ( '' === $name ) {
+			return '';
+		}
+
+		if ( ! empty( $custom_table['prefix'] ) ) {
+			global $wpdb;
+			$name = $wpdb->prefix . $name;
+		}
+
+		return self::sanitize_name( $name );
+	}
+
+	/**
+	 * Resolve the database table for a Builder custom model from stored settings.
+	 */
+	public static function resolve_model_table_from_settings( array $settings ): string {
+		$parser = new Parser( $settings );
+		$parser->parse();
+		$model = $parser->get_settings();
+
+		return self::sanitize_name( (string) ( $model['table'] ?? '' ) );
 	}
 
 	/**

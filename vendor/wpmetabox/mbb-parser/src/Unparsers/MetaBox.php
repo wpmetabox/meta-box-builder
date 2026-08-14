@@ -65,6 +65,7 @@ class MetaBox extends Base {
 		$this->unparse_conditional_logic();
 		$this->unparse_include_exclude();
 		$this->unparse_show_hide();
+		$this->unparse_model_settings_columns();
 	}
 
 	public function to_minimal_format() {
@@ -271,8 +272,12 @@ class MetaBox extends Base {
 	}
 
 	public function unparse_modified() {
-		$this->settings['modified']             = $this->lookup( [ 'modified', 'meta_box.modified' ], time() );
-		$this->settings['meta_box']['modified'] = $this->settings['modified'];
+		$modified                   = $this->lookup( [ 'modified', 'meta_box.modified', 'settings.modified', 'model.modified' ], time() );
+		$this->settings['modified'] = $modified;
+
+		if ( $this->detect_post_type() === 'meta-box' ) {
+			$this->settings['meta_box']['modified'] = $modified;
+		}
 
 		return $this;
 	}
@@ -447,6 +452,15 @@ class MetaBox extends Base {
 			return $this;
 		}
 
+		if ( $this->detect_post_type() === 'mb-model' ) {
+			$model = $this->settings['model'] ?? [];
+			if ( ! empty( $model ) && is_array( $model ) ) {
+				unset( $model['keys'], $model['post_id'] );
+				$this->settings['settings'] = $model;
+			}
+			return $this;
+		}
+
 		$id    = $this->id ?? uniqid();
 		$title = $this->lookup( [ 'post_title', 'title' ], $id );
 
@@ -612,10 +626,22 @@ class MetaBox extends Base {
 	}
 
 	public function unparse_columns() {
+		// Field-group admin "columns" setting — not model table schema columns.
+		if ( $this->detect_post_type() !== 'meta-box' ) {
+			return $this;
+		}
+
 		$columns = $this->lookup( [ 'columns', 'meta_box.columns' ], [] );
 		if ( empty( $columns ) ) {
 			return $this;
 		}
+
+		// Model-style map { name: sqlType } must not become custom_settings.
+		$first = reset( $columns );
+		if ( ! is_array( $first ) && ! is_object( $first ) ) {
+			return $this;
+		}
+
 		$custom_settings        = $this->lookup( [ 'settings.custom_settings' ], [] );
 		$id                     = uniqid();
 		$custom_settings[ $id ] = [
@@ -687,6 +713,62 @@ class MetaBox extends Base {
 				$this->settings['settings']['show_hide'] = $setting_show_hide;
 			}
 		}
+		return $this;
+	}
+
+	/**
+	 * Ensure settings.columns uses the editor shape after importing a minimal model JSON.
+	 * Exported models store columns as { name: sqlType }; the UI expects { id: { name, type, … } }.
+	 */
+	private function unparse_model_settings_columns(): self {
+		if ( $this->detect_post_type() !== 'mb-model' ) {
+			return $this;
+		}
+
+		$settings = $this->settings['settings'] ?? [];
+		$columns  = $settings['columns'] ?? [];
+		if ( ! is_array( $columns ) || empty( $columns ) ) {
+			$columns = $this->settings['model']['columns'] ?? [];
+		}
+		if ( ! is_array( $columns ) || empty( $columns ) ) {
+			return $this;
+		}
+
+		$first = reset( $columns );
+		if ( is_array( $first ) && array_key_exists( 'name', $first ) ) {
+			return $this;
+		}
+
+		$keys    = $settings['keys'] ?? ( $this->settings['model']['keys'] ?? [] );
+		$keys    = is_array( $keys ) ? $keys : [];
+		$key_set = array_fill_keys( $keys, true );
+		$editor = [];
+
+		foreach ( $columns as $name => $type ) {
+			if ( is_array( $type ) ) {
+				continue;
+			}
+			$name = (string) $name;
+			if ( '' === $name || 'id' === strtolower( $name ) ) {
+				continue;
+			}
+			$id            = 'col_' . str_replace( '-', '_', sanitize_key( $name ) );
+			$editor[ $id ] = [
+				'id'          => $id,
+				'name'        => $name,
+				'type'        => 'custom',
+				'custom_type' => (string) $type,
+				'index'       => isset( $key_set[ $name ] ),
+			];
+		}
+
+		if ( empty( $editor ) ) {
+			return $this;
+		}
+
+		$this->settings['settings']['columns'] = $editor;
+		unset( $this->settings['settings']['keys'] );
+
 		return $this;
 	}
 
