@@ -18,18 +18,23 @@ export const initSaveForm = () => {
 			return;
 		}
 
-		const missingCount = useModelSchema.getState().missingFieldIds.length;
+		const { missingFieldIds, schemaSource } = useModelSchema.getState();
+		const missingCount = missingFieldIds.length;
 		if ( missingCount > 0 ) {
+			const tableLabel = schemaSource === 'custom_table'
+				? __( 'custom table', 'meta-box-builder' )
+				: __( 'model table', 'meta-box-builder' );
 			const confirmed = window.confirm(
 				sprintf(
-					/* translators: %d: number of field IDs */
+					/* translators: %1$d: number of field IDs, %2$s: table type (model table / custom table) */
 					_n(
-						'%d field ID does not match the model table. Save anyway?',
-						'%d field IDs do not match the model table. Save anyway?',
+						'%1$d field ID does not match the %2$s. Save anyway?',
+						'%1$d field IDs do not match the %2$s. Save anyway?',
 						missingCount,
 						'meta-box-builder'
 					),
-					missingCount
+					missingCount,
+					tableLabel
 				)
 			);
 			if ( ! confirmed ) {

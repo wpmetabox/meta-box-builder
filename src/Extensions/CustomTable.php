@@ -4,6 +4,7 @@ namespace MBB\Extensions;
 
 use MetaBox\CustomTable\API;
 use MetaBox\Support\Arr;
+use MBB\Helpers\TableSchema;
 use MBB\LocalJson;
 
 class CustomTable {
@@ -42,21 +43,27 @@ class CustomTable {
 		if ( Arr::get( $settings, 'custom_table.prefix' ) ) {
 			global $wpdb;
 			$table = $wpdb->prefix . $table;
-
-			// Modify the table name in the parsed `meta_box` settings.
 			Arr::set( $data, 'meta_box.table', $table );
 		}
 
-		$columns   = [];
-		$id_prefix = Arr::get( $settings, 'prefix' );
-		$fields    = array_filter( $data['fields'], [ $this, 'has_value' ] );
-		foreach ( $fields as $field ) {
-			$columns[ $id_prefix . $field['id'] ] = 'TEXT';
+		$parsed  = TableSchema::parse_columns( (array) Arr::get( $settings, 'custom_table.columns', [] ) );
+		$columns = $parsed['columns'];
+		$keys    = $parsed['keys'];
+
+		// Backward compatible: no configured schema → TEXT columns from field IDs.
+		if ( empty( $columns ) ) {
+			$id_prefix = Arr::get( $settings, 'prefix' );
+			$fields    = array_filter( $data['fields'] ?? [], [ $this, 'has_value' ] );
+			foreach ( $fields as $field ) {
+				$columns[ $id_prefix . $field['id'] ] = 'TEXT';
+			}
+			$keys = [];
 		}
 
 		$cache_data = [
 			'table'   => $table,
 			'columns' => $columns,
+			'keys'    => $keys,
 		];
 		$cache_key  = 'mb_create_table_' . md5( wp_json_encode( $cache_data ) );
 		// Cache the table creation in production environment only.
@@ -64,7 +71,7 @@ class CustomTable {
 			return;
 		}
 
-		API::create( $table, $columns );
+		API::create( $table, $columns, $keys );
 		set_transient( $cache_key, 1, MONTH_IN_SECONDS );
 	}
 

@@ -298,6 +298,8 @@ const ColumnsEditor = ( {
 	table = '',
 	postId = 0,
 	readOnly = false,
+	allowDrop,
+	dropByTable = false,
 } ) => {
 	const isControlled = value !== undefined;
 	const [ localItems, setLocalItems ] = useState( () => maybeArrayToObject( defaultValue, 'id' ) );
@@ -307,7 +309,7 @@ const ColumnsEditor = ( {
 	const items = maybeArrayToObject( isControlled ? value : localItems, 'id' );
 	const showFieldContext = usedColumnNames.length > 0;
 	const showDbSync = ! readOnly && !! table;
-	const canDrop = postId > 0;
+	const canDrop = allowDrop !== undefined ? allowDrop : postId > 0;
 	const dbColumnNames = useMemo( () => new Set( Object.keys( dbColumns ) ), [ dbColumns ] );
 	const schemaColumns = useMemo( () => Object.values( items ), [ items ] );
 
@@ -413,12 +415,16 @@ const ColumnsEditor = ( {
 
 		setDropping( columnName );
 		try {
+			const params = { column: columnName };
+			if ( dropByTable || ! postId ) {
+				params.table = table;
+			} else {
+				params.post_id = postId;
+			}
+
 			const response = await fetcher( {
 				api: 'custom-model/table-columns',
-				params: {
-					post_id: postId,
-					column: columnName,
-				},
+				params,
 				method: 'DELETE',
 				cache: false,
 			} );

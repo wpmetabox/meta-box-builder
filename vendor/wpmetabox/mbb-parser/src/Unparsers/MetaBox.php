@@ -213,10 +213,11 @@ class MetaBox extends Base {
 		}
 
 		$default_custom_table = [
-			'enable' => false,
-			'name'   => '',
-			'prefix' => false,
-			'create' => false,
+			'enable'  => false,
+			'name'    => '',
+			'prefix'  => false,
+			'create'  => false,
+			'columns' => [],
 		];
 
 		$this->settings['settings']['custom_table'] = array_merge( $default_custom_table, $custom_table );

@@ -4,6 +4,7 @@ namespace MBB\Extensions\CustomModel;
 use WP_REST_Request;
 use WP_REST_Server;
 use WP_Error;
+use MBB\Helpers\TableSchema;
 use MBB\RestApi\Save as SaveRestApi;
 
 class Save {
@@ -70,7 +71,17 @@ class Save {
 				'permission_callback' => [ $this, 'has_permission' ],
 				'show_in_index'       => false,
 				'args'                => [
-					'post_id' => $this->get_post_id_arg(),
+					'post_id' => [
+						'required'          => false,
+						'validate_callback' => function ( $param ): bool {
+							return null === $param || '' === $param || is_numeric( $param );
+						},
+						'sanitize_callback' => 'absint',
+					],
+					'table'   => [
+						'required'          => false,
+						'sanitize_callback' => 'sanitize_text_field',
+					],
 					'column'  => [
 						'required'          => true,
 						'sanitize_callback' => 'sanitize_text_field',
@@ -94,7 +105,7 @@ class Save {
 		}
 
 		$post_name         = sanitize_title( empty( $settings['slug'] ) ? $post_title : $settings['slug'] );
-		$settings['table'] = $this->sanitize_table_name( $settings['table'] ?? '' );
+		$settings['table'] = TableSchema::sanitize_name( (string) ( $settings['table'] ?? '' ) );
 
 		$post = get_post( $post_id );
 		if ( ! $post ) {
@@ -207,7 +218,22 @@ class Save {
 	}
 
 	public function drop_table_column( WP_REST_Request $request ): array {
-		return TableColumns::drop( (int) $request->get_param( 'post_id' ), (string) $request->get_param( 'column' ) );
+		$column  = (string) $request->get_param( 'column' );
+		$post_id = (int) $request->get_param( 'post_id' );
+		$table   = (string) $request->get_param( 'table' );
+
+		if ( $post_id > 0 ) {
+			return TableColumns::drop( $post_id, $column );
+		}
+
+		if ( $table ) {
+			return TableColumns::drop_table_column( $table, $column );
+		}
+
+		return [
+			'success' => false,
+			'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
+		];
 	}
 
 	private function persist_model( int $post_id, string $post_name, array $settings ): array {
@@ -233,10 +259,6 @@ class Save {
 			'success' => true,
 			'message' => __( 'Custom model is updated.', 'meta-box-builder' ),
 		];
-	}
-
-	private function sanitize_table_name( $table ): string {
-		return str_replace( '-', '_', sanitize_key( (string) $table ) );
 	}
 
 	/**

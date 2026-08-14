@@ -1,14 +1,17 @@
-import { Tooltip } from "@wordpress/components";
+import { Button, Tooltip } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import DivRow from "../../../controls/DivRow";
 import PersistentPanelBodyWithToggle from "../../../controls/PersistentPanelBodyWithToggle";
 import Toggle from "../../../controls/Toggle";
 import UpgradePanelBody from "../../../controls/UpgradePanelBody";
+import useModelSchema from "../../../hooks/useModelSchema";
 import useSettings from "../../../hooks/useSettings";
 
 const CustomTable = () => {
-	const { getSetting, updateSetting } = useSettings();
+	const { getSetting, updateSetting, getObjectType } = useSettings();
 	const setting = getSetting( 'custom_table', {} );
+	const objectType = getObjectType();
+	const openSchema = useModelSchema( state => state.openCustomTableSchema );
 
 	const enableCustomTable = value => {
 		updateSetting( 'custom_table.enable', value );
@@ -29,6 +32,13 @@ const CustomTable = () => {
 		);
 	}
 
+	// Models own table schema via the model editor / schema modal.
+	if ( objectType === 'model' ) {
+		return null;
+	}
+
+	const canEditColumns = !! setting.enable && !! ( setting.name || '' ).trim();
+
 	return (
 		<PersistentPanelBodyWithToggle
 			panelId="field-group-custom-table"
@@ -41,7 +51,7 @@ const CustomTable = () => {
 				dependency="table_enable:true"
 				name="custom_table.create"
 				label={ __( 'Auto create table', 'meta-box-builder' ) }
-				tooltip={ __( 'This settings will create the table with all columns as TEXT. Create the table manually to set proper column types for a better performance.', 'meta-box-builder' ) }
+				tooltip={ __( 'Create or update the database table from the column schema when you save this field group. Use Edit columns to set types and indexes.', 'meta-box-builder' ) }
 				componentId="settings-table_create"
 				defaultValue={ !!setting.create }
 				updateField={ updateSetting }
@@ -76,6 +86,17 @@ const CustomTable = () => {
 					</label>
 				</div>
 			</DivRow>
+			{
+				canEditColumns && (
+					<DivRow dependency="table_enable:true">
+						<Button
+							variant="secondary"
+							onClick={ openSchema }
+							text={ __( 'Edit columns', 'meta-box-builder' ) }
+						/>
+					</DivRow>
+				)
+			}
 		</PersistentPanelBodyWithToggle>
 	);
 };

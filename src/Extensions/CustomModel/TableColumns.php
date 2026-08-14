@@ -1,25 +1,23 @@
 <?php
 namespace MBB\Extensions\CustomModel;
 
+use MBB\Helpers\TableSchema;
 use MetaBox\CustomTable\Model\Factory;
 use MetaBox\Support\Arr;
 
 class TableColumns {
 	/**
-	 * List columns for a registered model (Builder or code).
-	 *
-	 * Use the client-provided table when set. Fall back to the Factory table
-	 * and supports when the model is registered.
+	 * List columns for a registered model.
 	 *
 	 * @return array{success: bool, message?: string, columns?: array<string, string>, keys?: string[]}
 	 */
 	public static function list_for_model( string $model_name, string $table = '' ): array {
 		$supports = [];
 
-		if ( '' !== $model_name ) {
+		if ( $model_name ) {
 			$model = Factory::get( $model_name );
 			if ( $model ) {
-				if ( '' === $table && ! empty( $model->table ) ) {
+				if ( ! $table && ! empty( $model->table ) ) {
 					$table = (string) $model->table;
 				}
 				if ( isset( $model->supports ) && is_array( $model->supports ) ) {
@@ -28,8 +26,8 @@ class TableColumns {
 			}
 		}
 
-		$table = str_replace( '-', '_', sanitize_key( $table ) );
-		if ( '' === $table ) {
+		$table = TableSchema::sanitize_name( $table );
+		if ( ! $table ) {
 			return [
 				'success' => false,
 				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
@@ -50,7 +48,6 @@ class TableColumns {
 	 *
 	 * @param string   $table    Table name.
 	 * @param string[] $supports Model supports used to skip protected columns.
-	 *
 	 * @return array{columns: array<string, string>, keys: string[]}
 	 */
 	public static function inspect( string $table, array $supports = [] ): array {
@@ -63,19 +60,11 @@ class TableColumns {
 	}
 
 	/**
-	 * Drop a column from the model table.
+	 * Drop a column from a Builder-managed model table.
 	 *
 	 * @return array{success: bool, message?: string, columns?: array<string, string>}
 	 */
 	public static function drop( int $post_id, string $column ): array {
-		$column = str_replace( '-', '_', sanitize_key( $column ) );
-		if ( '' === $column ) {
-			return [
-				'success' => false,
-				'message' => __( 'Invalid column name.', 'meta-box-builder' ),
-			];
-		}
-
 		$post = get_post( $post_id );
 		if ( ! $post || 'mb-model' !== $post->post_type ) {
 			return [
@@ -85,18 +74,47 @@ class TableColumns {
 		}
 
 		$settings = self::get_settings( $post_id );
-		if ( self::is_protected( $column, $settings ) ) {
-			return [
-				'success' => false,
-				'message' => __( 'This column cannot be dropped.', 'meta-box-builder' ),
-			];
-		}
-
-		$table = self::resolve_table_name( $settings );
-		if ( null === $table ) {
+		$table    = self::resolve_table_name( $settings );
+		if ( ! $table ) {
 			return [
 				'success' => false,
 				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
+			];
+		}
+
+		return self::drop_table_column( $table, $column, self::get_protected_columns( $settings ) );
+	}
+
+	/**
+	 * Drop a column from a database table.
+	 *
+	 * @param string   $table             Table name.
+	 * @param string   $column            Column name.
+	 * @param string[] $protected_columns Column names that cannot be dropped.
+	 * @return array{success: bool, message?: string, columns?: array<string, string>}
+	 */
+	public static function drop_table_column( string $table, string $column, array $protected_columns = [ 'ID' ] ): array {
+		$column = TableSchema::sanitize_name( $column );
+		$table  = TableSchema::sanitize_name( $table );
+
+		if ( ! $column ) {
+			return [
+				'success' => false,
+				'message' => __( 'Invalid column name.', 'meta-box-builder' ),
+			];
+		}
+
+		if ( ! $table ) {
+			return [
+				'success' => false,
+				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
+			];
+		}
+
+		if ( in_array( $column, $protected_columns, true ) ) {
+			return [
+				'success' => false,
+				'message' => __( 'This column cannot be dropped.', 'meta-box-builder' ),
 			];
 		}
 
@@ -122,7 +140,7 @@ class TableColumns {
 		return [
 			'success' => true,
 			'message' => __( 'Column dropped from the database.', 'meta-box-builder' ),
-			'columns' => self::filter_protected( self::fetch( $table ), $settings ),
+			'columns' => array_diff_key( self::fetch( $table ), array_flip( $protected_columns ) ),
 		];
 	}
 
@@ -137,16 +155,15 @@ class TableColumns {
 		return is_array( $settings ) ? $settings : [];
 	}
 
-	private static function resolve_table_name( array $settings ): ?string {
+	private static function resolve_table_name( array $settings ): string {
 		if ( empty( $settings['table'] ) ) {
-			return null;
+			return '';
 		}
 
 		$parser = new Parser( $settings );
 		$parser->parse();
-		$table = (string) ( $parser->get_settings()['table'] ?? '' );
 
-		return '' !== $table ? $table : null;
+		return (string) ( $parser->get_settings()['table'] ?? '' );
 	}
 
 	/**
@@ -171,7 +188,7 @@ class TableColumns {
 		foreach ( $rows as $row ) {
 			$name = (string) ( $row['Field'] ?? '' );
 			$type = (string) ( $row['Type'] ?? '' );
-			if ( '' === $name || '' === $type ) {
+			if ( ! $name || ! $type ) {
 				continue;
 			}
 			$columns[ $name ] = strtoupper( $type );
@@ -216,26 +233,12 @@ class TableColumns {
 		return $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $like ) ) === $table;
 	}
 
-	private static function is_protected( string $column, array $settings ): bool {
-		return in_array( $column, self::get_protected_columns( $settings ), true );
-	}
-
-	/**
-	 * Remove protected columns from a column list.
-	 *
-	 * @param array<string, string> $columns  Column name => SQL type.
-	 * @param array                 $settings Model settings.
-	 *
-	 * @return array<string, string>
-	 */
 	private static function filter_protected( array $columns, array $settings ): array {
 		return array_diff_key( $columns, array_flip( self::get_protected_columns( $settings ) ) );
 	}
 
 	/**
 	 * Get column names that cannot be dropped or listed.
-	 *
-	 * @param array $settings Model settings.
 	 *
 	 * @return string[]
 	 */

@@ -164,6 +164,8 @@ class Edit extends BaseEditPage {
 
 		$post = get_post();
 
+		global $wpdb;
+
 		$data = [
 			'adminUrl'        => admin_url(),
 			'title'           => $post->post_title,
@@ -178,6 +180,7 @@ class Edit extends BaseEditPage {
 			'models'          => Data::get_models(),
 			'templates'       => Data::get_templates(),
 			'icons'           => DataHelper::get_dashicons(),
+			'tablePrefix'     => $wpdb->prefix,
 
 			'fieldCategories' => Data::get_field_categories(),
 

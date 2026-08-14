@@ -26,3 +26,28 @@ export const resolveTableName = ( table, usePrefix = false, prefix = '' ) => {
 
 	return usePrefix ? `${ prefix }${ name }` : name;
 };
+
+/**
+ * Merge stored editor columns with missing field IDs as TEXT columns.
+ */
+export const seedEditorColumns = ( editorColumns, fieldIds, createColumn ) => {
+	const existing = editorColumns && typeof editorColumns === 'object' ? { ...editorColumns } : {};
+	const existingNames = new Set(
+		Object.values( existing )
+			.map( column => column?.name )
+			.filter( Boolean )
+	);
+
+	fieldIds.forEach( id => {
+		if ( ! id || existingNames.has( id ) ) {
+			return;
+		}
+		const column = createColumn( {
+			name: id,
+		} );
+		existing[ column.id ] = column;
+		existingNames.add( id );
+	} );
+
+	return existing;
+};

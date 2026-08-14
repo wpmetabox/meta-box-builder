@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Extensions\CustomModel;
 
+use MBB\Helpers\TableSchema;
 use MBBParser\Parsers\Base;
 use MetaBox\Support\Arr;
 
@@ -35,55 +36,16 @@ class Parser extends Base {
 	}
 
 	private function parse_columns(): self {
-		$raw = Arr::get( $this->settings, 'columns', [] );
-		if ( ! is_array( $raw ) ) {
-			$raw = [];
-		}
+		$parsed = TableSchema::parse_columns( (array) Arr::get( $this->settings, 'columns', [] ) );
 
-		$columns = [];
-		$keys    = [];
-
-		foreach ( $raw as $item ) {
-			if ( ! is_array( $item ) ) {
-				continue;
-			}
-
-			$name = str_replace( '-', '_', sanitize_key( (string) ( $item['name'] ?? '' ) ) );
-			if ( '' === $name || 'id' === $name ) {
-				continue;
-			}
-
-			$type = (string) ( $item['type'] ?? 'TEXT' );
-			if ( 'custom' === $type ) {
-				$type = trim( (string) ( $item['custom_type'] ?? '' ) );
-			}
-			$type = $this->sanitize_column_type( $type );
-			if ( '' === $type ) {
-				$type = 'TEXT';
-			}
-
-			$columns[ $name ] = $type;
-
-			$wants_index = ! empty( $item['index'] );
-			if ( $wants_index && 'TEXT' !== strtoupper( $type ) ) {
-				$keys[] = $name;
-			}
-		}
-
-		$this->columns = $columns;
-		if ( ! empty( $keys ) ) {
-			$this->keys = array_values( array_unique( $keys ) );
+		$this->columns = $parsed['columns'];
+		if ( ! empty( $parsed['keys'] ) ) {
+			$this->keys = $parsed['keys'];
 		} else {
 			unset( $this->keys );
 		}
 
 		return $this;
-	}
-
-	private function sanitize_column_type( string $type ): string {
-		// Allow common SQL type characters while stripping dangerous input.
-		$type = preg_replace( '/[^a-zA-Z0-9_(),\s]/', '', $type );
-		return is_string( $type ) ? trim( $type ) : '';
 	}
 
 	private function parse_menu(): self {
