@@ -87,6 +87,7 @@ const useSettings = create( ( set, get ) => ( {
 			dotProp.delete( updatedSettings, 'taxonomies' );
 			dotProp.delete( updatedSettings, 'settings_pages' );
 			dotProp.delete( updatedSettings, 'type' );
+			// Model tables are owned by the model (or code-model manage opt-in), not post custom_table leftovers.
 			dotProp.delete( updatedSettings, 'custom_table' );
 		} else if ( [ 'block', 'user', 'comment' ].includes( value ) ) {
 			dotProp.delete( updatedSettings, 'post_types' );
@@ -95,7 +96,7 @@ const useSettings = create( ( set, get ) => ( {
 			dotProp.delete( updatedSettings, 'models' );
 		}
 
-		// Table settings belong to the model, not the field group.
+		// Leaving model: drop model-table manage settings that only apply there.
 		if ( currentValue === 'model' && value !== 'model' ) {
 			dotProp.delete( updatedSettings, 'custom_table' );
 		}

@@ -13,7 +13,11 @@ MB Builder is a WordPress plugin that extends Meta Box. It lets you create custo
 
 Always run the matching build after editing JS or (S)CSS.
 
-When changing files under `vendor/wpmetabox/mbb-parser`, always upstream those changes to the [mbb-parser](https://github.com/wpmetabox/mbb-parser) repository (commit and push to the `master` branch).
+When committing this builder repository, also commit and push related upstream repos if this commit changes them:
+- [mbb-parser](https://github.com/wpmetabox/mbb-parser) (`vendor/wpmetabox/mbb-parser` → push to `master`)
+- [schema](https://github.com/wpmetabox/schema) (e.g. `field-group.json`, `custom-model.json` → push to `main`)
+
+Do not commit or push mbb-parser or schema on their own outside a builder commit.
 
 ## Code style
 

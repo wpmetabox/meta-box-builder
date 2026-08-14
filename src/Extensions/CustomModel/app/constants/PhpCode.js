@@ -19,8 +19,6 @@ add_action( 'init', '${ functionName }' );
 function ${ functionName }() {${ globalWpdb }
 	$table = ${ tableExpression };
 
-	MetaBox\\CustomTable\\API::create( $table, ${ columnsCode( settings ) }, ${ keysCode( settings ) } );
-
 	mb_register_model( '${ slug }', [
 		'table' => $table,
 		'labels' => [
@@ -30,6 +28,8 @@ function ${ functionName }() {${ globalWpdb }
 		${ menuIcon( settings ) },
 		${ text( settings, 'capability' ) },${ supports }
 	] );
+
+	MetaBox\\CustomTable\\API::create( $table, ${ columnsCode( settings ) }, ${ keysCode( settings ) } );
 }`;
 };
 

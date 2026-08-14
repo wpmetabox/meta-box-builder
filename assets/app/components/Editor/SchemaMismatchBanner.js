@@ -1,12 +1,14 @@
 import { createInterpolateElement } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 import useModelSchema from '../../hooks/useModelSchema';
+import useSettings from '../../hooks/useSettings';
 
 const SchemaMismatchBanner = () => {
 	const missingFieldIds = useModelSchema( state => state.missingFieldIds );
 	const schemaSource = useModelSchema( state => state.schemaSource );
 	const selectedModel = useModelSchema( state => state.selectedModel );
 	const openSchema = useModelSchema( state => state.openSchema );
+	const manageCodeModel = !! useSettings( state => state.settings?.custom_table?.enable );
 
 	const count = missingFieldIds.length;
 	if ( ! count || ! schemaSource ) {
@@ -14,7 +16,7 @@ const SchemaMismatchBanner = () => {
 	}
 
 	const isCustomTable = schemaSource === 'custom_table';
-	const readOnly = ! isCustomTable && ! selectedModel?.post_id;
+	const readOnly = ! isCustomTable && ! selectedModel?.post_id && ! manageCodeModel;
 	const tableLabel = isCustomTable
 		? __( 'custom table', 'meta-box-builder' )
 		: __( 'model table', 'meta-box-builder' );

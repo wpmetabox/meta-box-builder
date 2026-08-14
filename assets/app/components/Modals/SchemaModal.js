@@ -1,38 +1,39 @@
-import { Button, Flex, Modal } from '@wordpress/components';
+import { Button, Flex, Modal, ToggleControl } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { DEFAULT_COLUMN_TYPE, parsedColumnsToEditor } from '../../constants/columnTypes';
 import ColumnsEditor from '../../controls/ColumnsEditor';
-import { uniqid } from '../../functions';
+import { maybeArrayToObject, uniqid } from '../../functions';
 import { fetcher } from '../../hooks/useFetch';
+import useSettings from '../../hooks/useSettings';
+import { seedEditorColumns } from '../../utils/modelColumns';
+
+const createColumnItem = ( overrides = {} ) => ( {
+	id: uniqid(),
+	name: '',
+	type: DEFAULT_COLUMN_TYPE,
+	custom_type: '',
+	index: false,
+	...overrides,
+} );
 
 const buildColumns = ( schemaColumns, schemaKeys, fieldIds ) => {
 	const existing = parsedColumnsToEditor( schemaColumns || {}, schemaKeys || [] );
-	const existingNames = new Set( Object.values( existing ).map( col => col.name ) );
-	const missing = Object.fromEntries(
-		fieldIds
-			.filter( id => ! existingNames.has( id ) )
-			.map( id => {
-				const itemId = uniqid();
-				return [ itemId, {
-					id: itemId,
-					name: id,
-					type: DEFAULT_COLUMN_TYPE,
-					custom_type: '',
-					index: false,
-				} ];
-			} )
-	);
-
-	return { ...existing, ...missing };
+	return seedEditorColumns( existing, fieldIds, createColumnItem );
 };
 
 const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
+	const { getSetting, updateSetting } = useSettings();
+	const isCodeModel = ! model.post_id;
+	const manageEnabled = !! getSetting( 'custom_table.enable', false );
+
+	const [ manage, setManage ] = useState( () => isCodeModel && manageEnabled );
 	const [ columns, setColumns ] = useState( {} );
 	const [ schemaColumnNames, setSchemaColumnNames ] = useState( () => Object.keys( model.columns || {} ) );
 	const [ saving, setSaving ] = useState( false );
 	const [ loading, setLoading ] = useState( false );
-	const readOnly = ! model.post_id;
+
+	const readOnly = isCodeModel && ! manage;
 
 	useEffect( () => {
 		let cancelled = false;
@@ -40,9 +41,20 @@ const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
 		const load = async () => {
 			let schemaColumns = model.columns || {};
 			let schemaKeys = model.keys || [];
+			const storedColumns = maybeArrayToObject( getSetting( 'custom_table.columns', {} ), 'id' );
 
-			// Code-registered models: always refresh from the live DB table.
-			if ( readOnly && model.name ) {
+			if ( isCodeModel && manage && Object.keys( storedColumns ).length > 0 ) {
+				if ( cancelled ) {
+					return;
+				}
+				setSchemaColumnNames(
+					Object.values( storedColumns ).map( column => column.name ).filter( Boolean )
+				);
+				setColumns( seedEditorColumns( storedColumns, fieldIds, createColumnItem ) );
+				return;
+			}
+
+			if ( isCodeModel && model.name ) {
 				setLoading( true );
 				try {
 					const response = await fetcher( {
@@ -80,10 +92,92 @@ const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
 		return () => {
 			cancelled = true;
 		};
-	}, [ model, fieldIds, readOnly ] );
+	}, [ model, fieldIds, isCodeModel, manage, getSetting ] );
+
+	const applyManageSettings = () => {
+		updateSetting( 'custom_table.enable', true );
+		updateSetting( 'custom_table.create', true );
+		updateSetting( 'custom_table.prefix', false );
+		if ( model.table ) {
+			updateSetting( 'custom_table.name', model.table );
+		}
+	};
+
+	const toggleManage = value => {
+		if ( value ) {
+			const confirmed = window.confirm(
+				__( 'Edit the table columns here? If you use PHP to create this table, remove that code to avoid conflicts.', 'meta-box-builder' )
+			);
+			if ( ! confirmed ) {
+				return;
+			}
+			setManage( true );
+			applyManageSettings();
+			return;
+		}
+
+		setManage( false );
+		updateSetting( 'custom_table.enable', false );
+	};
 
 	const save = async () => {
 		if ( readOnly ) {
+			return;
+		}
+
+		if ( isCodeModel ) {
+			const table = model.table || '';
+			if ( ! table ) {
+				alert( __( 'Could not resolve the model table.', 'meta-box-builder' ) );
+				return;
+			}
+
+			const tableExists = Object.keys( model.db_columns || {} ).length > 0;
+			if ( ! tableExists ) {
+				const confirmed = window.confirm(
+					sprintf(
+						/* translators: %s: table name */
+						__( 'Create table "%s" with the columns below?', 'meta-box-builder' ),
+						table
+					)
+				);
+				if ( ! confirmed ) {
+					return;
+				}
+			}
+
+			setSaving( true );
+			try {
+				const response = await fetcher( {
+					api: 'custom-model/create-table',
+					params: {
+						table,
+						model: model.name,
+						columns,
+					},
+					method: 'POST',
+					cache: false,
+				} );
+
+				if ( ! response.success ) {
+					alert( response.message || __( 'Could not update the table schema.', 'meta-box-builder' ) );
+					return;
+				}
+
+				applyManageSettings();
+				updateSetting( 'custom_table.columns', columns );
+				onSaved( {
+					...model,
+					columns: response.columns || {},
+					db_columns: response.columns || {},
+					keys: response.keys || [],
+				} );
+				onClose();
+			} catch ( error ) {
+				alert( error.message || __( 'Could not update the table schema.', 'meta-box-builder' ) );
+			} finally {
+				setSaving( false );
+			}
 			return;
 		}
 
@@ -135,10 +229,22 @@ const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
 			<p className="og-description">
 				{
 					readOnly
-						? __( 'This model is registered in code, so the schema is read-only here. Change field IDs to match columns, or update the table in PHP.', 'meta-box-builder' )
-						: __( 'Adjust column types and indexes before saving. Remove from schema keeps the column in the database. Drop column permanently deletes it and its data.', 'meta-box-builder' )
+						? __( 'This model is registered in code, so the schema is read-only. Enable the option below to edit the table columns.', 'meta-box-builder' )
+						: isCodeModel
+							? __( 'Edit the columns below, then save the schema to create or update the table. Drop column permanently deletes the column and its data.', 'meta-box-builder' )
+							: __( 'Adjust column types and indexes before saving. Remove from schema keeps the column in the database. Drop column permanently deletes it and its data.', 'meta-box-builder' )
 				}
 			</p>
+			{
+				isCodeModel && (
+					<ToggleControl
+						className="mb-schema-modal__manage"
+						label={ __( 'Edit table columns', 'meta-box-builder' ) }
+						checked={ manage }
+						onChange={ toggleManage }
+					/>
+				)
+			}
 			{
 				loading
 					? <p className="og-description">{ __( 'Loading columns…', 'meta-box-builder' ) }</p>
@@ -153,6 +259,8 @@ const SchemaModal = ( { model, fieldIds, onClose, onSaved } ) => {
 							table={ model.table }
 							postId={ model.post_id }
 							readOnly={ readOnly }
+							allowDrop={ ! readOnly && !! model.table }
+							dropByTable={ isCodeModel }
 						/>
 					)
 			}

@@ -28,6 +28,7 @@ const useModelSchemaSync = () => {
 	const customTableEnabled = objectType !== 'model'
 		&& !! customTable.enable
 		&& !! ( customTable.name || '' ).trim();
+	const manageCodeModelTable = objectType === 'model' && !! customTable.enable;
 	const customTableName = resolveTableName(
 		customTable.name || '',
 		!! customTable.prefix,
@@ -153,6 +154,14 @@ const useModelSchemaSync = () => {
 
 	const missingFieldIds = useMemo( () => {
 		if ( selectedModel ) {
+			if ( manageCodeModelTable ) {
+				const hasDbColumns = Object.keys( selectedModel.db_columns || {} ).length > 0;
+				const columnNames = getColumnNames(
+					hasDbColumns ? selectedModel.db_columns : ( customTable.columns || {} )
+				);
+				return fieldIds.filter( id => ! columnNames.includes( id ) );
+			}
+
 			const hasDbColumns = Object.keys( selectedModel.db_columns || {} ).length > 0;
 			const columnNames = getColumnNames(
 				hasDbColumns ? selectedModel.db_columns : selectedModel.columns
@@ -169,7 +178,14 @@ const useModelSchemaSync = () => {
 		}
 
 		return [];
-	}, [ selectedModel, customTableEnabled, customTable.columns, customTableDbColumns, fieldIds ] );
+	}, [
+		selectedModel,
+		manageCodeModelTable,
+		customTableEnabled,
+		customTable.columns,
+		customTableDbColumns,
+		fieldIds,
+	] );
 
 	const schemaSource = selectedModel ? 'model' : ( customTableEnabled ? 'custom_table' : null );
 

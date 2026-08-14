@@ -102,12 +102,13 @@ class Register {
 		$args = $model;
 		unset( $args['columns'], $args['keys'], $args['post_id'], $args['name'] );
 
-		if ( '' !== $table ) {
-			API::create( $table, $columns, $keys );
-		}
-
+		// Register first so TableSchema can add AUTO_INCREMENT + supports columns on create.
 		if ( ! Factory::get( $name ) ) {
 			mb_register_model( $name, $args );
+		}
+
+		if ( '' !== $table ) {
+			API::create( $table, $columns, $keys );
 		}
 	}
 

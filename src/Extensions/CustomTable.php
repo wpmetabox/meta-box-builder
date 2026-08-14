@@ -29,9 +29,10 @@ class CustomTable {
 	 */
 	public function create_custom_table( array &$data ): void {
 		$settings = $data['settings'] ?? [];
+		$is_model = ! empty( $settings['models'] ) || 'model' === ( $settings['object_type'] ?? '' );
 
-		// Models own the table schema — do not auto-create TEXT columns from field IDs.
-		if ( ! empty( $settings['models'] ) || 'model' === ( $settings['object_type'] ?? '' ) ) {
+		if ( $is_model ) {
+			$this->create_for_model( $data, $settings );
 			return;
 		}
 
@@ -46,6 +47,59 @@ class CustomTable {
 			Arr::set( $data, 'meta_box.table', $table );
 		}
 
+		$this->create_table( $table, $settings, $data['fields'] ?? [] );
+	}
+
+	/**
+	 * Create/update a code-model table from field-group settings when opted in.
+	 * Builder-managed models own their schema — skip those here.
+	 */
+	private function create_for_model( array &$data, array $settings ): void {
+		$custom_table = (array) ( $settings['custom_table'] ?? [] );
+		if ( empty( $custom_table['enable'] ) || empty( $custom_table['create'] ) ) {
+			return;
+		}
+
+		$models = array_filter( (array) ( $settings['models'] ?? [] ) );
+		$first  = reset( $models );
+		if ( $first && $this->is_builder_model( (string) $first ) ) {
+			return;
+		}
+
+		$table = TableSchema::resolve_model_table( $settings );
+		if ( '' === $table ) {
+			return;
+		}
+
+		Arr::set( $data, 'meta_box.table', $table );
+
+		$this->create_table( $table, $settings, $data['fields'] ?? [] );
+	}
+
+	/**
+	 * Whether the model is managed by MB Builder (has an mb-model post).
+	 */
+	private function is_builder_model( string $name ): bool {
+		$cache = get_option( 'mbb_models', [] );
+		if ( ! is_array( $cache ) ) {
+			return false;
+		}
+
+		return ! empty( $cache[ $name ]['post_id'] );
+	}
+
+	/**
+	 * Build columns and create or update the database table.
+	 *
+	 * @param string               $table    Table name.
+	 * @param array<string, mixed> $settings Field group settings.
+	 * @param array                $fields   Field list.
+	 */
+	private function create_table( string $table, array $settings, array $fields ): void {
+		if ( '' === $table ) {
+			return;
+		}
+
 		$parsed  = TableSchema::parse_columns( (array) Arr::get( $settings, 'custom_table.columns', [] ) );
 		$columns = $parsed['columns'];
 		$keys    = $parsed['keys'];
@@ -53,7 +107,7 @@ class CustomTable {
 		// Backward compatible: no configured schema → TEXT columns from field IDs.
 		if ( empty( $columns ) ) {
 			$id_prefix = Arr::get( $settings, 'prefix' );
-			$fields    = array_filter( $data['fields'] ?? [], [ $this, 'has_value' ] );
+			$fields    = array_filter( $fields, [ $this, 'has_value' ] );
 			foreach ( $fields as $field ) {
 				$columns[ $id_prefix . $field['id'] ] = 'TEXT';
 			}
@@ -66,7 +120,6 @@ class CustomTable {
 			'keys'    => $keys,
 		];
 		$cache_key  = 'mb_create_table_' . md5( wp_json_encode( $cache_data ) );
-		// Cache the table creation in production environment only.
 		if ( get_transient( $cache_key ) !== false && wp_get_environment_type() === 'production' ) {
 			return;
 		}

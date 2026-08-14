@@ -3,6 +3,39 @@ namespace MBB\Helpers;
 
 class TableSchema {
 	/**
+	 * Resolve a model table name from field-group settings.
+	 *
+	 * Prefers the live Factory model, then falls back to stored custom_table.name.
+	 *
+	 * @param array<string, mixed> $settings Field group settings.
+	 */
+	public static function resolve_model_table( array $settings ): string {
+		$models = array_filter( (array) ( $settings['models'] ?? [] ) );
+		$first  = reset( $models );
+
+		if ( $first && class_exists( \MetaBox\CustomTable\Model\Factory::class ) ) {
+			$model = \MetaBox\CustomTable\Model\Factory::get( $first );
+			if ( $model && ! empty( $model->table ) ) {
+				// Keep the model table name as registered (API only normalizes hyphens).
+				return str_replace( '-', '_', (string) $model->table );
+			}
+		}
+
+		$custom_table = (array) ( $settings['custom_table'] ?? [] );
+		$name         = (string) ( $custom_table['name'] ?? '' );
+		if ( '' === $name ) {
+			return '';
+		}
+
+		if ( ! empty( $custom_table['prefix'] ) ) {
+			global $wpdb;
+			$name = $wpdb->prefix . $name;
+		}
+
+		return str_replace( '-', '_', $name );
+	}
+
+	/**
 	 * Parse editor column items into SQL column definitions and index keys.
 	 *
 	 * @param array $column_items List or map of { name, type, custom_type, index }.

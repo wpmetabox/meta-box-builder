@@ -2,10 +2,57 @@
 namespace MBB\Extensions\CustomModel;
 
 use MBB\Helpers\TableSchema;
+use MetaBox\CustomTable\API;
 use MetaBox\CustomTable\Model\Factory;
 use MetaBox\Support\Arr;
 
 class TableColumns {
+	/**
+	 * Create or update a database table from editor column items.
+	 *
+	 * @param string $table        Table name.
+	 * @param array  $column_items Editor column items.
+	 * @param string $model_name   Optional model name (for supports columns via TableSchema).
+	 * @return array{success: bool, message?: string, columns?: array<string, string>, keys?: string[]}
+	 */
+	public static function create( string $table, array $column_items, string $model_name = '' ): array {
+		$table = str_replace( '-', '_', $table );
+		$table = TableSchema::sanitize_name( $table );
+		if ( ! $table ) {
+			return [
+				'success' => false,
+				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
+			];
+		}
+
+		if ( ! class_exists( API::class ) ) {
+			return [
+				'success' => false,
+				'message' => __( 'MB Custom Table is not active.', 'meta-box-builder' ),
+			];
+		}
+
+		$parsed = TableSchema::parse_columns( $column_items );
+		API::create( $table, $parsed['columns'], $parsed['keys'] );
+
+		$supports = [];
+		if ( $model_name && class_exists( Factory::class ) ) {
+			$model = Factory::get( $model_name );
+			if ( $model && isset( $model->supports ) && is_array( $model->supports ) ) {
+				$supports = $model->supports;
+			}
+		}
+
+		$inspected = self::inspect( $table, $supports );
+
+		return [
+			'success' => true,
+			'message' => __( 'Table schema updated.', 'meta-box-builder' ),
+			'columns' => $inspected['columns'],
+			'keys'    => $inspected['keys'],
+		];
+	}
+
 	/**
 	 * List columns for a registered model.
 	 *

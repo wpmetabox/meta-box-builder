@@ -48,6 +48,23 @@ class Save {
 			],
 		] );
 
+		register_rest_route( 'mbb', 'custom-model/create-table', [
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => [ $this, 'create_table' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+			'show_in_index'       => false,
+			'args'                => [
+				'table' => [
+					'required'          => true,
+					'sanitize_callback' => 'sanitize_text_field',
+				],
+				'model' => [
+					'required'          => false,
+					'sanitize_callback' => 'sanitize_key',
+				],
+			],
+		] );
+
 		register_rest_route( 'mbb', 'custom-model/table-columns', [
 			[
 				'methods'             => WP_REST_Server::READABLE,
@@ -195,19 +212,41 @@ class Save {
 			return $result;
 		}
 
-		$model = get_post_meta( $post_id, 'model', true );
+		$model     = get_post_meta( $post_id, 'model', true );
+		$table     = (string) ( $model['table'] ?? '' );
+		$supports  = isset( $model['supports'] ) && is_array( $model['supports'] ) ? $model['supports'] : [];
+		$inspected = [
+			'columns' => [],
+			'keys'    => [],
+		];
+		if ( $table ) {
+			$inspected = TableColumns::inspect( $table, $supports );
+		}
+		$db_columns = $inspected['columns'];
+
 		return [
 			'success' => true,
 			'message' => __( 'Model table schema updated.', 'meta-box-builder' ),
 			'model'   => [
-				'name'    => $post_name,
-				'label'   => $model['labels']['singular_name'] ?? $model['labels']['name'] ?? $post_name,
-				'table'   => $model['table'] ?? '',
-				'columns' => $model['columns'] ?? [],
-				'keys'    => $model['keys'] ?? [],
-				'post_id' => $post_id,
+				'name'       => $post_name,
+				'label'      => $model['labels']['singular_name'] ?? $model['labels']['name'] ?? $post_name,
+				'table'      => $table,
+				'columns'    => $model['columns'] ?? [],
+				'db_columns' => $db_columns,
+				'keys'       => $model['keys'] ?? ( $inspected['keys'] ?? [] ),
+				'post_id'    => $post_id,
 			],
 		];
+	}
+
+	public function create_table( WP_REST_Request $request ): array {
+		$columns = $request->get_param( 'columns' );
+
+		return TableColumns::create(
+			(string) $request->get_param( 'table' ),
+			is_array( $columns ) ? $columns : [],
+			(string) $request->get_param( 'model' )
+		);
 	}
 
 	public function get_table_columns( WP_REST_Request $request ): array {

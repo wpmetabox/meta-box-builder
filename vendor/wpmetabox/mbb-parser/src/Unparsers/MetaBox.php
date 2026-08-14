@@ -225,11 +225,16 @@ class MetaBox extends Base {
 		// For short reference.
 		$custom_table = &$this->settings['settings']['custom_table'];
 
-		// If table name is set, we need to set the name and enable the custom table back to the settings.
-		if ( isset( $this->table ) ) {
+		$settings    = $this->settings['settings'] ?? [];
+		$object_type = (string) ( $settings['object_type'] ?? '' );
+		$models      = array_filter( (array) ( $settings['models'] ?? [] ) );
+		$is_model    = 'model' === $object_type || ! empty( $models );
+
+		// Post/term/user: recover enable + name from the resolved table.
+		// Models: keep explicit manage/create/columns; do not force enable from the model table.
+		if ( isset( $this->table ) && ! $is_model ) {
 			$name = $this->table;
 
-			// Strip the prefix if it's set.
 			if ( ! empty( $custom_table['prefix'] ) ) {
 				global $wpdb;
 				if ( str_starts_with( $name, $wpdb->prefix ) ) {
@@ -245,15 +250,10 @@ class MetaBox extends Base {
 			return $this;
 		}
 
-		// Generate extra props for meta box settings (survive minimal export).
+		// Survive minimal export (settings are stripped).
 		$meta_box_custom_table = [];
 
-		$extra_keys = [
-			'prefix',
-			'create',
-		];
-
-		foreach ( $extra_keys as $key ) {
+		foreach ( [ 'enable', 'prefix', 'create' ] as $key ) {
 			if ( ! empty( $custom_table[ $key ] ) ) {
 				$meta_box_custom_table[ $key ] = true;
 			}
