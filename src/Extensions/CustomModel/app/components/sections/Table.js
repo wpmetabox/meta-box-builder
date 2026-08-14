@@ -7,8 +7,8 @@ import useAutofill from '../../hooks/useAutofill';
 
 const Table = () => {
 	const { getSetting, updateWithAutofill } = useAutofill();
-	const singularName = getSetting( 'labels.singular_name', '' );
-	const tableKey = getSetting( '_table_changed' ) ? 'table-manual' : singularName;
+	const pluralName = getSetting( 'labels.name', '' );
+	const tableKey = getSetting( '_table_changed' ) ? 'table-manual' : pluralName;
 	const model = getSetting( 'slug', '' );
 	const table = resolveTableName(
 		getSetting( 'table', '' ),

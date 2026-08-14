@@ -31,6 +31,9 @@ const autofillFrom = ( settings, sourceKey, value ) => {
 		if ( ! settings._slug_changed ) {
 			dotProp.set( settings, 'slug', slugify( value, { lower: true } ) );
 		}
+	}
+
+	if ( 'labels.name' === sourceKey ) {
 		if ( ! settings._table_changed ) {
 			dotProp.set( settings, 'table', slugify( value, { lower: true, replacement: '_' } ) );
 		}
