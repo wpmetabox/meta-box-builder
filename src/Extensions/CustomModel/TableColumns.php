@@ -107,7 +107,7 @@ class TableColumns {
 			return self::table_error();
 		}
 
-		$protected = self::get_protected_columns( $supports );
+		$protected = self::get_protected_columns( $supports ?: self::SUPPORT_FEATURES );
 
 		if ( in_array( $column, $protected, true ) ) {
 			return self::fail( __( 'This column cannot be dropped.', 'meta-box-builder' ) );

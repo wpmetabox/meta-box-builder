@@ -100,7 +100,7 @@ class TableSchema {
 	}
 
 	public static function sanitize_column_type( string $type ): string {
-		$type = preg_replace( '/[^a-zA-Z0-9_(),\s]/', '', $type );
+		$type = preg_replace( '/[^a-zA-Z0-9_(),\s\']/', '', $type );
 		return is_string( $type ) ? trim( $type ) : '';
 	}
 

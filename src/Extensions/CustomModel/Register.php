@@ -90,6 +90,12 @@ class Register {
 			}
 
 			self::register( $name, $args );
+
+			// Recreate missing tables (imported posts, dropped tables) without dbDelta every request.
+			$table = (string) ( $args['table'] ?? '' );
+			if ( $table && ! TableColumns::table_exists( $table ) ) {
+				self::create_table( $args );
+			}
 		}
 	}
 
