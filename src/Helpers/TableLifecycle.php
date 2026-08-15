@@ -67,7 +67,7 @@ class TableLifecycle {
 
 	public static function drop_table( string $table ): bool {
 		$table = TableSchema::sanitize_name( $table );
-		if ( '' === $table || ! TableColumns::table_exists( $table ) ) {
+		if ( ! $table || ! TableColumns::table_exists( $table ) ) {
 			return false;
 		}
 

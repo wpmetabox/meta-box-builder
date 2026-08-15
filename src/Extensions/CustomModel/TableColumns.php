@@ -26,7 +26,7 @@ class TableColumns {
 			return self::table_error();
 		}
 
-		// Register first so TableSchema can add AUTO_INCREMENT + supports columns on create.
+		// Register first so TableSchema adds AUTO_INCREMENT and supports columns.
 		if ( $model_name && ! Factory::get( $model_name ) ) {
 			mb_register_model( $model_name, [ 'table' => $table ] );
 		}
@@ -221,7 +221,7 @@ class TableColumns {
 	 */
 	public static function supports_for( string $model_name ): array {
 		$model_name = trim( $model_name );
-		if ( '' === $model_name ) {
+		if ( ! $model_name ) {
 			return [];
 		}
 

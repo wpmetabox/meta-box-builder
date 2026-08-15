@@ -7,7 +7,7 @@ class TableSchema {
 	 */
 	public static function apply_prefix( string $name, $use_prefix = false ): string {
 		$name = self::sanitize_name( $name );
-		if ( '' === $name || ! $use_prefix ) {
+		if ( ! $name || ! $use_prefix ) {
 			return $name;
 		}
 

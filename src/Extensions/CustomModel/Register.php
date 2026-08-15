@@ -91,7 +91,7 @@ class Register {
 
 			self::register( $name, $args );
 
-			// Recreate missing tables (imported posts, dropped tables) without dbDelta every request.
+			// Recreate missing tables (imported posts, dropped tables).
 			$table = (string) ( $args['table'] ?? '' );
 			if ( $table && ! TableColumns::table_exists( $table ) ) {
 				self::create_table( $args );
@@ -119,7 +119,7 @@ class Register {
 	 */
 	public static function create_table( array $model ): void {
 		$table = (string) ( $model['table'] ?? '' );
-		if ( '' === $table ) {
+		if ( ! $table ) {
 			return;
 		}
 
@@ -131,11 +131,30 @@ class Register {
 
 	/**
 	 * Whether a Builder mb-model post exists for this slug.
+	 *
+	 * Query the database instead of the mbb_models cache.
+	 * The cache only holds published models.
+	 * A trashed/draft model would falsely report false and let a field group drop its table.
+	 *
+	 * WordPress appends __trashed to the slug of trashed posts, so match both.
 	 */
 	public static function has_post( string $name ): bool {
-		$cache = get_option( self::CACHE_OPTION, [] );
+		if ( ! $name ) {
+			return false;
+		}
 
-		return is_array( $cache ) && ! empty( $cache[ $name ]['post_id'] );
+		$posts = get_posts( [
+			'post_name__in'          => [ $name, $name . '__trashed' ],
+			'post_type'              => 'mb-model',
+			'post_status'            => [ 'publish', 'draft', 'pending', 'private', 'trash' ],
+			'posts_per_page'         => 1,
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		] );
+
+		return ! empty( $posts );
 	}
 
 	public static function query_models(): array {
