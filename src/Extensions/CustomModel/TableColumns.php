@@ -88,52 +88,6 @@ class TableColumns {
 	}
 
 	/**
-	 * Drop a column from a database table.
-	 *
-	 * @param string   $table    Table name.
-	 * @param string   $column   Column name.
-	 * @param string[] $supports Model supports used to skip protected columns.
-	 * @return array{success: bool, message?: string, columns?: array<string, string>}
-	 */
-	public static function drop_table_column( string $table, string $column, array $supports = [] ): array {
-		$column = TableSchema::sanitize_name( $column );
-		$table  = TableSchema::sanitize_name( $table );
-
-		if ( ! $column ) {
-			return self::fail( __( 'Invalid column name.', 'meta-box-builder' ) );
-		}
-
-		if ( ! $table ) {
-			return self::table_error();
-		}
-
-		$protected = self::get_protected_columns( $supports ?: self::SUPPORT_FEATURES );
-
-		if ( in_array( $column, $protected, true ) ) {
-			return self::fail( __( 'This column cannot be dropped.', 'meta-box-builder' ) );
-		}
-
-		$db_columns = self::fetch( $table );
-		if ( ! isset( $db_columns[ $column ] ) ) {
-			return self::fail( __( 'This column does not exist in the database.', 'meta-box-builder' ) );
-		}
-
-		global $wpdb;
-
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- identifiers validated above.
-		$result = $wpdb->query( "ALTER TABLE `{$table}` DROP COLUMN `{$column}`" );
-		if ( false === $result ) {
-			return self::fail( __( 'Could not drop the column from the database.', 'meta-box-builder' ) );
-		}
-
-		return [
-			'success' => true,
-			'message' => __( 'Column dropped from the database.', 'meta-box-builder' ),
-			'columns' => array_diff_key( self::fetch( $table ), array_flip( $protected ) ),
-		];
-	}
-
-	/**
 	 * Read column definitions from the database table.
 	 *
 	 * @return array<string, string> Column name => SQL type.
@@ -201,7 +155,7 @@ class TableColumns {
 	}
 
 	/**
-	 * Get column names that cannot be dropped or listed.
+	 * Get column names that inspect should hide (ID and support columns).
 	 *
 	 * @param string[] $supports Model support features.
 	 * @return string[]

@@ -24,7 +24,9 @@ Do not commit or push mbb-parser or schema on their own outside a builder commit
 ### General principles
 - Make changes as minimal as possible
 - Write small, single-purpose functions, prefer declarative code
-- Add comments for why (not what)
+- Write comments only when needed
+- Write comments for why (not what)
+- Writes short, concise code comments. When a comment must wrap onto multiple lines, breaks at sentence boundaries (finish the sentence, then wrap) rather than mid-sentence.
 - Use descriptive names, avoid abbreviations unless widely recognized
 - Avoid one-off internal constants or variables used only once when inlining stays short, keep a named variable when it clarifies intent, especially in complex code
 - Keep commits minimal and focused

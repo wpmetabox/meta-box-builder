@@ -5,7 +5,7 @@ class TableSchema {
 	/**
 	 * Sanitize a table or column name and optionally prepend $wpdb->prefix.
 	 */
-	public static function apply_prefix( string $name, $use_prefix = false ): string {
+	public static function apply_prefix( string $name, bool $use_prefix = false ): string {
 		$name = self::sanitize_name( $name );
 		if ( ! $name || ! $use_prefix ) {
 			return $name;
@@ -43,16 +43,6 @@ class TableSchema {
 		return self::apply_prefix(
 			(string) ( $custom_table['name'] ?? '' ),
 			! empty( $custom_table['prefix'] )
-		);
-	}
-
-	/**
-	 * Resolve the database table for a Builder custom model from stored settings.
-	 */
-	public static function resolve_model_table_from_settings( array $settings ): string {
-		return self::apply_prefix(
-			(string) ( $settings['table'] ?? '' ),
-			! empty( $settings['prefix'] )
 		);
 	}
 

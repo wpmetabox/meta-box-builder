@@ -55,9 +55,8 @@ const useModelSchemaSync = () => {
 			return null;
 		}
 
-		return ensureArray( getSetting( 'models', [] ) )
-			.map( name => models.find( model => model.name === name ) )
-			.filter( Boolean )[ 0 ] || null;
+		const name = ensureArray( getSetting( 'models', [] ) )[ 0 ];
+		return name ? models.find( model => model.name === name ) || null : null;
 	}, [ objectType, settings, models, getSetting ] );
 
 	useEffect( () => {

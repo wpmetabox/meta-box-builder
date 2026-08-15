@@ -56,18 +56,6 @@ const CustomTable = () => {
 				defaultValue={ !!setting.create }
 				updateField={ updateSetting }
 			/>
-			{
-				!! setting.enable && !! setting.create && (
-					<Toggle
-						dependency="table_enable:true"
-						name="custom_table.drop_on_delete"
-						label={ __( 'Drop this table when deleting the field group', 'meta-box-builder' ) }
-						componentId="settings-table_drop_on_delete"
-						defaultValue={ !! setting.drop_on_delete }
-						updateField={ updateSetting }
-					/>
-				)
-			}
 			<DivRow
 				htmlFor="settings-table_name"
 				dependency="table_enable:true"

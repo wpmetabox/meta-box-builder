@@ -5,6 +5,7 @@ node_modules
 *.LICENSE.txt
 
 .commandcode
+.cursor
 
 # assets/js/build
 src/Extensions/Relationships/build/relationships.js.map

@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Helpers;
 
+use MBB\Extensions\CustomModel\Register;
 use MetaBox\CustomTable\Model\Factory;
 use MetaBox\Support\Data as DataHelper;
 use WP_Block_Type_Registry;
@@ -148,7 +149,7 @@ class Data {
 			return [];
 		}
 
-		$cache = get_option( 'mbb_models', [] );
+		$cache = get_option( Register::CACHE_OPTION, [] );
 		if ( ! is_array( $cache ) ) {
 			$cache = [];
 		}
@@ -182,7 +183,7 @@ class Data {
 		}
 
 		if ( ! is_array( $cache ) ) {
-			$cache = get_option( 'mbb_models', [] );
+			$cache = get_option( Register::CACHE_OPTION, [] );
 			$cache = is_array( $cache ) ? $cache : [];
 		}
 

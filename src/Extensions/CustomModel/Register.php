@@ -8,7 +8,7 @@ use MBBParser\Unparsers\MetaBox;
 use WP_Query;
 
 class Register {
-	private const CACHE_OPTION = 'mbb_models';
+	public const CACHE_OPTION = 'mbb_models';
 
 	public function __construct() {
 		$this->register_post_type();
@@ -106,10 +106,9 @@ class Register {
 	 * @param array  $model Parsed model args including optional columns, keys, post_id.
 	 */
 	public static function register( string $name, array $model ): void {
-		$args = $model;
-		unset( $args['columns'], $args['keys'], $args['post_id'], $args['name'], $args['modified'] );
+		unset( $model['columns'], $model['keys'], $model['post_id'], $model['name'], $model['modified'] );
 
-		mb_register_model( $name, $args );
+		mb_register_model( $name, $model );
 	}
 
 	/**
@@ -134,7 +133,6 @@ class Register {
 	 *
 	 * Query the database instead of the mbb_models cache.
 	 * The cache only holds published models.
-	 * A trashed/draft model would falsely report false and let a field group drop its table.
 	 *
 	 * WordPress appends __trashed to the slug of trashed posts, so match both.
 	 */

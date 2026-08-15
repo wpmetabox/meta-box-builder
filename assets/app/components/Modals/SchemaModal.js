@@ -8,11 +8,6 @@ import { fetcher } from '../../hooks/useFetch';
 import useSettings from '../../hooks/useSettings';
 import { resolveTableName, seedEditorColumns } from '../../utils/modelColumns';
 
-const buildColumns = ( schemaColumns, schemaKeys, fieldIds ) => {
-	const existing = parsedColumnsToEditor( schemaColumns || {}, schemaKeys || [] );
-	return seedEditorColumns( existing, fieldIds );
-};
-
 const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 	const { getSetting, updateSetting } = useSettings();
 	const isCustomTable = source === 'custom_table';
@@ -46,7 +41,10 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 		const live = model?.db_columns || {};
 		const schemaColumns = isCodeModel && Object.keys( live ).length ? live : ( model?.columns || {} );
 		setSchemaColumnNames( Object.keys( schemaColumns ) );
-		setColumns( buildColumns( schemaColumns, model?.keys || [], fieldIds ) );
+		setColumns( seedEditorColumns(
+			parsedColumnsToEditor( schemaColumns, model?.keys || [] ),
+			fieldIds
+		) );
 	}, [ model, fieldIds, isCodeModel, isCustomTable, manage, customTable.columns ] );
 
 	const applyManageSettings = () => {
@@ -199,12 +197,12 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 			);
 
 	const description = isCustomTable
-		? __( 'Adjust column types and indexes before saving. Remove from schema keeps the column in the database. Drop column permanently deletes it and its data. Save the field group with Auto create table enabled to apply schema changes to the database.', 'meta-box-builder' )
+		? __( 'Adjust column types and indexes before saving. Remove from schema keeps the column and its data in the database. Save the field group with Auto create table enabled to apply schema changes to the database.', 'meta-box-builder' )
 		: readOnly
 			? __( 'This model is registered in code, so the schema is read-only. Enable the option below to edit the table columns.', 'meta-box-builder' )
 			: isCodeModel
-				? __( 'Edit the columns below, then save the schema to create or update the table. Drop column permanently deletes the column and its data.', 'meta-box-builder' )
-				: __( 'Adjust column types and indexes before saving. Remove from schema keeps the column in the database. Drop column permanently deletes it and its data.', 'meta-box-builder' );
+				? __( 'Edit the columns below, then save the schema to create or update the table. Remove from schema keeps the column and its data in the database.', 'meta-box-builder' )
+				: __( 'Adjust column types and indexes before saving. Remove from schema keeps the column and its data in the database.', 'meta-box-builder' );
 
 	return (
 		<Modal
@@ -235,7 +233,6 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 				model={ model?.name }
 				table={ table }
 				readOnly={ readOnly }
-				allowDrop={ ! readOnly && !! table }
 			/>
 			{
 				! readOnly && (

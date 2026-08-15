@@ -67,34 +67,16 @@ const useSettings = create( ( set, get ) => ( {
 		dotProp.set( updatedSettings, key, value );
 
 		// Remove other settings that are not relevant for the selected object type.
-		if ( value === 'post' ) {
-			dotProp.delete( updatedSettings, 'taxonomies' );
-			dotProp.delete( updatedSettings, 'settings_pages' );
-			dotProp.delete( updatedSettings, 'models' );
-			dotProp.delete( updatedSettings, 'type' );
-		} else if ( value === 'term' ) {
-			dotProp.delete( updatedSettings, 'post_types' );
-			dotProp.delete( updatedSettings, 'settings_pages' );
-			dotProp.delete( updatedSettings, 'models' );
-			dotProp.delete( updatedSettings, 'type' );
-		} else if ( value === 'setting' ) {
-			dotProp.delete( updatedSettings, 'post_types' );
-			dotProp.delete( updatedSettings, 'taxonomies' );
-			dotProp.delete( updatedSettings, 'models' );
-			dotProp.delete( updatedSettings, 'type' );
-		} else if ( value === 'model' ) {
-			dotProp.delete( updatedSettings, 'post_types' );
-			dotProp.delete( updatedSettings, 'taxonomies' );
-			dotProp.delete( updatedSettings, 'settings_pages' );
-			dotProp.delete( updatedSettings, 'type' );
-			// Model tables are owned by the model (or code-model manage opt-in), not post custom_table leftovers.
-			dotProp.delete( updatedSettings, 'custom_table' );
-		} else if ( [ 'block', 'user', 'comment' ].includes( value ) ) {
-			dotProp.delete( updatedSettings, 'post_types' );
-			dotProp.delete( updatedSettings, 'taxonomies' );
-			dotProp.delete( updatedSettings, 'settings_pages' );
-			dotProp.delete( updatedSettings, 'models' );
-		}
+		const clearKeys = {
+			post: [ 'taxonomies', 'settings_pages', 'models', 'type' ],
+			term: [ 'post_types', 'settings_pages', 'models', 'type' ],
+			setting: [ 'post_types', 'taxonomies', 'models', 'type' ],
+			model: [ 'post_types', 'taxonomies', 'settings_pages', 'type', 'custom_table' ],
+			block: [ 'post_types', 'taxonomies', 'settings_pages', 'models' ],
+			user: [ 'post_types', 'taxonomies', 'settings_pages', 'models' ],
+			comment: [ 'post_types', 'taxonomies', 'settings_pages', 'models' ],
+		};
+		( clearKeys[ value ] || [] ).forEach( key => dotProp.delete( updatedSettings, key ) );
 
 		// Leaving model: drop model-table manage settings that only apply there.
 		if ( currentValue === 'model' && value !== 'model' ) {

@@ -38,11 +38,7 @@ class Parser extends Base {
 		$parsed = TableSchema::parse_columns( (array) Arr::get( $this->settings, 'columns', [] ) );
 
 		$this->columns = $parsed['columns'];
-		if ( ! empty( $parsed['keys'] ) ) {
-			$this->keys = $parsed['keys'];
-		} else {
-			unset( $this->keys );
-		}
+		$this->keys    = $parsed['keys'];
 
 		return $this;
 	}
@@ -111,9 +107,7 @@ class Parser extends Base {
 		}
 
 		// Keep only non-empty labels.
-		$labels = array_filter( $labels, function ( $value ): bool {
-			return '' !== $value && null !== $value;
-		} );
+		$labels = array_filter( $labels );
 
 		$this->labels = $labels;
 
@@ -142,8 +136,7 @@ class Parser extends Base {
 			$this->function_name,
 			$this->_slug_changed,
 			$this->_table_changed,
-			$this->modified,
-			$this->drop_table_on_delete
+			$this->modified
 		);
 
 		return $this;

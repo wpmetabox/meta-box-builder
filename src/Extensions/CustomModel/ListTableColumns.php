@@ -30,10 +30,10 @@ class ListTableColumns {
 			'table' => __( 'Table name', 'meta-box-builder' ),
 		];
 
-		$new_columns = array_combine(
-			array_map( static fn( string $column ): string => self::PREFIX . $column, self::COLUMNS ),
-			array_map( static fn( string $column ): string => $labels[ $column ], self::COLUMNS )
-		);
+		$new_columns = [];
+		foreach ( self::COLUMNS as $column ) {
+			$new_columns[ self::PREFIX . $column ] = $labels[ $column ];
+		}
 
 		$result = [];
 		foreach ( $columns as $key => $label ) {

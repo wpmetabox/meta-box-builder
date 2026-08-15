@@ -129,18 +129,6 @@ const Location = () => {
 					updateField={ updateSetting }
 				/>
 			}
-			{
-				'model' === objectType && !! getSetting( 'custom_table.enable', false ) && ! ( MbbApp.models || [] ).find(
-					item => item.name === ensureArray( getSetting( 'models', [] ) )[ 0 ] && item.post_id > 0
-				) &&
-				<Toggle
-					label={ __( 'Drop this table when deleting the field group', 'meta-box-builder' ) }
-					name="custom_table.drop_on_delete"
-					componentId="settings-model_table_drop_on_delete"
-					defaultValue={ !! getSetting( 'custom_table.drop_on_delete', false ) }
-					updateField={ updateSetting }
-				/>
-			}
 		</>
 	);
 };

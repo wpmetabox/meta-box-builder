@@ -21,13 +21,7 @@ class Save {
 			'permission_callback' => [ $this, 'has_permission' ],
 			'show_in_index'       => false,
 			'args'                => [
-				'post_id'    => [
-					'required'          => true,
-					'validate_callback' => function ( $param ): bool {
-						return is_numeric( $param );
-					},
-					'sanitize_callback' => 'absint',
-				],
+				'post_id'    => $this->get_post_id_arg(),
 				'post_title' => [
 					'validate_callback' => function ( $param ) {
 						if ( empty( $param ) ) {
@@ -68,40 +62,18 @@ class Save {
 		] );
 
 		register_rest_route( 'mbb', 'custom-model/table-columns', [
-			[
-				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'get_table_columns' ],
-				'permission_callback' => [ $this, 'has_permission' ],
-				'show_in_index'       => false,
-				'args'                => [
-					'model' => [
-						'required'          => false,
-						'sanitize_callback' => 'sanitize_key',
-					],
-					'table' => [
-						'required'          => false,
-						'sanitize_callback' => 'sanitize_text_field',
-					],
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => [ $this, 'get_table_columns' ],
+			'permission_callback' => [ $this, 'has_permission' ],
+			'show_in_index'       => false,
+			'args'                => [
+				'model' => [
+					'required'          => false,
+					'sanitize_callback' => 'sanitize_key',
 				],
-			],
-			[
-				'methods'             => WP_REST_Server::DELETABLE,
-				'callback'            => [ $this, 'drop_table_column' ],
-				'permission_callback' => [ $this, 'has_permission' ],
-				'show_in_index'       => false,
-				'args'                => [
-					'table'  => [
-						'required'          => true,
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'model'  => [
-						'required'          => false,
-						'sanitize_callback' => 'sanitize_key',
-					],
-					'column' => [
-						'required'          => true,
-						'sanitize_callback' => 'sanitize_text_field',
-					],
+				'table' => [
+					'required'          => false,
+					'sanitize_callback' => 'sanitize_text_field',
 				],
 			],
 		] );
@@ -243,23 +215,6 @@ class Save {
 		return TableColumns::list_for_model(
 			(string) $request->get_param( 'model' ),
 			(string) $request->get_param( 'table' )
-		);
-	}
-
-	public function drop_table_column( WP_REST_Request $request ): array {
-		$table = (string) $request->get_param( 'table' );
-		if ( ! $table ) {
-			return [
-				'success' => false,
-				'message' => __( 'Could not resolve the model table.', 'meta-box-builder' ),
-			];
-		}
-
-		$model = (string) $request->get_param( 'model' );
-		return TableColumns::drop_table_column(
-			$table,
-			(string) $request->get_param( 'column' ),
-			TableColumns::supports_for( $model )
 		);
 	}
 

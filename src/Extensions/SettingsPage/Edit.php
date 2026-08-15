@@ -64,32 +64,6 @@ class Edit extends BaseEditPage {
 		wp_localize_script( 'mb-settings-page-app', 'MbbApp', $data );
 	}
 
-	private function get_menu_positions() {
-		global $menu;
-		$positions = [];
-		foreach ( $menu as $position => $params ) {
-			if ( ! empty( $params[0] ) ) {
-				$positions[ $position ] = $this->strip_span( $params[0] );
-			}
-		}
-		return $positions;
-	}
-
-	private function get_menu_parents() {
-		global $menu;
-		$options = [];
-		foreach ( $menu as $params ) {
-			if ( ! empty( $params[0] ) && ! empty( $params[2] ) ) {
-				$options[ $params[2] ] = $this->strip_span( $params[0] );
-			}
-		}
-		return $options;
-	}
-
-	private function strip_span( $html ) {
-		return preg_replace( '@<span .*>.*</span>@si', '', $html );
-	}
-
 	private function get_capabilities() {
 		$caps  = [];
 		$roles = wp_roles();

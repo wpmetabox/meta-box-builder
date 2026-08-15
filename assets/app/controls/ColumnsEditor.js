@@ -90,19 +90,17 @@ const ColumnStatus = ( { status } ) => status && (
 const ACTION_TOOLTIPS = {
 	removeFromSchema: __( 'Remove from the schema but keep data in the database.', 'meta-box-builder' ),
 	removeUntitled: __( 'Remove from the schema.', 'meta-box-builder' ),
-	dropColumn: __( 'Permanently drop this column from the database.', 'meta-box-builder' ),
 	addToSchema: __( 'Add this column to the schema.', 'meta-box-builder' ),
 };
 
-const ActionButton = ( { icon, label, onClick, isDestructive = false, disabled = false, isBusy = false } ) => (
+const ActionButton = ( { icon, label, onClick, isDestructive = false, disabled = false } ) => (
 	<Tooltip text={ label } delay={ 0 } placement="top">
 		<button
 			type="button"
 			className={ `mb-columns-editor__action-btn${ isDestructive ? ' mb-columns-editor__action-btn--destructive' : '' }` }
 			onClick={ onClick }
-			disabled={ disabled || isBusy }
+			disabled={ disabled }
 			aria-label={ label }
-			aria-busy={ isBusy }
 		>
 			<span className={ `dashicons dashicons-${ icon }` } aria-hidden="true" />
 		</button>
@@ -141,54 +139,22 @@ const ColumnTypeSelect = ( { item, updateItem } ) => (
 	</>
 );
 
-const ColumnActions = ( { columnName, inDb, canDrop, isDropping, onRemove, onDrop } ) => {
-	const hasName = !! ( columnName || '' ).trim();
-
-	return (
-		<>
-			<ActionButton
-				icon="remove"
-				label={ hasName ? ACTION_TOOLTIPS.removeFromSchema : ACTION_TOOLTIPS.removeUntitled }
-				isDestructive
-				onClick={ onRemove }
-			/>
-			{
-				hasName && inDb && canDrop && (
-					<ActionButton
-						icon="trash"
-						label={ ACTION_TOOLTIPS.dropColumn }
-						isDestructive
-						disabled={ isDropping }
-						isBusy={ isDropping }
-						onClick={ () => onDrop( columnName ) }
-					/>
-				)
-			}
-		</>
-	);
-};
-
 const SchemaRow = ( {
 	item,
 	readOnly,
 	showFieldContext,
 	usedColumnNames,
 	existingColumnNames,
-	dbColumnNames,
-	dropping,
-	canDrop,
 	updateItem,
 	removeFromSchema,
-	dropColumn,
 } ) => {
 	const sqlType = resolveColumnSqlType( item );
 	const canIndex = isIndexableType( sqlType );
-	const inDb = dbColumnNames.has( item.name );
 	const status = showFieldContext
 		? getFieldStatus( item.name, usedColumnNames, existingColumnNames, readOnly )
 		: null;
-	const isDropping = dropping === item.name;
 	const typeLabel = item.db_type || ( existingColumnNames.includes( item.name ) ? sqlType : '—' );
+	const hasName = !! ( item.name || '' ).trim();
 
 	return (
 		<tr>
@@ -232,13 +198,11 @@ const SchemaRow = ( {
 			{
 				! readOnly && (
 					<td className="mb-columns-editor__action">
-						<ColumnActions
-							columnName={ item.name }
-							inDb={ inDb }
-							canDrop={ canDrop }
-							isDropping={ isDropping }
-							onRemove={ () => removeFromSchema( item.id, item.name ) }
-							onDrop={ dropColumn }
+						<ActionButton
+							icon="remove"
+							label={ hasName ? ACTION_TOOLTIPS.removeFromSchema : ACTION_TOOLTIPS.removeUntitled }
+							isDestructive
+							onClick={ () => removeFromSchema( item.id, item.name ) }
 						/>
 					</td>
 				)
@@ -247,7 +211,7 @@ const SchemaRow = ( {
 	);
 };
 
-const OrphanRow = ( { item, canDrop, isDropping, onAdd, onDrop } ) => (
+const OrphanRow = ( { item, onAdd } ) => (
 	<tr>
 		<td className="mb-columns-editor__name">{ item.name }</td>
 		<td className="mb-columns-editor__type">{ item.db_type }</td>
@@ -260,48 +224,31 @@ const OrphanRow = ( { item, canDrop, isDropping, onAdd, onDrop } ) => (
 				label={ ACTION_TOOLTIPS.addToSchema }
 				onClick={ () => onAdd( item ) }
 			/>
-			{
-				canDrop && (
-					<ActionButton
-						icon="trash"
-						label={ ACTION_TOOLTIPS.dropColumn }
-						isDestructive
-						disabled={ isDropping }
-						isBusy={ isDropping }
-						onClick={ () => onDrop( item.name ) }
-					/>
-				)
-			}
 		</td>
 	</tr>
 );
 
 const ColumnsEditor = ( {
 	name = 'columns',
+	label = __( 'Columns', 'meta-box-builder' ),
 	defaultValue,
 	value,
 	updateField,
 	onChange,
-	label = __( 'Columns', 'meta-box-builder' ),
-	description = '',
 	usedColumnNames = [],
 	existingColumnNames = [],
 	model = '',
 	table = '',
 	readOnly = false,
-	allowDrop,
 } ) => {
 	const isControlled = value !== undefined;
 	const [ localItems, setLocalItems ] = useState( () => maybeArrayToObject( defaultValue, 'id' ) );
 	const [ dbColumns, setDbColumns ] = useState( {} );
-	const [ dropping, setDropping ] = useState( '' );
 
-	const items = maybeArrayToObject( isControlled ? value : localItems, 'id' );
+	const items = isControlled ? maybeArrayToObject( value, 'id' ) : localItems;
 	const showFieldContext = usedColumnNames.length > 0;
 	const showDbSync = ! readOnly && !! table;
-	const canDrop = allowDrop !== undefined ? allowDrop : !! table;
-	const dbColumnNames = useMemo( () => new Set( Object.keys( dbColumns ) ), [ dbColumns ] );
-	const schemaColumns = useMemo( () => Object.values( items ), [ items ] );
+	const schemaColumns = Object.values( items );
 
 	useEffect( () => {
 		if ( ! showDbSync ) {
@@ -388,48 +335,6 @@ const ColumnsEditor = ( {
 		commit( { ...items, [ column.id ]: column } );
 	};
 
-	const dropColumn = async columnName => {
-		if ( ! canDrop ) {
-			return;
-		}
-
-		if ( ! window.confirm(
-			sprintf(
-				/* translators: %s: column name */
-				__( 'Permanently drop "%s" from the database? All data in this column will be deleted. This cannot be undone.', 'meta-box-builder' ),
-				columnName
-			)
-		) ) {
-			return;
-		}
-
-		setDropping( columnName );
-		try {
-			const params = { column: columnName, table };
-			if ( model ) {
-				params.model = model;
-			}
-
-			const response = await fetcher( {
-				api: 'custom-model/table-columns',
-				params,
-				method: 'DELETE',
-				cache: false,
-			} );
-
-			if ( ! response.success ) {
-				alert( response.message || __( 'Could not drop the column from the database.', 'meta-box-builder' ) );
-				return;
-			}
-
-			setDbColumns( response.columns || {} );
-		} catch ( error ) {
-			alert( error.message || __( 'Could not drop the column from the database.', 'meta-box-builder' ) );
-		} finally {
-			setDropping( '' );
-		}
-	};
-
 	const reorder = list => {
 		commit( Object.fromEntries(
 			list
@@ -463,12 +368,8 @@ const ColumnsEditor = ( {
 		showFieldContext,
 		usedColumnNames,
 		existingColumnNames,
-		dbColumnNames,
-		dropping,
-		canDrop,
 		updateItem,
 		removeFromSchema,
-		dropColumn,
 	};
 
 	const legendItems = showFieldContext
@@ -490,7 +391,7 @@ const ColumnsEditor = ( {
 	) );
 
 	return (
-		<DivRow label={ label } className="mb-columns-editor" description={ description }>
+		<DivRow label={ label } className="mb-columns-editor">
 			{
 				schemaColumns.length > 0 && (
 					<table className={ tableClassName }>
@@ -530,7 +431,7 @@ const ColumnsEditor = ( {
 							{ __( 'Columns in database only', 'meta-box-builder' ) }
 						</p>
 						<p className="mb-columns-editor__db-description">
-							{ __( 'These columns exist in the database but are not in the schema. Add them to the schema or drop them from the database.', 'meta-box-builder' ) }
+							{ __( 'These columns exist in the database but are not in the schema. Add them to the schema if you still use them.', 'meta-box-builder' ) }
 						</p>
 						<table className="mb-columns-editor__table mb-columns-editor__table--db-only">
 							<thead>
@@ -547,10 +448,7 @@ const ColumnsEditor = ( {
 										<OrphanRow
 											key={ item.name }
 											item={ item }
-											canDrop={ canDrop }
-											isDropping={ dropping === item.name }
 											onAdd={ addToSchema }
-											onDrop={ dropColumn }
 										/>
 									) )
 								}

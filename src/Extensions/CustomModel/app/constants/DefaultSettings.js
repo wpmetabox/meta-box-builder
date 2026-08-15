@@ -24,8 +24,6 @@ const DefaultSettings = {
 	prefix: true,
 	columns: {},
 
-	drop_table_on_delete: false,
-
 	show_in_menu: true,
 	menu_position: '',
 	icon_type: 'dashicons',

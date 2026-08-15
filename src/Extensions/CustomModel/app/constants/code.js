@@ -3,24 +3,14 @@ import { isIndexableType } from '../../../../../assets/app/constants/columnTypes
 
 const maxKeyLength = object => Math.max.apply( null, Object.keys( object ).map( key => key.length ) );
 const spaces = ( settings, key ) => ' '.repeat( Math.max( 0, maxKeyLength( settings ) - key.length ) );
-const checkText = ( settings, key ) => {
-	let value = ( dotProp.get( settings, key, '' ) || '' ).replace( /\\/g, '\\\\' );
-	value = value.replace( /'/g, "\\'" );
-	return value;
-};
+const escapeQuotes = value => String( value || '' ).replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" );
+const checkText = ( settings, key ) => escapeQuotes( dotProp.get( settings, key, '' ) );
 const text = ( settings, key ) => `'${ key }'${ spaces( settings, key ) } => '${ checkText( settings, key ) }'`;
 const translatableText = ( settings, key ) => `'${ key }'${ spaces( settings, key ) } => __( '${ checkText( settings, key ) }', '${ settings.text_domain || 'your-textdomain' }' )`;
 const checkboxList = ( settings, key, defaultValue ) => {
 	const values = [ ...new Set( dotProp.get( settings, key, [] ) || [] ) ];
 
 	return `'${ key }'${ spaces( settings, key ) } => ${ values.length ? `['${ values.join( "', '" ) }']` : defaultValue }`;
-};
-const general = ( settings, key ) => {
-	let value = dotProp.get( settings, key );
-	if ( [ '', undefined ].includes( value ) ) {
-		value = "''";
-	}
-	return `'${ key }'${ spaces( settings, key ) } => ${ value }`;
 };
 
 const labels = settings => {
@@ -33,9 +23,9 @@ const labels = settings => {
 };
 
 const showInMenu = settings => {
-	let value = settings.show_in_menu;
+	const value = settings.show_in_menu;
 	if ( [ true, false ].includes( value ) ) {
-		return general( settings, 'show_in_menu' );
+		return `'show_in_menu'${ spaces( settings, 'show_in_menu' ) } => ${ value }`;
 	}
 	return `'show_in_menu'${ spaces( settings, 'show_in_menu' ) } => true,\n\t\t'parent'${ spaces( settings, 'parent' ) } => '${ value }'`;
 };
@@ -54,10 +44,8 @@ const menuIcon = settings => {
 		value = settings.font_awesome || '';
 	}
 
-	return `'menu_icon'${ spaces( settings, 'menu_icon' ) } => '${ value.replace( /'/g, "\\'" ) }'`;
+	return `'menu_icon'${ spaces( settings, 'menu_icon' ) } => '${ escapeQuotes( value ) }'`;
 };
-
-const escapeSql = value => String( value || '' ).replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" );
 
 const columnsCode = settings => {
 	const columns = settings.columns || {};
@@ -68,12 +56,12 @@ const columnsCode = settings => {
 	}
 
 	const lines = entries.map( col => {
-		const name = ( col.name || '' ).trim().replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" );
+		const name = escapeQuotes( ( col.name || '' ).trim() );
 		let type = col.type || 'TEXT';
 		if ( 'custom' === type ) {
 			type = ( col.custom_type || '' ).trim() || 'TEXT';
 		}
-		return `\t\t'${ name }' => '${ escapeSql( type ) }'`;
+		return `\t\t'${ name }' => '${ escapeQuotes( type ) }'`;
 	} );
 
 	return `[\n${ lines.join( ",\n" ) },\n\t]`;
@@ -89,7 +77,7 @@ const keysCode = settings => {
 			const type = 'custom' === col.type ? ( ( col.custom_type || '' ).trim() || 'TEXT' ) : ( col.type || 'TEXT' );
 			return isIndexableType( type );
 		} )
-		.map( col => `'${ ( col.name || '' ).trim().replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" ) }'` );
+		.map( col => `'${ escapeQuotes( ( col.name || '' ).trim() ) }'` );
 
 	if ( ! keys.length ) {
 		return '[]';
@@ -99,11 +87,11 @@ const keysCode = settings => {
 };
 
 const tableVar = settings => {
-	const name = settings.table || '';
+	const name = escapeQuotes( settings.table || '' );
 	if ( settings.prefix ) {
-		return `$wpdb->prefix . '${ name.replace( /'/g, "\\'" ) }'`;
+		return `$wpdb->prefix . '${ name }'`;
 	}
-	return `'${ name.replace( /'/g, "\\'" ) }'`;
+	return `'${ name }'`;
 };
 
-export { checkboxList, columnsCode, keysCode, labels, menuIcon, showInMenu, tableVar, text };
+export { checkboxList, columnsCode, escapeQuotes, keysCode, labels, menuIcon, showInMenu, tableVar, text };
