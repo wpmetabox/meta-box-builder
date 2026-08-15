@@ -4,7 +4,7 @@ import { createColumnItem } from '../constants/columnTypes';
  * Column names from a model schema or database map.
  * Supports parsed `{ name: sqlType }` and editor `{ id: { name } }` shapes.
  */
-export const getColumnNames = columns => {
+const getColumnNames = columns => {
 	if ( ! columns || typeof columns !== 'object' ) {
 		return [];
 	}

@@ -44,7 +44,7 @@ export const COLUMN_TYPE_GROUPS = [
 
 export const CUSTOM_COLUMN_TYPE = 'custom';
 
-export const COLUMN_TYPE_PRESETS = COLUMN_TYPE_GROUPS.reduce( ( presets, group ) => ( {
+const COLUMN_TYPE_PRESETS = COLUMN_TYPE_GROUPS.reduce( ( presets, group ) => ( {
 	...presets,
 	...group.options,
 } ), {} );
@@ -62,7 +62,7 @@ export const createColumnItem = ( overrides = {} ) => ( {
 
 export const isIndexableType = type => ! /^(TINY|MEDIUM|LONG)?TEXT$/i.test( String( type || '' ).trim() );
 
-export const isPresetColumnType = type => Object.prototype.hasOwnProperty.call( COLUMN_TYPE_PRESETS, type );
+const isPresetColumnType = type => Object.prototype.hasOwnProperty.call( COLUMN_TYPE_PRESETS, type );
 
 export const resolveColumnSqlType = column => {
 	if ( ! column ) {

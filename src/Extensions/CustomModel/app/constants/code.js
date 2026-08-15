@@ -57,14 +57,6 @@ const menuIcon = settings => {
 	return `'menu_icon'${ spaces( settings, 'menu_icon' ) } => '${ value.replace( /'/g, "\\'" ) }'`;
 };
 
-const table = settings => {
-	const name = settings.table || '';
-	if ( settings.prefix ) {
-		return `'table'${ spaces( settings, 'table' ) } => $wpdb->prefix . '${ name.replace( /'/g, "\\'" ) }'`;
-	}
-	return text( settings, 'table' );
-};
-
 const escapeSql = value => String( value || '' ).replace( /\\/g, '\\\\' ).replace( /'/g, "\\'" );
 
 const columnsCode = settings => {
@@ -114,4 +106,4 @@ const tableVar = settings => {
 	return `'${ name.replace( /'/g, "\\'" ) }'`;
 };
 
-export { checkboxList, columnsCode, general, keysCode, labels, menuIcon, showInMenu, spaces, table, tableVar, text, translatableText };
+export { checkboxList, columnsCode, keysCode, labels, menuIcon, showInMenu, tableVar, text };
