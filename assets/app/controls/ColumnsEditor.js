@@ -88,8 +88,8 @@ const ColumnStatus = ( { status } ) => status && (
 );
 
 const ACTION_TOOLTIPS = {
-	remove: __( 'Remove from the schema.', 'meta-box-builder' ),
-	addToSchema: __( 'Add this column to the schema.', 'meta-box-builder' ),
+	remove: __( 'Remove from the schema', 'meta-box-builder' ),
+	addToSchema: __( 'Add this column to the schema', 'meta-box-builder' ),
 };
 
 const ActionButton = ( { icon, label, onClick, isDestructive = false, disabled = false } ) => (

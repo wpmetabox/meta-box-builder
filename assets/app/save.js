@@ -28,8 +28,8 @@ export const initSaveForm = () => {
 				sprintf(
 					/* translators: %1$d: number of field IDs, %2$s: table type (model table / custom table) */
 					_n(
-						'%1$d field ID does not match the %2$s. Save anyway?',
-						'%1$d field IDs do not match the %2$s. Save anyway?',
+						'%1$d field ID does not match the %2$s. It will be added as a TEXT column. Do you want to save?',
+						'%1$d field IDs do not match the %2$s. They will be added as TEXT columns. Do you want to save?',
 						missingCount,
 						'meta-box-builder'
 					),

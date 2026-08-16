@@ -152,7 +152,7 @@ class Save {
 			$settings['labels']['menu_name'] = $settings['labels']['name'];
 		}
 
-		return $this->persist_model( $post_id, $post_name, $settings );
+		return self::persist_model( $post_id, $post_name, $settings );
 	}
 
 	/**
@@ -178,7 +178,7 @@ class Save {
 		$settings['columns'] = is_array( $columns ) ? $columns : [];
 		$post_name           = $post->post_name ?: sanitize_title( $post->post_title );
 
-		$result = $this->persist_model( $post_id, $post_name, $settings );
+		$result = self::persist_model( $post_id, $post_name, $settings );
 		if ( ! $result['success'] ) {
 			return $result;
 		}
@@ -218,7 +218,7 @@ class Save {
 		);
 	}
 
-	private function persist_model( int $post_id, string $post_name, array $settings ): array {
+	public static function persist_model( int $post_id, string $post_name, array $settings ): array {
 		$settings['modified'] = time();
 
 		$parser = new Parser( $settings );

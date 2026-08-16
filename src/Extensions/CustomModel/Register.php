@@ -129,22 +129,20 @@ class Register {
 	}
 
 	/**
-	 * Whether a Builder mb-model post exists for this slug.
+	 * Builder mb-model post ID for this slug, or 0.
 	 *
 	 * Query the database instead of the mbb_models cache.
-	 * The cache only holds published models.
-	 *
-	 * WordPress appends __trashed to the slug of trashed posts, so match both.
+	 * The cache only holds published models. Does not include trash.
 	 */
-	public static function has_post( string $name ): bool {
+	public static function get_model_post_id( string $name ): int {
 		if ( ! $name ) {
-			return false;
+			return 0;
 		}
 
 		$posts = get_posts( [
-			'post_name__in'          => [ $name, $name . '__trashed' ],
+			'name'                   => $name,
 			'post_type'              => 'mb-model',
-			'post_status'            => [ 'publish', 'draft', 'pending', 'private', 'trash' ],
+			'post_status'            => [ 'publish', 'draft', 'pending', 'private' ],
 			'posts_per_page'         => 1,
 			'fields'                 => 'ids',
 			'no_found_rows'          => true,
@@ -152,7 +150,7 @@ class Register {
 			'update_post_term_cache' => false,
 		] );
 
-		return ! empty( $posts );
+		return empty( $posts ) ? 0 : (int) $posts[0];
 	}
 
 	public static function query_models(): array {

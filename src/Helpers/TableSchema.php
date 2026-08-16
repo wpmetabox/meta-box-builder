@@ -97,4 +97,23 @@ class TableSchema {
 	public static function is_indexable( string $type ): bool {
 		return ! str_contains( strtoupper( $type ), 'TEXT' );
 	}
+
+	/**
+	 * Add TEXT columns for field names missing from the schema.
+	 *
+	 * @param array<string, string> $columns Column name => SQL type.
+	 * @param string[]              $names   Field column names.
+	 * @return array<string, string>
+	 */
+	public static function merge_field_columns( array $columns, array $names ): array {
+		foreach ( $names as $name ) {
+			$name = self::sanitize_name( (string) $name );
+			if ( ! $name || 'id' === $name || isset( $columns[ $name ] ) ) {
+				continue;
+			}
+			$columns[ $name ] = 'TEXT';
+		}
+
+		return $columns;
+	}
 }
