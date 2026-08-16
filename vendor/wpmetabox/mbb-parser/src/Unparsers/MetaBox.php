@@ -32,6 +32,7 @@ class MetaBox extends Base {
 		'meta-box'         => 'https://schemas.metabox.io/field-group.json',
 		'mb-relationship'  => 'https://schemas.metabox.io/relationships.json',
 		'mb-settings-page' => 'https://schemas.metabox.io/settings-page.json',
+		'mb-model'         => 'https://schemas.metabox.io/custom-model.json',
 	];
 
 	/**
@@ -43,6 +44,7 @@ class MetaBox extends Base {
 		'meta-box'         => 'meta_box',
 		'mb-relationship'  => 'relationship',
 		'mb-settings-page' => 'settings_page',
+		'mb-model'         => 'model',
 	];
 
 	public function unparse() {
@@ -50,6 +52,7 @@ class MetaBox extends Base {
 		$this->unparse_meta_box();
 		$this->unparse_relationship();
 		$this->unparse_settings_page()->unparse_settings_page_tabs();
+		$this->unparse_model();
 		$this->unparse_post_fields();
 		$this->unparse_modified();
 		$this->unparse_settings();
@@ -62,6 +65,7 @@ class MetaBox extends Base {
 		$this->unparse_conditional_logic();
 		$this->unparse_include_exclude();
 		$this->unparse_show_hide();
+		$this->unparse_model_settings_columns();
 	}
 
 	public function to_minimal_format() {
@@ -210,10 +214,11 @@ class MetaBox extends Base {
 		}
 
 		$default_custom_table = [
-			'enable' => false,
-			'name'   => '',
-			'prefix' => false,
-			'create' => false,
+			'enable'  => false,
+			'name'    => '',
+			'prefix'  => false,
+			'create'  => false,
+			'columns' => [],
 		];
 
 		$this->settings['settings']['custom_table'] = array_merge( $default_custom_table, $custom_table );
@@ -221,11 +226,16 @@ class MetaBox extends Base {
 		// For short reference.
 		$custom_table = &$this->settings['settings']['custom_table'];
 
-		// If table name is set, we need to set the name and enable the custom table back to the settings.
-		if ( isset( $this->table ) ) {
+		$settings    = $this->settings['settings'] ?? [];
+		$object_type = (string) ( $settings['object_type'] ?? '' );
+		$models      = array_filter( (array) ( $settings['models'] ?? [] ) );
+		$is_model    = 'model' === $object_type || ! empty( $models );
+
+		// Post/term/user: recover enable + name from the resolved table.
+		// Models: keep explicit manage/create/columns; do not force enable from the model table.
+		if ( isset( $this->table ) && ! $is_model ) {
 			$name = $this->table;
 
-			// Strip the prefix if it's set.
 			if ( ! empty( $custom_table['prefix'] ) ) {
 				global $wpdb;
 				if ( str_starts_with( $name, $wpdb->prefix ) ) {
@@ -241,19 +251,17 @@ class MetaBox extends Base {
 			return $this;
 		}
 
-		// Generate extra props for meta box settings.
+		// Survive minimal export (settings are stripped).
 		$meta_box_custom_table = [];
 
-		// We need those keys on meta box only for minimal format, other keys can be retrieved from meta box settings itself.
-		$extra_keys = [
-			'prefix',
-			'create',
-		];
-
-		foreach ( $extra_keys as $key ) {
+		foreach ( [ 'enable', 'prefix', 'create' ] as $key ) {
 			if ( ! empty( $custom_table[ $key ] ) ) {
 				$meta_box_custom_table[ $key ] = true;
 			}
+		}
+
+		if ( ! empty( $custom_table['columns'] ) && is_array( $custom_table['columns'] ) ) {
+			$meta_box_custom_table['columns'] = $custom_table['columns'];
 		}
 
 		if ( ! empty( $meta_box_custom_table ) ) {
@@ -264,8 +272,12 @@ class MetaBox extends Base {
 	}
 
 	public function unparse_modified() {
-		$this->settings['modified']             = $this->lookup( [ 'modified', 'meta_box.modified' ], time() );
-		$this->settings['meta_box']['modified'] = $this->settings['modified'];
+		$modified                   = $this->lookup( [ 'modified', 'meta_box.modified', 'settings.modified', 'model.modified' ], time() );
+		$this->settings['modified'] = $modified;
+
+		if ( $this->detect_post_type() === 'meta-box' ) {
+			$this->settings['meta_box']['modified'] = $modified;
+		}
 
 		return $this;
 	}
@@ -391,10 +403,61 @@ class MetaBox extends Base {
 		return $this;
 	}
 
+	public function unparse_model(): self {
+		if ( $this->detect_post_type() !== 'mb-model' ) {
+			return $this;
+		}
+
+		if ( isset( $this->model ) ) {
+			$model = $this->settings['model'];
+			if ( empty( $model['id'] ) && ! empty( $model['name'] ) ) {
+				$model['id'] = $model['name'];
+			} elseif ( empty( $model['name'] ) && ! empty( $model['id'] ) ) {
+				$model['name'] = $model['id'];
+			}
+			$this->settings['model'] = $model;
+			$this->post_title        = $this->lookup( [
+				'post_title',
+				'model.labels.name',
+				'model.labels.singular_name',
+				'model.id',
+				'id',
+			] );
+
+			return $this;
+		}
+
+		$model = $this->get_settings();
+
+		foreach ( $this->get_unneeded_keys() as $key ) {
+			unset( $model[ $key ] );
+		}
+
+		if ( empty( $model['id'] ) && ! empty( $model['name'] ) ) {
+			$model['id'] = $model['name'];
+		} elseif ( empty( $model['name'] ) && ! empty( $model['id'] ) ) {
+			$model['name'] = $model['id'];
+		}
+
+		$this->model      = $model;
+		$this->post_title = $this->lookup( [ 'post_title', 'labels.name', 'labels.singular_name', 'id' ] );
+
+		return $this;
+	}
+
 	public function unparse_settings() {
 		$settings = $this->settings['settings'] ?? [];
 
 		if ( ! empty( $settings ) ) {
+			return $this;
+		}
+
+		if ( $this->detect_post_type() === 'mb-model' ) {
+			$model = $this->settings['model'] ?? [];
+			if ( ! empty( $model ) && is_array( $model ) ) {
+				unset( $model['keys'], $model['post_id'] );
+				$this->settings['settings'] = $model;
+			}
 			return $this;
 		}
 
@@ -449,7 +512,7 @@ class MetaBox extends Base {
 		$post_type        = $this->post_type ?? $this->detect_post_type();
 
 		$this->post_type    = $post_type;
-		$this->post_name    = $this->lookup( [ 'post_name', 'settings.id', 'relationship.id', 'meta_box.id', 'id' ] );
+		$this->post_name    = $this->lookup( [ 'post_name', 'settings.id', 'relationship.id', 'meta_box.id', 'model.id', 'model.name', 'id' ] );
 		$this->post_date    = $this->lookup( [ 'post_date' ], gmdate( 'Y-m-d H:i:s' ) );
 		$this->post_status  = $this->lookup( [ 'post_status' ], 'publish' );
 		$this->post_content = $this->lookup( [ 'post_content' ], '' );
@@ -563,10 +626,22 @@ class MetaBox extends Base {
 	}
 
 	public function unparse_columns() {
+		// Field-group admin "columns" setting — not model table schema columns.
+		if ( $this->detect_post_type() !== 'meta-box' ) {
+			return $this;
+		}
+
 		$columns = $this->lookup( [ 'columns', 'meta_box.columns' ], [] );
 		if ( empty( $columns ) ) {
 			return $this;
 		}
+
+		// Model-style map { name: sqlType } must not become custom_settings.
+		$first = reset( $columns );
+		if ( ! is_array( $first ) && ! is_object( $first ) ) {
+			return $this;
+		}
+
 		$custom_settings        = $this->lookup( [ 'settings.custom_settings' ], [] );
 		$id                     = uniqid();
 		$custom_settings[ $id ] = [
@@ -642,6 +717,62 @@ class MetaBox extends Base {
 	}
 
 	/**
+	 * Ensure settings.columns uses the editor shape after importing a minimal model JSON.
+	 * Exported models store columns as { name: sqlType }; the UI expects { id: { name, type, … } }.
+	 */
+	private function unparse_model_settings_columns(): self {
+		if ( $this->detect_post_type() !== 'mb-model' ) {
+			return $this;
+		}
+
+		$settings = $this->settings['settings'] ?? [];
+		$columns  = $settings['columns'] ?? [];
+		if ( ! is_array( $columns ) || empty( $columns ) ) {
+			$columns = $this->settings['model']['columns'] ?? [];
+		}
+		if ( ! is_array( $columns ) || empty( $columns ) ) {
+			return $this;
+		}
+
+		$first = reset( $columns );
+		if ( is_array( $first ) && array_key_exists( 'name', $first ) ) {
+			return $this;
+		}
+
+		$keys    = $settings['keys'] ?? ( $this->settings['model']['keys'] ?? [] );
+		$keys    = is_array( $keys ) ? $keys : [];
+		$key_set = array_fill_keys( $keys, true );
+		$editor = [];
+
+		foreach ( $columns as $name => $type ) {
+			if ( is_array( $type ) ) {
+				continue;
+			}
+			$name = (string) $name;
+			if ( '' === $name || 'id' === strtolower( $name ) ) {
+				continue;
+			}
+			$id            = 'col_' . str_replace( '-', '_', sanitize_key( $name ) );
+			$editor[ $id ] = [
+				'id'          => $id,
+				'name'        => $name,
+				'type'        => 'custom',
+				'custom_type' => (string) $type,
+				'index'       => isset( $key_set[ $name ] ),
+			];
+		}
+
+		if ( empty( $editor ) ) {
+			return $this;
+		}
+
+		$this->settings['settings']['columns'] = $editor;
+		unset( $this->settings['settings']['keys'] );
+
+		return $this;
+	}
+
+	/**
 	 * By default, we move all keys under the root to the settings array.
 	 * Except these keys
 	 *
@@ -688,9 +819,10 @@ class MetaBox extends Base {
 
 		// Add extra keys for other post types
 		$extras = [
-			'meta-box'         => [ 'relationship' ],
-			'mb-relationship'  => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data' ],
-			'mb-settings-page' => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data' ],
+			'meta-box'         => [ 'relationship', 'model' ],
+			'mb-relationship'  => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data', 'model' ],
+			'mb-settings-page' => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data', 'model' ],
+			'mb-model'         => [ 'fields', 'settings_page', 'relationship', 'meta_box', 'data', 'model' ],
 		];
 
 		return array_merge( $default, $extras[ $post_type ] ?? [] );

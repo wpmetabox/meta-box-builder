@@ -4,6 +4,7 @@ namespace MBB\RestApi;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_Error;
+use WP_Post;
 use MBBParser\Parsers\Base as BaseParser;
 use MBBParser\Parsers\MetaBox as MetaBoxParser;
 
@@ -94,7 +95,7 @@ class Save extends Base {
 		];
 	}
 
-	public static function parse( \WP_Post $post, array $fields, array $settings, ?string $post_title = null, ?string $post_name = null ): MetaBoxParser {
+	public static function parse( WP_Post $post, array $fields, array $settings, ?string $post_title = null, ?string $post_name = null ): MetaBoxParser {
 		$base_parser = new BaseParser();
 
 		$base_parser->set_settings( $settings )->parse_boolean_values()->parse_numeric_values();

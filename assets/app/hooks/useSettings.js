@@ -32,7 +32,8 @@ const useSettings = create( ( set, get ) => ( {
 			term: 'termMeta',
 			user: 'userMeta',
 			comment: 'commentMeta',
-			setting: 'settingsPage'
+			setting: 'settingsPage',
+			model: 'customTable',
 		};
 
 		// Check if the current object type requires an extension that's not available
@@ -66,22 +67,20 @@ const useSettings = create( ( set, get ) => ( {
 		dotProp.set( updatedSettings, key, value );
 
 		// Remove other settings that are not relevant for the selected object type.
-		if ( value === 'post' ) {
-			dotProp.delete( updatedSettings, 'taxonomies' );
-			dotProp.delete( updatedSettings, 'settings_pages' );
-			dotProp.delete( updatedSettings, 'type' );
-		} else if ( value === 'term' ) {
-			dotProp.delete( updatedSettings, 'post_types' );
-			dotProp.delete( updatedSettings, 'settings_pages' );
-			dotProp.delete( updatedSettings, 'type' );
-		} else if ( value === 'setting' ) {
-			dotProp.delete( updatedSettings, 'post_types' );
-			dotProp.delete( updatedSettings, 'taxonomies' );
-			dotProp.delete( updatedSettings, 'type' );
-		} else if ( [ 'block', 'user', 'comment' ].includes( value ) ) {
-			dotProp.delete( updatedSettings, 'post_types' );
-			dotProp.delete( updatedSettings, 'taxonomies' );
-			dotProp.delete( updatedSettings, 'settings_pages' );
+		const clearKeys = {
+			post: [ 'taxonomies', 'settings_pages', 'models', 'type' ],
+			term: [ 'post_types', 'settings_pages', 'models', 'type' ],
+			setting: [ 'post_types', 'taxonomies', 'models', 'type' ],
+			model: [ 'post_types', 'taxonomies', 'settings_pages', 'type', 'custom_table' ],
+			block: [ 'post_types', 'taxonomies', 'settings_pages', 'models' ],
+			user: [ 'post_types', 'taxonomies', 'settings_pages', 'models' ],
+			comment: [ 'post_types', 'taxonomies', 'settings_pages', 'models' ],
+		};
+		( clearKeys[ value ] || [] ).forEach( key => dotProp.delete( updatedSettings, key ) );
+
+		// Leaving model: drop model-table manage settings that only apply there.
+		if ( currentValue === 'model' && value !== 'model' ) {
+			dotProp.delete( updatedSettings, 'custom_table' );
 		}
 
 		set( { settings: updatedSettings } );

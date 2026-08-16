@@ -13,7 +13,7 @@ const Location = () => {
 	const postTypes = getPostTypes();
 
 	const settingsPages = ensureArray( getSetting( 'settings_pages', [] ) );
-	const selectedSettingsPage = MbbApp.settingsPages.find( p => settingsPages.includes( p.id ) );
+	const selectedSettingsPage = ( MbbApp.settingsPages || [] ).find( p => settingsPages.includes( p.id ) );
 	const tabs = selectedSettingsPage ? selectedSettingsPage.tabs : [];
 
 	let locationText = [];
@@ -41,6 +41,11 @@ const Location = () => {
 
 	let upgradeText = [ locationText, entities ].filter( Boolean ).join( __( ', or ', 'meta-box-builder' ) );
 
+	const updateModels = ( name, value ) => {
+		// Keep models as a one-item array for settings compatibility.
+		updateSetting( name, value ? [ value ] : [] );
+	};
+
 	return (
 		<>
 			<DivRow label={ __( 'Rule', 'meta-box-builder' ) } htmlFor="settings-object_type" className="mb-location" tooltip={ __( 'Where to display the field group', 'meta-box-builder' ) }>
@@ -50,6 +55,7 @@ const Location = () => {
 					{ MbbApp.extensions.userMeta && <option value="user">{ __( 'User', 'meta-box-builder' ) }</option> }
 					{ MbbApp.extensions.commentMeta && <option value="comment">{ __( 'Comment', 'meta-box-builder' ) }</option> }
 					{ MbbApp.extensions.settingsPage && <option value="setting">{ __( 'Settings page', 'meta-box-builder' ) }</option> }
+					{ MbbApp.extensions.customTable && <option value="model">{ __( 'Custom model', 'meta-box-builder' ) }</option> }
 					{ MbbApp.extensions.blocks && <option value="block">{ __( 'Block', 'meta-box-builder' ) }</option> }
 				</select>
 				{
@@ -79,6 +85,17 @@ const Location = () => {
 						options={ MbbApp.settingsPages.map( item => ( { value: item.id, label: `${ item.title } (${ item.id })` } ) ) }
 						defaultValue={ ensureArray( getSetting( 'settings_pages', [] ) ) }
 						updateField={ updateSetting }
+					/>
+				}
+				{
+					'model' === objectType &&
+					<ReactSelect
+						name="models"
+						wrapper={ false }
+						isMulti={ false }
+						options={ ( MbbApp.models || [] ).map( item => ( { value: item.name, label: `${ item.label } (${ item.name })` } ) ) }
+						defaultValue={ ensureArray( getSetting( 'models', [] ) )[ 0 ] || '' }
+						updateField={ updateModels }
 					/>
 				}
 				{

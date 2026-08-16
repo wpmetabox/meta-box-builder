@@ -4,6 +4,7 @@ import { cog, external, listView, plus } from "@wordpress/icons";
 import { useShallow } from 'zustand/react/shallow';
 import { ensureArray, isMac, ucwords } from '../functions';
 import useFloatingStructurePanel from '../hooks/useFloatingStructurePanel';
+import useModelSchema from '../hooks/useModelSchema';
 import useNavPanel from '../hooks/useNavPanel';
 import useSettings from '../hooks/useSettings';
 import useUnsavedChanges from '../hooks/useUnsavedChanges';
@@ -18,12 +19,13 @@ const Header = () => {
 		visible: state.visible,
 		toggleVisible: state.toggleVisible,
 	} ) ) );
-	const { settings, getObjectType, getPostTypes, getSetting } = useSettings( useShallow( state => ( {
-		settings: state.settings, // Triggers useShallow to re-evaluate when settings change (not referenced directly).
+	const { getObjectType, getPostTypes, getSetting } = useSettings( useShallow( state => ( {
+		settings: state.settings, // Subscribe so location labels update when settings change.
 		getObjectType: state.getObjectType,
 		getPostTypes: state.getPostTypes,
 		getSetting: state.getSetting,
 	} ) ) );
+	const models = useModelSchema( state => state.models );
 
 	const updateNavPanel = key => () => setNavPanel( key === navPanel ? '' : key );
 
@@ -35,9 +37,7 @@ const Header = () => {
 		}
 	};
 
-	// Show structure panel if it's in floating mode and visible, or if it's in normal mode and navPanel is 'structure'
 	const isStructurePressed = floating ? visible : navPanel === 'structure';
-
 	const objectType = getObjectType();
 
 	let locations = [ ucwords( objectType ) ];
@@ -56,6 +56,11 @@ const Header = () => {
 			.map( page => MbbApp.settingsPages.find( p => p.id === page ) )
 			.filter( Boolean )
 			.map( p => p.title );
+	} else if ( objectType === 'model' ) {
+		locations = ensureArray( getSetting( 'models', [] ) )
+			.map( model => models.find( m => m.name === model ) )
+			.filter( Boolean )
+			.map( m => m.label );
 	}
 
 	return (

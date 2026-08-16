@@ -2,6 +2,9 @@
 namespace MBB;
 
 use MBB\RestApi\Save;
+use MBBParser\Unparsers\MetaBox;
+use MBB\Extensions\CustomModel\Register;
+use WP_Error;
 
 class LocalJson {
 	public function __construct() {
@@ -51,7 +54,7 @@ class LocalJson {
 	/**
 	 * Import from .json file
 	 *
-	 * @return \WP_Error|boolean
+	 * @return WP_Error|boolean
 	 */
 	public static function import( array $data ): bool {
 		return self::sync_json( $data );
@@ -72,7 +75,7 @@ class LocalJson {
 	public static function use_json( array $args ): bool {
 		$json = JsonService::get_json( [
 			'id'        => $args['post_name'],
-			'post_type' => $args['post_type'],
+			'post_type' => $args['post_type'] ?? 'meta-box',
 		] );
 
 		if ( ! $json || ! is_array( $json ) ) {
@@ -119,7 +122,7 @@ class LocalJson {
 
 		$post_array = [ 'ID' => $data['post_id'] ];
 		$data       = $data['local'];
-		$unparser   = new \MBBParser\Unparsers\MetaBox( $data );
+		$unparser   = new MetaBox( $data );
 		$unparser->unparse();
 		$data        = $unparser->get_settings();
 		$meta_fields = Export::get_meta_keys( $data['post_type'] );
@@ -131,7 +134,7 @@ class LocalJson {
 			'post_status'  => $data['post_status'],
 			'post_content' => $data['post_content'],
 		] );
-		$post_array = Save::fix_post_date( $post_array );
+		$post_array  = Save::fix_post_date( $post_array );
 
 		$post_id = wp_insert_post( $post_array );
 
@@ -143,8 +146,21 @@ class LocalJson {
 			update_post_meta( $post_id, $meta_key, $data[ $meta_key ] );
 		}
 
+		if ( 'mb-model' === ( $data['post_type'] ?? '' ) ) {
+			$model = $data['model'] ?? [];
+			if ( is_array( $model ) && ! empty( $model['name'] ) && ! empty( $model['table'] ) ) {
+				$model['post_id'] = $post_id;
+				Register::register( $model['name'], $model );
+				Register::create_table( $model );
+				Register::rebuild_cache();
+			}
+		}
+
 		// Now we need to save the modified data back to the JSON file
-		self::use_database( [ 'post_id' => $post_id ] );
+		self::use_database( [
+			'post_id'   => $post_id,
+			'post_type' => $data['post_type'] ?? 'meta-box',
+		] );
 
 		return true;
 	}
@@ -160,29 +176,34 @@ class LocalJson {
 			return false;
 		}
 
-		$post = null;
+		$post_type = $args['post_type'] ?? 'meta-box';
+		$post      = null;
 		if ( isset( $args['post_id'] ) ) {
 			$post = get_post( $args['post_id'] );
 		} elseif ( isset( $args['post_name'] ) ) {
-			$post = get_page_by_path( $args['post_name'], OBJECT, 'meta-box' );
+			$post = get_page_by_path( $args['post_name'], OBJECT, $post_type );
 		}
 
-		if ( empty( $post ) || $post->post_type !== 'meta-box' || $post->post_status !== 'publish' ) {
+		if ( empty( $post ) || $post->post_status !== 'publish' ) {
 			return false;
 		}
 
-		$post_data             = (array) $post;
-		$meta_box              = get_post_meta( $post->ID, 'meta_box', true ) ?: [];
-		$post_data['meta_box'] = $meta_box;
-		$settings              = get_post_meta( $post->ID, 'settings', true );
-		$post_data['settings'] = (array) $settings;
+		if ( ! in_array( $post->post_type, [ 'meta-box', 'mb-model' ], true ) ) {
+			return false;
+		}
 
-		$unparser = new \MBBParser\Unparsers\MetaBox( $post_data );
+		$post_data = (array) $post;
+		foreach ( Export::get_meta_keys( $post->post_type ) as $meta_key ) {
+			$value                  = get_post_meta( $post->ID, $meta_key, true );
+			$post_data[ $meta_key ] = is_array( $value ) ? $value : [];
+		}
+
+		$unparser = new MetaBox( $post_data );
 		$unparser->unparse();
 		$post_data = $unparser->to_minimal_format();
 
 		// By default, we will save the file in the first path with {$post->post_name}.json
-		// however, some users might store the file name different with the meta box ID
+		// however, some users might store the file name different with the ID
 		// so we need to make an additional check if the file exists and write to that file instead
 		// of writing to the new file.
 		$files     = JsonService::get_files();
@@ -193,11 +214,15 @@ class LocalJson {
 				continue;
 			}
 
-			$unparser = new \MBBParser\Unparsers\MetaBox( $raw_json );
+			$unparser = new MetaBox( $raw_json );
 			$unparser->unparse();
 			$json = $unparser->get_settings();
 
-			if ( $json['meta_box']['id'] !== $post->post_name ) {
+			if ( ( $json['post_type'] ?? 'meta-box' ) !== $post->post_type ) {
+				continue;
+			}
+
+			if ( self::get_json_id( $json ) !== $post->post_name ) {
 				continue;
 			}
 
@@ -206,5 +231,18 @@ class LocalJson {
 		}
 
 		return (bool) self::write_file( $file_path, $post_data );
+	}
+
+	/**
+	 * ID used to match a JSON file to a Builder post.
+	 */
+	public static function get_json_id( array $data ): string {
+		$post_type = $data['post_type'] ?? 'meta-box';
+
+		if ( 'mb-model' === $post_type ) {
+			return (string) ( $data['model']['id'] ?? $data['model']['name'] ?? $data['post_name'] ?? '' );
+		}
+
+		return (string) ( $data['meta_box']['id'] ?? $data['post_name'] ?? '' );
 	}
 }

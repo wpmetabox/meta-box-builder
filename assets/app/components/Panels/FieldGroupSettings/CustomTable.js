@@ -1,14 +1,25 @@
-import { Tooltip } from "@wordpress/components";
+import { Button, Tooltip } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import DivRow from "../../../controls/DivRow";
 import PersistentPanelBodyWithToggle from "../../../controls/PersistentPanelBodyWithToggle";
 import Toggle from "../../../controls/Toggle";
 import UpgradePanelBody from "../../../controls/UpgradePanelBody";
+import useModelSchema from "../../../hooks/useModelSchema";
 import useSettings from "../../../hooks/useSettings";
 
 const CustomTable = () => {
-	const { getSetting, updateSetting } = useSettings();
+	const { getSetting, updateSetting, getObjectType } = useSettings();
 	const setting = getSetting( 'custom_table', {} );
+	const objectType = getObjectType();
+	const openSchema = useModelSchema( state => state.openSchema );
+
+	const enableCustomTable = value => {
+		updateSetting( 'custom_table.enable', value );
+		// New tables default to include prefix; existing saves keep their stored value.
+		if ( value && setting.prefix === undefined ) {
+			updateSetting( 'custom_table.prefix', true );
+		}
+	};
 
 	if ( !MbbApp.extensions.customTable ) {
 		return !MbbApp.extensions.aio && (
@@ -21,19 +32,26 @@ const CustomTable = () => {
 		);
 	}
 
+	// Models own table schema via the model editor / schema modal.
+	if ( objectType === 'model' ) {
+		return null;
+	}
+
+	const canEditColumns = !! setting.enable && !! ( setting.name || '' ).trim();
+
 	return (
 		<PersistentPanelBodyWithToggle
 			panelId="field-group-custom-table"
 			title={ __( 'Custom table', 'meta-box-builder' ) }
 			value={ !!setting.enable }
-			toggleValue={ value => updateSetting( 'custom_table.enable', value ) }
+			toggleValue={ enableCustomTable }
 			tooltip={ __( 'Save data in a custom table', 'meta-box-builder' ) }
 		>
 			<Toggle
 				dependency="table_enable:true"
 				name="custom_table.create"
 				label={ __( 'Auto create table', 'meta-box-builder' ) }
-				tooltip={ __( 'This settings will create the table with all columns as TEXT. Create the table manually to set proper column types for a better performance.', 'meta-box-builder' ) }
+				tooltip={ __( 'Create or update the database table from the column schema when you save this field group. Use Edit columns to set types and indexes.', 'meta-box-builder' ) }
 				componentId="settings-table_create"
 				defaultValue={ !!setting.create }
 				updateField={ updateSetting }
@@ -55,8 +73,9 @@ const CustomTable = () => {
 					/>
 					<label>
 						<input
+							key={ `prefix-${ setting.prefix ? '1' : '0' }` }
 							type="checkbox"
-							defaultChecked={ !!setting.prefix }
+							defaultChecked={ !! setting.prefix }
 							value={ true }
 							onChange={ e => updateSetting( 'custom_table.prefix', e.target.checked ) }
 						/>
@@ -67,6 +86,18 @@ const CustomTable = () => {
 					</label>
 				</div>
 			</DivRow>
+			{
+				canEditColumns && (
+					<DivRow dependency="table_enable:true">
+						<Button
+							variant="secondary"
+							size="compact"
+							onClick={ openSchema }
+							text={ __( 'Edit columns', 'meta-box-builder' ) }
+						/>
+					</DivRow>
+				)
+			}
 		</PersistentPanelBodyWithToggle>
 	);
 };

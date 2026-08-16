@@ -11,16 +11,20 @@ export const fetcher = ( { api, params = {}, method = 'GET', cache = true } ) =>
 	}
 
 	let path = `/mbb/${ api }`;
-	if ( method === 'GET' ) {
+	if ( method === 'GET' || method === 'DELETE' ) {
 		path = addQueryArgs( path, params );
 	}
 
 	const data = apiFetch( {
 		path,
 		method,
-		data: method === 'POST' ? params : null
+		data: method === 'POST' ? params : null,
 	} );
-	cacheData[ key ] = data;
+
+	if ( cache ) {
+		cacheData[ key ] = data;
+	}
+
 	return data;
 };
 

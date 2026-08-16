@@ -13,6 +13,7 @@ const ReactSelect = ( {
 	name,
 
 	wrapper = true, // Whether to wrap in DivRow.
+	isMulti = true,
 	options,
 	defaultValue,
 	updateField,
@@ -24,22 +25,33 @@ const ReactSelect = ( {
 
 	let newValue = defaultValue;
 	if ( defaultValue ) {
-		if ( !Array.isArray( newValue ) ) {
-			newValue = [ newValue ];
+		if ( isMulti ) {
+			if ( ! Array.isArray( newValue ) ) {
+				newValue = [ newValue ];
+			}
+			newValue = newValue.map( value => options.find( item => item.value === value ) );
+		} else {
+			const value = Array.isArray( newValue ) ? newValue[ 0 ] : newValue;
+			newValue = options.find( item => item.value === value ) || null;
 		}
-		newValue = newValue.map( value => options.find( item => item.value === value ) );
 	}
 
-	const handleChange = items => updateField( name, items ? items.map( item => item.value ) : [] );
+	const handleChange = items => {
+		if ( ! isMulti ) {
+			updateField( name, items ? items.value : '' );
+			return;
+		}
+		updateField( name, items ? items.map( item => item.value ) : [] );
+	};
 
 	const select = <Select
 		className="react-select"
 		classNamePrefix="react-select"
-		isMulti
 		options={ options }
 		defaultValue={ newValue }
 		onChange={ handleChange }
 		{ ...rest }
+		isMulti={ isMulti }
 	/>;
 
 	return ! wrapper
