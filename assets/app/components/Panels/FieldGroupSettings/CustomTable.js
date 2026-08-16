@@ -91,6 +91,7 @@ const CustomTable = () => {
 					<DivRow dependency="table_enable:true">
 						<Button
 							variant="secondary"
+							size="compact"
 							onClick={ openSchema }
 							text={ __( 'Edit columns', 'meta-box-builder' ) }
 						/>

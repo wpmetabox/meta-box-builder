@@ -88,8 +88,7 @@ const ColumnStatus = ( { status } ) => status && (
 );
 
 const ACTION_TOOLTIPS = {
-	removeFromSchema: __( 'Remove from the schema but keep data in the database.', 'meta-box-builder' ),
-	removeUntitled: __( 'Remove from the schema.', 'meta-box-builder' ),
+	remove: __( 'Remove from the schema.', 'meta-box-builder' ),
 	addToSchema: __( 'Add this column to the schema.', 'meta-box-builder' ),
 };
 
@@ -154,7 +153,6 @@ const SchemaRow = ( {
 		? getFieldStatus( item.name, usedColumnNames, existingColumnNames, readOnly )
 		: null;
 	const typeLabel = item.db_type || ( existingColumnNames.includes( item.name ) ? sqlType : '—' );
-	const hasName = !! ( item.name || '' ).trim();
 
 	return (
 		<tr>
@@ -200,7 +198,7 @@ const SchemaRow = ( {
 					<td className="mb-columns-editor__action">
 						<ActionButton
 							icon="remove"
-							label={ hasName ? ACTION_TOOLTIPS.removeFromSchema : ACTION_TOOLTIPS.removeUntitled }
+							label={ ACTION_TOOLTIPS.remove }
 							isDestructive
 							onClick={ () => removeFromSchema( item.id, item.name ) }
 						/>
@@ -314,7 +312,7 @@ const ColumnsEditor = ( {
 		if ( hasName && ! window.confirm(
 			sprintf(
 				/* translators: %s: column name */
-				__( 'Remove "%s" from the schema? The column and its data will remain in the database.', 'meta-box-builder' ),
+				__( 'Do you really want to remove "%s" from the schema?', 'meta-box-builder' ),
 				columnName
 			)
 		) ) {

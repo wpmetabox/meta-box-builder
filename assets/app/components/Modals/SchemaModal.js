@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, ToggleControl } from '@wordpress/components';
+import { Button, Flex, Modal } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { parsedColumnsToEditor } from '../../constants/columnTypes';
@@ -56,21 +56,14 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 		}
 	};
 
-	const toggleManage = value => {
-		if ( value ) {
-			const confirmed = window.confirm(
-				__( 'Edit the table columns here? If you use PHP to create this table, remove that code to avoid conflicts.', 'meta-box-builder' )
-			);
-			if ( ! confirmed ) {
-				return;
-			}
-			setManage( true );
-			applyManageSettings();
+	const enableEditing = () => {
+		if ( ! window.confirm(
+			__( 'Edit the table columns here? If you use PHP to create this table, remove that code to avoid conflicts.', 'meta-box-builder' )
+		) ) {
 			return;
 		}
 
-		setManage( false );
-		updateSetting( 'custom_table.enable', false );
+		setManage( true );
 	};
 
 	const saveCustomTable = () => {
@@ -197,12 +190,12 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 			);
 
 	const description = isCustomTable
-		? __( 'Adjust column types and indexes before saving. Remove from schema keeps the column and its data in the database. Save the field group with Auto create table enabled to apply schema changes to the database.', 'meta-box-builder' )
+		? __( 'Adjust column types and indexes before saving. Save the field group with Auto create table enabled to apply schema changes to the database.', 'meta-box-builder' )
 		: readOnly
-			? __( 'This model is registered in code, so the schema is read-only. Enable the option below to edit the table columns.', 'meta-box-builder' )
+			? __( 'This model is registered in code, so the schema is read-only. Click the button below to manage it from this field group.', 'meta-box-builder' )
 			: isCodeModel
-				? __( 'Edit the columns below, then save the schema to create or update the table. Remove from schema keeps the column and its data in the database.', 'meta-box-builder' )
-				: __( 'Adjust column types and indexes before saving. Remove from schema keeps the column and its data in the database.', 'meta-box-builder' );
+				? __( 'Edit the columns below, then save the schema to create or update the table.', 'meta-box-builder' )
+				: __( 'Adjust column types and indexes before saving.', 'meta-box-builder' );
 
 	return (
 		<Modal
@@ -213,14 +206,11 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 		>
 			<p className="og-description">{ description }</p>
 			{
-				isCodeModel && (
+				isCodeModel && readOnly && (
 					<div className="mb-schema-modal__options">
-						<ToggleControl
-							className="mb-schema-modal__manage"
-							label={ __( 'Edit table columns', 'meta-box-builder' ) }
-							checked={ manage }
-							onChange={ toggleManage }
-						/>
+						<Button variant="secondary" onClick={ enableEditing }>
+							{ __( 'Edit table columns', 'meta-box-builder' ) }
+						</Button>
 					</div>
 				)
 			}
