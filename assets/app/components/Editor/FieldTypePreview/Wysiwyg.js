@@ -8,7 +8,7 @@ const Wysiwyg = ( { field } ) => {
 
 	useEffect( () => {
 		const selector = `#${ field._id }`;
-		const input = document.querySelector( selector );
+		const input = document.getElementById( field._id );
 		const editor = input.closest( '.rwmb-input' ).querySelector( '.mce-container' );
 		if ( editor ) {
 			editor.remove();

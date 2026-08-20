@@ -1,3 +1,14 @@
+### 5.4.2 - 2026-07-30
+
+- Add block bindings toggle for fields
+- Fix `querySelector` errors with numeric IDs and missing DOM elements
+- Update description text for `max_clone` in relationship Fields tab for clarity
+- Update Twig
+
+### 5.4.1 - 2026-07-16
+
+- Add "has one relationship" setting to relationship sides
+
 ### 5.4.0 - 2026-07-06
 
 **Highlights:**
