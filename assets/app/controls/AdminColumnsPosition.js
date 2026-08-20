@@ -13,7 +13,6 @@ const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) =>
 	const defaultColumns = {
 		term: 'name',
 		user: 'username',
-		order: 'order_number'
 	};
 	const defaultColumn = defaultColumns[ objectType ] || 'title';
 
@@ -98,7 +97,7 @@ const objectTypeFields = ( objectType, postTypes ) => {
 		];
 	}
 
-	const fields = [
+	let fields = [
 		[ 'cb', __( 'Checkbox', 'meta-box-builder' ) ],
 		[ 'title', __( 'Title', 'meta-box-builder' ) ],
 		[ 'author', __( 'Author', 'meta-box-builder' ) ],
@@ -130,12 +129,12 @@ const objectTypeFields = ( objectType, postTypes ) => {
 			[ 'order_title', __( 'Subscription: Subscription', 'meta-box-builder' ) ],
 			[ 'order_items', __( 'Subscription: Items', 'meta-box-builder' ) ],
 			[ 'recurring_total', __( 'Subscription: Total', 'meta-box-builder' ) ],
-			[ 'start_date', __( 'Subscription: Start Date', 'meta-box-builder' ) ],
-			[ 'trial_end_date', __( 'Subscription: Trial End', 'meta-box-builder' ) ],
-			[ 'next_payment_date', __( 'Subscription: Next Payment', 'meta-box-builder' ) ],
-			[ 'last_payment_date', __( 'Subscription: Last Order Date', 'meta-box-builder' ) ],
-			[ 'end_date', __( 'Subscription: End Date', 'meta-box-builder' ) ],
-			[ 'orders', __( 'Subscription: Related Orders', 'meta-box-builder' ) ],
+			[ 'start_date', __( 'Subscription: Start date', 'meta-box-builder' ) ],
+			[ 'end_date', __( 'Subscription: End date', 'meta-box-builder' ) ],
+			[ 'trial_end_date', __( 'Subscription: Trial end date', 'meta-box-builder' ) ],
+			[ 'next_payment_date', __( 'Subscription: Next payment', 'meta-box-builder' ) ],
+			[ 'last_payment_date', __( 'Subscription: Last order date', 'meta-box-builder' ) ],
+			[ 'orders', __( 'Subscription: Related orders', 'meta-box-builder' ) ],
 		);
 	}
 
