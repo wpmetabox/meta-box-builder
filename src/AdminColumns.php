@@ -96,7 +96,7 @@ class AdminColumns {
 
 	public function delete_json( $post_id ) {
 		$post = get_post( $post_id );
-		if ( ! $post ) {
+		if ( ! $post || ! in_array( $post->post_type, [ 'meta-box', 'mb-model' ], true ) ) {
 			return;
 		}
 
