@@ -89,20 +89,24 @@ const ColumnStatus = ( { status } ) => status && (
 
 const ACTION_TOOLTIPS = {
 	remove: __( 'Remove from the schema', 'meta-box-builder' ),
+	removeDisabled: __( 'A field uses this column, so it cannot be removed', 'meta-box-builder' ),
 	addToSchema: __( 'Add this column to the schema', 'meta-box-builder' ),
 };
 
 const ActionButton = ( { icon, label, onClick, isDestructive = false, disabled = false } ) => (
 	<Tooltip text={ label } delay={ 0 } placement="top">
-		<button
-			type="button"
-			className={ `mb-columns-editor__action-btn${ isDestructive ? ' mb-columns-editor__action-btn--destructive' : '' }` }
-			onClick={ onClick }
-			disabled={ disabled }
-			aria-label={ label }
-		>
-			<span className={ `dashicons dashicons-${ icon }` } aria-hidden="true" />
-		</button>
+		{/* Disabled buttons do not fire mouse events, so wrap in a span to keep the tooltip working. */}
+		<span className="mb-columns-editor__action-wrap">
+			<button
+				type="button"
+				className={ `mb-columns-editor__action-btn${ isDestructive ? ' mb-columns-editor__action-btn--destructive' : '' }` }
+				onClick={ onClick }
+				disabled={ disabled }
+				aria-label={ label }
+			>
+				<span className={ `dashicons dashicons-${ icon }` } aria-hidden="true" />
+			</button>
+		</span>
 	</Tooltip>
 );
 
@@ -153,6 +157,7 @@ const SchemaRow = ( {
 		? getFieldStatus( item.name, usedColumnNames, existingColumnNames, readOnly )
 		: null;
 	const typeLabel = item.db_type || ( existingColumnNames.includes( item.name ) ? sqlType : '—' );
+	const usedByField = showFieldContext && usedColumnNames.includes( item.name );
 
 	return (
 		<tr>
@@ -198,8 +203,9 @@ const SchemaRow = ( {
 					<td className="mb-columns-editor__action">
 						<ActionButton
 							icon="remove"
-							label={ ACTION_TOOLTIPS.remove }
+							label={ usedByField ? ACTION_TOOLTIPS.removeDisabled : ACTION_TOOLTIPS.remove }
 							isDestructive
+							disabled={ usedByField }
 							onClick={ () => removeFromSchema( item.id, item.name ) }
 						/>
 					</td>

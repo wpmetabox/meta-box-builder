@@ -135,6 +135,10 @@
 		}
 	}
 
+	&__action-wrap {
+		display: inline-flex;
+	}
+
 	&__table &__status {
 		width: 1%;
 		text-align: center;
