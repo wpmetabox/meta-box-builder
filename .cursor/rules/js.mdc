@@ -1,0 +1,9 @@
+---
+description: General code style for JavaScript
+globs: **/*.js
+alwaysApply: true
+---
+
+- Follow the [WordPress JavaScript Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/javascript/)
+- Prefer arrow functions over traditional function expressions for inline callbacks and short functions.
+- Omit the parentheses for arrow functions with one parameter

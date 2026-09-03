@@ -1,0 +1,14 @@
+---
+description: General code style for PHP
+globs: **/*.php
+alwaysApply: true
+---
+
+- Follow the [WordPress PHP Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/)
+- Use PSR-4 for autoloading
+- Import classes at the top of the file with `use`, not `\FQCN`
+- Add type hints (for parameters and return values) wherever possible
+- Add `@param` and `@return` docblocks when type hints are insufficient
+- Use WordPress core functions before custom solutions
+- Avoids unnecessary defensive existence checks (e.g., function_exists) when the dependency is guaranteed to exist
+- Support PHP 7.4+ and WordPress 6.6+
