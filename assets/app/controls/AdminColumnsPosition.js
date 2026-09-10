@@ -6,9 +6,11 @@ import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
 const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) => {
-	const { getObjectType, getPostTypes } = useSettings();
+	const { getObjectType, getPostTypes, getPrefix } = useSettings();
 	const objectType = getObjectType();
 	const postTypes = getPostTypes();
+	const coreColumns = objectTypeFields( objectType, postTypes );
+	const coreColumnIds = coreColumns.map( ( [ id ] ) => id );
 
 	const defaultColumns = {
 		term: 'name',
@@ -17,13 +19,14 @@ const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) =>
 	const defaultColumn = defaultColumns[ objectType ] || 'title';
 
 	let fields = useAllFields().map( field => [ field.id, `${ field.name } (${ field.id })` ] );
-	fields = [ ...objectTypeFields( objectType, postTypes ), ...fields ];
+	fields = [ ...coreColumns, ...fields ];
 
 	const handleChangeType = e => updateField( `${ name }.type`, e.target.value );
 	const handleChangeColumn = ( inputRef, value ) => updateField( `${ name }.column`, value );
 	const handleSelectColumn = ( inputRef, value ) => {
-		inputRef.current.value = value;
-		updateField( `${ name }.column`, value );
+		const column = coreColumnIds.includes( value ) ? value : `${ getPrefix() || '' }${ value }`;
+		inputRef.current.value = column;
+		updateField( `${ name }.column`, column );
 	};
 
 	useEffect( () => {
@@ -67,7 +70,7 @@ const AdminColumnsPosition = ( { name, defaultValue, updateField, ...rest } ) =>
 				defaultValue={ defaultValue?.column }
 				items={ fields }
 				isID={ true }
-				exclude={ objectTypeFields( objectType, postTypes ) }
+				exclude={ coreColumnIds }
 				onChange={ handleChangeColumn }
 				onSelect={ handleSelectColumn }
 			/>
