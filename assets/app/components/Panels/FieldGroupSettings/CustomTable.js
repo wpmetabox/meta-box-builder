@@ -8,9 +8,8 @@ import useModelSchema from "../../../hooks/useModelSchema";
 import useSettings from "../../../hooks/useSettings";
 
 const CustomTable = () => {
-	const { getSetting, updateSetting, getObjectType } = useSettings();
+	const { getSetting, updateSetting } = useSettings();
 	const setting = getSetting( 'custom_table', {} );
-	const objectType = getObjectType();
 	const openSchema = useModelSchema( state => state.openSchema );
 
 	const enableCustomTable = value => {
@@ -30,11 +29,6 @@ const CustomTable = () => {
 				utm_medium="custom_table"
 			/>
 		);
-	}
-
-	// Models own table schema via the model editor / schema modal.
-	if ( objectType === 'model' ) {
-		return null;
 	}
 
 	const canEditColumns = !! setting.enable && !! ( setting.name || '' ).trim();

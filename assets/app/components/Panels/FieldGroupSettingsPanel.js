@@ -11,6 +11,7 @@ import ConditionalLogic from './FieldGroupSettings/ConditionalLogic';
 import CustomTable from './FieldGroupSettings/CustomTable';
 import IncludeExclude from './FieldGroupSettings/IncludeExclude';
 import Location from './FieldGroupSettings/Location';
+import ModelCustomTable from './FieldGroupSettings/ModelCustomTable';
 import Post from './FieldGroupSettings/Post';
 import SettingsPage from './FieldGroupSettings/SettingsPage';
 import ShowHide from './FieldGroupSettings/ShowHide';
@@ -198,6 +199,7 @@ const FieldGroupSettingsPanel = () => {
 					![ 'setting', 'block', 'model' ].includes( objectType ) &&
 					<CustomTable />
 				}
+				{ objectType === 'model' && <ModelCustomTable /> }
 				{
 					MbbApp.polylang &&
 					<PersistentPanelBody panelId="field-group-translation" title={ __( 'Translation', 'meta-box-builder' ) }>
