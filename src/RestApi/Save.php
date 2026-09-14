@@ -57,6 +57,8 @@ class Save extends Base {
 			];
 		}
 
+		$previous_id = $post->post_name;
+
 		// Create (publish) the post if it's auto-draft.
 		$post_status = $post->post_status;
 		if ( ! in_array( $post_status, [ 'publish', 'draft' ], true ) ) {
@@ -86,7 +88,12 @@ class Save extends Base {
 
 		$parser = self::parse( $post, $fields, $settings, $post_title, $post_name );
 
-		do_action( 'mbb_after_save', $parser, $post_id, compact( 'fields', 'settings', 'post_title', 'post_name' ) );
+		$raw_data = compact( 'fields', 'settings', 'post_title', 'post_name' );
+		if ( $previous_id !== '' && $previous_id !== $post_name ) {
+			$raw_data['previous_id'] = $previous_id;
+		}
+
+		do_action( 'mbb_after_save', $parser, $post_id, $raw_data );
 
 		return [
 			'success' => true,

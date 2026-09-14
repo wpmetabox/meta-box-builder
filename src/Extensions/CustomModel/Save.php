@@ -111,6 +111,8 @@ class Save {
 			];
 		}
 
+		$previous_id = $post->post_name;
+
 		// Create (publish) the post if it's auto-draft.
 		$post_status = $post->post_status;
 		if ( ! in_array( $post_status, [ 'publish', 'draft' ], true ) ) {
@@ -153,7 +155,7 @@ class Save {
 			$settings['labels']['menu_name'] = $settings['labels']['name'];
 		}
 
-		return self::persist_model( $post_id, $post_name, $settings );
+		return self::persist_model( $post_id, $post_name, $settings, $previous_id );
 	}
 
 	/**
@@ -219,7 +221,15 @@ class Save {
 		);
 	}
 
-	public static function persist_model( int $post_id, string $post_name, array $settings ): array {
+	/**
+	 * Persist model settings, register the model, and sync Local JSON.
+	 *
+	 * @param int    $post_id     Model post ID.
+	 * @param string $post_name   Model slug.
+	 * @param array  $settings    Raw settings from the editor.
+	 * @param string $previous_id Slug before save; used to remove the old Local JSON file after rename.
+	 */
+	public static function persist_model( int $post_id, string $post_name, array $settings, string $previous_id = '' ): array {
 		$settings['modified'] = time();
 
 		$parser = new Parser( $settings );
@@ -236,10 +246,15 @@ class Save {
 		Register::create_table( $model );
 		Register::rebuild_cache();
 
-		LocalJson::use_database( [
+		$args = [
 			'post_id'   => $post_id,
 			'post_type' => 'mb-model',
-		] );
+		];
+		if ( $previous_id !== '' && $previous_id !== $post_name ) {
+			$args['previous_id'] = $previous_id;
+		}
+
+		LocalJson::use_database( $args );
 
 		return [
 			'success' => true,
