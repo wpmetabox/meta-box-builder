@@ -75,8 +75,13 @@ class Register {
 	}
 
 	public function register_models(): void {
-		$models = LocalJson::is_enabled() ? self::query_models_from_json() : null;
-		if ( ! is_array( $models ) ) {
+		if ( LocalJson::is_enabled() ) {
+			$models = self::query_models_from_json();
+			// Data::get_models() reads post_id from this option; restore after trash/delete.
+			if ( ! is_array( get_option( self::CACHE_OPTION, false ) ) ) {
+				update_option( self::CACHE_OPTION, $models, true );
+			}
+		} else {
 			$models = get_option( self::CACHE_OPTION, false );
 			if ( ! is_array( $models ) ) {
 				$models = self::query_models();
