@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from "@wordpress/element";
+import { lazy, Suspense } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { ucwords } from "../../../functions";
 
@@ -12,7 +12,6 @@ const getLazyObjectField = type => {
 };
 
 const ObjectField = ( { field, defaultPlaceholder, defaultItemTitle } ) => {
-	const ref = useRef();
 	const type = field.field_type || 'select_advanced';
 
 	// Don't change field directly as it can fill the field settings inputs.
@@ -25,20 +24,14 @@ const ObjectField = ( { field, defaultPlaceholder, defaultItemTitle } ) => {
 
 	const FieldType = getLazyObjectField( type );
 
-	useEffect( () => {
-		if ( ref.current ) {
-			ref.current.querySelector( '.select2-container' )?.remove();
-		}
-	}, [ type ] );
-
 	return (
 		<Suspense fallback={ null }>
-			<div ref={ ref }>
+			<>
 				<FieldType field={ normalizedField } />
 				{
 					field.add_new && <a href="#" className="rwmb-modal-add-button">{ __( 'Add new', 'meta-box-builder' ) }</a>
 				}
-			</div>
+			</>
 		</Suspense>
 	);
 };

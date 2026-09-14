@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "@wordpress/element";
+import { useLayoutEffect, useRef } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import { doNothing, getFullOptions } from "../../../functions";
 
@@ -9,11 +9,12 @@ const SelectAdvanced = ( { field } ) => {
 
 	const ref = useRef();
 
-	useEffect( () => {
-		const $select = jQuery( ref.current );
-
-		// Remove previous select2 instance, like in "post" field, when changing field_type.
-		$select.siblings( '.select2-container' ).remove();
+	useLayoutEffect( () => {
+		const select = ref.current;
+		// select2 inserts .select2-container as a sibling outside React.
+		// On unmount, React removes <select> before the cleanup runs, so keep parent to remove the .select2-container.
+		const parent = select.parentElement;
+		const $select = jQuery( select );
 
 		$select.select2( {
 			allowClear: true,
@@ -21,6 +22,8 @@ const SelectAdvanced = ( { field } ) => {
 			placeholder: field.placeholder || __( 'Select an item', 'meta-box-builder' ),
 			width: 'style',
 		} );
+
+		return () => parent?.querySelector( '.select2-container' )?.remove();
 	}, [ field.multiple, field.std, field.placeholder ] );
 
 	return (

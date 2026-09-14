@@ -1,3 +1,7 @@
+### 5.4.3 - 2026-09-03
+
+- Add support for WooCommerce HPOS
+
 ### 5.4.2 - 2026-07-30
 
 - Add block bindings toggle for fields
