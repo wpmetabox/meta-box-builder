@@ -5,6 +5,7 @@ use WP_REST_Request;
 use WP_REST_Server;
 use WP_Error;
 use MBB\Helpers\Data;
+use MBB\Helpers\Id;
 use MBB\Helpers\TableSchema;
 use MBB\LocalJson;
 use MBB\RestApi\Save as SaveRestApi;
@@ -92,7 +93,7 @@ class Save {
 			$settings = [];
 		}
 
-		$post_name         = sanitize_title( empty( $settings['slug'] ) ? $post_title : $settings['slug'] );
+		$post_name         = Id::sanitize( empty( $settings['slug'] ) ? $post_title : $settings['slug'], $post_title );
 		$settings['table'] = TableSchema::sanitize_name( (string) ( $settings['table'] ?? '' ) );
 
 		$post = get_post( $post_id );
@@ -176,7 +177,7 @@ class Save {
 		}
 
 		$settings['columns'] = is_array( $columns ) ? $columns : [];
-		$post_name           = $post->post_name ?: sanitize_title( $post->post_title );
+		$post_name           = Id::sanitize( $post->post_name ?: $post->post_title, $post->post_title );
 
 		$result = self::persist_model( $post_id, $post_name, $settings );
 		if ( ! $result['success'] ) {

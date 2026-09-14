@@ -4,6 +4,7 @@ namespace MBB;
 use MBB\RestApi\Save;
 use MBB\JsonService;
 use MBB\LocalJson;
+use MBB\Helpers\Id;
 use MBBParser\Unparsers\MetaBox;
 use MBBParser\Unparsers\Field as FieldUnparser;
 use WP_REST_Request;
@@ -657,7 +658,7 @@ class Abilities {
 		$post_id = wp_insert_post( [
 			'post_type'   => 'meta-box',
 			'post_title'  => $title,
-			'post_name'   => $slug ? $slug : sanitize_title( $title ),
+			'post_name'   => Id::sanitize( $slug ?: $title, $title ),
 			'post_status' => $status,
 		] );
 

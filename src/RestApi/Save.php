@@ -5,6 +5,7 @@ use WP_REST_Server;
 use WP_REST_Request;
 use WP_Error;
 use WP_Post;
+use MBB\Helpers\Id;
 use MBBParser\Parsers\Base as BaseParser;
 use MBBParser\Parsers\MetaBox as MetaBoxParser;
 
@@ -46,9 +47,7 @@ class Save extends Base {
 		$fields     = $request->get_param( 'fields' );
 		$settings   = $request->get_param( 'settings' );
 
-		if ( ! $post_name ) {
-			$post_name = sanitize_title( $post_title );
-		}
+		$post_name = Id::sanitize( $post_name ?: $post_title, $post_title );
 
 		$post = get_post( $post_id );
 		if ( ! $post ) {

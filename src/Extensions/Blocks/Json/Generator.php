@@ -1,6 +1,7 @@
 <?php
 namespace MBB\Extensions\Blocks\Json;
 
+use MBB\Helpers\Id;
 use MBB\Helpers\Path;
 use MetaBox\Support\Arr;
 use stdClass;
@@ -20,7 +21,7 @@ class Generator {
 	}
 
 	private function generate_block_metadata( array $settings, array $raw_data ): array {
-		$block_id = $settings['id'] ?? sanitize_title( $settings['title'] );
+		$block_id = Id::sanitize( $settings['id'] ?? $settings['title'] ?? '', $settings['title'] ?? '' );
 
 		$metadata = [
 			'$schema'     => 'https://schemas.wp.org/trunk/block.json',
