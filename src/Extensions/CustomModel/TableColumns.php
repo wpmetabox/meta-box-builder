@@ -42,7 +42,7 @@ class TableColumns {
 			return self::fail( $result );
 		}
 
-		$inspected = self::inspect( $table, self::supports_for( $model_name ) );
+		$inspected = self::inspect( $table, $supports );
 
 		return [
 			'success' => true,
