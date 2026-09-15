@@ -742,7 +742,7 @@ class MetaBox extends Base {
 		$keys    = $settings['keys'] ?? ( $this->settings['model']['keys'] ?? [] );
 		$keys    = is_array( $keys ) ? $keys : [];
 		$key_set = array_fill_keys( $keys, true );
-		$editor = [];
+		$editor  = [];
 
 		foreach ( $columns as $name => $type ) {
 			if ( is_array( $type ) ) {
@@ -752,12 +752,13 @@ class MetaBox extends Base {
 			if ( '' === $name || 'id' === strtolower( $name ) ) {
 				continue;
 			}
-			$id            = 'col_' . str_replace( '-', '_', sanitize_key( $name ) );
-			$editor[ $id ] = [
+			$id             = 'col_' . str_replace( '-', '_', sanitize_key( $name ) );
+			$editor_type    = $this->sql_type_to_editor_column( (string) $type );
+			$editor[ $id ]  = [
 				'id'          => $id,
 				'name'        => $name,
-				'type'        => 'custom',
-				'custom_type' => (string) $type,
+				'type'        => $editor_type['type'],
+				'custom_type' => $editor_type['custom_type'],
 				'index'       => isset( $key_set[ $name ] ),
 			];
 		}
@@ -770,6 +771,51 @@ class MetaBox extends Base {
 		unset( $this->settings['settings']['keys'] );
 
 		return $this;
+	}
+
+	/**
+	 * Map a SQL column type to editor type fields.
+	 * Exact preset match only; variants keep custom_type so import/sync does not rewrite SQL.
+	 * Keep in sync with dbTypeToEditorColumn() in meta-box-builder columnTypes.js.
+	 *
+	 * @return array{type: string, custom_type: string}
+	 */
+	private function sql_type_to_editor_column( string $sql_type ): array {
+		$presets = [
+			'TINYINT',
+			'SMALLINT',
+			'MEDIUMINT',
+			'INT',
+			'BIGINT',
+			'DECIMAL(10,2)',
+			'FLOAT',
+			'DOUBLE',
+			'TINYINT(1)',
+			'CHAR(1)',
+			'VARCHAR(255)',
+			'TINYTEXT',
+			'TEXT',
+			'MEDIUMTEXT',
+			'LONGTEXT',
+			'DATE',
+			'TIME',
+			'DATETIME',
+		];
+
+		$type  = trim( $sql_type );
+		$upper = strtoupper( $type );
+
+		if ( in_array( $upper, $presets, true ) ) {
+			return [
+				'type'        => $upper,
+				'custom_type' => '',
+			];
+		}
+
+		return [
+			'type'        => 'custom',
+			'custom_type' => $type,
+		];
 	}
 
 	/**

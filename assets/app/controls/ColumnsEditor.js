@@ -9,6 +9,7 @@ import {
 	createColumnItem,
 	dbTypeToEditorColumn,
 	isIndexableType,
+	isReservedColumnName,
 	resolveColumnSqlType,
 } from '../constants/columnTypes';
 import { maybeArrayToObject } from '../functions';
@@ -348,6 +349,11 @@ const ColumnsEditor = ( {
 	};
 
 	const updateItem = ( id, prop, propValue ) => {
+		if ( 'name' === prop && isReservedColumnName( propValue ) ) {
+			window.alert( __( 'The column name "id" is reserved for the auto-increment primary key.', 'meta-box-builder' ) );
+			return;
+		}
+
 		const nextItem = {
 			...( items[ id ] || {} ),
 			id,

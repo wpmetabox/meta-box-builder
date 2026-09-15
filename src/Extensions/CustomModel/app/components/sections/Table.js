@@ -2,7 +2,7 @@ import { Tooltip } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import ColumnsEditor from '../../../../../../assets/app/controls/ColumnsEditor';
 import DivRow from '../../../../../../assets/app/controls/DivRow';
-import { resolveTableName } from '../../../../../../assets/app/utils/modelColumns';
+import { resolveTableName, sanitizeTableName } from '../../../../../../assets/app/utils/modelColumns';
 import useAutofill from '../../hooks/useAutofill';
 
 const Table = () => {
@@ -34,7 +34,11 @@ const Table = () => {
 						size={ 16 }
 						id="table"
 						defaultValue={ getSetting( 'table' ) }
-						onChange={ e => updateWithAutofill( 'table', e.target.value ) }
+						onChange={ e => {
+							const next = sanitizeTableName( e.target.value );
+							e.target.value = next;
+							updateWithAutofill( 'table', next );
+						} }
 					/>
 					<label>
 						<input

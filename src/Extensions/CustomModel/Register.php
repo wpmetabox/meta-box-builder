@@ -1,9 +1,9 @@
 <?php
 namespace MBB\Extensions\CustomModel;
 
-use MetaBox\CustomTable\API;
 use MBB\LocalJson;
 use MBB\JsonService;
+use MBB\Helpers\TableSchema;
 use MBBParser\Unparsers\MetaBox;
 use WP_Query;
 
@@ -75,8 +75,15 @@ class Register {
 	}
 
 	public function register_models(): void {
-		$models = LocalJson::is_enabled() ? self::query_models_from_json() : null;
-		if ( ! is_array( $models ) ) {
+		if ( LocalJson::is_enabled() ) {
+			$models = self::query_models_from_json();
+			// Keep mbb_models in sync for Data::get_models() (post_id, columns, keys).
+			// Strict compare: key-order drift updates once, then matches JSON thereafter.
+			$cached = get_option( self::CACHE_OPTION, false );
+			if ( ! is_array( $cached ) || $cached !== $models ) {
+				update_option( self::CACHE_OPTION, $models, true );
+			}
+		} else {
 			$models = get_option( self::CACHE_OPTION, false );
 			if ( ! is_array( $models ) ) {
 				$models = self::query_models();
@@ -93,7 +100,7 @@ class Register {
 
 			// Recreate missing tables (imported posts, dropped tables).
 			$table = (string) ( $args['table'] ?? '' );
-			if ( $table && ! TableColumns::table_exists( $table ) ) {
+			if ( $table && ! TableSchema::table_exists( $table ) ) {
 				self::create_table( $args );
 			}
 		}
@@ -115,17 +122,18 @@ class Register {
 	 * Create or update the model's custom table.
 	 *
 	 * @param array $model Parsed model args including table, columns, keys.
+	 * @return true|string True on success, error message on failure.
 	 */
-	public static function create_table( array $model ): void {
+	public static function create_table( array $model ) {
 		$table = (string) ( $model['table'] ?? '' );
 		if ( ! $table ) {
-			return;
+			return true;
 		}
 
 		$columns = isset( $model['columns'] ) && is_array( $model['columns'] ) ? $model['columns'] : [];
 		$keys    = isset( $model['keys'] ) && is_array( $model['keys'] ) ? $model['keys'] : [];
 
-		API::create( $table, $columns, $keys );
+		return TableSchema::create( $table, $columns, $keys );
 	}
 
 	/**

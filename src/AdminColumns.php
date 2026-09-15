@@ -295,6 +295,14 @@ class AdminColumns {
 								case 'sync_status':
 									$this->show_sync_status( $id );
 									break;
+
+								case 'mbb-model-slug':
+									echo esc_html( (string) ( $data['local_minimized']['id'] ?? '' ) );
+									break;
+
+								case 'mbb-model-table':
+									echo esc_html( (string) ( $data['local_minimized']['table'] ?? '' ) );
+									break;
 							}
 
 							echo "</$tag>";
@@ -431,7 +439,7 @@ class AdminColumns {
 		$columns['sync_status'] = __( 'Sync status', 'meta-box-builder' ) . Data::tooltip( __( 'You must set the modified time to a Unix timestamp for it to display correctly.', 'meta-box-builder' ) );
 
 		if ( $this->is_status( 'sync' ) ) {
-			unset( $columns['mbb-model-slug'], $columns['mbb-model-table'], $columns['date'] );
+			unset( $columns['date'] );
 		}
 
 		return $columns;

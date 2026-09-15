@@ -111,6 +111,8 @@ class Save {
 			];
 		}
 
+		$previous_id = $post->post_name;
+
 		// Create (publish) the post if it's auto-draft.
 		$post_status = $post->post_status;
 		if ( ! in_array( $post_status, [ 'publish', 'draft' ], true ) ) {
@@ -153,7 +155,7 @@ class Save {
 			$settings['labels']['menu_name'] = $settings['labels']['name'];
 		}
 
-		return self::persist_model( $post_id, $post_name, $settings );
+		return self::persist_model( $post_id, $post_name, $settings, $previous_id );
 	}
 
 	/**
@@ -219,27 +221,61 @@ class Save {
 		);
 	}
 
-	public static function persist_model( int $post_id, string $post_name, array $settings ): array {
+	/**
+	 * Persist model settings, register the model, and sync Local JSON.
+	 *
+	 * @param int    $post_id     Model post ID.
+	 * @param string $post_name   Model slug.
+	 * @param array  $settings    Raw settings from the editor.
+	 * @param string $previous_id Slug before save; used to remove the old Local JSON file after rename.
+	 */
+	public static function persist_model( int $post_id, string $post_name, array $settings, string $previous_id = '' ): array {
 		$settings['modified'] = time();
 
 		$parser = new Parser( $settings );
 		$parser->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'settings', $parser->get_settings() );
+
+		// UI-only locks; derived again on editor load from slug/table vs labels.
+		$settings_data = $parser->get_settings();
+		unset( $settings_data['_slug_changed'], $settings_data['_table_changed'] );
 
 		$parser->parse();
 		$model         = $parser->get_settings();
 		$model['name'] = $post_name;
-		update_post_meta( $post_id, 'model', $model );
 
+		// Register before DDL so mbct_table_schema can add AUTO_INCREMENT and supports.
 		$model['post_id'] = $post_id;
 		Register::register( $post_name, $model );
-		Register::create_table( $model );
+		$table_result = Register::create_table( $model );
+		if ( true !== $table_result ) {
+			return [
+				'success' => false,
+				'message' => is_string( $table_result )
+					? $table_result
+					: __( 'Could not create or update the database table.', 'meta-box-builder' ),
+			];
+		}
+
+		unset( $model['post_id'] );
+		update_post_meta( $post_id, 'settings', $settings_data );
+		update_post_meta( $post_id, 'model', $model );
+
 		Register::rebuild_cache();
 
-		LocalJson::use_database( [
+		$args = [
 			'post_id'   => $post_id,
 			'post_type' => 'mb-model',
-		] );
+		];
+		if ( $previous_id !== '' && $previous_id !== $post_name ) {
+			$args['previous_id'] = $previous_id;
+		}
+
+		if ( LocalJson::is_enabled() && ! LocalJson::use_database( $args ) ) {
+			return [
+				'success' => false,
+				'message' => __( 'Could not sync the Local JSON file. The ID may already be used by another JSON file.', 'meta-box-builder' ),
+			];
+		}
 
 		return [
 			'success' => true,

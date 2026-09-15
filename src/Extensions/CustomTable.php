@@ -2,7 +2,6 @@
 
 namespace MBB\Extensions;
 
-use MetaBox\CustomTable\API;
 use MetaBox\Support\Arr;
 use MBB\Extensions\CustomModel\Register;
 use MBB\Extensions\CustomModel\Save as CustomModelSave;
@@ -10,6 +9,13 @@ use MBB\Helpers\TableSchema;
 use MBB\LocalJson;
 
 class CustomTable {
+	/**
+	 * Last DDL error from create/sync during field group save (empty if none).
+	 *
+	 * @var string
+	 */
+	private static string $last_ddl_error = '';
+
 	public function __construct() {
 		add_action( 'mbb_after_save', [ $this, 'create_custom_table_after_save' ], 10, 3 );
 
@@ -18,7 +24,15 @@ class CustomTable {
 		}
 	}
 
+	/**
+	 * DDL error from the latest field-group save hook, if any.
+	 */
+	public static function get_last_ddl_error(): string {
+		return self::$last_ddl_error;
+	}
+
 	public function create_custom_table_after_save( $parser, $post_id, $submitted_data ): void {
+		self::$last_ddl_error = '';
 		$this->create_custom_table( $submitted_data, (int) $post_id );
 	}
 
@@ -55,6 +69,10 @@ class CustomTable {
 			(array) Arr::get( $settings, 'custom_table.columns', [] ),
 			$this->field_column_names( $data['fields'] ?? [], (string) Arr::get( $settings, 'prefix', '' ) )
 		);
+
+		if ( '' !== self::$last_ddl_error ) {
+			return;
+		}
 
 		$this->persist_field_group_columns( $data, $post_id, $items );
 	}
@@ -96,6 +114,10 @@ class CustomTable {
 			$this->field_column_names( $data['fields'] ?? [] )
 		);
 
+		if ( '' !== self::$last_ddl_error ) {
+			return;
+		}
+
 		$this->persist_field_group_columns( $data, $post_id, $items );
 	}
 
@@ -121,8 +143,14 @@ class CustomTable {
 			return $this->append_field_columns( $column_items, $field_names );
 		}
 
-		API::create( $table, $columns, $parsed['keys'] );
-		set_transient( $cache_key, 1, MONTH_IN_SECONDS );
+		$result = TableSchema::create( $table, $columns, $parsed['keys'] );
+		if ( true === $result ) {
+			set_transient( $cache_key, 1, MONTH_IN_SECONDS );
+		} else {
+			self::$last_ddl_error = is_string( $result ) && '' !== $result
+				? $result
+				: __( 'Could not create or update the database table.', 'meta-box-builder' );
+		}
 
 		return $this->append_field_columns( $column_items, $field_names );
 	}
@@ -230,7 +258,10 @@ class CustomTable {
 
 		$post      = get_post( $model_id );
 		$post_name = $post ? $post->post_name : (string) ( $model['name'] ?? '' );
-		CustomModelSave::persist_model( $model_id, $post_name, $settings );
+		$result    = CustomModelSave::persist_model( $model_id, $post_name, $settings );
+		if ( empty( $result['success'] ) ) {
+			self::$last_ddl_error = (string) ( $result['message'] ?? __( 'Could not create or update the database table.', 'meta-box-builder' ) );
+		}
 	}
 
 	/**

@@ -12,7 +12,12 @@ class LocalJson {
 	}
 
 	public function generate_local_json( $parser, $post_id, $raw_data ): bool {
-		return self::use_database( compact( 'post_id' ) );
+		$args = compact( 'post_id' );
+		if ( ! empty( $raw_data['previous_id'] ) ) {
+			$args['previous_id'] = (string) $raw_data['previous_id'];
+		}
+
+		return self::use_database( $args );
 	}
 
 	/**
@@ -168,8 +173,8 @@ class LocalJson {
 	/**
 	 * Sync data from database to JSON file, overwriting existing content.
 	 *
-	 * @param array $args Contains either `post_id` or `post_name`.
-	 * @return bool Success or not
+	 * @param array $args Contains post_id or post_name, optional post_type and previous_id (old slug after rename).
+	 * @return bool Success or not.
 	 */
 	public static function use_database( array $args = [] ): bool {
 		if ( ! self::is_enabled() ) {
@@ -206,8 +211,13 @@ class LocalJson {
 		// however, some users might store the file name different with the ID
 		// so we need to make an additional check if the file exists and write to that file instead
 		// of writing to the new file.
-		$files     = JsonService::get_files();
-		$file_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
+		$previous_id  = (string) ( $args['previous_id'] ?? '' );
+		$files        = JsonService::get_files();
+		$default_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
+		$file_path    = $default_path;
+		$stale_files  = [];
+		$is_rename    = $previous_id !== '' && $previous_id !== $post->post_name;
+
 		foreach ( $files as $file ) {
 			$raw_json = self::read_file( $file );
 			if ( empty( $raw_json ) ) {
@@ -222,15 +232,37 @@ class LocalJson {
 				continue;
 			}
 
-			if ( self::get_json_id( $json ) !== $post->post_name ) {
+			$json_id = self::get_json_id( $json );
+
+			// Target ID already used by another JSON file — do not overwrite on rename.
+			if ( $is_rename && $json_id === $post->post_name ) {
+				return false;
+			}
+
+			if ( ! $is_rename && $json_id === $post->post_name && $file_path === $default_path ) {
+				$file_path = $file;
 				continue;
 			}
 
-			$file_path = $file;
-			break;
+			// After a rename, the existing file still has the old ID.
+			if ( $is_rename && $json_id === $previous_id ) {
+				$stale_files[] = $file;
+			}
 		}
 
-		return (bool) self::write_file( $file_path, $post_data );
+		$written = (bool) self::write_file( $file_path, $post_data );
+
+		// Remove JSON files left behind when the slug/ID changed.
+		// Deletion needs write access on the directory, not the file (same as write_file).
+		if ( $written ) {
+			foreach ( $stale_files as $stale_file ) {
+				if ( $stale_file !== $file_path && is_writable( dirname( $stale_file ) ) ) {
+					wp_delete_file( $stale_file );
+				}
+			}
+		}
+
+		return $written;
 	}
 
 	/**

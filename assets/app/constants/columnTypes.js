@@ -60,7 +60,21 @@ export const createColumnItem = ( overrides = {} ) => ( {
 	...overrides,
 } );
 
-export const isIndexableType = type => ! /^(TINY|MEDIUM|LONG)?TEXT$/i.test( String( type || '' ).trim() );
+/** Keep in sync with TableSchema::is_indexable() in PHP. */
+export const isIndexableType = type => {
+	const upper = String( type || '' ).toUpperCase();
+	return ! upper.includes( 'TEXT' ) && ! upper.includes( 'BLOB' ) && ! upper.includes( 'JSON' );
+};
+
+/** Matches PHP: sanitize_key + hyphen→underscore, then reject name "id". */
+export const isReservedColumnName = name => {
+	const normalized = String( name || '' )
+		.trim()
+		.toLowerCase()
+		.replace( /-/g, '_' )
+		.replace( /[^a-z0-9_]/g, '' );
+	return 'id' === normalized;
+};
 
 const isPresetColumnType = type => Object.prototype.hasOwnProperty.call( COLUMN_TYPE_PRESETS, type );
 
@@ -76,6 +90,7 @@ export const resolveColumnSqlType = column => {
 	return column.type || DEFAULT_COLUMN_TYPE;
 };
 
+/** Exact preset match only; variants keep custom_type so import/sync does not rewrite SQL. Keep in sync with MetaBox::sql_type_to_editor_column(). */
 export const dbTypeToEditorColumn = ( sqlType = '' ) => {
 	const type = String( sqlType ).trim();
 	const upper = type.toUpperCase();
@@ -85,19 +100,6 @@ export const dbTypeToEditorColumn = ( sqlType = '' ) => {
 			type: upper,
 			custom_type: '',
 		};
-	}
-
-	if ( upper.startsWith( 'VARCHAR' ) ) {
-		return { type: 'VARCHAR(255)', custom_type: '' };
-	}
-
-	if ( upper.startsWith( 'TINYINT(1)' ) ) {
-		return { type: 'TINYINT(1)', custom_type: '' };
-	}
-
-	const base = upper.replace( /\s+UNSIGNED$/, '' ).replace( /\(\d+(,\d+)?\)/, '' );
-	if ( isPresetColumnType( base ) ) {
-		return { type: base, custom_type: '' };
 	}
 
 	return {

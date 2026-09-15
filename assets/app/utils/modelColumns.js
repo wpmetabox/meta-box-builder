@@ -29,10 +29,18 @@ export const getMissingColumnIds = ( fieldIds, dbColumns, editorColumns ) => {
 };
 
 /**
+ * Match TableSchema::sanitize_name() (sanitize_key, then hyphen → underscore).
+ */
+export const sanitizeTableName = name => String( name || '' )
+	.toLowerCase()
+	.replace( /[^a-z0-9_\-]/g, '' )
+	.replace( /-/g, '_' );
+
+/**
  * Resolve the full database table name from UI settings.
  */
 export const resolveTableName = ( table, usePrefix = false, prefix = '' ) => {
-	const name = String( table || '' ).trim();
+	const name = sanitizeTableName( table );
 	if ( ! name ) {
 		return '';
 	}
