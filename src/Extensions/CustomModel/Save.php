@@ -238,16 +238,28 @@ class Save {
 		// UI-only locks; derived again on editor load from slug/table vs labels.
 		$settings_data = $parser->get_settings();
 		unset( $settings_data['_slug_changed'], $settings_data['_table_changed'] );
-		update_post_meta( $post_id, 'settings', $settings_data );
 
 		$parser->parse();
 		$model         = $parser->get_settings();
 		$model['name'] = $post_name;
-		update_post_meta( $post_id, 'model', $model );
 
+		// Register before DDL so mbct_table_schema can add AUTO_INCREMENT and supports.
 		$model['post_id'] = $post_id;
 		Register::register( $post_name, $model );
 		$table_result = Register::create_table( $model );
+		if ( true !== $table_result ) {
+			return [
+				'success' => false,
+				'message' => is_string( $table_result )
+					? $table_result
+					: __( 'Could not create or update the database table.', 'meta-box-builder' ),
+			];
+		}
+
+		unset( $model['post_id'] );
+		update_post_meta( $post_id, 'settings', $settings_data );
+		update_post_meta( $post_id, 'model', $model );
+
 		Register::rebuild_cache();
 
 		$args = [
@@ -259,15 +271,6 @@ class Save {
 		}
 
 		LocalJson::use_database( $args );
-
-		if ( true !== $table_result ) {
-			return [
-				'success' => false,
-				'message' => is_string( $table_result )
-					? $table_result
-					: __( 'Could not create or update the database table.', 'meta-box-builder' ),
-			];
-		}
 
 		return [
 			'success' => true,
