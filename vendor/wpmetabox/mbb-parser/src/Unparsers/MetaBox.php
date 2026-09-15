@@ -775,6 +775,7 @@ class MetaBox extends Base {
 
 	/**
 	 * Map a SQL column type to editor type fields.
+	 * Exact preset match only; variants keep custom_type so import/sync does not rewrite SQL.
 	 * Keep in sync with dbTypeToEditorColumn() in meta-box-builder columnTypes.js.
 	 *
 	 * @return array{type: string, custom_type: string}
@@ -800,37 +801,13 @@ class MetaBox extends Base {
 			'TIME',
 			'DATETIME',
 		];
-		$preset_lookup = array_fill_keys( $presets, true );
 
 		$type  = trim( $sql_type );
 		$upper = strtoupper( $type );
 
-		if ( isset( $preset_lookup[ $upper ] ) ) {
+		if ( in_array( $upper, $presets, true ) ) {
 			return [
 				'type'        => $upper,
-				'custom_type' => '',
-			];
-		}
-
-		if ( 0 === strpos( $upper, 'VARCHAR' ) ) {
-			return [
-				'type'        => 'VARCHAR(255)',
-				'custom_type' => '',
-			];
-		}
-
-		if ( 0 === strpos( $upper, 'TINYINT(1)' ) ) {
-			return [
-				'type'        => 'TINYINT(1)',
-				'custom_type' => '',
-			];
-		}
-
-		$base = preg_replace( '/\s+UNSIGNED$/', '', $upper );
-		$base = preg_replace( '/\(\d+(,\d+)?\)/', '', $base );
-		if ( is_string( $base ) && isset( $preset_lookup[ $base ] ) ) {
-			return [
-				'type'        => $base,
 				'custom_type' => '',
 			];
 		}

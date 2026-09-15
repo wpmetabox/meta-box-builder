@@ -90,6 +90,7 @@ export const resolveColumnSqlType = column => {
 	return column.type || DEFAULT_COLUMN_TYPE;
 };
 
+/** Exact preset match only; variants keep custom_type so import/sync does not rewrite SQL. Keep in sync with MetaBox::sql_type_to_editor_column(). */
 export const dbTypeToEditorColumn = ( sqlType = '' ) => {
 	const type = String( sqlType ).trim();
 	const upper = type.toUpperCase();
@@ -99,19 +100,6 @@ export const dbTypeToEditorColumn = ( sqlType = '' ) => {
 			type: upper,
 			custom_type: '',
 		};
-	}
-
-	if ( upper.startsWith( 'VARCHAR' ) ) {
-		return { type: 'VARCHAR(255)', custom_type: '' };
-	}
-
-	if ( upper.startsWith( 'TINYINT(1)' ) ) {
-		return { type: 'TINYINT(1)', custom_type: '' };
-	}
-
-	const base = upper.replace( /\s+UNSIGNED$/, '' ).replace( /\(\d+(,\d+)?\)/, '' );
-	if ( isPresetColumnType( base ) ) {
-		return { type: base, custom_type: '' };
 	}
 
 	return {
