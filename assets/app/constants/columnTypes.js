@@ -66,6 +66,16 @@ export const isIndexableType = type => {
 	return ! upper.includes( 'TEXT' ) && ! upper.includes( 'BLOB' ) && ! upper.includes( 'JSON' );
 };
 
+/** Matches PHP: sanitize_key + hyphen→underscore, then reject name "id". */
+export const isReservedColumnName = name => {
+	const normalized = String( name || '' )
+		.trim()
+		.toLowerCase()
+		.replace( /-/g, '_' )
+		.replace( /[^a-z0-9_]/g, '' );
+	return 'id' === normalized;
+};
+
 const isPresetColumnType = type => Object.prototype.hasOwnProperty.call( COLUMN_TYPE_PRESETS, type );
 
 export const resolveColumnSqlType = column => {
