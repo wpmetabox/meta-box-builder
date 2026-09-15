@@ -216,6 +216,7 @@ class LocalJson {
 		$default_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
 		$file_path    = $default_path;
 		$stale_files  = [];
+		$is_rename    = $previous_id !== '' && $previous_id !== $post->post_name;
 
 		foreach ( $files as $file ) {
 			$raw_json = self::read_file( $file );
@@ -233,13 +234,18 @@ class LocalJson {
 
 			$json_id = self::get_json_id( $json );
 
-			if ( $json_id === $post->post_name && $file_path === $default_path ) {
+			// Target ID already used by another JSON file — do not overwrite on rename.
+			if ( $is_rename && $json_id === $post->post_name ) {
+				return false;
+			}
+
+			if ( ! $is_rename && $json_id === $post->post_name && $file_path === $default_path ) {
 				$file_path = $file;
 				continue;
 			}
 
 			// After a rename, the existing file still has the old ID.
-			if ( $previous_id !== '' && $json_id === $previous_id ) {
+			if ( $is_rename && $json_id === $previous_id ) {
 				$stale_files[] = $file;
 			}
 		}
@@ -247,9 +253,10 @@ class LocalJson {
 		$written = (bool) self::write_file( $file_path, $post_data );
 
 		// Remove JSON files left behind when the slug/ID changed.
+		// Deletion needs write access on the directory, not the file (same as write_file).
 		if ( $written ) {
 			foreach ( $stale_files as $stale_file ) {
-				if ( $stale_file !== $file_path && is_writable( $stale_file ) ) {
+				if ( $stale_file !== $file_path && is_writable( dirname( $stale_file ) ) ) {
 					wp_delete_file( $stale_file );
 				}
 			}

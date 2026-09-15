@@ -270,7 +270,12 @@ class Save {
 			$args['previous_id'] = $previous_id;
 		}
 
-		LocalJson::use_database( $args );
+		if ( LocalJson::is_enabled() && ! LocalJson::use_database( $args ) ) {
+			return [
+				'success' => false,
+				'message' => __( 'Could not sync the Local JSON file. The ID may already be used by another JSON file.', 'meta-box-builder' ),
+			];
+		}
 
 		return [
 			'success' => true,
