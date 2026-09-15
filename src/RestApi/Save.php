@@ -6,6 +6,7 @@ use WP_REST_Request;
 use WP_Error;
 use WP_Post;
 use MBB\Helpers\Id;
+use MBB\Extensions\CustomTable;
 use MBBParser\Parsers\Base as BaseParser;
 use MBBParser\Parsers\MetaBox as MetaBoxParser;
 
@@ -94,6 +95,14 @@ class Save extends Base {
 		}
 
 		do_action( 'mbb_after_save', $parser, $post_id, $raw_data );
+
+		$ddl_error = CustomTable::get_last_ddl_error();
+		if ( '' !== $ddl_error ) {
+			return [
+				'success' => false,
+				'message' => $ddl_error,
+			];
+		}
 
 		return [
 			'success' => true,
