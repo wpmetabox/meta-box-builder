@@ -26,6 +26,25 @@ const LABEL_AUTOFILL = [
 	{ name: 'labels.item_deleted', template: '%singular_name% deleted.', source: 'labels.singular_name' },
 ];
 
+/**
+ * Derive lock flags from current values so Local JSON round-trips keep manual slug/table.
+ * Empty slug/table still allow autofill from labels.
+ */
+export const deriveAutofillLocks = settings => {
+	const singular = settings?.labels?.singular_name || '';
+	const plural = settings?.labels?.name || '';
+	const slug = settings?.slug || '';
+	const table = settings?.table || '';
+	const expectedSlug = singular ? slugify( singular, { lower: true } ) : '';
+	const expectedTable = plural ? slugify( plural, { lower: true, replacement: '_' } ) : '';
+
+	return {
+		...settings,
+		_slug_changed: '' !== slug && slug !== expectedSlug,
+		_table_changed: '' !== table && table !== expectedTable,
+	};
+};
+
 const autofillFrom = ( settings, sourceKey, value ) => {
 	if ( 'labels.singular_name' === sourceKey ) {
 		if ( ! settings._slug_changed ) {

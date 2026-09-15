@@ -234,7 +234,11 @@ class Save {
 
 		$parser = new Parser( $settings );
 		$parser->parse_boolean_values()->parse_numeric_values();
-		update_post_meta( $post_id, 'settings', $parser->get_settings() );
+
+		// UI-only locks; derived again on editor load from slug/table vs labels.
+		$settings_data = $parser->get_settings();
+		unset( $settings_data['_slug_changed'], $settings_data['_table_changed'] );
+		update_post_meta( $post_id, 'settings', $settings_data );
 
 		$parser->parse();
 		$model         = $parser->get_settings();
