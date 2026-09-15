@@ -60,7 +60,11 @@ export const createColumnItem = ( overrides = {} ) => ( {
 	...overrides,
 } );
 
-export const isIndexableType = type => ! /^(TINY|MEDIUM|LONG)?TEXT$/i.test( String( type || '' ).trim() );
+/** Keep in sync with TableSchema::is_indexable() in PHP. */
+export const isIndexableType = type => {
+	const upper = String( type || '' ).toUpperCase();
+	return ! upper.includes( 'TEXT' ) && ! upper.includes( 'BLOB' ) && ! upper.includes( 'JSON' );
+};
 
 const isPresetColumnType = type => Object.prototype.hasOwnProperty.call( COLUMN_TYPE_PRESETS, type );
 

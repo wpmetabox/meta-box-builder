@@ -130,7 +130,11 @@ class TableSchema {
 	}
 
 	public static function is_indexable( string $type ): bool {
-		return ! str_contains( strtoupper( $type ), 'TEXT' );
+		$type = strtoupper( $type );
+
+		return ! str_contains( $type, 'TEXT' )
+			&& ! str_contains( $type, 'BLOB' )
+			&& ! str_contains( $type, 'JSON' );
 	}
 
 	/**
