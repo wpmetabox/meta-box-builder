@@ -77,8 +77,10 @@ class Register {
 	public function register_models(): void {
 		if ( LocalJson::is_enabled() ) {
 			$models = self::query_models_from_json();
-			// Data::get_models() reads post_id from this option; restore after trash/delete.
-			if ( ! is_array( get_option( self::CACHE_OPTION, false ) ) ) {
+			// Keep mbb_models in sync for Data::get_models() (post_id, columns, keys).
+			// Strict compare: key-order drift updates once, then matches JSON thereafter.
+			$cached = get_option( self::CACHE_OPTION, false );
+			if ( ! is_array( $cached ) || $cached !== $models ) {
 				update_option( self::CACHE_OPTION, $models, true );
 			}
 		} else {
