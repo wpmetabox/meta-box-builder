@@ -1,6 +1,8 @@
 <?php
 namespace MBB\Helpers;
 
+use MetaBox\CustomTable\API;
+
 class TableSchema {
 	/**
 	 * Sanitize a table or column name and optionally prepend $wpdb->prefix.
@@ -83,6 +85,39 @@ class TableSchema {
 			'columns' => $columns,
 			'keys'    => array_values( array_unique( $keys ) ),
 		];
+	}
+
+	/**
+	 * Create or update a table via API::create and verify the DDL succeeded.
+	 *
+	 * @param string                $table   Table name.
+	 * @param array<string, string> $columns Column name => SQL type.
+	 * @param string[]              $keys    Indexed column names.
+	 * @return true|string True on success, error message on failure.
+	 */
+	public static function create( string $table, array $columns, array $keys = [] ) {
+		global $wpdb;
+
+		$wpdb->last_error = '';
+		API::create( $table, $columns, $keys );
+
+		if ( $wpdb->last_error ) {
+			return $wpdb->last_error;
+		}
+
+		if ( ! self::table_exists( $table ) ) {
+			return __( 'Could not create the database table.', 'meta-box-builder' );
+		}
+
+		return true;
+	}
+
+	public static function table_exists( string $table ): bool {
+		global $wpdb;
+
+		$like = $wpdb->esc_like( $table );
+
+		return $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $like ) ) === $table;
 	}
 
 	public static function sanitize_name( string $name ): string {

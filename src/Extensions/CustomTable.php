@@ -2,7 +2,6 @@
 
 namespace MBB\Extensions;
 
-use MetaBox\CustomTable\API;
 use MetaBox\Support\Arr;
 use MBB\Extensions\CustomModel\Register;
 use MBB\Extensions\CustomModel\Save as CustomModelSave;
@@ -121,8 +120,10 @@ class CustomTable {
 			return $this->append_field_columns( $column_items, $field_names );
 		}
 
-		API::create( $table, $columns, $parsed['keys'] );
-		set_transient( $cache_key, 1, MONTH_IN_SECONDS );
+		$result = TableSchema::create( $table, $columns, $parsed['keys'] );
+		if ( true === $result ) {
+			set_transient( $cache_key, 1, MONTH_IN_SECONDS );
+		}
 
 		return $this->append_field_columns( $column_items, $field_names );
 	}

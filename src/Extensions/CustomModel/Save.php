@@ -243,7 +243,7 @@ class Save {
 
 		$model['post_id'] = $post_id;
 		Register::register( $post_name, $model );
-		Register::create_table( $model );
+		$table_result = Register::create_table( $model );
 		Register::rebuild_cache();
 
 		$args = [
@@ -255,6 +255,15 @@ class Save {
 		}
 
 		LocalJson::use_database( $args );
+
+		if ( true !== $table_result ) {
+			return [
+				'success' => false,
+				'message' => is_string( $table_result )
+					? $table_result
+					: __( 'Could not create or update the database table.', 'meta-box-builder' ),
+			];
+		}
 
 		return [
 			'success' => true,

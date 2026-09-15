@@ -1,9 +1,9 @@
 <?php
 namespace MBB\Extensions\CustomModel;
 
-use MetaBox\CustomTable\API;
 use MBB\LocalJson;
 use MBB\JsonService;
+use MBB\Helpers\TableSchema;
 use MBBParser\Unparsers\MetaBox;
 use WP_Query;
 
@@ -98,7 +98,7 @@ class Register {
 
 			// Recreate missing tables (imported posts, dropped tables).
 			$table = (string) ( $args['table'] ?? '' );
-			if ( $table && ! TableColumns::table_exists( $table ) ) {
+			if ( $table && ! TableSchema::table_exists( $table ) ) {
 				self::create_table( $args );
 			}
 		}
@@ -120,17 +120,18 @@ class Register {
 	 * Create or update the model's custom table.
 	 *
 	 * @param array $model Parsed model args including table, columns, keys.
+	 * @return true|string True on success, error message on failure.
 	 */
-	public static function create_table( array $model ): void {
+	public static function create_table( array $model ) {
 		$table = (string) ( $model['table'] ?? '' );
 		if ( ! $table ) {
-			return;
+			return true;
 		}
 
 		$columns = isset( $model['columns'] ) && is_array( $model['columns'] ) ? $model['columns'] : [];
 		$keys    = isset( $model['keys'] ) && is_array( $model['keys'] ) ? $model['keys'] : [];
 
-		API::create( $table, $columns, $keys );
+		return TableSchema::create( $table, $columns, $keys );
 	}
 
 	/**

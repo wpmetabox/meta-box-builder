@@ -2,7 +2,6 @@
 namespace MBB\Extensions\CustomModel;
 
 use MBB\Helpers\TableSchema;
-use MetaBox\CustomTable\API;
 use MetaBox\CustomTable\Model\Factory;
 use MetaBox\CustomTable\Model\Model;
 
@@ -32,7 +31,10 @@ class TableColumns {
 		}
 
 		$parsed = TableSchema::parse_columns( $column_items );
-		API::create( $table, $parsed['columns'], $parsed['keys'] );
+		$result = TableSchema::create( $table, $parsed['columns'], $parsed['keys'] );
+		if ( true !== $result ) {
+			return self::fail( $result );
+		}
 
 		$inspected = self::inspect( $table, self::supports_for( $model_name ) );
 
@@ -95,7 +97,7 @@ class TableColumns {
 	private static function fetch( string $table ): array {
 		global $wpdb;
 
-		if ( ! self::table_exists( $table ) ) {
+		if ( ! TableSchema::table_exists( $table ) ) {
 			return [];
 		}
 
@@ -126,7 +128,7 @@ class TableColumns {
 	private static function fetch_keys( string $table ): array {
 		global $wpdb;
 
-		if ( ! self::table_exists( $table ) ) {
+		if ( ! TableSchema::table_exists( $table ) ) {
 			return [];
 		}
 
@@ -144,14 +146,6 @@ class TableColumns {
 		);
 
 		return array_values( array_unique( array_column( $rows, 'Column_name' ) ) );
-	}
-
-	public static function table_exists( string $table ): bool {
-		global $wpdb;
-
-		$like = $wpdb->esc_like( $table );
-
-		return $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $like ) ) === $table;
 	}
 
 	/**
