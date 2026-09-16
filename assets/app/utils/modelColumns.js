@@ -1,3 +1,4 @@
+import slugify from 'slugify';
 import { createColumnItem } from '../constants/columnTypes';
 
 /**
@@ -29,18 +30,26 @@ export const getMissingColumnIds = ( fieldIds, dbColumns, editorColumns ) => {
 };
 
 /**
- * Match TableSchema::sanitize_name() (sanitize_key, then hyphen → underscore).
+ * Sanitize a table or column name, matching TableSchema::sanitize_name() in PHP.
+ *
+ * Transliterate first, because sanitize_key() drops accented characters: typing
+ * "giao dịch" would silently become "giaodch". Symbols and "đ" are handled before
+ * slugify, which spells symbols out ("50% off" → "50percent_off") and maps "đ" to the
+ * Serbian "dj". Non-Latin scripts have no transliteration and give an empty name.
  */
-export const sanitizeTableName = name => String( name || '' )
-	.toLowerCase()
-	.replace( /[^a-z0-9_\-]/g, '' )
-	.replace( /-/g, '_' );
+export const sanitizeSqlName = name => slugify(
+	String( name || '' )
+		.replace( /[^\p{L}\p{N}\s_-]/gu, '' )
+		.replace( /đ/gi, 'd' )
+		.replace( /[\s\-]/g, '_' ),
+	{ lower: true, replacement: '_', strict: true, trim: false }
+);
 
 /**
  * Resolve the full database table name from UI settings.
  */
 export const resolveTableName = ( table, usePrefix = false, prefix = '' ) => {
-	const name = sanitizeTableName( table );
+	const name = sanitizeSqlName( table );
 	if ( ! name ) {
 		return '';
 	}

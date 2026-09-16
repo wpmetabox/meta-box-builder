@@ -195,8 +195,14 @@ class TableSchema {
 		return array_values( array_unique( $missing ) );
 	}
 
+	/**
+	 * Transliterate first: sanitize_key() drops accented characters, turning "đơn hàng" into
+	 * "nhng". Match sanitizeSqlName() in JS, which slugifies before sanitizing.
+	 */
 	public static function sanitize_name( string $name ): string {
-		return str_replace( '-', '_', sanitize_key( $name ) );
+		$name = str_replace( [ ' ', '-' ], '_', remove_accents( $name ) );
+
+		return sanitize_key( $name );
 	}
 
 	public static function sanitize_column_type( string $type ): string {

@@ -1,9 +1,7 @@
 import dotProp from 'dot-prop';
 import slugify from 'slugify';
 import useSettings from '../../../../../assets/app/hooks/useSettings';
-import { sanitizeTableName } from '../../../../../assets/app/utils/modelColumns';
-
-const tableFromLabel = value => sanitizeTableName( slugify( value, { lower: true, replacement: '_' } ) );
+import { sanitizeSqlName } from '../../../../../assets/app/utils/modelColumns';
 
 const ucfirst = str => ( str.length ? str[ 0 ].toUpperCase() + str.slice( 1 ) : str );
 
@@ -39,7 +37,7 @@ export const deriveAutofillLocks = settings => {
 	const slug = settings?.slug || '';
 	const table = settings?.table || '';
 	const expectedSlug = singular ? slugify( singular, { lower: true } ) : '';
-	const expectedTable = plural ? tableFromLabel( plural ) : '';
+	const expectedTable = plural ? sanitizeSqlName( plural ) : '';
 
 	return {
 		...settings,
@@ -57,7 +55,7 @@ const autofillFrom = ( settings, sourceKey, value ) => {
 
 	if ( 'labels.name' === sourceKey ) {
 		if ( ! settings._table_changed ) {
-			dotProp.set( settings, 'table', tableFromLabel( value ) );
+			dotProp.set( settings, 'table', sanitizeSqlName( value ) );
 		}
 	}
 
@@ -77,7 +75,7 @@ const useAutofill = () => {
 		}
 		if ( 'table' === key ) {
 			settings._table_changed = true;
-			value = sanitizeTableName( value );
+			value = sanitizeSqlName( value );
 		}
 		if ( 'menu_position' === key ) {
 			value = parseFloat( value ) || '';
