@@ -6,8 +6,25 @@ use MBBParser\Unparsers\MetaBox;
 use WP_Error;
 
 class LocalJson {
+	/**
+	 * Why the latest sync did not write a file, empty when it wrote one or had nothing to do.
+	 *
+	 * @var string
+	 */
+	private static string $last_error = '';
+
 	public function __construct() {
 		add_action( 'mbb_after_save', [ $this, 'generate_local_json' ], 10, 3 );
+	}
+
+	/**
+	 * Sync error from the latest use_database() call, if any.
+	 *
+	 * Not every false return is an error: drafts and other post types simply have
+	 * nothing to sync.
+	 */
+	public static function get_last_error(): string {
+		return self::$last_error;
 	}
 
 	public function generate_local_json( $parser, $post_id, $raw_data ): bool {
@@ -168,6 +185,8 @@ class LocalJson {
 	 * @return bool Success or not.
 	 */
 	public static function use_database( array $args = [] ): bool {
+		self::$last_error = '';
+
 		if ( ! self::is_enabled() ) {
 			return false;
 		}
@@ -208,18 +227,18 @@ class LocalJson {
 
 		// After a rename the new ID must be free, so a match here is another field group or model.
 		if ( $is_rename && $current_file ) {
-			return false;
+			return self::fail( __( 'Another JSON file already uses this ID. Please choose a different one.', 'meta-box-builder' ) );
 		}
 
 		// Likewise, the default file name may already store another object under a custom ID.
 		if ( ! $current_file && self::read_file( $default_path ) ) {
-			return false;
+			return self::fail( __( 'Another JSON file already uses this ID. Please choose a different one.', 'meta-box-builder' ) );
 		}
 
 		$file_path = $current_file ?: $default_path;
 
 		if ( ! self::write_file( $file_path, $post_data ) ) {
-			return false;
+			return self::fail( __( 'Could not write the Local JSON file.', 'meta-box-builder' ) );
 		}
 
 		// Remove the file left behind by the rename, wherever it is stored.
@@ -229,6 +248,12 @@ class LocalJson {
 		}
 
 		return true;
+	}
+
+	private static function fail( string $message ): bool {
+		self::$last_error = $message;
+
+		return false;
 	}
 
 	/**
