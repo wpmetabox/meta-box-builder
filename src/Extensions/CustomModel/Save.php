@@ -246,7 +246,7 @@ class Save {
 		// Register before DDL so mbct_table_schema can add AUTO_INCREMENT and supports.
 		$model['post_id'] = $post_id;
 		Register::register( $post_name, $model );
-		$table_result = Register::create_table( $model );
+		$table_result = Register::create_table( $model, true );
 		if ( true !== $table_result ) {
 			return [
 				'success' => false,

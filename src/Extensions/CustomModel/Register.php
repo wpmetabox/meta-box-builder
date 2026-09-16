@@ -75,7 +75,9 @@ class Register {
 	}
 
 	public function register_models(): void {
-		if ( LocalJson::is_enabled() ) {
+		$local_json = LocalJson::is_enabled();
+
+		if ( $local_json ) {
 			$models = self::query_models_from_json();
 			// Keep mbb_models in sync for Data::get_models() (post_id, columns, keys).
 			// Strict compare: key-order drift updates once, then matches JSON thereafter.
@@ -98,9 +100,9 @@ class Register {
 
 			self::register( $name, $args );
 
-			// Recreate missing tables (imported posts, dropped tables).
-			$table = (string) ( $args['table'] ?? '' );
-			if ( $table && ! TableSchema::table_exists( $table ) ) {
+			// Models can be added or changed by editing JSON files, where no save runs.
+			// DbDelta creates the table when missing and updates it when the schema changed.
+			if ( $local_json ) {
 				self::create_table( $args );
 			}
 		}
@@ -122,9 +124,10 @@ class Register {
 	 * Create or update the model's custom table.
 	 *
 	 * @param array $model Parsed model args including table, columns, keys.
+	 * @param bool  $force Ignore the cached DDL result. Saving and importing always run it.
 	 * @return true|string True on success, error message on failure.
 	 */
-	public static function create_table( array $model ) {
+	public static function create_table( array $model, bool $force = false ) {
 		$table = (string) ( $model['table'] ?? '' );
 		if ( ! $table ) {
 			return true;
@@ -133,7 +136,7 @@ class Register {
 		$columns = isset( $model['columns'] ) && is_array( $model['columns'] ) ? $model['columns'] : [];
 		$keys    = isset( $model['keys'] ) && is_array( $model['keys'] ) ? $model['keys'] : [];
 
-		return TableSchema::create( $table, $columns, $keys );
+		return TableSchema::create_cached( $table, $columns, $keys, $force );
 	}
 
 	/**

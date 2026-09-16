@@ -125,6 +125,34 @@ class TableSchema {
 		return true;
 	}
 
+	/**
+	 * Create or update a table, skipping the DDL when the same schema succeeded before.
+	 *
+	 * Registering field groups and models runs on every request, so cache the result
+	 * for a month. Saving and importing must always run the DDL, otherwise a dropped
+	 * table would never come back.
+	 *
+	 * @param string                $table   Table name.
+	 * @param array<string, string> $columns Column name => SQL type.
+	 * @param string[]              $keys    Indexed column names.
+	 * @param bool                  $force   Ignore the cache and always run the DDL.
+	 * @return true|string True on success, error message on failure.
+	 */
+	public static function create_cached( string $table, array $columns, array $keys = [], bool $force = false ) {
+		$cache_key = 'mb_create_table_' . md5( wp_json_encode( compact( 'table', 'columns', 'keys' ) ) );
+
+		if ( ! $force && get_transient( $cache_key ) !== false && wp_get_environment_type() === 'production' ) {
+			return true;
+		}
+
+		$result = self::create( $table, $columns, $keys );
+		if ( true === $result ) {
+			set_transient( $cache_key, 1, MONTH_IN_SECONDS );
+		}
+
+		return $result;
+	}
+
 	public static function table_exists( string $table ): bool {
 		global $wpdb;
 
@@ -143,8 +171,7 @@ class TableSchema {
 	private static function missing_columns( string $table, array $expected ): array {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is sanitized via sanitize_name().
-		$rows = $wpdb->get_results( "SHOW COLUMNS FROM `{$table}`", ARRAY_A );
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM %i', $table ), ARRAY_A );
 		if ( ! is_array( $rows ) ) {
 			return array_values( array_unique( array_filter( $expected ) ) );
 		}

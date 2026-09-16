@@ -18,6 +18,7 @@ class CustomTable {
 
 	public function __construct() {
 		add_action( 'mbb_after_save', [ $this, 'create_custom_table_after_save' ], 10, 3 );
+		add_action( 'mbb_after_import', [ $this, 'create_custom_table_after_import' ], 10, 2 );
 
 		if ( LocalJson::is_enabled() ) {
 			add_action( 'mbb_before_register_meta_box', [ $this, 'create_custom_table' ] );
@@ -33,7 +34,18 @@ class CustomTable {
 
 	public function create_custom_table_after_save( $parser, $post_id, $submitted_data ): void {
 		self::$last_ddl_error = '';
-		$this->create_custom_table( $submitted_data, (int) $post_id );
+		$this->create_custom_table( $submitted_data, (int) $post_id, true );
+	}
+
+	/**
+	 * Create the custom table for a field group imported from a JSON file.
+	 *
+	 * @param array $data    Unparsed field group data.
+	 * @param int   $post_id Field group post ID.
+	 */
+	public function create_custom_table_after_import( array $data, int $post_id ): void {
+		self::$last_ddl_error = '';
+		$this->create_custom_table( $data, $post_id, true );
 	}
 
 	/**
@@ -42,14 +54,15 @@ class CustomTable {
 	 * @param array $data Must be either full data for a field group, or full unparsed data for a local JSON file.
 	 *                    This data must contains: `settings.custom_table` settings (enable, create, name, prefix) and `fields` array.
 	 * @param int   $post_id Field group post ID.
+	 * @param bool  $force   Ignore the cached DDL result. Saving and importing always run it.
 	 * @return void
 	 */
-	public function create_custom_table( array &$data, int $post_id = 0 ): void {
+	public function create_custom_table( array &$data, int $post_id = 0, bool $force = false ): void {
 		$settings = $data['settings'] ?? [];
 		$is_model = ! empty( $settings['models'] ) || 'model' === ( $settings['object_type'] ?? '' );
 
 		if ( $is_model ) {
-			$this->create_for_model( $data, $settings, $post_id );
+			$this->create_for_model( $data, $settings, $post_id, $force );
 			return;
 		}
 
@@ -67,7 +80,8 @@ class CustomTable {
 		$items = $this->create_table(
 			$table,
 			(array) Arr::get( $settings, 'custom_table.columns', [] ),
-			$this->field_column_names( $data['fields'] ?? [], (string) Arr::get( $settings, 'prefix', '' ) )
+			$this->field_column_names( $data['fields'] ?? [], (string) Arr::get( $settings, 'prefix', '' ) ),
+			$force
 		);
 
 		if ( '' !== self::$last_ddl_error ) {
@@ -83,7 +97,7 @@ class CustomTable {
 	 * Builder models: merge missing field IDs into the model schema.
 	 * Code models: only when the field group opted in via custom_table.enable/create.
 	 */
-	private function create_for_model( array &$data, array $settings, int $post_id ): void {
+	private function create_for_model( array &$data, array $settings, int $post_id, bool $force ): void {
 		$models = array_filter( (array) ( $settings['models'] ?? [] ) );
 		$first  = reset( $models );
 		if ( ! $first ) {
@@ -111,7 +125,8 @@ class CustomTable {
 		$items = $this->create_table(
 			$table,
 			(array) ( $custom_table['columns'] ?? [] ),
-			$this->field_column_names( $data['fields'] ?? [] )
+			$this->field_column_names( $data['fields'] ?? [] ),
+			$force
 		);
 
 		if ( '' !== self::$last_ddl_error ) {
@@ -127,26 +142,15 @@ class CustomTable {
 	 * @param string   $table        Table name.
 	 * @param array    $column_items Editor column items.
 	 * @param string[] $field_names  Field column names.
+	 * @param bool     $force        Ignore the cached DDL result.
 	 * @return array Updated editor column items.
 	 */
-	private function create_table( string $table, array $column_items, array $field_names ): array {
+	private function create_table( string $table, array $column_items, array $field_names, bool $force ): array {
 		$parsed  = TableSchema::parse_columns( $column_items );
 		$columns = TableSchema::merge_field_columns( $parsed['columns'], $field_names );
 
-		$cache_data = [
-			'table'   => $table,
-			'columns' => $columns,
-			'keys'    => $parsed['keys'],
-		];
-		$cache_key  = 'mb_create_table_' . md5( wp_json_encode( $cache_data ) );
-		if ( get_transient( $cache_key ) !== false && wp_get_environment_type() === 'production' ) {
-			return $this->append_field_columns( $column_items, $field_names );
-		}
-
-		$result = TableSchema::create( $table, $columns, $parsed['keys'] );
-		if ( true === $result ) {
-			set_transient( $cache_key, 1, MONTH_IN_SECONDS );
-		} else {
+		$result = TableSchema::create_cached( $table, $columns, $parsed['keys'], $force );
+		if ( true !== $result ) {
 			self::$last_ddl_error = is_string( $result ) && '' !== $result
 				? $result
 				: __( 'Could not create or update the database table.', 'meta-box-builder' );
