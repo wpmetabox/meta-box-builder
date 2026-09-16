@@ -18,7 +18,7 @@ class CustomTable {
 
 	public function __construct() {
 		add_action( 'mbb_after_save', [ $this, 'create_custom_table_after_save' ], 10, 3 );
-		add_action( 'mbb_after_import', [ $this, 'create_custom_table_after_import' ], 10, 2 );
+		add_action( 'mbb_sync_json', [ $this, 'create_custom_table_after_sync' ], 10, 2 );
 
 		if ( LocalJson::is_enabled() ) {
 			add_action( 'mbb_before_register_meta_box', [ $this, 'create_custom_table' ] );
@@ -33,18 +33,20 @@ class CustomTable {
 	}
 
 	public function create_custom_table_after_save( $parser, $post_id, $submitted_data ): void {
-		self::$last_ddl_error = '';
 		$this->create_custom_table( $submitted_data, (int) $post_id, true );
 	}
 
 	/**
-	 * Create the custom table for a field group imported from a JSON file.
+	 * Create the custom table for a field group synced from a JSON file.
 	 *
 	 * @param array $data    Unparsed field group data.
 	 * @param int   $post_id Field group post ID.
 	 */
-	public function create_custom_table_after_import( array $data, int $post_id ): void {
-		self::$last_ddl_error = '';
+	public function create_custom_table_after_sync( array $data, int $post_id ): void {
+		if ( 'mb-model' === ( $data['post_type'] ?? '' ) ) {
+			return;
+		}
+
 		$this->create_custom_table( $data, $post_id, true );
 	}
 
@@ -58,6 +60,8 @@ class CustomTable {
 	 * @return void
 	 */
 	public function create_custom_table( array &$data, int $post_id = 0, bool $force = false ): void {
+		self::$last_ddl_error = '';
+
 		$settings = $data['settings'] ?? [];
 		$is_model = ! empty( $settings['models'] ) || 'model' === ( $settings['object_type'] ?? '' );
 

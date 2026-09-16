@@ -3,7 +3,6 @@ namespace MBB;
 
 use MBB\RestApi\Save;
 use MBBParser\Unparsers\MetaBox;
-use MBB\Extensions\CustomModel\Register;
 use WP_Error;
 
 class LocalJson {
@@ -151,18 +150,7 @@ class LocalJson {
 			update_post_meta( $post_id, $meta_key, $data[ $meta_key ] );
 		}
 
-		// Importing must create the table right away, like saving in the Builder does.
-		if ( 'mb-model' === ( $data['post_type'] ?? '' ) ) {
-			$model = $data['model'] ?? [];
-			if ( is_array( $model ) && ! empty( $model['name'] ) && ! empty( $model['table'] ) ) {
-				$model['post_id'] = $post_id;
-				Register::register( $model['name'], $model );
-				Register::create_table( $model, true );
-				Register::rebuild_cache();
-			}
-		}
-
-		do_action( 'mbb_after_import', $data, $post_id );
+		do_action( 'mbb_sync_json', $data, $post_id );
 
 		// Now we need to save the modified data back to the JSON file
 		self::use_database( [

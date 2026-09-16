@@ -14,6 +14,7 @@ class Register {
 		$this->register_post_type();
 
 		add_action( 'init', [ $this, 'register_models' ] );
+		add_action( 'mbb_sync_json', [ $this, 'create_table_after_sync' ], 10, 2 );
 
 		add_action( 'save_post_mb-model', [ __CLASS__, 'clear_cache' ] );
 		add_action( 'before_delete_post', [ $this, 'clear_cache_on_delete' ] );
@@ -106,6 +107,30 @@ class Register {
 				self::create_table( $args );
 			}
 		}
+	}
+
+	/**
+	 * Create the table for a model synced from a JSON file.
+	 *
+	 * Registering first lets mbct_table_schema add AUTO_INCREMENT and support columns.
+	 * The cache needs no update here: wp_insert_post() already cleared it.
+	 *
+	 * @param array $data    Unparsed model data.
+	 * @param int   $post_id Model post ID.
+	 */
+	public function create_table_after_sync( array $data, int $post_id ): void {
+		if ( 'mb-model' !== ( $data['post_type'] ?? '' ) ) {
+			return;
+		}
+
+		$model = $data['model'] ?? [];
+		if ( ! is_array( $model ) || empty( $model['name'] ) || empty( $model['table'] ) ) {
+			return;
+		}
+
+		$model['post_id'] = $post_id;
+		self::register( $model['name'], $model );
+		self::create_table( $model, true );
 	}
 
 	/**
