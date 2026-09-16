@@ -5,6 +5,8 @@ use MBB\LocalJson;
 use MBB\JsonService;
 use MBB\Helpers\TableSchema;
 use MBBParser\Unparsers\MetaBox;
+use MetaBox\CustomTable\Model\Factory;
+use MetaBox\CustomTable\Model\Model;
 use WP_Query;
 
 class Register {
@@ -141,6 +143,16 @@ class Register {
 	 */
 	public static function register( string $name, array $model ): void {
 		unset( $model['columns'], $model['keys'], $model['post_id'], $model['name'], $model['modified'] );
+
+		// Saving registers a model already registered on init. Registering it again adds a
+		// second mbct_table_schema listener, which duplicates the support columns and keys.
+		$registered = Factory::get( $name );
+		if ( $registered instanceof Model ) {
+			foreach ( $model as $key => $value ) {
+				$registered->$key = $value;
+			}
+			return;
+		}
 
 		mb_register_model( $name, $model );
 	}
