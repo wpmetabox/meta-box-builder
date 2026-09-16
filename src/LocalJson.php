@@ -217,25 +217,13 @@ class LocalJson {
 		$unparser->unparse();
 		$post_data = $unparser->to_minimal_format();
 
-		// A file is normally stored in the first path as {$post->post_name}.json, but users
-		// might use another file name, so existing files are matched by the ID inside them.
-		$previous_id  = (string) ( $args['previous_id'] ?? '' );
-		$is_rename    = $previous_id !== '' && $previous_id !== $post->post_name;
-		$default_path = JsonService::get_paths()[0] . '/' . $post->post_name . '.json';
+		$previous_id = (string) ( $args['previous_id'] ?? '' );
+		$is_rename   = $previous_id !== '' && $previous_id !== $post->post_name;
 
-		$current_file = self::find_file_by_id( $post->post_type, $post->post_name );
-
-		// After a rename the new ID must be free, so a match here is another field group or model.
-		if ( $is_rename && $current_file ) {
-			return self::fail( __( 'Another JSON file already uses this ID. Please choose a different one.', 'meta-box-builder' ) );
+		$file_path = self::resolve_file( $post->post_type, $post->post_name, $is_rename );
+		if ( ! $file_path ) {
+			return self::fail( self::id_taken_message() );
 		}
-
-		// Likewise, the default file name may already store another object under a custom ID.
-		if ( ! $current_file && self::read_file( $default_path ) ) {
-			return self::fail( __( 'Another JSON file already uses this ID. Please choose a different one.', 'meta-box-builder' ) );
-		}
-
-		$file_path = $current_file ?: $default_path;
 
 		if ( ! self::write_file( $file_path, $post_data ) ) {
 			return self::fail( __( 'Could not write the Local JSON file.', 'meta-box-builder' ) );
@@ -254,6 +242,58 @@ class LocalJson {
 		self::$last_error = $message;
 
 		return false;
+	}
+
+	/**
+	 * File that must store this ID, empty string when another file already holds it.
+	 *
+	 * A file is normally stored in the first path as {$id}.json, but users might use
+	 * another file name, so existing files are matched by the ID inside them.
+	 *
+	 * @param string $post_type Builder post type.
+	 * @param string $id        ID to store.
+	 * @param bool   $is_rename Whether the ID just changed.
+	 */
+	private static function resolve_file( string $post_type, string $id, bool $is_rename ): string {
+		$current_file = self::find_file_by_id( $post_type, $id );
+
+		// After a rename the new ID must be free, so a match here is another field group or model.
+		if ( $is_rename && $current_file ) {
+			return '';
+		}
+
+		$default_path = JsonService::get_paths()[0] . '/' . $id . '.json';
+
+		// Likewise, the default file name may already store another object under a custom ID.
+		if ( ! $current_file && self::read_file( $default_path ) ) {
+			return '';
+		}
+
+		return $current_file ?: $default_path;
+	}
+
+	/**
+	 * Error when a JSON file already stores this ID, empty string when the ID is free.
+	 *
+	 * Saving checks this before writing the post, because the sync runs afterwards and
+	 * would leave the new ID on the post while the file kept the old one.
+	 *
+	 * @param string $post_type   Builder post type.
+	 * @param string $id          ID about to be saved.
+	 * @param string $previous_id ID before this save.
+	 */
+	public static function check_id( string $post_type, string $id, string $previous_id = '' ): string {
+		if ( ! self::is_enabled() ) {
+			return '';
+		}
+
+		return self::resolve_file( $post_type, $id, $previous_id !== '' && $previous_id !== $id )
+			? ''
+			: self::id_taken_message();
+	}
+
+	private static function id_taken_message(): string {
+		return __( 'Another JSON file already uses this ID. Please choose a different one.', 'meta-box-builder' );
 	}
 
 	/**

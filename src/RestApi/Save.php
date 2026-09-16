@@ -67,6 +67,16 @@ class Save extends Base {
 			$post_status = 'publish';
 		}
 
+		if ( 'publish' === $post_status ) {
+			$json_error = LocalJson::check_id( 'meta-box', $post_name, $previous_id );
+			if ( '' !== $json_error ) {
+				return [
+					'success' => false,
+					'message' => $json_error,
+				];
+			}
+		}
+
 		$update_args = [
 			'ID'          => $post_id,
 			'post_title'  => $post_title,
