@@ -152,6 +152,12 @@
 		margin: 0;
 	}
 
+	&__error {
+		margin: 4px 0 0;
+		color: var(--color-red);
+		font-size: 12px;
+	}
+
 	&__table &__type {
 		display: flex;
 		flex-wrap: nowrap;

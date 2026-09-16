@@ -178,12 +178,21 @@ const SchemaRow = ( {
 					readOnly
 						? item.name
 						: (
-							<input
-								type="text"
-								placeholder={ __( 'column_name', 'meta-box-builder' ) }
-								value={ item.name || '' }
-								onChange={ e => updateItem( item.id, 'name', e.target.value ) }
-							/>
+							<>
+								<input
+									type="text"
+									placeholder={ __( 'column_name', 'meta-box-builder' ) }
+									value={ item.name || '' }
+									onChange={ e => updateItem( item.id, 'name', e.target.value ) }
+								/>
+								{
+									isReservedColumnName( item.name ) && (
+										<p className="mb-columns-editor__error">
+											{ __( 'The column name "id" is reserved for the auto-increment primary key.', 'meta-box-builder' ) }
+										</p>
+									)
+								}
+							</>
 						)
 				}
 			</td>
@@ -349,11 +358,6 @@ const ColumnsEditor = ( {
 	};
 
 	const updateItem = ( id, prop, propValue ) => {
-		if ( 'name' === prop && isReservedColumnName( propValue ) ) {
-			window.alert( __( 'The column name "id" is reserved for the auto-increment primary key.', 'meta-box-builder' ) );
-			return;
-		}
-
 		const nextItem = {
 			...( items[ id ] || {} ),
 			id,
