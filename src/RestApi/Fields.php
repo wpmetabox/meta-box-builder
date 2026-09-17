@@ -423,7 +423,7 @@ class Fields extends Base {
 				'category'    => 'wordpress',
 				'controls'    => array_merge(
 					[ 'required', 'clone_settings' ],
-					array_merge( $general_tab, [ 'post_type', 'field_type', 'add_new', 'multiple', 'parent', 'query_args' ] ),
+					array_merge( $general_tab, [ 'post_type', 'field_type', 'add_new', 'multiple', 'parent', 'show_thumbnail', 'query_args' ] ),
 					[ 'select_all_none', 'label_description', 'desc', 'placeholder' ],
 					$validation_tab,
 					$advanced_tab

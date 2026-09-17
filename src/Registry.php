@@ -317,6 +317,7 @@ class Registry {
 			Control::Toggle( 'add_new', __( 'Allow to create a new item', 'meta-box-builder' ) ),
 			Control::Toggle( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
 			Control::Toggle( 'multiple', __( 'Allow to select multiple items', 'meta-box-builder' ) ),
+			Control::Toggle( 'show_thumbnail', __( 'Show featured image', 'meta-box-builder' ) ),
 			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ), false, 'appearance' ),
 			'select_all_none_post' => Control::Toggle( 'select_all_none', [
 				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
