@@ -53,6 +53,7 @@ class MetaBox extends Base {
 		$this->unparse_relationship();
 		$this->unparse_settings_page()->unparse_settings_page_tabs();
 		$this->unparse_model();
+		$this->unparse_model_settings();
 		$this->unparse_post_fields();
 		$this->unparse_modified();
 		$this->unparse_settings();
@@ -66,6 +67,8 @@ class MetaBox extends Base {
 		$this->unparse_include_exclude();
 		$this->unparse_show_hide();
 		$this->unparse_model_settings_columns();
+		$this->unparse_settings_page_menu();
+		$this->unparse_block_icon();
 	}
 
 	public function to_minimal_format() {
@@ -452,12 +455,8 @@ class MetaBox extends Base {
 			return $this;
 		}
 
+		// Models build their settings in unparse_model_settings(), which runs earlier.
 		if ( $this->detect_post_type() === 'mb-model' ) {
-			$model = $this->settings['model'] ?? [];
-			if ( ! empty( $model ) && is_array( $model ) ) {
-				unset( $model['keys'], $model['post_id'] );
-				$this->settings['settings'] = $model;
-			}
 			return $this;
 		}
 
@@ -714,6 +713,145 @@ class MetaBox extends Base {
 			}
 		}
 		return $this;
+	}
+
+	/**
+	 * Build the editor settings from a registered model.
+	 * Registration stores id/name, a prefixed table and a single menu_icon string, while the
+	 * editor expects slug, an unprefixed table with a prefix flag, and icon_type + icon fields.
+	 */
+	private function unparse_model_settings(): self {
+		global $wpdb;
+
+		$model = $this->settings['model'] ?? [];
+
+		if ( $this->detect_post_type() !== 'mb-model' || ! empty( $this->settings['settings'] ) || empty( $model ) || ! is_array( $model ) ) {
+			return $this;
+		}
+
+		unset( $model['keys'], $model['post_id'] );
+
+		$settings         = $model;
+		$settings['slug'] = (string) ( $model['id'] ?? $model['name'] ?? '' );
+
+		$table              = (string) ( $model['table'] ?? '' );
+		$settings['prefix'] = str_starts_with( $table, $wpdb->prefix );
+		$settings['table']  = $settings['prefix'] ? substr( $table, strlen( $wpdb->prefix ) ) : $table;
+
+		// Submenu models register a parent slug, which the editor keeps in show_in_menu.
+		if ( ! empty( $model['parent'] ) ) {
+			$settings['show_in_menu'] = $model['parent'];
+		}
+
+		$settings += $this->icon_to_editor_fields( (string) ( $model['menu_icon'] ?? '' ), [
+			'dashicons'    => 'icon',
+			'svg'          => 'icon_svg',
+			'custom'       => 'icon_custom',
+			'font_awesome' => 'font_awesome',
+		] );
+
+		unset( $settings['id'], $settings['name'], $settings['menu_icon'], $settings['parent'] );
+
+		$this->settings['settings'] = $settings;
+
+		return $this;
+	}
+
+	/**
+	 * Restore the editor menu fields after importing a minimal settings page JSON.
+	 * Registration keeps only parent and a single icon_url string, while the editor needs
+	 * menu_type plus icon_type and the field matching that type.
+	 */
+	private function unparse_settings_page_menu(): self {
+		$settings = $this->settings['settings'] ?? [];
+
+		if ( $this->detect_post_type() !== 'mb-settings-page' || isset( $settings['menu_type'] ) ) {
+			return $this;
+		}
+
+		$settings['menu_type'] = empty( $settings['parent'] ) ? 'top' : 'submenu';
+		$settings             += $this->icon_to_editor_fields( (string) ( $settings['icon_url'] ?? '' ), [
+			'dashicons'    => 'icon_dashicons',
+			'svg'          => 'icon_svg',
+			'custom'       => 'icon_custom',
+			'font_awesome' => 'icon_font_awesome',
+		] );
+
+		$this->settings['settings'] = $settings;
+
+		return $this;
+	}
+
+	/**
+	 * Restore the editor icon fields after importing a minimal block JSON.
+	 * Blocks register either an SVG string or an array carrying the dashicon and its colors.
+	 * A plain dashicon slug already matches the editor field, so it needs no mapping.
+	 */
+	private function unparse_block_icon(): self {
+		$settings = $this->settings['settings'] ?? [];
+
+		if ( ( $settings['object_type'] ?? '' ) !== 'block' || isset( $settings['icon_type'] ) ) {
+			return $this;
+		}
+
+		$icon = $settings['icon'] ?? '';
+
+		if ( is_array( $icon ) ) {
+			$settings['icon_type']       = 'dashicons';
+			$settings['icon']            = $icon['src'] ?? '';
+			$settings['icon_background'] = $icon['background'] ?? '';
+			$settings['icon_foreground'] = $icon['foreground'] ?? '';
+		} elseif ( $this->is_svg_icon( (string) $icon ) ) {
+			$settings['icon_type'] = 'svg';
+			$settings['icon_svg']  = $icon;
+		} else {
+			return $this;
+		}
+
+		$this->settings['settings'] = $settings;
+
+		return $this;
+	}
+
+	/**
+	 * Editor icon fields for a registered icon string.
+	 * Registration flattens every icon type into one string, so the type comes from its shape.
+	 *
+	 * @param string                $icon Registered icon value.
+	 * @param array<string, string> $keys Editor field name for each icon type.
+	 * @return array<string, string>
+	 */
+	private function icon_to_editor_fields( string $icon, array $keys ): array {
+		if ( '' === $icon ) {
+			return [];
+		}
+
+		$type = $this->detect_icon_type( $icon );
+
+		return [
+			'icon_type'    => $type,
+			$keys[ $type ] => 'dashicons' === $type ? substr( $icon, strlen( 'dashicons-' ) ) : $icon,
+		];
+	}
+
+	private function detect_icon_type( string $icon ): string {
+		if ( str_starts_with( $icon, 'dashicons-' ) ) {
+			return 'dashicons';
+		}
+
+		if ( $this->is_svg_icon( $icon ) ) {
+			return 'svg';
+		}
+
+		if ( str_starts_with( $icon, 'http' ) || str_starts_with( $icon, '/' ) ) {
+			return 'custom';
+		}
+
+		return 'font_awesome';
+	}
+
+	private function is_svg_icon( string $icon ): bool {
+		return str_contains( $icon, '<svg' ) || str_starts_with( $icon, 'data:image/svg' );
 	}
 
 	/**
