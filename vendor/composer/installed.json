@@ -102,24 +102,24 @@
         },
         {
             "name": "wpmetabox/mbb-parser",
-            "version": "2.0.11",
-            "version_normalized": "2.0.11.0",
+            "version": "2.1.0",
+            "version_normalized": "2.1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/mbb-parser.git",
-                "reference": "0a41cbad52c33b819e676e67bba984218c1bd03d"
+                "reference": "589e210d320d65187a48357f224feb1216b2471c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/0a41cbad52c33b819e676e67bba984218c1bd03d",
-                "reference": "0a41cbad52c33b819e676e67bba984218c1bd03d",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/589e210d320d65187a48357f224feb1216b2471c",
+                "reference": "589e210d320d65187a48357f224feb1216b2471c",
                 "shasum": ""
             },
             "require": {
                 "riimu/kit-phpencoder": "^2.4",
                 "wpmetabox/support": "^1"
             },
-            "time": "2026-07-28T03:41:40+00:00",
+            "time": "2026-09-17T02:44:36+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -134,7 +134,7 @@
             "description": "Parse meta box settings from JSON",
             "support": {
                 "issues": "https://github.com/wpmetabox/mbb-parser/issues",
-                "source": "https://github.com/wpmetabox/mbb-parser/tree/2.0.11"
+                "source": "https://github.com/wpmetabox/mbb-parser/tree/2.1.0"
             },
             "install-path": "../wpmetabox/mbb-parser"
         },
