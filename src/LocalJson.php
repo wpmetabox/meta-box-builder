@@ -3,7 +3,6 @@ namespace MBB;
 
 use MBB\RestApi\Save;
 use MBBParser\Unparsers\MetaBox;
-use WP_Error;
 
 class LocalJson {
 	/**
@@ -58,13 +57,15 @@ class LocalJson {
 		return is_array( $json ) ? $json : [];
 	}
 
-	public static function write_file( string $file_path, array $data ) {
-		if ( ! is_writable( dirname( $file_path ) ) ) {
-			return false;
+	private static function write_file( string $file_path, array $data ) {
+		// Create the directory first: a missing one is never writable.
+		$dir = dirname( $file_path );
+		if ( ! is_dir( $dir ) ) {
+			wp_mkdir_p( $dir );
 		}
 
-		if ( ! is_dir( dirname( $file_path ) ) ) {
-			wp_mkdir_p( dirname( $file_path ) );
+		if ( ! is_writable( $dir ) ) {
+			return false;
 		}
 
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
@@ -72,18 +73,9 @@ class LocalJson {
 		return @file_put_contents( $file_path, $output );
 	}
 
-	/**
-	 * Import from .json file
-	 *
-	 * @return WP_Error|boolean
-	 */
-	public static function import( array $data ): bool {
-		return self::sync_json( $data );
-	}
-
 	public static function import_many( array $json ): void {
 		foreach ( $json as $data ) {
-			self::import( $data );
+			self::sync_json( $data );
 		}
 	}
 
@@ -132,7 +124,7 @@ class LocalJson {
 	 * @param array $data
 	 * @return bool Success or not
 	 */
-	public static function sync_json( array $data ): bool {
+	private static function sync_json( array $data ): bool {
 		$required_keys = [ 'post_id', 'local' ];
 
 		foreach ( $required_keys as $key ) {
@@ -217,10 +209,8 @@ class LocalJson {
 		$unparser->unparse();
 		$post_data = $unparser->to_minimal_format();
 
-		$previous_id = (string) ( $args['previous_id'] ?? '' );
-		$is_rename   = $previous_id !== '' && $previous_id !== $post->post_name;
-
-		$file_path = self::resolve_file( $post->post_type, $post->post_name, $is_rename );
+		$own_file  = self::find_own_file( $post->post_type, $post->post_name, (string) ( $args['previous_id'] ?? '' ) );
+		$file_path = self::target_file( $post->post_type, $post->post_name, $own_file );
 		if ( ! $file_path ) {
 			return self::fail( self::id_taken_message() );
 		}
@@ -229,10 +219,9 @@ class LocalJson {
 			return self::fail( __( 'Could not write the Local JSON file.', 'meta-box-builder' ) );
 		}
 
-		// Remove the file left behind by the rename, wherever it is stored.
-		$stale_file = $is_rename ? self::find_file_by_id( $post->post_type, $previous_id ) : '';
-		if ( $stale_file && $stale_file !== $file_path ) {
-			wp_delete_file( $stale_file );
+		// A rename writes a new file, so the old one is left behind.
+		if ( $own_file && $own_file !== $file_path ) {
+			wp_delete_file( $own_file );
 		}
 
 		return true;
@@ -245,35 +234,38 @@ class LocalJson {
 	}
 
 	/**
-	 * File that must store this ID, empty string when another file already holds it.
+	 * File currently storing this object, empty string when it has none yet.
 	 *
-	 * A file is normally stored in the first path as {$id}.json, but users might use
-	 * another file name, so existing files are matched by the ID inside them.
-	 *
-	 * @param string $post_type Builder post type.
-	 * @param string $id        ID to store.
-	 * @param bool   $is_rename Whether the ID just changed.
+	 * @param string $post_type   Builder post type.
+	 * @param string $id          ID being saved.
+	 * @param string $previous_id ID before this save.
 	 */
-	private static function resolve_file( string $post_type, string $id, bool $is_rename ): string {
-		$current_file = self::find_file_by_id( $post_type, $id );
-
-		// After a rename the new ID must be free, so a match here is another field group or model.
-		if ( $is_rename && $current_file ) {
-			return '';
-		}
-
-		$default_path = JsonService::get_paths()[0] . '/' . $id . '.json';
-
-		// Likewise, the default file name may already store another object under a custom ID.
-		if ( ! $current_file && self::read_file( $default_path ) ) {
-			return '';
-		}
-
-		return $current_file ?: $default_path;
+	private static function find_own_file( string $post_type, string $id, string $previous_id ): string {
+		return self::find_file_by_id( $post_type, $previous_id ?: $id );
 	}
 
 	/**
-	 * Error when a JSON file already stores this ID, empty string when the ID is free.
+	 * File to write, empty string when another object owns the target ID or file name.
+	 *
+	 * @param string $post_type Builder post type.
+	 * @param string $id        ID to store.
+	 * @param string $own_file  File currently storing this object, if any.
+	 */
+	private static function target_file( string $post_type, string $id, string $own_file ): string {
+		// Files are matched by the ID inside them, since users may rename files freely.
+		$holder = self::find_file_by_id( $post_type, $id );
+		if ( $holder ) {
+			return $holder === $own_file ? $holder : '';
+		}
+
+		// Nothing stores the ID yet, so use {$id}.json unless a file already sits there.
+		$path = JsonService::get_paths()[0] . '/' . $id . '.json';
+
+		return $path === $own_file || ! self::read_file( $path ) ? $path : '';
+	}
+
+	/**
+	 * Error when another object owns this ID, empty string when the ID is free.
 	 *
 	 * Saving checks this before writing the post, because the sync runs afterwards and
 	 * would leave the new ID on the post while the file kept the old one.
@@ -287,9 +279,9 @@ class LocalJson {
 			return '';
 		}
 
-		return self::resolve_file( $post_type, $id, $previous_id !== '' && $previous_id !== $id )
-			? ''
-			: self::id_taken_message();
+		$own_file = self::find_own_file( $post_type, $id, $previous_id );
+
+		return self::target_file( $post_type, $id, $own_file ) ? '' : self::id_taken_message();
 	}
 
 	private static function id_taken_message(): string {
@@ -303,6 +295,10 @@ class LocalJson {
 	 * @param string $id        ID stored in the JSON file.
 	 */
 	private static function find_file_by_id( string $post_type, string $id ): string {
+		if ( ! $id ) {
+			return '';
+		}
+
 		foreach ( JsonService::get_files() as $file ) {
 			$raw_json = self::read_file( $file );
 			if ( empty( $raw_json ) ) {
@@ -324,7 +320,7 @@ class LocalJson {
 	/**
 	 * ID used to match a JSON file to a Builder post.
 	 */
-	public static function get_json_id( array $data ): string {
+	private static function get_json_id( array $data ): string {
 		$post_type = $data['post_type'] ?? 'meta-box';
 
 		if ( 'mb-model' === $post_type ) {
