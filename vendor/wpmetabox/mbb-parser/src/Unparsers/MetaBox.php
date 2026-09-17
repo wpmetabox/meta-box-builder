@@ -52,11 +52,15 @@ class MetaBox extends Base {
 		$this->unparse_meta_box();
 		$this->unparse_relationship();
 		$this->unparse_settings_page()->unparse_settings_page_tabs();
-		$this->unparse_model();
-		$this->unparse_model_settings();
+		$this->unparse_model()->unparse_model_settings()->unparse_model_settings_columns();
 		$this->unparse_post_fields();
 		$this->unparse_modified();
 		$this->unparse_settings();
+
+		// Settings page and block read the settings that unparse_settings() builds.
+		$this->unparse_settings_page_menu();
+		$this->unparse_block_icon();
+
 		$this->unparse_fields();
 		$this->unparse_custom_table();
 		$this->unparse_tabs();
@@ -66,9 +70,6 @@ class MetaBox extends Base {
 		$this->unparse_conditional_logic();
 		$this->unparse_include_exclude();
 		$this->unparse_show_hide();
-		$this->unparse_model_settings_columns();
-		$this->unparse_settings_page_menu();
-		$this->unparse_block_icon();
 	}
 
 	public function to_minimal_format() {
@@ -342,6 +343,37 @@ class MetaBox extends Base {
 		return $this;
 	}
 
+	/**
+	 * Restore the editor icon fields after importing a minimal block JSON.
+	 * Blocks register either an SVG string or an array carrying the dashicon and its colors.
+	 * A plain dashicon slug already matches the editor field, so it needs no mapping.
+	 */
+	private function unparse_block_icon(): self {
+		$settings = $this->settings['settings'] ?? [];
+
+		if ( ( $settings['object_type'] ?? '' ) !== 'block' || isset( $settings['icon_type'] ) ) {
+			return $this;
+		}
+
+		$icon = $settings['icon'] ?? '';
+
+		if ( is_array( $icon ) ) {
+			$settings['icon_type']       = 'dashicons';
+			$settings['icon']            = $icon['src'] ?? '';
+			$settings['icon_background'] = $icon['background'] ?? '';
+			$settings['icon_foreground'] = $icon['foreground'] ?? '';
+		} elseif ( $this->is_svg_icon( (string) $icon ) ) {
+			$settings['icon_type'] = 'svg';
+			$settings['icon_svg']  = $icon;
+		} else {
+			return $this;
+		}
+
+		$this->settings['settings'] = $settings;
+
+		return $this;
+	}
+
 	public function unparse_settings_page(): self {
 		if ( $this->detect_post_type() !== 'mb-settings-page' ) {
 			return $this;
@@ -381,6 +413,31 @@ class MetaBox extends Base {
 		}
 
 		$this->settings['tabs'] = $tab_items;
+
+		return $this;
+	}
+
+	/**
+	 * Restore the editor menu fields after importing a minimal settings page JSON.
+	 * Registration keeps only parent and a single icon_url string, while the editor needs
+	 * menu_type plus icon_type and the field matching that type.
+	 */
+	private function unparse_settings_page_menu(): self {
+		$settings = $this->settings['settings'] ?? [];
+
+		if ( $this->detect_post_type() !== 'mb-settings-page' || isset( $settings['menu_type'] ) ) {
+			return $this;
+		}
+
+		$settings['menu_type'] = empty( $settings['parent'] ) ? 'top' : 'submenu';
+		$settings             += $this->icon_to_editor_fields( (string) ( $settings['icon_url'] ?? '' ), [
+			'dashicons'    => 'icon_dashicons',
+			'svg'          => 'icon_svg',
+			'custom'       => 'icon_custom',
+			'font_awesome' => 'icon_font_awesome',
+		] );
+
+		$this->settings['settings'] = $settings;
 
 		return $this;
 	}
@@ -446,6 +503,150 @@ class MetaBox extends Base {
 		$this->post_title = $this->lookup( [ 'post_title', 'labels.name', 'labels.singular_name', 'id' ] );
 
 		return $this;
+	}
+
+	/**
+	 * Build the editor settings from a registered model.
+	 * Registration stores id/name, a prefixed table and a single menu_icon string, while the
+	 * editor expects slug, an unprefixed table with a prefix flag, and icon_type + icon fields.
+	 */
+	private function unparse_model_settings(): self {
+		global $wpdb;
+
+		$model = $this->settings['model'] ?? [];
+
+		if ( $this->detect_post_type() !== 'mb-model' || ! empty( $this->settings['settings'] ) || empty( $model ) || ! is_array( $model ) ) {
+			return $this;
+		}
+
+		unset( $model['keys'], $model['post_id'] );
+
+		$settings         = $model;
+		$settings['slug'] = (string) ( $model['id'] ?? $model['name'] ?? '' );
+
+		$table              = (string) ( $model['table'] ?? '' );
+		$settings['prefix'] = str_starts_with( $table, $wpdb->prefix );
+		$settings['table']  = $settings['prefix'] ? substr( $table, strlen( $wpdb->prefix ) ) : $table;
+
+		// Submenu models register a parent slug, which the editor keeps in show_in_menu.
+		if ( ! empty( $model['parent'] ) ) {
+			$settings['show_in_menu'] = $model['parent'];
+		}
+
+		$settings += $this->icon_to_editor_fields( (string) ( $model['menu_icon'] ?? '' ), [
+			'dashicons'    => 'icon',
+			'svg'          => 'icon_svg',
+			'custom'       => 'icon_custom',
+			'font_awesome' => 'font_awesome',
+		] );
+
+		unset( $settings['id'], $settings['name'], $settings['menu_icon'], $settings['parent'] );
+
+		$this->settings['settings'] = $settings;
+
+		return $this;
+	}
+
+	/**
+	 * Ensure settings.columns uses the editor shape after importing a minimal model JSON.
+	 * Exported models store columns as { name: sqlType }; the UI expects { id: { name, type, … } }.
+	 */
+	private function unparse_model_settings_columns(): self {
+		if ( $this->detect_post_type() !== 'mb-model' ) {
+			return $this;
+		}
+
+		$settings = $this->settings['settings'] ?? [];
+		$columns  = $settings['columns'] ?? [];
+		if ( ! is_array( $columns ) || empty( $columns ) ) {
+			$columns = $this->settings['model']['columns'] ?? [];
+		}
+		if ( ! is_array( $columns ) || empty( $columns ) ) {
+			return $this;
+		}
+
+		$first = reset( $columns );
+		if ( is_array( $first ) && array_key_exists( 'name', $first ) ) {
+			return $this;
+		}
+
+		$keys    = $settings['keys'] ?? ( $this->settings['model']['keys'] ?? [] );
+		$keys    = is_array( $keys ) ? $keys : [];
+		$key_set = array_fill_keys( $keys, true );
+		$editor  = [];
+
+		foreach ( $columns as $name => $type ) {
+			if ( is_array( $type ) ) {
+				continue;
+			}
+			$name = (string) $name;
+			if ( '' === $name || 'id' === strtolower( $name ) ) {
+				continue;
+			}
+			$id             = 'col_' . str_replace( '-', '_', sanitize_key( $name ) );
+			$editor_type    = $this->sql_type_to_editor_column( (string) $type );
+			$editor[ $id ]  = [
+				'id'          => $id,
+				'name'        => $name,
+				'type'        => $editor_type['type'],
+				'custom_type' => $editor_type['custom_type'],
+				'index'       => isset( $key_set[ $name ] ),
+			];
+		}
+
+		if ( empty( $editor ) ) {
+			return $this;
+		}
+
+		$this->settings['settings']['columns'] = $editor;
+		unset( $this->settings['settings']['keys'] );
+
+		return $this;
+	}
+
+	/**
+	 * Map a SQL column type to editor type fields.
+	 * Exact preset match only; variants keep custom_type so import/sync does not rewrite SQL.
+	 * Keep in sync with dbTypeToEditorColumn() in meta-box-builder columnTypes.js.
+	 *
+	 * @return array{type: string, custom_type: string}
+	 */
+	private function sql_type_to_editor_column( string $sql_type ): array {
+		$presets = [
+			'TINYINT',
+			'SMALLINT',
+			'MEDIUMINT',
+			'INT',
+			'BIGINT',
+			'DECIMAL(10,2)',
+			'FLOAT',
+			'DOUBLE',
+			'TINYINT(1)',
+			'CHAR(1)',
+			'VARCHAR(255)',
+			'TINYTEXT',
+			'TEXT',
+			'MEDIUMTEXT',
+			'LONGTEXT',
+			'DATE',
+			'TIME',
+			'DATETIME',
+		];
+
+		$type  = trim( $sql_type );
+		$upper = strtoupper( $type );
+
+		if ( in_array( $upper, $presets, true ) ) {
+			return [
+				'type'        => $upper,
+				'custom_type' => '',
+			];
+		}
+
+		return [
+			'type'        => 'custom',
+			'custom_type' => $type,
+		];
 	}
 
 	public function unparse_settings() {
@@ -716,104 +917,6 @@ class MetaBox extends Base {
 	}
 
 	/**
-	 * Build the editor settings from a registered model.
-	 * Registration stores id/name, a prefixed table and a single menu_icon string, while the
-	 * editor expects slug, an unprefixed table with a prefix flag, and icon_type + icon fields.
-	 */
-	private function unparse_model_settings(): self {
-		global $wpdb;
-
-		$model = $this->settings['model'] ?? [];
-
-		if ( $this->detect_post_type() !== 'mb-model' || ! empty( $this->settings['settings'] ) || empty( $model ) || ! is_array( $model ) ) {
-			return $this;
-		}
-
-		unset( $model['keys'], $model['post_id'] );
-
-		$settings         = $model;
-		$settings['slug'] = (string) ( $model['id'] ?? $model['name'] ?? '' );
-
-		$table              = (string) ( $model['table'] ?? '' );
-		$settings['prefix'] = str_starts_with( $table, $wpdb->prefix );
-		$settings['table']  = $settings['prefix'] ? substr( $table, strlen( $wpdb->prefix ) ) : $table;
-
-		// Submenu models register a parent slug, which the editor keeps in show_in_menu.
-		if ( ! empty( $model['parent'] ) ) {
-			$settings['show_in_menu'] = $model['parent'];
-		}
-
-		$settings += $this->icon_to_editor_fields( (string) ( $model['menu_icon'] ?? '' ), [
-			'dashicons'    => 'icon',
-			'svg'          => 'icon_svg',
-			'custom'       => 'icon_custom',
-			'font_awesome' => 'font_awesome',
-		] );
-
-		unset( $settings['id'], $settings['name'], $settings['menu_icon'], $settings['parent'] );
-
-		$this->settings['settings'] = $settings;
-
-		return $this;
-	}
-
-	/**
-	 * Restore the editor menu fields after importing a minimal settings page JSON.
-	 * Registration keeps only parent and a single icon_url string, while the editor needs
-	 * menu_type plus icon_type and the field matching that type.
-	 */
-	private function unparse_settings_page_menu(): self {
-		$settings = $this->settings['settings'] ?? [];
-
-		if ( $this->detect_post_type() !== 'mb-settings-page' || isset( $settings['menu_type'] ) ) {
-			return $this;
-		}
-
-		$settings['menu_type'] = empty( $settings['parent'] ) ? 'top' : 'submenu';
-		$settings             += $this->icon_to_editor_fields( (string) ( $settings['icon_url'] ?? '' ), [
-			'dashicons'    => 'icon_dashicons',
-			'svg'          => 'icon_svg',
-			'custom'       => 'icon_custom',
-			'font_awesome' => 'icon_font_awesome',
-		] );
-
-		$this->settings['settings'] = $settings;
-
-		return $this;
-	}
-
-	/**
-	 * Restore the editor icon fields after importing a minimal block JSON.
-	 * Blocks register either an SVG string or an array carrying the dashicon and its colors.
-	 * A plain dashicon slug already matches the editor field, so it needs no mapping.
-	 */
-	private function unparse_block_icon(): self {
-		$settings = $this->settings['settings'] ?? [];
-
-		if ( ( $settings['object_type'] ?? '' ) !== 'block' || isset( $settings['icon_type'] ) ) {
-			return $this;
-		}
-
-		$icon = $settings['icon'] ?? '';
-
-		if ( is_array( $icon ) ) {
-			$settings['icon_type']       = 'dashicons';
-			$settings['icon']            = $icon['src'] ?? '';
-			$settings['icon_background'] = $icon['background'] ?? '';
-			$settings['icon_foreground'] = $icon['foreground'] ?? '';
-		} elseif ( $this->is_svg_icon( (string) $icon ) ) {
-			$settings['icon_type'] = 'svg';
-			$settings['icon_svg']  = $icon;
-		} else {
-			return $this;
-		}
-
-		$this->settings['settings'] = $settings;
-
-		return $this;
-	}
-
-	/**
 	 * Editor icon fields for a registered icon string.
 	 * Registration flattens every icon type into one string, so the type comes from its shape.
 	 *
@@ -852,108 +955,6 @@ class MetaBox extends Base {
 
 	private function is_svg_icon( string $icon ): bool {
 		return str_contains( $icon, '<svg' ) || str_starts_with( $icon, 'data:image/svg' );
-	}
-
-	/**
-	 * Ensure settings.columns uses the editor shape after importing a minimal model JSON.
-	 * Exported models store columns as { name: sqlType }; the UI expects { id: { name, type, … } }.
-	 */
-	private function unparse_model_settings_columns(): self {
-		if ( $this->detect_post_type() !== 'mb-model' ) {
-			return $this;
-		}
-
-		$settings = $this->settings['settings'] ?? [];
-		$columns  = $settings['columns'] ?? [];
-		if ( ! is_array( $columns ) || empty( $columns ) ) {
-			$columns = $this->settings['model']['columns'] ?? [];
-		}
-		if ( ! is_array( $columns ) || empty( $columns ) ) {
-			return $this;
-		}
-
-		$first = reset( $columns );
-		if ( is_array( $first ) && array_key_exists( 'name', $first ) ) {
-			return $this;
-		}
-
-		$keys    = $settings['keys'] ?? ( $this->settings['model']['keys'] ?? [] );
-		$keys    = is_array( $keys ) ? $keys : [];
-		$key_set = array_fill_keys( $keys, true );
-		$editor  = [];
-
-		foreach ( $columns as $name => $type ) {
-			if ( is_array( $type ) ) {
-				continue;
-			}
-			$name = (string) $name;
-			if ( '' === $name || 'id' === strtolower( $name ) ) {
-				continue;
-			}
-			$id             = 'col_' . str_replace( '-', '_', sanitize_key( $name ) );
-			$editor_type    = $this->sql_type_to_editor_column( (string) $type );
-			$editor[ $id ]  = [
-				'id'          => $id,
-				'name'        => $name,
-				'type'        => $editor_type['type'],
-				'custom_type' => $editor_type['custom_type'],
-				'index'       => isset( $key_set[ $name ] ),
-			];
-		}
-
-		if ( empty( $editor ) ) {
-			return $this;
-		}
-
-		$this->settings['settings']['columns'] = $editor;
-		unset( $this->settings['settings']['keys'] );
-
-		return $this;
-	}
-
-	/**
-	 * Map a SQL column type to editor type fields.
-	 * Exact preset match only; variants keep custom_type so import/sync does not rewrite SQL.
-	 * Keep in sync with dbTypeToEditorColumn() in meta-box-builder columnTypes.js.
-	 *
-	 * @return array{type: string, custom_type: string}
-	 */
-	private function sql_type_to_editor_column( string $sql_type ): array {
-		$presets = [
-			'TINYINT',
-			'SMALLINT',
-			'MEDIUMINT',
-			'INT',
-			'BIGINT',
-			'DECIMAL(10,2)',
-			'FLOAT',
-			'DOUBLE',
-			'TINYINT(1)',
-			'CHAR(1)',
-			'VARCHAR(255)',
-			'TINYTEXT',
-			'TEXT',
-			'MEDIUMTEXT',
-			'LONGTEXT',
-			'DATE',
-			'TIME',
-			'DATETIME',
-		];
-
-		$type  = trim( $sql_type );
-		$upper = strtoupper( $type );
-
-		if ( in_array( $upper, $presets, true ) ) {
-			return [
-				'type'        => $upper,
-				'custom_type' => '',
-			];
-		}
-
-		return [
-			'type'        => 'custom',
-			'custom_type' => $type,
-		];
 	}
 
 	/**
