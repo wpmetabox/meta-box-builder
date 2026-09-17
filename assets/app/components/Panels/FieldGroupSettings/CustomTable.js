@@ -1,4 +1,5 @@
 import { Button, Tooltip } from "@wordpress/components";
+import { useState } from "@wordpress/element";
 import { __ } from "@wordpress/i18n";
 import DivRow from "../../../controls/DivRow";
 import PersistentPanelBodyWithToggle from "../../../controls/PersistentPanelBodyWithToggle";
@@ -6,11 +7,13 @@ import Toggle from "../../../controls/Toggle";
 import UpgradePanelBody from "../../../controls/UpgradePanelBody";
 import useModelSchema from "../../../hooks/useModelSchema";
 import useSettings from "../../../hooks/useSettings";
+import { sanitizeSqlName } from "../../../utils/modelColumns";
 
 const CustomTable = () => {
 	const { getSetting, updateSetting } = useSettings();
 	const setting = getSetting( 'custom_table', {} );
 	const openSchema = useModelSchema( state => state.openSchema );
+	const [ unsupportedInput, setUnsupportedInput ] = useState( false );
 
 	const enableCustomTable = value => {
 		updateSetting( 'custom_table.enable', value );
@@ -63,7 +66,12 @@ const CustomTable = () => {
 						size={ 16 }
 						id="settings-table_name"
 						defaultValue={ setting.name }
-						onChange={ e => updateSetting( 'custom_table.name', e.target.value ) }
+						onChange={ e => {
+							const next = sanitizeSqlName( e.target.value );
+							setUnsupportedInput( '' !== e.target.value && '' === next );
+							e.target.value = next;
+							updateSetting( 'custom_table.name', next );
+						} }
 					/>
 					<label>
 						<input
@@ -79,6 +87,13 @@ const CustomTable = () => {
 						</Tooltip>
 					</label>
 				</div>
+				{
+					unsupportedInput && (
+						<p className="og-error">
+							{ __( 'Table names accept only letters a-z, numbers, and underscores.', 'meta-box-builder' ) }
+						</p>
+					)
+				}
 			</DivRow>
 			{
 				canEditColumns && (

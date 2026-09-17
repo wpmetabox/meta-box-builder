@@ -170,24 +170,11 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 		await saveBuilderModel();
 	};
 
-	const modelLabel = model?.label || model?.name || '';
-	const title = isCustomTable
-		? sprintf(
-			/* translators: %s: table name */
-			__( 'Edit table schema: %s', 'meta-box-builder' ),
-			table || customTable.name || ''
-		)
-		: readOnly
-			? sprintf(
-				/* translators: %s: model label */
-				__( 'Table schema: %s', 'meta-box-builder' ),
-				modelLabel
-			)
-			: sprintf(
-				/* translators: %s: model label */
-				__( 'Edit table schema: %s', 'meta-box-builder' ),
-				modelLabel
-			);
+	const title = sprintf(
+		/* translators: %s: table name */
+		readOnly ? __( 'Table schema: %s', 'meta-box-builder' ) : __( 'Edit table schema: %s', 'meta-box-builder' ),
+		table
+	);
 
 	const description = isCustomTable
 		? __( 'Adjust column types and indexes before saving. Save the field group with Auto create table enabled to apply schema changes to the database.', 'meta-box-builder' )
