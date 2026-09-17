@@ -6,13 +6,14 @@ import Header from './components/Header';
 import Main from './components/Main';
 import Notification from './components/Notification';
 import DefaultSettings from './constants/DefaultSettings';
+import { deriveAutofillLocks } from './hooks/useAutofill';
 import { initSaveForm } from './save';
 
 useSettings.setState( {
-	settings: {
+	settings: deriveAutofillLocks( {
 		...DefaultSettings,
 		...( MbbApp.settings || {} ),
-	},
+	} ),
 } );
 
 const Layout = ( { children } ) => (

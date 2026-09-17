@@ -1,10 +1,12 @@
 <?php
 namespace MBB\Extensions\CustomModel;
 
-use MetaBox\CustomTable\API;
 use MBB\LocalJson;
 use MBB\JsonService;
+use MBB\Helpers\TableSchema;
 use MBBParser\Unparsers\MetaBox;
+use MetaBox\CustomTable\Model\Factory;
+use MetaBox\CustomTable\Model\Model;
 use WP_Query;
 
 class Register {
@@ -14,6 +16,7 @@ class Register {
 		$this->register_post_type();
 
 		add_action( 'init', [ $this, 'register_models' ] );
+		add_action( 'mbb_sync_json', [ $this, 'create_table_after_sync' ], 10, 2 );
 
 		add_action( 'save_post_mb-model', [ __CLASS__, 'clear_cache' ] );
 		add_action( 'before_delete_post', [ $this, 'clear_cache_on_delete' ] );
@@ -75,8 +78,17 @@ class Register {
 	}
 
 	public function register_models(): void {
-		$models = LocalJson::is_enabled() ? self::query_models_from_json() : null;
-		if ( ! is_array( $models ) ) {
+		$local_json = LocalJson::is_enabled();
+
+		if ( $local_json ) {
+			$models = self::query_models_from_json();
+			// Keep mbb_models in sync for Data::get_models() (post_id, columns, keys).
+			// Strict compare: key-order drift updates once, then matches JSON thereafter.
+			$cached = get_option( self::CACHE_OPTION, false );
+			if ( ! is_array( $cached ) || $cached !== $models ) {
+				update_option( self::CACHE_OPTION, $models, true );
+			}
+		} else {
 			$models = get_option( self::CACHE_OPTION, false );
 			if ( ! is_array( $models ) ) {
 				$models = self::query_models();
@@ -91,12 +103,36 @@ class Register {
 
 			self::register( $name, $args );
 
-			// Recreate missing tables (imported posts, dropped tables).
-			$table = (string) ( $args['table'] ?? '' );
-			if ( $table && ! TableColumns::table_exists( $table ) ) {
+			// Models can be added or changed by editing JSON files, where no save runs.
+			// DbDelta creates the table when missing and updates it when the schema changed.
+			if ( $local_json ) {
 				self::create_table( $args );
 			}
 		}
+	}
+
+	/**
+	 * Create the table for a model synced from a JSON file.
+	 *
+	 * Registering first lets mbct_table_schema add AUTO_INCREMENT and support columns.
+	 * The cache needs no update here: wp_insert_post() already cleared it.
+	 *
+	 * @param array $data    Unparsed model data.
+	 * @param int   $post_id Model post ID.
+	 */
+	public function create_table_after_sync( array $data, int $post_id ): void {
+		if ( 'mb-model' !== ( $data['post_type'] ?? '' ) ) {
+			return;
+		}
+
+		$model = $data['model'] ?? [];
+		if ( ! is_array( $model ) || empty( $model['name'] ) || empty( $model['table'] ) ) {
+			return;
+		}
+
+		$model['post_id'] = $post_id;
+		self::register( $model['name'], $model );
+		self::create_table( $model, true );
 	}
 
 	/**
@@ -108,6 +144,16 @@ class Register {
 	public static function register( string $name, array $model ): void {
 		unset( $model['columns'], $model['keys'], $model['post_id'], $model['name'], $model['modified'] );
 
+		// Saving registers a model already registered on init. Registering it again adds a
+		// second mbct_table_schema listener, which duplicates the support columns and keys.
+		$registered = Factory::get( $name );
+		if ( $registered instanceof Model ) {
+			foreach ( $model as $key => $value ) {
+				$registered->$key = $value;
+			}
+			return;
+		}
+
 		mb_register_model( $name, $model );
 	}
 
@@ -115,17 +161,19 @@ class Register {
 	 * Create or update the model's custom table.
 	 *
 	 * @param array $model Parsed model args including table, columns, keys.
+	 * @param bool  $force Ignore the cached DDL result. Saving and importing always run it.
+	 * @return true|string True on success, error message on failure.
 	 */
-	public static function create_table( array $model ): void {
+	public static function create_table( array $model, bool $force = false ) {
 		$table = (string) ( $model['table'] ?? '' );
 		if ( ! $table ) {
-			return;
+			return true;
 		}
 
 		$columns = isset( $model['columns'] ) && is_array( $model['columns'] ) ? $model['columns'] : [];
 		$keys    = isset( $model['keys'] ) && is_array( $model['keys'] ) ? $model['keys'] : [];
 
-		API::create( $table, $columns, $keys );
+		return TableSchema::create_cached( $table, $columns, $keys, $force );
 	}
 
 	/**

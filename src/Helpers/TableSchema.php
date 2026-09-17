@@ -1,6 +1,8 @@
 <?php
 namespace MBB\Helpers;
 
+use MetaBox\CustomTable\API;
+
 class TableSchema {
 	/**
 	 * Sanitize a table or column name and optionally prepend $wpdb->prefix.
@@ -85,8 +87,122 @@ class TableSchema {
 		];
 	}
 
+	/**
+	 * Create or update a table via API::create and verify the DDL succeeded.
+	 *
+	 * DbDelta may run several ALTERs; $wpdb->last_error only reflects the last query,
+	 * and table_exists() stays true when the table already exists. Verify column names.
+	 *
+	 * @param string                $table   Table name.
+	 * @param array<string, string> $columns Column name => SQL type.
+	 * @param string[]              $keys    Indexed column names.
+	 * @return true|string True on success, error message on failure.
+	 */
+	public static function create( string $table, array $columns, array $keys = [] ) {
+		global $wpdb;
+
+		$wpdb->last_error = '';
+		API::create( $table, $columns, $keys );
+
+		if ( $wpdb->last_error ) {
+			return $wpdb->last_error;
+		}
+
+		if ( ! self::table_exists( $table ) ) {
+			return __( 'Could not create the database table.', 'meta-box-builder' );
+		}
+
+		$expected = array_merge( [ 'ID' ], array_keys( $columns ) );
+		$missing  = self::missing_columns( $table, $expected );
+		if ( $missing ) {
+			return sprintf(
+				/* translators: %s: comma-separated column names */
+				__( 'Could not update the database table. Missing columns: %s', 'meta-box-builder' ),
+				implode( ', ', $missing )
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * Create or update a table, skipping the DDL when the same schema succeeded before.
+	 *
+	 * Registering field groups and models runs on every request, so cache the result
+	 * for a month. Saving and importing must always run the DDL, otherwise a dropped
+	 * table would never come back.
+	 *
+	 * @param string                $table   Table name.
+	 * @param array<string, string> $columns Column name => SQL type.
+	 * @param string[]              $keys    Indexed column names.
+	 * @param bool                  $force   Ignore the cache and always run the DDL.
+	 * @return true|string True on success, error message on failure.
+	 */
+	public static function create_cached( string $table, array $columns, array $keys = [], bool $force = false ) {
+		$cache_key = 'mb_create_table_' . md5( wp_json_encode( compact( 'table', 'columns', 'keys' ) ) );
+
+		if ( ! $force && get_transient( $cache_key ) !== false && wp_get_environment_type() === 'production' ) {
+			return true;
+		}
+
+		$result = self::create( $table, $columns, $keys );
+		if ( true === $result ) {
+			set_transient( $cache_key, 1, MONTH_IN_SECONDS );
+		}
+
+		return $result;
+	}
+
+	public static function table_exists( string $table ): bool {
+		global $wpdb;
+
+		$like = $wpdb->esc_like( $table );
+
+		return $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $like ) ) === $table;
+	}
+
+	/**
+	 * Column names from $expected that are missing from the table (name check only).
+	 *
+	 * @param string   $table    Table name.
+	 * @param string[] $expected Expected column names.
+	 * @return string[]
+	 */
+	private static function missing_columns( string $table, array $expected ): array {
+		global $wpdb;
+
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM %i', $table ), ARRAY_A );
+		if ( ! is_array( $rows ) ) {
+			return array_values( array_unique( array_filter( $expected ) ) );
+		}
+
+		$present = [];
+		foreach ( $rows as $row ) {
+			$name = (string) ( $row['Field'] ?? '' );
+			if ( $name ) {
+				$present[ strtolower( $name ) ] = true;
+			}
+		}
+
+		$missing = [];
+		foreach ( $expected as $name ) {
+			$name = self::sanitize_name( (string) $name );
+			if ( $name && empty( $present[ strtolower( $name ) ] ) ) {
+				$missing[] = $name;
+			}
+		}
+
+		return array_values( array_unique( $missing ) );
+	}
+
+	/**
+	 * Transliterate first: sanitize_key() drops accented characters, turning "đơn hàng" into
+	 * "nhng". Match sanitizeSqlName() in JS, which slugifies before sanitizing.
+	 */
 	public static function sanitize_name( string $name ): string {
-		return str_replace( '-', '_', sanitize_key( $name ) );
+		$name = str_replace( [ ' ', '-' ], '_', remove_accents( $name ) );
+
+		return sanitize_key( $name );
 	}
 
 	public static function sanitize_column_type( string $type ): string {
@@ -95,7 +211,11 @@ class TableSchema {
 	}
 
 	public static function is_indexable( string $type ): bool {
-		return ! str_contains( strtoupper( $type ), 'TEXT' );
+		$type = strtoupper( $type );
+
+		return ! str_contains( $type, 'TEXT' )
+			&& ! str_contains( $type, 'BLOB' )
+			&& ! str_contains( $type, 'JSON' );
 	}
 
 	/**

@@ -2,7 +2,6 @@
 namespace MBB\Extensions\CustomModel;
 
 use MBB\Helpers\TableSchema;
-use MetaBox\CustomTable\API;
 use MetaBox\CustomTable\Model\Factory;
 use MetaBox\CustomTable\Model\Model;
 
@@ -26,15 +25,24 @@ class TableColumns {
 			return self::table_error();
 		}
 
-		// Register first so TableSchema adds AUTO_INCREMENT and supports columns.
+		$supports = self::supports_for( $model_name );
+
+		// Register first so mbct_table_schema can add AUTO_INCREMENT and support columns.
 		if ( $model_name && ! Factory::get( $model_name ) ) {
-			mb_register_model( $model_name, [ 'table' => $table ] );
+			$args = [ 'table' => $table ];
+			if ( $supports ) {
+				$args['supports'] = $supports;
+			}
+			mb_register_model( $model_name, $args );
 		}
 
 		$parsed = TableSchema::parse_columns( $column_items );
-		API::create( $table, $parsed['columns'], $parsed['keys'] );
+		$result = TableSchema::create( $table, $parsed['columns'], $parsed['keys'] );
+		if ( true !== $result ) {
+			return self::fail( $result );
+		}
 
-		$inspected = self::inspect( $table, self::supports_for( $model_name ) );
+		$inspected = self::inspect( $table, $supports );
 
 		return [
 			'success' => true,
@@ -95,7 +103,7 @@ class TableColumns {
 	private static function fetch( string $table ): array {
 		global $wpdb;
 
-		if ( ! self::table_exists( $table ) ) {
+		if ( ! TableSchema::table_exists( $table ) ) {
 			return [];
 		}
 
@@ -126,7 +134,7 @@ class TableColumns {
 	private static function fetch_keys( string $table ): array {
 		global $wpdb;
 
-		if ( ! self::table_exists( $table ) ) {
+		if ( ! TableSchema::table_exists( $table ) ) {
 			return [];
 		}
 
@@ -146,14 +154,6 @@ class TableColumns {
 		return array_values( array_unique( array_column( $rows, 'Column_name' ) ) );
 	}
 
-	public static function table_exists( string $table ): bool {
-		global $wpdb;
-
-		$like = $wpdb->esc_like( $table );
-
-		return $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $like ) ) === $table;
-	}
-
 	/**
 	 * Get column names that inspect should hide (ID and support columns).
 	 *
@@ -168,7 +168,7 @@ class TableColumns {
 	}
 
 	/**
-	 * Resolve model supports from a registered model name.
+	 * Resolve model supports: Factory first, then builder post meta.
 	 *
 	 * @param string $model_name Model slug.
 	 * @return string[]
@@ -179,9 +179,28 @@ class TableColumns {
 			return [];
 		}
 
+		$from_factory = self::supports_from_factory( $model_name );
+		if ( null !== $from_factory && $from_factory ) {
+			return $from_factory;
+		}
+
+		$from_meta = self::supports_from_meta( $model_name );
+		if ( $from_meta ) {
+			return $from_meta;
+		}
+
+		return $from_factory ?? [];
+	}
+
+	/**
+	 * Supports from a runtime-registered model, or null if not in Factory.
+	 *
+	 * @return string[]|null
+	 */
+	private static function supports_from_factory( string $model_name ): ?array {
 		$model = Factory::get( $model_name );
 		if ( ! $model instanceof Model ) {
-			return [];
+			return null;
 		}
 
 		$features = [];
@@ -192,6 +211,25 @@ class TableColumns {
 		}
 
 		return $features;
+	}
+
+	/**
+	 * Supports from the builder mb-model post meta for this slug.
+	 *
+	 * @return string[]
+	 */
+	private static function supports_from_meta( string $model_name ): array {
+		$post_id = Register::get_model_post_id( $model_name );
+		if ( ! $post_id ) {
+			return [];
+		}
+
+		$model = get_post_meta( $post_id, 'model', true );
+		if ( ! is_array( $model ) || empty( $model['supports'] ) || ! is_array( $model['supports'] ) ) {
+			return [];
+		}
+
+		return array_values( array_intersect( self::SUPPORT_FEATURES, $model['supports'] ) );
 	}
 
 	private static function table_error(): array {

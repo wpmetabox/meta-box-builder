@@ -1,12 +1,14 @@
 import { Tooltip } from '@wordpress/components';
+import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import ColumnsEditor from '../../../../../../assets/app/controls/ColumnsEditor';
 import DivRow from '../../../../../../assets/app/controls/DivRow';
-import { resolveTableName } from '../../../../../../assets/app/utils/modelColumns';
+import { resolveTableName, sanitizeSqlName } from '../../../../../../assets/app/utils/modelColumns';
 import useAutofill from '../../hooks/useAutofill';
 
 const Table = () => {
 	const { getSetting, updateWithAutofill } = useAutofill();
+	const [ unsupportedInput, setUnsupportedInput ] = useState( false );
 	const pluralName = getSetting( 'labels.name', '' );
 	const tableKey = getSetting( '_table_changed' ) ? 'table-manual' : pluralName;
 	const model = getSetting( 'slug', '' );
@@ -34,7 +36,12 @@ const Table = () => {
 						size={ 16 }
 						id="table"
 						defaultValue={ getSetting( 'table' ) }
-						onChange={ e => updateWithAutofill( 'table', e.target.value ) }
+						onChange={ e => {
+							const next = sanitizeSqlName( e.target.value );
+							setUnsupportedInput( '' !== e.target.value && '' === next );
+							e.target.value = next;
+							updateWithAutofill( 'table', next );
+						} }
 					/>
 					<label>
 						<input
@@ -49,6 +56,13 @@ const Table = () => {
 						</Tooltip>
 					</label>
 				</div>
+				{
+					unsupportedInput && (
+						<p className="og-error">
+							{ __( 'Table names accept only letters a-z, numbers, and underscores.', 'meta-box-builder' ) }
+						</p>
+					)
+				}
 			</DivRow>
 			<hr />
 			<p className="og-description">

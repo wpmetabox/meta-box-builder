@@ -9,10 +9,12 @@ import {
 	createColumnItem,
 	dbTypeToEditorColumn,
 	isIndexableType,
+	isReservedColumnName,
 	resolveColumnSqlType,
 } from '../constants/columnTypes';
 import { maybeArrayToObject } from '../functions';
 import { fetcher } from '../hooks/useFetch';
+import { sanitizeSqlName } from '../utils/modelColumns';
 import DivRow from './DivRow';
 
 const stripSortableMeta = item => {
@@ -151,6 +153,7 @@ const SchemaRow = ( {
 	updateItem,
 	removeFromSchema,
 } ) => {
+	const [ unsupportedInput, setUnsupportedInput ] = useState( false );
 	const sqlType = resolveColumnSqlType( item );
 	const canIndex = isIndexableType( sqlType );
 	const status = showFieldContext
@@ -177,12 +180,32 @@ const SchemaRow = ( {
 					readOnly
 						? item.name
 						: (
-							<input
-								type="text"
-								placeholder={ __( 'column_name', 'meta-box-builder' ) }
-								value={ item.name || '' }
-								onChange={ e => updateItem( item.id, 'name', e.target.value ) }
-							/>
+							<>
+								<input
+									type="text"
+									placeholder={ __( 'column_name', 'meta-box-builder' ) }
+									value={ item.name || '' }
+									onChange={ e => {
+										const next = sanitizeSqlName( e.target.value );
+										setUnsupportedInput( '' !== e.target.value && '' === next );
+										updateItem( item.id, 'name', next );
+									} }
+								/>
+								{
+									isReservedColumnName( item.name ) && (
+										<p className="mb-columns-editor__error">
+											{ __( 'The column name "id" is reserved for the auto-increment primary key.', 'meta-box-builder' ) }
+										</p>
+									)
+								}
+								{
+									unsupportedInput && (
+										<p className="mb-columns-editor__error">
+											{ __( 'Column names accept only letters a-z, numbers, and underscores.', 'meta-box-builder' ) }
+										</p>
+									)
+								}
+							</>
 						)
 				}
 			</td>

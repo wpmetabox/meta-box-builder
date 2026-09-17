@@ -1,6 +1,7 @@
 import dotProp from 'dot-prop';
 import slugify from 'slugify';
 import useSettings from '../../../../../assets/app/hooks/useSettings';
+import { sanitizeSqlName } from '../../../../../assets/app/utils/modelColumns';
 
 const ucfirst = str => ( str.length ? str[ 0 ].toUpperCase() + str.slice( 1 ) : str );
 
@@ -26,6 +27,25 @@ const LABEL_AUTOFILL = [
 	{ name: 'labels.item_deleted', template: '%singular_name% deleted.', source: 'labels.singular_name' },
 ];
 
+/**
+ * Derive lock flags from current values so Local JSON round-trips keep manual slug/table.
+ * Empty slug/table still allow autofill from labels.
+ */
+export const deriveAutofillLocks = settings => {
+	const singular = settings?.labels?.singular_name || '';
+	const plural = settings?.labels?.name || '';
+	const slug = settings?.slug || '';
+	const table = settings?.table || '';
+	const expectedSlug = singular ? slugify( singular, { lower: true } ) : '';
+	const expectedTable = plural ? sanitizeSqlName( plural ) : '';
+
+	return {
+		...settings,
+		_slug_changed: '' !== slug && slug !== expectedSlug,
+		_table_changed: '' !== table && table !== expectedTable,
+	};
+};
+
 const autofillFrom = ( settings, sourceKey, value ) => {
 	if ( 'labels.singular_name' === sourceKey ) {
 		if ( ! settings._slug_changed ) {
@@ -35,7 +55,7 @@ const autofillFrom = ( settings, sourceKey, value ) => {
 
 	if ( 'labels.name' === sourceKey ) {
 		if ( ! settings._table_changed ) {
-			dotProp.set( settings, 'table', slugify( value, { lower: true, replacement: '_' } ) );
+			dotProp.set( settings, 'table', sanitizeSqlName( value ) );
 		}
 	}
 
@@ -55,6 +75,7 @@ const useAutofill = () => {
 		}
 		if ( 'table' === key ) {
 			settings._table_changed = true;
+			value = sanitizeSqlName( value );
 		}
 		if ( 'menu_position' === key ) {
 			value = parseFloat( value ) || '';
