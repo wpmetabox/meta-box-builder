@@ -1,5 +1,5 @@
 import slugify from 'slugify';
-import { createColumnItem } from '../constants/columnTypes';
+import { createColumnItem, suggestColumnType } from '../constants/columnTypes';
 
 /**
  * Column names from a model schema or database map.
@@ -58,9 +58,14 @@ export const resolveTableName = ( table, usePrefix = false, prefix = '' ) => {
 };
 
 /**
- * Merge stored editor columns with missing field IDs as TEXT columns.
+ * Merge stored editor columns with missing fields, using a suggested SQL type per field.
+ *
+ * @param {Object}   editorColumns Existing editor column items.
+ * @param {Object[]} fields        Root fields that should have columns.
+ * @param {Object}   options
+ * @param {string}   options.idPrefix Prefix prepended to field IDs (custom table field prefix).
  */
-export const seedEditorColumns = ( editorColumns, fieldIds, createColumn = createColumnItem ) => {
+export const seedEditorColumns = ( editorColumns, fields = [], { idPrefix = '' } = {} ) => {
 	const existing = editorColumns && typeof editorColumns === 'object' ? { ...editorColumns } : {};
 	const existingNames = new Set(
 		Object.values( existing )
@@ -68,15 +73,22 @@ export const seedEditorColumns = ( editorColumns, fieldIds, createColumn = creat
 			.filter( Boolean )
 	);
 
-	fieldIds.forEach( id => {
-		if ( ! id || existingNames.has( id ) ) {
+	( fields || [] ).forEach( field => {
+		if ( ! field?.id ) {
 			return;
 		}
-		const column = createColumn( {
-			name: id,
+
+		const name = sanitizeSqlName( `${ idPrefix }${ field.id }` );
+		if ( ! name || existingNames.has( name ) ) {
+			return;
+		}
+
+		const column = createColumnItem( {
+			name,
+			type: suggestColumnType( field ),
 		} );
 		existing[ column.id ] = column;
-		existingNames.add( id );
+		existingNames.add( name );
 	} );
 
 	return existing;

@@ -60,6 +60,117 @@ export const createColumnItem = ( overrides = {} ) => ( {
 	...overrides,
 } );
 
+/** Field types that always serialize or store free-form strings. */
+const ALWAYS_TEXT_FIELD_TYPES = [
+	'autocomplete',
+	'background',
+	'button_group',
+	'checkbox_list',
+	'fieldset_text',
+	'file',
+	'file_advanced',
+	'file_upload',
+	'group',
+	'image',
+	'image_advanced',
+	'image_select',
+	'image_upload',
+	'key_value',
+	'link',
+	'radio',
+	'select',
+	'select_advanced',
+	'taxonomy',
+	'text_list',
+	'textarea',
+	'video',
+];
+
+const VARCHAR_FIELD_TYPES = [
+	'color',
+	'email',
+	'file_input',
+	'hidden',
+	'icon',
+	'map',
+	'oembed',
+	'osm',
+	'password',
+	'sidebar',
+	'text',
+	'url',
+];
+
+const BIGINT_FIELD_TYPES = [ 'post', 'single_image', 'taxonomy_advanced', 'user' ];
+
+const isIntegerStep = step => {
+	if ( ! step ) {
+		return true;
+	}
+	if ( String( step ).toLowerCase() === 'any' ) {
+		return false;
+	}
+	const value = Number( step );
+	return Number.isFinite( value ) && Number.isInteger( value );
+};
+
+const isMysqlDateFormat = format => ! format || format === 'Y-m-d';
+
+const isMysqlDatetimeFormat = format => ! format || format === 'Y-m-d H:i' || format === 'Y-m-d H:i:s';
+
+/**
+ * Suggest a SQL column type from a field's type and settings.
+ * Used when seeding columns in the schema editor only — save still defaults missing columns to TEXT.
+ *
+ * @param {Object} field Field settings from the editor.
+ * @return {string} A COLUMN_TYPE_GROUPS preset key.
+ */
+export const suggestColumnType = ( field = {} ) => {
+	if ( field.clone || field.multiple || ALWAYS_TEXT_FIELD_TYPES.includes( field.type ) ) {
+		return DEFAULT_COLUMN_TYPE;
+	}
+
+	if ( [ 'checkbox', 'switch' ].includes( field.type ) ) {
+		return 'TINYINT(1)';
+	}
+
+	if ( field.type === 'time' ) {
+		return 'TIME';
+	}
+
+	if ( field.type === 'date' ) {
+		if ( field.timestamp ) {
+			return 'BIGINT';
+		}
+		return isMysqlDateFormat( field.save_format ) ? 'DATE' : 'VARCHAR(255)';
+	}
+
+	if ( field.type === 'datetime' ) {
+		if ( field.timestamp ) {
+			return 'BIGINT';
+		}
+		return isMysqlDatetimeFormat( field.save_format ) ? 'DATETIME' : 'VARCHAR(255)';
+	}
+
+	if ( [ 'wysiwyg', 'block_editor' ].includes( field.type ) ) {
+		return 'LONGTEXT';
+	}
+
+	if ( VARCHAR_FIELD_TYPES.includes( field.type ) ) {
+		return 'VARCHAR(255)';
+	}
+
+	if ( [ 'number', 'range', 'slider' ].includes( field.type ) ) {
+		return isIntegerStep( field.step ) ? 'INT' : 'FLOAT';
+	}
+
+	if ( BIGINT_FIELD_TYPES.includes( field.type ) ) {
+		return 'BIGINT';
+	}
+
+	return DEFAULT_COLUMN_TYPE;
+};
+
 /** Keep in sync with TableSchema::is_indexable() in PHP. */
 export const isIndexableType = type => {
 	const upper = String( type || '' ).toUpperCase();

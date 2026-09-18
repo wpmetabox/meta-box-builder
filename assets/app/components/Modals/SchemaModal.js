@@ -2,14 +2,17 @@ import { Button, Flex, Modal } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { parsedColumnsToEditor } from '../../constants/columnTypes';
+import { IGNORE_SCHEMA_FIELD_TYPES } from '../../constants/schemaFieldTypes';
 import ColumnsEditor from '../../controls/ColumnsEditor';
 import { maybeArrayToObject } from '../../functions';
 import { fetcher } from '../../hooks/useFetch';
+import useRootFields from '../../hooks/useRootFields';
 import useSettings from '../../hooks/useSettings';
 import { resolveTableName, seedEditorColumns } from '../../utils/modelColumns';
 
 const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
-	const { getSetting, updateSetting } = useSettings();
+	const { getSetting, updateSetting, getPrefix } = useSettings();
+	const fields = useRootFields();
 	const isCustomTable = source === 'custom_table';
 	const isCodeModel = ! isCustomTable && ! model?.post_id;
 	const manageEnabled = !! getSetting( 'custom_table.enable', false );
@@ -20,6 +23,7 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 		MbbApp.tablePrefix || ''
 	);
 	const table = isCustomTable ? customTableName : ( model?.table || '' );
+	const idPrefix = isCustomTable ? ( getPrefix() || '' ) : '';
 
 	const [ manage, setManage ] = useState( () => isCodeModel && manageEnabled );
 	const [ columns, setColumns ] = useState( {} );
@@ -29,12 +33,13 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 	const readOnly = isCodeModel && ! manage;
 
 	useEffect( () => {
+		const schemaFields = fields.filter( field => field.id && ! IGNORE_SCHEMA_FIELD_TYPES.includes( field.type ) );
 		const storedColumns = maybeArrayToObject( customTable.columns || {}, 'id' );
 		if ( isCustomTable || ( isCodeModel && manage && Object.keys( storedColumns ).length > 0 ) ) {
 			setSchemaColumnNames(
 				Object.values( storedColumns ).map( column => column.name ).filter( Boolean )
 			);
-			setColumns( seedEditorColumns( storedColumns, fieldIds ) );
+			setColumns( seedEditorColumns( storedColumns, schemaFields, { idPrefix } ) );
 			return;
 		}
 
@@ -43,9 +48,10 @@ const SchemaModal = ( { source, model, fieldIds, onClose, onSaved } ) => {
 		setSchemaColumnNames( Object.keys( schemaColumns ) );
 		setColumns( seedEditorColumns(
 			parsedColumnsToEditor( schemaColumns, model?.keys || [] ),
-			fieldIds
+			schemaFields,
+			{ idPrefix }
 		) );
-	}, [ model, fieldIds, isCodeModel, isCustomTable, manage, customTable.columns ] );
+	}, [ model, fields, idPrefix, isCodeModel, isCustomTable, manage, customTable.columns ] );
 
 	const applyManageSettings = () => {
 		updateSetting( 'custom_table.enable', true );
