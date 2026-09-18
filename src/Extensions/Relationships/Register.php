@@ -1,6 +1,9 @@
 <?php
 namespace MBB\Extensions\Relationships;
 
+use MBB\JsonService;
+use MBB\LocalJson;
+use MBBParser\Unparsers\MetaBox;
 use MB_Relationships_API;
 use WP_Query;
 
@@ -66,6 +69,18 @@ class Register {
 	}
 
 	public function register_relationships() {
+		$relationships = LocalJson::is_enabled()
+			? $this->get_json_relationships()
+			: $this->get_database_relationships();
+
+		foreach ( $relationships as $relationship ) {
+			MB_Relationships_API::register( $relationship );
+		}
+	}
+
+	private function get_database_relationships(): array {
+		$relationships = [];
+
 		$query = new WP_Query( [
 			'posts_per_page'         => -1,
 			'post_status'            => 'publish',
@@ -76,11 +91,47 @@ class Register {
 
 		foreach ( $query->posts as $post ) {
 			$relationship = get_post_meta( $post->ID, 'relationship', true );
+			if ( empty( $relationship ) || ! is_array( $relationship ) ) {
+				continue;
+			}
 
 			// Allow WPML to translate relationship data.
-			$relationship = apply_filters( 'mbb_relationship', $relationship, $post );
-
-			MB_Relationships_API::register( $relationship );
+			$relationships[] = apply_filters( 'mbb_relationship', $relationship, $post );
 		}
+
+		return $relationships;
+	}
+
+	private function get_json_relationships(): array {
+		$relationships = [];
+
+		foreach ( JsonService::get_files() as $file ) {
+			$raw = LocalJson::read_file( $file );
+			if ( empty( $raw ) ) {
+				continue;
+			}
+
+			$unparser = new MetaBox( $raw );
+			$unparser->unparse();
+			$data = $unparser->get_settings();
+
+			if ( ( $data['post_type'] ?? '' ) !== 'mb-relationship' ) {
+				continue;
+			}
+
+			$relationship = $data['relationship'] ?? [];
+			if ( empty( $relationship ) || ! is_array( $relationship ) ) {
+				continue;
+			}
+
+			$post_object = (object) [
+				'post_title' => $data['post_title'] ?? '',
+				'post_name'  => $data['post_name'] ?? '',
+			];
+
+			$relationships[] = apply_filters( 'mbb_relationship', $relationship, $post_object );
+		}
+
+		return $relationships;
 	}
 }

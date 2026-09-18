@@ -69,6 +69,10 @@ class Register {
 				continue;
 			}
 
+			if ( ( $meta_box['post_type'] ?? 'meta-box' ) !== 'meta-box' ) {
+				continue;
+			}
+
 			$meta_boxes[] = $meta_box;
 		}
 

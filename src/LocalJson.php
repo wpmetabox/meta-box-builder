@@ -2,9 +2,18 @@
 namespace MBB;
 
 use MBB\RestApi\Save;
+use MBB\Helpers\Template;
 use MBBParser\Unparsers\MetaBox;
+use MetaBox\Support\Arr;
 
 class LocalJson {
+	public const SUPPORTED_POST_TYPES = [
+		'meta-box',
+		'mb-model',
+		'mb-settings-page',
+		'mb-relationship',
+	];
+
 	/**
 	 * Why the latest sync did not write a file, empty when it wrote one or had nothing to do.
 	 *
@@ -14,6 +23,11 @@ class LocalJson {
 
 	public function __construct() {
 		add_action( 'mbb_after_save', [ $this, 'generate_local_json' ], 10, 3 );
+		new Template();
+	}
+
+	public static function is_supported( string $post_type ): bool {
+		return in_array( $post_type, self::SUPPORTED_POST_TYPES, true );
 	}
 
 	/**
@@ -195,7 +209,7 @@ class LocalJson {
 			return false;
 		}
 
-		if ( ! in_array( $post->post_type, [ 'meta-box', 'mb-model' ], true ) ) {
+		if ( ! self::is_supported( $post->post_type ) ) {
 			return false;
 		}
 
@@ -321,12 +335,20 @@ class LocalJson {
 	 * ID used to match a JSON file to a Builder post.
 	 */
 	private static function get_json_id( array $data ): string {
-		$post_type = $data['post_type'] ?? 'meta-box';
+		$keys = [
+			'meta-box'         => [ 'meta_box.id', 'post_name' ],
+			'mb-model'         => [ 'model.id', 'model.name', 'post_name' ],
+			'mb-settings-page' => [ 'settings_page.id', 'post_name' ],
+			'mb-relationship'  => [ 'relationship.id', 'post_name' ],
+		];
 
-		if ( 'mb-model' === $post_type ) {
-			return (string) ( $data['model']['id'] ?? $data['model']['name'] ?? $data['post_name'] ?? '' );
+		foreach ( $keys[ $data['post_type'] ?? 'meta-box' ] ?? [] as $key ) {
+			$value = Arr::get( $data, $key );
+			if ( $value ) {
+				return (string) $value;
+			}
 		}
 
-		return (string) ( $data['meta_box']['id'] ?? $data['post_name'] ?? '' );
+		return '';
 	}
 }
