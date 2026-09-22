@@ -3,7 +3,6 @@ namespace MBB\Extensions\Relationships;
 
 use MBB\JsonService;
 use MBB\LocalJson;
-use MBBParser\Unparsers\MetaBox;
 use MB_Relationships_API;
 use WP_Query;
 
@@ -105,20 +104,8 @@ class Register {
 	private function get_json_relationships(): array {
 		$relationships = [];
 
-		foreach ( JsonService::get_files() as $file ) {
-			$raw = LocalJson::read_file( $file );
-			if ( empty( $raw ) ) {
-				continue;
-			}
-
-			$unparser = new MetaBox( $raw );
-			$unparser->unparse();
-			$data = $unparser->get_settings();
-
-			if ( ( $data['post_type'] ?? '' ) !== 'mb-relationship' ) {
-				continue;
-			}
-
+		foreach ( JsonService::get_unparsed( 'mb-relationship' ) as $item ) {
+			$data         = $item['data'];
 			$relationship = $data['relationship'] ?? [];
 			if ( empty( $relationship ) || ! is_array( $relationship ) ) {
 				continue;

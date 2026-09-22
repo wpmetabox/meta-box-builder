@@ -3,7 +3,6 @@ namespace MBB\Extensions\SettingsPage;
 
 use MBB\JsonService;
 use MBB\LocalJson;
-use MBBParser\Unparsers\MetaBox;
 use WP_Query;
 
 class Register {
@@ -108,20 +107,8 @@ class Register {
 	private function get_json_settings_pages(): array {
 		$pages = [];
 
-		foreach ( JsonService::get_files() as $file ) {
-			$raw = LocalJson::read_file( $file );
-			if ( empty( $raw ) ) {
-				continue;
-			}
-
-			$unparser = new MetaBox( $raw );
-			$unparser->unparse();
-			$data = $unparser->get_settings();
-
-			if ( ( $data['post_type'] ?? '' ) !== 'mb-settings-page' ) {
-				continue;
-			}
-
+		foreach ( JsonService::get_unparsed( 'mb-settings-page' ) as $item ) {
+			$data          = $item['data'];
 			$settings_page = $data['settings_page'] ?? [];
 			if ( empty( $settings_page ) || ! is_array( $settings_page ) ) {
 				continue;

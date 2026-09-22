@@ -119,6 +119,7 @@ class AdminColumns {
 		}
 
 		unlink( $file_path );
+		JsonService::clear_cache();
 	}
 
 	public function restore_json( $post_id ): bool {

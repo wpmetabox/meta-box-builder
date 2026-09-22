@@ -84,7 +84,12 @@ class LocalJson {
 
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
-		return @file_put_contents( $file_path, $output );
+		$result = @file_put_contents( $file_path, $output );
+		if ( false !== $result ) {
+			JsonService::clear_cache();
+		}
+
+		return $result;
 	}
 
 	public static function import_many( array $json ): void {
@@ -236,6 +241,7 @@ class LocalJson {
 		// A rename writes a new file, so the old one is left behind.
 		if ( $own_file && $own_file !== $file_path ) {
 			wp_delete_file( $own_file );
+			JsonService::clear_cache();
 		}
 
 		return true;
@@ -313,18 +319,9 @@ class LocalJson {
 			return '';
 		}
 
-		foreach ( JsonService::get_files() as $file ) {
-			$raw_json = self::read_file( $file );
-			if ( empty( $raw_json ) ) {
-				continue;
-			}
-
-			$unparser = new MetaBox( $raw_json );
-			$unparser->unparse();
-			$json = $unparser->get_settings();
-
-			if ( ( $json['post_type'] ?? 'meta-box' ) === $post_type && self::get_json_id( $json ) === $id ) {
-				return $file;
+		foreach ( JsonService::get_unparsed( $post_type ) as $item ) {
+			if ( self::get_json_id( $item['data'] ) === $id ) {
+				return $item['file'];
 			}
 		}
 

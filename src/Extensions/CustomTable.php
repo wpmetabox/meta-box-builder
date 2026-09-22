@@ -239,6 +239,12 @@ class CustomTable {
 	 * Merge field columns into a Builder model and persist it.
 	 */
 	private function sync_builder_model( int $model_id, array $fields ): void {
+		// Local JSON: Register::register_models() already applies the file schema via dbDelta.
+		// Persisting from post meta would overwrite newer JSON column types.
+		if ( LocalJson::is_enabled() ) {
+			return;
+		}
+
 		$settings = get_post_meta( $model_id, 'settings', true );
 		if ( ! is_array( $settings ) ) {
 			$settings = [];
