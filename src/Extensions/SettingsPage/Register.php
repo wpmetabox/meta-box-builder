@@ -73,11 +73,7 @@ class Register {
 			? $this->get_json_settings_pages()
 			: $this->get_database_settings_pages();
 
-		foreach ( $pages as $page ) {
-			$settings_pages[] = $page;
-		}
-
-		return $settings_pages;
+		return array_merge( $settings_pages, $pages );
 	}
 
 	private function get_database_settings_pages(): array {

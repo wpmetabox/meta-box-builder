@@ -127,8 +127,10 @@ class Import {
 			}
 
 			// After importing, we write to the json file too.
-			LocalJson::use_database( [ 'post_id' => $post_id ] );
+			LocalJson::use_database( [ 'post_id' => $post_id ], false );
 		}
+
+		JsonService::clear_cache();
 
 		return true;
 	}

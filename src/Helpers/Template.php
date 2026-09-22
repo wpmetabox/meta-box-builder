@@ -100,14 +100,17 @@ class Template {
 	}
 
 	private function is_supported_screen(): bool {
-		$screen_id = get_current_screen()->id;
-		$screens   = [];
-
-		foreach ( LocalJson::SUPPORTED_POST_TYPES as $post_type ) {
-			$screens[] = $post_type;
-			$screens[] = "edit-{$post_type}";
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return false;
 		}
 
-		return in_array( $screen_id, $screens, true );
+		foreach ( LocalJson::SUPPORTED_POST_TYPES as $post_type ) {
+			if ( $screen->id === $post_type || $screen->id === "edit-{$post_type}" ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

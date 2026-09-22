@@ -37,6 +37,7 @@ abstract class BaseEditPage {
 	}
 
 	protected function show_local_json_notice(): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin UI notice, not a form action.
 		$action = sanitize_text_field( wp_unslash( $_GET['action'] ?? '' ) );
 		if ( 'edit' !== $action ) {
 			return;

@@ -85,17 +85,15 @@ class LocalJson {
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
 		$result = @file_put_contents( $file_path, $output );
-		if ( false !== $result ) {
-			JsonService::clear_cache();
-		}
 
 		return $result;
 	}
 
 	public static function import_many( array $json ): void {
 		foreach ( $json as $data ) {
-			self::sync_json( $data );
+			self::sync_json( $data, false );
 		}
+		JsonService::clear_cache();
 	}
 
 	/**
@@ -140,10 +138,11 @@ class LocalJson {
 	 *      'data',
 	 * ]
 	 *
-	 * @param array $data
+	 * @param array $data        Sync payload with post_id and local JSON.
+	 * @param bool  $clear_cache Whether to clear the JsonService cache after writing.
 	 * @return bool Success or not
 	 */
-	private static function sync_json( array $data ): bool {
+	private static function sync_json( array $data, bool $clear_cache = true ): bool {
 		$required_keys = [ 'post_id', 'local' ];
 
 		foreach ( $required_keys as $key ) {
@@ -184,7 +183,7 @@ class LocalJson {
 		self::use_database( [
 			'post_id'   => $post_id,
 			'post_type' => $data['post_type'] ?? 'meta-box',
-		] );
+		], $clear_cache );
 
 		return true;
 	}
@@ -192,10 +191,11 @@ class LocalJson {
 	/**
 	 * Sync data from database to JSON file, overwriting existing content.
 	 *
-	 * @param array $args Contains post_id or post_name, optional post_type and previous_id (old slug after rename).
+	 * @param array $args        Contains post_id or post_name, optional post_type and previous_id (old slug after rename).
+	 * @param bool  $clear_cache Whether to clear the JsonService cache after writing.
 	 * @return bool Success or not.
 	 */
-	public static function use_database( array $args = [] ): bool {
+	public static function use_database( array $args = [], bool $clear_cache = true ): bool {
 		self::$last_error = '';
 
 		if ( ! self::is_enabled() ) {
@@ -241,6 +241,9 @@ class LocalJson {
 		// A rename writes a new file, so the old one is left behind.
 		if ( $own_file && $own_file !== $file_path ) {
 			wp_delete_file( $own_file );
+		}
+
+		if ( $clear_cache ) {
 			JsonService::clear_cache();
 		}
 

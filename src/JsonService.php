@@ -27,12 +27,13 @@ class JsonService {
 	 *
 	 * Each item: file, local, local_minimized, is_newer (-1|0|1), post_id, post_type, id, remote, diff, is_writable.
 	 *
-	 * @param array $params Filters: post_type, id, post_id, file, is_newer, …
+	 * @param array $params Filters: post_type, id, post_id, file, is_newer, ….
 	 */
 	public static function get_json( array $params = [] ): array {
 		$post_type = $params['post_type'] ?? 'meta-box';
 		if ( ! isset( self::$json_items[ $post_type ] ) ) {
-			self::$json_items[ $post_type ] = self::query_json( $post_type, $params );
+			// Cache the full post-type set; filter_items() applies post_id and other filters.
+			self::$json_items[ $post_type ] = self::query_json( $post_type );
 		}
 
 		return self::filter_items( self::$json_items[ $post_type ], $params );
@@ -40,6 +41,9 @@ class JsonService {
 
 	/**
 	 * Unparsed Local JSON items for a post type (parsed once per request).
+	 *
+	 * Includes files with `"private": true` so registers can load them.
+	 * Sync/compare UI excludes those via get_json().
 	 *
 	 * @return array<int, array{file: string, raw: array, data: array, minimal: array}>
 	 */
@@ -75,11 +79,13 @@ class JsonService {
 	}
 
 	/**
+	 * Parse one Local JSON file into raw, unparsed, and minimal forms.
+	 *
 	 * @return array{file: string, raw: array, data: array, minimal: array}|null
 	 */
 	private static function parse_file( string $file ): ?array {
 		$raw = LocalJson::read_file( $file );
-		if ( empty( $raw ) || ! empty( $raw['private'] ) ) {
+		if ( empty( $raw ) ) {
 			return null;
 		}
 
@@ -129,22 +135,16 @@ class JsonService {
 	/**
 	 * Build compare items: Local JSON first, then overlay database posts.
 	 */
-	private static function query_json( string $post_type, array $params ): array {
+	private static function query_json( string $post_type ): array {
 		$items = self::items_from_files( $post_type );
 
-		if ( isset( $params['post_id'] ) ) {
-			$params['post__in'] = [ $params['post_id'] ];
-		}
-		$params['post_type'] = $post_type;
-
-		foreach ( self::get_meta_boxes( $params ) as $meta_box ) {
+		foreach ( self::get_meta_boxes( [ 'post_type' => $post_type ] ) as $meta_box ) {
 			if ( empty( $meta_box['id'] ) ) {
 				continue;
 			}
 
-			$id        = $meta_box['id'];
-			$post_id   = $meta_box['post_id'];
-			$post_type = $meta_box['post_type'];
+			$id      = $meta_box['id'];
+			$post_id = $meta_box['post_id'];
 			unset( $meta_box['post_id'], $meta_box['post_type'] );
 
 			if ( ! isset( $items[ $id ] ) ) {
@@ -181,12 +181,19 @@ class JsonService {
 	}
 
 	/**
+	 * Build compare/sync items from Local JSON files for a post type.
+	 *
 	 * @return array<string, array> Items keyed by JSON id.
 	 */
 	private static function items_from_files( string $post_type ): array {
 		$items = [];
 
 		foreach ( self::get_unparsed( $post_type ) as $item ) {
+			// Hide from Sync UI; registers still load these via get_unparsed().
+			if ( ! empty( $item['raw']['private'] ) ) {
+				continue;
+			}
+
 			$minimal = $item['minimal'];
 			if ( empty( $minimal['id'] ) ) {
 				continue;
@@ -212,6 +219,8 @@ class JsonService {
 	}
 
 	/**
+	 * HTML diff between database and Local JSON payloads.
+	 *
 	 * @param array|null $left  Database (remote) side.
 	 * @param array|null $right Local JSON side.
 	 */
@@ -230,7 +239,7 @@ class JsonService {
 	private static function filter_items( array $items, array $params ): array {
 		if ( isset( $params['id'] ) ) {
 			$items = array_filter( $items, function ( $item ) use ( $params ) {
-				return $item['id'] == $params['id'];
+				return $item['id'] === $params['id'];
 			} );
 		}
 
@@ -240,7 +249,7 @@ class JsonService {
 			}
 
 			$items = array_filter( $items, function ( $item ) use ( $key, $params ) {
-				return isset( $item[ $key ] ) && $item[ $key ] == $params[ $key ];
+				return isset( $item[ $key ] ) && $item[ $key ] === $params[ $key ];
 			} );
 		}
 
@@ -248,7 +257,9 @@ class JsonService {
 	}
 
 	/**
-	 * @return string[] Meta keys that hold the registered object for this post type.
+	 * Meta keys that hold the registered object for this post type.
+	 *
+	 * @return string[]
 	 */
 	private static function get_related_meta_keys( string $post_type ): array {
 		$meta_keys = [
@@ -288,7 +299,7 @@ class JsonService {
 
 			$post_data['settings'] = (array) get_post_meta( $post->ID, 'settings', true );
 
-			$unparser  = new MetaBox( $post_data );
+			$unparser = new MetaBox( $post_data );
 			$unparser->unparse();
 			$post_data = $format === 'minimal' ? $unparser->to_minimal_format() : $unparser->get_settings();
 
@@ -303,6 +314,8 @@ class JsonService {
 	}
 
 	/**
+	 * Absolute paths of all Local JSON files.
+	 *
 	 * @return string[]
 	 */
 	public static function get_files(): array {
@@ -315,6 +328,8 @@ class JsonService {
 	}
 
 	/**
+	 * Writable directories that hold Local JSON files.
+	 *
 	 * @return string[]
 	 */
 	public static function get_paths(): array {
