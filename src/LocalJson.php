@@ -23,7 +23,9 @@ class LocalJson {
 
 	public function __construct() {
 		add_action( 'mbb_after_save', [ $this, 'generate_local_json' ], 10, 3 );
-		new Template();
+		if ( is_admin() ) {
+			new Template();
+		}
 	}
 
 	public static function is_supported( string $post_type ): bool {
@@ -71,6 +73,11 @@ class LocalJson {
 		return is_array( $json ) ? $json : [];
 	}
 
+	/**
+	 * Write encoded JSON to disk.
+	 *
+	 * @return int|false Bytes written, or false on failure.
+	 */
 	private static function write_file( string $file_path, array $data ) {
 		// Create the directory first: a missing one is never writable.
 		$dir = dirname( $file_path );
