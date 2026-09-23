@@ -84,9 +84,7 @@ class LocalJson {
 
 		$output = wp_json_encode( $data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT );
 
-		$result = @file_put_contents( $file_path, $output );
-
-		return $result;
+		return @file_put_contents( $file_path, $output );
 	}
 
 	public static function import_many( array $json ): void {

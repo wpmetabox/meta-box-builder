@@ -68,7 +68,7 @@ class Register {
 	}
 	// phpcs:enable
 
-	public function register_settings_pages( $settings_pages ) {
+	public function register_settings_pages( $settings_pages ): array {
 		$pages = LocalJson::is_enabled()
 			? $this->get_json_settings_pages()
 			: $this->get_database_settings_pages();

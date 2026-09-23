@@ -239,7 +239,8 @@ class JsonService {
 	private static function filter_items( array $items, array $params ): array {
 		if ( isset( $params['id'] ) ) {
 			$items = array_filter( $items, function ( $item ) use ( $params ) {
-				return $item['id'] === $params['id'];
+				// Loose compare: REST/URL params are strings; item post_id/is_newer are ints.
+				return $item['id'] == $params['id']; // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual
 			} );
 		}
 
@@ -249,7 +250,8 @@ class JsonService {
 			}
 
 			$items = array_filter( $items, function ( $item ) use ( $key, $params ) {
-				return isset( $item[ $key ] ) && $item[ $key ] === $params[ $key ];
+				// phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual -- See id filter above.
+				return isset( $item[ $key ] ) && $item[ $key ] == $params[ $key ];
 			} );
 		}
 

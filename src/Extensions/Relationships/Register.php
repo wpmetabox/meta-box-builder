@@ -67,7 +67,7 @@ class Register {
 		register_post_type( 'mb-relationship', $args );
 	}
 
-	public function register_relationships() {
+	public function register_relationships(): void {
 		$relationships = LocalJson::is_enabled()
 			? $this->get_json_relationships()
 			: $this->get_database_relationships();
