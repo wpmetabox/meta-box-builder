@@ -42,6 +42,7 @@ class ModelField {
 						'radio_list'      => __( 'Radio list', 'meta-box-builder' ),
 					],
 				], 'select_advanced' ),
+				'add_new',
 				'multiple',
 				Control::KeyValue( 'query_args', [
 					'label'       => __( 'Query args', 'meta-box-builder' ),
