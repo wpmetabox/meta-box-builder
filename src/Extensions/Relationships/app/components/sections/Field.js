@@ -46,6 +46,17 @@ const Field = ( { id } ) => {
 				defaultValue={ getSetting( `${ id }.field.placeholder` ) }
 				updateField={ updateSetting }
 			/>
+			{
+				getSetting( `${ id }.object_type`, 'post' ) === 'model' && (
+					<Input
+						name={ `${ id }.field.item_title` }
+						label={ __( 'Item title', 'meta-box-builder' ) }
+						description={ __( 'Column name or template, e.g. {email} — {amount}', 'meta-box-builder' ) }
+						defaultValue={ getSetting( `${ id }.field.item_title` ) }
+						updateField={ updateSetting }
+					/>
+				)
+			}
 			<Checkbox
 				name={ `${ id }.field.add_new` }
 				label={ __( 'Add new', 'meta-box-builder' ) }
