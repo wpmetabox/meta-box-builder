@@ -39,6 +39,17 @@ const General = ( { id } ) => {
 					/>
 				)
 			}
+			{
+				getSetting( `${ id }.object_type` ) === 'model' && (
+					<Select
+						name={ `${ id }.model` }
+						label={ __( 'Model', 'meta-box-builder' ) }
+						options={ MbbApp.models || {} }
+						defaultValue={ getSetting( `${ id }.model` ) }
+						updateField={ updateSetting }
+					/>
+				)
+			}
 			<Checkbox
 				name={ `${ id }.has_one_relationship` }
 				label={ __( 'Has one relationship', 'meta-box-builder' ) }

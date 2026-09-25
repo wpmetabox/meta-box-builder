@@ -53,6 +53,7 @@ const builtInFieldTypes = [
 	'link',
 	'map',
 	'media',
+	'model',
 	'multiple_values',
 	'number',
 	'object_choice',

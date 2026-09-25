@@ -26,6 +26,10 @@ class Relationship extends Base {
 			unset( $settings['post_type'] );
 			unset( $settings['taxonomy'] );
 		}
+		if ( 'model' === $object_type ) {
+			unset( $settings['post_type'] );
+			unset( $settings['taxonomy'] );
+		}
 
 		if ( empty( $settings['empty_message'] ) ) {
 			unset( $settings['empty_message'] );
