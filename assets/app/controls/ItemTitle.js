@@ -3,18 +3,13 @@ import useModelSchema from '../hooks/useModelSchema';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
-const SUPPORT_COLUMNS = [ 'author', 'published_date', 'modified_date' ];
-
 const getColumnNames = model => {
 	if ( !model ) {
 		return [];
 	}
 
 	const supports = Array.isArray( model.supports ) ? model.supports : [];
-	const defaults = [
-		'ID',
-		...SUPPORT_COLUMNS.filter( col => supports.includes( col ) ),
-	];
+	const defaults = [ 'ID', ...supports ];
 	const custom = ( model.column_names || [] ).filter( col => !defaults.includes( col ) );
 
 	return [ ...defaults, ...custom ];
