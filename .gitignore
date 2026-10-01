@@ -11,3 +11,5 @@ node_modules
 src/Extensions/Relationships/build/relationships.js.map
 src/Extensions/SettingsPage/build/settings-page.js.map
 .pnpm-store
+
+.phpunit.cache/
