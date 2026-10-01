@@ -198,15 +198,48 @@ class Data {
 		}
 
 		return [
-			'name'       => $name,
-			'label'      => $model->labels['singular_name'] ?? $model->labels['name'] ?? $name,
-			'table'      => $model->table,
-			'columns'    => $columns,
-			'db_columns' => [],
-			'keys'       => $keys,
-			'supports'   => TableColumns::supports_for( $name ),
-			'post_id'    => $post_id,
+			'name'         => $name,
+			'label'        => $model->labels['singular_name'] ?? $model->labels['name'] ?? $name,
+			'table'        => $model->table,
+			'columns'      => $columns,
+			'column_names' => self::column_names( $columns ),
+			'db_columns'   => [],
+			'keys'         => $keys,
+			'supports'     => TableColumns::supports_for( $name ),
+			'post_id'      => $post_id,
 		];
+	}
+
+	/**
+	 * Flatten column definitions to a list of column names.
+	 *
+	 * Accepts editor items (list of {name}), name => type maps, or a list of names.
+	 *
+	 * @param array $columns Column definitions.
+	 * @return list<string>
+	 */
+	public static function column_names( array $columns ): array {
+		if ( ! $columns ) {
+			return [];
+		}
+
+		// List of editor items or names (0-based keys).
+		if ( is_int( array_key_first( $columns ) ) ) {
+			$names = [];
+			foreach ( $columns as $item ) {
+				if ( is_string( $item ) ) {
+					$names[] = $item;
+					continue;
+				}
+				if ( is_array( $item ) && ! empty( $item['name'] ) ) {
+					$names[] = (string) $item['name'];
+				}
+			}
+			return array_values( array_unique( $names ) );
+		}
+
+		// Associative map: name => type (or name => anything).
+		return array_values( array_map( 'strval', array_keys( $columns ) ) );
 	}
 
 	public static function is_extension_active( $extension ) {

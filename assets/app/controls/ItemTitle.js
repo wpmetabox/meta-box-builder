@@ -5,23 +5,6 @@ import FieldInserter from './FieldInserter';
 
 const SUPPORT_COLUMNS = [ 'author', 'published_date', 'modified_date' ];
 
-const getCustomColumnNames = model => {
-	if ( !model ) {
-		return [];
-	}
-
-	const hasColumns = Array.isArray( model.columns )
-		? model.columns.length > 0
-		: model.columns && Object.keys( model.columns ).length > 0;
-	const source = hasColumns ? model.columns : ( model.db_columns || {} );
-
-	if ( Array.isArray( source ) ) {
-		return source.map( item => item?.name ).filter( Boolean );
-	}
-
-	return Object.keys( source );
-};
-
 const getColumnNames = model => {
 	if ( !model ) {
 		return [];
@@ -32,7 +15,7 @@ const getColumnNames = model => {
 		'ID',
 		...SUPPORT_COLUMNS.filter( col => supports.includes( col ) ),
 	];
-	const custom = getCustomColumnNames( model ).filter( col => !defaults.includes( col ) );
+	const custom = ( model.column_names || [] ).filter( col => !defaults.includes( col ) );
 
 	return [ ...defaults, ...custom ];
 };
