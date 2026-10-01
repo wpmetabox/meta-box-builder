@@ -8,7 +8,12 @@ $baseDir = dirname($vendorDir);
 return array(
     'eLightUp\\' => array($vendorDir . '/elightup/twig'),
     'Riimu\\Kit\\PHPEncoder\\' => array($vendorDir . '/riimu/kit-phpencoder/src'),
+    'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
+    'Opis\\Uri\\' => array($vendorDir . '/opis/uri/src'),
+    'Opis\\String\\' => array($vendorDir . '/opis/string/src'),
+    'Opis\\JsonSchema\\' => array($vendorDir . '/opis/json-schema/src'),
     'MetaBox\\Support\\' => array($vendorDir . '/wpmetabox/support'),
     'MBB\\' => array($baseDir . '/src'),
     'MBBParser\\' => array($vendorDir . '/wpmetabox/mbb-parser/src'),
+    'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
 );

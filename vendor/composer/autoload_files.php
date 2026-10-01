@@ -6,9 +6,11 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    '6124b4c8570aa390c21fafd04a26c69f' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
     'a5c46146abbe604d5c1093a7f3da03bd' => $vendorDir . '/elightup/twig/src/deprecation-contracts.php',
     '8b498914ceeb1108203e7c7885f7bba3' => $vendorDir . '/elightup/twig/Symfony/Polyfill/Ctype/bootstrap.php',
     '730a5433db5cc4599c79c4eb3c61d9b6' => $vendorDir . '/elightup/twig/Symfony/Polyfill/Mbstring/bootstrap.php',
     '7c1a54178937151a8c6b81415aef6d0e' => $vendorDir . '/elightup/twig/Symfony/Polyfill/Php80/bootstrap.php',
     '7a7f251a7840ae3e0424fbb9fde67f81' => $vendorDir . '/elightup/twig/Symfony/Polyfill/Php81/bootstrap.php',
+    'ec07570ca5a812141189b1fa81503674' => $vendorDir . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
 );
