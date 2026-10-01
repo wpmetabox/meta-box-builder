@@ -5,16 +5,6 @@ import FieldInserter from './FieldInserter';
 
 const SUPPORT_COLUMNS = [ 'author', 'published_date', 'modified_date' ];
 
-const getModels = storeModels => {
-	if ( Array.isArray( storeModels ) && storeModels.length ) {
-		return storeModels;
-	}
-	if ( Array.isArray( MbbApp.model_list ) ) {
-		return MbbApp.model_list;
-	}
-	return Array.isArray( MbbApp.models ) ? MbbApp.models : [];
-};
-
 const getCustomColumnNames = model => {
 	if ( !model ) {
 		return [];
@@ -48,9 +38,9 @@ const getColumnNames = model => {
 };
 
 const ItemTitle = ( { name, componentId, field, updateField, model: modelNameProp, defaultValue, ...rest } ) => {
-	const storeModels = useModelSchema( state => state.models );
+	const models = useModelSchema( state => state.models );
 	const modelName = modelNameProp ?? field?.model ?? '';
-	const model = getModels( storeModels ).find( m => m.name === modelName );
+	const model = models.find( m => m.name === modelName );
 	const items = getColumnNames( model ).map( col => [ col, col ] );
 
 	const settingKey = name && !String( name ).includes( '[' ) ? name : 'item_title';

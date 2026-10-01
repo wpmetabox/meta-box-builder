@@ -59,8 +59,7 @@ class Edit extends BaseEditPage {
 		];
 
 		if ( Data::is_extension_active( 'mb-custom-table' ) ) {
-			$data['models']     = $this->get_models();
-			$data['model_list'] = Data::get_models();
+			$data['models'] = Data::get_models();
 		}
 
 		wp_localize_script( 'mb-relationships-app', 'MbbApp', $data );
@@ -80,16 +79,6 @@ class Edit extends BaseEditPage {
 		$options    = [];
 		foreach ( $taxonomies as $taxonomy ) {
 			$options[ $taxonomy['slug'] ] = sprintf( '%s (%s)', $taxonomy['name'], $taxonomy['slug'] );
-		}
-		return $options;
-	}
-
-	private function get_models(): array {
-		$options = [];
-		foreach ( Data::get_models() as $model ) {
-			$name             = $model['name'] ?? '';
-			$label            = $model['label'] ?? $name;
-			$options[ $name ] = sprintf( '%s (%s)', $label, $name );
 		}
 		return $options;
 	}
