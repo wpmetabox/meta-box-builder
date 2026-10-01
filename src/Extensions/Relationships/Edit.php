@@ -59,7 +59,8 @@ class Edit extends BaseEditPage {
 		];
 
 		if ( Data::is_extension_active( 'mb-custom-table' ) ) {
-			$data['models'] = $this->get_models();
+			$data['models']     = $this->get_models();
+			$data['model_list'] = Data::get_models();
 		}
 
 		wp_localize_script( 'mb-relationships-app', 'MbbApp', $data );

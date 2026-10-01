@@ -196,6 +196,15 @@ class Data {
 			$columns = $model->columns;
 		}
 
+		$support_features = [ 'author', 'published_date', 'modified_date' ];
+		$supports         = [];
+		if ( isset( $cached['supports'] ) && is_array( $cached['supports'] ) ) {
+			$supports = $cached['supports'];
+		} elseif ( isset( $model->supports ) && is_array( $model->supports ) ) {
+			$supports = $model->supports;
+		}
+		$supports = array_values( array_intersect( $support_features, $supports ) );
+
 		return [
 			'name'       => $name,
 			'label'      => $model->labels['singular_name'] ?? $model->labels['name'] ?? $name,
@@ -203,6 +212,7 @@ class Data {
 			'columns'    => $columns,
 			'db_columns' => [],
 			'keys'       => $keys,
+			'supports'   => $supports,
 			'post_id'    => $post_id,
 		];
 	}

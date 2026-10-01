@@ -3,6 +3,7 @@ import { RawHTML } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import Checkbox from "../../../../../../assets/app/controls/Checkbox";
 import Input from "../../../../../../assets/app/controls/Input";
+import ItemTitle from "../../../../../../assets/app/controls/ItemTitle";
 import KeyValue from "../../../../../../assets/app/controls/KeyValue";
 import Textarea from "../../../../../../assets/app/controls/Textarea";
 import useSettings from "../../../../../../assets/app/hooks/useSettings";
@@ -48,12 +49,14 @@ const Field = ( { id } ) => {
 			/>
 			{
 				getSetting( `${ id }.object_type`, 'post' ) === 'model' && (
-					<Input
-						name={ `${ id }.field.item_title` }
+					<ItemTitle
+						name="item_title"
+						componentId={ `${ id }-field-item_title` }
 						label={ __( 'Item title', 'meta-box-builder' ) }
-						description={ __( 'Column name or template, e.g. {email} — {amount}', 'meta-box-builder' ) }
+						tooltip={ __( 'Click … to insert a column, or type a template like {email} — {amount}', 'meta-box-builder' ) }
+						model={ getSetting( `${ id }.model` ) }
 						defaultValue={ getSetting( `${ id }.field.item_title` ) }
-						updateField={ updateSetting }
+						updateField={ ( key, value ) => updateSetting( `${ id }.field.${ key }`, value ) }
 					/>
 				)
 			}
