@@ -29,7 +29,7 @@ class ModelField {
 				'id',
 				Control::Select( 'model', [
 					'label'   => __( 'Model', 'meta-box-builder' ),
-					'options' => $this->get_model_options(),
+					'options' => Data::get_model_options(),
 				] ),
 				Control::ItemTitle( 'item_title', [
 					'label' => __( 'Item title', 'meta-box-builder' ),
@@ -71,15 +71,5 @@ class ModelField {
 		];
 
 		return $field_types;
-	}
-
-	private function get_model_options(): array {
-		$options = [];
-		foreach ( Data::get_models() as $model ) {
-			$name             = $model['name'] ?? '';
-			$label            = $model['label'] ?? $name;
-			$options[ $name ] = sprintf( '%s (%s)', $label, $name );
-		}
-		return $options;
 	}
 }

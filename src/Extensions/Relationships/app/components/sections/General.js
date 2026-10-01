@@ -44,7 +44,7 @@ const General = ( { id } ) => {
 					<Select
 						name={ `${ id }.model` }
 						label={ __( 'Model', 'meta-box-builder' ) }
-						options={ Object.fromEntries( ( MbbApp.models || [] ).map( m => [ m.name, `${ m.label } (${ m.name })` ] ) ) }
+						options={ MbbApp.modelOptions || {} }
 						defaultValue={ getSetting( `${ id }.model` ) }
 						updateField={ updateSetting }
 					/>
