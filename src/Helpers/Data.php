@@ -164,7 +164,9 @@ class Data {
 	}
 
 	/**
-	 * Build the editor payload for one registered model (no database inspect).
+	 * Build the editor payload for one registered model.
+	 *
+	 * Prefers Factory + mbb_models cache; does not DESCRIBE the database table.
 	 *
 	 * @param string                    $name  Model slug.
 	 * @param object|null               $model Factory model instance.
