@@ -53,10 +53,7 @@ class ModelField {
 						'order' => [ 'ASC', 'DESC' ],
 					],
 				] ),
-				Control::Toggle( 'select_all_none', [
-					'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
-					'dependency' => 'multiple:true',
-				], false, 'appearance' ),
+				'select_all_none',
 				'label_description',
 				'desc',
 				'placeholder',
