@@ -53,7 +53,6 @@ const builtInFieldTypes = [
 	'link',
 	'map',
 	'media',
-	'model',
 	'multiple_values',
 	'number',
 	'object_choice',
@@ -85,6 +84,7 @@ const builtInFieldTypes = [
 	// Premium field types.
 	'group',
 	'tab',
+	'model',
 ];
 
 const FieldPreview = ( { field: f, parent = '', ...fieldActions } ) => {
