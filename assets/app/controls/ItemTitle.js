@@ -1,5 +1,6 @@
 import { __ } from "@wordpress/i18n";
 import useModelSchema from '../hooks/useModelSchema';
+import { getColumnNames as columnNamesFromMap } from '../utils/modelColumns';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
@@ -10,7 +11,10 @@ const getColumnNames = model => {
 
 	const supports = Array.isArray( model.supports ) ? model.supports : [];
 	const defaults = [ 'ID', ...supports ];
-	const custom = ( model.column_names || [] ).filter( col => !defaults.includes( col ) );
+	const named = model.column_names?.length
+		? model.column_names
+		: columnNamesFromMap( model.columns || model.db_columns || {} );
+	const custom = named.filter( col => !defaults.includes( col ) );
 
 	return [ ...defaults, ...custom ];
 };

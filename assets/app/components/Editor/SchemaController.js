@@ -15,13 +15,16 @@ const SchemaController = () => {
 	const setModels = useModelSchema( state => state.setModels );
 
 	const onSchemaSaved = updatedModel => {
-		const dbColumns = updatedModel.db_columns || updatedModel.columns || {};
+		const dbColumns = Object.keys( updatedModel.db_columns || {} ).length
+			? updatedModel.db_columns
+			: ( updatedModel.columns || {} );
+		const columnNames = getColumnNames( dbColumns );
 		const withDb = {
 			...updatedModel,
 			db_columns: dbColumns,
-			column_names: updatedModel.column_names?.length
-				? updatedModel.column_names
-				: getColumnNames( dbColumns ),
+			column_names: columnNames.length
+				? columnNames
+				: ( updatedModel.column_names || [] ),
 		};
 		const exists = models.some( model => model.name === withDb.name );
 		setModels(
