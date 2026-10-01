@@ -52,7 +52,6 @@ const Field = ( { id } ) => {
 					<ItemTitle
 						componentId={ `${ id }-field-item_title` }
 						label={ __( 'Item title', 'meta-box-builder' ) }
-						tooltip={ __( 'Click … to insert a column, or type a template like {email} — {amount}', 'meta-box-builder' ) }
 						model={ getSetting( `${ id }.model` ) }
 						defaultValue={ getSetting( `${ id }.field.item_title` ) }
 						updateField={ ( _key, value ) => updateSetting( `${ id }.field.item_title`, value ) }

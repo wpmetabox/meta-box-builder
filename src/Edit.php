@@ -110,7 +110,8 @@ class Edit extends BaseEditPage {
 			'assetsBaseUrl'   => MBB_URL . 'assets',
 
 			'texts'           => [
-				'saving' => __( 'Saving...', 'meta-box-builder' ),
+				'saving'             => __( 'Saving...', 'meta-box-builder' ),
+				'item_title_tooltip' => __( 'Click … to insert a column, or type a template like {email} — {amount}', 'meta-box-builder' ),
 			],
 		];
 

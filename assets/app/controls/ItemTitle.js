@@ -20,7 +20,15 @@ const getColumnNames = model => {
 	return [ ...defaults, ...custom ];
 };
 
-const ItemTitle = ( { componentId, field, updateField, model: modelNameProp, defaultValue = '', ...rest } ) => {
+const ItemTitle = ( {
+	componentId,
+	field,
+	updateField,
+	model: modelNameProp,
+	defaultValue = '',
+	tooltip = MbbApp.texts?.item_title_tooltip,
+	...rest
+} ) => {
 	const models = useModelSchema( state => state.models );
 	const modelName = modelNameProp ?? field?.model ?? '';
 	const model = models.find( m => m.name === modelName );
@@ -36,7 +44,7 @@ const ItemTitle = ( { componentId, field, updateField, model: modelNameProp, def
 	};
 
 	return (
-		<DivRow className="og-item-title" htmlFor={ componentId } { ...rest }>
+		<DivRow className="og-item-title" htmlFor={ componentId } tooltip={ tooltip } { ...rest }>
 			<FieldInserter
 				id={ componentId }
 				defaultValue={ defaultValue }
