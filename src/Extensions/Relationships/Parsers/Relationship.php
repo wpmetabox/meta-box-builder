@@ -22,9 +22,11 @@ class Relationship extends Base {
 		if ( 'term' === $object_type ) {
 			unset( $settings['post_type'] );
 		}
-		if ( 'user' === $object_type ) {
-			unset( $settings['post_type'] );
-			unset( $settings['taxonomy'] );
+		if ( in_array( $object_type, [ 'user', 'model' ], true ) ) {
+			unset( $settings['post_type'], $settings['taxonomy'] );
+		}
+		if ( 'model' !== $object_type ) {
+			unset( $settings['model'] );
 		}
 
 		if ( empty( $settings['empty_message'] ) ) {

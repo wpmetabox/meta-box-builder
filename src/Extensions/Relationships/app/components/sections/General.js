@@ -29,12 +29,23 @@ const General = ( { id } ) => {
 				)
 			}
 			{
-				getSetting( `${ id }.object_type` ) === 'term' && (
+				getSetting( `${ id }.object_type`, 'post' ) === 'term' && (
 					<Select
 						name={ `${ id }.taxonomy` }
 						label={ __( 'Taxonomy', 'meta-box-builder' ) }
 						options={ MbbApp.taxonomies }
 						defaultValue={ getSetting( `${ id }.taxonomy`, 'category' ) }
+						updateField={ updateSetting }
+					/>
+				)
+			}
+			{
+				getSetting( `${ id }.object_type`, 'post' ) === 'model' && (
+					<Select
+						name={ `${ id }.model` }
+						label={ __( 'Model', 'meta-box-builder' ) }
+						options={ MbbApp.modelOptions || {} }
+						defaultValue={ getSetting( `${ id }.model` ) }
 						updateField={ updateSetting }
 					/>
 				)

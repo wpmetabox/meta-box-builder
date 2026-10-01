@@ -60,6 +60,9 @@ const FieldInserter = ( { items = [], required = false, className = '', isID = f
 
 	const handleSelect = ( e, onToggle ) => {
 		onToggle();
+		if ( selection && ref.current ) {
+			[ ref.current.selectionStart, ref.current.selectionEnd ] = selection;
+		}
 		if ( onSelect ) {
 			onSelect( ref, e.target.dataset.value );
 		} else {
@@ -80,7 +83,17 @@ const FieldInserter = ( { items = [], required = false, className = '', isID = f
 				items.length > 0 && <Dropdown
 					className="og-dropdown"
 					placement="bottom left"
-					renderToggle={ ( { onToggle } ) => <Button icon="ellipsis" onClick={ onToggle } /> }
+					renderToggle={ ( { onToggle } ) => (
+						<Button
+							icon="ellipsis"
+							onMouseDown={ () => {
+								if ( ref.current ) {
+									setSelection( [ ref.current.selectionStart, ref.current.selectionEnd ] );
+								}
+							} }
+							onClick={ onToggle }
+						/>
+					) }
 					renderContent={ ( { onToggle } ) => <DropdownInserter items={ items } onSelect={ e => handleSelect( e, onToggle ) } /> }
 				/>
 			}

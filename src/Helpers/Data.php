@@ -2,6 +2,7 @@
 namespace MBB\Helpers;
 
 use MBB\Extensions\CustomModel\Register;
+use MBB\Extensions\CustomModel\TableColumns;
 use MetaBox\CustomTable\Model\Factory;
 use MetaBox\Support\Data as DataHelper;
 use WP_Block_Type_Registry;
@@ -163,7 +164,25 @@ class Data {
 	}
 
 	/**
-	 * Build the editor payload for one registered model (no database inspect).
+	 * Model choices for select controls: name => "Label (name)".
+	 *
+	 * @param array|null $models Optional preloaded list from get_models().
+	 * @return array<string, string>
+	 */
+	public static function get_model_options( ?array $models = null ): array {
+		$options = [];
+		foreach ( $models ?? self::get_models() as $model ) {
+			$name             = $model['name'] ?? '';
+			$label            = $model['label'] ?? $name;
+			$options[ $name ] = sprintf( '%s (%s)', $label, $name );
+		}
+		return $options;
+	}
+
+	/**
+	 * Build the editor payload for one registered model.
+	 *
+	 * Prefers Factory + mbb_models cache; does not DESCRIBE the database table.
 	 *
 	 * @param string                    $name  Model slug.
 	 * @param object|null               $model Factory model instance.
@@ -197,14 +216,48 @@ class Data {
 		}
 
 		return [
-			'name'       => $name,
-			'label'      => $model->labels['singular_name'] ?? $model->labels['name'] ?? $name,
-			'table'      => $model->table,
-			'columns'    => $columns,
-			'db_columns' => [],
-			'keys'       => $keys,
-			'post_id'    => $post_id,
+			'name'         => $name,
+			'label'        => $model->labels['singular_name'] ?? $model->labels['name'] ?? $name,
+			'table'        => $model->table,
+			'columns'      => $columns,
+			'column_names' => self::column_names( $columns ),
+			'db_columns'   => [],
+			'keys'         => $keys,
+			'supports'     => TableColumns::supports_for( $name ),
+			'post_id'      => $post_id,
 		];
+	}
+
+	/**
+	 * Flatten column definitions to a list of column names.
+	 *
+	 * Accepts editor items (list of {name}), name => type maps, or a list of names.
+	 *
+	 * @param array $columns Column definitions.
+	 * @return list<string>
+	 */
+	public static function column_names( array $columns ): array {
+		if ( ! $columns ) {
+			return [];
+		}
+
+		// List of editor items or names (0-based keys).
+		if ( is_int( array_key_first( $columns ) ) ) {
+			$names = [];
+			foreach ( $columns as $item ) {
+				if ( is_string( $item ) ) {
+					$names[] = $item;
+					continue;
+				}
+				if ( is_array( $item ) && ! empty( $item['name'] ) ) {
+					$names[] = (string) $item['name'];
+				}
+			}
+			return array_values( array_unique( $names ) );
+		}
+
+		// Associative map: name => type (or name => anything).
+		return array_values( array_map( 'strval', array_keys( $columns ) ) );
 	}
 
 	public static function is_extension_active( $extension ) {

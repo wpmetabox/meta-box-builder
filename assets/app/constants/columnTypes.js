@@ -101,7 +101,7 @@ const VARCHAR_FIELD_TYPES = [
 	'url',
 ];
 
-const BIGINT_FIELD_TYPES = [ 'post', 'single_image', 'taxonomy_advanced', 'user' ];
+const BIGINT_FIELD_TYPES = [ 'model', 'post', 'single_image', 'taxonomy_advanced', 'user' ];
 
 const isIntegerStep = step => {
 	if ( ! step ) {

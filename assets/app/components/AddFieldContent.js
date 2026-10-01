@@ -63,16 +63,18 @@ const FieldButton = ( { type, field, onSelect, addField } ) => {
 
 	return field.disabled
 		? <Tooltip delay={ 0 } text={
-			<UpgradeText
-				text={ __( 'This field type is available in Meta Box AIO only.', 'meta-box-builder' ) }
-				utm_source="add_field"
-				utm_medium={ type }
-			/>
+			field.disabled_text
+				? field.disabled_text
+				: <UpgradeText
+					text={ __( 'This field type is available in Meta Box AIO only.', 'meta-box-builder' ) }
+					utm_source="add_field"
+					utm_medium={ type }
+				/>
 		}>
 			<Button
 				icon={ getFieldIcon( type ) }
 				className="mb-add-field__disabled"
-				text={ `${ field.title } (${ __( 'Premium', 'meta-box-builder' ) })` }
+				text={ `${ field.title } (${ field.disabled_label || __( 'Premium', 'meta-box-builder' ) })` }
 			/>
 		</Tooltip>
 		: <Button icon={ getFieldIcon( type ) } onClick={ handleClick } text={ field.title } />;

@@ -1,0 +1,21 @@
+{
+    "$schema": "https://schemas.metabox.io/field-group.json",
+    "id": "model-field-test",
+    "title": "Model Field Test",
+    "fields": [
+        {
+            "name": "Related item",
+            "id": "related_item",
+            "type": "model",
+            "model": "transaction",
+            "item_title": "{transaction_id} — {amount}",
+            "field_type": "select_advanced",
+            "query_args": {
+                "limit": "20",
+                "orderby": "ID",
+                "order": "DESC"
+            }
+        }
+    ],
+    "modified": 1759320000
+}
