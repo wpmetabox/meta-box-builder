@@ -58,9 +58,11 @@ const ItemTitle = ( { name, componentId, field, updateField, model: modelNamePro
 
 	const handleChange = ( inputRef, next ) => updateField( settingKey, next );
 
-	const handleSelectItem = ( inputRef, col ) => {
-		inputRef.current.value += `{${ col }}`;
-		updateField( settingKey, inputRef.current.value );
+	const handleSelectItem = ( { current: input }, col ) => {
+		const start = input.selectionStart;
+		input.value = input.value.slice( 0, start ) + `{${ col }}` + input.value.slice( input.selectionEnd );
+		input.selectionStart = input.selectionEnd = start + col.length + 2;
+		updateField( settingKey, input.value );
 	};
 
 	return (
