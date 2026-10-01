@@ -65,9 +65,15 @@ const FieldInserter = ( { items = [], required = false, className = '', isID = f
 		}
 		if ( onSelect ) {
 			onSelect( ref, e.target.dataset.value );
-		} else {
-			ref.current.value = !isID || exclude.includes( e.target.dataset.value ) ? e.target.dataset.value : `${ getPrefix() || '' }${ e.target.dataset.value }`;
+			return;
 		}
+
+		const value = !isID || exclude.includes( e.target.dataset.value ) ? e.target.dataset.value : `${ getPrefix() || '' }${ e.target.dataset.value }`;
+		ref.current.value = value;
+		const end = value.length;
+		ref.current.selectionStart = ref.current.selectionEnd = end;
+		setSelection( [ end, end ] );
+		onChange && onChange( ref, value );
 	};
 
 	useLayoutEffect( () => {
