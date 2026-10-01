@@ -3,27 +3,40 @@ import { createColumnItem, suggestColumnType } from '../constants/columnTypes';
 
 /**
  * Column names from a model schema or database map.
- * Supports parsed `{ name: sqlType }`, editor `{ id: { name } }`, and list shapes.
+ * Mirrors Data::column_names(): list shapes use values, assoc maps use keys.
  */
 export const getColumnNames = columns => {
 	if ( ! columns || typeof columns !== 'object' ) {
 		return [];
 	}
 
-	const values = Object.values( columns );
-	if ( ! values.length ) {
+	const keys = Object.keys( columns );
+	if ( ! keys.length ) {
 		return [];
 	}
 
-	if ( typeof values[ 0 ] === 'string' ) {
-		return values.filter( Boolean );
+	// List (0-based keys): names or editor items — same as PHP is_int( array_key_first() ).
+	const isList = Array.isArray( columns ) || keys.every( key => /^\d+$/.test( key ) );
+	if ( isList ) {
+		return Object.values( columns ).flatMap( item => {
+			if ( typeof item === 'string' ) {
+				return item ? [ item ] : [];
+			}
+			if ( item && typeof item === 'object' && item.name ) {
+				return [ item.name ];
+			}
+			return [];
+		} );
 	}
 
+	// Editor map: id => { name, ... }.
+	const values = Object.values( columns );
 	if ( values[ 0 ] && typeof values[ 0 ] === 'object' && 'name' in values[ 0 ] ) {
 		return values.map( column => column.name ).filter( Boolean );
 	}
 
-	return Object.keys( columns );
+	// Assoc map: name => sqlType (db_columns from SHOW COLUMNS).
+	return keys;
 };
 
 /**
