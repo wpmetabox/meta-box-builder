@@ -29,7 +29,7 @@ const General = ( { id } ) => {
 				)
 			}
 			{
-				getSetting( `${ id }.object_type` ) === 'term' && (
+				getSetting( `${ id }.object_type`, 'post' ) === 'term' && (
 					<Select
 						name={ `${ id }.taxonomy` }
 						label={ __( 'Taxonomy', 'meta-box-builder' ) }
@@ -40,7 +40,7 @@ const General = ( { id } ) => {
 				)
 			}
 			{
-				getSetting( `${ id }.object_type` ) === 'model' && (
+				getSetting( `${ id }.object_type`, 'post' ) === 'model' && (
 					<Select
 						name={ `${ id }.model` }
 						label={ __( 'Model', 'meta-box-builder' ) }
