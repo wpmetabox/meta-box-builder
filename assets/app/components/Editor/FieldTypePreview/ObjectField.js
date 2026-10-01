@@ -6,7 +6,7 @@ import { ucwords } from "../../../functions";
 const lazyObjectFieldCache = new Map();
 const getLazyObjectField = type => {
 	if ( !lazyObjectFieldCache.has( type ) ) {
-		lazyObjectFieldCache.set( type, lazy( () => import( `./Object/${ ucwords( type, '_', '' ) }` ) ) );
+		lazyObjectFieldCache.set( type, lazy( () => import( `./${ ucwords( type, '_', '' ) }` ) ) );
 	}
 	return lazyObjectFieldCache.get( type );
 };

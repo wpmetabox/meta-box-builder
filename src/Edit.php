@@ -82,7 +82,6 @@ class Edit extends BaseEditPage {
 			'taxonomies'      => Data::get_taxonomies(),
 			'settingsPages'   => Data::get_setting_pages(),
 			'models'          => $models,
-			'modelOptions'    => Data::get_model_options( $models ),
 			'templates'       => Data::get_templates(),
 			'icons'           => DataHelper::get_dashicons(),
 			'tablePrefix'     => $wpdb->prefix,
@@ -113,8 +112,7 @@ class Edit extends BaseEditPage {
 			'assetsBaseUrl'   => MBB_URL . 'assets',
 
 			'texts'           => [
-				'saving'             => __( 'Saving...', 'meta-box-builder' ),
-				'item_title_tooltip' => __( 'Click … to insert a column, or type a template like {email} — {amount}', 'meta-box-builder' ),
+				'saving' => __( 'Saving...', 'meta-box-builder' ),
 			],
 		];
 

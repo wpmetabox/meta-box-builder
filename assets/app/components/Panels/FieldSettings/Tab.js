@@ -82,8 +82,8 @@ const getControlSettings = control => {
 	if ( control.name === 'InputGroup' ) {
 		return [ control.props.key1, control.props.key2 ];
 	}
-	if ( control.props?.watch ) {
-		return [ control.setting, ...control.props.watch ];
+	if ( control.name === 'ItemTitle' ) {
+		return [ 'item_title', 'model' ];
 	}
 
 	return [ control.setting ];

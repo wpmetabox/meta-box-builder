@@ -32,8 +32,8 @@ class ModelField {
 					'options' => Data::get_model_options(),
 				] ),
 				Control::ItemTitle( 'item_title', [
-					'label' => __( 'Item title', 'meta-box-builder' ),
-					'watch' => [ 'model' ],
+					'label'   => __( 'Item title', 'meta-box-builder' ),
+					'tooltip' => __( 'Click … to insert a column, or type a template like {email} — {amount}', 'meta-box-builder' ),
 				] ),
 				Control::Select( 'field_type', [
 					'label'   => __( 'Field type', 'meta-box-builder' ),

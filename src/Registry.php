@@ -318,11 +318,11 @@ class Registry {
 			Control::Toggle( 'remove_default', __( 'Remove default meta box', 'meta-box-builder' ) ),
 			Control::Toggle( 'multiple', __( 'Allow to select multiple items', 'meta-box-builder' ) ),
 			Control::Toggle( 'select_all_none', __( 'Display "Toggle All" button', 'meta-box-builder' ), false, 'appearance' ),
-			'select_all_none_post'              => Control::Toggle( 'select_all_none', [
+			'select_all_none_post' => Control::Toggle( 'select_all_none', [
 				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
 				'dependency' => 'multiple:true',
 			], false, 'appearance' ),
-			'select_all_none_taxonomy'          => Control::Toggle( 'select_all_none', [
+			'select_all_none_taxonomy' => Control::Toggle( 'select_all_none', [
 				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
 				'dependency' => 'multiple:true',
 			], false, 'appearance' ),
@@ -330,15 +330,15 @@ class Registry {
 				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
 				'dependency' => 'multiple:true',
 			], false, 'appearance' ),
-			'select_all_none_user'              => Control::Toggle( 'select_all_none', [
+			'select_all_none_user' => Control::Toggle( 'select_all_none', [
 				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
 				'dependency' => 'multiple:true',
 			], false, 'appearance' ),
-			'select_all_none_model'             => Control::Toggle( 'select_all_none', [
+			'select_all_none_model' => Control::Toggle( 'select_all_none', [
 				'label'      => __( 'Display "Toggle All" button', 'meta-box-builder' ),
 				'dependency' => 'multiple:true',
 			], false, 'appearance' ),
-			'select_all_none_select'            => Control::Toggle( 'select_all_none', [
+			'select_all_none_select' => Control::Toggle( 'select_all_none', [
 				'label'      => __( 'Display "Select: All | None" button', 'meta-box-builder' ),
 				'dependency' => 'multiple:true',
 			], false, 'appearance' ),

@@ -54,8 +54,7 @@ class Edit extends BaseEditPage {
 			'settings'     => get_post_meta( get_the_ID(), 'settings', true ),
 
 			'texts'        => [
-				'saving'             => __( 'Saving...', 'meta-box-builder' ),
-				'item_title_tooltip' => __( 'Click … to insert a column, or type a template like {email} — {amount}', 'meta-box-builder' ),
+				'saving' => __( 'Saving...', 'meta-box-builder' ),
 			],
 		];
 

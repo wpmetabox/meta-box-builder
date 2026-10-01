@@ -93,7 +93,7 @@ const Location = () => {
 						name="models"
 						wrapper={ false }
 						isMulti={ false }
-						options={ Object.entries( MbbApp.modelOptions || {} ).map( ( [ value, label ] ) => ( { value, label } ) ) }
+						options={ ( MbbApp.models || [] ).map( item => ( { value: item.name, label: `${ item.label } (${ item.name })` } ) ) }
 						defaultValue={ ensureArray( getSetting( 'models', [] ) )[ 0 ] || '' }
 						updateField={ updateModels }
 					/>
