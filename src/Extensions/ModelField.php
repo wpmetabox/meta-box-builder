@@ -15,11 +15,13 @@ class ModelField {
 
 	public function add_field_type( array $field_types ): array {
 		$field_types['model'] = [
-			'title'       => __( 'Custom Model', 'meta-box-builder' ),
-			'category'    => 'wordpress',
-			'disabled'    => ! Data::is_extension_active( 'mb-custom-table' ),
-			'description' => __( 'For selecting items from a custom model', 'meta-box-builder' ),
-			'controls'    => [
+			'title'          => __( 'Custom Model', 'meta-box-builder' ),
+			'category'       => 'wordpress',
+			'disabled'       => ! Data::is_extension_active( 'mb-custom-table' ),
+			'disabled_text'  => __( 'This field type requires the MB Custom Table extension.', 'meta-box-builder' ),
+			'disabled_label' => __( 'MB Custom Table', 'meta-box-builder' ),
+			'description'    => __( 'For selecting items from a custom model', 'meta-box-builder' ),
+			'controls'       => [
 				'required',
 				'clone_settings',
 				'type',
