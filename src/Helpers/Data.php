@@ -157,11 +157,7 @@ class Data {
 
 		$models = [];
 		foreach ( Factory::get() as $name => $model ) {
-			$formatted = self::format_model( $name, $model, $cache );
-			if ( empty( $formatted['name'] ) ) {
-				continue;
-			}
-			$models[] = $formatted;
+			$models[] = self::format_model( $name, $model, $cache );
 		}
 
 		return $models;

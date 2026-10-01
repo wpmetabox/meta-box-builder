@@ -11,9 +11,12 @@ const getColumnNames = model => {
 
 	const supports = Array.isArray( model.supports ) ? model.supports : [];
 	const defaults = [ 'ID', ...supports ];
-	const named = model.column_names?.length
-		? model.column_names
-		: columnNamesFromMap( model.columns || model.db_columns || {} );
+	const dbColumns = model.db_columns || {};
+	const named = Object.keys( dbColumns ).length
+		? columnNamesFromMap( dbColumns )
+		: ( model.column_names?.length
+			? model.column_names
+			: columnNamesFromMap( model.columns || {} ) );
 	const custom = named.filter( col => !defaults.includes( col ) );
 
 	return [ ...defaults, ...custom ];
