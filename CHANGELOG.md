@@ -1,9 +1,3 @@
-### 5.5.1 - 2026-09-25
-
-- Add Custom Model field type (requires MB Custom Table)
-- Add Model object type to relationships UI
-- Autocomplete columns for model item title (field group + relationships)
-
 ### 5.5.0 - 2026-09-17
 
 **Highlights:**
