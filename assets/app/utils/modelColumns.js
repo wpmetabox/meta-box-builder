@@ -3,15 +3,23 @@ import { createColumnItem, suggestColumnType } from '../constants/columnTypes';
 
 /**
  * Column names from a model schema or database map.
- * Supports parsed `{ name: sqlType }` and editor `{ id: { name } }` shapes.
+ * Supports parsed `{ name: sqlType }`, editor `{ id: { name } }`, and list shapes.
  */
-const getColumnNames = columns => {
+export const getColumnNames = columns => {
 	if ( ! columns || typeof columns !== 'object' ) {
 		return [];
 	}
 
 	const values = Object.values( columns );
-	if ( values.length > 0 && values[ 0 ] && typeof values[ 0 ] === 'object' && 'name' in values[ 0 ] ) {
+	if ( ! values.length ) {
+		return [];
+	}
+
+	if ( typeof values[ 0 ] === 'string' ) {
+		return values.filter( Boolean );
+	}
+
+	if ( values[ 0 ] && typeof values[ 0 ] === 'object' && 'name' in values[ 0 ] ) {
 		return values.map( column => column.name ).filter( Boolean );
 	}
 
