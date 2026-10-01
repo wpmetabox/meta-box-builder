@@ -50,13 +50,12 @@ const Field = ( { id } ) => {
 			{
 				getSetting( `${ id }.object_type`, 'post' ) === 'model' && (
 					<ItemTitle
-						name="item_title"
 						componentId={ `${ id }-field-item_title` }
 						label={ __( 'Item title', 'meta-box-builder' ) }
 						tooltip={ __( 'Click … to insert a column, or type a template like {email} — {amount}', 'meta-box-builder' ) }
 						model={ getSetting( `${ id }.model` ) }
 						defaultValue={ getSetting( `${ id }.field.item_title` ) }
-						updateField={ ( key, value ) => updateSetting( `${ id }.field.${ key }`, value ) }
+						updateField={ ( _key, value ) => updateSetting( `${ id }.field.item_title`, value ) }
 					/>
 				)
 			}

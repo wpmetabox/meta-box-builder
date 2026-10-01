@@ -20,29 +20,26 @@ const getColumnNames = model => {
 	return [ ...defaults, ...custom ];
 };
 
-const ItemTitle = ( { name, componentId, field, updateField, model: modelNameProp, defaultValue, ...rest } ) => {
+const ItemTitle = ( { componentId, field, updateField, model: modelNameProp, defaultValue = '', ...rest } ) => {
 	const models = useModelSchema( state => state.models );
 	const modelName = modelNameProp ?? field?.model ?? '';
 	const model = models.find( m => m.name === modelName );
 	const items = getColumnNames( model ).map( col => [ col, col ] );
 
-	const settingKey = name && !String( name ).includes( '[' ) ? name : 'item_title';
-	const value = defaultValue ?? field?.item_title ?? '';
-
-	const handleChange = ( inputRef, next ) => updateField( settingKey, next );
+	const handleChange = ( inputRef, value ) => updateField( 'item_title', value );
 
 	const handleSelectItem = ( { current: input }, col ) => {
 		const start = input.selectionStart;
 		input.value = input.value.slice( 0, start ) + `{${ col }}` + input.value.slice( input.selectionEnd );
 		input.selectionStart = input.selectionEnd = start + col.length + 2;
-		updateField( settingKey, input.value );
+		updateField( 'item_title', input.value );
 	};
 
 	return (
 		<DivRow className="og-item-title" htmlFor={ componentId } { ...rest }>
 			<FieldInserter
 				id={ componentId }
-				defaultValue={ value }
+				defaultValue={ defaultValue }
 				items={ items }
 				onChange={ handleChange }
 				onSelect={ handleSelectItem }
