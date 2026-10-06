@@ -28,8 +28,9 @@ class ModelField {
 				'name',
 				'id',
 				Control::Select( 'model', [
-					'label'   => __( 'Model', 'meta-box-builder' ),
-					'options' => Data::get_model_options(),
+					'label'    => __( 'Model', 'meta-box-builder' ),
+					'options'  => Data::get_model_options(),
+					'required' => true,
 				] ),
 				Control::ItemTitle( 'item_title', [
 					'label'   => __( 'Item title', 'meta-box-builder' ),
