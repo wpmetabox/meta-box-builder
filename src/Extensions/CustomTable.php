@@ -39,7 +39,8 @@ class CustomTable {
 	 */
 	public function sync_model_table( array &$data ): void {
 		$settings = $data['settings'] ?? [];
-		if ( empty( $settings['models'] ) && 'model' !== ( $settings['object_type'] ?? '' ) ) {
+		$models   = array_filter( (array) ( $settings['models'] ?? [] ) );
+		if ( ! $models ) {
 			return;
 		}
 
