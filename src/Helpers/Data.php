@@ -173,7 +173,7 @@ class Data {
 		$options = [];
 		foreach ( $models ?? self::get_models() as $model ) {
 			$name             = $model['name'] ?? '';
-			$label            = $model['label'] ?? $name;
+			$label            = $model['label'] ?: $name;
 			$options[ $name ] = sprintf( '%s (%s)', $label, $name );
 		}
 		return $options;
