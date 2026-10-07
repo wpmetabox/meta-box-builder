@@ -1,11 +1,11 @@
-import { __ } from "@wordpress/i18n";
+import { __ } from '@wordpress/i18n';
 import useModelSchema from '../hooks/useModelSchema';
 import { getColumnNames as columnNamesFromMap } from '../utils/modelColumns';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
 const getColumnNames = model => {
-	if ( !model ) {
+	if ( ! model ) {
 		return [];
 	}
 
@@ -26,7 +26,7 @@ const ItemTitle = ( { componentId, field, updateField, model: modelNameProp, def
 	const model = models.find( m => m.name === modelName );
 	const items = getColumnNames( model ).map( col => [ col, col ] );
 
-	const handleChange = ( inputRef, value ) => updateField( 'item_title', value );
+	const handleChange = ( _, value ) => updateField( 'item_title', value );
 
 	const handleSelectItem = ( { current: input }, col ) => {
 		const start = input.selectionStart;
