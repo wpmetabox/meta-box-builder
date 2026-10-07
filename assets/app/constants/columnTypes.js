@@ -126,7 +126,13 @@ const isMysqlDatetimeFormat = format => ! format || format === 'Y-m-d H:i' || fo
  * @return {string} A COLUMN_TYPE_GROUPS preset key.
  */
 export const suggestColumnType = ( field = {} ) => {
-	if ( field.clone || field.multiple || ALWAYS_TEXT_FIELD_TYPES.includes( field.type ) ) {
+	// field_type (e.g. model/post as checkbox_list) stores a serialized array even when multiple is false.
+	if (
+		field.clone
+		|| field.multiple
+		|| field.field_type === 'checkbox_list'
+		|| ALWAYS_TEXT_FIELD_TYPES.includes( field.type )
+	) {
 		return DEFAULT_COLUMN_TYPE;
 	}
 
