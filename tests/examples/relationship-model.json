@@ -1,0 +1,16 @@
+{
+    "$schema": "https://schemas.metabox.io/relationships.json",
+    "id": "posts-to-models",
+    "from": {
+        "object_type": "post",
+        "post_type": "post"
+    },
+    "to": {
+        "object_type": "model",
+        "model": "transaction",
+        "field": {
+            "name": "Transactions",
+            "item_title": "{transaction_id} — {amount}"
+        }
+    }
+}

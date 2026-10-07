@@ -1,4 +1,5 @@
 import { __ } from "@wordpress/i18n";
+import dotProp from 'dot-prop';
 import AdminColumnsPosition from "../../../../../../assets/app/controls/AdminColumnsPosition";
 import Checkbox from "../../../../../../assets/app/controls/Checkbox";
 import Input from "../../../../../../assets/app/controls/Input";
@@ -8,6 +9,22 @@ import useSettings from "../../../../../../assets/app/hooks/useSettings";
 
 const General = ( { id } ) => {
 	const { getSetting, updateSetting } = useSettings();
+
+	const updateObjectType = ( name, value ) => {
+		if ( value === 'model' ) {
+			updateSetting( name, value );
+			return;
+		}
+
+		useSettings.setState( state => {
+			const settings = structuredClone( state.settings );
+			dotProp.set( settings, name, value );
+			dotProp.delete( settings, `${ id }.model` );
+			dotProp.delete( settings, `${ id }.field.item_title` );
+			return { settings };
+		} );
+	};
+
 	return (
 		<>
 			<ToggleGroup
@@ -15,7 +32,7 @@ const General = ( { id } ) => {
 				label={ __( 'Object type', 'meta-box-builder' ) }
 				options={ MbbApp.object_types }
 				defaultValue={ getSetting( `${ id }.object_type`, 'post' ) }
-				updateField={ updateSetting }
+				updateField={ updateObjectType }
 			/>
 			{
 				getSetting( `${ id }.object_type`, 'post' ) === 'post' && (
@@ -29,12 +46,23 @@ const General = ( { id } ) => {
 				)
 			}
 			{
-				getSetting( `${ id }.object_type` ) === 'term' && (
+				getSetting( `${ id }.object_type`, 'post' ) === 'term' && (
 					<Select
 						name={ `${ id }.taxonomy` }
 						label={ __( 'Taxonomy', 'meta-box-builder' ) }
 						options={ MbbApp.taxonomies }
 						defaultValue={ getSetting( `${ id }.taxonomy`, 'category' ) }
+						updateField={ updateSetting }
+					/>
+				)
+			}
+			{
+				getSetting( `${ id }.object_type`, 'post' ) === 'model' && (
+					<Select
+						name={ `${ id }.model` }
+						label={ __( 'Model', 'meta-box-builder' ) }
+						options={ MbbApp.modelOptions || {} }
+						defaultValue={ getSetting( `${ id }.model` ) }
 						updateField={ updateSetting }
 					/>
 				)

@@ -91,7 +91,10 @@ const useModelSchemaSync = () => {
 						return model;
 					}
 
-					const next = { ...model, db_columns: dbColumns };
+					const next = {
+						...model,
+						db_columns: dbColumns,
+					};
 					if ( ! model.post_id ) {
 						next.keys = keys;
 					}
