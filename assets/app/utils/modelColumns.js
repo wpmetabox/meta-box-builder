@@ -3,7 +3,7 @@ import { createColumnItem, suggestColumnType } from '../constants/columnTypes';
 
 /**
  * Column names from a model schema or database map.
- * Mirrors Data::column_names(): list shapes use values, assoc maps use keys.
+ * List shapes use values; assoc maps use keys; editor maps use item.name.
  */
 export const getColumnNames = columns => {
 	if ( ! columns || typeof columns !== 'object' ) {

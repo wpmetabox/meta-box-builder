@@ -14,9 +14,7 @@ const getColumnNames = model => {
 	const dbColumns = model.db_columns || {};
 	const named = Object.keys( dbColumns ).length
 		? columnNamesFromMap( dbColumns )
-		: ( model.column_names?.length
-			? model.column_names
-			: columnNamesFromMap( model.columns || {} ) );
+		: columnNamesFromMap( model.columns || {} );
 	const custom = named.filter( col => !defaults.includes( col ) );
 
 	return [ ...defaults, ...custom ];

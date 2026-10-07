@@ -2,7 +2,7 @@ import { useEffect, useMemo } from '@wordpress/element';
 import { useShallow } from 'zustand/react/shallow';
 import { IGNORE_SCHEMA_FIELD_TYPES } from '../constants/schemaFieldTypes';
 import { ensureArray } from '../functions';
-import { getMissingColumnIds, getColumnNames, resolveTableName } from '../utils/modelColumns';
+import { getMissingColumnIds, resolveTableName } from '../utils/modelColumns';
 import { fetcher } from './useFetch';
 import useModelSchema from './useModelSchema';
 import useRootFields from './useRootFields';
@@ -94,7 +94,6 @@ const useModelSchemaSync = () => {
 					const next = {
 						...model,
 						db_columns: dbColumns,
-						column_names: getColumnNames( dbColumns ),
 					};
 					if ( ! model.post_id ) {
 						next.keys = keys;

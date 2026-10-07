@@ -1,6 +1,5 @@
 import useModelSchemaSync from '../../hooks/useModelSchemaSync';
 import useModelSchema from '../../hooks/useModelSchema';
-import { getColumnNames } from '../../utils/modelColumns';
 import SchemaModal from '../Modals/SchemaModal';
 
 const SchemaController = () => {
@@ -18,13 +17,9 @@ const SchemaController = () => {
 		const dbColumns = Object.keys( updatedModel.db_columns || {} ).length
 			? updatedModel.db_columns
 			: ( updatedModel.columns || {} );
-		const columnNames = getColumnNames( dbColumns );
 		const withDb = {
 			...updatedModel,
 			db_columns: dbColumns,
-			column_names: columnNames.length
-				? columnNames
-				: ( updatedModel.column_names || [] ),
 		};
 		const exists = models.some( model => model.name === withDb.name );
 		setModels(
