@@ -33,6 +33,37 @@ class RelationshipModelTest extends TestCase {
 		$this->assertSame( '{transaction_id} — {amount}', $result['to']['field']['item_title'] );
 	}
 
+	public function testParseSideClearsItemTitleWhenNotModel(): void {
+		$parser = new Relationship( [
+			'id'   => 'models-to-posts',
+			'from' => [
+				'object_type' => 'model',
+				'model'       => 'transaction',
+				'field'       => [
+					'item_title' => '{amount}',
+				],
+				'meta_box'    => [],
+			],
+			'to'   => [
+				'object_type' => 'post',
+				'post_type'   => 'post',
+				'model'       => 'transaction',
+				'field'       => [
+					'item_title' => '{amount}',
+					'name'       => 'Related',
+				],
+				'meta_box'    => [],
+			],
+		] );
+		$parser->parse();
+		$result = $parser->get_settings();
+
+		$this->assertSame( '{amount}', $result['from']['field']['item_title'] );
+		$this->assertArrayNotHasKey( 'model', $result['to'] );
+		$this->assertArrayNotHasKey( 'item_title', $result['to']['field'] );
+		$this->assertSame( 'Related', $result['to']['field']['name'] );
+	}
+
 	public function testParseSideFromExampleJson(): void {
 		$json = json_decode( file_get_contents( __DIR__ . '/../examples/relationship-model.json' ), true );
 		$this->assertIsArray( $json );

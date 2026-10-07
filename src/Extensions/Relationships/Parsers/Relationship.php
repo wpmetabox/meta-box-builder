@@ -51,6 +51,9 @@ class Relationship extends Base {
 		$field_parser = new Field( $settings['field'] );
 		$field_parser->parse();
 		$settings['field'] = $field_parser->get_settings();
+		if ( 'model' !== $object_type ) {
+			unset( $settings['field']['item_title'] );
+		}
 		if ( empty( $settings['field'] ) ) {
 			unset( $settings['field'] );
 		}
