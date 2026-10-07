@@ -103,6 +103,9 @@ const VARCHAR_FIELD_TYPES = [
 
 const BIGINT_FIELD_TYPES = [ 'model', 'post', 'single_image', 'taxonomy_advanced', 'user' ];
 
+/** Object-choice field_type values that always store a serialized array. */
+const ARRAY_FIELD_TYPES = [ 'checkbox_list', 'checkbox_tree', 'select_tree' ];
+
 const isIntegerStep = step => {
 	if ( ! step ) {
 		return true;
@@ -126,11 +129,11 @@ const isMysqlDatetimeFormat = format => ! format || format === 'Y-m-d H:i' || fo
  * @return {string} A COLUMN_TYPE_GROUPS preset key.
  */
 export const suggestColumnType = ( field = {} ) => {
-	// field_type (e.g. model/post as checkbox_list) stores a serialized array even when multiple is false.
+	// Object-choice field_type (checkbox_list/tree, select_tree) stores an array even when multiple is false.
 	if (
 		field.clone
 		|| field.multiple
-		|| field.field_type === 'checkbox_list'
+		|| ARRAY_FIELD_TYPES.includes( field.field_type )
 		|| ALWAYS_TEXT_FIELD_TYPES.includes( field.type )
 	) {
 		return DEFAULT_COLUMN_TYPE;
