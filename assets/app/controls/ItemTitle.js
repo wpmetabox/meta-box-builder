@@ -4,7 +4,7 @@ import { getColumnNames as columnNamesFromMap } from '../utils/modelColumns';
 import DivRow from './DivRow';
 import FieldInserter from './FieldInserter';
 
-const getColumnNames = model => {
+const getModelColumns = model => {
 	if ( ! model ) {
 		return [];
 	}
@@ -24,7 +24,7 @@ const ItemTitle = ( { componentId, field, updateField, model: modelNameProp, def
 	const models = useModelSchema( state => state.models );
 	const modelName = modelNameProp ?? field?.model ?? '';
 	const model = models.find( m => m.name === modelName );
-	const items = getColumnNames( model ).map( col => [ col, col ] );
+	const items = getModelColumns( model ).map( col => [ col, col ] );
 
 	const handleChange = ( _, value ) => updateField( 'item_title', value );
 
