@@ -2,7 +2,6 @@
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 
 const path = require( 'path' );
-const webpack = require( 'webpack' );
 
 const externals = {
 	...defaultConfig.externals,
@@ -12,49 +11,25 @@ const externals = {
 	clipboard: 'ClipboardJS',
 };
 
-// Main Meta Box Builder app.
-const main = {
+const createConfig = ( entry, filename, uniqueName ) => ( {
 	...defaultConfig,
-	entry: './assets/app/App.js',
+	entry,
 	output: {
-		path: path.resolve( 'assets/build' ),
-		filename: 'app.js'
+		path: path.resolve( path.dirname( filename ) ),
+		filename: path.basename( filename ),
+		// Keep cache-busting that @wordpress/scripts sets by default.
+		// Overriding `output` without this leaves chunks as bare `5771.app.js`,
+		// so browsers can pair a new app.js with a stale chunk after upgrades.
+		chunkFilename: '[id].app.js?ver=[chunkhash]',
+		uniqueName,
+		clean: true,
 	},
 	externals,
-};
+} );
 
-// Settings page app.
-const settingsPage = {
-	...defaultConfig,
-	entry: './src/Extensions/SettingsPage/app/App.js',
-	output: {
-		path: path.resolve( 'src/Extensions/SettingsPage/build' ),
-		filename: 'settings-page.js'
-	},
-	externals,
-};
-
-// Relationships app.
-const relationships = {
-	...defaultConfig,
-	entry: './src/Extensions/Relationships/app/App.js',
-	output: {
-		path: path.resolve( 'src/Extensions/Relationships/build' ),
-		filename: 'relationships.js'
-	},
-	externals,
-};
-
-// Custom model app.
-const customModel = {
-	...defaultConfig,
-	entry: './src/Extensions/CustomModel/app/App.js',
-	output: {
-		path: path.resolve( 'src/Extensions/CustomModel/build' ),
-		filename: 'custom-model.js'
-	},
-	externals,
-};
-
-module.exports = [ main, settingsPage, relationships, customModel ];
-// module.exports = [ main ];
+module.exports = [
+	createConfig( './assets/app/App.js', 'assets/build/app.js', 'mbb-app' ),
+	createConfig( './src/Extensions/SettingsPage/app/App.js', 'src/Extensions/SettingsPage/build/settings-page.js', 'mbb-settings-page' ),
+	createConfig( './src/Extensions/Relationships/app/App.js', 'src/Extensions/Relationships/build/relationships.js', 'mbb-relationships' ),
+	createConfig( './src/Extensions/CustomModel/app/App.js', 'src/Extensions/CustomModel/build/custom-model.js', 'mbb-custom-model' ),
+];
