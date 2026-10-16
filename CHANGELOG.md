@@ -1,3 +1,9 @@
+### 5.6.1 - 2026-10-14
+
+- Fix Local JSON blocking settings pages and relationships whose ID matches an existing field group file
+- Use `{prefix}-{id}.json` when `{id}.json` is already taken by another object type
+- Export existing settings pages and relationships to Local JSON on upgrade so they keep registering
+
 ### 5.6.0 - 2026-10-12
 
 **Highlights:**
