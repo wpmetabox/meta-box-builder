@@ -14,7 +14,7 @@ import {
 } from '../constants/columnTypes';
 import { maybeArrayToObject } from '../functions';
 import { fetcher } from '../hooks/useFetch';
-import { sanitizeSqlName } from '../utils/modelColumns';
+import { sanitizeColumnName } from '../utils/modelColumns';
 import DivRow from './DivRow';
 
 const stripSortableMeta = item => {
@@ -186,7 +186,7 @@ const SchemaRow = ( {
 									placeholder={ __( 'column_name', 'meta-box-builder' ) }
 									value={ item.name || '' }
 									onChange={ e => {
-										const next = sanitizeSqlName( e.target.value );
+										const next = sanitizeColumnName( e.target.value );
 										setUnsupportedInput( '' !== e.target.value && '' === next );
 										updateItem( item.id, 'name', next );
 									} }

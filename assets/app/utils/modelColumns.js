@@ -51,20 +51,23 @@ export const getMissingColumnIds = ( fieldIds, dbColumns, editorColumns ) => {
 };
 
 /**
- * Sanitize a table or column name, matching TableSchema::sanitize_name() in PHP.
+ * Sanitize a table name. Keep letter case so an uppercase prefix still matches.
+ * Match TableSchema::sanitize_name() in PHP.
  *
- * Transliterate first, because sanitize_key() drops accented characters: typing
- * "giao dịch" would silently become "giaodch". Symbols and "đ" are handled before
- * slugify, which spells symbols out ("50% off" → "50percent_off") and maps "đ" to the
- * Serbian "dj". Non-Latin scripts have no transliteration and give an empty name.
+ * Transliterate first: a raw strip drops accents ("giao dịch" → "giaodch").
+ * Handle symbols and "đ" before slugify ("50% off" → "50percent_off", "đ" → "dj").
+ * Non-Latin scripts have no transliteration and give an empty name.
  */
 export const sanitizeSqlName = name => slugify(
 	String( name || '' )
 		.replace( /[^\p{L}\p{N}\s_-]/gu, '' )
 		.replace( /đ/gi, 'd' )
 		.replace( /[\s\-]/g, '_' ),
-	{ lower: true, replacement: '_', strict: true, trim: false }
+	{ lower: false, replacement: '_', strict: true, trim: false }
 );
+
+/** Sanitize a column name. Lowercase to match field IDs. */
+export const sanitizeColumnName = name => sanitizeSqlName( name ).toLowerCase();
 
 /**
  * Resolve the full database table name from UI settings.
@@ -99,7 +102,7 @@ export const seedEditorColumns = ( editorColumns, fields = [], { idPrefix = '' }
 			return;
 		}
 
-		const name = sanitizeSqlName( `${ idPrefix }${ field.id }` );
+		const name = sanitizeColumnName( `${ idPrefix }${ field.id }` );
 		if ( ! name || existingNames.has( name ) ) {
 			return;
 		}

@@ -37,7 +37,7 @@ export const deriveAutofillLocks = settings => {
 	const slug = settings?.slug || '';
 	const table = settings?.table || '';
 	const expectedSlug = singular ? slugify( singular, { lower: true } ) : '';
-	const expectedTable = plural ? sanitizeSqlName( plural ) : '';
+	const expectedTable = plural ? sanitizeSqlName( plural ).toLowerCase() : '';
 
 	return {
 		...settings,
@@ -55,7 +55,7 @@ const autofillFrom = ( settings, sourceKey, value ) => {
 
 	if ( 'labels.name' === sourceKey ) {
 		if ( ! settings._table_changed ) {
-			dotProp.set( settings, 'table', sanitizeSqlName( value ) );
+			dotProp.set( settings, 'table', sanitizeSqlName( value ).toLowerCase() );
 		}
 	}
 

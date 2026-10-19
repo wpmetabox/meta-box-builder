@@ -27,7 +27,7 @@ const Table = () => {
 				key={ tableKey }
 				htmlFor="table"
 				label={ __( 'Table name', 'meta-box-builder' ) }
-				description={ __( 'Use only lowercase letters, numbers, and underscores.', 'meta-box-builder' ) }
+				description={ __( 'Use only letters, numbers, and underscores.', 'meta-box-builder' ) }
 				required
 			>
 				<div className="og-input-group">
@@ -59,7 +59,7 @@ const Table = () => {
 				{
 					unsupportedInput && (
 						<p className="og-error">
-							{ __( 'Table names accept only letters a-z, numbers, and underscores.', 'meta-box-builder' ) }
+							{ __( 'Table names accept only letters, numbers, and underscores.', 'meta-box-builder' ) }
 						</p>
 					)
 				}
