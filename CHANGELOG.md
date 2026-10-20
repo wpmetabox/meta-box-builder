@@ -1,3 +1,10 @@
+### 5.6.2 - 2026-10-20
+
+- Fix custom table lookup when the DB prefix has uppercase letters
+- Require edit caps for builder definition export
+- Fix Local JSON ID collisions across object types
+- Cache-bust async webpack chunks to prevent stale builder crashes
+
 ### 5.6.1 - 2026-10-14
 
 - Fix Local JSON blocking settings pages and relationships whose ID matches an existing field group file
