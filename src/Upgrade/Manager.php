@@ -10,16 +10,15 @@ class Manager {
 		/**
 		 * Get current version to check.
 		 * - Allow to set via query string `mbb_version`.
-		 * - Make sure it <= MBB_VER, in case users already installed a newer version that will bypass the upgrade.
 		 */
-		$current_version = rwmb_request()->get( 'mbb_version', get_option( 'mbb_version', '1.0.0' ) );
+		$current_version = get_option( 'mbb_version', '1.0.0' );
 
 		// Manual re-run for admin only + nonce
-		if ( is_admin()
+		if (
+			is_admin()
 			&& current_user_can( 'manage_options' )
-			&& isset( $_GET['mbb_version'] )
-			&& isset( $_GET['_wpnonce'] )
-			&& wp_verify_nonce( $_GET['_wpnonce'], 'mbb_force_upgrade' )
+			&& isset( $_GET['mbb_version'], $_GET['_wpnonce'] )
+			&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'mbb_force_upgrade' )
 		) {
 			$forced = sanitize_text_field( wp_unslash( $_GET['mbb_version'] ) );
 			if ( preg_match( '/^\d+\.\d+(\.\d+)?$/', $forced ) ) {
