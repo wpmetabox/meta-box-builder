@@ -196,6 +196,24 @@ class AbilitiesTest extends TestCase {
 		$this->assertSame( [ 'a', 'b' ], array_column( $fields, 'id' ) );
 	}
 
+	public function test_update_field_group_without_fields_keeps_string_keyed_fields() {
+		$this->set_fields( [
+			'field_a' => $this->field( 'a', 'A' ),
+			'field_b' => $this->field( 'b', 'B' ),
+		] );
+
+		$result = $this->abilities->update_field_group( [
+			'id'    => $this->post_id,
+			'title' => 'Renamed Field Group',
+		] );
+
+		$this->assertTrue( $result['success'] );
+
+		$fields = $this->get_fields();
+		$this->assertSame( [ 0, 1 ], array_keys( $fields ) );
+		$this->assertSame( [ 'a', 'b' ], array_column( $fields, 'id' ) );
+	}
+
 	private function set_fields( array $fields ): void {
 		update_post_meta( $this->post_id, 'fields', $fields );
 		update_post_meta( $this->post_id, 'settings', [] );

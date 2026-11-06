@@ -946,7 +946,7 @@ class Abilities {
 	 * @param string $field_id The field ID to find.
 	 * @return int|null The field key, or null if not found.
 	 */
-	private function find_field_index( array $fields, string $field_id ) {
+	private function find_field_index( array $fields, string $field_id ): ?int {
 		foreach ( $fields as $index => $field ) {
 			$id = $field['id'] ?? $field['_id'] ?? '';
 			if ( $id === $field_id ) {
