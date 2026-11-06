@@ -858,8 +858,7 @@ class Abilities {
 			return $this->error( __( 'Field not found.', 'meta-box-builder' ) );
 		}
 
-		unset( $fields[ $index ] );
-		$fields = array_values( $fields );
+		array_splice( $fields, $index, 1 );
 		Save::parse( $post, $fields, $settings );
 
 		return $this->success( __( 'Field deleted successfully.', 'meta-box-builder' ) );
@@ -943,9 +942,9 @@ class Abilities {
 	/**
 	 * Find the key of a field by its ID.
 	 *
-	 * @param array  $fields   The fields, keyed numerically or by string.
+	 * @param array  $fields   The fields, keyed numerically.
 	 * @param string $field_id The field ID to find.
-	 * @return int|string|null The field key, or null if not found.
+	 * @return int|null The field key, or null if not found.
 	 */
 	private function find_field_index( array $fields, string $field_id ) {
 		foreach ( $fields as $index => $field ) {
@@ -961,12 +960,12 @@ class Abilities {
 	/**
 	 * Ensure a field has a unique `_id`.
 	 *
-	 * @param array           $field_data      The field data.
-	 * @param array           $existing_fields The existing fields.
-	 * @param int|string|null $exclude_index   The key of the field being updated, if any.
+	 * @param array    $field_data      The field data.
+	 * @param array    $existing_fields The existing fields.
+	 * @param int|null $exclude_index   The key of the field being updated, if any.
 	 * @return array
 	 */
-	private function ensure_unique_field_id( array $field_data, array $existing_fields, $exclude_index = null ): array {
+	private function ensure_unique_field_id( array $field_data, array $existing_fields, ?int $exclude_index = null ): array {
 		$existing_ids = [];
 		foreach ( $existing_fields as $index => $field ) {
 			if ( $exclude_index !== null && $index === $exclude_index ) {
@@ -1030,7 +1029,7 @@ class Abilities {
 	 * Build a lightweight summary array for a field group.
 	 *
 	 * @param WP_Post $post   The field group post object.
-	 * @param array   $fields The field definitions.
+	 * @param array    $fields The field definitions.
 	 * @return array
 	 */
 	private function build_field_group_summary( WP_Post $post, array $fields = [] ): array {
