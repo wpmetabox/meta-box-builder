@@ -1,3 +1,10 @@
+### 5.6.3 - 2026-11-06
+
+- Security: prevent unauthenticated requests from triggering the upgrade process (#205)
+- Fix field operations at the first position in abilities (#206)
+- Fix the "Undefined array key" warning when importing fields
+- Fix parsing the `model` setting in the builder
+
 ### 5.6.2 - 2026-10-20
 
 - Fix custom table lookup when the DB prefix has uppercase letters
