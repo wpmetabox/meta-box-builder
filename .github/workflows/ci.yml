@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 jobs:
   php:
-    uses: wpmetabox/meta-box/.github/workflows/php-compat.yml@ci-js-check
+    uses: wpmetabox/meta-box/.github/workflows/php-compat.yml@master
     with:
       requires: meta-box mb-relationships
       pages: "admin.php?page=meta-box edit.php?post_type=meta-box post-new.php?post_type=meta-box edit.php?post_type=mb-relationship post-new.php?post_type=mb-relationship"
