@@ -72,7 +72,7 @@
 				"sass/",
 				"vendor/"
 			],
-			"riimu/kit-phpencoder": [
+			"wpmetabox/kit-phpencoder": [
 				"examples/",
 				"*.json"
 			],

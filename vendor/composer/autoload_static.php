@@ -38,7 +38,7 @@ class ComposerStaticInite19679b2c031a0a42c1567343a0d570f
         ),
         'Riimu\\Kit\\PHPEncoder\\' =>
         array (
-            0 => __DIR__ . '/..' . '/riimu/kit-phpencoder/src',
+            0 => __DIR__ . '/..' . '/wpmetabox/kit-phpencoder/src',
         ),
         'MetaBox\\Support\\' =>
         array (

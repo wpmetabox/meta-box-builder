@@ -7,7 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'eLightUp\\' => array($vendorDir . '/elightup/twig'),
-    'Riimu\\Kit\\PHPEncoder\\' => array($vendorDir . '/riimu/kit-phpencoder/src'),
+    'Riimu\\Kit\\PHPEncoder\\' => array($vendorDir . '/wpmetabox/kit-phpencoder/src'),
     'MetaBox\\Support\\' => array($vendorDir . '/wpmetabox/support'),
     'MBB\\' => array($baseDir . '/src'),
     'MBBParser\\' => array($vendorDir . '/wpmetabox/mbb-parser/src'),
