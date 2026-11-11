@@ -1,0 +1,12 @@
+name: CI
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+jobs:
+  php:
+    uses: wpmetabox/meta-box/.github/workflows/php-compat.yml@ci-js-check
+    with:
+      requires: meta-box
+      pages: "admin.php?page=meta-box edit.php?post_type=meta-box post-new.php?post_type=meta-box edit.php?post_type=mb-settings-page post-new.php?post_type=mb-settings-page edit.php?post_type=mb-relationship post-new.php?post_type=mb-relationship post-new.php?post_type=mb-model"
