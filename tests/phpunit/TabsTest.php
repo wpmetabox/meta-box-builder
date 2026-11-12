@@ -3,11 +3,6 @@
 use MBBParser\Unparsers\MetaBox;
 
 class TabsTest extends WP_UnitTestCase {
-	/**
-	 * Fails since before 5.6.4: run with `composer test -- --group failing`.
-	 *
-	 * @group failing
-	 */
 	public function testTabNormalization() {
 		$testCases = [ 
 			'new_format' => [ 
@@ -87,7 +82,8 @@ class TabsTest extends WP_UnitTestCase {
 				$this->assertEquals( 'tab', $tab_field['type'], "[$caseName] Field '$tab_id' should be a tab" );
 				$this->assertEquals( $label, $tab_field['name'], "[$caseName] Tab '$tab_id' name should match" );
 				if ( $icon ) {
-					$this->assertEquals( $icon, $tab_field['icon'], "[$caseName] Tab '$tab_id' icon should match" );
+					// The editor stores dashicons without the 'dashicons-' prefix.
+					$this->assertEquals( preg_replace( '/^dashicons-/', '', $icon ), $tab_field['icon'], "[$caseName] Tab '$tab_id' icon should match" );
 				}
 			}
 

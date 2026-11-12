@@ -3,11 +3,6 @@
 use MBBParser\Unparsers\MetaBox;
 
 class FieldTest extends WP_UnitTestCase {
-    /**
-     * Fails since before 5.6.4: run with `composer test -- --group failing`.
-     *
-     * @group failing
-     */
     public function testFieldsPropertyIsKeyValueArrayWithRequiredKeys() {
         // Sample new format JSON with multiple fields
         $newJson = json_decode('{
@@ -40,6 +35,8 @@ class FieldTest extends WP_UnitTestCase {
         $unparser = new MetaBox($newJson);
         $unparser->unparse();
         $result = $unparser->get_settings();
+        // The Builder keys fields by '_id' (a random ID), so look them up by 'id'.
+        $by_id = array_column( $result['fields'] ?? [], null, 'id' );
 
         // Check top-level fields exists and is an array
         $this->assertArrayHasKey('fields', $result, "Result should have 'fields' key");
@@ -52,9 +49,9 @@ class FieldTest extends WP_UnitTestCase {
         );
         
         // Check that fields is a key-value array (not numeric)
-        $this->assertArrayHasKey('field1', $result['fields'], "'fields' should use 'field1' as key");
-        $this->assertArrayHasKey('field2', $result['fields'], "'fields' should use 'field2' as key");
-        $this->assertArrayHasKey('field3', $result['fields'], "'fields' should use 'field3' as key");
+        $this->assertArrayHasKey('field1', $by_id, "'fields' should have 'field1' as key");
+        $this->assertArrayHasKey('field2', $by_id, "'fields' should have 'field2' as key");
+        $this->assertArrayHasKey('field3', $by_id, "'fields' should have 'field3' as key");
 
         $this->assertFalse(
             array_key_exists(0, $result['fields']),
@@ -79,11 +76,6 @@ class FieldTest extends WP_UnitTestCase {
             }
 
             // Specific value checks
-            $this->assertEquals(
-                $fieldId,
-                $field['id'],
-                "Field '$fieldId' 'id' should match its key"
-            );
             $this->assertEquals(
                 $fieldId,
                 $field['_id'],

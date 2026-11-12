@@ -3,11 +3,6 @@
 use MBBParser\Unparsers\MetaBox;
 
 class AttributeTest extends WP_UnitTestCase {
-    /**
-     * Fails since before 5.6.4: run with `composer test -- --group failing`.
-     *
-     * @group failing
-     */
     public function testOptionPropertyForSelectField() {
         // Sample new format JSON with a select field
         $newJson = json_decode('{
@@ -32,14 +27,16 @@ class AttributeTest extends WP_UnitTestCase {
         $unparser = new MetaBox($newJson);
         $unparser->unparse();
         $result = $unparser->get_settings();
+        // The Builder keys fields by '_id' (a random ID), so look them up by 'id'.
+        $by_id = array_column( $result['fields'] ?? [], null, 'id' );
 
         // Check top-level fields
         $this->assertArrayHasKey('fields', $result, "Result should have 'fields' key");
         $this->assertIsArray($result['fields'], "'fields' should be an array");
-        $this->assertArrayHasKey('color_select', $result['fields'], "'fields' should use 'color_select' as key");
+        $this->assertArrayHasKey('color_select', $by_id, "'fields' should have 'color_select' as key");
 
         // Check fields.options (multiline string)
-        $selectField = $result['fields']['color_select'];
+        $selectField = $by_id['color_select'];
         $this->assertEquals('select', $selectField['type'], "Field type should be 'select'");
         $this->assertArrayHasKey('options', $selectField, "Select field should have 'options'");
         $this->assertIsString($selectField['options'], "'options' in 'fields' should be a string");
@@ -77,12 +74,6 @@ class AttributeTest extends WP_UnitTestCase {
             "'options' in 'meta_box.fields' should match the original key-value array"
         );
     }
-
-    /**
-     * Fails since before 5.6.4: run with `composer test -- --group failing`.
-     *
-     * @group failing
-     */
     public function testAttributesPropertyForTextField() {
         // Sample new format JSON with a text field and attributes
         $newJson = json_decode('{
@@ -107,14 +98,16 @@ class AttributeTest extends WP_UnitTestCase {
         $unparser = new MetaBox($newJson);
         $unparser->unparse();
         $result = $unparser->get_settings();
+        // The Builder keys fields by '_id' (a random ID), so look them up by 'id'.
+        $by_id = array_column( $result['fields'] ?? [], null, 'id' );
 
         // Check top-level fields
         $this->assertArrayHasKey('fields', $result, "Result should have 'fields' key");
         $this->assertIsArray($result['fields'], "'fields' should be an array");
-        $this->assertArrayHasKey('phone_number', $result['fields'], "'fields' should use 'phone_number' as key");
+        $this->assertArrayHasKey('phone_number', $by_id, "'fields' should have 'phone_number' as key");
 
         // Check fields.attributes (UUID-keyed array of objects)
-        $textField = $result['fields']['phone_number'];
+        $textField = $by_id['phone_number'];
         $this->assertEquals('text', $textField['type'], "Field type should be 'text'");
         $this->assertArrayHasKey('attributes', $textField, "Text field should have 'attributes'");
         $this->assertIsArray($textField['attributes'], "'attributes' in 'fields' should be an array");

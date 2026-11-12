@@ -2,11 +2,6 @@
 use MBBParser\Unparsers\MetaBox;
 
 class GroupTest extends WP_UnitTestCase {
-	/**
-	 * Fails since before 5.6.4: run with `composer test -- --group failing`.
-	 *
-	 * @group failing
-	 */
 	public function testGroupFieldConversionFromNewFormat() {
 		// Sample new format JSON with a Group field
 		$newJson = json_decode( '{
@@ -39,22 +34,25 @@ class GroupTest extends WP_UnitTestCase {
 		$unparser = new MetaBox( $newJson );
 		$unparser->unparse();
 		$result = $unparser->get_settings();
+		// The Builder keys fields by '_id' (a random ID), so look them up by 'id'.
+		$by_id = array_column( $result['fields'] ?? [], null, 'id' );
 
 		// Check top-level fields is a key-value array
 		$this->assertArrayHasKey( 'fields', $result, "Result should have 'fields' key" );
 		$this->assertIsArray( $result['fields'], "'fields' should be an array" );
-		$this->assertArrayHasKey( 'HighlightsGroup', $result['fields'], "'fields' should use 'HighlightsGroup' as key" );
+		$this->assertArrayHasKey( 'HighlightsGroup', $by_id, "'fields' should have 'HighlightsGroup' as key" );
 
 		// Check the Group field structure
-		$groupField = $result['fields']['HighlightsGroup'];
+		$groupField = $by_id['HighlightsGroup'];
 		$this->assertEquals( 'group', $groupField['type'], "Field type should be 'group'" );
 		$this->assertArrayHasKey( 'fields', $groupField, "Group field should have nested 'fields'" );
 		$this->assertIsArray( $groupField['fields'], "Nested 'fields' should be an array" );
 
 		// Check that nested fields is a key-value array
 		$nestedFields = $groupField['fields'];
-		$this->assertArrayHasKey( 'highlight', $nestedFields, "Nested 'fields' should use 'highlight' as key" );
-		$this->assertArrayHasKey( 'description', $nestedFields, "Nested 'fields' should use 'description' as key" );
+		$nested_by_id = array_column( $nestedFields, null, 'id' );
+		$this->assertArrayHasKey( 'highlight', $nested_by_id, "Nested 'fields' should have 'highlight' as key" );
+		$this->assertArrayHasKey( 'description', $nested_by_id, "Nested 'fields' should have 'description' as key" );
 		$this->assertFalse(
 			array_key_exists( 0, $nestedFields ),
 			"Nested 'fields' should not have numeric keys"
@@ -78,7 +76,6 @@ class GroupTest extends WP_UnitTestCase {
 			}
 
 			// Specific value checks
-			$this->assertEquals( $fieldId, $field['id'], "Field '$fieldId' 'id' should match its key" );
 			$this->assertEquals( $fieldId, $field['_id'], "Field '$fieldId' '_id' should match its key" );
 			$this->assertTrue(
 				$field['save_field'],

@@ -4,7 +4,7 @@ use MBBParser\Unparsers\MetaBox;
 
 class ColumnsTest extends WP_UnitTestCase {
     /**
-     * Fails since before 5.6.4: run with `composer test -- --group failing`.
+     * Needs mbb-parser > 2.1.6 (MB Columns sizes as plain numbers): run with `composer test -- --group failing`.
      *
      * @group failing
      */

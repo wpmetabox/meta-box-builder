@@ -3,11 +3,6 @@
 use MBBParser\Unparsers\MetaBox;
 
 class TooltipTest extends WP_UnitTestCase {
-	/**
-	 * Fails since before 5.6.4: run with `composer test -- --group failing`.
-	 *
-	 * @group failing
-	 */
 	public function testTooltipNormalization() {
 		$testCases = [ 
 			'string' => [ 
@@ -57,11 +52,13 @@ class TooltipTest extends WP_UnitTestCase {
 			$unparser = new MetaBox( $newJson );
 			$unparser->unparse();
 			$result = $unparser->get_settings();
+			// The Builder keys fields by '_id' (a random ID), so look them up by 'id'.
+			$by_id = array_column( $result['fields'] ?? [], null, 'id' );
 
 			// Check fields
 			$this->assertArrayHasKey( 'fields', $result, "[$caseName] Result should have 'fields' key" );
-			$this->assertArrayHasKey( 'test_field', $result['fields'], "[$caseName] 'fields' should have 'test_field'" );
-			$field = $result['fields']['test_field'];
+			$this->assertArrayHasKey( 'test_field', $by_id, "[$caseName] 'fields' should have 'test_field'" );
+			$field = $by_id['test_field'];
 
 			// Check tooltip normalization
 			$this->assertArrayHasKey( 'tooltip', $field, "[$caseName] Field should have 'tooltip'" );
