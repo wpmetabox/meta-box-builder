@@ -104,16 +104,16 @@
         },
         {
             "name": "wpmetabox/mbb-parser",
-            "version": "2.1.6",
+            "version": "2.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/mbb-parser.git",
-                "reference": "5e2a2256b553ea18f572ba3fd9fb2dc28dff259e"
+                "reference": "d9471840f0adde34900099ecdfb8ec98f7d0234a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/5e2a2256b553ea18f572ba3fd9fb2dc28dff259e",
-                "reference": "5e2a2256b553ea18f572ba3fd9fb2dc28dff259e",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/d9471840f0adde34900099ecdfb8ec98f7d0234a",
+                "reference": "d9471840f0adde34900099ecdfb8ec98f7d0234a",
                 "shasum": ""
             },
             "require": {
@@ -133,9 +133,9 @@
             "description": "Parse meta box settings from JSON",
             "support": {
                 "issues": "https://github.com/wpmetabox/mbb-parser/issues",
-                "source": "https://github.com/wpmetabox/mbb-parser/tree/2.1.6"
+                "source": "https://github.com/wpmetabox/mbb-parser/tree/2.1.7"
             },
-            "time": "2026-11-11T12:48:38+00:00"
+            "time": "2026-11-12T09:19:31+00:00"
         },
         {
             "name": "wpmetabox/support",

@@ -3,11 +3,6 @@
 use MBBParser\Unparsers\MetaBox;
 
 class ColumnsTest extends WP_UnitTestCase {
-    /**
-     * Needs mbb-parser > 2.1.6 (MB Columns sizes as plain numbers): run with `composer test -- --group failing`.
-     *
-     * @group failing
-     */
     public function testColumnsNormalization() {
         $testCases = [
             'simple_new' => [
