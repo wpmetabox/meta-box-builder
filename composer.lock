@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6cc8fc76d2e9e9a6e97aff1c5628df1b",
+    "content-hash": "614fd1dac7806c2e12a3118e0e88b9a8",
     "packages": [
         {
             "name": "elightup/twig",
@@ -104,16 +104,16 @@
         },
         {
             "name": "wpmetabox/mbb-parser",
-            "version": "2.1.5",
+            "version": "2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wpmetabox/mbb-parser.git",
-                "reference": "030b7010e06d1769329dfa25c261882e3847e5e6"
+                "reference": "5e2a2256b553ea18f572ba3fd9fb2dc28dff259e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/030b7010e06d1769329dfa25c261882e3847e5e6",
-                "reference": "030b7010e06d1769329dfa25c261882e3847e5e6",
+                "url": "https://api.github.com/repos/wpmetabox/mbb-parser/zipball/5e2a2256b553ea18f572ba3fd9fb2dc28dff259e",
+                "reference": "5e2a2256b553ea18f572ba3fd9fb2dc28dff259e",
                 "shasum": ""
             },
             "require": {
@@ -133,9 +133,9 @@
             "description": "Parse meta box settings from JSON",
             "support": {
                 "issues": "https://github.com/wpmetabox/mbb-parser/issues",
-                "source": "https://github.com/wpmetabox/mbb-parser/tree/2.1.5"
+                "source": "https://github.com/wpmetabox/mbb-parser/tree/2.1.6"
             },
-            "time": "2026-11-11T08:30:45+00:00"
+            "time": "2026-11-11T12:48:38+00:00"
         },
         {
             "name": "wpmetabox/support",

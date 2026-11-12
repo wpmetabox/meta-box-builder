@@ -1,3 +1,14 @@
+### 5.6.4 - 2026-11-12
+
+- Fix "Theme code" for groups in field groups with a prefix: sub-field keys now have the prefix
+- Fix "Theme code" for field groups that use a custom table: add the missing `storage_type` and `table` arguments
+- Fix "Theme code" for comment fields using an undefined `$comment_id` variable
+- Fix "Get PHP Code" for multi-line names and descriptions, which kept the `{translate}` placeholder
+- Fix "Get PHP Code" losing choices when the `callback:` function is not loaded yet
+- Fix "Get PHP Code" adding an empty `icon_url` for settings pages with no icon
+- Fix deprecation notices on PHP 8.4+ and an error on PHP 7.4 from bundled libraries
+- Require WordPress 6.7+ and PHP 7.4+
+
 ### 5.6.3 - 2026-11-06
 
 - Security: prevent unauthenticated requests from triggering the upgrade process (#205)
