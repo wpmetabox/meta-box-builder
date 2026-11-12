@@ -1,7 +1,6 @@
 <?php
-use PHPUnit\Framework\TestCase;
 
-class InitTest extends TestCase {
+class InitTest extends WP_UnitTestCase {
     public function testInit() {
         $this->assertTrue(true);
     }

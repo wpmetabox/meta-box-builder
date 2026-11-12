@@ -1,13 +1,13 @@
 <?php
 
 use MBBParser\Unparsers\MetaBox;
-use PHPUnit\Framework\TestCase;
 
-class MetaBoxUnparserTest extends TestCase {
+class MetaBoxUnparserTest extends WP_UnitTestCase {
 	protected $newJson;
 	protected $oldJson;
 
-	protected function setUp(): void {
+	public function set_up(): void {
+		parent::set_up();
 		// Load new format sample
 		$this->newJson = json_decode( '{
             "$schema": "https://schemas.metabox.io/field-group.json",

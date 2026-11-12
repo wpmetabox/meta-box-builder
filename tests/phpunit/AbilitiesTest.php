@@ -4,13 +4,13 @@ use MBB\Abilities;
 use MBB\Helpers\FieldKeys;
 use MBB\Registry;
 use MBB\RestApi\Fields;
-use PHPUnit\Framework\TestCase;
 
-class AbilitiesTest extends TestCase {
+class AbilitiesTest extends WP_UnitTestCase {
 	private Abilities $abilities;
 	private int $post_id;
 
-	protected function setUp(): void {
+	public function set_up(): void {
+		parent::set_up();
 		if ( empty( FieldKeys::all() ) ) {
 			FieldKeys::init( new Fields( new Registry() ) );
 		}
@@ -24,7 +24,8 @@ class AbilitiesTest extends TestCase {
 		] );
 	}
 
-	protected function tearDown(): void {
+	public function tear_down(): void {
+		parent::tear_down();
 		wp_delete_post( $this->post_id, true );
 	}
 

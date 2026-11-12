@@ -1,8 +1,7 @@
 <?php
 use Opis\JsonSchema\Validator;
-use PHPUnit\Framework\TestCase;
 
-class SchemaValidationTest extends TestCase {
+class SchemaValidationTest extends WP_UnitTestCase {
 	private function schema_dir(): ?string {
 		$candidates = array_filter( [
 			getenv( 'MBB_SCHEMA_DIR' ) ?: null,

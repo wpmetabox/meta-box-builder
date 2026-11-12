@@ -1,8 +1,7 @@
 <?php
 use MBB\Extensions\Relationships\Parsers\Relationship;
-use PHPUnit\Framework\TestCase;
 
-class RelationshipModelTest extends TestCase {
+class RelationshipModelTest extends WP_UnitTestCase {
 	public function testParseSideKeepsModelAndClearsPostTypeTaxonomy(): void {
 		$parser = new Relationship( [
 			'id'   => 'posts-to-models',

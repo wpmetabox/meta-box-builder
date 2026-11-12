@@ -1,9 +1,8 @@
 <?php
 
 use MBBParser\Unparsers\MetaBox;
-use PHPUnit\Framework\TestCase;
 
-class GeolocationTest extends TestCase {
+class GeolocationTest extends WP_UnitTestCase {
     public function testGeolocationNormalization() {
         $testCases = [
             'boolean_true_new' => [

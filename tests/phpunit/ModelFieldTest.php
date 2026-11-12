@@ -1,8 +1,7 @@
 <?php
 use MBBParser\Unparsers\MetaBox;
-use PHPUnit\Framework\TestCase;
 
-class ModelFieldTest extends TestCase {
+class ModelFieldTest extends WP_UnitTestCase {
 	public function testModelFieldUnparseFromExample(): void {
 		$json = json_decode( file_get_contents( __DIR__ . '/../examples/model.json' ), true );
 		$this->assertIsArray( $json );

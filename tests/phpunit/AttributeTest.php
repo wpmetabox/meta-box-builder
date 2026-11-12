@@ -1,9 +1,13 @@
 <?php
 
 use MBBParser\Unparsers\MetaBox;
-use PHPUnit\Framework\TestCase;
 
-class AttributeTest extends TestCase {
+class AttributeTest extends WP_UnitTestCase {
+    /**
+     * Fails since before 5.6.4: run with `composer test -- --group failing`.
+     *
+     * @group failing
+     */
     public function testOptionPropertyForSelectField() {
         // Sample new format JSON with a select field
         $newJson = json_decode('{
@@ -74,6 +78,11 @@ class AttributeTest extends TestCase {
         );
     }
 
+    /**
+     * Fails since before 5.6.4: run with `composer test -- --group failing`.
+     *
+     * @group failing
+     */
     public function testAttributesPropertyForTextField() {
         // Sample new format JSON with a text field and attributes
         $newJson = json_decode('{

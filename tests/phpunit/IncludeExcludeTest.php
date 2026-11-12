@@ -1,9 +1,8 @@
 <?php
 
 use MBBParser\Unparsers\MetaBox;
-use PHPUnit\Framework\TestCase;
 
-class IncludeExcludeTest extends TestCase {
+class IncludeExcludeTest extends WP_UnitTestCase {
     public function testIncludeExcludeNormalization() {
         $testCases = [
             'include_new' => [

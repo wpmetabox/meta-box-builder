@@ -1,13 +1,12 @@
 <?php
 use MBB\RestApi\Generator;
 use MBB\RestApi\ThemeCode\ThemeCode;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for "Get PHP Code" and "Theme code".
  * Each case is a bug reported by users. The generated code must be valid PHP and use the same field IDs as when the field group is saved.
  */
-class CodeGeneratorTest extends TestCase {
+class CodeGeneratorTest extends WP_UnitTestCase {
 	private array $fields = [
 		'title' => [
 			'_id'        => 'title',
