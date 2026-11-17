@@ -50,6 +50,7 @@ class ToggleStatusColumn {
 		// Use the switch markup and styles from Meta Box.
 		$field = RWMB_Switch_Field::normalize( [
 			'type'       => 'switch',
+			'disabled'   => ! $this->can_toggle( $post ),
 			'attributes' => [
 				'data-id' => $post_id,
 			],
@@ -85,9 +86,16 @@ class ToggleStatusColumn {
 		check_ajax_referer( 'toggle-status' );
 
 		$post_id = intval( $_POST['post_id'] ?? 0 );
-		if ( ! $post_id ) {
+		$post    = get_post( $post_id );
+		if ( ! $post || ! in_array( $post->post_type, $this->post_types, true ) ) {
 			wp_send_json_error( [
 				'message' => __( 'Invalid post ID', 'meta-box-builder' ),
+			] );
+		}
+
+		if ( ! $this->can_toggle( $post ) ) {
+			wp_send_json_error( [
+				'message' => __( 'You are not allowed to change the status of this item', 'meta-box-builder' ),
 			] );
 		}
 
@@ -105,6 +113,14 @@ class ToggleStatusColumn {
 		}
 
 		wp_send_json_success();
+	}
+
+	/**
+	 * Toggling publishes or unpublishes, so it needs both edit and publish rights.
+	 */
+	private function can_toggle( WP_Post $post ): bool {
+		$post_type = get_post_type_object( $post->post_type );
+		return $post_type && current_user_can( 'edit_post', $post->ID ) && current_user_can( $post_type->cap->publish_posts );
 	}
 
 	public function remove_draft_state_label( array $states, WP_Post $post ): array {
