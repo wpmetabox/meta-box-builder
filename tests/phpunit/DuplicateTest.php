@@ -115,6 +115,18 @@ class DuplicateTest extends WP_UnitTestCase {
 		$renamed_copy = $this->copy( $this->create_post( 'mb-settings-page', 'theme-options-new', 'Theme Options', $renamed ) );
 		$this->assertSame( 'theme-options-new_copy', get_post_meta( $renamed_copy, 'settings', true )['option_name'] );
 		$this->assertSame( 'theme-options-new_copy', get_post_meta( $renamed_copy, 'settings_page', true )['option_name'] );
+
+		$shared = $meta;
+		foreach ( [ 'settings', 'settings_page' ] as $key ) {
+			$shared[ $key ]['id']          = 'theme';
+			$shared[ $key ]['option_name'] = 'theme_copy';
+		}
+		$shared_id   = $this->create_post( 'mb-settings-page', 'theme', 'Theme', $shared );
+		$shared_copy = $this->copy( $shared_id );
+		$this->assertSame( 'theme_copy_2', get_post( $shared_copy )->post_name );
+		$this->assertSame( 'theme_copy_2', get_post_meta( $shared_copy, 'settings', true )['option_name'] );
+		$this->assertSame( 'theme_copy_2', get_post_meta( $shared_copy, 'settings_page', true )['option_name'] );
+		$this->assertSame( 'theme_copy', get_post_meta( $shared_id, 'settings', true )['option_name'] );
 	}
 
 	public function test_duplicate_relationship(): void {
@@ -380,6 +392,23 @@ class DuplicateTest extends WP_UnitTestCase {
 		$disabled['meta_box']['id']                     = 'disabled';
 		$disabled_copy                                  = $this->copy( $this->create_post( 'meta-box', 'disabled', 'Disabled', $disabled ) );
 		$this->assertSame( 'books', get_post_meta( $disabled_copy, 'settings', true )['custom_table']['name'] );
+
+		$external = $meta;
+		$external['settings']['id']                     = 'external';
+		$external['settings']['custom_table']['create'] = false;
+		$external['meta_box']['id']                     = 'external';
+		$external_copy                                  = $this->copy( $this->create_post( 'meta-box', 'external', 'External', $external ) );
+		$this->assertSame( 'books', get_post_meta( $external_copy, 'settings', true )['custom_table']['name'] );
+		$this->assertSame( 'books', get_post_meta( $external_copy, 'meta_box', true )['table'] );
+
+		$unnamed = $meta;
+		$unnamed['settings']['id']                   = 'unnamed';
+		$unnamed['settings']['custom_table']['name'] = '';
+		$unnamed['meta_box']['id']                   = 'unnamed';
+		$unnamed['meta_box']['table']                = '';
+		$unnamed_copy                                = $this->copy( $this->create_post( 'meta-box', 'unnamed', 'Unnamed', $unnamed ) );
+		$this->assertSame( '', get_post_meta( $unnamed_copy, 'settings', true )['custom_table']['name'] );
+		$this->assertSame( '', get_post_meta( $unnamed_copy, 'meta_box', true )['table'] );
 	}
 
 	public function test_duplicate_model_keeps_the_table_prefix(): void {
@@ -440,6 +469,22 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertSame( 'foo', get_post_meta( $post_id, 'settings', true )['id'] );
 		$this->assertSame( 'foo_copy', get_post( $copy_id )->post_name );
 		$this->assertSame( 'foo_copy', get_post_meta( $copy_id, 'settings', true )['id'] );
+	}
+
+	public function test_duplicate_skips_a_slug_trash_will_restore(): void {
+		$post_id = $this->create_post( 'meta-box', 'restore', 'Restore', [
+			'settings' => [ 'id' => 'restore' ],
+			'fields'   => [],
+			'meta_box' => [ 'id' => 'restore' ],
+		] );
+		$first   = $this->copy( $post_id );
+		wp_trash_post( $first );
+		$second = $this->copy( $post_id );
+
+		$this->assertSame( 'restore_copy', get_post_meta( $first, '_wp_desired_post_slug', true ) );
+		$this->assertSame( 'restore_copy_2', get_post( $second )->post_name );
+		$this->assertSame( 'restore_copy_2', get_post_meta( $second, 'settings', true )['id'] );
+		$this->assertSame( 'restore_copy', get_post_meta( $first, 'settings', true )['id'] );
 	}
 
 	public function test_saving_copy_does_not_change_original(): void {

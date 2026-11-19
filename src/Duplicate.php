@@ -118,9 +118,8 @@ class Duplicate {
 		$data = Export::sync_id( $data, $new_id );
 
 		// Last updated and JSON sync read this timestamp.
-		$modified                     = time();
-		$data['settings']['modified'] = $modified;
-		foreach ( [ 'meta_box', 'settings_page', 'relationship', 'model' ] as $key ) {
+		$modified = time();
+		foreach ( [ 'settings', 'meta_box', 'settings_page', 'relationship', 'model' ] as $key ) {
 			if ( isset( $data[ $key ] ) && is_array( $data[ $key ] ) ) {
 				$data[ $key ]['modified'] = $modified;
 			}
@@ -148,9 +147,10 @@ class Duplicate {
 			}
 		}
 
-		// Saving the copy runs DDL on this table.
-		$custom_table = $data['settings']['custom_table'] ?? null;
-		if ( 'meta-box' === $post_type && is_array( $custom_table ) && wp_validate_boolean( $custom_table['enable'] ?? false ) ) {
+		// Saving the copy runs DDL on this table. create=false points at a table managed elsewhere.
+		$custom_table = $data['settings']['custom_table'] ?? [];
+		$creates      = is_array( $custom_table ) && wp_validate_boolean( $custom_table['enable'] ?? false ) && wp_validate_boolean( $custom_table['create'] ?? false ) && ( $custom_table['name'] ?? '' );
+		if ( 'meta-box' === $post_type && $creates ) {
 			$use_prefix = wp_validate_boolean( $custom_table['prefix'] ?? false );
 			$table      = $this->unique_table( $new_id, $use_prefix );
 			if ( $table ) {
@@ -203,18 +203,8 @@ class Duplicate {
 	}
 
 	private function stored_tables(): array {
-		$posts = get_posts( [
-			'post_type'              => [ 'mb-model', 'meta-box' ],
-			'post_status'            => get_post_stati(),
-			'posts_per_page'         => -1,
-			'fields'                 => 'ids',
-			'no_found_rows'          => true,
-			'update_post_term_cache' => false,
-			'suppress_filters'       => true,
-		] );
-
 		$names = [];
-		foreach ( $posts as $post_id ) {
+		foreach ( $this->post_ids( [ 'mb-model', 'meta-box' ], get_post_stati() ) as $post_id ) {
 			foreach ( [ 'settings', 'model', 'meta_box' ] as $key ) {
 				$meta = get_post_meta( $post_id, $key, true );
 				if ( is_array( $meta ) ) {
@@ -235,7 +225,7 @@ class Duplicate {
 		$candidate = $base;
 		$suffix    = 2;
 
-		while ( $this->id_exists( $post_type, $candidate ) ) {
+		while ( $this->id_exists( $post_type, $candidate ) || ( 'mb-settings-page' === $post_type && $this->option_name_taken( $candidate ) ) ) {
 			$candidate = Id::sanitize( $base . '_' . $suffix, $id );
 			++$suffix;
 		}
@@ -257,6 +247,54 @@ class Duplicate {
 		] );
 
 		// A copy is a new object, so the source file must not count as its own.
-		return (bool) $posts || ( LocalJson::is_enabled() && ! LocalJson::new_file_path( $post_type, $id ) );
+		return (bool) $posts || $this->desired_slug_taken( $post_type, $id ) || ( LocalJson::is_enabled() && ! LocalJson::new_file_path( $post_type, $id ) );
+	}
+
+	/**
+	 * Untrash restores this slug. WordPress then changes post_name and leaves the stored ID.
+	 */
+	private function desired_slug_taken( string $post_type, string $id ): bool {
+		foreach ( $this->post_ids( $post_type, 'trash' ) as $post_id ) {
+			if ( get_post_meta( $post_id, '_wp_desired_post_slug', true ) === $id ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Two settings pages with the same option_name share one options row.
+	 */
+	private function option_name_taken( string $id ): bool {
+		foreach ( $this->post_ids( 'mb-settings-page', get_post_stati() ) as $post_id ) {
+			foreach ( [ 'settings', 'settings_page' ] as $key ) {
+				$meta = get_post_meta( $post_id, $key, true );
+				if ( is_array( $meta ) && ( $meta['option_name'] ?? '' ) === $id ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * IDs in every requested status. A language filter would hide a slug that is already taken.
+	 *
+	 * @param string|string[] $post_type   Post type or list of post types.
+	 * @param string|string[] $post_status Post status or list of statuses.
+	 * @return int[]
+	 */
+	private function post_ids( $post_type, $post_status ): array {
+		return get_posts( [
+			'post_type'              => $post_type,
+			'post_status'            => $post_status,
+			'posts_per_page'         => -1,
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_term_cache' => false,
+			'suppress_filters'       => true,
+		] );
 	}
 }
