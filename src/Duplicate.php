@@ -117,17 +117,45 @@ class Duplicate {
 	private function apply_new_id( array $data, string $new_id ): array {
 		$data = Export::sync_id( $data, $new_id );
 
-		if ( 'mb-settings-page' === ( $data['post_type'] ?? '' ) ) {
+		// Last updated and JSON sync read this timestamp.
+		$modified                     = time();
+		$data['settings']['modified'] = $modified;
+		foreach ( [ 'meta_box', 'settings_page', 'relationship', 'model' ] as $key ) {
+			if ( isset( $data[ $key ] ) && is_array( $data[ $key ] ) ) {
+				$data[ $key ]['modified'] = $modified;
+			}
+		}
+
+		// Generated PHP declares this name. A copied name fatal-errors when both snippets load.
+		if ( $data['settings']['function_name'] ?? '' ) {
+			$name                              = str_replace( '-', '_', $new_id );
+			$data['settings']['function_name'] = preg_match( '/^\d/', $name ) ? 'mb_' . $name : $name;
+		}
+
+		$post_type = $data['post_type'] ?? '';
+
+		if ( 'mb-settings-page' === $post_type ) {
 			$data['settings']['option_name']      = $new_id;
 			$data['settings_page']['option_name'] = $new_id;
 		}
 
-		if ( 'mb-model' === ( $data['post_type'] ?? '' ) ) {
+		if ( 'mb-model' === $post_type ) {
 			$use_prefix = ! empty( $data['settings']['prefix'] );
 			$table      = $this->unique_table( $new_id, $use_prefix );
 			if ( $table ) {
 				$data['settings']['table'] = $table;
 				$data['model']['table']    = TableSchema::apply_prefix( $table, $use_prefix );
+			}
+		}
+
+		// Saving the copy runs DDL on this table.
+		$custom_table = $data['settings']['custom_table'] ?? null;
+		if ( 'meta-box' === $post_type && is_array( $custom_table ) && wp_validate_boolean( $custom_table['enable'] ?? false ) ) {
+			$use_prefix = wp_validate_boolean( $custom_table['prefix'] ?? false );
+			$table      = $this->unique_table( $new_id, $use_prefix );
+			if ( $table ) {
+				$data['settings']['custom_table']['name'] = $table;
+				$data['meta_box']['table']                = TableSchema::apply_prefix( $table, $use_prefix );
 			}
 		}
 
@@ -157,7 +185,7 @@ class Duplicate {
 			return '';
 		}
 
-		$used      = $this->model_tables();
+		$used      = $this->stored_tables();
 		$candidate = $base;
 		$suffix    = 2;
 		while ( $this->table_taken( $candidate, $use_prefix, $used ) ) {
@@ -174,22 +202,27 @@ class Duplicate {
 		return TableSchema::table_exists( $stored ) || in_array( $table, $used, true ) || in_array( $stored, $used, true );
 	}
 
-	private function model_tables(): array {
+	private function stored_tables(): array {
 		$posts = get_posts( [
-			'post_type'              => 'mb-model',
+			'post_type'              => [ 'mb-model', 'meta-box' ],
 			'post_status'            => get_post_stati(),
 			'posts_per_page'         => -1,
 			'fields'                 => 'ids',
 			'no_found_rows'          => true,
 			'update_post_term_cache' => false,
+			'suppress_filters'       => true,
 		] );
 
 		$names = [];
 		foreach ( $posts as $post_id ) {
-			foreach ( [ 'settings', 'model' ] as $key ) {
+			foreach ( [ 'settings', 'model', 'meta_box' ] as $key ) {
 				$meta = get_post_meta( $post_id, $key, true );
-				if ( is_array( $meta ) && ! empty( $meta['table'] ) ) {
-					$names[] = (string) $meta['table'];
+				if ( is_array( $meta ) ) {
+					foreach ( [ $meta['table'] ?? '', $meta['custom_table']['name'] ?? '' ] as $name ) {
+						if ( $name ) {
+							$names[] = (string) $name;
+						}
+					}
 				}
 			}
 		}
@@ -202,7 +235,7 @@ class Duplicate {
 		$candidate = $base;
 		$suffix    = 2;
 
-		while ( $this->id_exists( $post_type, $candidate, $id ) ) {
+		while ( $this->id_exists( $post_type, $candidate ) ) {
 			$candidate = Id::sanitize( $base . '_' . $suffix, $id );
 			++$suffix;
 		}
@@ -210,19 +243,20 @@ class Duplicate {
 		return $candidate;
 	}
 
-	private function id_exists( string $post_type, string $id, string $previous_id ): bool {
+	private function id_exists( string $post_type, string $id ): bool {
 		// Limit the lookup to this post type, including trashed posts.
 		// get_page_by_path() also matches attachments.
 		$posts = get_posts( [
-			'name'           => $id,
-			'post_type'      => $post_type,
-			'post_status'    => get_post_stati(),
-			'posts_per_page' => 1,
-			'fields'         => 'ids',
-			'no_found_rows'  => true,
+			'name'             => $id,
+			'post_type'        => $post_type,
+			'post_status'      => get_post_stati(),
+			'posts_per_page'   => 1,
+			'fields'           => 'ids',
+			'no_found_rows'    => true,
+			'suppress_filters' => true,
 		] );
 
-		// An empty previous id is read as this id, so its JSON file would look like ours.
-		return (bool) $posts || (bool) LocalJson::check_id( $post_type, $id, $previous_id ?: '-' );
+		// A copy is a new object, so the source file must not count as its own.
+		return (bool) $posts || ( LocalJson::is_enabled() && ! LocalJson::new_file_path( $post_type, $id ) );
 	}
 }
