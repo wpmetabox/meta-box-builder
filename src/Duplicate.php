@@ -69,9 +69,9 @@ class Duplicate {
 			$data[ $meta_key ] = is_array( $value ) ? $value : [];
 		}
 
-		$old_id = $post->post_name ?: $this->id_from_meta( $post->post_type, $data );
+		$old_id = $this->source_id( $post, $data );
 		$slug   = $this->unique_id( $post->post_type, $old_id );
-		$data   = $this->apply_new_id( $data, $old_id, $slug );
+		$data   = $this->apply_new_id( $data, $slug );
 
 		// Registration reads this title. The list and the editor read post_title.
 		if ( isset( $data['meta_box']['title'] ) ) {
@@ -91,26 +91,47 @@ class Duplicate {
 
 		$created = get_post( $post_id );
 		if ( $created->post_name !== $data['post_name'] ) {
-			$data = $this->apply_new_id( $data, $data['post_name'], $created->post_name );
+			$data = $this->apply_new_id( $data, $created->post_name );
 		}
 
 		foreach ( $meta_keys as $meta_key ) {
 			update_post_meta( $post_id, $meta_key, $data[ $meta_key ] );
 		}
 
-		LocalJson::use_database( [
-			'post_id'   => $post_id,
-			'post_type' => $post->post_type,
-		], false );
-
 		return $post_id;
 	}
 
-	private function apply_new_id( array $data, string $old_id, string $new_id ): array {
-		$data = Export::sync_id( $data, $new_id );
-		$data = $this->sync_option_name( $data, $old_id, $new_id );
+	/**
+	 * Trash stores the original slug in post meta and appends __trashed to post_name.
+	 */
+	private function source_id( WP_Post $post, array $data ): string {
+		$slug = $post->post_name;
+		if ( 'trash' === $post->post_status ) {
+			$desired = get_post_meta( $post->ID, '_wp_desired_post_slug', true );
+			$slug    = $desired ?: preg_replace( '/__trashed$/', '', $slug );
+		}
 
-		return $this->sync_model_table( $data, $new_id );
+		return $slug ?: $this->id_from_meta( $post->post_type, $data );
+	}
+
+	private function apply_new_id( array $data, string $new_id ): array {
+		$data = Export::sync_id( $data, $new_id );
+
+		if ( 'mb-settings-page' === ( $data['post_type'] ?? '' ) ) {
+			$data['settings']['option_name']      = $new_id;
+			$data['settings_page']['option_name'] = $new_id;
+		}
+
+		if ( 'mb-model' === ( $data['post_type'] ?? '' ) ) {
+			$use_prefix = ! empty( $data['settings']['prefix'] );
+			$table      = $this->unique_table( $new_id, $use_prefix );
+			if ( $table ) {
+				$data['settings']['table'] = $table;
+				$data['model']['table']    = TableSchema::apply_prefix( $table, $use_prefix );
+			}
+		}
+
+		return $data;
 	}
 
 	/**
@@ -128,35 +149,52 @@ class Duplicate {
 	}
 
 	/**
-	 * Save leaves a non-empty option_name alone, so a copied default would keep writing the original option.
+	 * Publishing calls create_table(), which alters a table that already exists.
 	 */
-	private function sync_option_name( array $data, string $old_id, string $new_id ): array {
-		if ( 'mb-settings-page' === ( $data['post_type'] ?? '' ) && $old_id ) {
-			foreach ( [ 'settings', 'settings_page' ] as $key ) {
-				if ( ( $data[ $key ]['option_name'] ?? '' ) === $old_id ) {
-					$data[ $key ]['option_name'] = $new_id;
+	private function unique_table( string $id, bool $use_prefix ): string {
+		$base = TableSchema::sanitize_name( $id );
+		if ( ! $base ) {
+			return '';
+		}
+
+		$used      = $this->model_tables();
+		$candidate = $base;
+		$suffix    = 2;
+		while ( $this->table_taken( $candidate, $use_prefix, $used ) ) {
+			$candidate = TableSchema::sanitize_name( $base . '_' . $suffix );
+			++$suffix;
+		}
+
+		return $candidate;
+	}
+
+	private function table_taken( string $table, bool $use_prefix, array $used ): bool {
+		$stored = TableSchema::apply_prefix( $table, $use_prefix );
+
+		return TableSchema::table_exists( $stored ) || in_array( $table, $used, true ) || in_array( $stored, $used, true );
+	}
+
+	private function model_tables(): array {
+		$posts = get_posts( [
+			'post_type'              => 'mb-model',
+			'post_status'            => get_post_stati(),
+			'posts_per_page'         => -1,
+			'fields'                 => 'ids',
+			'no_found_rows'          => true,
+			'update_post_term_cache' => false,
+		] );
+
+		$names = [];
+		foreach ( $posts as $post_id ) {
+			foreach ( [ 'settings', 'model' ] as $key ) {
+				$meta = get_post_meta( $post_id, $key, true );
+				if ( is_array( $meta ) && ! empty( $meta['table'] ) ) {
+					$names[] = (string) $meta['table'];
 				}
 			}
 		}
 
-		return $data;
-	}
-
-	/**
-	 * Publishing calls create_table() with this name, so the copy must not keep the original table.
-	 */
-	private function sync_model_table( array $data, string $new_id ): array {
-		$table = TableSchema::sanitize_name( $new_id );
-		if ( 'mb-model' === ( $data['post_type'] ?? '' ) && $table ) {
-			if ( $data['settings']['table'] ?? '' ) {
-				$data['settings']['table'] = $table;
-			}
-			if ( $data['model']['table'] ?? '' ) {
-				$data['model']['table'] = TableSchema::apply_prefix( $table, ! empty( $data['settings']['prefix'] ) );
-			}
-		}
-
-		return $data;
+		return $names;
 	}
 
 	private function unique_id( string $post_type, string $id ): string {
@@ -164,7 +202,7 @@ class Duplicate {
 		$candidate = $base;
 		$suffix    = 2;
 
-		while ( $this->id_exists( $post_type, $candidate ) ) {
+		while ( $this->id_exists( $post_type, $candidate, $id ) ) {
 			$candidate = Id::sanitize( $base . '_' . $suffix, $id );
 			++$suffix;
 		}
@@ -172,7 +210,7 @@ class Duplicate {
 		return $candidate;
 	}
 
-	private function id_exists( string $post_type, string $id ): bool {
+	private function id_exists( string $post_type, string $id, string $previous_id ): bool {
 		// Limit the lookup to this post type, including trashed posts.
 		// get_page_by_path() also matches attachments.
 		$posts = get_posts( [
@@ -184,6 +222,7 @@ class Duplicate {
 			'no_found_rows'  => true,
 		] );
 
-		return (bool) $posts || (bool) LocalJson::check_id( $post_type, $id );
+		// An empty previous id is read as this id, so its JSON file would look like ours.
+		return (bool) $posts || (bool) LocalJson::check_id( $post_type, $id, $previous_id ?: '-' );
 	}
 }

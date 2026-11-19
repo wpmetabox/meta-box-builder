@@ -1,6 +1,7 @@
 <?php
 
 use MBB\Duplicate;
+use MBB\JsonService;
 use MBB\RestApi\Save;
 
 class DuplicateTest extends WP_UnitTestCase {
@@ -102,10 +103,18 @@ class DuplicateTest extends WP_UnitTestCase {
 			$custom[ $key ]['id']          = 'theme-custom';
 			$custom[ $key ]['option_name'] = 'site-options';
 		}
-		$custom_id   = $this->create_post( 'mb-settings-page', 'theme-custom', 'Theme Options', $custom );
-		$custom_copy = $this->copy( $custom_id );
-		$this->assertSame( 'site-options', get_post_meta( $custom_copy, 'settings', true )['option_name'] );
-		$this->assertSame( 'site-options', get_post_meta( $custom_copy, 'settings_page', true )['option_name'] );
+		$custom_copy = $this->copy( $this->create_post( 'mb-settings-page', 'theme-custom', 'Theme Options', $custom ) );
+		$this->assertSame( 'theme-custom_copy', get_post_meta( $custom_copy, 'settings', true )['option_name'] );
+		$this->assertSame( 'theme-custom_copy', get_post_meta( $custom_copy, 'settings_page', true )['option_name'] );
+
+		$renamed = $meta;
+		foreach ( [ 'settings', 'settings_page' ] as $key ) {
+			$renamed[ $key ]['id']          = 'theme-options-new';
+			$renamed[ $key ]['option_name'] = 'theme-options';
+		}
+		$renamed_copy = $this->copy( $this->create_post( 'mb-settings-page', 'theme-options-new', 'Theme Options', $renamed ) );
+		$this->assertSame( 'theme-options-new_copy', get_post_meta( $renamed_copy, 'settings', true )['option_name'] );
+		$this->assertSame( 'theme-options-new_copy', get_post_meta( $renamed_copy, 'settings_page', true )['option_name'] );
 	}
 
 	public function test_duplicate_relationship(): void {
@@ -155,6 +164,108 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertSame( 'book_copy', $model['name'] );
 		$this->assertSame( 'book_copy', $model['table'] );
 		$this->assert_original( $post_id, 'book', 'Books', $meta );
+	}
+
+	public function test_duplicate_model_skips_a_table_another_model_uses(): void {
+		$meta    = [
+			'settings' => [
+				'slug'  => 'book',
+				'table' => 'book_copy',
+			],
+			'model'    => [
+				'id'    => 'book',
+				'name'  => 'book',
+				'table' => 'book_copy',
+			],
+		];
+		$post_id = $this->create_post( 'mb-model', 'book', 'Books', $meta );
+		$copy_id = $this->copy( $post_id );
+
+		$this->assertSame( 'book_copy_2', get_post_meta( $copy_id, 'settings', true )['table'] );
+		$this->assertSame( 'book_copy_2', get_post_meta( $copy_id, 'model', true )['table'] );
+		$this->assertSame( 'book_copy', get_post_meta( $post_id, 'model', true )['table'] );
+	}
+
+	public function test_duplicate_model_skips_an_existing_database_table(): void {
+		global $wpdb;
+
+		// The test suite turns CREATE TABLE into a temporary table, which SHOW TABLES does not list.
+		remove_filter( 'query', [ $this, '_create_temporary_tables' ] );
+		remove_filter( 'query', [ $this, '_drop_temporary_tables' ] );
+		$wpdb->query( 'DROP TABLE IF EXISTS book_copy' );
+		$wpdb->query( 'CREATE TABLE book_copy (id bigint unsigned NOT NULL)' );
+
+		try {
+			$post_id = $this->create_post( 'mb-model', 'book', 'Books', [
+				'settings' => [
+					'slug'  => 'book',
+					'table' => 'books',
+				],
+				'model'    => [
+					'id'    => 'book',
+					'name'  => 'book',
+					'table' => 'books',
+				],
+			] );
+			$copy_id = $this->copy( $post_id );
+
+			$this->assertSame( 'book_copy', get_post( $copy_id )->post_name );
+			$this->assertSame( 'book_copy_2', get_post_meta( $copy_id, 'settings', true )['table'] );
+			$this->assertSame( 'book_copy_2', get_post_meta( $copy_id, 'model', true )['table'] );
+		} finally {
+			$wpdb->query( 'DROP TABLE IF EXISTS book_copy' );
+			add_filter( 'query', [ $this, '_create_temporary_tables' ] );
+			add_filter( 'query', [ $this, '_drop_temporary_tables' ] );
+		}
+	}
+
+	public function test_duplicate_skips_id_used_by_local_json(): void {
+		$dir = sys_get_temp_dir() . '/mbb-duplicate-json';
+		wp_mkdir_p( $dir );
+		$filter = static function () use ( $dir ) {
+			return [ $dir ];
+		};
+		add_filter( 'mb_json_paths', $filter );
+		file_put_contents( $dir . '/book_copy.json', wp_json_encode( [
+			'$schema' => 'https://schemas.metabox.io/field-group.json',
+			'id'      => 'book_copy',
+			'title'   => 'Book Copy',
+			'fields'  => [],
+		] ) );
+		JsonService::clear_cache();
+
+		try {
+			$post_id = $this->create_post( 'meta-box', 'book', 'Book', [
+				'settings' => [ 'id' => 'book' ],
+				'fields'   => [],
+				'meta_box' => [ 'id' => 'book' ],
+			] );
+			$copy_id = $this->copy( $post_id );
+
+			$this->assertSame( 'book_copy_2', get_post( $copy_id )->post_name );
+			$this->assertSame( 'book_copy_2', get_post_meta( $copy_id, 'settings', true )['id'] );
+			$this->assertSame( 'book', get_post( $post_id )->post_name );
+		} finally {
+			wp_delete_file( $dir . '/book_copy.json' );
+			remove_filter( 'mb_json_paths', $filter );
+			JsonService::clear_cache();
+		}
+	}
+
+	public function test_duplicate_trashed_post_uses_the_slug_from_before_trash(): void {
+		$post_id = $this->create_post( 'meta-box', 'foo', 'Foo', [
+			'settings' => [ 'id' => 'foo' ],
+			'fields'   => [],
+			'meta_box' => [ 'id' => 'foo' ],
+		] );
+		wp_trash_post( $post_id );
+
+		$copy_id = $this->copy( $post_id );
+
+		$this->assertSame( 'foo__trashed', get_post( $post_id )->post_name );
+		$this->assertSame( 'foo', get_post_meta( $post_id, 'settings', true )['id'] );
+		$this->assertSame( 'foo_copy', get_post( $copy_id )->post_name );
+		$this->assertSame( 'foo_copy', get_post_meta( $copy_id, 'settings', true )['id'] );
 	}
 
 	public function test_saving_copy_does_not_change_original(): void {
