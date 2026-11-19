@@ -13,20 +13,28 @@ jQuery( function ( $ ) {
 		}
 
 		const input = event.currentTarget;
+		// The response can arrive after another click or after Back restores the form.
+		const checked = input.checked;
+		input.disabled = true;
 
 		$.post( ajaxurl, {
 			action: 'mbb_toggle_status',
 			post_id: input.dataset.id,
-			checked: input.checked,
+			checked,
 			_ajax_nonce: mbbStatusToggle.nonce,
-		}, response => {
+		} ).done( response => {
 			if ( ! response.success ) {
-				input.checked = input.dataset.status === 'publish';
+				input.checked = ! checked;
 				alert( response.data.message );
 				return;
 			}
 
-			input.dataset.status = input.checked ? 'publish' : 'draft';
+			input.checked = checked;
+			input.dataset.status = checked ? 'publish' : 'draft';
+		} ).fail( () => {
+			input.checked = ! checked;
+		} ).always( () => {
+			input.disabled = false;
 		} );
 	} );
 
