@@ -1,10 +1,11 @@
 <?php
 namespace MBB;
 
+use MetaBox\Support\Arr;
 use WP_Post;
 
 class Export {
-	private const ALLOWED_POST_TYPES = [ 'meta-box', 'mb-relationship', 'mb-settings-page', 'mb-model' ];
+	public const ALLOWED_POST_TYPES = [ 'meta-box', 'mb-relationship', 'mb-settings-page', 'mb-model' ];
 
 	public function __construct() {
 		add_filter( 'post_row_actions', [ $this, 'add_export_link' ], 10, 2 );
@@ -112,5 +113,36 @@ class Export {
 		];
 
 		return $meta_keys[ $post_type ] ?? [];
+	}
+
+	/**
+	 * Dot-notation keys that store the object ID.
+	 *
+	 * @return string[]
+	 */
+	public static function id_keys( string $post_type ): array {
+		$keys = [
+			'meta-box'         => [ 'settings.id', 'meta_box.id' ],
+			'mb-model'         => [ 'settings.slug', 'model.id', 'model.name' ],
+			'mb-settings-page' => [ 'settings.id', 'settings_page.id' ],
+			'mb-relationship'  => [ 'settings.id', 'relationship.id' ],
+		];
+
+		return $keys[ $post_type ] ?? [];
+	}
+
+	/**
+	 * Store the given ID everywhere the object type keeps it.
+	 *
+	 * @param array  $post Post data, including post_type and meta.
+	 * @param string $id   ID to store, which is also the post slug.
+	 */
+	public static function sync_id( array $post, string $id ): array {
+		$post['post_name'] = $id;
+		foreach ( self::id_keys( $post['post_type'] ?? '' ) as $key ) {
+			Arr::set( $post, $key, $id );
+		}
+
+		return $post;
 	}
 }
