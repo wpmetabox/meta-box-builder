@@ -47,15 +47,20 @@ class ToggleStatusColumn {
 			return;
 		}
 
-		// Use the switch markup and styles from Meta Box.
-		$field = RWMB_Switch_Field::normalize( [
+		// Browser Back restores checkbox state by position when the name is empty.
+		// A new duplicate row then shows the previous row's status until reload.
+		$published = $post->post_status === 'publish';
+		$field     = RWMB_Switch_Field::normalize( [
 			'type'       => 'switch',
+			'id'         => 'mbb-status-' . $post_id,
 			'disabled'   => ! $this->can_toggle( $post ),
 			'attributes' => [
-				'data-id' => $post_id,
+				'data-id'      => $post_id,
+				'data-status'  => $published ? 'publish' : 'draft',
+				'autocomplete' => 'off',
 			],
 		] );
-		echo RWMB_Switch_Field::html( $post->post_status === 'publish', $field );
+		echo RWMB_Switch_Field::html( $published, $field );
 	}
 
 	public function enqueue_scripts(): void {
