@@ -46,7 +46,7 @@ class Export {
 		$post_type        = sanitize_key( wp_unslash( $_REQUEST['post_type'] ) );
 		$post_type_object = in_array( $post_type, self::ALLOWED_POST_TYPES, true ) ? get_post_type_object( $post_type ) : null;
 		if ( ! $post_type_object || ! current_user_can( $post_type_object->cap->edit_posts ) ) {
-			wp_die( esc_html__( 'You are not allowed to export this post type.', 'meta-box-builder' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to export this post type.', 'meta-box-builder' ), '', [ 'response' => 403 ] );
 		}
 
 		$post_ids = [];
@@ -58,7 +58,7 @@ class Export {
 		}
 
 		if ( ! $post_ids ) {
-			wp_die( esc_html__( 'You are not allowed to export these items.', 'meta-box-builder' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to export these items.', 'meta-box-builder' ), '', [ 'response' => 403 ] );
 		}
 
 		$data = JsonService::get_meta_boxes( [

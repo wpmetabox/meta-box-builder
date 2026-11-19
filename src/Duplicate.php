@@ -2,6 +2,7 @@
 namespace MBB;
 
 use MBB\Helpers\Id;
+use MBB\Helpers\TableSchema;
 use MetaBox\Support\Arr;
 use WP_Post;
 
@@ -42,7 +43,7 @@ class Duplicate {
 		// get_post( 0 ) falls back to the global post. && would return true, not the post.
 		$post = $post_id ? get_post( $post_id ) : null;
 		if ( ! $post instanceof WP_Post || ! in_array( $post->post_type, Export::ALLOWED_POST_TYPES, true ) || ! current_user_can( 'edit_post', $post->ID ) ) {
-			wp_die( esc_html__( 'You are not allowed to duplicate this item.', 'meta-box-builder' ), 403 );
+			wp_die( esc_html__( 'You are not allowed to duplicate this item.', 'meta-box-builder' ), '', [ 'response' => 403 ] );
 		}
 
 		$new_id = $this->duplicate_post( $post );
@@ -68,8 +69,9 @@ class Duplicate {
 			$data[ $meta_key ] = is_array( $value ) ? $value : [];
 		}
 
-		$slug = $this->unique_id( $post->post_type, $post->post_name ?: $this->id_from_meta( $data ) );
-		$data = Export::sync_id( $data, $slug );
+		$old_id = $post->post_name ?: $this->id_from_meta( $post->post_type, $data );
+		$slug   = $this->unique_id( $post->post_type, $old_id );
+		$data   = $this->apply_new_id( $data, $old_id, $slug );
 
 		// Registration reads this title. The list and the editor read post_title.
 		if ( isset( $data['meta_box']['title'] ) ) {
@@ -89,7 +91,7 @@ class Duplicate {
 
 		$created = get_post( $post_id );
 		if ( $created->post_name !== $data['post_name'] ) {
-			$data = Export::sync_id( $data, $created->post_name );
+			$data = $this->apply_new_id( $data, $data['post_name'], $created->post_name );
 		}
 
 		foreach ( $meta_keys as $meta_key ) {
@@ -104,18 +106,57 @@ class Duplicate {
 		return $post_id;
 	}
 
+	private function apply_new_id( array $data, string $old_id, string $new_id ): array {
+		$data = Export::sync_id( $data, $new_id );
+		$data = $this->sync_option_name( $data, $old_id, $new_id );
+
+		return $this->sync_model_table( $data, $new_id );
+	}
+
 	/**
 	 * ID stored in meta when the post has no slug yet.
 	 */
-	private function id_from_meta( array $data ): string {
-		foreach ( Export::id_keys( $data['post_type'] ) as $key ) {
-			$value = Arr::get( $data, $key );
+	private function id_from_meta( string $post_type, array $meta ): string {
+		foreach ( Export::id_keys( $post_type ) as $key ) {
+			$value = Arr::get( $meta, $key );
 			if ( $value ) {
 				return (string) $value;
 			}
 		}
 
 		return '';
+	}
+
+	/**
+	 * Save leaves a non-empty option_name alone, so a copied default would keep writing the original option.
+	 */
+	private function sync_option_name( array $data, string $old_id, string $new_id ): array {
+		if ( 'mb-settings-page' === ( $data['post_type'] ?? '' ) && $old_id ) {
+			foreach ( [ 'settings', 'settings_page' ] as $key ) {
+				if ( ( $data[ $key ]['option_name'] ?? '' ) === $old_id ) {
+					$data[ $key ]['option_name'] = $new_id;
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Publishing calls create_table() with this name, so the copy must not keep the original table.
+	 */
+	private function sync_model_table( array $data, string $new_id ): array {
+		$table = TableSchema::sanitize_name( $new_id );
+		if ( 'mb-model' === ( $data['post_type'] ?? '' ) && $table ) {
+			if ( $data['settings']['table'] ?? '' ) {
+				$data['settings']['table'] = $table;
+			}
+			if ( $data['model']['table'] ?? '' ) {
+				$data['model']['table'] = TableSchema::apply_prefix( $table, ! empty( $data['settings']['prefix'] ) );
+			}
+		}
+
+		return $data;
 	}
 
 	private function unique_id( string $post_type, string $id ): string {

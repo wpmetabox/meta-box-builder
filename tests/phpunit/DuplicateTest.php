@@ -72,12 +72,14 @@ class DuplicateTest extends WP_UnitTestCase {
 	public function test_duplicate_settings_page(): void {
 		$meta    = [
 			'settings'      => [
-				'id'         => 'theme-options',
-				'menu_title' => 'Theme Options',
+				'id'          => 'theme-options',
+				'menu_title'  => 'Theme Options',
+				'option_name' => 'theme-options',
 			],
 			'settings_page' => [
-				'id'         => 'theme-options',
-				'menu_title' => 'Theme Options',
+				'id'          => 'theme-options',
+				'menu_title'  => 'Theme Options',
+				'option_name' => 'theme-options',
 			],
 		];
 		$post_id = $this->create_post( 'mb-settings-page', 'theme-options', 'Theme Options', $meta );
@@ -89,9 +91,21 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertSame( 'draft', get_post( $copy_id )->post_status );
 		$this->assertSame( 'theme-options_copy', $settings['id'] );
 		$this->assertSame( 'Theme Options', $settings['menu_title'] );
+		$this->assertSame( 'theme-options_copy', $settings['option_name'] );
 		$this->assertSame( 'theme-options_copy', $page['id'] );
 		$this->assertSame( 'Theme Options', $page['menu_title'] );
+		$this->assertSame( 'theme-options_copy', $page['option_name'] );
 		$this->assert_original( $post_id, 'theme-options', 'Theme Options', $meta );
+
+		$custom = $meta;
+		foreach ( [ 'settings', 'settings_page' ] as $key ) {
+			$custom[ $key ]['id']          = 'theme-custom';
+			$custom[ $key ]['option_name'] = 'site-options';
+		}
+		$custom_id   = $this->create_post( 'mb-settings-page', 'theme-custom', 'Theme Options', $custom );
+		$custom_copy = $this->copy( $custom_id );
+		$this->assertSame( 'site-options', get_post_meta( $custom_copy, 'settings', true )['option_name'] );
+		$this->assertSame( 'site-options', get_post_meta( $custom_copy, 'settings_page', true )['option_name'] );
 	}
 
 	public function test_duplicate_relationship(): void {
@@ -115,7 +129,7 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assert_original( $post_id, 'posts-to-pages', 'Posts to Pages', $meta );
 	}
 
-	public function test_duplicate_model_keeps_table(): void {
+	public function test_duplicate_model_gets_its_own_table(): void {
 		$meta    = [
 			'settings' => [
 				'slug'   => 'book',
@@ -135,11 +149,11 @@ class DuplicateTest extends WP_UnitTestCase {
 		$model    = get_post_meta( $copy_id, 'model', true );
 		$this->assertSame( 'book_copy', get_post( $copy_id )->post_name );
 		$this->assertSame( 'book_copy', $settings['slug'] );
-		$this->assertSame( 'books', $settings['table'] );
+		$this->assertSame( 'book_copy', $settings['table'] );
 		$this->assertSame( 'Books', $settings['labels']['name'] );
 		$this->assertSame( 'book_copy', $model['id'] );
 		$this->assertSame( 'book_copy', $model['name'] );
-		$this->assertSame( 'books', $model['table'] );
+		$this->assertSame( 'book_copy', $model['table'] );
 		$this->assert_original( $post_id, 'book', 'Books', $meta );
 	}
 
