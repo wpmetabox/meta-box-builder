@@ -8,24 +8,14 @@ class DuplicateTest extends WP_UnitTestCase {
 	/** @var Duplicate */
 	private $duplicator;
 
-	/** @var int[] */
-	private $post_ids = [];
-
 	public function set_up(): void {
 		parent::set_up();
 		$this->duplicator = new Duplicate();
 		wp_set_current_user( $this->factory()->user->create( [ 'role' => 'administrator' ] ) );
 	}
 
-	public function tear_down(): void {
-		foreach ( $this->post_ids as $post_id ) {
-			wp_delete_post( $post_id, true );
-		}
-		parent::tear_down();
-	}
-
 	public function test_duplicate_field_group_keeps_field_ids(): void {
-		$fields = [
+		$fields  = [
 			[
 				'id'     => 'group_field',
 				'type'   => 'group',
@@ -265,7 +255,7 @@ class DuplicateTest extends WP_UnitTestCase {
 	}
 
 	public function test_duplicate_skips_id_when_renamed_json_uses_both_file_names(): void {
-		$dir    = sys_get_temp_dir() . '/mbb-duplicate-json';
+		$dir = sys_get_temp_dir() . '/mbb-duplicate-json';
 		wp_mkdir_p( $dir );
 		$filter = static function () use ( $dir ) {
 			return [ $dir ];
@@ -364,7 +354,7 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertSame( 'book_copy', get_post_meta( $copy_id, 'meta_box', true )['table'] );
 		$this->assertSame( 'books', get_post_meta( $post_id, 'settings', true )['custom_table']['name'] );
 
-		$prefixed = $meta;
+		$prefixed                                       = $meta;
 		$prefixed['settings']['id']                     = 'prefixed';
 		$prefixed['settings']['custom_table']['prefix'] = true;
 		$prefixed['meta_box']['id']                     = 'prefixed';
@@ -373,27 +363,27 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertSame( 'prefixed_copy', get_post_meta( $prefixed_copy, 'settings', true )['custom_table']['name'] );
 		$this->assertSame( $wpdb->prefix . 'prefixed_copy', get_post_meta( $prefixed_copy, 'meta_box', true )['table'] );
 
-		$taken = $meta;
+		$taken                                     = $meta;
 		$taken['settings']['id']                   = 'taken';
 		$taken['settings']['custom_table']['name'] = 'shelf_copy';
 		$taken['meta_box']['id']                   = 'taken';
 		$taken['meta_box']['table']                = 'shelf_copy';
 		$this->create_post( 'meta-box', 'taken', 'Taken', $taken );
-		$shelf = $meta;
+		$shelf                   = $meta;
 		$shelf['settings']['id'] = 'shelf';
 		$shelf['meta_box']['id'] = 'shelf';
 		$skipped                 = $this->copy( $this->create_post( 'meta-box', 'shelf', 'Shelf', $shelf ) );
 		$this->assertSame( 'shelf_copy', get_post( $skipped )->post_name );
 		$this->assertSame( 'shelf_copy_2', get_post_meta( $skipped, 'settings', true )['custom_table']['name'] );
 
-		$disabled = $meta;
+		$disabled                                       = $meta;
 		$disabled['settings']['id']                     = 'disabled';
 		$disabled['settings']['custom_table']['enable'] = false;
 		$disabled['meta_box']['id']                     = 'disabled';
 		$disabled_copy                                  = $this->copy( $this->create_post( 'meta-box', 'disabled', 'Disabled', $disabled ) );
 		$this->assertSame( 'books', get_post_meta( $disabled_copy, 'settings', true )['custom_table']['name'] );
 
-		$external = $meta;
+		$external                                       = $meta;
 		$external['settings']['id']                     = 'external';
 		$external['settings']['custom_table']['create'] = false;
 		$external['meta_box']['id']                     = 'external';
@@ -401,7 +391,7 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertSame( 'books', get_post_meta( $external_copy, 'settings', true )['custom_table']['name'] );
 		$this->assertSame( 'books', get_post_meta( $external_copy, 'meta_box', true )['table'] );
 
-		$unnamed = $meta;
+		$unnamed                                     = $meta;
 		$unnamed['settings']['id']                   = 'unnamed';
 		$unnamed['settings']['custom_table']['name'] = '';
 		$unnamed['meta_box']['id']                   = 'unnamed';
@@ -455,38 +445,6 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertSame( 1, get_post_meta( $post_id, 'meta_box', true )['modified'] );
 	}
 
-	public function test_duplicate_trashed_post_uses_the_slug_from_before_trash(): void {
-		$post_id = $this->create_post( 'meta-box', 'foo', 'Foo', [
-			'settings' => [ 'id' => 'foo' ],
-			'fields'   => [],
-			'meta_box' => [ 'id' => 'foo' ],
-		] );
-		wp_trash_post( $post_id );
-
-		$copy_id = $this->copy( $post_id );
-
-		$this->assertSame( 'foo__trashed', get_post( $post_id )->post_name );
-		$this->assertSame( 'foo', get_post_meta( $post_id, 'settings', true )['id'] );
-		$this->assertSame( 'foo_copy', get_post( $copy_id )->post_name );
-		$this->assertSame( 'foo_copy', get_post_meta( $copy_id, 'settings', true )['id'] );
-	}
-
-	public function test_duplicate_skips_a_slug_trash_will_restore(): void {
-		$post_id = $this->create_post( 'meta-box', 'restore', 'Restore', [
-			'settings' => [ 'id' => 'restore' ],
-			'fields'   => [],
-			'meta_box' => [ 'id' => 'restore' ],
-		] );
-		$first   = $this->copy( $post_id );
-		wp_trash_post( $first );
-		$second = $this->copy( $post_id );
-
-		$this->assertSame( 'restore_copy', get_post_meta( $first, '_wp_desired_post_slug', true ) );
-		$this->assertSame( 'restore_copy_2', get_post( $second )->post_name );
-		$this->assertSame( 'restore_copy_2', get_post_meta( $second, 'settings', true )['id'] );
-		$this->assertSame( 'restore_copy', get_post_meta( $first, 'settings', true )['id'] );
-	}
-
 	public function test_saving_copy_does_not_change_original(): void {
 		$fields  = [
 			[
@@ -531,12 +489,12 @@ class DuplicateTest extends WP_UnitTestCase {
 	}
 
 	public function test_duplicate_without_slug_reads_id_from_meta(): void {
-		$post_id = $this->track( wp_insert_post( [
+		$post_id = wp_insert_post( [
 			'post_type'   => 'meta-box',
 			'post_status' => 'draft',
 			'post_title'  => 'No Slug',
 			'post_name'   => '',
-		] ) );
+		] );
 		update_post_meta( $post_id, 'settings', [ 'id' => 'from-meta' ] );
 		update_post_meta( $post_id, 'fields', [] );
 		update_post_meta( $post_id, 'meta_box', [ 'id' => 'from-meta' ] );
@@ -558,7 +516,7 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'Duplicate', $actions['duplicate'] );
 
 		preg_match( '/href="([^"]+)"/', $actions['duplicate'], $matches );
-		$href  = htmlspecialchars_decode( $matches[1] );
+		$href  = htmlspecialchars_decode( $matches[1], ENT_QUOTES );
 		$query = [];
 		wp_parse_str( (string) wp_parse_url( $href, PHP_URL_QUERY ), $query );
 
@@ -581,12 +539,30 @@ class DuplicateTest extends WP_UnitTestCase {
 	}
 
 	public function test_duplicate_rejects_empty_post_id(): void {
-		$_GET['action']       = 'mbb-duplicate';
-		$_GET['post']         = '0';
-		$_REQUEST['_wpnonce'] = wp_create_nonce( 'mbb-duplicate_0' );
-
 		$this->expectException( WPDieException::class );
 		$this->expectExceptionMessage( 'not allowed' );
+		$this->request_duplicate( '0', wp_create_nonce( 'mbb-duplicate_0' ) );
+	}
+
+	public function test_duplicate_rejects_user_without_permission(): void {
+		$post_id = $this->create_post( 'meta-box', 'secure', 'Secure', [] );
+		wp_set_current_user( $this->factory()->user->create( [ 'role' => 'subscriber' ] ) );
+
+		$this->assertArrayNotHasKey( 'duplicate', $this->duplicator->add_duplicate_link( [], get_post( $post_id ) ) );
+		$this->expectException( WPDieException::class );
+		$this->request_duplicate( (string) $post_id, wp_create_nonce( 'mbb-duplicate_' . $post_id ) );
+	}
+
+	public function test_duplicate_rejects_wrong_nonce(): void {
+		$post_id = $this->create_post( 'meta-box', 'nonce', 'Nonce', [] );
+		$this->expectException( WPDieException::class );
+		$this->request_duplicate( (string) $post_id, 'wrong' );
+	}
+
+	private function request_duplicate( string $post_id, string $nonce ): void {
+		$_GET['action']       = 'mbb-duplicate';
+		$_GET['post']         = $post_id;
+		$_REQUEST['_wpnonce'] = $nonce;
 
 		try {
 			$this->duplicator->duplicate();
@@ -606,16 +582,11 @@ class DuplicateTest extends WP_UnitTestCase {
 			update_post_meta( $post_id, $key, $value );
 		}
 
-		return $this->track( (int) $post_id );
+		return (int) $post_id;
 	}
 
 	private function copy( int $post_id ): int {
-		return $this->track( $this->duplicator->duplicate_post( get_post( $post_id ) ) );
-	}
-
-	private function track( int $post_id ): int {
-		$this->post_ids[] = $post_id;
-		return $post_id;
+		return $this->duplicator->duplicate_post( get_post( $post_id ) );
 	}
 
 	private function assert_original( int $post_id, string $name, string $title, array $meta ): void {

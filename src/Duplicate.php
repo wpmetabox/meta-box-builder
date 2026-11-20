@@ -18,7 +18,7 @@ class Duplicate {
 	 * @param array<string, string> $actions Row actions.
 	 */
 	public function add_duplicate_link( array $actions, WP_Post $post ): array {
-		if ( ! in_array( $post->post_type, Export::ALLOWED_POST_TYPES, true ) || ! current_user_can( 'edit_post', $post->ID ) ) {
+		if ( 'trash' === $post->post_status || ! in_array( $post->post_type, Export::ALLOWED_POST_TYPES, true ) || ! current_user_can( 'edit_post', $post->ID ) ) {
 			return $actions;
 		}
 
@@ -42,7 +42,7 @@ class Duplicate {
 
 		// get_post( 0 ) falls back to the global post. && would return true, not the post.
 		$post = $post_id ? get_post( $post_id ) : null;
-		if ( ! $post instanceof WP_Post || ! in_array( $post->post_type, Export::ALLOWED_POST_TYPES, true ) || ! current_user_can( 'edit_post', $post->ID ) ) {
+		if ( ! $post instanceof WP_Post || 'trash' === $post->post_status || ! in_array( $post->post_type, Export::ALLOWED_POST_TYPES, true ) || ! current_user_can( 'edit_post', $post->ID ) ) {
 			wp_die( esc_html__( 'You are not allowed to duplicate this item.', 'meta-box-builder' ), '', [ 'response' => 403 ] );
 		}
 
@@ -89,11 +89,6 @@ class Duplicate {
 			wp_die( esc_html__( 'Could not duplicate this item.', 'meta-box-builder' ) );
 		}
 
-		$created = get_post( $post_id );
-		if ( $created->post_name !== $data['post_name'] ) {
-			$data = $this->apply_new_id( $data, $created->post_name );
-		}
-
 		foreach ( $meta_keys as $meta_key ) {
 			update_post_meta( $post_id, $meta_key, $data[ $meta_key ] );
 		}
@@ -101,17 +96,8 @@ class Duplicate {
 		return $post_id;
 	}
 
-	/**
-	 * Trash stores the original slug in post meta and appends __trashed to post_name.
-	 */
 	private function source_id( WP_Post $post, array $data ): string {
-		$slug = $post->post_name;
-		if ( 'trash' === $post->post_status ) {
-			$desired = get_post_meta( $post->ID, '_wp_desired_post_slug', true );
-			$slug    = $desired ?: preg_replace( '/__trashed$/', '', $slug );
-		}
-
-		return $slug ?: $this->id_from_meta( $post->post_type, $data );
+		return $post->post_name ?: $this->id_from_meta( $post->post_type, $data );
 	}
 
 	private function apply_new_id( array $data, string $new_id ): array {
@@ -247,20 +233,7 @@ class Duplicate {
 		] );
 
 		// A copy is a new object, so the source file must not count as its own.
-		return (bool) $posts || $this->desired_slug_taken( $post_type, $id ) || ( LocalJson::is_enabled() && ! LocalJson::new_file_path( $post_type, $id ) );
-	}
-
-	/**
-	 * Untrash restores this slug. WordPress then changes post_name and leaves the stored ID.
-	 */
-	private function desired_slug_taken( string $post_type, string $id ): bool {
-		foreach ( $this->post_ids( $post_type, 'trash' ) as $post_id ) {
-			if ( get_post_meta( $post_id, '_wp_desired_post_slug', true ) === $id ) {
-				return true;
-			}
-		}
-
-		return false;
+		return $posts || ( LocalJson::is_enabled() && ! LocalJson::new_file_path( $post_type, $id ) );
 	}
 
 	/**
