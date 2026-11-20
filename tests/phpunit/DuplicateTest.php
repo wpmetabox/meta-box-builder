@@ -445,6 +445,26 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertSame( 1, get_post_meta( $post_id, 'meta_box', true )['modified'] );
 	}
 
+	public function test_duplicate_skips_a_slug_trash_will_restore(): void {
+		$post_id = $this->create_post( 'meta-box', 'restore', 'Restore', [
+			'settings' => [ 'id' => 'restore' ],
+			'fields'   => [],
+			'meta_box' => [ 'id' => 'restore' ],
+		] );
+		$first   = $this->copy( $post_id );
+		wp_trash_post( $first );
+		$second = $this->copy( $post_id );
+
+		$this->assertSame( 'restore_copy_2', get_post( $second )->post_name );
+		$this->assertSame( 'restore_copy_2', get_post_meta( $second, 'settings', true )['id'] );
+
+		wp_untrash_post( $first );
+
+		$this->assertSame( 'restore_copy', get_post( $first )->post_name );
+		$this->assertSame( 'restore_copy', get_post_meta( $first, 'settings', true )['id'] );
+		$this->assertSame( 'restore_copy_2', get_post( $second )->post_name );
+	}
+
 	public function test_saving_copy_does_not_change_original(): void {
 		$fields  = [
 			[

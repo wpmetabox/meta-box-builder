@@ -233,7 +233,20 @@ class Duplicate {
 		] );
 
 		// A copy is a new object, so the source file must not count as its own.
-		return $posts || ( LocalJson::is_enabled() && ! LocalJson::new_file_path( $post_type, $id ) );
+		return $posts || $this->desired_slug_taken( $post_type, $id ) || ( LocalJson::is_enabled() && ! LocalJson::new_file_path( $post_type, $id ) );
+	}
+
+	/**
+	 * Untrash restores this slug. Drafts skip the unique-slug check, so both posts would keep the same ID.
+	 */
+	private function desired_slug_taken( string $post_type, string $id ): bool {
+		foreach ( $this->post_ids( $post_type, 'trash' ) as $post_id ) {
+			if ( get_post_meta( $post_id, '_wp_desired_post_slug', true ) === $id ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
