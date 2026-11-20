@@ -508,6 +508,41 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assert_original( $post_id, 'save-group', 'Save Group', $meta );
 	}
 
+	public function test_duplicate_keeps_backslashes(): void {
+		$post_id = wp_insert_post( [
+			'post_type'   => 'meta-box',
+			'post_status' => 'publish',
+			'post_name'   => 'slashed',
+			'post_title'  => 'Slashed',
+		] );
+		$fields  = [
+			[
+				'id'   => 'code',
+				'type' => 'text',
+				'std'  => '^\\d+$',
+			],
+		];
+		$meta    = [
+			'settings' => [
+				'id'              => 'slashed',
+				'custom_settings' => 'C:\\data',
+			],
+			'fields'   => $fields,
+			'meta_box' => [
+				'id'     => 'slashed',
+				'fields' => $fields,
+			],
+		];
+		foreach ( $meta as $key => $value ) {
+			update_post_meta( $post_id, $key, wp_slash( $value ) );
+		}
+
+		$copy_id = $this->copy( $post_id );
+
+		$this->assertSame( '^\\d+$', get_post_meta( $copy_id, 'fields', true )[0]['std'] );
+		$this->assertSame( 'C:\\data', get_post_meta( $copy_id, 'settings', true )['custom_settings'] );
+	}
+
 	public function test_duplicate_without_slug_reads_id_from_meta(): void {
 		$post_id = wp_insert_post( [
 			'post_type'   => 'meta-box',

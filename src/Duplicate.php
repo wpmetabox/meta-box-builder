@@ -90,7 +90,8 @@ class Duplicate {
 		}
 
 		foreach ( $meta_keys as $meta_key ) {
-			update_post_meta( $post_id, $meta_key, $data[ $meta_key ] );
+			// update_post_meta() unslashes. Copied meta is already unslashed.
+			update_post_meta( $post_id, $meta_key, wp_slash( $data[ $meta_key ] ) );
 		}
 
 		return $post_id;
