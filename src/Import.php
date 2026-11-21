@@ -118,7 +118,7 @@ class Import {
 			// ID, so the imported ID may not survive. Realign it with the slug in use.
 			$new_post = get_post( $post_id );
 			if ( $new_post->post_name !== $post['post_name'] ) {
-				$post = $this->sync_id( $post, $new_post->post_name );
+				$post = self::sync_id( $post, $new_post->post_name );
 			}
 
 			$meta_keys = Export::get_meta_keys( $post['post_type'] );
@@ -141,7 +141,7 @@ class Import {
 	 * @param array  $post Imported post data.
 	 * @param string $id   ID to store, which is also the post slug.
 	 */
-	private function sync_id( array $post, string $id ): array {
+	public static function sync_id( array $post, string $id ): array {
 		$keys = [
 			'meta-box'         => [ 'settings.id', 'meta_box.id' ],
 			'mb-model'         => [ 'settings.slug', 'model.id', 'model.name' ],

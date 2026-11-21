@@ -47,12 +47,14 @@ class ToggleStatusColumn {
 			return;
 		}
 
-		// Use the switch markup and styles from Meta Box.
+		// Browser Back restores nameless checkboxes by position. A unique name and autocomplete=off keep each switch with its row.
 		$field = RWMB_Switch_Field::normalize( [
 			'type'       => 'switch',
+			'id'         => 'mbb-status-' . $post_id,
 			'disabled'   => ! $this->can_toggle( $post ),
 			'attributes' => [
-				'data-id' => $post_id,
+				'data-id'      => $post_id,
+				'autocomplete' => 'off',
 			],
 		] );
 		echo RWMB_Switch_Field::html( $post->post_status === 'publish', $field );

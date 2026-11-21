@@ -70,6 +70,7 @@ new LocalJson();
 if ( is_admin() ) {
 	new Import();
 	new Export();
+	new Duplicate();
 	new Edit( 'meta-box' );
 	new AdminColumns();
 
