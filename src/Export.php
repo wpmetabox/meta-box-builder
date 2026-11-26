@@ -4,7 +4,7 @@ namespace MBB;
 use WP_Post;
 
 class Export {
-	private const ALLOWED_POST_TYPES = [ 'meta-box', 'mb-relationship', 'mb-settings-page', 'mb-model' ];
+	public const ALLOWED_POST_TYPES = [ 'meta-box', 'mb-relationship', 'mb-settings-page', 'mb-model' ];
 
 	public function __construct() {
 		add_filter( 'post_row_actions', [ $this, 'add_export_link' ], 10, 2 );
