@@ -75,6 +75,8 @@ class Duplicate {
 			update_post_meta( $post_id, $key, wp_slash( $data[ $key ] ) );
 		}
 
+		do_action( 'mbb_sync_json', $data, $post_id );
+
 		return $post_id;
 	}
 
