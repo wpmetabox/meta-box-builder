@@ -1,6 +1,7 @@
 <?php
 namespace MBB;
 
+use MBB\Helpers\TableSchema;
 use WP_Post;
 
 class Duplicate {
@@ -32,36 +33,39 @@ class Duplicate {
 	}
 
 	/**
-	 * Copy as a draft, so nothing registers until the user reviews and publishes it.
-	 * Saving runs the usual checks (Local JSON ID, table name), and regenerates the parsed meta.
+	 * Copy as a draft, so nothing registers until the user publishes it.
 	 */
 	public function duplicate_post( WP_Post $post ): int {
-		// Drafts skip the unique slug check, so ask for the slug a published post would get.
 		$data = [
 			'post_type' => $post->post_type,
-			'post_name' => wp_unique_post_slug( $post->post_name . '_copy', 0, 'publish', $post->post_type, 0 ),
+			'post_name' => $this->new_id( $post ),
 		];
 
 		$keys = Export::get_meta_keys( $post->post_type );
 		foreach ( $keys as $key ) {
-			$data[ $key ] = (array) get_post_meta( $post->ID, $key, true );
+			// A missing key is an empty string. Casting that to an array stores one empty item.
+			$value        = get_post_meta( $post->ID, $key, true );
+			$data[ $key ] = is_array( $value ) ? $value : [];
 		}
 
 		$data = Import::sync_id( $data, $data['post_name'] );
 
-		// Two settings pages with one option name share data, two models with one table share rows.
+		// Two settings pages with one option name share data.
 		unset( $data['settings']['option_name'], $data['settings_page']['option_name'] );
 		if ( 'mb-model' === $post->post_type ) {
-			unset( $data['settings']['table'], $data['model']['table'] );
+			// Publishing from the list never opens the editor, so the copy needs its own table.
+			$data['settings']['table'] = TableSchema::sanitize_name( $data['post_name'] );
+			$data['model']['table']    = TableSchema::apply_prefix( $data['settings']['table'], ! empty( $data['settings']['prefix'] ) );
 		}
 
-		$post_id = wp_insert_post( [
+		// wp_insert_post() unslashes its input, so a backslash in the title must be slashed first.
+		$post_id = wp_insert_post( wp_slash( [
 			'post_type'   => $post->post_type,
 			// translators: %s - original title.
 			'post_title'  => sprintf( __( '%s (Copy)', 'meta-box-builder' ), $post->post_title ),
 			'post_name'   => $data['post_name'],
 			'post_status' => 'draft',
-		], true );
+		] ), true );
 
 		if ( is_wp_error( $post_id ) ) {
 			wp_die( esc_html( $post_id->get_error_message() ) );
@@ -72,6 +76,21 @@ class Duplicate {
 		}
 
 		return $post_id;
+	}
+
+	/**
+	 * Slug a published post would get, skipping an ID that already has a Local JSON file.
+	 *
+	 * Drafts skip the unique slug check, and publishing would overwrite that file.
+	 */
+	private function new_id( WP_Post $post ): string {
+		$base = $post->post_name . '_copy';
+		for ( $i = 1; ; $i++ ) {
+			$id = wp_unique_post_slug( $i > 1 ? "{$base}-{$i}" : $base, 0, 'publish', $post->post_type, 0 );
+			if ( ! LocalJson::is_enabled() || LocalJson::new_file_path( $post->post_type, $id ) ) {
+				return $id;
+			}
+		}
 	}
 
 	private function can_duplicate( WP_Post $post ): bool {

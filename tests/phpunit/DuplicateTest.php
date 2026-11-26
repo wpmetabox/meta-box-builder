@@ -1,5 +1,7 @@
 <?php
 use MBB\Duplicate;
+use MBB\JsonService;
+use MBB\LocalJson;
 use MBB\RestApi\Save;
 
 class DuplicateTest extends WP_UnitTestCase {
@@ -81,7 +83,7 @@ class DuplicateTest extends WP_UnitTestCase {
 		$this->assertSame( 'theme', get_post_meta( $post_id, 'settings', true )['option_name'] );
 	}
 
-	public function test_model_drops_the_shared_table(): void {
+	public function test_model_gets_its_own_table(): void {
 		$post_id = $this->create_post( 'mb-model', 'book', [
 			'settings' => [
 				'slug'  => 'book',
@@ -97,10 +99,73 @@ class DuplicateTest extends WP_UnitTestCase {
 
 		$this->assertSame( 'book_copy', get_post( $copy_id )->post_name );
 		$this->assertSame( 'draft', get_post( $copy_id )->post_status );
-		$this->assertArrayNotHasKey( 'table', get_post_meta( $copy_id, 'settings', true ) );
-		$this->assertArrayNotHasKey( 'table', get_post_meta( $copy_id, 'model', true ) );
+		$this->assertSame( 'book_copy', get_post_meta( $copy_id, 'settings', true )['table'] );
+		$this->assertSame( 'book_copy', get_post_meta( $copy_id, 'model', true )['table'] );
 		$this->assertSame( 'book_copy', get_post_meta( $copy_id, 'model', true )['name'] );
 		$this->assertSame( 'books', get_post_meta( $post_id, 'settings', true )['table'] );
+		$this->assertSame( 'wp_books', get_post_meta( $post_id, 'model', true )['table'] );
+	}
+
+	public function test_copy_skips_an_id_that_already_has_a_local_json_file(): void {
+		$dir  = get_temp_dir() . 'mbb-duplicate-json';
+		$file = $dir . '/book_copy.json';
+		wp_mkdir_p( $dir );
+		file_put_contents( // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+			$file,
+			wp_json_encode( [
+				'$schema' => 'https://schemas.metabox.io/field-group.json',
+				'id'      => 'book_copy',
+				'title'   => 'Taken',
+				'fields'  => [],
+			] )
+		);
+		$filter = static function () use ( $dir ) {
+			return [ $dir ];
+		};
+		add_filter( 'mb_json_paths', $filter );
+		JsonService::clear_cache();
+
+		try {
+			$post_id = $this->create_post( 'meta-box', 'book', [
+				'settings' => [ 'id' => 'book' ],
+				'fields'   => [],
+				'meta_box' => [ 'id' => 'book' ],
+			] );
+			$copy_id = $this->duplicator->duplicate_post( get_post( $post_id ) );
+
+			$this->assertSame( 'book_copy-2', get_post( $copy_id )->post_name );
+			$this->assertSame( 'book_copy-2', get_post_meta( $copy_id, 'settings', true )['id'] );
+			$this->assertSame( 'book_copy', LocalJson::read_file( $file )['id'] );
+		} finally {
+			remove_filter( 'mb_json_paths', $filter );
+			wp_delete_file( $file );
+			JsonService::clear_cache();
+		}
+	}
+
+	public function test_copy_keeps_a_backslash_in_the_title(): void {
+		$post_id = $this->create_post( 'meta-box', 'regex', [
+			'settings' => [ 'id' => 'regex' ],
+			'fields'   => [],
+			'meta_box' => [ 'id' => 'regex' ],
+		] );
+		wp_update_post( wp_slash( [
+			'ID'         => $post_id,
+			'post_title' => 'Regex ^\\d+$',
+		] ) );
+		$copy_id = $this->duplicator->duplicate_post( get_post( $post_id ) );
+
+		$this->assertSame( 'Regex ^\\d+$ (Copy)', get_post( $copy_id )->post_title );
+	}
+
+	public function test_missing_meta_is_an_empty_array(): void {
+		$post_id = $this->create_post( 'meta-box', 'blank', [
+			'settings' => [ 'id' => 'blank' ],
+			'meta_box' => [ 'id' => 'blank' ],
+		] );
+		$copy_id = $this->duplicator->duplicate_post( get_post( $post_id ) );
+
+		$this->assertSame( [], get_post_meta( $copy_id, 'fields', true ) );
 	}
 
 	public function test_saving_the_copy_does_not_change_the_original(): void {
