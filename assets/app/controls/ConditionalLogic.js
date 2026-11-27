@@ -13,6 +13,9 @@ import UpgradePanelBody from './UpgradePanelBody';
 
 const CLIPBOARD_TYPE = 'conditional_logic';
 
+// Edit-screen values, not field IDs, so they never take a field prefix.
+const wpConditionalNames = [ 'page_template', 'post_format', 'parent_id', 'post_ID', 'post_category', 'tags' ];
+
 const hasFieldId = when => Object.values( maybeArrayToObject( when, 'id' ) ).some( rule => rule.name );
 
 const ConditionalLogic = ( {
@@ -110,12 +113,19 @@ const ConditionalLogicClipboard = ( { setting, updateField, panelId } ) => {
 		const when = maybeArrayToObject( next.when, 'id' );
 
 		// New ids so uncontrolled inputs remount with the pasted values.
+		const fieldName = name => {
+			if ( ! name || wpConditionalNames.includes( name ) ) {
+				return name;
+			}
+			if ( sourcePrefix ) {
+				return name.startsWith( sourcePrefix ) ? `${ prefix }${ name.slice( sourcePrefix.length ) }` : name;
+			}
+			// An empty source prefix still needs the destination prefix, once.
+			return prefix && ! name.startsWith( prefix ) ? `${ prefix }${ name }` : name;
+		};
 		next.when = Object.fromEntries( Object.values( when ).map( rule => {
 			const id = uniqid();
-			const name = sourcePrefix && rule.name?.startsWith( sourcePrefix )
-				? `${ prefix }${ rule.name.slice( sourcePrefix.length ) }`
-				: rule.name;
-			return [ id, { ...rule, id, name } ];
+			return [ id, { ...rule, id, name: fieldName( rule.name ) } ];
 		} ) );
 
 		updateField( 'conditional_logic', next );
