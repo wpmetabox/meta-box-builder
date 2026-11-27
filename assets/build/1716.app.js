@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkmbb_app=globalThis.webpackChunkmbb_app||[]).push([[1716],{1716(e,a,s){s.r(a),s.d(a,{default:()=>h});var i=s(6087),l=s(7723),b=s(790);const h=(0,i.memo)(()=>(0,b.jsx)("p",{className:"description",children:(0,l.__)("(This is a placeholder for the hidden field)","meta-box-builder")}))}}]);

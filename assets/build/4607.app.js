@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkmbb_app=globalThis.webpackChunkmbb_app||[]).push([[4607],{4607(a,e,p){p.r(e),p.d(e,{default:()=>b});var s=p(6087),t=p(790);const b=(0,s.memo)(()=>(0,t.jsx)("input",{type:"text",className:"rwmb-autocomplete-search"}))}}]);

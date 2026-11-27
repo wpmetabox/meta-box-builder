@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkmbb_app=globalThis.webpackChunkmbb_app||[]).push([[4226],{4226(a,i,p){p.r(i),p.d(i,{default:()=>l});var s=p(790);const l=({id:a,options:i})=>i.length>0&&(0,s.jsx)("datalist",{id:a,children:i.map(a=>(0,s.jsx)("option",{children:a},a))})}}]);

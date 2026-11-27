@@ -1,5 +1,4 @@
 import { Button, Icon } from '@wordpress/components';
-import { useState } from '@wordpress/element';
 import { chevronDown, chevronUp, plus } from '@wordpress/icons';
 import usePanelStates from '../hooks/usePanelStates';
 
@@ -10,18 +9,18 @@ const PersistentPanelBodyWithAdd = ( {
 	children,
 	onAdd,
 	empty,
+	titleActions,
 } ) => {
-	const { getPanelState, setPanelState } = usePanelStates();
-	const [ open, setOpen ] = useState( getPanelState( panelId, initialOpen ) );
+	const storedOpen = usePanelStates( state => state.panelStates[ panelId ] );
+	const setPanelState = usePanelStates( state => state.setPanelState );
+	const open = storedOpen ?? initialOpen;
 
 	const toggle = () => {
 		if ( empty ) {
 			return;
 		}
 
-		const newState = !open;
-		setOpen( newState );
-		setPanelState( panelId, newState );
+		setPanelState( panelId, ! open );
 	};
 
 	const addNew = e => {
@@ -30,14 +29,13 @@ const PersistentPanelBodyWithAdd = ( {
 		}
 
 		e.stopPropagation();
-		setOpen( true );
 		setPanelState( panelId, true );
 		onAdd();
 	};
 
 	return (
 		<div className={ `components-panel__body ${ open && ! empty ? 'is-opened' : '' }` }>
-			<h2 className="components-panel__body-title">
+			<h2 className={ `components-panel__body-title${ titleActions ? ' has-actions' : '' }` }>
 				<Button
 					__next40pxDefaultSize
 					className="components-panel__body-toggle"
@@ -51,6 +49,14 @@ const PersistentPanelBodyWithAdd = ( {
 					</span>
 					{ title }
 				</Button>
+				{
+					titleActions && (
+						<>
+							<div className="mb-panel-title-actions">{ titleActions }</div>
+							<span className="mb-panel-title-fill" onClick={ toggle } />
+						</>
+					)
+				}
 			</h2>
 			{ open && ! empty && children }
 		</div>

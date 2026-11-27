@@ -1,13 +1,17 @@
 import { Button, Flex, SelectControl } from "@wordpress/components";
-import { useEffect, useState } from "@wordpress/element";
+import { useEffect, useRef, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import { trimStart } from 'lodash';
 import { getFullOptions, maybeArrayToObject, uniqid } from '../functions';
 import useAllFields from "../hooks/useAllFields";
+import useClipboard from "../hooks/useClipboard";
+import usePanelStates from "../hooks/usePanelStates";
 import useSettings from "../hooks/useSettings";
 import FieldInserter from './FieldInserter';
 import PersistentPanelBodyWithAdd from './PersistentPanelBodyWithAdd';
 import UpgradePanelBody from './UpgradePanelBody';
+
+const CLIPBOARD_TYPE = 'conditional_logic';
 
 const ConditionalLogic = ( {
 	defaultValue,
@@ -63,6 +67,9 @@ const ConditionalLogic = ( {
 			title={ __( 'Conditional logic', 'meta-box-builder' ) }
 			empty={ Object.values( rules ).length === 0 }
 			onAdd={ addRule }
+			titleActions={ utm_source === 'field_settings' && (
+				<ConditionalLogicClipboard setting={ setting } updateField={ updateField } panelId={ panelId } />
+			) }
 		>
 			<div className="mb-ruleset">
 				{ Object.values( rules ).length > 0 && <Intro setting={ setting } updateField={ updateField } /> }
@@ -78,6 +85,50 @@ const ConditionalLogic = ( {
 				<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 			</div>
 		</PersistentPanelBodyWithAdd>
+	);
+};
+
+const ConditionalLogicClipboard = ( { setting, updateField, panelId } ) => {
+	const { value, copy } = useClipboard( CLIPBOARD_TYPE );
+	const setPanelState = usePanelStates( state => state.setPanelState );
+	const pasted = value && ! Array.isArray( value ) && value;
+	const [ notice, setNotice ] = useState( '' );
+	const timer = useRef();
+
+	const showNotice = text => {
+		setNotice( text );
+		clearTimeout( timer.current );
+		timer.current = setTimeout( () => setNotice( '' ), 2000 );
+	};
+
+	useEffect( () => () => clearTimeout( timer.current ), [] );
+
+	const copyLogic = () => {
+		copy( ( ! Array.isArray( setting ) && setting ) || {} );
+		showNotice( __( 'Copied.', 'meta-box-builder' ) );
+	};
+
+	const pasteLogic = () => {
+		const next = structuredClone( pasted );
+		const when = maybeArrayToObject( next.when, 'id' );
+
+		// New ids so uncontrolled inputs remount with the pasted values.
+		next.when = Object.fromEntries( Object.values( when ).map( rule => {
+			const id = uniqid();
+			return [ id, { ...rule, id } ];
+		} ) );
+
+		updateField( 'conditional_logic', next );
+		setPanelState( panelId, true );
+		showNotice( __( 'Pasted.', 'meta-box-builder' ) );
+	};
+
+	return (
+		<>
+			<Button variant="secondary" size="compact" onClick={ copyLogic } text={ __( 'Copy', 'meta-box-builder' ) } />
+			{ pasted && <Button variant="secondary" size="compact" onClick={ pasteLogic } text={ __( 'Paste', 'meta-box-builder' ) } /> }
+			{ notice && <span className="mb-panel-title-notice">{ notice }</span> }
+		</>
 	);
 };
 
