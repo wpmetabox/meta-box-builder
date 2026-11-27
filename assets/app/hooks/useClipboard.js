@@ -1,16 +1,15 @@
 import { useEffect, useState } from '@wordpress/element';
-import { CLIPBOARD_EVENT, clipboardKey, getClipboard, setClipboard } from '../utils/clipboard';
+import { CLIPBOARD_EVENT, clipboardKey, getClipboard, setClipboard, syncClipboard } from '../utils/clipboard';
 
 const useClipboard = type => {
 	const [ value, setValue ] = useState( () => getClipboard( type ) );
 
 	useEffect( () => {
 		const refresh = event => {
-			const matches = event.type === 'storage'
-				? event.key === clipboardKey( type )
-				: event.detail === type;
-
-			if ( matches ) {
+			if ( event.type === 'storage' && event.key === clipboardKey( type ) ) {
+				setValue( syncClipboard( type ) );
+			}
+			if ( event.detail === type ) {
 				setValue( getClipboard( type ) );
 			}
 		};

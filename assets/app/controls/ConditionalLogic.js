@@ -90,6 +90,7 @@ const ConditionalLogic = ( {
 
 const ConditionalLogicClipboard = ( { setting, updateField, panelId } ) => {
 	const { value, copy } = useClipboard( CLIPBOARD_TYPE );
+	const { getPrefix } = useSettings();
 	const setPanelState = usePanelStates( state => state.setPanelState );
 	const pasted = value && ! Array.isArray( value ) && value;
 	const [ notice, setNotice ] = useState( '' );
@@ -104,18 +105,28 @@ const ConditionalLogicClipboard = ( { setting, updateField, panelId } ) => {
 	useEffect( () => () => clearTimeout( timer.current ), [] );
 
 	const copyLogic = () => {
-		copy( ( ! Array.isArray( setting ) && setting ) || {} );
+		copy( {
+			prefix: getPrefix() || '',
+			value: structuredClone( ( ! Array.isArray( setting ) && setting ) || {} ),
+		} );
 		showNotice( __( 'Copied.', 'meta-box-builder' ) );
 	};
 
 	const pasteLogic = () => {
-		const next = structuredClone( pasted );
+		const sourcePrefix = pasted.prefix || '';
+		const next = structuredClone( pasted.value || {} );
 		const when = maybeArrayToObject( next.when, 'id' );
+		const prefix = getPrefix() || '';
+
+		// Swap the source group's prefix for this group's. Names without that prefix stay.
+		const fieldName = name => name && ( ! sourcePrefix || name.startsWith( sourcePrefix ) )
+			? `${ prefix }${ name.slice( sourcePrefix.length ) }`
+			: ( name || '' );
 
 		// New ids so uncontrolled inputs remount with the pasted values.
 		next.when = Object.fromEntries( Object.values( when ).map( rule => {
 			const id = uniqid();
-			return [ id, { ...rule, id } ];
+			return [ id, { ...rule, id, name: fieldName( rule.name ) } ];
 		} ) );
 
 		updateField( 'conditional_logic', next );
