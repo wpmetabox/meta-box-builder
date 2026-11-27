@@ -1,5 +1,5 @@
 import { Button, Flex, SelectControl } from "@wordpress/components";
-import { useEffect, useRef, useState } from "@wordpress/element";
+import { useEffect, useState } from "@wordpress/element";
 import { __, sprintf } from "@wordpress/i18n";
 import { trimStart } from 'lodash';
 import { getFullOptions, maybeArrayToObject, uniqid } from '../functions';
@@ -12,6 +12,8 @@ import PersistentPanelBodyWithAdd from './PersistentPanelBodyWithAdd';
 import UpgradePanelBody from './UpgradePanelBody';
 
 const CLIPBOARD_TYPE = 'conditional_logic';
+
+const hasFieldId = when => Object.values( maybeArrayToObject( when, 'id' ) ).some( rule => rule.name );
 
 const ConditionalLogic = ( {
 	defaultValue,
@@ -89,56 +91,42 @@ const ConditionalLogic = ( {
 };
 
 const ConditionalLogicClipboard = ( { setting, updateField, panelId } ) => {
-	const { value, copy } = useClipboard( CLIPBOARD_TYPE );
+	const pasted = useClipboard( state => state.conditional_logic );
 	const { getPrefix } = useSettings();
 	const setPanelState = usePanelStates( state => state.setPanelState );
-	const pasted = value && ! Array.isArray( value ) && value;
-	const [ notice, setNotice ] = useState( '' );
-	const timer = useRef();
-
-	const showNotice = text => {
-		setNotice( text );
-		clearTimeout( timer.current );
-		timer.current = setTimeout( () => setNotice( '' ), 2000 );
-	};
-
-	useEffect( () => () => clearTimeout( timer.current ), [] );
 
 	const copyLogic = () => {
-		copy( {
+		useClipboard.getState().copy( CLIPBOARD_TYPE, {
 			prefix: getPrefix() || '',
-			value: structuredClone( ( ! Array.isArray( setting ) && setting ) || {} ),
+			value: setting,
 		} );
-		showNotice( __( 'Copied.', 'meta-box-builder' ) );
+		window.mbbShowNotification( __( 'Copied.', 'meta-box-builder' ) );
 	};
 
 	const pasteLogic = () => {
 		const sourcePrefix = pasted.prefix || '';
-		const next = structuredClone( pasted.value || {} );
-		const when = maybeArrayToObject( next.when, 'id' );
 		const prefix = getPrefix() || '';
-
-		// Swap the source group's prefix for this group's. Names without that prefix stay.
-		const fieldName = name => name && ( ! sourcePrefix || name.startsWith( sourcePrefix ) )
-			? `${ prefix }${ name.slice( sourcePrefix.length ) }`
-			: ( name || '' );
+		const next = { ...pasted.value };
+		const when = maybeArrayToObject( next.when, 'id' );
 
 		// New ids so uncontrolled inputs remount with the pasted values.
 		next.when = Object.fromEntries( Object.values( when ).map( rule => {
 			const id = uniqid();
-			return [ id, { ...rule, id, name: fieldName( rule.name ) } ];
+			const name = sourcePrefix && rule.name?.startsWith( sourcePrefix )
+				? `${ prefix }${ rule.name.slice( sourcePrefix.length ) }`
+				: rule.name;
+			return [ id, { ...rule, id, name } ];
 		} ) );
 
 		updateField( 'conditional_logic', next );
 		setPanelState( panelId, true );
-		showNotice( __( 'Pasted.', 'meta-box-builder' ) );
+		window.mbbShowNotification( __( 'Pasted.', 'meta-box-builder' ) );
 	};
 
 	return (
 		<>
-			<Button variant="secondary" size="compact" onClick={ copyLogic } text={ __( 'Copy', 'meta-box-builder' ) } />
-			{ pasted && <Button variant="secondary" size="compact" onClick={ pasteLogic } text={ __( 'Paste', 'meta-box-builder' ) } /> }
-			{ notice && <span className="mb-panel-title-notice">{ notice }</span> }
+			{ hasFieldId( setting.when ) && <Button variant="secondary" size="compact" onClick={ copyLogic } text={ __( 'Copy', 'meta-box-builder' ) } /> }
+			{ hasFieldId( pasted?.value?.when ) && <Button variant="secondary" size="compact" onClick={ pasteLogic } text={ __( 'Paste', 'meta-box-builder' ) } /> }
 		</>
 	);
 };
