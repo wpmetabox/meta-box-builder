@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkmbb_app=globalThis.webpackChunkmbb_app||[]).push([[1986],{1986(s,a,d){d.r(a),d.d(a,{default:()=>b});var e=d(6087),l=d(790);const b=(0,e.memo)(({field:s})=>(0,l.jsx)(e.RawHTML,{children:s.std}),(s,a)=>s.field.std===a.field.std)}}]);

@@ -23,6 +23,36 @@
 	margin-bottom: 16px;
 }
 
+.components-panel__body-title.has-actions {
+	display: flex;
+	align-items: center;
+
+	> .components-button.components-panel__body-toggle {
+		width: auto;
+		flex: none;
+	}
+}
+
+.mb-panel-title-actions {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	flex: none;
+
+	.components-button {
+		height: 24px;
+		min-width: 0;
+		padding-inline: 6px;
+		font-size: 11px;
+	}
+}
+
+.mb-panel-title-fill {
+	flex: 1;
+	align-self: stretch;
+	cursor: pointer;
+}
+
 // For displaying the toggle control in the panel body title.
 .components-panel__arrow .components-toggle-control {
 	margin: 0;

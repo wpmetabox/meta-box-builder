@@ -4,10 +4,19 @@ import { __, sprintf } from "@wordpress/i18n";
 import { trimStart } from 'lodash';
 import { getFullOptions, maybeArrayToObject, uniqid } from '../functions';
 import useAllFields from "../hooks/useAllFields";
+import useClipboard from "../hooks/useClipboard";
+import usePanelStates from "../hooks/usePanelStates";
 import useSettings from "../hooks/useSettings";
 import FieldInserter from './FieldInserter';
 import PersistentPanelBodyWithAdd from './PersistentPanelBodyWithAdd';
 import UpgradePanelBody from './UpgradePanelBody';
+
+const CLIPBOARD_TYPE = 'conditional_logic';
+
+// Edit-screen values, not field IDs, so they never take a field prefix.
+const wpConditionalNames = [ 'page_template', 'post_format', 'parent_id', 'post_ID', 'post_category', 'tags' ];
+
+const hasFieldId = when => Object.values( maybeArrayToObject( when, 'id' ) ).some( rule => rule.name );
 
 const ConditionalLogic = ( {
 	defaultValue,
@@ -63,6 +72,9 @@ const ConditionalLogic = ( {
 			title={ __( 'Conditional logic', 'meta-box-builder' ) }
 			empty={ Object.values( rules ).length === 0 }
 			onAdd={ addRule }
+			titleActions={ utm_source === 'field_settings' && (
+				<ConditionalLogicClipboard setting={ setting } updateField={ updateField } panelId={ panelId } />
+			) }
 		>
 			<div className="mb-ruleset">
 				{ Object.values( rules ).length > 0 && <Intro setting={ setting } updateField={ updateField } /> }
@@ -78,6 +90,54 @@ const ConditionalLogic = ( {
 				<Button variant="secondary" onClick={ addRule } text={ __( '+ Add Rule', 'meta-box-builder' ) } />
 			</div>
 		</PersistentPanelBodyWithAdd>
+	);
+};
+
+const ConditionalLogicClipboard = ( { setting, updateField, panelId } ) => {
+	const pasted = useClipboard( state => state.conditional_logic );
+	const { getPrefix } = useSettings();
+	const setPanelState = usePanelStates( state => state.setPanelState );
+
+	const copyLogic = () => {
+		useClipboard.getState().copy( CLIPBOARD_TYPE, {
+			prefix: getPrefix() || '',
+			value: setting,
+		} );
+		window.mbbShowNotification( __( 'Copied.', 'meta-box-builder' ) );
+	};
+
+	const pasteLogic = () => {
+		const sourcePrefix = pasted.prefix || '';
+		const prefix = getPrefix() || '';
+		const next = { ...pasted.value };
+		const when = maybeArrayToObject( next.when, 'id' );
+
+		// New ids so uncontrolled inputs remount with the pasted values.
+		const fieldName = name => {
+			if ( ! name || wpConditionalNames.includes( name ) ) {
+				return name;
+			}
+			if ( sourcePrefix ) {
+				return name.startsWith( sourcePrefix ) ? `${ prefix }${ name.slice( sourcePrefix.length ) }` : name;
+			}
+			// An empty source prefix still needs the destination prefix, once.
+			return prefix && ! name.startsWith( prefix ) ? `${ prefix }${ name }` : name;
+		};
+		next.when = Object.fromEntries( Object.values( when ).map( rule => {
+			const id = uniqid();
+			return [ id, { ...rule, id, name: fieldName( rule.name ) } ];
+		} ) );
+
+		updateField( 'conditional_logic', next );
+		setPanelState( panelId, true );
+		window.mbbShowNotification( __( 'Pasted.', 'meta-box-builder' ) );
+	};
+
+	return (
+		<>
+			{ hasFieldId( setting.when ) && <Button variant="secondary" size="compact" onClick={ copyLogic } text={ __( 'Copy', 'meta-box-builder' ) } /> }
+			{ hasFieldId( pasted?.value?.when ) && <Button variant="secondary" size="compact" onClick={ pasteLogic } text={ __( 'Paste', 'meta-box-builder' ) } /> }
+		</>
 	);
 };
 
