@@ -1,11 +1,13 @@
 <?php
 /**
- * Plugin Name: MBB Parser
- * Plugin URI:  https://metabox.io
- * Description: Parses meta box settings from JSON.
- * Version:     2.0.0
- * Author:      MetaBox.io
- * Author URI:  https://metabox.io
+ * Plugin Name:       MBB Parser
+ * Plugin URI:        https://metabox.io
+ * Description:       Parses meta box settings from JSON.
+ * Version:           2.1.8
+ * Requires at least: 6.7
+ * Requires PHP:      7.4
+ * Author:            MetaBox.io
+ * Author URI:        https://metabox.io
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

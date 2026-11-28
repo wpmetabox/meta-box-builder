@@ -1,3 +1,15 @@
+### 5.7.0 - 2026-11-28
+
+**Highlights:**
+
+Add the **Duplicate** action for field groups, custom models, settings pages and relationships. Duplicate an item to make a draft copy with all its settings. For more details, please see [this blog post](https://metabox.io/meta-box-aio-3-15/) and the [documentation](https://docs.metabox.io/extensions/meta-box-builder/#duplicating-field-groups).
+
+**Other changes:**
+
+- Status column: check the user's permission before toggling the status, and disable the switch when the user is not allowed
+- Fix duplicate fields when editing validation rules (#27)
+- Fix the upload folder setting on Windows (#26)
+
 ### 5.6.4 - 2026-11-12
 
 - Fix "Theme code" for groups in field groups with a prefix: sub-field keys now have the prefix
